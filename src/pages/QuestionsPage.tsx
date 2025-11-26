@@ -8,11 +8,7 @@ export function DatabasePage() {
     const [currentSearch, setSearch] = useState("");
     
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-    const searchFiltered =
-        currentSearch.length < 2
-        ? []
-        : questions.filter((q) => q.text.toLowerCase().includes(currentSearch.toLowerCase()));
-    
+
     const toggleCategory = (category: Category) => {
         setSelectedCategories((prev) => {
             return prev.includes(category)
