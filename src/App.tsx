@@ -6,7 +6,7 @@ import {
   Link,
   Navigate
 } from "react-router-dom";
-import { QuestionsPage } from "./pages/QuestionsPage";
+import { DatabasePage } from "./pages/QuestionsPage";
 import { PracticePage } from "./pages/PracticePage";
 
 function App() {
@@ -20,12 +20,12 @@ function App() {
           borderBottom: "1px solid #ddd",
           marginBottom: "16px",
         }}>
-          <Link to="/questions">Questions</Link>
+          <Link to="/database">Database</Link>
           <Link to="/practice">Practice</Link>
         </nav>
 
         <Routes>
-          <Route path="/questions" element={<QuestionsPage />} />
+          <Route path="/database" element={<DatabasePage />} />
           <Route path="/practice" element={<PracticePage />} />
           <Route path="*" element={<Navigate to="/questions" replace />} />
         </Routes>

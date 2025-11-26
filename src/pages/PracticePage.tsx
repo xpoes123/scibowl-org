@@ -8,10 +8,8 @@ export function PracticePage() {
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-    const practicePool = questions.filter((q) =>
-        selectedCategories.length === 0
-        ? true
-        : selectedCategories.includes(q.category)
+    const practicePool = questions.filter(q =>
+        selectedCategories.length === 0 || selectedCategories.includes(q.category)
     );
 
     const toggleCategory = (category: Category) => {
@@ -23,13 +21,13 @@ export function PracticePage() {
     }
     const currentQuestion = practicePool[currentIndex];
     const PRACTICE_CATEGORIES: Category[] = [
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Math",
-    "Energy",
-    "Earth",
-    "Space",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Math",
+        "Energy",
+        "Earth",
+        "Space",
     ];
 
     return (
@@ -58,7 +56,11 @@ export function PracticePage() {
                     })}
                 </div>
             </div>
-            <QuestionCard
+            {practicePool.length === 0 && (
+                <p>No questions available for the selected filters.</p>
+            )}
+            {practicePool.length > 0 && (
+                <QuestionCard
                 key={currentQuestion.id}
                 question={currentQuestion}
                 onSubmitResult={(wasCorrect) => {
@@ -68,7 +70,8 @@ export function PracticePage() {
                     }
                 }}    
             />
-            <button onClick={() => setCurrentIndex((prev) => (prev - 1 + practicePool.length) % questions.length)}>
+            )}
+            <button onClick={() => setCurrentIndex((prev) => (prev - 1 + practicePool.length) % practicePool.length)}>
                 Previous 
             </button>
             <button onClick={() => setCurrentIndex((prev) => (prev + 1) % practicePool.length)}>

@@ -3,21 +3,36 @@ import { useState } from "react";
 import { QuestionList } from "../components/QuestionList";
 import type { Category } from "../data/questions";
 
-type CategoryFilter = "All"  | Category;
-const CATEGORIES: CategoryFilter[] = ["All", "Physics", "Chemistry", "Biology", "Math", "Energy", "Earth", "Space"];
 
-export function QuestionsPage() {
-    const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("All");
+export function DatabasePage() {
     const [currentSearch, setSearch] = useState("");
+    
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const searchFiltered =
         currentSearch.length < 2
         ? []
         : questions.filter((q) => q.text.toLowerCase().includes(currentSearch.toLowerCase()));
-    const filteredQuestions =
-        selectedCategory === "All"
-        ? searchFiltered
-        : searchFiltered.filter((q) =>
-            q.category === selectedCategory);
+    
+    const toggleCategory = (category: Category) => {
+        setSelectedCategories((prev) => {
+            return prev.includes(category)
+                ? prev.filter((c) => c !== category)
+                : prev.concat(category);
+        });
+    }
+        const filteredQuestions = questions.filter(q => 
+        selectedCategories.length === 0 || selectedCategories.includes(q.category)
+    );
+
+    const PRACTICE_CATEGORIES: Category[] = [
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Math",
+        "Energy",
+        "Earth",
+        "Space",
+    ];
 
     return (
         <div style={{ width:"100%", fontFamily: "Arial, sans-serif", padding: "16px" }}>
@@ -26,28 +41,36 @@ export function QuestionsPage() {
                 type="text"
                 value={currentSearch}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search questions..."
+                placeholder="Query"
                 style={{
                     width: "100%",
                     padding: "12px",
                 }}
             />
             <div style={{ marginBottom: "12px" }}>
-                <label style={{ marginRight: "8px" }}>Category:</label>
-                <select
-                    value={selectedCategory}
-                    onChange={(e) => {
-                        setSelectedCategory(e.target.value as CategoryFilter);
-                    }}
-            >
-                {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                        {cat}
-                    </option>
-                ))}
-            </select>
+                <strong>Filter by Category:</strong>
+                <div>
+                    {PRACTICE_CATEGORIES.map((cat) => {
+                        const checked = selectedCategories.includes(cat);
+                        return (
+                            <label key={cat} style={{ marginRight: "12px" }}>
+                                <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() => toggleCategory(cat)}
+                                />
+                                {cat}
+                            </label>
+                        );
+                    })}
+                </div>
             </div>
-
+            {currentSearch.length == 0 &&
+            <div style={{ padding: "16px" }}>
+                <h2>Question List Component</h2>
+                <QuestionList questions={filteredQuestions.slice(0, 5)} />
+            </div>
+            }
             {currentSearch.length >= 2 &&
             filteredQuestions.length > 0 &&
             filteredQuestions.length <= 2 &&
