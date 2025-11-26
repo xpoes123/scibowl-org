@@ -1,73 +1,152 @@
-# React + TypeScript + Vite
+# 🧪 Scibowl Org
+### A Science Bowl Practice Platform — Built with React + TypeScript (MVP In Progress)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Scibowl Org is a full-stack platform designed to help students, teams, and coaches practice for **National Science Bowl** competitions.  
+This repository currently contains the **frontend codebase** for the MVP, built with **React + TypeScript**, with early features including:
 
-Currently, two official plugins are available:
+- Question browser  
+- Search (min 2 chars)  
+- Category filtering  
+- Conditional result rendering  
+- Modular components (`QuestionList`, `QuestionCard`)  
+- Early UI scaffolding for future pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Backend (Django/DRF + Postgres) will be added in later phases according to the roadmap below.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# 🚀 Current Status (Early MVP)
 
-## Expanding the ESLint configuration
+The project is in **Week 1–2** of the 16-week MVP schedule.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Completed so far:**
+- React + TypeScript setup  
+- Static question dataset  
+- Search input with feedback states  
+- Category dropdown filter  
+- `QuestionList` + `QuestionCard` components  
+- Basic conditional UI  
+- Initial file structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**In progress:**
+- Practice Mode (short-answer MVP)
+- Establishing global layout + CSS approach (Tailwind or custom)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 📂 Folder Structure (Current)
+
+```
+src/
+  App.tsx
+  components/
+    QuestionList.tsx
+    QuestionCard.tsx
+  data/
+    questions.ts
+  pages/
+  types/
+  utils/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# 🧰 Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **React** (Vite)
+- **TypeScript**
+- **CSS** (migrating toward Tailwind)
+- **Django + DRF** (backend, upcoming)
+- **PostgreSQL** (backend DB, upcoming)
+
+---
+
+# 🧠 Core MVP Features
+
+### **Question DB**
+- PDF/ZIP parsing  
+- Search + filtering  
+- Question submission  
+- Voting system  
+- Reporting / tagging  
+- Beta/approved status  
+
+### **Practice Mode**
+- Short answer  
+- Multiple choice / multiple select  
+- Practice filters  
+- Slow read mode  
+- Answer verification  
+- Practice history  
+- Difficulty rating / Elo metric  
+
+### **Analytics**
+- Accuracy, attempts, category performance  
+- Question analytics dashboard  
+
+### **Accounts**
+- Login/signup  
+- Profile page  
+- Optional OAuth  
+
+### **Static Pages**
+- Resources  
+- Tournaments  
+- Coming soon pages for Arenas, Queue, Teams, Coach  
+
+---
+
+# 📆 16-Week Roadmap (Summary)
+
+### **Weeks 1–3 — Frontend Foundation**
+- Build Question Browser UI  
+- Practice Mode MVP  
+- CSS structure
+
+### **Weeks 4–6 — Backend + DB**
+- Django/DRF setup  
+- Question Model  
+- Search + filters  
+- PDF parser + upload  
+- Question migration
+
+### **Weeks 7–9 — Practice + Analytics**
+- MCQ support  
+- Skip button  
+- Answer validation  
+- Practice history  
+- Analytics MVP
+
+### **Weeks 10–12 — Accounts + Static Pages**
+- Login system  
+- Profile page  
+- Resources & Tournaments pages
+
+### **Weeks 13–16 — Infra + Stretch**
+- Environment variables  
+- Logging  
+- Dockerization  
+- OAuth  
+- Final polish  
+
+---
+
+# ▶️ Getting Started
+
 ```
+npm install
+npm run dev
+```
+
+Runs at:  
+`http://localhost:5173`
+
+---
+
+# 📄 License  
+MIT License (or TBD)
+
+---
+
+# 📬 Contact  
+Created by **David Jiang**  
