@@ -1,12 +1,36 @@
 import { useState} from "react";
 import { questions } from "../data/questions";
 import { QuestionCard } from "../components/QuestionCard";
+import type { Category } from "../data/questions";
 
 export function PracticePage() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const currentQuestion = questions[currentIndex];
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+    const practicePool = questions.filter((q) =>
+        selectedCategories.length === 0
+        ? true
+        : selectedCategories.includes(q.category)
+    );
+
+    const toggleCategory = (category: Category) => {
+        setSelectedCategories((prev) => {
+            return prev.includes(category)
+                ? prev.filter((c) => c !== category)
+                : prev.concat(category);
+        });
+    }
+    const currentQuestion = practicePool[currentIndex];
+    const PRACTICE_CATEGORIES: Category[] = [
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Math",
+    "Energy",
+    "Earth",
+    "Space",
+    ];
 
     return (
         <div
@@ -16,6 +40,24 @@ export function PracticePage() {
                 padding: "16px",
             }}>
             <h1>NSB Arena - Practice Page</h1>
+            <div style={{ marginBottom: "16px" }}>
+                <strong>Filter by Category:</strong>
+                <div>
+                    {PRACTICE_CATEGORIES.map((cat) => {
+                        const checked = selectedCategories.includes(cat);
+                        return (
+                            <label key={cat} style={{ marginRight: "12px" }}>
+                                <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() => toggleCategory(cat)}
+                                />
+                                {cat}
+                            </label>
+                        );
+                    })}
+                </div>
+            </div>
             <QuestionCard
                 key={currentQuestion.id}
                 question={currentQuestion}
@@ -26,17 +68,17 @@ export function PracticePage() {
                     }
                 }}    
             />
-            <button onClick={() => setCurrentIndex((prev) => (prev - 1 + questions.length) % questions.length)}>
+            <button onClick={() => setCurrentIndex((prev) => (prev - 1 + practicePool.length) % questions.length)}>
                 Previous 
             </button>
-            <button onClick={() => setCurrentIndex((prev) => (prev + 1) % questions.length)}>
+            <button onClick={() => setCurrentIndex((prev) => (prev + 1) % practicePool.length)}>
                 Next
             </button>
             <button onClick={() => setCurrentIndex((prev) => {
-                if (questions.length <= 1) return prev;
+                if (practicePool.length <= 1) return prev;
                 let next = prev;
                 while (next === prev){
-                    next = Math.floor(Math.random() * questions.length);
+                    next = Math.floor(Math.random() * practicePool.length);
                 }
                 return next;
             })}>
