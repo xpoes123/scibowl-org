@@ -21,9 +21,7 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
         const correct = normalizedUser===normalizedCorrect;
         setIsCorrect(correct);
         setHasSubmitted(true);
-        if (onSubmitResult) {
-            onSubmitResult(correct);
-        }
+        onSubmitResult(correct)
     };
     const renderAnswer = () => {
         if (question.questionCategory === "multiple_choice" && question.choices) {
@@ -111,11 +109,11 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                         <div style={{ marginTop: "4px" }}>
                         {isCorrect ? (
                             <span style={{ color: "green" }}>
-                            You were correct
+                            Correct
                             </span>
                         ) : (
                             <span style={{ color: "red" }}>
-                            Your answer was incorrect
+                            Incorrect
                             </span>
                         )}
                         </div>
