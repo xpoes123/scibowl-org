@@ -8,13 +8,13 @@ import { filterQuestions } from "../utils/filterQuestions";
 export function DatabasePage() {
     const [inputValue, setInputValue] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [appliedTextType, setAppliedTextType] = useState<"question" | "answer" | "all">("all");
 
+    const [appliedTextType, setAppliedTextType] = useState<"question" | "answer" | "all">("all");
     const [appliedCategories, setAppliedCategories] = useState<Category[]>([]);
 
     const [textType, setTextType] = useState<"question" | "answer" | "all">("all");
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-
+    const [questionType, setQuestionType] = useState<"tossup" | "bonus" | "all">("all");
     const toggleCategory = (category: Category) => {
         setSelectedCategories((prev) => {
             return prev.includes(category)
