@@ -11,10 +11,14 @@ export function DatabasePage() {
 
     const [appliedTextType, setAppliedTextType] = useState<"question" | "answer" | "all">("all");
     const [appliedCategories, setAppliedCategories] = useState<Category[]>([]);
+    const [appliedQuestionType, setAppliedQuestionType] = useState<"tossup" | "bonus" | "all">("all");
+    const [appliedQuestionCategory, setAppliedQuestionCategory] = useState<"multiple_choice" | "identify_all" | "rank" | "all">("all");
 
     const [textType, setTextType] = useState<"question" | "answer" | "all">("all");
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [questionType, setQuestionType] = useState<"tossup" | "bonus" | "all">("all");
+    const [questionCategory, setQuestionCategory] = useState<"multiple_choice" | "identify_all" | "rank" | "all">("all");
+    
     const toggleCategory = (category: Category) => {
         setSelectedCategories((prev) => {
             return prev.includes(category)
@@ -27,6 +31,8 @@ export function DatabasePage() {
         term: searchTerm,
         categories: appliedCategories,
         textType: appliedTextType,
+        questionType: appliedQuestionType,
+        questionCategory: appliedQuestionCategory,
     });
 
     const CATEGORY_OPTIONS: Category[] = [
@@ -42,10 +48,12 @@ export function DatabasePage() {
         setSearchTerm(inputValue);
         setAppliedCategories(selectedCategories);
         setAppliedTextType(textType);
+        setAppliedQuestionType(questionType);
+        setAppliedQuestionCategory(questionCategory);
     }
     return (
         <div style={{ width:"100%", fontFamily: "Arial, sans-serif", padding: "16px" }}>
-            <h1 style={{ textAlign: "center" }}>NSB Arena</h1>
+            <h1 style={{ textAlign: "center" }}>SBorg</h1>
             <input
                 type="text"
                 value={inputValue}
@@ -98,6 +106,32 @@ export function DatabasePage() {
                     <option value="all">All Text</option>
                     <option value="question">Question</option>
                     <option value="answer">Answer</option>
+                </select>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+                <select
+                    value={questionCategory}
+                    onChange={(e) => {
+                        setQuestionCategory(e.target.value as "multiple_choice" | "identify_all" | "rank" | "all");
+                    }}
+                >
+                    <option value="all">All Question Categories</option>
+                    <option value="short_answer">Short Answer</option>
+                    <option value="multiple_choice">Multiple Choice</option>
+                    <option value="identify_all">Identify All</option>
+                    <option value="rank">Rank</option>
+                </select>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+                <select
+                    value={questionType}
+                    onChange={(e) => {
+                        setQuestionType(e.target.value as "tossup" | "bonus" | "all");
+                    }}
+                >
+                    <option value="all">All Questions</option>
+                    <option value="tossup">Tossup</option>
+                    <option value="bonus">Bonus</option>
                 </select>
             </div>
             {searchTerm.length === 0 &&
