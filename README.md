@@ -1,133 +1,204 @@
 # 🧪 Scibowl Org
 ### A Science Bowl Practice Platform — Built with React + TypeScript (MVP In Progress)
 
-Scibowl Org is a full-stack platform designed to help students, teams, and coaches practice for **National Science Bowl** competitions.  
-This repository currently contains the **frontend codebase** for the MVP, built with **React + TypeScript**, with early features including:
+Scibowl Org is a full-stack platform designed to help students, teams, and coaches practice for **National Science Bowl (NSB)** competitions.
 
-- Question browser  
-- Search (min 2 chars)  
-- Category filtering  
-- Conditional result rendering  
-- Modular components (`QuestionList`, `QuestionCard`)  
-- Early UI scaffolding for future pages
+The app is currently in **active MVP development**, with the frontend built using **React + TypeScript** and the backend (Django + DRF + PostgreSQL) arriving in the next development phase.
 
-Backend (Django/DRF + Postgres) will be added in later phases according to the roadmap below.
-
----
-
-# 🚀 Current Status (Early MVP)
-
-The project is in **Week 1–2** of the 16-week MVP schedule.
-
-**Completed so far:**
-- React + TypeScript setup  
-- Static question dataset  
-- Search input with feedback states  
-- Category dropdown filter  
-- `QuestionList` + `QuestionCard` components  
-- Basic conditional UI  
-- Initial file structure
-
-**In progress:**
-- Practice Mode (short-answer MVP)
-- Establishing global layout + CSS approach (Tailwind or custom)
+The goal of Scibowl Org is to provide:
+- the best NSB study experience online,
+- competitive play (1v1, rooms, team scrimmages),
+- question writing + submission tools,
+- coach dashboards,
+- advanced analytics,
+- LLM-powered tutoring and explanations.
 
 ---
 
-# 📂 Folder Structure (Current)
+# 🚀 Current Status (MVP Development)
 
-```
-src/
-  App.tsx
-  components/
-    QuestionList.tsx
-    QuestionCard.tsx
-  data/
-    questions.ts
-  pages/
-  types/
-  utils/
-```
+### **Completed so far**
+- React + TypeScript base
+- Static question dataset
+- Search
+- Category filters
+- `QuestionList` + `QuestionCard` components
+- Basic study mode groundwork
+- Conditional UI states
+- Initial layout and component system
+
+### **In Progress**
+- Practice Mode (short answer, flashcard, timed)
+- Improved search options
+- Answer validation + override system
+- Layout + visual design decisions
 
 ---
 
 # 🧰 Tech Stack
 
-- **React** (Vite)
-- **TypeScript**
-- **CSS** (migrating toward Tailwind)
-- **Django + DRF** (backend, upcoming)
-- **PostgreSQL** (backend DB, upcoming)
+### **Frontend**
+- React (Vite)
+- TypeScript
+- TailwindCSS
+
+### **Backend (upcoming)**
+- Django + Django REST Framework
+- PostgreSQL
+- Optional Redis for match features
+- Docker + environment configuration
 
 ---
 
-# 🧠 Core MVP Features
+# 🧠 MVP Features (v0.x)
 
-### **Question DB**
-- PDF/ZIP parsing  
-- Search + filtering  
-- Question submission  
-- Voting system  
-- Reporting / tagging  
-- Beta/approved status  
+## **📘 Question Database**
+- Ingest ~10% of QBReader question sets
+- View full packets or generate random packets
+- Search + category filtering
+- PDF/ZIP upload for packets
+- User question submissions (single and packet)
+- Difficulty & quality ratings (Alcumus-style)
+- Report issues / bug flagging
 
-### **Practice Mode**
-- Short answer  
-- Multiple choice / multiple select  
-- Practice filters  
-- Slow read mode  
-- Answer verification  
-- Practice history  
-- Difficulty rating / Elo metric  
+## **🎯 Study Mode**
+- Flashcard mode
+- Timed mode
+- Basic text reading / slow read mode
+- Answer validation with override
+- Practice filters (category, year, difficulty)
 
-### **Analytics**
-- Accuracy, attempts, category performance  
-- Question analytics dashboard  
+## **🔔 Solo Play**
+- Tossup-style practice (qbreader-style reader)
+- Smooth filters and searching
+- Override system acts as reporting mechanism
+- Begin per-session stats tracking
 
-### **Accounts**
-- Login/signup  
-- Profile page  
-- Optional OAuth  
+## **📤 User Question System**
+- Submit questions (single or packet)
+- Rate questions (difficulty + quality)
+- Report bad or incorrect questions
+- Submission leaderboards
 
-### **Static Pages**
-- Resources  
-- Tournaments  
-- Coming soon pages for Arenas, Queue, Teams, Coach  
+## **⚔️ 1v1 Polling-Based Matches**
+- Low-latency polling race
+- Buzz lock
+- Judge answer via override
+- Basic scoring and results page
+
+## **👤 Accounts & Profiles**
+- OAuth login
+- Basic profile page
+- Stats Dashboard MVP
+
+## **📈 Social Features**
+- Solo leaderboards
+- Submission leaderboards
+
+## **🤖 LLM Integrations**
+- Cheap LLM explanations
+- Paraphrasing / simplified explanations
+
+## **📘 Static Pages**
+- Resources page
+- “Coming soon” pages for:
+  - Teams
+  - Coach Dashboard
+  - Scrimmage Rooms
+  - Ranked
 
 ---
 
-# 📆 16-Week Roadmap (Summary)
+# 🧭 V1 Feature Set (Post-Launch Upgrade)
 
-### **Weeks 1–3 — Frontend Foundation**
-- Build Question Browser UI  
-- Practice Mode MVP  
-- CSS structure
+## **📘 Database & Search**
+- Full question ingestion (all QBReader sets)
+- Automated submission → ingestion pipeline
+- Difficulty system
+- Advanced search (AND/OR)
+- Buzzpoint statistics
+- Public packet browser
 
-### **Weeks 4–6 — Backend + DB**
-- Django/DRF setup  
-- Question Model  
-- Search + filters  
-- PDF parser + upload  
-- Question migration
+## **🎯 Study Mode 2.0**
+- Adjustable timers
+- “Reveal next word” mode
+- Save/revisit questions
+- Session summaries
+- Bookmarking
 
-### **Weeks 7–9 — Practice + Analytics**
-- MCQ support  
-- Skip button  
-- Answer validation  
-- Practice history  
-- Analytics MVP
+## **🔔 Solo Mode 2.0**
+- Better animations
+- Smarter validation
+- Tossup/bonus support
 
-### **Weeks 10–12 — Accounts + Static Pages**
-- Login system  
-- Profile page  
-- Resources & Tournaments pages
+## **🏟️ Match Rooms**
+- Configurable settings
+- Real-time buzzing (WebSockets)
+- Overrides with consensus
+- Bonuses + full cycle
+- Rating system (Elo v1)
+- Match history + replay
+- Per-match dashboards
 
-### **Weeks 13–16 — Infra + Stretch**
-- Environment variables  
-- Logging  
-- Dockerization  
-- OAuth  
-- Final polish  
+## **📤 Submission Dashboard 2.0**
+- Edit submissions based on feedback
+- Inline feedback
+- Better PDF parsing
+- Automated formatting checks
+- Trusted submitter system
+
+## **🛡 Moderator Dashboard**
+- Approve/deny submissions
+- Resolve reported questions
+- Merge duplicates
+- Manage trusted users
+
+## **👤 Profiles 2.0**
+- Graphs & radar charts
+- Tossup/bonus analytics
+- Buzzpoint speed profile
+- Recent matches
+- Submission dashboard
+
+## **📈 Analytics & Insights**
+- Weak topic detection
+- Recommended questions
+- Study paths
+- Category heatmaps
+
+## **🏆 Leaderboards**
+- Weekly, Monthly, All-time
+- 1v1 rating leaderboard
+- Submission / editing leaderboards
+- School leaderboards
+
+## **🎖 Achievements**
+- Packet finisher
+- Perfect sessions
+- Streaks
+- Submission milestones
+
+## **🤖 LLM Upgrades**
+- Tiered explanations
+- RAG system
+- Distractor analysis
+
+## **👥 Team System**
+- Team creation
+- Team dashboards
+- Roster, practice stats, leaderboards
+
+## **🎓 Coach Dashboard**
+- Assign practice packets
+- Writing assignments
+- Category breakdowns
+- Weak topic identification
+
+## **👨‍🏫 Team Practice Room**
+- Coach controls reading
+- Join via code
+- Live buzzing & scoring
+- Replays & stats
 
 ---
 
@@ -139,14 +210,14 @@ npm run dev
 ```
 
 Runs at:  
-`http://localhost:5173`
+http://localhost:5173
 
 ---
 
-# 📄 License  
+# 📄 License
 MIT License (or TBD)
 
 ---
 
-# 📬 Contact  
-Created by **David Jiang**  
+# 📬 Contact
+Created by **David Jiang**
