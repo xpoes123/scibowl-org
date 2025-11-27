@@ -4,6 +4,17 @@ import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
 import { useEffect } from "react";
 
+/*
+    TODO List:
+    - Add question type filter (tossup/bonus/all)
+    - Collapsed previous questions
+    - Multiple choice support
+    - Hotkey support
+    - Timer with adjustable options
+    - Smart spaced reptition
+    - Streaks
+    - Local storage of filters and stats
+*/
 export function PracticePage() {
     const initialIndex = Math.floor(Math.random() * questions.length);
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -86,8 +97,8 @@ export function PracticePage() {
                         display: "flex",
                         flexWrap: "wrap",
                         gap: "8px",
-                        justifyContent: "center",      // <-- new
-                        width: "100%",                  // <-- ensures it spans full width
+                        justifyContent: "center",
+                        width: "100%",
                     }}
                     >
 
