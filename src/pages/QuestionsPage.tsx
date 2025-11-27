@@ -40,6 +40,12 @@ export function DatabasePage() {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        setSearchTerm(inputValue);
+                    }
+                }}
                 placeholder="Query"
                 style={{
                     width: "100%",
