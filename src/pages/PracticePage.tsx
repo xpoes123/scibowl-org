@@ -1,6 +1,6 @@
 import { useState} from "react";
 import { questions } from "../data/questions";
-import { QuestionCard } from "../components/QuestionCard";
+import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
 
 export function PracticePage() {
@@ -60,7 +60,7 @@ export function PracticePage() {
                 <p>No questions available for the selected filters.</p>
             )}
             {practicePool.length > 0 && (
-                <QuestionCard
+                <PracticeCard
                 key={currentQuestion.id}
                 question={currentQuestion}
                 onSubmitResult={(wasCorrect) => {
