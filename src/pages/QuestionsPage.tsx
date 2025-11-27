@@ -6,7 +6,6 @@ import { filterQuestions } from "../utils/filterQuestions";
 
 
 export function DatabasePage() {
-    const [currentSearch, setSearch] = useState("");
     const [inputValue, setInputValue] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -20,7 +19,7 @@ export function DatabasePage() {
         });
     }
         const filteredQuestions = filterQuestions(questions, {
-            term: currentSearch,
+            term: inputValue,
             categories: selectedCategories
         });
 
@@ -39,15 +38,20 @@ export function DatabasePage() {
             <h1 style={{ textAlign: "center" }}>NSB Arena</h1>
             <input
                 type="text"
-                value={currentSearch}
-                onChange={(e) => setSearch(e.target.value)}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Query"
                 style={{
                     width: "100%",
                     padding: "12px",
                 }}
             />
-            <button style={{ marginTop: "12px", padding: "8px 16px" }}>Search</button>
+            <button
+                onClick={() => setSearchTerm(inputValue)}
+                style={{ marginTop: "8px", padding: "8px 16px" }}
+            >
+                Search
+            </button>
             <div style={{ marginBottom: "12px" }}>
                 <strong>Filter by Category:</strong>
                 <div>
@@ -66,13 +70,13 @@ export function DatabasePage() {
                     })}
                 </div>
             </div>
-            {currentSearch.length == 0 &&
+            {searchTerm.length == 0 &&
             <div style={{ padding: "16px" }}>
                 <h2>Question List Component</h2>
                 <QuestionList questions={filteredQuestions.slice(0, 5)} />
             </div>
             }
-            {currentSearch.length >= 2 &&
+            {searchTerm.length >= 2 &&
             filteredQuestions.length > 0 &&
             filteredQuestions.length <= 2 &&
             <div style={{ padding: "16px" }}>
@@ -80,15 +84,15 @@ export function DatabasePage() {
                 <QuestionList questions={filteredQuestions} />
             </div>
             }
-            {filteredQuestions.length > 2 && currentSearch.length >= 2 &&(
+            {filteredQuestions.length > 2 && searchTerm.length >= 2 &&(
                 <p style={{ color: "#777" }}>Too many results, </p>
             )}
 
-            {currentSearch.length > 0 && currentSearch.length < 2&& (
+            {searchTerm.length > 0 && searchTerm.length < 2&& (
                 <p style={{ color: "#777" }}>Type at least 2 characters...</p>
             )}
 
-            {currentSearch.length >= 2 && filteredQuestions.length === 0 &&(
+            {searchTerm.length >= 2 && filteredQuestions.length === 0 &&(
                 <p style={{ color: "#777" }}>No results found</p>
             )}
         </div>
