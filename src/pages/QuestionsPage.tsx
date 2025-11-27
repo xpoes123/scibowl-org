@@ -8,7 +8,11 @@ import { filterQuestions } from "../utils/filterQuestions";
 export function DatabasePage() {
     const [inputValue, setInputValue] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [appliedTextType, setAppliedTextType] = useState<"question" | "answer" | "all">("all");
 
+    const [appliedCategories, setAppliedCategories] = useState<Category[]>([]);
+
+    const [textType, setTextType] = useState<"question" | "answer" | "all">("all");
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
 
     const toggleCategory = (category: Category) => {
@@ -18,12 +22,14 @@ export function DatabasePage() {
                 : prev.concat(category);
         });
     }
-        const filteredQuestions = filterQuestions(questions, {
-            term: inputValue,
-            categories: selectedCategories
-        });
 
-    const PRACTICE_CATEGORIES: Category[] = [
+    const filteredQuestions = filterQuestions(questions, {
+        term: searchTerm,
+        categories: appliedCategories,
+        textType: appliedTextType,
+    });
+
+    const CATEGORY_OPTIONS: Category[] = [
         "Physics",
         "Chemistry",
         "Biology",
@@ -32,7 +38,11 @@ export function DatabasePage() {
         "Earth",
         "Space",
     ];
-
+    const runSearch = () => {
+        setSearchTerm(inputValue);
+        setAppliedCategories(selectedCategories);
+        setAppliedTextType(textType);
+    }
     return (
         <div style={{ width:"100%", fontFamily: "Arial, sans-serif", padding: "16px" }}>
             <h1 style={{ textAlign: "center" }}>NSB Arena</h1>
@@ -43,7 +53,7 @@ export function DatabasePage() {
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         e.preventDefault();
-                        setSearchTerm(inputValue);
+                        runSearch();
                     }
                 }}
                 placeholder="Query"
@@ -53,7 +63,9 @@ export function DatabasePage() {
                 }}
             />
             <button
-                onClick={() => setSearchTerm(inputValue)}
+                onClick={() => {
+                    runSearch();
+                }}
                 style={{ marginTop: "8px", padding: "8px 16px" }}
             >
                 Search
@@ -61,7 +73,7 @@ export function DatabasePage() {
             <div style={{ marginBottom: "12px" }}>
                 <strong>Filter by Category:</strong>
                 <div>
-                    {PRACTICE_CATEGORIES.map((cat) => {
+                    {CATEGORY_OPTIONS.map((cat) => {
                         const checked = selectedCategories.includes(cat);
                         return (
                             <label key={cat} style={{ marginRight: "12px" }}>
@@ -76,7 +88,19 @@ export function DatabasePage() {
                     })}
                 </div>
             </div>
-            {searchTerm.length == 0 &&
+            <div style={{ marginBottom: "12px" }}>
+                <select
+                    value={textType}
+                    onChange={(e) => {
+                        setTextType(e.target.value as "question" | "answer" | "all");
+                    }}
+                >
+                    <option value="all">All Text</option>
+                    <option value="question">Question</option>
+                    <option value="answer">Answer</option>
+                </select>
+            </div>
+            {searchTerm.length === 0 &&
             <div style={{ padding: "16px" }}>
                 <h2>Question List Component</h2>
                 <QuestionList questions={filteredQuestions.slice(0, 5)} />
