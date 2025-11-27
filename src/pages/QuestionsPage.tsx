@@ -2,11 +2,14 @@ import { questions } from "../data/questions";
 import { useState } from "react";
 import { QuestionList } from "../components/QuestionList";
 import type { Category } from "../data/questions";
+import { filterQuestions } from "../utils/filterQuestions";
 
 
 export function DatabasePage() {
     const [currentSearch, setSearch] = useState("");
-    
+    const [inputValue, setInputValue] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
 
     const toggleCategory = (category: Category) => {
@@ -16,9 +19,10 @@ export function DatabasePage() {
                 : prev.concat(category);
         });
     }
-        const filteredQuestions = questions.filter(q => 
-        selectedCategories.length === 0 || selectedCategories.includes(q.category)
-    );
+        const filteredQuestions = filterQuestions(questions, {
+            term: currentSearch,
+            categories: selectedCategories
+        });
 
     const PRACTICE_CATEGORIES: Category[] = [
         "Physics",
@@ -43,6 +47,7 @@ export function DatabasePage() {
                     padding: "12px",
                 }}
             />
+            <button style={{ marginTop: "12px", padding: "8px 16px" }}>Search</button>
             <div style={{ marginBottom: "12px" }}>
                 <strong>Filter by Category:</strong>
                 <div>
