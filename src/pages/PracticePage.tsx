@@ -1,10 +1,15 @@
-import { useState, useEffect, useMemo} from "react";
+import { useState, useEffect, useMemo, useRef} from "react";
 import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
 import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
-import { buildPracticePool, getRandomNextIndex, formatAnswer, type QuestionTypeFilter } from "../utils/practiceUtils";
+import { 
+    buildPracticePool,
+    getRandomNextIndex,
+    formatAnswer,
+    pickRandomUnseenIndex,
+    type QuestionTypeFilter } from "../utils/practiceUtils";
 
 /*
     TODO List:
@@ -15,8 +20,10 @@ import { buildPracticePool, getRandomNextIndex, formatAnswer, type QuestionTypeF
     - Smart spaced reptition
     - Streaks
     - Local storage of filters and stats
+    - Stats reset button
 */
 
+const MAX_HISTORY_ENTRIES = 100;
 
 export function PracticePage() {
     const [currentIndex, setCurrentIndex] = useState(
@@ -38,6 +45,8 @@ export function PracticePage() {
         useState<"flashcard" | "reading">("flashcard");
     const [hasStarted, setHasStarted] = useState(false);
     const [hasSubmitted, setHasSubmitted] = useState(false);
+
+    const seenIdsRef = useRef<Set<number>>(new Set());
 
     const practicePool = useMemo(() => buildPracticePool(questions, selectedCategories, questionType), [questions, selectedCategories, questionType]);
     
@@ -72,16 +81,23 @@ export function PracticePage() {
 
     const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
 
-
+    
     const goToRandomQuestion = () => {
         if (practicePool.length <= 1) return;
 
         if (hasSubmitted && pendingHistory) {
-            setHistory((prev => [pendingHistory, ...prev]));
+            setHistory((prev => {
+                const next = [pendingHistory, ...prev];
+                return next.slice(0, MAX_HISTORY_ENTRIES);
+            }));
             setPendingHistory(null);
         }
         setCurrentIndex((prev) => {
-            return getRandomNextIndex(practicePool.length, prev);
+            return pickRandomUnseenIndex(
+                practicePool,
+                prev,
+                seenIdsRef.current
+            );
         });
     };
 
@@ -94,6 +110,8 @@ export function PracticePage() {
             setTotalCorrect((prev) => prev + 1);
         }
         const formattedAnswer = formatAnswer(currentQuestion);
+        
+        seenIdsRef.current.add(currentQuestion.id);
 
         setPendingHistory({
             id: currentQuestion.id,
@@ -177,7 +195,7 @@ export function PracticePage() {
                 onClick={goToRandomQuestion}
                 disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
             >
-                Random
+                Next
             </button>
 
             <button

@@ -39,7 +39,7 @@ export function HistoryCard({ entry }: HistoryCardProps) {
                 }}
             >
                 <span style={{ fontSize: "12px", color: "#fff" }}>
-                    {entry.answer.length > 20
+                    {entry.category} - {entry.answer.length > 20
                         ? entry.answer.slice(0, 20) + "…"
                         : entry.answer}
                 </span>

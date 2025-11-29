@@ -49,3 +49,26 @@ export function formatAnswer(
     }
     return question.answer;
 }
+
+
+export function pickRandomUnseenIndex(
+  practicePool: Question[],
+  currentIndex: number,
+  seenIds: Set<number>,
+): number {
+  const n = practicePool.length;
+  if (n <= 1) return currentIndex;
+
+  const MAX_TRIES = 50;
+
+  for (let attempt = 0; attempt < MAX_TRIES; attempt++) {
+    const idx = Math.floor(Math.random() * n);
+    if (idx === currentIndex) continue;
+    const qid = practicePool[idx].id;
+    if (!seenIds.has(qid)) {
+      return idx;
+    }
+  }
+
+  return getRandomNextIndex(n, currentIndex);
+}
