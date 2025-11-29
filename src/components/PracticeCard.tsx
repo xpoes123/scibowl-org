@@ -1,4 +1,5 @@
 import type { Question, QuestionCategory } from '../data/questions';
+import { MultipleChoice } from './MultipleChoice';
 import { useState } from 'react';
 
 type PracticeCardProps = {
@@ -46,15 +47,6 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                 <h2 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.category}</h2>
                 <h5 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.type.charAt(0).toUpperCase() + question.type.slice(1)}</h5>
                 <p style={{ marginBottom: "8px" , textAlign: "left"}}>{question.text}</p>
-                {question.questionCategory === "multiple_choice" && question.choices && (
-                    <ul style={{ listStyleType: "none", paddingLeft: 0, textAlign: "left" }}>
-                        {question.choices.map((choice) => (
-                            <li key={choice.label}>
-                                <strong>{choice.label}.</strong> {choice.text}
-                            </li>
-                        ))}
-                        </ul>
-                )}
                 {question.questionCategory === "identify_all" && question.attributes && (
                     <ul style={{ listStyleType: "none", paddingLeft: 0, textAlign: "left" }}>
                         {question.attributes.map((attr, index) => (
@@ -73,6 +65,20 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                         ))}
                     </ul>
                 )}
+
+                {question.questionCategory === "multiple_choice" && question.choices && (
+                    <MultipleChoice
+                        question={question}
+                        selectedLabel={userAnswer}
+                        onChange={(label) => {
+                            if (!hasSubmitted) {
+                                setUserAnswer(label);
+                            }
+                        }}
+                        disabled={hasSubmitted}
+                    />
+                )}
+
                  <input
                     type="text"
                     value={userAnswer}
