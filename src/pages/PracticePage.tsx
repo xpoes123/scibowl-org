@@ -1,9 +1,10 @@
-import { useState} from "react";
+import { useState, useEffect, useMemo} from "react";
 import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
-import { useEffect } from "react";
 import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
+import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
+import { buildPracticePool, getRandomNextIndex, formatAnswer, type QuestionTypeFilter } from "../utils/practiceUtils";
 
 /*
     TODO List:
@@ -19,50 +20,38 @@ import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 
 
 export function PracticePage() {
-    const initialIndex = Math.floor(Math.random() * questions.length);
-    const [currentIndex, setCurrentIndex] = useState(initialIndex);
+    const [currentIndex, setCurrentIndex] = useState(
+        () => Math.floor(Math.random() * questions.length)
+    );
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
-    const [history, setHistory] = useState<HistoryEntry[]>([]);
-    const [pendingHistory, setPendingHistory] = useState<HistoryEntry | null>(null);
 
-    const PRACTICE_CATEGORIES: Category[] = [
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Math",
-        "Energy",
-        "Earth",
-        "Space",
-    ];
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>(PRACTICE_CATEGORIES);
-    const [questionType, setQuestionType] = useState<"tossup" | "bonus" | "all">("all");
-    const [gameMode, setGameMode] = useState<"flashcard" | "reading">("flashcard");
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
+    const [pendingHistory, setPendingHistory] = useState<HistoryEntry | null>(
+        null
+    );
+
+    const [selectedCategories, setSelectedCategories] =
+        useState<Category[]>(PRACTICE_CATEGORIES);
+    const [questionType, setQuestionType] =
+        useState<QuestionTypeFilter>("all");
+    const [gameMode, setGameMode] =
+        useState<"flashcard" | "reading">("flashcard");
     const [hasStarted, setHasStarted] = useState(false);
     const [hasSubmitted, setHasSubmitted] = useState(false);
 
-    const practicePool = questions.filter(q =>
-        selectedCategories.length === 0 || selectedCategories.includes(q.category)
-    );
+    const practicePool = useMemo(() => buildPracticePool(questions, selectedCategories, questionType), [questions, selectedCategories, questionType]);
+    
     useEffect(() => {
         if (practicePool.length === 0) {
             return;
         }
-        setCurrentIndex(Math.floor(Math.random() * practicePool.length));
-    }, [selectedCategories, questionType]);
-    const toggleCategory = (category: Category) => {
-        setSelectedCategories((prev) => {
-            return prev.includes(category)
-                ? prev.filter((c) => c !== category)
-                : prev.concat(category);
-        });
-    }
-    const currentQuestion = practicePool[currentIndex];
+        setCurrentIndex(getRandomNextIndex(practicePool.length, -1));
+        }, [practicePool.length]);
 
     useEffect(() => {
         setHasSubmitted(false);
     }, [currentIndex]);
-
 
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
@@ -74,6 +63,17 @@ export function PracticePage() {
         return () => window.removeEventListener("keydown", handler);
     }, []);
 
+    const toggleCategory = (category: Category) => {
+        setSelectedCategories((prev) => {
+            return prev.includes(category)
+                ? prev.filter((c) => c !== category)
+                : prev.concat(category);
+        });
+    };
+
+    const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
+
+
     const goToRandomQuestion = () => {
         if (practicePool.length <= 1) return;
 
@@ -82,12 +82,25 @@ export function PracticePage() {
             setPendingHistory(null);
         }
         setCurrentIndex((prev) => {
-            let next = prev;
-            while (next === prev) {
-                next = Math.floor(Math.random() * practicePool.length);
-            }
+            return getRandomNextIndex(practicePool.length, prev);
+        });
+    };
 
-            return next;
+    const handleSubmitResult = (wasCorrect: boolean) => {
+        if (!currentQuestion) return;
+        
+        setHasSubmitted(true);
+        setTotalAttempts((prev) => prev + 1);
+        if (wasCorrect) {
+            setTotalCorrect((prev) => prev + 1);
+        }
+        const formattedAnswer = formatAnswer(currentQuestion);
+
+        setPendingHistory({
+            id: currentQuestion.id,
+            answer: formattedAnswer,
+            wasCorrect,
+            category: currentQuestion.category,
         });
     };
 
@@ -138,7 +151,7 @@ export function PracticePage() {
                 <select
                     value={questionType}
                     onChange={(e) => {
-                        setQuestionType(e.target.value as "tossup" | "bonus" | "all");
+                        setQuestionType(e.target.value as QuestionTypeFilter);
                     }}
                 >
                     <option value="all">All Questions</option>
@@ -159,12 +172,14 @@ export function PracticePage() {
             {practicePool.length === 0 && (
                 <p>No questions available for the selected filters.</p>
             )}
+
             <button
                 onClick={goToRandomQuestion}
                 disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
             >
                 Random
             </button>
+
             <button
                 onClick={() => setHasStarted((prev) => !prev)}
                 disabled={practicePool.length === 0}
@@ -175,6 +190,7 @@ export function PracticePage() {
                 >
                 {hasStarted ? "Pause" : "Start"}
             </button>
+
             <div style={{ marginTop: "16px" }}>
                 <p>
                     Attempts: {totalAttempts} | Correct: {totalCorrect}
@@ -185,30 +201,15 @@ export function PracticePage() {
                     </p>
                 )}
             </div>
-                {hasStarted &&practicePool.length > 0 && (
+
+                {hasStarted && currentQuestion && (
                     <PracticeCard
                         key={currentQuestion.id}
                         question={currentQuestion}
-                        onSubmitResult={(wasCorrect) => {
-                            setHasSubmitted(true);
-                            setTotalAttempts((prev) => prev +1);
-                            if (wasCorrect) {
-                                setTotalCorrect((prev) => prev + 1);
-                            }
-                            const formattedAnswer = currentQuestion.questionCategory === "multiple_choice" && currentQuestion.choices
-                                ? `${currentQuestion.answer}. ${currentQuestion.choices.find(c => c.label === currentQuestion.answer)?.text || ""}`
-                                : currentQuestion.answer;
-
-                            setPendingHistory({
-                                id: currentQuestion.id,
-                                answer: formattedAnswer,
-                                wasCorrect,
-                                category: currentQuestion.category,
-                            })
-                        }}    
-                    />
+                        onSubmitResult={handleSubmitResult}/>
                 )
             }
+
             {history.length > 0 && (
                 <div style={{ marginTop: "24px" }}>
                     <h3>Previous Questions</h3>
