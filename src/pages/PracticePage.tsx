@@ -10,14 +10,13 @@ import {
     formatAnswer,
     pickRandomUnseenIndex,
     type QuestionTypeFilter } from "../utils/practiceUtils";
-
+import { MultipleChoice } from "../components/MultipleChoice";
 /*
     TODO List:
-    - Collapsed previous questions
     - Multiple choice support
     - Hotkey support
     - Timer with adjustable options
-    - Smart spaced reptition
+    - Smart spaced repetition
     - Streaks
     - Local storage of filters and stats
     - Stats reset button
