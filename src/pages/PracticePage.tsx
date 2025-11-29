@@ -3,6 +3,7 @@ import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
 import { useEffect } from "react";
+import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 
 /*
     TODO List:
@@ -15,11 +16,14 @@ import { useEffect } from "react";
     - Streaks
     - Local storage of filters and stats
 */
+
+
 export function PracticePage() {
     const initialIndex = Math.floor(Math.random() * questions.length);
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
+    const [history, setHistory] = useState<HistoryEntry[]>([]);
     const PRACTICE_CATEGORIES: Category[] = [
         "Physics",
         "Chemistry",
@@ -145,34 +149,25 @@ export function PracticePage() {
                     <option value="reading">Reading</option>
                 </select>
             </div>
+
             {practicePool.length === 0 && (
                 <p>No questions available for the selected filters.</p>
             )}
-            {!hasStarted ? (
-                <div style={{ marginTop: "32px" }}>
-                    <button onClick={() => setHasStarted(true)}>Start</button>
-                </div>
-            ) : (
-                practicePool.length > 0 && (
-                    <PracticeCard
-                        key={currentQuestion.id}
-                        question={currentQuestion}
-                        onSubmitResult={(wasCorrect) => {
-                            setHasSubmitted(true);
-                            setTotalAttempts((prev) => prev +1);
-                            if (wasCorrect) {
-                                setTotalCorrect((prev) => prev + 1);
-                            }
-                        }}    
-                    />
-                )
-            )}
-
             <button
                 onClick={goToRandomQuestion}
                 disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
             >
                 Random
+            </button>
+            <button
+                onClick={() => setHasStarted((prev) => !prev)}
+                disabled={practicePool.length === 0}
+                style={{
+                    marginRight: "8px",
+                    cursor: practicePool.length === 0 ? "not-allowed" : "pointer",
+                }}
+                >
+                {hasStarted ? "Pause" : "Start"}
             </button>
             <div style={{ marginTop: "16px" }}>
                 <p>
@@ -184,6 +179,44 @@ export function PracticePage() {
                     </p>
                 )}
             </div>
+                {hasStarted &&practicePool.length > 0 && (
+                    <PracticeCard
+                        key={currentQuestion.id}
+                        question={currentQuestion}
+                        onSubmitResult={(wasCorrect) => {
+                            setHasSubmitted(true);
+                            setTotalAttempts((prev) => prev +1);
+                            if (wasCorrect) {
+                                setTotalCorrect((prev) => prev + 1);
+                            }
+                            const formattedAnswer = currentQuestion.questionCategory === "multiple_choice" && currentQuestion.choices
+                                ? `${currentQuestion.answer}. ${currentQuestion.choices.find(c => c.label === currentQuestion.answer)?.text || ""}`
+                                : currentQuestion.answer;
+
+                            setHistory((prev) => [
+                                {
+                                    id: currentQuestion.id,
+                                    answer: formattedAnswer,
+                                    wasCorrect,
+                                    category: currentQuestion.category,
+                                },
+                                ...prev,
+                            ])
+                        }}    
+                    />
+                )
+            }
+            {history.length > 0 && (
+                <div style={{ marginTop: "24px" }}>
+                    <h3>Previous Questions</h3>
+                    {history.map((entry, idx) => (
+                    <HistoryCard
+                        key={`${entry.id}-${idx}`}
+                        entry={entry}
+                    />
+                    ))}
+                </div>
+                )}
         </div>
     );
 }
