@@ -10,7 +10,7 @@ import {
     formatAnswer,
     pickRandomUnseenIndex,
     type QuestionTypeFilter } from "../utils/practiceUtils";
-import { MultipleChoice } from "../components/MultipleChoice";
+import { CategoryFilter } from "../components/CategoryFilter";
 /*
     TODO List:
     - Multiple choice support
@@ -70,13 +70,6 @@ export function PracticePage() {
         return () => window.removeEventListener("keydown", handler);
     }, []);
 
-    const toggleCategory = (category: Category) => {
-        setSelectedCategories((prev) => {
-            return prev.includes(category)
-                ? prev.filter((c) => c !== category)
-                : prev.concat(category);
-        });
-    };
 
     const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
 
@@ -122,122 +115,114 @@ export function PracticePage() {
     };
 
     return (
-        <div
-            style={{
-                width: "100%",
-                fontFamily: "Arial, sans-serif",
-                padding: "16px",
-            }}>
-            <h1>NSB Arena - Practice Page</h1>
-            <div style={{ marginBottom: "16px" }}>
-                <strong>Filter by Category:</strong>
-                <div 
-                    style={{
-                        marginTop: "8px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "8px",
-                        justifyContent: "center",
-                        width: "100%",
-                    }}
-                    >
+    <div className="w-full max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_320px] gap-6">
+        {/* MAIN QUESTION AREA (left on desktop) */}
+        <div>
+        {hasStarted && currentQuestion && (
+            <PracticeCard
+            key={currentQuestion.id}
+            question={currentQuestion}
+            onSubmitResult={handleSubmitResult}
+            />
+        )}
 
-                    {PRACTICE_CATEGORIES.map((cat) => {
-                        const active = selectedCategories.includes(cat);
-                        return (
-                           <button
-                            key={cat}
-                            onClick={() => toggleCategory(cat)}
-                           style={{
-                                padding: "6px 12px",
-                                borderRadius: "6px",
-                                border: "1px solid #888",
-                                cursor: "pointer",
-                                background: active ? "#4CAF50" : "#eee",
-                                color: active ? "white" : "black",
-                                fontWeight: active ? "bold" : "normal",
-                            }}
-                            >
-                            {cat}
-                           </button>
-                        );
-                    })}
-                </div>
+        {history.length > 0 && (
+            <div className="mt-8">
+            <h3 className="text-2xl font-semibold text-white mb-4">
+                Previous Questions
+            </h3>
+            {history.map((entry, idx) => (
+                <HistoryCard
+                key={`${entry.id}-${idx}`}
+                entry={entry}
+                />
+            ))}
             </div>
-            <div style={{ marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #ccc" }}>
-                <select
-                    value={questionType}
-                    onChange={(e) => {
-                        setQuestionType(e.target.value as QuestionTypeFilter);
-                    }}
-                >
-                    <option value="all">All Questions</option>
-                    <option value="tossup">Tossup</option>
-                    <option value="bonus">Bonus</option>
-                </select>
-                <select
-                    value={gameMode}
-                    onChange={(e) => {
-                        setGameMode(e.target.value as "flashcard" | "reading");
-                    }}
-                >
-                    <option value="flashcard">Flashcard</option>
-                    <option value="reading">Reading</option>
-                </select>
-            </div>
-
-            {practicePool.length === 0 && (
-                <p>No questions available for the selected filters.</p>
-            )}
-
-            <button
-                onClick={goToRandomQuestion}
-                disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
-            >
-                Next
-            </button>
-
-            <button
-                onClick={() => setHasStarted((prev) => !prev)}
-                disabled={practicePool.length === 0}
-                style={{
-                    marginRight: "8px",
-                    cursor: practicePool.length === 0 ? "not-allowed" : "pointer",
-                }}
-                >
-                {hasStarted ? "Pause" : "Start"}
-            </button>
-
-            <div style={{ marginTop: "16px" }}>
-                <p>
-                    Attempts: {totalAttempts} | Correct: {totalCorrect}
-                </p>
-                {totalAttempts > 0 && (
-                    <p>
-                    Accuracy: {Math.round((totalCorrect / totalAttempts) * 100)}%
-                    </p>
-                )}
-            </div>
-
-                {hasStarted && currentQuestion && (
-                    <PracticeCard
-                        key={currentQuestion.id}
-                        question={currentQuestion}
-                        onSubmitResult={handleSubmitResult}/>
-                )
-            }
-
-            {history.length > 0 && (
-                <div style={{ marginTop: "24px" }}>
-                    <h3>Previous Questions</h3>
-                    {history.map((entry, idx) => (
-                    <HistoryCard
-                        key={`${entry.id}-${idx}`}
-                        entry={entry}
-                    />
-                    ))}
-                </div>
-                )}
+        )}
         </div>
+
+        {/* SIDEBAR (right on desktop) */}
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-[#7d70f1]/20 h-fit sticky top-6">
+        <CategoryFilter
+            categories={PRACTICE_CATEGORIES}
+            selected={selectedCategories}
+            onChange={setSelectedCategories}
+            className="justify-center mb-6"
+        />
+
+        <div className="flex gap-3 mb-6 pb-6 border-b border-slate-700">
+            <select
+            value={questionType}
+            onChange={(e) => {
+                setQuestionType(e.target.value as QuestionTypeFilter);
+            }}
+            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
+            >
+            <option value="all">All Questions</option>
+            <option value="tossup">Tossup</option>
+            <option value="bonus">Bonus</option>
+            </select>
+            <select
+            value={gameMode}
+            onChange={(e) => {
+                setGameMode(e.target.value as "flashcard" | "reading");
+            }}
+            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
+            >
+            <option value="flashcard">Flashcard</option>
+            <option value="reading">Reading</option>
+            </select>
+        </div>
+
+        {practicePool.length === 0 && (
+            <p className="text-slate-400 text-center py-4">
+            No questions available for the selected filters.
+            </p>
+        )}
+
+        <div className="flex gap-3 mb-6">
+            <button
+            onClick={() => setHasStarted((prev) => !prev)}
+            disabled={practicePool.length === 0}
+            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
+                practicePool.length === 0
+                ? "bg-slate-600 cursor-not-allowed text-slate-400"
+                : hasStarted
+                ? "bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/30"
+                : "bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30"
+            }`}
+            >
+            {hasStarted ? "Pause" : "Start (S)"}
+            </button>
+
+            <button
+            onClick={goToRandomQuestion}
+            disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
+            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
+                !hasStarted || !hasSubmitted || practicePool.length === 0
+                ? "bg-slate-600 cursor-not-allowed text-slate-400"
+                : "bg-gradient-to-r from-[#7d70f1] to-[#9789f5] hover:from-[#6c5fe0] hover:to-[#8678e4] text-white shadow-lg shadow-[#7d70f1]/30"
+            }`}
+            >
+            Next
+            </button>
+        </div>
+
+        <div className="bg-slate-900/50 rounded-lg p-4 text-center border border-[#7d70f1]/20">
+            <p className="text-slate-300 text-lg">
+            <span className="font-semibold text-white">Attempts:</span>{" "}
+            {totalAttempts}
+            <span className="mx-2">|</span>
+            <span className="font-semibold text-white">Correct:</span>{" "}
+            {totalCorrect}
+            </p>
+            {totalAttempts > 0 && (
+            <p className="text-2xl font-bold bg-gradient-to-r from-[#7d70f1] to-[#b4a8ff] bg-clip-text text-transparent mt-2">
+                Accuracy: {Math.round((totalCorrect / totalAttempts) * 100)}%
+            </p>
+            )}
+        </div>
+        </div>
+    </div>
     );
 }

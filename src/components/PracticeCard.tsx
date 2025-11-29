@@ -36,50 +36,51 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
         return question.answer;
     }
     return (
-        <div
-            style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "12px",
-                marginBottom: "12px",
-            }}
-            >
-                <h2 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.category}</h2>
-                <h5 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.type.charAt(0).toUpperCase() + question.type.slice(1)}</h5>
-                <p style={{ marginBottom: "8px" , textAlign: "left"}}>{question.text}</p>
-                {question.questionCategory === "identify_all" && question.attributes && (
-                    <ul style={{ listStyleType: "none", paddingLeft: 0, textAlign: "left" }}>
-                        {question.attributes.map((attr, index) => (
-                            <li key={attr}>
-                                <strong>{index + 1} </strong> {attr}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                {question.questionCategory === "rank" && question.attributes && (
-                    <ul style={{ listStyleType: "none", paddingLeft: 0, textAlign: "left" }}>
-                        {question.attributes.map((attr, index) => (
-                            <li key={attr}>
-                                <strong>{index + 1} </strong> {attr}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+        <div className="border border-[#7d70f1]/30 rounded-xl p-6 mb-6 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm shadow-2xl shadow-[#7d70f1]/10">
+            <div className="mb-4">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-[#7d70f1] to-[#b4a8ff] bg-clip-text text-transparent mb-2">{question.category}</h2>
+                <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
+                    {question.type.charAt(0).toUpperCase() + question.type.slice(1)}
+                </span>
+            </div>
 
-                {question.questionCategory === "multiple_choice" && question.choices && (
-                    <MultipleChoice
-                        question={question}
-                        selectedLabel={userAnswer}
-                        onChange={(label) => {
-                            if (!hasSubmitted) {
-                                setUserAnswer(label);
-                            }
-                        }}
-                        disabled={hasSubmitted}
-                    />
-                )}
+            <p className="mb-6 text-slate-100 leading-relaxed text-lg">{question.text}</p>
 
-                 <input
+            {question.questionCategory === "identify_all" && question.attributes && (
+                <ul className="list-none pl-0 space-y-2 mb-6">
+                    {question.attributes.map((attr, index) => (
+                        <li key={attr} className="text-slate-200 bg-slate-700/30 p-2 rounded-lg">
+                            <strong className="text-white">{index + 1}.</strong> {attr}
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            {question.questionCategory === "rank" && question.attributes && (
+                <ul className="list-none pl-0 space-y-2 mb-6">
+                    {question.attributes.map((attr, index) => (
+                        <li key={attr} className="text-slate-200 bg-slate-700/30 p-2 rounded-lg">
+                            <strong className="text-white">{index + 1}.</strong> {attr}
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            {question.questionCategory === "multiple_choice" && question.choices && (
+                <MultipleChoice
+                    question={question}
+                    selectedLabel={userAnswer}
+                    onChange={(label) => {
+                        if (!hasSubmitted) {
+                            setUserAnswer(label);
+                        }
+                    }}
+                    disabled={hasSubmitted}
+                />
+            )}
+
+            <div className="flex gap-3 mb-4">
+                <input
                     type="text"
                     value={userAnswer}
                     onChange={(e) => {
@@ -93,37 +94,38 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                             handleSubmit();
                         }
                     }}
-                    placeholder="Type your answer here"
-                    style={{ width: "80%", padding: "8px", marginBottom: "8px" }}
+                    placeholder="Type your answer here..."
+                    className="flex-1 px-4 py-3 bg-slate-900/70 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7d70f1] disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={hasSubmitted}
                 />
                 <button
                     onClick={handleSubmit}
-                    style={{ marginBottom: "8px", marginLeft: "8px" }}
                     disabled={hasSubmitted || userAnswer.trim() === ""}
+                    className="px-6 py-3 bg-gradient-to-r from-[#7d70f1] to-[#9789f5] hover:from-[#6c5fe0] hover:to-[#8678e4] text-white font-semibold rounded-lg transition-all disabled:bg-slate-600 disabled:cursor-not-allowed shadow-lg shadow-[#7d70f1]/30"
                     >
-                    Submit answer
-                </button>    
+                    Submit
+                </button>
+            </div>
 
-                {hasSubmitted && (
-                    <div style={{ marginTop: "4px" }}>
-                        <div>
-                            <strong>Correct Answer:</strong> {renderAnswer()}
-                        </div>
+            {hasSubmitted && (
+                <div className={`mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-900/30 border border-green-700' : 'bg-red-900/30 border border-red-700'}`}>
+                    <div className="mb-2">
+                        <strong className="text-white">Correct Answer:</strong> <span className="text-green-300">{renderAnswer()}</span>
+                    </div>
 
-                        <div style={{ marginTop: "4px" }}>
+                    <div className="text-lg font-bold">
                         {isCorrect ? (
-                            <span style={{ color: "green" }}>
-                            Correct
+                            <span className="text-green-400">
+                            ✓ Correct!
                             </span>
                         ) : (
-                            <span style={{ color: "red" }}>
-                            Incorrect
+                            <span className="text-red-400">
+                            ✗ Incorrect
                             </span>
                         )}
-                        </div>
                     </div>
-                    )}
+                </div>
+            )}
         </div>
     );
 }

@@ -18,14 +18,7 @@ export function MultipleChoice({ question, onChange, selectedLabel, disabled=fal
     }
 
     return (
-        <div
-            style={{
-                marginTop: "12px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-            }}
-        >
+        <div className="mt-4 flex flex-col gap-3 mb-6">
             {question.choices.map((choice) => {
                 const isSelected = selectedLabel === choice.label;
                 return (
@@ -37,18 +30,13 @@ export function MultipleChoice({ question, onChange, selectedLabel, disabled=fal
                                 onChange(choice.label);
                             }
                         }}
-                        style={{
-                            padding: "8px 12px",
-                            borderRadius: "6px",
-                            border: isSelected ? "2px solid #555" : "1px solid #aaa",
-                            background: isSelected ? "#2C2C2C" : "#616161ff",
-                            color: "#ffffffff",
-                            cursor: disabled ? "not-allowed" : "pointer",
-                            textAlign: "left",
-                        }}
-
+                        className={`px-4 py-3 rounded-lg text-left font-semibold transition-all transform hover:scale-[1.02] ${
+                            isSelected
+                                ? 'bg-gradient-to-r from-[#7d70f1] to-[#9789f5] border-2 border-[#b4a8ff] text-white shadow-lg shadow-[#7d70f1]/40'
+                                : 'bg-slate-700 border border-slate-600 text-slate-100 hover:bg-slate-600 hover:border-[#7d70f1]/30'
+                        } ${disabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
                     >
-                        <strong>{choice.label}) {choice.text}</strong>
+                        <span className="text-white">{choice.label})</span> {choice.text}
                     </button>
                 )
             })}
