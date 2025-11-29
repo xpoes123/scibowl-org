@@ -13,7 +13,6 @@ import {
 import { CategoryFilter } from "../components/CategoryFilter";
 /*
     TODO List:
-    - Add quick enter
     - Timer with adjustable options
     - Smart spaced repetition
     - Streaks
