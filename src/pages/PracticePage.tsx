@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef} from "react";
+import { useState, useEffect, useMemo, useRef, useCallback} from "react";
 import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
@@ -13,8 +13,7 @@ import {
 import { CategoryFilter } from "../components/CategoryFilter";
 /*
     TODO List:
-    - Multiple choice support
-    - Hotkey support
+    - Add quick enter
     - Timer with adjustable options
     - Smart spaced repetition
     - Streaks
@@ -70,20 +69,48 @@ export function PracticePage() {
         return () => window.removeEventListener("keydown", handler);
     }, []);
 
+    useEffect(() => {
+        const handler = (e:KeyboardEvent) => {
+            if (e.key.toLowerCase() === "p") {
+                setHasStarted(false);
+            }
+        };
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, []);
+
 
     const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
 
     
-    const goToRandomQuestion = () => {
+    const goToRandomQuestion = useCallback(() => {
         if (practicePool.length <= 1) return;
+        if (!hasSubmitted && currentQuestion) {
+            setTotalAttempts((prev) => prev + 1);
+            const formattedAnswer = formatAnswer(currentQuestion);
+            seenIdsRef.current.add(currentQuestion?.id);
 
-        if (hasSubmitted && pendingHistory) {
+            setHistory((prev) => {
+                const entry: HistoryEntry = {
+                    id: currentQuestion.id,
+                    answer: formattedAnswer,
+                    wasCorrect: false,
+                    category: currentQuestion.category,
+                    fullQuestion: currentQuestion,
+                };
+                const next = [entry, ...prev];
+                return next.slice(0, MAX_HISTORY_ENTRIES)
+            })
+            setHasSubmitted(false);
+        }
+        else if (hasSubmitted && pendingHistory) {
             setHistory((prev => {
                 const next = [pendingHistory, ...prev];
                 return next.slice(0, MAX_HISTORY_ENTRIES);
             }));
             setPendingHistory(null);
         }
+
         setCurrentIndex((prev) => {
             return pickRandomUnseenIndex(
                 practicePool,
@@ -91,7 +118,41 @@ export function PracticePage() {
                 seenIdsRef.current
             );
         });
-    };
+    }, [practicePool, hasSubmitted, pendingHistory, currentQuestion]);
+
+    useEffect(() => {
+        const handler = (e:KeyboardEvent) => {
+            if (e.key === "Enter"  && hasStarted && hasSubmitted && practicePool.length > 0) {
+                e.preventDefault();
+                goToRandomQuestion();
+            }
+        };
+
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [hasStarted, hasSubmitted, goToRandomQuestion]);
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key.toLowerCase() === "n" && hasSubmitted && hasStarted && practicePool.length > 0) {
+                goToRandomQuestion();
+                setHasSubmitted(false);
+            }
+        };
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [hasSubmitted, goToRandomQuestion]);
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key.toLowerCase() === "s" && !hasSubmitted && hasStarted && practicePool.length > 0) {
+                goToRandomQuestion();
+                setHasSubmitted(false);
+            }
+        };
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [hasSubmitted, goToRandomQuestion]);
 
     const handleSubmitResult = (wasCorrect: boolean) => {
         if (!currentQuestion) return;
@@ -170,7 +231,7 @@ export function PracticePage() {
             className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
             >
             <option value="flashcard">Flashcard</option>
-            <option value="reading">Reading</option>
+            <option value="reading">Reading)</option>
             </select>
         </div>
 
@@ -182,29 +243,28 @@ export function PracticePage() {
 
         <div className="flex gap-3 mb-6">
             <button
-            onClick={() => setHasStarted((prev) => !prev)}
-            disabled={practicePool.length === 0}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
-                practicePool.length === 0
-                ? "bg-slate-600 cursor-not-allowed text-slate-400"
-                : hasStarted
-                ? "bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/30"
-                : "bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30"
-            }`}
-            >
-            {hasStarted ? "Pause" : "Start (S)"}
+                onClick={() => setHasStarted((prev) => !prev)}
+                disabled={practicePool.length === 0}
+                className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
+                    practicePool.length === 0 
+                    ? "bg-slate-600 cursor-not-allowed text-slate-400"
+                    : hasStarted
+                    ? "bg-amber-700 hover:bg-amber-800 text-white shadow-lg shadow-amber-800/30"
+                    : "bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30"
+                }`}
+                >
+                {hasStarted ? "Pause (P)" : "Start (S)"}
             </button>
-
             <button
-            onClick={goToRandomQuestion}
-            disabled={!hasStarted || !hasSubmitted || practicePool.length === 0}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
-                !hasStarted || !hasSubmitted || practicePool.length === 0
-                ? "bg-slate-600 cursor-not-allowed text-slate-400"
-                : "bg-gradient-to-r from-[#7d70f1] to-[#9789f5] hover:from-[#6c5fe0] hover:to-[#8678e4] text-white shadow-lg shadow-[#7d70f1]/30"
-            }`}
+                onClick={goToRandomQuestion}
+                disabled={!hasStarted || practicePool.length === 0}
+                className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
+                    !hasStarted || practicePool.length === 0
+                        ? "bg-slate-600 cursor-not-allowed text-slate-400"
+                        : "bg-gradient-to-r from-[#7d70f1] to-[#9789f5] hover:from-[#6c5fe0] hover:to-[#8678e4] text-white shadow-lg shadow-[#7d70f1]/30"
+                }`}
             >
-            Next
+                {hasSubmitted ? "Next (N)" : "Skip (S)"}
             </button>
         </div>
 
