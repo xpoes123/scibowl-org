@@ -1,9 +1,10 @@
 import { questions } from "../data/questions";
 import { useState } from "react";
 import { QuestionList } from "../components/QuestionList";
-import type { Category } from "../data/questions";
+import type { Category, QuestionCategory } from "../data/questions";
 import { filterQuestions } from "../utils/filterQuestions";
 import { CategoryFilter } from "../components/CategoryFilter";
+import { QuestionCategoryFilter } from "../components/QuestionCategoriesFilter";
 
 
 export function DatabasePage() {
@@ -13,20 +14,13 @@ export function DatabasePage() {
     const [appliedTextType, setAppliedTextType] = useState<"question" | "answer" | "all">("all");
     const [appliedCategories, setAppliedCategories] = useState<Category[]>([]);
     const [appliedQuestionType, setAppliedQuestionType] = useState<"tossup" | "bonus" | "all">("all");
-    const [appliedQuestionCategory, setAppliedQuestionCategory] = useState<"multiple_choice" | "identify_all" | "rank" | "all">("all");
+    const [appliedQuestionCategory, setAppliedQuestionCategory] = useState<QuestionCategory[]>([]);
 
     const [textType, setTextType] = useState<"question" | "answer" | "all">("all");
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [questionType, setQuestionType] = useState<"tossup" | "bonus" | "all">("all");
-    const [questionCategory, setQuestionCategory] = useState<"multiple_choice" | "identify_all" | "rank" | "all">("all");
+    const [questionCategory, setQuestionCategory] = useState<QuestionCategory[]>([]);
     
-    const toggleCategory = (category: Category) => {
-        setSelectedCategories((prev) => {
-            return prev.includes(category)
-                ? prev.filter((c) => c !== category)
-                : prev.concat(category);
-        });
-    }
 
     const filteredQuestions = filterQuestions(questions, {
         term: searchTerm,
@@ -61,6 +55,14 @@ export function DatabasePage() {
                     onChange={setSelectedCategories}
                     className="justify-center mb-6"
                 />
+                <div className="mb-4">
+                    <QuestionCategoryFilter
+                        categories={["multiple_choice", "identify_all", "rank", "short_answer"]}
+                        selected={questionCategory}
+                        onChange={setQuestionCategory}
+                        className="justify-center mb-6"
+                    />
+                </div>
                 <div className="flex gap-3 mb-4">
                     <input
                         type="text"
@@ -83,8 +85,8 @@ export function DatabasePage() {
                     >
                         Search
                     </button>
+                    
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <select
                         value={textType}
@@ -96,20 +98,6 @@ export function DatabasePage() {
                         <option value="all">All Text</option>
                         <option value="question">Question</option>
                         <option value="answer">Answer</option>
-                    </select>
-
-                    <select
-                        value={questionCategory}
-                        onChange={(e) => {
-                            setQuestionCategory(e.target.value as "multiple_choice" | "identify_all" | "rank" | "all");
-                        }}
-                        className="px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
-                    >
-                        <option value="all">All Question Categories</option>
-                        <option value="short_answer">Short Answer</option>
-                        <option value="multiple_choice">Multiple Choice</option>
-                        <option value="identify_all">Identify All</option>
-                        <option value="rank">Rank</option>
                     </select>
 
                     <select
