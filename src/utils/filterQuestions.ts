@@ -1,11 +1,11 @@
-import type { Question, Category } from "../data/questions";
+import type { Question, Category, QuestionCategory } from "../data/questions";
 
 export type FilterParams = {
   term: string;
   categories: Category[];
   textType: "question" | "answer" | "all";
   questionType: "tossup" | "bonus" | "all";
-  questionCategory: "multiple_choice" | "identify_all" | "rank" | "all";
+  questionCategory: QuestionCategory[];
 };
 
 export function filterQuestions(
@@ -18,7 +18,7 @@ export function filterQuestions(
   const hasTerm = normalizedTerm.length >= 2;
   const hasCategoryFilter = categories.length > 0;
   const hasQuestionTypeFilter = questionType !== "all";
-  const hasQuestionCategoryFilter = questionCategory !== "all";
+  const hasQuestionCategoryFilter = questionCategory.length > 0;
 
   return allQuestions.filter((q) => {
     if (hasCategoryFilter && !categories.includes(q.category)) {
@@ -29,7 +29,7 @@ export function filterQuestions(
       return false;
     }
 
-    if (hasQuestionCategoryFilter && q.questionCategory !== questionCategory) {
+    if (hasQuestionCategoryFilter && !questionCategory.includes(q.questionCategory)) {
       return false;
     }
 
