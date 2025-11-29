@@ -24,6 +24,8 @@ export function PracticePage() {
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
     const [history, setHistory] = useState<HistoryEntry[]>([]);
+    const [pendingHistory, setPendingHistory] = useState<HistoryEntry | null>(null);
+
     const PRACTICE_CATEGORIES: Category[] = [
         "Physics",
         "Chemistry",
@@ -73,9 +75,13 @@ export function PracticePage() {
     }, []);
 
     const goToRandomQuestion = () => {
-        setCurrentIndex((prev) => {
-            if (practicePool.length <= 1) return prev;
+        if (practicePool.length <= 1) return;
 
+        if (hasSubmitted && pendingHistory) {
+            setHistory((prev => [pendingHistory, ...prev]));
+            setPendingHistory(null);
+        }
+        setCurrentIndex((prev) => {
             let next = prev;
             while (next === prev) {
                 next = Math.floor(Math.random() * practicePool.length);
@@ -193,15 +199,12 @@ export function PracticePage() {
                                 ? `${currentQuestion.answer}. ${currentQuestion.choices.find(c => c.label === currentQuestion.answer)?.text || ""}`
                                 : currentQuestion.answer;
 
-                            setHistory((prev) => [
-                                {
-                                    id: currentQuestion.id,
-                                    answer: formattedAnswer,
-                                    wasCorrect,
-                                    category: currentQuestion.category,
-                                },
-                                ...prev,
-                            ])
+                            setPendingHistory({
+                                id: currentQuestion.id,
+                                answer: formattedAnswer,
+                                wasCorrect,
+                                category: currentQuestion.category,
+                            })
                         }}    
                     />
                 )
