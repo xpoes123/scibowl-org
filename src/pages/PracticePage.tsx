@@ -8,7 +8,6 @@ import { buildPracticePool, getRandomNextIndex, formatAnswer, type QuestionTypeF
 
 /*
     TODO List:
-    - Add question type filter (tossup/bonus/all)
     - Collapsed previous questions
     - Multiple choice support
     - Hotkey support
@@ -101,6 +100,7 @@ export function PracticePage() {
             answer: formattedAnswer,
             wasCorrect,
             category: currentQuestion.category,
+            fullQuestion: currentQuestion,
         });
     };
 
