@@ -1,4 +1,4 @@
-import type { Question, QuestionCategory } from '../data/questions';
+import type { Question } from '../data/questions';
 
 type QuestionCardProps = {
     question: Question;

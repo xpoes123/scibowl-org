@@ -45,7 +45,6 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
             >
                 <h2 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.category}</h2>
                 <h5 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.type.charAt(0).toUpperCase() + question.type.slice(1)}</h5>
-                <h5 style={{ marginTop: 0, textAlign: "left", marginLeft: "8px" }}>{question.questionCategory.charAt(0).toUpperCase() + question.questionCategory.slice(1).replaceAll("_", " ")}</h5> 
                 <p style={{ marginBottom: "8px" , textAlign: "left"}}>{question.text}</p>
                 {question.questionCategory === "multiple_choice" && question.choices && (
                     <ul style={{ listStyleType: "none", paddingLeft: 0, textAlign: "left" }}>
