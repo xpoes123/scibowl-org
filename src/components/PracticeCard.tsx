@@ -1,6 +1,6 @@
 import type { Question, QuestionCategory } from '../data/questions';
 import { MultipleChoice } from './MultipleChoice';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type PracticeCardProps = {
     question: Question;
@@ -35,6 +35,18 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
         }
         return question.answer;
     }
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                handleSubmit();
+            }
+        };
+            window.addEventListener("keydown", handler);
+            return () => window.removeEventListener("keydown", handler);
+    }, [userAnswer, hasSubmitted, question.answer]);
+
     return (
         <div className="border border-[#7d70f1]/30 rounded-xl p-6 mb-6 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm shadow-2xl shadow-[#7d70f1]/10">
             <div className="mb-4">
@@ -88,12 +100,6 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                             setUserAnswer(e.target.value);
                         }
                     }}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                            handleSubmit();
-                        }
-                    }}
                     placeholder="Type your answer here..."
                     className="flex-1 px-4 py-3 bg-slate-900/70 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7d70f1] disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={hasSubmitted}
@@ -116,11 +122,11 @@ export function PracticeCard({ question, onSubmitResult }: PracticeCardProps) {
                     <div className="text-lg font-bold">
                         {isCorrect ? (
                             <span className="text-green-400">
-                            ✓ Correct!
+                            Correct!
                             </span>
                         ) : (
                             <span className="text-red-400">
-                            ✗ Incorrect
+                            Incorrect
                             </span>
                         )}
                     </div>

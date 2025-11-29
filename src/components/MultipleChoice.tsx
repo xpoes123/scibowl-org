@@ -1,5 +1,5 @@
 import { type Question } from "../data/questions";
-import { useState } from "react";
+import { useEffect } from "react";
 
 export type MultipleChoiceProps = {
     question: Question;
@@ -16,6 +16,21 @@ export function MultipleChoice({ question, onChange, selectedLabel, disabled=fal
     ) {
         return null;
     }
+
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (disabled) return;
+            const num = Number(e.key)
+
+            if (!isNaN(num) && num >= 1 && num <= question.choices!.length) {
+                const choice = question.choices![num - 1];
+                onChange(choice.label);
+            }
+        };
+
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    })
 
     return (
         <div className="mt-4 flex flex-col gap-3 mb-6">
