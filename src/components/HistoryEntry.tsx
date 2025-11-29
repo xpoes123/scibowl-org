@@ -1,10 +1,14 @@
+import { useState } from "react";
 import type { Category } from "../data/questions";
+import type { Question } from "../data/questions";
+import { QuestionCard } from "./QuestionCard";
 
 export type HistoryEntry = {
     id: number;
     answer: string;
     wasCorrect: boolean;
     category: Category;
+    fullQuestion?: Question;
 };
 
 type HistoryCardProps = {
@@ -12,6 +16,7 @@ type HistoryCardProps = {
 };
 
 export function HistoryCard({ entry }: HistoryCardProps) {
+    const [expanded, setExpanded] = useState(false);
     const borderColor = entry.wasCorrect ? "#4CAF50" : "#D9534F";
 
     return (
@@ -21,28 +26,24 @@ export function HistoryCard({ entry }: HistoryCardProps) {
                 borderRadius: "6px",
                 padding: "8px 12px",
                 marginBottom: "8px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
                 background: "#2C2C2C",
             }}
         >
-            <div 
+            <div
+                onClick={() => setExpanded(prev => !prev)}
                 style={{
                     display: "flex",
-                    flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    width: "100%",
+                    cursor: "pointer",
                 }}
             >
-                {entry.category && (
-                    <span style={{ fontSize: "12px", color: "#ffffffff" }}>
-                    {entry.answer.length > 20 
-                        ? entry.answer.slice(0, 20) + "…" 
+                <span style={{ fontSize: "12px", color: "#fff" }}>
+                    {entry.answer.length > 20
+                        ? entry.answer.slice(0, 20) + "…"
                         : entry.answer}
-                    </span>
-                )}
+                </span>
+
                 <button
                     type="button"
                     style={{
@@ -51,12 +52,23 @@ export function HistoryCard({ entry }: HistoryCardProps) {
                         cursor: "pointer",
                         fontSize: "20px",
                         lineHeight: 1,
+                        marginLeft: "12px",
                     }}
                     aria-label="Save question (not implemented)"
-                    >
-                        ⭐
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        console.log("Save later!");
+                    }}
+                >
+                    ⭐
                 </button>
             </div>
+
+            {expanded && entry.fullQuestion && (
+                <div style={{ marginTop: "12px" }}>
+                    <QuestionCard question={entry.fullQuestion} />
+                </div>
+            )}
         </div>
     );
 }
