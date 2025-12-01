@@ -107,7 +107,6 @@ export const PracticeCard = forwardRef<HTMLInputElement, PracticeCardProps>(
 
                 <div className="flex gap-3 mb-4">
                     <input
-                        // 👇 this ref is now controlled by the parent
                         ref={ref}
                         type="text"
                         value={userAnswer}
