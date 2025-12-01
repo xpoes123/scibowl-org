@@ -1,0 +1,96 @@
+# -----------------------------
+# Node / Vite / React
+# -----------------------------
+node_modules/
+dist/
+build/
+temp/
+.vite/
+.vite-ssr/
+vite.config.ts.timestamp-*
+
+# Tailwind / PostCSS / CSS artifacts
+*.css.map
+*.postcss
+.postcss-cache/
+.tailwind-cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+logs/
+*.log
+
+# Local environment / secrets
+.env
+.env*.local
+.env.development.local
+.env.production.local
+
+# Editor / IDE junk
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# OS files
+.DS_Store
+Desktop.ini
+
+# Test coverage
+coverage/
+*.lcov
+
+# -----------------------------
+# Future Python / Django backend (if added)
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+.env
+.env.local
+.env.*.local
+
+# Django migrations you don't want tracked initially
+# (optional – sometimes people ignore auto-created migrations)
+#migrations/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build artifacts
+*.egg-info/
+*.egg
+build/
+dist/
+
+# -----------------------------
+# Project-specific artifacts
+# -----------------------------
+
+# Question data caches
+questions.json
+questions_cache/
+data_cache/
+scraper_output/
+
+# Local dev-only files
+local_dev/
+notes/
+scratch/
+*.local.js
+*.local.ts
