@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback} from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
@@ -11,8 +11,10 @@ import {
     pickRandomUnseenIndex,
     type QuestionTypeFilter } from "../utils/practiceUtils";
 import { CategoryFilter } from "../components/CategoryFilter";
+
 /*
     TODO List:
+    - Support rank and identify questions
     - Timer with adjustable options
     - Smart spaced repetition
     - Streaks
@@ -23,6 +25,7 @@ import { CategoryFilter } from "../components/CategoryFilter";
 const MAX_HISTORY_ENTRIES = 100;
 
 export function PracticePage() {
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [currentIndex, setCurrentIndex] = useState(
         () => Math.floor(Math.random() * questions.length)
     );
@@ -81,6 +84,33 @@ export function PracticePage() {
 
     const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
 
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === "Tab") {
+                // Let Tab behave normally on multiple choice
+                if (!currentQuestion || currentQuestion.questionCategory === "multiple_choice") {
+                    return;
+                }
+
+                e.preventDefault();
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handler);
+        return () => window.removeEventListener("keydown", handler);
+    }, [currentQuestion]);
+    useEffect(() => {
+        if (!currentQuestion) return;
+        if (currentQuestion.questionCategory === "multiple_choice") return;
+
+        if (hasStarted && inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.select();
+        }
+    }, [currentIndex, hasStarted, currentQuestion]);
     
     const goToRandomQuestion = useCallback(() => {
         if (practicePool.length <= 1) return;
@@ -180,6 +210,7 @@ export function PracticePage() {
         <div>
         {hasStarted && currentQuestion && (
             <PracticeCard
+            ref={inputRef}
             key={currentQuestion.id}
             question={currentQuestion}
             onSubmitResult={handleSubmitResult}
