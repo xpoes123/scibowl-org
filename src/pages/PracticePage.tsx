@@ -15,8 +15,6 @@ import { CategoryFilter } from "../components/CategoryFilter";
 /*
     TODO List:
     - Timer with adjustable options
-    - Smart spaced repetition
-    - Streaks
     - Local storage of filters and stats
     - Stats reset button
 */
@@ -199,17 +197,15 @@ export function PracticePage() {
         }
 
         // Update streak
-        setStreakType((prevType) => {
-            if (prevType === null || prevType === (wasCorrect ? "correct" : "wrong")) {
-                // Continue the streak
-                setCurrentStreak((prev) => prev + 1);
-                return wasCorrect ? "correct" : "wrong";
-            } else {
-                // Streak broken, start new streak
-                setCurrentStreak(1);
-                return wasCorrect ? "correct" : "wrong";
-            }
-        });
+        const newType = wasCorrect ? "correct" : "wrong";
+        if (streakType === null || streakType !== newType) {
+            // First answer or streak broken - start at 1
+            setCurrentStreak(1);
+            setStreakType(newType);
+        } else {
+            // Continue the streak
+            setCurrentStreak((prev) => prev + 1);
+        }
 
         const formattedAnswer = formatAnswer(currentQuestion);
 
@@ -341,6 +337,21 @@ export function PracticePage() {
             </p>
             )}
         </div>
+        <div className="mt-6">
+            <button
+            onClick={() => {
+                setTotalAttempts(0);
+                setTotalCorrect(0);
+                setCurrentStreak(0);
+                setStreakType(null);
+                setHistory([]);
+                seenIdsRef.current.clear();
+            }}
+            className="w-full px-6 py-3 bg-amber-700 hover:bg-amber-800 text-white rounded-lg transition-all shadow-lg shadow-amber-800/30"
+            >
+                Reset Stats
+            </button>
+            </div>
         </div>
     </div>
     );
