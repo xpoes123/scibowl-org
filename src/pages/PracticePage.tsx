@@ -14,7 +14,6 @@ import { CategoryFilter } from "../components/CategoryFilter";
 
 /*
     TODO List:
-    - Support rank and identify questions
     - Timer with adjustable options
     - Smart spaced repetition
     - Streaks
@@ -31,6 +30,8 @@ export function PracticePage() {
     );
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
+    const [currentStreak, setCurrentStreak] = useState(0);
+    const [streakType, setStreakType] = useState<"correct" | "wrong" | null>(null);
 
     const [history, setHistory] = useState<HistoryEntry[]>([]);
     const [pendingHistory, setPendingHistory] = useState<HistoryEntry | null>(
@@ -87,8 +88,11 @@ export function PracticePage() {
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (e.key === "Tab") {
-                // Let Tab behave normally on multiple choice
-                if (!currentQuestion || currentQuestion.questionCategory === "multiple_choice") {
+                // Let Tab behave normally on multiple choice, identify_all, and rank
+                if (!currentQuestion ||
+                    currentQuestion.questionCategory === "multiple_choice" ||
+                    currentQuestion.questionCategory === "identify_all" ||
+                    currentQuestion.questionCategory === "rank") {
                     return;
                 }
 
@@ -105,6 +109,8 @@ export function PracticePage() {
     useEffect(() => {
         if (!currentQuestion) return;
         if (currentQuestion.questionCategory === "multiple_choice") return;
+        if (currentQuestion.questionCategory === "identify_all") return;
+        if (currentQuestion.questionCategory === "rank") return;
 
         if (hasStarted && inputRef.current) {
             inputRef.current.focus();
@@ -185,14 +191,28 @@ export function PracticePage() {
 
     const handleSubmitResult = (wasCorrect: boolean) => {
         if (!currentQuestion) return;
-        
+
         setHasSubmitted(true);
         setTotalAttempts((prev) => prev + 1);
         if (wasCorrect) {
             setTotalCorrect((prev) => prev + 1);
         }
+
+        // Update streak
+        setStreakType((prevType) => {
+            if (prevType === null || prevType === (wasCorrect ? "correct" : "wrong")) {
+                // Continue the streak
+                setCurrentStreak((prev) => prev + 1);
+                return wasCorrect ? "correct" : "wrong";
+            } else {
+                // Streak broken, start new streak
+                setCurrentStreak(1);
+                return wasCorrect ? "correct" : "wrong";
+            }
+        });
+
         const formattedAnswer = formatAnswer(currentQuestion);
-        
+
         seenIdsRef.current.add(currentQuestion.id);
 
         setPendingHistory({
@@ -309,6 +329,15 @@ export function PracticePage() {
             {totalAttempts > 0 && (
             <p className="text-2xl font-bold bg-gradient-to-r from-[#7d70f1] to-[#b4a8ff] bg-clip-text text-transparent mt-2">
                 Accuracy: {Math.round((totalCorrect / totalAttempts) * 100)}%
+            </p>
+            )}
+            {currentStreak > 0 && streakType && (
+            <p className={`text-lg font-semibold mt-3 ${
+                streakType === "correct"
+                    ? "text-green-400"
+                    : "text-red-400"
+            }`}>
+                {streakType === "correct" ? "🔥" : "❌"} Streak: {currentStreak} {streakType}
             </p>
             )}
         </div>
