@@ -1,5 +1,7 @@
 import type { Question } from '../data/questions';
 import { MultipleChoice } from './MultipleChoice';
+import { IdentifyAll } from './IdentifyAll';
+import { Rank } from './Rank';
 import { useState, useEffect, forwardRef } from 'react';
 
 type PracticeCardProps = {
@@ -67,29 +69,29 @@ export const PracticeCard = forwardRef<HTMLInputElement, PracticeCardProps>(
                 </p>
 
                 {question.questionCategory === "identify_all" && question.attributes && (
-                    <ul className="list-none pl-0 space-y-2 mb-6">
-                        {question.attributes.map((attr, index) => (
-                            <li
-                                key={attr}
-                                className="text-slate-200 bg-slate-700/30 p-2 rounded-lg"
-                            >
-                                <strong className="text-white">{index + 1}.</strong> {attr}
-                            </li>
-                        ))}
-                    </ul>
+                    <IdentifyAll
+                        question={question}
+                        selectedAnswer={userAnswer}
+                        onChange={(answer) => {
+                            if (!hasSubmitted) {
+                                setUserAnswer(answer);
+                            }
+                        }}
+                        disabled={hasSubmitted}
+                    />
                 )}
 
                 {question.questionCategory === "rank" && question.attributes && (
-                    <ul className="list-none pl-0 space-y-2 mb-6">
-                        {question.attributes.map((attr, index) => (
-                            <li
-                                key={attr}
-                                className="text-slate-200 bg-slate-700/30 p-2 rounded-lg"
-                            >
-                                <strong className="text-white">{index + 1}.</strong> {attr}
-                            </li>
-                        ))}
-                    </ul>
+                    <Rank
+                        question={question}
+                        selectedAnswer={userAnswer}
+                        onChange={(answer) => {
+                            if (!hasSubmitted) {
+                                setUserAnswer(answer);
+                            }
+                        }}
+                        disabled={hasSubmitted}
+                    />
                 )}
 
                 {question.questionCategory === "multiple_choice" && question.choices && (
