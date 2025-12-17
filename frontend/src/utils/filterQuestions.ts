@@ -1,4 +1,5 @@
-import type { Question, Category, QuestionCategory } from "../data/questions";
+import type { Category, QuestionCategory } from "../data/questions";
+import type { TransformedQuestion } from "../types/api";
 
 export type FilterParams = {
   term: string;
@@ -9,9 +10,9 @@ export type FilterParams = {
 };
 
 export function filterQuestions(
-  allQuestions: Question[],
+  allQuestions: TransformedQuestion[],
   params: FilterParams
-): Question[] {
+): TransformedQuestion[] {
   const { term, categories, textType, questionType, questionCategory } = params;
 
   const normalizedTerm = term.trim().toLowerCase();
@@ -21,7 +22,7 @@ export function filterQuestions(
   const hasQuestionCategoryFilter = questionCategory.length > 0;
 
   return allQuestions.filter((q) => {
-    if (hasCategoryFilter && !categories.includes(q.category)) {
+    if (hasCategoryFilter && !categories.includes(q.category as Category)) {
       return false;
     }
 

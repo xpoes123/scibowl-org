@@ -1,11 +1,11 @@
-import type { Question } from '../data/questions';
+import type { TransformedQuestion } from '../types/api';
 import { MultipleChoice } from './MultipleChoice';
 import { IdentifyAll } from './IdentifyAll';
 import { Rank } from './Rank';
 import { useState, useEffect, forwardRef } from 'react';
 
 type PracticeCardProps = {
-    question: Question;
+    question: TransformedQuestion;
     onSubmitResult: (wasCorrrect: boolean ) => void;
 };
 
