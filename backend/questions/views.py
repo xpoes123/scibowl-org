@@ -13,9 +13,9 @@ class QuestionListView(generics.ListAPIView):
     serializer_class = QuestionListSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['category', 'question_type', 'difficulty']
-    search_fields = ['question_text', 'source']
-    ordering_fields = ['created_at', 'times_answered', 'difficulty']
+    filterset_fields = ['category', 'question_type', 'question_style', 'source']
+    search_fields = ['question_text']
+    ordering_fields = ['created_at', 'times_answered']
     ordering = ['-created_at']
 
 

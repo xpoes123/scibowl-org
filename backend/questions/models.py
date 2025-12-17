@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 
 class Question(models.Model):
@@ -16,36 +15,46 @@ class Question(models.Model):
         ('ENERGY', 'Energy'),
     ]
 
-    QUESTION_TYPE_CHOICES = [
+    QUESTION_STYLE_CHOICES = [
         ('SHORT_ANSWER', 'Short Answer'),
         ('MULTIPLE_CHOICE', 'Multiple Choice'),
         ('IDENTIFY_ALL', 'Identify All'),
         ('RANK', 'Rank'),
     ]
 
-    DIFFICULTY_CHOICES = [
-        ('EASY', 'Easy'),
-        ('MEDIUM', 'Medium'),
-        ('HARD', 'Hard'),
+    SOURCE_CHOICES = [
+        ('MIT_2025', 'MIT 2025'),
+        ('USER_SUBMITTED', 'User Submitted'),
+    ]
+    
+    QUESTION_TYPE_CHOICES = [
+        ('TOSSUP', 'Tossup'),
+        ('BONUS', 'Bonus'),
     ]
 
     # Question content
     question_text = models.TextField()
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, db_index=True)
-    question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES, db_index=True)
-    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='MEDIUM', db_index=True)
+    question_style = models.CharField(max_length=20, choices=QUESTION_STYLE_CHOICES, db_index=True, default='MULTIPLE_CHOICE')
+    question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES, db_index=True, default='TOSSUP')
 
     # Answer fields
-    correct_answer = models.TextField(help_text="The correct answer(s)")
+    correct_answer = models.CharField(max_length=1000, help_text="The correct answer(s)")
 
-    # For multiple choice questions
-    choice_w = models.CharField(max_length=500, blank=True, null=True)
-    choice_x = models.CharField(max_length=500, blank=True, null=True)
-    choice_y = models.CharField(max_length=500, blank=True, null=True)
-    choice_z = models.CharField(max_length=500, blank=True, null=True)
+    # Options for multiple choice, ranking, and identify all questions
+    option_1 = models.CharField(max_length=500, blank=True, null=True, help_text="Option W")
+    option_2 = models.CharField(max_length=500, blank=True, null=True, help_text="Option X")
+    option_3 = models.CharField(max_length=500, blank=True, null=True, help_text="Option Y")
+    option_4 = models.CharField(max_length=500, blank=True, null=True, help_text="Option Z")
 
     # Metadata
-    source = models.CharField(max_length=255, blank=True, null=True, help_text="Source of question (e.g., 'NSB 2023 Regionals')")
+    source = models.CharField(
+        max_length=50,
+        choices=SOURCE_CHOICES,
+        blank=True,
+        null=True,
+        help_text="Source of question"
+    )
     explanation = models.TextField(blank=True, null=True, help_text="Explanation of the answer")
 
     # Stats
@@ -61,7 +70,6 @@ class Question(models.Model):
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['category', 'question_type']),
-            models.Index(fields=['difficulty']),
         ]
 
     def __str__(self):

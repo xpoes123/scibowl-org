@@ -1,8 +1,8 @@
-import { type Question } from "../data/questions";
+import { type TransformedQuestion } from "../types/api";
 import { useEffect } from "react";
 
 export type MultipleChoiceProps = {
-    question: Question;
+    question: TransformedQuestion;
     selectedLabel: string | null;
     onChange: (label: string) => void;
     disabled?: boolean;

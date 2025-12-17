@@ -3,15 +3,15 @@ from .models import Question, UserQuestionHistory, Bookmark
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    """Serializer for Question model"""
+    """Serializer for Question model - includes answers (for admin/review)"""
 
     accuracy_rate = serializers.ReadOnlyField()
 
     class Meta:
         model = Question
         fields = [
-            'id', 'question_text', 'category', 'question_type', 'difficulty',
-            'correct_answer', 'choice_w', 'choice_x', 'choice_y', 'choice_z',
+            'id', 'question_text', 'category', 'question_type', 'question_style',
+            'correct_answer', 'option_1', 'option_2', 'option_3', 'option_4',
             'source', 'explanation', 'times_answered', 'times_correct',
             'accuracy_rate', 'created_at', 'updated_at'
         ]
@@ -19,13 +19,13 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuestionListSerializer(serializers.ModelSerializer):
-    """Simplified serializer for question lists (without answers)"""
+    """Simplified serializer for question lists (without answers) - for practice/quiz"""
 
     class Meta:
         model = Question
         fields = [
-            'id', 'question_text', 'category', 'question_type', 'difficulty',
-            'choice_w', 'choice_x', 'choice_y', 'choice_z', 'source'
+            'id', 'question_text', 'category', 'question_type', 'question_style',
+            'option_1', 'option_2', 'option_3', 'option_4', 'source'
         ]
 
 

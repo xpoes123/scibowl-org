@@ -1,8 +1,8 @@
-import { type Question } from "../data/questions";
+import { type TransformedQuestion } from "../types/api";
 import { useEffect } from "react";
 
 export type RankProps = {
-    question: Question;
+    question: TransformedQuestion;
     selectedAnswer: string;
     onChange: (answer: string) => void;
     disabled?: boolean;

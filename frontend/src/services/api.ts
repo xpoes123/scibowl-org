@@ -65,33 +65,52 @@ export const authAPI = {
   },
 };
 
+// services/api.ts
+
+type Paginated<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+};
+
+const unwrapList = <T,>(data: any): T[] => {
+  if (Array.isArray(data)) return data;
+  if (data && typeof data === "object" && Array.isArray(data.results)) return data.results;
+  throw new Error("Unexpected questions response shape");
+};
+
+
 // Questions API
 export const questionsAPI = {
   getQuestions: async (filters?: {
     category?: string;
     question_type?: string;
-    difficulty?: string;
+    question_style?: string;
+    source?: string;
     search?: string;
   }) => {
     const params = new URLSearchParams();
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.question_type) params.append('question_type', filters.question_type);
-    if (filters?.difficulty) params.append('difficulty', filters.difficulty);
-    if (filters?.search) params.append('search', filters.search);
+    if (filters?.category) params.append("category", filters.category);
+    if (filters?.question_type) params.append("question_type", filters.question_type);
+    if (filters?.question_style) params.append("question_style", filters.question_style);
+    if (filters?.source) params.append("source", filters.source);
+    if (filters?.search) params.append("search", filters.search);
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/questions/?${params.toString()}`,
-      {
-        headers: getAuthHeaders(),
-      }
-    );
-    return handleResponse(response);
+    const response = await fetch(`${API_BASE_URL}/api/questions/?${params.toString()}`, {
+      headers: getAuthHeaders(),
+    });
+
+    const data = await handleResponse(response);
+    return unwrapList<any>(data); // later replace `any` with your API question type
   },
+
 
   getQuestion: async (id: number) => {
     const response = await fetch(`${API_BASE_URL}/api/questions/${id}/`, {
       headers: getAuthHeaders(),
     });
+    console.log(response);
     return handleResponse(response);
   },
 

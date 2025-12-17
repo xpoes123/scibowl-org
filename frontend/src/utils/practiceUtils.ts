@@ -1,17 +1,18 @@
-import type { Question, Category } from "../data/questions";
+import type { Category } from "../data/questions";
+import type { TransformedQuestion } from "../types/api";
 
 export type QuestionTypeFilter = "tossup" | "bonus" | "all";
 
 export function buildPracticePool(
-    allQuestions: Question[],
+    allQuestions: TransformedQuestion[],
     selectedCategories: Category[],
     questionType: QuestionTypeFilter
-): Question[] {
+): TransformedQuestion[] {
     return allQuestions.filter((q) => {
-        const categoryOk = 
-        selectedCategories.length === 0 || selectedCategories.includes(q.category);
+        const categoryOk =
+        selectedCategories.length === 0 || selectedCategories.includes(q.category as Category);
 
-        const typeOk = 
+        const typeOk =
         questionType === "all" ? true : q.type === questionType;
 
         return categoryOk && typeOk;
@@ -34,10 +35,10 @@ export function getRandomNextIndex(
 
 
 export function formatAnswer(
-    question: Question
+    question: TransformedQuestion
 ): string {
     if (
-        question.questionCategory === "multiple_choice" && 
+        question.questionCategory === "multiple_choice" &&
         question.choices
     ) {
         const correctChoice = question.choices.find(
@@ -52,7 +53,7 @@ export function formatAnswer(
 
 
 export function pickRandomUnseenIndex(
-  practicePool: Question[],
+  practicePool: TransformedQuestion[],
   currentIndex: number,
   seenIds: Set<number>,
 ): number {

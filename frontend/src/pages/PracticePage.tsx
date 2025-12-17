@@ -1,16 +1,17 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { questions } from "../data/questions";
 import { PracticeCard } from "../components/PracticeCard";
 import type { Category } from "../data/questions";
 import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
-import { 
+import {
     buildPracticePool,
     getRandomNextIndex,
     formatAnswer,
     pickRandomUnseenIndex,
     type QuestionTypeFilter } from "../utils/practiceUtils";
 import { CategoryFilter } from "../components/CategoryFilter";
+import { questionsAPI } from "../services/api";
+import { transformAPIQuestion, type APIQuestionList, type TransformedQuestion } from "../types/api";
 
 /*
     TODO List:
@@ -23,9 +24,11 @@ const MAX_HISTORY_ENTRIES = 100;
 
 export function PracticePage() {
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [currentIndex, setCurrentIndex] = useState(
-        () => Math.floor(Math.random() * questions.length)
-    );
+    const [questions, setQuestions] = useState<TransformedQuestion[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [totalAttempts, setTotalAttempts] = useState(0);
     const [totalCorrect, setTotalCorrect] = useState(0);
     const [currentStreak, setCurrentStreak] = useState(0);
@@ -46,6 +49,28 @@ export function PracticePage() {
     const [hasSubmitted, setHasSubmitted] = useState(false);
 
     const seenIdsRef = useRef<Set<number>>(new Set());
+
+    // Fetch questions from API on mount and when filters change
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await questionsAPI.getQuestions();
+                const transformedQuestions = response.map((q: APIQuestionList) =>
+                    transformAPIQuestion(q, false)
+                );
+                setQuestions(transformedQuestions);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to fetch questions');
+                console.error('Error fetching questions:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchQuestions();
+    }, []);
 
     const practicePool = useMemo(() => buildPracticePool(questions, selectedCategories, questionType), [questions, selectedCategories, questionType]);
     
@@ -224,13 +249,31 @@ export function PracticePage() {
     <div className="w-full max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_320px] gap-6">
         {/* MAIN QUESTION AREA (left on desktop) */}
         <div>
-        {hasStarted && currentQuestion && (
+        {isLoading && (
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 shadow-2xl border border-purple-500/20 text-center">
+                <p className="text-slate-300 text-lg">Loading questions...</p>
+            </div>
+        )}
+
+        {error && (
+            <div className="bg-red-900/30 backdrop-blur-sm rounded-xl p-8 shadow-2xl border border-red-700 text-center">
+                <p className="text-red-300 text-lg">Error: {error}</p>
+            </div>
+        )}
+
+        {!isLoading && !error && hasStarted && currentQuestion && (
             <PracticeCard
             ref={inputRef}
             key={currentQuestion.id}
             question={currentQuestion}
             onSubmitResult={handleSubmitResult}
             />
+        )}
+
+        {!isLoading && !error && !hasStarted && (
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 shadow-2xl border border-purple-500/20 text-center">
+                <p className="text-slate-300 text-lg">Press <span className="font-bold text-purple-400">S</span> to start practicing!</p>
+            </div>
         )}
 
         {history.length > 0 && (
@@ -249,7 +292,7 @@ export function PracticePage() {
         </div>
 
         {/* SIDEBAR (right on desktop) */}
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-[#7d70f1]/20 h-fit sticky top-6">
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-purple-500/20 h-fit sticky top-6">
         <CategoryFilter
             categories={PRACTICE_CATEGORIES}
             selected={selectedCategories}
@@ -263,7 +306,7 @@ export function PracticePage() {
             onChange={(e) => {
                 setQuestionType(e.target.value as QuestionTypeFilter);
             }}
-            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
+            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
             <option value="all">All Questions</option>
             <option value="tossup">Tossup</option>
@@ -274,7 +317,7 @@ export function PracticePage() {
             onChange={(e) => {
                 setGameMode(e.target.value as "flashcard" | "reading");
             }}
-            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#7d70f1]"
+            className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
             <option value="flashcard">Flashcard</option>
             <option value="reading">Reading)</option>
@@ -307,14 +350,14 @@ export function PracticePage() {
                 className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
                     !hasStarted || practicePool.length === 0
                         ? "bg-slate-600 cursor-not-allowed text-slate-400"
-                        : "bg-gradient-to-r from-[#7d70f1] to-[#9789f5] hover:from-[#6c5fe0] hover:to-[#8678e4] text-white shadow-lg shadow-[#7d70f1]/30"
+                        : "bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 text-white shadow-lg shadow-purple-500/30"
                 }`}
             >
                 {hasSubmitted ? "Next (N)" : "Skip (S)"}
             </button>
         </div>
 
-        <div className="bg-slate-900/50 rounded-lg p-4 text-center border border-[#7d70f1]/20">
+        <div className="bg-slate-900/50 rounded-lg p-4 text-center border border-purple-500/20">
             <p className="text-slate-300 text-lg">
             <span className="font-semibold text-white">Attempts:</span>{" "}
             {totalAttempts}
@@ -323,7 +366,7 @@ export function PracticePage() {
             {totalCorrect}
             </p>
             {totalAttempts > 0 && (
-            <p className="text-2xl font-bold bg-gradient-to-r from-[#7d70f1] to-[#b4a8ff] bg-clip-text text-transparent mt-2">
+            <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent mt-2">
                 Accuracy: {Math.round((totalCorrect / totalAttempts) * 100)}%
             </p>
             )}
