@@ -44,13 +44,11 @@ class QuestionAdminForm(forms.ModelForm):
             bool(option_4)
         ])
 
-        # Validate options based on question style
         if question_style == 'MULTIPLE_CHOICE':
             if filled_options != 4:
                 raise forms.ValidationError(
                     "Multiple Choice questions require all 4 options to be filled."
                 )
-            # Validate answer format
             if correct_answer and correct_answer.upper() not in ['W', 'X', 'Y', 'Z']:
                 raise forms.ValidationError(
                     "For Multiple Choice, correct_answer must be W, X, Y, or Z"
@@ -61,7 +59,6 @@ class QuestionAdminForm(forms.ModelForm):
                 raise forms.ValidationError(
                     f"{dict(Question.QUESTION_STYLE_CHOICES)[question_style]} questions require at least 3 options."
                 )
-            # Validate answer format for IDENTIFY_ALL and RANK
             if correct_answer and question_style == 'IDENTIFY_ALL':
                 valid_letters = set(['W', 'X', 'Y', 'Z'])
                 answer_letters = [a.strip().upper() for a in correct_answer.split(',')]
