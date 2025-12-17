@@ -84,10 +84,10 @@ Empower teams and coaches:
 - Hotkey-driven UX
 - Modular component design
 
-### **Backend (upcoming)**
-- Django + DRF
+### **Backend**
+- Django + Django REST Framework
 - PostgreSQL
-- Redis (match + real-time)
+- JWT Authentication
 - Docker
 
 ---
@@ -113,6 +113,112 @@ Empower teams and coaches:
 
 ## ▶️ Getting Started
 
+### **Monorepo Structure**
+```
+nsb-arena/
+├── frontend/         # React + TypeScript + Vite
+├── backend/          # Django + PostgreSQL API
+├── docker-compose.yml
+└── README.md
+```
+
+### **Quick Start with Docker (Recommended)**
+
 ```bash
+# Start everything (frontend + backend + database)
+docker-compose up
+
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# Admin Panel: http://localhost:8000/admin
+```
+
+### **Manual Setup**
+
+**Frontend:**
+```bash
+cd frontend
 npm install
 npm run dev
+# Runs on http://localhost:5173
+```
+
+**Backend:**
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Mac/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up database (requires PostgreSQL running)
+python manage.py migrate
+python manage.py createsuperuser
+
+# Run server
+python manage.py runserver
+# Runs on http://localhost:8000
+```
+
+---
+
+## 🔧 Development Commands
+
+### **Docker Commands**
+```bash
+# Start all services
+docker-compose up
+
+# Start in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up --build
+
+# Run Django commands
+docker-compose exec backend python manage.py <command>
+```
+
+### **Backend Commands**
+```bash
+# Create migrations
+docker-compose exec backend python manage.py makemigrations
+
+# Apply migrations
+docker-compose exec backend python manage.py migrate
+
+# Create superuser
+docker-compose exec backend python manage.py createsuperuser
+
+# Access Django shell
+docker-compose exec backend python manage.py shell
+```
+
+---
+
+## 📡 API Endpoints
+
+### **Authentication**
+- `POST /api/auth/register/` - Register new user
+- `POST /api/auth/login/` - Login (get JWT tokens)
+- `POST /api/auth/refresh/` - Refresh access token
+- `GET /api/profile/` - Get current user profile
+- `PUT /api/profile/` - Update profile
+
+### **Questions**
+- `GET /api/questions/` - List questions (supports filtering by category, type, difficulty)
+- `GET /api/questions/<id>/` - Get question details
+- `POST /api/questions/history/` - Submit answer
+- `GET /api/questions/history/` - Get answer history
+- `POST /api/questions/bookmarks/` - Bookmark question
+- `GET /api/questions/bookmarks/` - List bookmarks

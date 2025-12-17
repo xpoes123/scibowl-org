@@ -50,33 +50,43 @@ coverage/
 *.lcov
 
 # -----------------------------
-# Future Python / Django backend (if added)
+# Python / Django Backend
 # -----------------------------
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+.Python
 *.sqlite3
 db.sqlite3
-media/
-staticfiles/
-.env
-.env.local
-.env.*.local
+db.sqlite3-journal
+backend/media/
+backend/staticfiles/
+backend/.env
+backend/venv/
+backend/env/
+backend/ENV/
 
-# Django migrations you don't want tracked initially
-# (optional – sometimes people ignore auto-created migrations)
-#migrations/
+# Python build artifacts
+*.egg-info/
+*.egg
+.eggs/
+*.whl
+
+# Django specific
+*.log
+local_settings.py
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Virtual environments
 .venv/
 venv/
 env/
 ENV/
-
-# Build artifacts
-*.egg-info/
-*.egg
-build/
-dist/
 
 # -----------------------------
 # Project-specific artifacts
