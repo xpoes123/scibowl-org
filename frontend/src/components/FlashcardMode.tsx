@@ -3,6 +3,7 @@ import { MultipleChoice } from './MultipleChoice';
 import { IdentifyAll } from './IdentifyAll';
 import { Rank } from './Rank';
 import { useState, useEffect, forwardRef } from 'react';
+import { QUESTION_CATEGORY_LABELS } from '../constants/practiceConstants';
 
 type FlashcardModeProps = {
     question: TransformedQuestion;
@@ -66,7 +67,7 @@ export const FlashcardMode = forwardRef<HTMLInputElement, FlashcardModeProps>(
                         </span>
 
                         <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
-                            {question.questionCategory.charAt(0).toUpperCase() + question.questionCategory.slice(1).replace("_", " ")}
+                            {QUESTION_CATEGORY_LABELS[question.questionCategory]}
                         </span>
                     </div>
                 </div>
