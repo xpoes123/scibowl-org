@@ -30,7 +30,7 @@ export function MultipleChoice({ question, onChange, selectedLabel, disabled=fal
 
         window.addEventListener("keydown", handleKey);
         return () => window.removeEventListener("keydown", handleKey);
-    })
+    }, [disabled, question.choices, onChange])
 
     return (
         <div className="mt-4 flex flex-col gap-3 mb-6">
