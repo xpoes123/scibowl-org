@@ -1,5 +1,4 @@
-import type { Category, QuestionCategory } from "../data/questions";
-import type { TransformedQuestion } from "../types/api";
+import type { Category, QuestionCategory, TransformedQuestion } from "../types/api";
 
 export type FilterParams = {
   term: string;

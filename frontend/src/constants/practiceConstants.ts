@@ -1,4 +1,4 @@
-import type { Category } from "../data/questions";
+import type { Category } from "../types/api";
 
 export const PRACTICE_CATEGORIES: Category[] = [
   "Physics",

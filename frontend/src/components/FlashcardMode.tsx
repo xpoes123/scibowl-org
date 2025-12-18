@@ -59,10 +59,18 @@ export const FlashcardMode = forwardRef<HTMLInputElement, FlashcardModeProps>(
                     <h2 className="text-2xl font-bold bg-gradient-to-r from-[#7d70f1] to-[#b4a8ff] bg-clip-text text-transparent mb-2">
                         {question.category}
                     </h2>
-                    <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
-                        {question.type.charAt(0).toUpperCase() + question.type.slice(1)}
-                    </span>
+
+                    <div className="flex gap-2">
+                        <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
+                            {question.type.charAt(0).toUpperCase() + question.type.slice(1)}
+                        </span>
+
+                        <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
+                            {question.questionCategory.charAt(0).toUpperCase() + question.questionCategory.slice(1).replace("_", " ")}
+                        </span>
+                    </div>
                 </div>
+
 
                 <p className="mb-6 text-slate-100 leading-relaxed text-lg">
                     {question.text}

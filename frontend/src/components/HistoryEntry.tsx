@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type { Category } from "../data/questions";
-import type { Question } from "../data/questions";
+import type { Category, Question } from "../types/api";
 import { QuestionCard } from "./QuestionCard";
 
 export type HistoryEntry = {

@@ -1,5 +1,4 @@
-import type { Category } from "../data/questions";
-import type { TransformedQuestion } from "../types/api";
+import type { Category, TransformedQuestion } from "../types/api";
 
 export type QuestionTypeFilter = "tossup" | "bonus" | "all";
 
