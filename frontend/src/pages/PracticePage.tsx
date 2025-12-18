@@ -242,8 +242,6 @@ export function PracticePage() {
             category: currentQuestion.category,
             fullQuestion: currentQuestion,
         });
-        console.log(formattedAnswer)
-        console.log("Hello")
     };
 
     return (
