@@ -1,12 +1,24 @@
 // API Types matching Django backend models
 
-export type Category =
+export type APICategory =
   | "PHYSICS"
   | "CHEMISTRY"
   | "BIOLOGY"
   | "MATH"
   | "EARTH_SPACE"
   | "ENERGY";
+
+// Frontend display category type (for filters and UI)
+export type Category =
+  | "Physics"
+  | "Chemistry"
+  | "Biology"
+  | "Math"
+  | "Energy"
+  | "Earth"
+  | "Space";
+
+export type QuestionCategory = "short_answer" | "multiple_choice" | "identify_all" | "rank";
 
 export type QuestionStyle =
   | "SHORT_ANSWER"
@@ -28,7 +40,7 @@ export type Source =
 export interface APIQuestion {
   id: number;
   question_text: string;
-  category: Category;
+  category: APICategory;
   question_type: QuestionType;
   question_style: QuestionStyle;
   correct_answer: string;
@@ -49,7 +61,7 @@ export interface APIQuestion {
 export interface APIQuestionList {
   id: number;
   question_text: string;
-  category: Category;
+  category: APICategory;
   question_type: QuestionType;
   question_style: QuestionStyle;
   correct_answer: string;
@@ -77,9 +89,12 @@ export interface TransformedQuestion {
   attributes?: string[]; // for identify_all and rank
 }
 
+// Alias for backwards compatibility
+export type Question = TransformedQuestion;
+
 // Helper function to transform API question to frontend format
 export function transformAPIQuestion(apiQuestion: APIQuestion | APIQuestionList, includeAnswer = false): TransformedQuestion {
-  const categoryDisplayNames: Record<Category, string> = {
+  const categoryDisplayNames: Record<APICategory, string> = {
     PHYSICS: "Physics",
     CHEMISTRY: "Chemistry",
     BIOLOGY: "Biology",

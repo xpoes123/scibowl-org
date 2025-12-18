@@ -1,4 +1,4 @@
-import type { Category } from "../data/questions";
+import type { Category } from "../types/api";
 
 type CategoryFilterProps = {
     categories: Category[];

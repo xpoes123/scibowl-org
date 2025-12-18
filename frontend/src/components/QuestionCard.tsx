@@ -1,4 +1,4 @@
-import type { Question } from '../data/questions';
+import type { Question } from '../types/api';
 
 type QuestionCardProps = {
     question: Question;

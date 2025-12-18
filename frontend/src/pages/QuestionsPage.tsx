@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { QuestionList } from "../components/QuestionList";
-import type { Category, QuestionCategory } from "../data/questions";
+import type { Category, QuestionCategory, APIQuestion, TransformedQuestion } from "../types/api";
 import { filterQuestions } from "../utils/filterQuestions";
 import { CategoryFilter } from "../components/CategoryFilter";
 import { QuestionCategoryFilter } from "../components/QuestionCategoriesFilter";
 import { questionsAPI } from "../services/api";
-import { transformAPIQuestion, type APIQuestion, type TransformedQuestion } from "../types/api";
+import { transformAPIQuestion } from "../types/api";
 
 
 export function DatabasePage() {

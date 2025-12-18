@@ -75,7 +75,6 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                     e.preventDefault();
                     setHasBuzzed(true);
                     setIsReading(false);
-                    // Keep text at current position - don't reveal full question
                 }
             };
             window.addEventListener("keydown", handler);
