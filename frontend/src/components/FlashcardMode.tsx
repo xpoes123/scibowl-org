@@ -4,14 +4,14 @@ import { IdentifyAll } from './IdentifyAll';
 import { Rank } from './Rank';
 import { useState, useEffect, forwardRef } from 'react';
 
-type PracticeCardProps = {
+type FlashcardModeProps = {
     question: TransformedQuestion;
-    onSubmitResult: (wasCorrrect: boolean ) => void;
+    onSubmitResult: (wasCorrect: boolean) => void;
 };
 
 
-export const PracticeCard = forwardRef<HTMLInputElement, PracticeCardProps>(
-    ({ question, onSubmitResult }: PracticeCardProps, ref) => {
+export const FlashcardMode = forwardRef<HTMLInputElement, FlashcardModeProps>(
+    ({ question, onSubmitResult }, ref) => {
         const [userAnswer, setUserAnswer] = useState("");
         const [hasSubmitted, setHasSubmitted] = useState(false);
         const [isCorrect, setIsCorrect] = useState<boolean | null>(null);

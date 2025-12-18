@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { PracticeCard } from "../components/PracticeCard";
+import { FlashcardMode } from "../components/FlashcardMode";
+import { ReadingMode } from "../components/ReadingMode";
 import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
 import {
@@ -261,12 +262,23 @@ export function PracticePage() {
         )}
 
         {!isLoading && !error && hasStarted && currentQuestion && (
-            <PracticeCard
-            ref={inputRef}
-            key={currentQuestion.id}
-            question={currentQuestion}
-            onSubmitResult={handleSubmitResult}
-            />
+            <>
+                {gameMode === "flashcard" ? (
+                    <FlashcardMode
+                        ref={inputRef}
+                        key={currentQuestion.id}
+                        question={currentQuestion}
+                        onSubmitResult={handleSubmitResult}
+                    />
+                ) : (
+                    <ReadingMode
+                        ref={inputRef}
+                        key={currentQuestion.id}
+                        question={currentQuestion}
+                        onSubmitResult={handleSubmitResult}
+                    />
+                )}
+            </>
         )}
 
         {!isLoading && !error && !hasStarted && (
@@ -319,7 +331,7 @@ export function PracticePage() {
             className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
             <option value="flashcard">Flashcard</option>
-            <option value="reading">Reading)</option>
+            <option value="reading">Reading</option>
             </select>
         </div>
 
