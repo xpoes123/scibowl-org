@@ -19,13 +19,13 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuestionListSerializer(serializers.ModelSerializer):
-    """Simplified serializer for question lists (without answers) - for practice/quiz"""
+    """Simplified serializer for question lists (with answers) - for practice/quiz"""
 
     class Meta:
         model = Question
         fields = [
             'id', 'question_text', 'category', 'question_type', 'question_style',
-            'option_1', 'option_2', 'option_3', 'option_4', 'source'
+            'correct_answer', 'option_1', 'option_2', 'option_3', 'option_4', 'source'
         ]
 
 

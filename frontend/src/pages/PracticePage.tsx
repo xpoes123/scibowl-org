@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { PracticeCard } from "../components/PracticeCard";
-import type { Category } from "../data/questions";
 import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
 import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
 import {
@@ -58,7 +57,7 @@ export function PracticePage() {
             try {
                 const response = await questionsAPI.getQuestions();
                 const transformedQuestions = response.map((q: APIQuestionList) =>
-                    transformAPIQuestion(q, false)
+                    transformAPIQuestion(q, true)
                 );
                 setQuestions(transformedQuestions);
             } catch (err) {

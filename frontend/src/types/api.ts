@@ -45,13 +45,14 @@ export interface APIQuestion {
   updated_at: string;
 }
 
-// API Response for Question List (without answer - used for practice)
+// API Response for Question List (with answer - used for practice)
 export interface APIQuestionList {
   id: number;
   question_text: string;
   category: Category;
   question_type: QuestionType;
   question_style: QuestionStyle;
+  correct_answer: string;
   option_1: string | null;
   option_2: string | null;
   option_3: string | null;
