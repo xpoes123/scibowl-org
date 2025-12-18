@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { DatabasePage } from "./pages/QuestionsPage";
 import { PracticePage } from "./pages/PracticePage";
-import { QuestionsTestPage } from "./pages/QuestionsTestPage";
 
 function App() {
   return (
@@ -29,18 +28,11 @@ function App() {
           >
             Practice
           </Link>
-          <Link
-            to="/test"
-            className="text-slate-300 hover:text-purple-300 font-medium transition-all duration-200 hover:scale-105 transform"
-          >
-            API Test
-          </Link>
         </nav>
 
         <Routes>
           <Route path="/database" element={<DatabasePage />} />
           <Route path="/practice" element={<PracticePage />} />
-          <Route path="/test" element={<QuestionsTestPage />} />
           <Route path="*" element={<Navigate to="/practice" replace />} />
         </Routes>
       </div>
