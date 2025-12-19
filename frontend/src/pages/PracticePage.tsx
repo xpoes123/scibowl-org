@@ -334,6 +334,14 @@ export function PracticePage() {
             value={gameMode}
             onChange={(e) => {
                 setGameMode(e.target.value as "flashcard" | "reading");
+                // Reset game stats when switching modes
+                setTotalAttempts(0);
+                setTotalCorrect(0);
+                setCurrentStreak(0);
+                setStreakType(null);
+                setHistory([]);
+                seenIdsRef.current.clear();
+                setHasSubmitted(false);
             }}
             className="flex-1 px-4 py-2 bg-slate-900/70 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
             >

@@ -79,8 +79,8 @@ class QuestionAdminForm(forms.ModelForm):
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
-    list_display = ['id', 'category', 'question_type', 'question_style', 'times_answered', 'accuracy_rate', 'created_at']
-    list_filter = ['category', 'question_type', 'question_style', 'created_at']
+    list_display = ['id', 'category', 'question_type', 'question_style', 'source', 'times_answered', 'accuracy_rate', 'created_at']
+    list_filter = ['category', 'question_type', 'question_style', 'source', 'created_at']
     search_fields = ['question_text', 'correct_answer']
     ordering = ['-created_at']
 
