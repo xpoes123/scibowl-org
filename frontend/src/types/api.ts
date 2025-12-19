@@ -80,7 +80,7 @@ export interface TransformedQuestion {
   id: number;
   text: string;
   answer: string;
-  category: string; // Display name
+  category: Category;
   type: "tossup" | "bonus";
   questionCategory: "short_answer" | "multiple_choice" | "identify_all" | "rank";
   choices?: {
