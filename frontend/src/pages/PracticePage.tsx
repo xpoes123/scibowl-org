@@ -73,13 +73,20 @@ export function PracticePage() {
     }, []);
 
     const practicePool = useMemo(() => buildPracticePool(questions, selectedCategories, questionType), [questions, selectedCategories, questionType]);
-    
+
     useEffect(() => {
         if (practicePool.length === 0) {
             return;
         }
         setCurrentIndex(getRandomNextIndex(practicePool.length, -1));
         }, [practicePool.length]);
+
+    // Pause game when categories change
+    useEffect(() => {
+        if (hasStarted) {
+            setHasStarted(false);
+        }
+    }, [selectedCategories]);
 
     useEffect(() => {
         setHasSubmitted(false);
