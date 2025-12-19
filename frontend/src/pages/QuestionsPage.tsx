@@ -63,8 +63,8 @@ export function DatabasePage() {
         "Biology",
         "Math",
         "Energy",
-        "Earth",
-        "Space",
+        "ESS",
+        "Other",
     ];
     const runSearch = () => {
         setSearchTerm(inputValue);
