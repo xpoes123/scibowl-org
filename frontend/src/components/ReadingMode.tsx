@@ -25,6 +25,10 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         // Store the revealed choice texts when user buzzes
         const [frozenChoiceTexts, setFrozenChoiceTexts] = useState<string[]>([]);
 
+        // 5-second buzz timer state
+        const [buzzTimeLeft, setBuzzTimeLeft] = useState<number | null>(null);
+        const buzzTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
         // Configuration (can be made adjustable later)
         const CHARS_PER_SECOND = 20; // Adjust reading speed
         const MS_PER_CHAR = 1000 / CHARS_PER_SECOND;
@@ -124,11 +128,55 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
             setRevealedText(fullQuestionText.slice(0, currentCharIndex));
         }, [currentCharIndex, fullQuestionText]);
 
+        // 5-second buzz timer after reading finishes
+        useEffect(() => {
+            // Start timer when reading finishes and user hasn't buzzed yet
+            if (!isReading && !hasBuzzed && !hasSubmitted) {
+                setBuzzTimeLeft(5);
+
+                buzzTimerRef.current = setInterval(() => {
+                    setBuzzTimeLeft(prev => {
+                        if (prev === null || prev <= 1) {
+                            // Time's up! Mark as incorrect
+                            if (buzzTimerRef.current) {
+                                clearInterval(buzzTimerRef.current);
+                            }
+                            setIsCorrect(false);
+                            setHasSubmitted(true);
+                            onSubmitResult(false);
+                            return null;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+
+                return () => {
+                    if (buzzTimerRef.current) {
+                        clearInterval(buzzTimerRef.current);
+                    }
+                };
+            } else {
+                // Clear timer if conditions change
+                if (buzzTimerRef.current) {
+                    clearInterval(buzzTimerRef.current);
+                    buzzTimerRef.current = null;
+                }
+                setBuzzTimeLeft(null);
+            }
+        }, [isReading, hasBuzzed, hasSubmitted, onSubmitResult]);
+
         // Handle buzz-in (spacebar)
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
-                if (e.key === " " && !hasBuzzed && !hasSubmitted && isReading) {
+                if (e.key === " " && !hasBuzzed && !hasSubmitted && (isReading || buzzTimeLeft !== null)) {
                     e.preventDefault();
+
+                    // Clear the buzz timer if it's running
+                    if (buzzTimerRef.current) {
+                        clearInterval(buzzTimerRef.current);
+                        buzzTimerRef.current = null;
+                    }
+                    setBuzzTimeLeft(null);
 
                     // Freeze the current revealed choice texts
                     if (question.questionCategory === "multiple_choice" && question.choices) {
@@ -142,7 +190,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
             };
             window.addEventListener("keydown", handler);
             return () => window.removeEventListener("keydown", handler);
-        }, [hasBuzzed, hasSubmitted, isReading, question.questionCategory, question.choices, getRevealedChoiceText]);
+        }, [hasBuzzed, hasSubmitted, isReading, buzzTimeLeft, question.questionCategory, question.choices, getRevealedChoiceText]);
 
         const handleSubmit = () => {
             if (hasSubmitted) return;
@@ -212,9 +260,14 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                         <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
                             {QUESTION_CATEGORY_LABELS[question.questionCategory]}
                         </span>
-                        {isReading && !hasBuzzed && (
+                        {isReading && !hasBuzzed && buzzTimeLeft === null && (
                             <span className="text-sm px-3 py-1 bg-amber-600/30 text-amber-300 rounded-md font-medium border border-amber-600/40 animate-pulse">
                                 Reading...
+                            </span>
+                        )}
+                        {buzzTimeLeft !== null && !hasBuzzed && !hasSubmitted && (
+                            <span className="text-sm px-3 py-1 bg-red-600/30 text-red-300 rounded-md font-medium border border-red-600/40 animate-pulse">
+                                Buzz in: {buzzTimeLeft}s
                             </span>
                         )}
                         {hasBuzzed && !hasSubmitted && (
@@ -261,11 +314,18 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                     </div>
                 )}
 
-                {/* Buzz button - shown while reading, before buzz */}
-                {isReading && !hasBuzzed && !hasSubmitted && (
+                {/* Buzz button - shown while reading or during buzz timer, before buzz */}
+                {(isReading || buzzTimeLeft !== null) && !hasBuzzed && !hasSubmitted && (
                     <div className="mb-6 flex justify-center">
                         <button
                             onClick={() => {
+                                // Clear the buzz timer if it's running
+                                if (buzzTimerRef.current) {
+                                    clearInterval(buzzTimerRef.current);
+                                    buzzTimerRef.current = null;
+                                }
+                                setBuzzTimeLeft(null);
+
                                 // Freeze the current revealed choice texts
                                 if (question.questionCategory === "multiple_choice" && question.choices) {
                                     const frozen = question.choices.map((_, index) => getRevealedChoiceText(index));
