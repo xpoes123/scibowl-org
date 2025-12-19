@@ -7,8 +7,8 @@ export const PRACTICE_CATEGORIES: Category[] = [
   "Biology",
   "Math",
   "Energy",
-  "Earth",
-  "Space",
+  "ESS",
+  "Other",
 ];
 
 export const QUESTION_CATEGORY_LABELS: Record<QuestionCategory, string> = {

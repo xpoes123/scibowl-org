@@ -13,6 +13,7 @@ class Question(models.Model):
         ('EARTH_SPACE', 'Earth and Space'),
         ('MATH', 'Math'),
         ('ENERGY', 'Energy'),
+        ('OTHER', 'Other'),
     ]
 
     QUESTION_STYLE_CHOICES = [

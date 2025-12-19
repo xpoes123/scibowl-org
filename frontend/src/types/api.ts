@@ -6,7 +6,8 @@ export type APICategory =
   | "BIOLOGY"
   | "MATH"
   | "EARTH_SPACE"
-  | "ENERGY";
+  | "ENERGY"
+  | "OTHER";
 
 // Frontend display category type (for filters and UI)
 export type Category =
@@ -15,8 +16,8 @@ export type Category =
   | "Biology"
   | "Math"
   | "Energy"
-  | "Earth"
-  | "Space";
+  | "ESS"
+  | "Other";
 
 export type QuestionCategory = "short_answer" | "multiple_choice" | "identify_all" | "rank";
 
@@ -99,8 +100,9 @@ export function transformAPIQuestion(apiQuestion: APIQuestion | APIQuestionList,
     CHEMISTRY: "Chemistry",
     BIOLOGY: "Biology",
     MATH: "Math",
-    EARTH_SPACE: "Earth & Space",
-    ENERGY: "Energy"
+    EARTH_SPACE: "ESS",
+    ENERGY: "Energy",
+    OTHER: "Other"
   };
 
   const questionStyleMap: Record<QuestionStyle, TransformedQuestion["questionCategory"]> = {
