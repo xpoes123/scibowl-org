@@ -25,6 +25,13 @@ class Question(models.Model):
 
     SOURCE_CHOICES = [
         ('MIT_2025', 'MIT 2025'),
+        ('REGIONALS_2023', 'Regionals 2023'),
+        ('REGIONALS_2024', 'Regionals 2024'),
+        ('REGIONALS_2025', 'Regionals 2025'),
+        ('NATIONALS_2023', 'Nationals 2023'),
+        ('NATIONALS_2024', 'Nationals 2024'),
+        ('NATIONALS_2025', 'Nationals 2025'),
+        ('INVITATIONAL', 'Invitational'),
         ('USER_SUBMITTED', 'User Submitted'),
     ]
     

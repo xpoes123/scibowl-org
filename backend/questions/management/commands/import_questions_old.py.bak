@@ -1,0 +1,350 @@
+"""
+Django management command to import Science Bowl questions from PDF files.
+
+Usage:
+    python manage.py import_questions <pdf_path> [--source SOURCE] [--dry-run]
+
+Example:
+    python manage.py import_questions question_pdfs/Round_1.pdf --source MIT_2025
+"""
+
+import re
+from pathlib import Path
+from typing import List, Dict, Optional, Tuple
+
+from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
+
+from questions.models import Question
+
+
+class PDFParser:
+    """Parser for Science Bowl PDF formats."""
+
+    # Category mapping from PDF text to database values
+    CATEGORY_MAP = {
+        'EARTH AND SPACE': 'EARTH_SPACE',
+        'EARTH SPACE': 'EARTH_SPACE',
+        'CHEMISTRY': 'CHEMISTRY',
+        'BIOLOGY': 'BIOLOGY',
+        'PHYSICS': 'PHYSICS',
+        'MATH': 'MATH',
+        'ENERGY': 'ENERGY',
+    }
+
+    # Question style mapping
+    STYLE_MAP = {
+        'MULTIPLE CHOICE': 'MULTIPLE_CHOICE',
+        'SHORT ANSWER': 'SHORT_ANSWER',
+        'IDENTIFY ALL': 'IDENTIFY_ALL',
+        'RANK': 'RANK',
+    }
+
+    def __init__(self, pdf_path: str):
+        self.pdf_path = Path(pdf_path)
+        if not self.pdf_path.exists():
+            raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+
+    def parse(self) -> List[Dict]:
+        """Parse PDF and return list of question dictionaries."""
+        try:
+            import pdfplumber
+        except ImportError:
+            raise ImportError(
+                "pdfplumber is required to parse PDFs. "
+                "Install it with: pip install pdfplumber"
+            )
+
+        questions = []
+
+        with pdfplumber.open(self.pdf_path) as pdf:
+            full_text = ""
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    full_text += page_text + "\n"
+
+        # Split into TOSS-UP and BONUS sections
+        questions.extend(self._parse_questions(full_text, 'TOSSUP'))
+        questions.extend(self._parse_questions(full_text, 'BONUS'))
+
+        return questions
+
+    def _parse_questions(self, text: str, question_type: str) -> List[Dict]:
+        """Parse questions of a specific type from text."""
+        questions = []
+
+        # Find all occurrences of question type headers
+        if question_type == 'TOSSUP':
+            # Match: "TOSS-UP\n1) CATEGORY – Type ..."
+            pattern = r'TOSS-UP\s+(\d+)\)\s*([A-Z\s]+?)\s*–\s*(Multiple Choice|Short Answer|Identify All|Rank)\s+(.*?)(?=\nANSWER:)'
+        else:
+            # Match: "BONUS\n1) CATEGORY – Type ..."
+            pattern = r'BONUS\s+(\d+)\)\s*([A-Z\s]+?)\s*–\s*(Multiple Choice|Short Answer|Identify All|Rank)\s+(.*?)(?=\nANSWER:)'
+
+        # Find questions with their text
+        question_matches = re.finditer(pattern, text, re.DOTALL | re.IGNORECASE)
+
+        for match in question_matches:
+            number = match.group(1)
+            category_raw = match.group(2).strip()
+            style_raw = match.group(3).strip().upper()
+            question_text = match.group(4).strip()
+
+            # Find the answer
+            answer_pattern = rf'ANSWER:\s*([^\n]+(?:\n(?!TOSS-UP|BONUS|\d+\))[^\n]+)*)'
+            answer_match = re.search(answer_pattern, text[match.end():match.end() + 500])
+
+            if not answer_match:
+                continue
+
+            answer_text = answer_match.group(1).strip()
+
+            # Parse category
+            category = self._parse_category(category_raw)
+            if not category:
+                print(f"Warning: Unknown category '{category_raw}' for question {number}")
+                continue
+
+            # Parse style
+            style = self._parse_style(style_raw)
+            if not style:
+                print(f"Warning: Unknown style '{style_raw}' for question {number}")
+                continue
+
+            # Clean up question text spacing
+            question_text = re.sub(r'\s+', ' ', question_text).strip()
+
+            # Extract options for multiple choice questions
+            options = self._extract_options(question_text, style)
+            if options:
+                # Remove options from question text
+                question_text = self._remove_options_from_text(question_text, options)
+            else:
+                # Even for non-multiple choice, clean up spacing
+                question_text = re.sub(r'\s+', ' ', question_text).strip()
+
+            # Clean answer
+            clean_answer = self._clean_answer(answer_text, style, options)
+
+            question_data = {
+                'number': number,
+                'category': category,
+                'question_type': 'TOSSUP' if question_type == 'TOSSUP' else 'BONUS',
+                'question_style': style,
+                'question_text': question_text.strip(),
+                'correct_answer': clean_answer,
+                'option_1': options.get('W') if options else None,
+                'option_2': options.get('X') if options else None,
+                'option_3': options.get('Y') if options else None,
+                'option_4': options.get('Z') if options else None,
+            }
+
+            questions.append(question_data)
+
+        return questions
+
+    def _parse_category(self, category_raw: str) -> Optional[str]:
+        """Map raw category text to database value."""
+        category_upper = category_raw.strip().upper()
+        return self.CATEGORY_MAP.get(category_upper)
+
+    def _parse_style(self, style_raw: str) -> Optional[str]:
+        """Map raw style text to database value."""
+        style_upper = style_raw.strip().upper()
+        return self.STYLE_MAP.get(style_upper)
+
+    def _extract_options(self, text: str, style: str) -> Optional[Dict[str, str]]:
+        """Extract W, X, Y, Z options from multiple choice questions."""
+        if style != 'MULTIPLE_CHOICE':
+            return None
+
+        options = {}
+
+        # Find all W), X), Y), Z) positions
+        option_positions = []
+        for label in ['W', 'X', 'Y', 'Z']:
+            pattern = rf'\b{label}\)\s*'
+            for match in re.finditer(pattern, text):
+                option_positions.append((match.start(), match.end(), label))
+
+        # Sort by position
+        option_positions.sort()
+
+        # Extract text between each option marker and the next one
+        for i, (start, end, label) in enumerate(option_positions):
+            # Find where this option's text ends (either at next option or end of text)
+            if i + 1 < len(option_positions):
+                next_start = option_positions[i + 1][0]
+                option_text = text[end:next_start]
+            else:
+                option_text = text[end:]
+
+            # Clean up the option text
+            option_text = option_text.strip()
+            # Remove any trailing patterns that might be the next question marker
+            option_text = re.split(r'\s+(?=\d+\)|\bANSWER:)', option_text)[0]
+            option_text = re.sub(r'\s+', ' ', option_text)
+
+            if option_text:
+                options[label] = option_text.strip()
+
+        return options if options else None
+
+    def _remove_options_from_text(self, text: str, options: Dict[str, str]) -> str:
+        """Remove option markers and text from question text."""
+        # Find the position of the first option marker
+        first_option_pos = None
+        for label in ['W', 'X', 'Y', 'Z']:
+            pattern = rf'\b{label}\)\s*'
+            match = re.search(pattern, text)
+            if match:
+                if first_option_pos is None or match.start() < first_option_pos:
+                    first_option_pos = match.start()
+
+        # If we found options, take only text before first option
+        if first_option_pos is not None:
+            text = text[:first_option_pos]
+
+        # Clean up whitespace
+        text = re.sub(r'\s+', ' ', text)
+        return text.strip()
+
+    def _clean_answer(self, answer: str, style: str, options: Optional[Dict]) -> str:
+        """Clean and format the answer."""
+        # Remove footer patterns (MIT Science Bowl, page numbers, etc.)
+        answer = re.sub(r'MIT Science Bowl.*', '', answer, flags=re.IGNORECASE)
+        answer = re.sub(r'Page \d+', '', answer, flags=re.IGNORECASE)
+        answer = re.sub(r'Invitational.*Round.*', '', answer, flags=re.IGNORECASE)
+
+        # For multiple choice, extract just the letter
+        if style == 'MULTIPLE_CHOICE':
+            # Match patterns like "W)", "W) TEXT", or just "W"
+            match = re.search(r'\b([WXYZ])\b', answer.upper())
+            if match:
+                return match.group(1)
+
+        # Remove parenthetical notes like (ACCEPT: ...) and (DO NOT ACCEPT: ...)
+        answer = re.sub(r'\(ACCEPT:.*?\)', '', answer, flags=re.IGNORECASE | re.DOTALL)
+        answer = re.sub(r'\(DO NOT ACCEPT:.*?\)', '', answer, flags=re.IGNORECASE | re.DOTALL)
+
+        # Remove leading W), X), Y), Z) if present
+        answer = re.sub(r'^[WXYZ]\)\s*', '', answer, flags=re.IGNORECASE)
+
+        # Clean up whitespace
+        answer = re.sub(r'\s+', ' ', answer)
+        answer = answer.strip()
+
+        return answer
+
+
+class Command(BaseCommand):
+    help = 'Import Science Bowl questions from PDF files'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            'pdf_path',
+            type=str,
+            help='Path to the PDF file to import'
+        )
+        parser.add_argument(
+            '--source',
+            type=str,
+            default='USER_SUBMITTED',
+            help='Source identifier for the questions (e.g., MIT_2025, REGIONALS_2024)'
+        )
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Parse and display questions without saving to database'
+        )
+        parser.add_argument(
+            '--skip-duplicates',
+            action='store_true',
+            help='Skip questions that already exist in the database'
+        )
+
+    def handle(self, *args, **options):
+        pdf_path = options['pdf_path']
+        source = options['source']
+        dry_run = options['dry_run']
+        skip_duplicates = options['skip_duplicates']
+
+        self.stdout.write(f'Parsing PDF: {pdf_path}')
+
+        try:
+            parser = PDFParser(pdf_path)
+            questions_data = parser.parse()
+        except Exception as e:
+            raise CommandError(f'Error parsing PDF: {e}')
+
+        self.stdout.write(
+            self.style.SUCCESS(f'Found {len(questions_data)} questions')
+        )
+
+        if dry_run:
+            self._display_questions(questions_data)
+            return
+
+        # Import questions to database
+        created_count = 0
+        skipped_count = 0
+
+        with transaction.atomic():
+            for q_data in questions_data:
+                # Check for duplicates
+                if skip_duplicates:
+                    exists = Question.objects.filter(
+                        question_text=q_data['question_text'],
+                        category=q_data['category']
+                    ).exists()
+
+                    if exists:
+                        skipped_count += 1
+                        continue
+
+                # Create question
+                Question.objects.create(
+                    question_text=q_data['question_text'],
+                    category=q_data['category'],
+                    question_type=q_data['question_type'],
+                    question_style=q_data['question_style'],
+                    correct_answer=q_data['correct_answer'],
+                    option_1=q_data.get('option_1'),
+                    option_2=q_data.get('option_2'),
+                    option_3=q_data.get('option_3'),
+                    option_4=q_data.get('option_4'),
+                    source=source,
+                )
+                created_count += 1
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f'Successfully imported {created_count} questions'
+            )
+        )
+
+        if skipped_count > 0:
+            self.stdout.write(
+                self.style.WARNING(f'Skipped {skipped_count} duplicate questions')
+            )
+
+    def _display_questions(self, questions_data: List[Dict]):
+        """Display parsed questions for dry-run mode."""
+        for i, q in enumerate(questions_data, 1):
+            self.stdout.write(f'\n--- Question {i} ---')
+            self.stdout.write(f'Type: {q["question_type"]}')
+            self.stdout.write(f'Category: {q["category"]}')
+            self.stdout.write(f'Style: {q["question_style"]}')
+            # Encode to handle Unicode characters
+            text_preview = q["question_text"][:100].encode('ascii', 'ignore').decode('ascii')
+            self.stdout.write(f'Text: {text_preview}...')
+            if q.get('option_1'):
+                try:
+                    self.stdout.write(f'W) {q["option_1"].encode("ascii", "ignore").decode("ascii")}')
+                    self.stdout.write(f'X) {q["option_2"].encode("ascii", "ignore").decode("ascii")}')
+                    self.stdout.write(f'Y) {q["option_3"].encode("ascii", "ignore").decode("ascii")}')
+                    self.stdout.write(f'Z) {q["option_4"].encode("ascii", "ignore").decode("ascii")}')
+                except:
+                    self.stdout.write('[Options contain special characters]')
+            self.stdout.write(f'Answer: {q["correct_answer"]}')
