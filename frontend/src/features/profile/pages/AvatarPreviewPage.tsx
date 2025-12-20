@@ -7,14 +7,30 @@ export const AvatarPreviewPage = () => {
 
   // Sample usernames using advanced science terminology
   const sampleUsernames = [
-    'Voronoi', 'Matrix', 'Auger', 'Benzene', 'Supernova', 'Azeotrope', 'Lagrange', 'Fourier', 'Quantum', 'Heisenberg',
-    'Planck', 'Fermi', 'Bohr', 'Dirac', 'Schrodinger', 'Maxwell',
-    'Faraday', 'Tesla', 'Ampere', 'Coulomb', 'Joule', 'Kelvin', 'Pascal', 'Newton',
-    'Einstein', 'Hawking', 'Feynman', 'Curie', 'Rutherford', 'Boyle', 'Avogadro', 'Doppler', 'Lorentz',
-    'Fibonacci', 'Euler', 'Gauss', 'Riemann', 'Cauchy', 'Laplace', 'Fermat',
-    'Pythagoras', 'Archimedes', 'Kepler', 'Galileo', 'Copernicus', 'Hubble', 'Halley', 'Cassini'
-  ];
+  // Group 1
+  'Voronoi', 'Manifold', 'Noether', 'Favorskii', 'Hamiltonian', 'Madelung',
 
+  // Group 2
+  'jahn_teller', 'Auger', 'Azeotrope', 'Spinodal', 'Atkins', 'Boltzmann',
+
+  // Group 3
+  'Apoptosis', 'Aquaporin', 'Tryptophan', 'Plasmodium', 'Campbell', 'Operon',
+
+  // Group 4
+  'Isostasy', 'Lithosphere', 'Permafrost', 'Epidote', 'Cryosphere', 'Asthenosphere',
+
+  // Group 5
+  'Redshift', 'Pulsar', 'Exoplanet', 'Marshak', 'Supernova', 'Magnetosphere',
+
+  // Group 6
+  'Klein', 'Fourier', 'Halliday', 'Invariant', 'Dispersion', 'Lagrangian',
+
+  // Group 7
+  'Lexington', 'NoHo', 'Mira_Loma', 'DOE', 'NSBA', 'NEG',
+
+  // Group 8
+  'Bingel', 'Zeolite', 'Clathrate', 'Morphogen', 'Ribosome', 'Epigenetic'
+];
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchUsername.trim()) {
