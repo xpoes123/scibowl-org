@@ -12,7 +12,7 @@ export function HomePage() {
             </h1>
           </div>
           <p className="text-lg text-slate-400">
-            Practice, compete, and organize Science Bowl tournaments
+            A website like no other...
           </p>
         </div>
 
