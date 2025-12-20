@@ -64,10 +64,10 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Sidebar */}
       <div
-        className={`bg-slate-900/50 border-r border-purple-500/30 flex flex-col transition-all duration-300 ${
+        className={`fixed left-0 top-0 h-screen bg-slate-900/50 border-r border-purple-500/30 flex flex-col transition-all duration-300 z-10 ${
           sidebarCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -237,7 +237,9 @@ function AppContent() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 overflow-auto">
+      <div className={`min-h-screen transition-all duration-300 ${
+        sidebarCollapsed ? 'ml-20' : 'ml-64'
+      }`}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/study" element={<StudyPage />} />
