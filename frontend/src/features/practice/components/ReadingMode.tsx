@@ -138,6 +138,11 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                         <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
                             {QUESTION_CATEGORY_LABELS[question.questionCategory]}
                         </span>
+                        {question.source && (
+                            <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
+                                {question.source}
+                            </span>
+                        )}
                         {isReading && !hasBuzzed && buzzTimeLeft === null && (
                             <span className="text-sm px-3 py-1 bg-amber-600/30 text-amber-300 rounded-md font-medium border border-amber-600/40 animate-pulse">
                                 Reading...
