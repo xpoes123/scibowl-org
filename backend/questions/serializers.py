@@ -45,7 +45,16 @@ class UserQuestionHistorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
+        history = super().create(validated_data)
+
+        # Update question statistics
+        question = history.question
+        question.times_answered += 1
+        if history.is_correct:
+            question.times_correct += 1
+        question.save()
+
+        return history
 
 
 class BookmarkSerializer(serializers.ModelSerializer):

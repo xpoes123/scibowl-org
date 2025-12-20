@@ -386,7 +386,7 @@ class BookmarkTestCase(TestCase):
         url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
         data = {'notes': 'Updated note'}
 
-        response = self.client.put(url, data)
+        response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         bookmark.refresh_from_db()
@@ -421,7 +421,7 @@ class BookmarkTestCase(TestCase):
         url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
         data = {'notes': 'Hacked note'}
 
-        response = self.client.put(url, data)
+        response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_cannot_delete_other_user_bookmark(self):

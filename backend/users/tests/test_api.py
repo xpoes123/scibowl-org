@@ -26,9 +26,8 @@ class UserRegistrationTestCase(TestCase):
 
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertIn('user', response.data)
-        self.assertEqual(response.data['user']['username'], 'newuser')
-        self.assertEqual(response.data['user']['email'], 'newuser@example.com')
+        self.assertEqual(response.data['username'], 'newuser')
+        self.assertEqual(response.data['email'], 'newuser@example.com')
 
         # Verify user was created in database
         self.assertTrue(User.objects.filter(username='newuser').exists())
@@ -289,7 +288,7 @@ class UserProfileTestCase(TestCase):
         self.user2.refresh_from_db()
         self.assertEqual(self.user2.bio, 'Updated bio')
         self.assertEqual(self.user2.school, 'New School')
-        self.assertEqual(self.user2.grade_level, '12')
+        self.assertEqual(self.user2.grade_level, 12)
 
     def test_partial_update_profile(self):
         """Test user can partially update their profile"""
