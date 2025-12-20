@@ -13,7 +13,7 @@ class UserRegistrationTestCase(TestCase):
     def setUp(self):
         """Set up test client"""
         self.client = APIClient()
-        self.url = reverse('user-registration')
+        self.url = reverse('users:register')
 
     def test_register_user_success(self):
         """Test successful user registration"""
@@ -132,7 +132,7 @@ class UserLoginTestCase(TestCase):
     def setUp(self):
         """Set up test client and user"""
         self.client = APIClient()
-        self.url = reverse('token_obtain_pair')
+        self.url = reverse('users:token_obtain_pair')
 
         # Create test user
         self.user = User.objects.create_user(
@@ -189,8 +189,8 @@ class TokenRefreshTestCase(TestCase):
     def setUp(self):
         """Set up test client and user"""
         self.client = APIClient()
-        self.token_url = reverse('token_obtain_pair')
-        self.refresh_url = reverse('token_refresh')
+        self.token_url = reverse('users:token_obtain_pair')
+        self.refresh_url = reverse('users:token_refresh')
 
         # Create test user
         self.user = User.objects.create_user(
@@ -238,7 +238,7 @@ class UserProfileTestCase(TestCase):
     def setUp(self):
         """Set up test client and users"""
         self.client = APIClient()
-        self.url = reverse('user-profile')
+        self.url = reverse('users:profile')
 
         # Create test users
         self.user1 = User.objects.create_user(
@@ -342,7 +342,7 @@ class UserDetailViewTestCase(TestCase):
             correct_answers=40
         )
 
-        self.url = reverse('user-detail', kwargs={'username': 'publicuser'})
+        self.url = reverse('users:user_detail', kwargs={'username': 'publicuser'})
 
     def test_get_public_profile_unauthenticated(self):
         """Test unauthenticated users can view public profiles"""
@@ -381,6 +381,6 @@ class UserDetailViewTestCase(TestCase):
 
     def test_get_nonexistent_user_profile(self):
         """Test accessing non-existent user returns 404"""
-        url = reverse('user-detail', kwargs={'username': 'nonexistent'})
+        url = reverse('users:user_detail', kwargs={'username': 'nonexistent'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

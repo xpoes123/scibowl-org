@@ -14,7 +14,7 @@ class QuestionListViewTestCase(TestCase):
     def setUp(self):
         """Set up test client and sample data"""
         self.client = APIClient()
-        self.url = reverse('question-list')
+        self.url = reverse('questions:question_list')
 
         # Create test user
         self.user = User.objects.create_user(
@@ -130,7 +130,7 @@ class QuestionDetailViewTestCase(TestCase):
             explanation='Speed of light in vacuum'
         )
 
-        self.url = reverse('question-detail', kwargs={'pk': self.question.pk})
+        self.url = reverse('questions:question_detail', kwargs={'pk': self.question.pk})
 
     def test_get_question_detail(self):
         """Test retrieving a single question"""
@@ -141,7 +141,7 @@ class QuestionDetailViewTestCase(TestCase):
 
     def test_get_nonexistent_question(self):
         """Test retrieving a non-existent question returns 404"""
-        url = reverse('question-detail', kwargs={'pk': 99999})
+        url = reverse('questions:question_detail', kwargs={'pk': 99999})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -152,7 +152,7 @@ class UserQuestionHistoryTestCase(TestCase):
     def setUp(self):
         """Set up test client and sample data"""
         self.client = APIClient()
-        self.url = reverse('user-question-history')
+        self.url = reverse('questions:history_list')
 
         # Create test users
         self.user1 = User.objects.create_user(
@@ -263,7 +263,7 @@ class BookmarkTestCase(TestCase):
     def setUp(self):
         """Set up test client and sample data"""
         self.client = APIClient()
-        self.list_url = reverse('bookmark-list')
+        self.list_url = reverse('questions:bookmark_list')
 
         # Create test users
         self.user1 = User.objects.create_user(
@@ -383,7 +383,7 @@ class BookmarkTestCase(TestCase):
             notes='Original note'
         )
 
-        url = reverse('bookmark-detail', kwargs={'pk': bookmark.pk})
+        url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
         data = {'notes': 'Updated note'}
 
         response = self.client.put(url, data)
@@ -402,7 +402,7 @@ class BookmarkTestCase(TestCase):
             notes='To delete'
         )
 
-        url = reverse('bookmark-detail', kwargs={'pk': bookmark.pk})
+        url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Bookmark.objects.count(), 0)
@@ -418,7 +418,7 @@ class BookmarkTestCase(TestCase):
 
         # Try to update as user1
         self.client.force_authenticate(user=self.user1)
-        url = reverse('bookmark-detail', kwargs={'pk': bookmark.pk})
+        url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
         data = {'notes': 'Hacked note'}
 
         response = self.client.put(url, data)
@@ -435,7 +435,7 @@ class BookmarkTestCase(TestCase):
 
         # Try to delete as user1
         self.client.force_authenticate(user=self.user1)
-        url = reverse('bookmark-detail', kwargs={'pk': bookmark.pk})
+        url = reverse('questions:bookmark_detail', kwargs={'pk': bookmark.pk})
 
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
