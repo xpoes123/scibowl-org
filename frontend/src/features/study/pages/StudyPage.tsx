@@ -11,13 +11,21 @@ export function StudyPage() {
 
         <div className="mb-8">
           <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Available Now</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <Link
-              to="/practice"
+              to="/study/flashcard"
               className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
             >
-              <h3 className="text-lg font-semibold text-white mb-1">Practice</h3>
-              <p className="text-sm text-slate-400">Solo reading & flashcard play</p>
+              <h3 className="text-lg font-semibold text-white mb-1">Flashcard Practice</h3>
+              <p className="text-sm text-slate-400">Instant reveal mode - answer and see results immediately</p>
+            </Link>
+
+            <Link
+              to="/study/reading"
+              className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
+            >
+              <h3 className="text-lg font-semibold text-white mb-1">Reading Practice</h3>
+              <p className="text-sm text-slate-400">Simulated quiz bowl - buzz in as text reveals</p>
             </Link>
 
             <Link

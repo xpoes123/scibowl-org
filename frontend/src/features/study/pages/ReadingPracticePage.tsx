@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { FlashcardMode } from "../components/FlashcardMode";
-import { HistoryCard, type HistoryEntry } from "../components/HistoryEntry";
-import { PRACTICE_CATEGORIES } from "../constants/practiceConstants";
+import { ReadingMode } from "../../practice/components/ReadingMode";
+import { HistoryCard, type HistoryEntry } from "../../practice/components/HistoryEntry";
+import { PRACTICE_CATEGORIES } from "../../practice/constants/practiceConstants";
 import {
     buildPracticePool,
     getRandomNextIndex,
     formatAnswer,
     pickRandomUnseenIndex,
-    type QuestionTypeFilter } from "../utils/practiceUtils";
-import { CategoryFilter } from "../components/CategoryFilter";
+    type QuestionTypeFilter } from "../../practice/utils/practiceUtils";
+import { CategoryFilter } from "../../practice/components/CategoryFilter";
 import { questionsAPI } from "../../../core/api/api";
 import { transformAPIQuestion, type APIQuestionList, type TransformedQuestion, type Category } from "../../../shared/types/api";
 import { isTypingInInput } from "../../../shared/utils/keyboardUtils";
@@ -16,7 +16,7 @@ import { shouldAllowTabFocus } from "../../../shared/utils/answerUtils";
 
 const MAX_HISTORY_ENTRIES = 100;
 
-export function FlashcardPracticePage() {
+export function ReadingPracticePage() {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [questions, setQuestions] = useState<TransformedQuestion[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -269,7 +269,7 @@ export function FlashcardPracticePage() {
                 )}
 
                 {!isLoading && !error && hasStarted && currentQuestion && (
-                    <FlashcardMode
+                    <ReadingMode
                         ref={inputRef}
                         key={currentQuestion.id}
                         question={currentQuestion}
@@ -300,7 +300,7 @@ export function FlashcardPracticePage() {
 
             {/* SIDEBAR */}
             <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 shadow-2xl border border-purple-500/20 h-fit sticky top-6">
-                <h2 className="text-xl font-bold text-white mb-4 text-center">Flashcard Mode</h2>
+                <h2 className="text-xl font-bold text-white mb-4 text-center">Reading Mode</h2>
 
                 <CategoryFilter
                     categories={PRACTICE_CATEGORIES}
