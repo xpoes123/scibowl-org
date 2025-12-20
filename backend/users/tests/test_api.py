@@ -21,7 +21,7 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password': 'SecurePass123!',
-            'password2': 'SecurePass123!'
+            'password_confirm': 'SecurePass123!'
         }
 
         response = self.client.post(self.url, data)
@@ -39,10 +39,10 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password': 'SecurePass123!',
-            'password2': 'SecurePass123!',
+            'password_confirm': 'SecurePass123!',
             'bio': 'Science enthusiast',
             'school': 'Test High School',
-            'grade_level': '10'
+            'grade_level': 10
         }
 
         response = self.client.post(self.url, data)
@@ -59,7 +59,7 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password': 'SecurePass123!',
-            'password2': 'DifferentPass123!'
+            'password_confirm': 'DifferentPass123!'
         }
 
         response = self.client.post(self.url, data)
@@ -79,7 +79,7 @@ class UserRegistrationTestCase(TestCase):
             'username': 'existinguser',
             'email': 'different@example.com',
             'password': 'SecurePass123!',
-            'password2': 'SecurePass123!'
+            'password_confirm': 'SecurePass123!'
         }
 
         response = self.client.post(self.url, data)
@@ -98,7 +98,7 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'existing@example.com',
             'password': 'SecurePass123!',
-            'password2': 'SecurePass123!'
+            'password_confirm': 'SecurePass123!'
         }
 
         response = self.client.post(self.url, data)
@@ -110,7 +110,7 @@ class UserRegistrationTestCase(TestCase):
             'username': 'newuser',
             'email': 'invalid-email',
             'password': 'SecurePass123!',
-            'password2': 'SecurePass123!'
+            'password_confirm': 'SecurePass123!'
         }
 
         response = self.client.post(self.url, data)
@@ -271,7 +271,7 @@ class UserProfileTestCase(TestCase):
         self.assertEqual(response.data['email'], 'user1@example.com')
         self.assertEqual(response.data['bio'], 'Love science')
         self.assertEqual(response.data['school'], 'Test High School')
-        self.assertEqual(response.data['grade_level'], '11')
+        self.assertEqual(response.data['grade_level'], 11)
 
     def test_update_profile(self):
         """Test user can update their profile"""
@@ -280,10 +280,10 @@ class UserProfileTestCase(TestCase):
         data = {
             'bio': 'Updated bio',
             'school': 'New School',
-            'grade_level': '12'
+            'grade_level': 12
         }
 
-        response = self.client.put(self.url, data)
+        response = self.client.patch(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.user2.refresh_from_db()

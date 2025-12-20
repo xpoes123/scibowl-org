@@ -229,7 +229,7 @@ class UserQuestionHistoryTestCase(TestCase):
         self.client.force_authenticate(user=self.user1)
 
         data = {
-            'question': self.question.id,
+            'question_id': self.question.id,
             'user_answer': 'Water',
             'is_correct': True,
             'time_taken': 12
@@ -247,7 +247,7 @@ class UserQuestionHistoryTestCase(TestCase):
     def test_create_history_unauthenticated(self):
         """Test unauthenticated users cannot create history"""
         data = {
-            'question': self.question.id,
+            'question_id': self.question.id,
             'user_answer': 'Water',
             'is_correct': True,
             'time_taken': 12

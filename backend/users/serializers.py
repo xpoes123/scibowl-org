@@ -45,3 +45,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop('password_confirm')
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class PublicUserSerializer(serializers.ModelSerializer):
+    """Serializer for public user profiles (excludes email)"""
+
+    accuracy = serializers.ReadOnlyField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'first_name', 'last_name',
+            'bio', 'school', 'grade_level',
+            'total_questions_answered', 'correct_answers', 'accuracy',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']

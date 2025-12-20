@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from .serializers import UserSerializer, UserRegistrationSerializer
+from .serializers import UserSerializer, UserRegistrationSerializer, PublicUserSerializer
 
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -24,6 +24,6 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     """API endpoint for viewing any user's public profile"""
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = PublicUserSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = 'username'
