@@ -45,7 +45,16 @@ class UserQuestionHistorySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
+        history = super().create(validated_data)
+
+        # Update question statistics
+        question = history.question
+        question.times_answered += 1
+        if history.is_correct:
+            question.times_correct += 1
+        question.save()
+
+        return history
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -58,6 +67,17 @@ class BookmarkSerializer(serializers.ModelSerializer):
         model = Bookmark
         fields = ['id', 'user', 'question', 'question_id', 'notes', 'created_at']
         read_only_fields = ['id', 'user', 'created_at']
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        question_id = attrs.get('question_id')
+
+        # Check if bookmark already exists
+        if Bookmark.objects.filter(user=user, question_id=question_id).exists():
+            raise serializers.ValidationError(
+                "You have already bookmarked this question."
+            )
+        return attrs
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user

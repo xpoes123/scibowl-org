@@ -31,8 +31,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'username', 'email', 'password', 'password_confirm',
-            'first_name', 'last_name', 'school', 'grade_level'
+            'first_name', 'last_name', 'bio', 'school', 'grade_level'
         ]
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
@@ -42,6 +47,25 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        password = validated_data.pop('password')
         validated_data.pop('password_confirm')
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create(**validated_data)
+        user.set_password(password)
+        user.save()
         return user
+
+
+class PublicUserSerializer(serializers.ModelSerializer):
+    """Serializer for public user profiles (excludes email)"""
+
+    accuracy = serializers.ReadOnlyField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'first_name', 'last_name',
+            'bio', 'school', 'grade_level',
+            'total_questions_answered', 'correct_answers', 'accuracy',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']
