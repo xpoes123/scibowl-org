@@ -8,6 +8,7 @@ import {
 import { useState } from "react";
 import { DatabasePage } from "./pages/QuestionsPage";
 import { PracticePage } from "./pages/PracticePage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LoginModal } from "./components/LoginModal";
 import { SignupModal } from "./components/SignupModal";
@@ -50,6 +51,12 @@ function AppContent() {
           <>
             {user ? (
               <div className="flex items-center gap-4">
+                <Link
+                  to="/profile"
+                  className="text-slate-300 hover:text-purple-300 font-medium transition-all duration-200 hover:scale-105 transform"
+                >
+                  Profile
+                </Link>
                 <span className="text-slate-300">
                   Welcome, <span className="text-purple-400 font-medium">{user.username}</span>
                 </span>
@@ -83,6 +90,7 @@ function AppContent() {
       <Routes>
         <Route path="/database" element={<DatabasePage />} />
         <Route path="/practice" element={<PracticePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="*" element={<Navigate to="/practice" replace />} />
       </Routes>
 

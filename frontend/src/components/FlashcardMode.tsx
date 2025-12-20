@@ -45,6 +45,12 @@ export const FlashcardMode = forwardRef<HTMLInputElement, FlashcardModeProps>(
 
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
+                // Ignore hotkeys when typing in input fields or modals
+                if (e.target instanceof HTMLInputElement ||
+                    e.target instanceof HTMLTextAreaElement) {
+                    return;
+                }
+
                 if (e.key === "Enter") {
                     e.preventDefault();
                     handleSubmit();

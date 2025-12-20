@@ -94,6 +94,12 @@ export function PracticePage() {
 
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
+            // Ignore hotkeys when typing in input fields or modals
+            if (e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement) {
+                return;
+            }
+
             if (e.key.toLowerCase() === "s") {
                 setHasStarted(true);
             }
@@ -104,6 +110,12 @@ export function PracticePage() {
 
     useEffect(() => {
         const handler = (e:KeyboardEvent) => {
+            // Ignore hotkeys when typing in input fields or modals
+            if (e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement) {
+                return;
+            }
+
             if (e.key.toLowerCase() === "p") {
                 setHasStarted(false);
             }
@@ -117,6 +129,12 @@ export function PracticePage() {
 
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
+            // Ignore hotkeys when typing in input fields or modals
+            if (e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement) {
+                return;
+            }
+
             if (e.key === "Tab") {
                 // Let Tab behave normally on multiple choice, identify_all, and rank
                 if (!currentQuestion ||
