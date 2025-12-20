@@ -11,6 +11,7 @@ import { useReadingMode } from '../hooks/useReadingMode';
 type ReadingModeProps = {
     question: TransformedQuestion;
     onSubmitResult: (wasCorrect: boolean) => void;
+    onAnsweringChange?: (isAnswering: boolean) => void;
 };
 
 export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
@@ -123,7 +124,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
             window.addEventListener("keydown", handler);
             return () => window.removeEventListener("keydown", handler);
         }, [hasBuzzed, hasSubmitted, question.questionCategory, question.choices]);
-
+        
         return (
             <div className="border border-[#7d70f1]/30 rounded-xl p-6 mb-6 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm shadow-2xl shadow-[#7d70f1]/10">
                 <div className="mb-4">

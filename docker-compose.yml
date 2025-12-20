@@ -35,19 +35,21 @@ services:
       db:
         condition: service_healthy
 
-  frontend:
-    image: node:20
-    working_dir: /app
-    command: sh -c "npm install && npm run dev -- --host"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:8000
-    stdin_open: true
-    tty: true
+frontend:
+  image: node:20
+  working_dir: /app
+  command: sh -c "npm install && npm run dev -- --host --force"
+  volumes:
+    - ./frontend:/app
+    - /app/node_modules
+  ports:
+    - "5173:5173"
+  environment:
+    - VITE_API_URL=http://localhost:8000
+    - CHOKIDAR_USEPOLLING=true
+    - CHOKIDAR_INTERVAL=100
+  stdin_open: true
+  tty: true
 
 volumes:
   postgres_data:

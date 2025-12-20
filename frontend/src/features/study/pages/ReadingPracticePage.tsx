@@ -82,11 +82,11 @@ export function ReadingPracticePage() {
 
     const currentQuestion = practicePool.length > 0 ? practicePool[currentIndex] : null;
 
-    // Keyboard shortcuts - Start (S)
+    // Keyboard shortcuts - Start (K)
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (isTypingInInput(e)) return;
-            if (e.key.toLowerCase() === "s") {
+            if (e.key.toLowerCase() === "k") {
                 setHasStarted(true);
             }
         };
@@ -192,6 +192,7 @@ export function ReadingPracticePage() {
     // Keyboard shortcuts - Next (N)
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
+            if (isTypingInInput(e)) return;
             if (e.key.toLowerCase() === "n" && hasSubmitted && hasStarted && practicePool.length > 0) {
                 goToRandomQuestion();
                 setHasSubmitted(false);
@@ -204,6 +205,7 @@ export function ReadingPracticePage() {
     // Keyboard shortcuts - Skip (S)
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
+            if (isTypingInInput(e)) return;
             if (e.key.toLowerCase() === "s" && !hasSubmitted && hasStarted && practicePool.length > 0) {
                 goToRandomQuestion();
                 setHasSubmitted(false);
@@ -279,7 +281,7 @@ export function ReadingPracticePage() {
 
                 {!isLoading && !error && !hasStarted && (
                     <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 shadow-2xl border border-purple-500/20 text-center">
-                        <p className="text-slate-300 text-lg">Press <span className="font-bold text-purple-400">S</span> to start practicing!</p>
+                        <p className="text-slate-300 text-lg">Press <span className="font-bold text-purple-400">K</span> to start practicing!</p>
                     </div>
                 )}
 
@@ -341,7 +343,7 @@ export function ReadingPracticePage() {
                                 : "bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30"
                         }`}
                     >
-                        {hasStarted ? "Pause (P)" : "Start (S)"}
+                        {hasStarted ? "Pause (P)" : "Start (K)"}
                     </button>
                     <button
                         onClick={goToRandomQuestion}
