@@ -11,6 +11,7 @@ import { useReadingMode } from '../hooks/useReadingMode';
 type ReadingModeProps = {
     question: TransformedQuestion;
     onSubmitResult: (wasCorrect: boolean) => void;
+    onAnsweringChange?: (isAnswering: boolean) => void;
 };
 
 export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
@@ -123,7 +124,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
             window.addEventListener("keydown", handler);
             return () => window.removeEventListener("keydown", handler);
         }, [hasBuzzed, hasSubmitted, question.questionCategory, question.choices]);
-
+        
         return (
             <div className="border border-[#7d70f1]/30 rounded-xl p-6 mb-6 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm shadow-2xl shadow-[#7d70f1]/10">
                 <div className="mb-4">
@@ -137,6 +138,11 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                         <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
                             {QUESTION_CATEGORY_LABELS[question.questionCategory]}
                         </span>
+                        {question.source && (
+                            <span className="text-sm px-3 py-1 bg-[#7d70f1]/30 text-[#b4a8ff] rounded-md font-medium border border-[#7d70f1]/40">
+                                {question.source}
+                            </span>
+                        )}
                         {isReading && !hasBuzzed && buzzTimeLeft === null && (
                             <span className="text-sm px-3 py-1 bg-amber-600/30 text-amber-300 rounded-md font-medium border border-amber-600/40 animate-pulse">
                                 Reading...

@@ -6,11 +6,18 @@
  * Checks if the keyboard event target is an input field where we should ignore hotkeys
  */
 export function isTypingInInput(e: KeyboardEvent): boolean {
-    return (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement
-    );
+  // Check if the event originated from an input field
+  const target = e.target as HTMLElement | null;
+  if (!target) return false;
+
+  const tag = target.tagName;
+  return (
+    tag === "INPUT" ||
+    tag === "TEXTAREA" ||
+    target.isContentEditable
+  );
 }
+
 
 /**
  * Creates a keyboard event handler with common filtering logic

@@ -27,6 +27,9 @@ export function QuestionCard({ question }: QuestionCardProps) {
                     <span className="text-xs px-2 py-1 bg-[#9789f5]/20 text-[#c4baff] rounded-md font-medium border border-[#9789f5]/30">
                         {question.questionCategory.charAt(0).toUpperCase() + question.questionCategory.slice(1).replaceAll("_", " ")}
                     </span>
+                    <span className="text-xs px-2 py-1 bg-[#9789f5]/20 text-[#c4baff] rounded-md font-medium border border-[#9789f5]/30">
+                        {question.source ? question.source : "Unknown Source"}
+                    </span>
                 </div>
             </div>
 

@@ -29,14 +29,6 @@ export type QuestionStyle =
 
 export type QuestionType = "TOSSUP" | "BONUS";
 
-export type Source =
-  | "REGIONALS_2023"
-  | "REGIONALS_2024"
-  | "REGIONALS_2025"
-  | "NATIONALS_2023"
-  | "NATIONALS_2024"
-  | "NATIONALS_2025";
-
 // API Response for Question (with answer - used after submission)
 export interface APIQuestion {
   id: number;
@@ -49,7 +41,7 @@ export interface APIQuestion {
   option_2: string | null;
   option_3: string | null;
   option_4: string | null;
-  source: Source | null;
+  source: string | null;
   explanation: string;
   times_answered: number;
   times_correct: number;
@@ -70,7 +62,7 @@ export interface APIQuestionList {
   option_2: string | null;
   option_3: string | null;
   option_4: string | null;
-  source: Source | null;
+  source: string | null;
 }
 
 // Transformed type for frontend use (matches current Question type structure)
@@ -87,6 +79,7 @@ export interface TransformedQuestion {
     label: MCLabel;
     text: string;
   }[];
+  source: Source | null;
   attributes?: string[]; // for identify_all and rank
 }
 
