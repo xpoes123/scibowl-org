@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { authAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { Avatar } from '../components/Avatar';
 
 export const ProfilePage = () => {
   const { user, loading: authLoading } = useAuth();
@@ -110,10 +111,17 @@ export const ProfilePage = () => {
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
       <div className="bg-slate-800 rounded-lg shadow-xl border border-purple-500/30 p-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
-            Profile
-          </h1>
+        {/* Avatar and Header */}
+        <div className="flex items-center gap-6 mb-8">
+          <Avatar username={user.username} size={120} className="ring-4 ring-purple-500/30" />
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
+              {user.username}
+            </h1>
+            <p className="text-slate-400 mt-1">
+              {user.email}
+            </p>
+          </div>
           {!isEditing && (
             <button
               onClick={() => setIsEditing(true)}

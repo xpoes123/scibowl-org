@@ -9,9 +9,11 @@ import { useState } from "react";
 import { DatabasePage } from "./pages/QuestionsPage";
 import { PracticePage } from "./pages/PracticePage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { AvatarPreviewPage } from "./pages/AvatarPreviewPage";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LoginModal } from "./components/LoginModal";
 import { SignupModal } from "./components/SignupModal";
+import { Avatar } from "./components/Avatar";
 
 function AppContent() {
   const { user, logout, loading } = useAuth();
@@ -57,9 +59,12 @@ function AppContent() {
                 >
                   Profile
                 </Link>
-                <span className="text-slate-300">
-                  Welcome, <span className="text-purple-400 font-medium">{user.username}</span>
-                </span>
+                <div className="flex items-center gap-3">
+                  <Avatar username={user.username} size={40} />
+                  <span className="text-slate-300">
+                    <span className="text-purple-400 font-medium">{user.username}</span>
+                  </span>
+                </div>
                 <button
                   onClick={logout}
                   className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded transition-colors"
@@ -91,6 +96,7 @@ function AppContent() {
         <Route path="/database" element={<DatabasePage />} />
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/avatars" element={<AvatarPreviewPage />} />
         <Route path="*" element={<Navigate to="/practice" replace />} />
       </Routes>
 
