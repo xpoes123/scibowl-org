@@ -5,14 +5,14 @@ export const AvatarPreviewPage = () => {
   const [searchUsername, setSearchUsername] = useState('');
   const [searchedUsername, setSearchedUsername] = useState('');
 
-  // Sample usernames for demonstration
+  // Sample usernames using advanced science terminology
   const sampleUsernames = [
-    'alice', 'bob', 'charlie', 'david', 'eve', 'frank', 'grace', 'heidi', 'ivan', 'judy',
-    'alice123', 'bob_smith', 'charlie99', 'david_m', 'eve_parker', 'frank_west',
-    'grace_lee', 'heidi_jones', 'ivan_k', 'judy_chen', 'kevin', 'laura', 'mike', 'nancy',
-    'oliver', 'paul', 'quinn', 'rachel', 'steve', 'tina', 'uma', 'victor', 'wendy',
-    'xavier', 'yolanda', 'zack', 'anna', 'brian', 'cathy', 'derek', 'emma', 'felix',
-    'gina', 'henry', 'iris', 'jack', 'kate', 'liam', 'maya', 'noah'
+    'Voronoi', 'Matrix', 'Auger', 'Benzene', 'Supernova', 'Azeotrope', 'Lagrange', 'Fourier', 'Quantum', 'Heisenberg',
+    'Planck', 'Fermi', 'Bohr', 'Dirac', 'Schrodinger', 'Maxwell',
+    'Faraday', 'Tesla', 'Ampere', 'Coulomb', 'Joule', 'Kelvin', 'Pascal', 'Newton',
+    'Einstein', 'Hawking', 'Feynman', 'Curie', 'Rutherford', 'Boyle', 'Avogadro', 'Doppler', 'Lorentz',
+    'Fibonacci', 'Euler', 'Gauss', 'Riemann', 'Cauchy', 'Laplace', 'Fermat',
+    'Pythagoras', 'Archimedes', 'Kepler', 'Galileo', 'Copernicus', 'Hubble', 'Halley', 'Cassini'
   ];
 
   const handleSearch = (e: React.FormEvent) => {
