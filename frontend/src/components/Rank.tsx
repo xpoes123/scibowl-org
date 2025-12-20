@@ -6,9 +6,10 @@ export type RankProps = {
     selectedAnswer: string;
     onChange: (answer: string) => void;
     disabled?: boolean;
+    frozenAttributeTexts?: string[];
 }
 
-export function Rank({ question, onChange, selectedAnswer, disabled = false }: RankProps) {
+export function Rank({ question, onChange, selectedAnswer, disabled = false, frozenAttributeTexts }: RankProps) {
     if (
         question.questionCategory !== "rank" ||
         !question.attributes ||
@@ -84,6 +85,10 @@ export function Rank({ question, onChange, selectedAnswer, disabled = false }: R
                 const optionNumber = index + 1;
                 const rankPosition = getRankPosition(optionNumber);
                 const isSelected = rankPosition !== null;
+                // Use frozen text if available, otherwise show full attribute
+                const displayText = frozenAttributeTexts && frozenAttributeTexts[index] !== undefined
+                    ? frozenAttributeTexts[index]
+                    : attr;
 
                 return (
                     <button
@@ -98,7 +103,7 @@ export function Rank({ question, onChange, selectedAnswer, disabled = false }: R
                     >
                         <div className="flex items-center justify-between">
                             <div>
-                                <span className="text-white">{optionNumber}.</span> {attr}
+                                <span className="text-white">{optionNumber}.</span> {displayText}
                             </div>
                             {isSelected && (
                                 <div className="ml-4 flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">

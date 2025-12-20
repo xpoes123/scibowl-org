@@ -1,8 +1,12 @@
 import type { TransformedQuestion } from '../types/api';
 import { IdentifyAll } from './IdentifyAll';
 import { Rank } from './Rank';
-import { useState, useEffect, forwardRef, useRef, useMemo } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import { QUESTION_CATEGORY_LABELS } from '../constants/practiceConstants';
+import { validateAnswer, renderAnswer } from '../utils/answerUtils';
+import { getRevealedChoiceText } from '../utils/textRevealUtils';
+import { isTypingInInput } from '../utils/keyboardUtils';
+import { useReadingMode } from '../hooks/useReadingMode';
 
 type ReadingModeProps = {
     question: TransformedQuestion;
@@ -14,130 +18,28 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         const [userAnswer, setUserAnswer] = useState("");
         const [hasSubmitted, setHasSubmitted] = useState(false);
         const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-        const [hasBuzzed, setHasBuzzed] = useState(false);
 
-        // Reading mode specific state
-        const [revealedText, setRevealedText] = useState("");
-        const [isReading, setIsReading] = useState(false);
-        const [currentCharIndex, setCurrentCharIndex] = useState(0);
-        const readingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-        // Store the revealed choice texts when user buzzes
-        const [frozenChoiceTexts, setFrozenChoiceTexts] = useState<string[]>([]);
-
-        // 5-second buzz timer state
-        const [buzzTimeLeft, setBuzzTimeLeft] = useState<number | null>(null);
-        const buzzTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-        // Configuration (can be made adjustable later)
-        const CHARS_PER_SECOND = 20; // Adjust reading speed
-        const MS_PER_CHAR = 1000 / CHARS_PER_SECOND;
-
-        // Build full text including choices for multiple choice questions
-        const fullQuestionText = useMemo(() => {
-            let text = question.text;
-
-            // Append choices to the question text for multiple choice
-            if (question.questionCategory === "multiple_choice" && question.choices) {
-                text += "\n\n";
-                question.choices.forEach(choice => {
-                    text += `${choice.label}) ${choice.text}\n`;
-                });
-            }
-
-            return text;
-        }, [question.text, question.questionCategory, question.choices]);
-
-        // Calculate how much of each choice has been revealed
-        const getRevealedChoiceText = (choiceIndex: number) => {
-            if (!question.choices || question.questionCategory !== "multiple_choice") {
-                return "";
-            }
-
-            // Calculate where this choice starts in the full text
-            let charsSoFar = question.text.length + 2; // +2 for "\n\n"
-
-            for (let i = 0; i < choiceIndex; i++) {
-                charsSoFar += question.choices[i].label.length + 2; // "W) "
-                charsSoFar += question.choices[i].text.length + 1; // text + "\n"
-            }
-
-            const choiceStart = charsSoFar;
-            const labelLength = question.choices[choiceIndex].label.length + 2; // "W) "
-            const choiceTextStart = choiceStart + labelLength;
-            const choiceTextEnd = choiceTextStart + question.choices[choiceIndex].text.length;
-
-            // How many characters have been revealed?
-            const revealedChars = currentCharIndex;
-
-            if (revealedChars <= choiceTextStart) {
-                return ""; // Haven't reached this choice's text yet
-            } else if (revealedChars >= choiceTextEnd) {
-                return question.choices[choiceIndex].text; // Fully revealed
-            } else {
-                // Partially revealed
-                const charsRevealed = revealedChars - choiceTextStart;
-                return question.choices[choiceIndex].text.slice(0, charsRevealed);
-            }
-        };
-
-        // Start reading when component mounts or question changes
-        useEffect(() => {
-            setIsReading(true);
-            setCurrentCharIndex(0);
-            setRevealedText("");
-            setHasBuzzed(false);
-            setHasSubmitted(false);
-            setUserAnswer("");
-            setIsCorrect(null);
-            setFrozenChoiceTexts([]);
-        }, [question.id]);
-
-        // Progressive text reveal
-        useEffect(() => {
-            if (!isReading || hasBuzzed) {
-                if (readingIntervalRef.current) {
-                    clearInterval(readingIntervalRef.current);
-                }
-                return;
-            }
-
-            readingIntervalRef.current = setInterval(() => {
-                setCurrentCharIndex(prev => {
-                    const next = prev + 1;
-                    if (next >= fullQuestionText.length) {
-                        setIsReading(false);
-                        if (readingIntervalRef.current) {
-                            clearInterval(readingIntervalRef.current);
-                        }
-                        return fullQuestionText.length;
-                    }
-                    return next;
-                });
-            }, MS_PER_CHAR);
-
-            return () => {
-                if (readingIntervalRef.current) {
-                    clearInterval(readingIntervalRef.current);
-                }
-            };
-        }, [isReading, hasBuzzed, fullQuestionText.length]);
-
-        // Update revealed text
-        useEffect(() => {
-            setRevealedText(fullQuestionText.slice(0, currentCharIndex));
-        }, [currentCharIndex, fullQuestionText]);
+        const {
+            revealedText,
+            isReading,
+            currentCharIndex,
+            hasBuzzed,
+            frozenChoiceTexts,
+            frozenAttributeTexts,
+            buzzTimeLeft,
+            setBuzzTimeLeft,
+            buzzTimerRef,
+            handleBuzz,
+        } = useReadingMode(question);
 
         // 5-second buzz timer after reading finishes
         useEffect(() => {
-            // Start timer when reading finishes and user hasn't buzzed yet
             if (!isReading && !hasBuzzed && !hasSubmitted) {
                 setBuzzTimeLeft(5);
 
                 buzzTimerRef.current = setInterval(() => {
                     setBuzzTimeLeft(prev => {
                         if (prev === null || prev <= 1) {
-                            // Time's up! Mark as incorrect
                             if (buzzTimerRef.current) {
                                 clearInterval(buzzTimerRef.current);
                             }
@@ -156,83 +58,42 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                     }
                 };
             } else {
-                // Clear timer if conditions change
                 if (buzzTimerRef.current) {
                     clearInterval(buzzTimerRef.current);
                     buzzTimerRef.current = null;
                 }
                 setBuzzTimeLeft(null);
             }
-        }, [isReading, hasBuzzed, hasSubmitted, onSubmitResult]);
+        }, [isReading, hasBuzzed, hasSubmitted, onSubmitResult, setBuzzTimeLeft, buzzTimerRef]);
 
         // Handle buzz-in (spacebar)
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
-                // Ignore hotkeys when typing in input fields or modals
-                if (e.target instanceof HTMLInputElement ||
-                    e.target instanceof HTMLTextAreaElement) {
+                if (hasBuzzed || isTypingInInput(e)) {
                     return;
                 }
 
                 if (e.key === " " && !hasBuzzed && !hasSubmitted && (isReading || buzzTimeLeft !== null)) {
                     e.preventDefault();
-
-                    // Clear the buzz timer if it's running
-                    if (buzzTimerRef.current) {
-                        clearInterval(buzzTimerRef.current);
-                        buzzTimerRef.current = null;
-                    }
-                    setBuzzTimeLeft(null);
-
-                    // Freeze the current revealed choice texts
-                    if (question.questionCategory === "multiple_choice" && question.choices) {
-                        const frozen = question.choices.map((_, index) => getRevealedChoiceText(index));
-                        setFrozenChoiceTexts(frozen);
-                    }
-
-                    setHasBuzzed(true);
-                    setIsReading(false);
+                    handleBuzz();
                 }
             };
             window.addEventListener("keydown", handler);
             return () => window.removeEventListener("keydown", handler);
-        }, [hasBuzzed, hasSubmitted, isReading, buzzTimeLeft, question.questionCategory, question.choices, getRevealedChoiceText]);
+        }, [hasBuzzed, hasSubmitted, isReading, buzzTimeLeft, handleBuzz]);
 
         const handleSubmit = () => {
-            if (hasSubmitted) return;
-            const normalizedUser = userAnswer.trim().toLowerCase();
-            const normalizedCorrect = question.answer.trim().toLowerCase();
+            if (hasSubmitted || userAnswer.trim() === "") return;
 
-            if (normalizedUser === "") {
-                return;
-            }
-            const correct = normalizedUser === normalizedCorrect;
+            const correct = validateAnswer(userAnswer, question.answer);
             setIsCorrect(correct);
             setHasSubmitted(true);
             onSubmitResult(correct);
         };
 
-        const renderAnswer = () => {
-            if (question.questionCategory === "multiple_choice" && question.choices) {
-                const correctChoice = question.choices.find(
-                    (choice) => choice.label === question.answer
-                );
-                if (correctChoice) {
-                    return `${correctChoice.label}. ${correctChoice.text}`;
-                }
-            }
-            return question.answer;
-        };
-
         // Enter to submit
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
-                // Ignore hotkeys when typing in input fields or modals
-                if (e.target instanceof HTMLInputElement ||
-                    e.target instanceof HTMLTextAreaElement) {
-                    return;
-                }
-
                 if (e.key === "Enter" && hasBuzzed && !hasSubmitted) {
                     e.preventDefault();
                     handleSubmit();
@@ -245,9 +106,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         // Number keys (1-4) to select multiple choice after buzzing
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
-                // Ignore hotkeys when typing in input fields or modals
-                if (e.target instanceof HTMLInputElement ||
-                    e.target instanceof HTMLTextAreaElement) {
+                if (isTypingInInput(e)) {
                     return;
                 }
 
@@ -298,7 +157,6 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
 
                 {/* Question text with progressive reveal */}
                 <div className="mb-6 text-slate-100 leading-relaxed text-lg min-h-[100px] whitespace-pre-line">
-                    {/* Show only the question text part, not the choices (they're shown as buttons) */}
                     {hasSubmitted
                         ? question.text
                         : (question.questionCategory === "multiple_choice"
@@ -314,7 +172,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                 {question.questionCategory === "multiple_choice" && question.choices && !hasBuzzed && (
                     <div className="mt-4 flex flex-col gap-3 mb-6">
                         {question.choices.map((choice, index) => {
-                            const revealedChoiceText = hasSubmitted ? choice.text : getRevealedChoiceText(index);
+                            const revealedChoiceText = hasSubmitted ? choice.text : getRevealedChoiceText(question, index, currentCharIndex);
                             const isRevealing = isReading && revealedChoiceText.length > 0 && revealedChoiceText.length < choice.text.length;
 
                             return (
@@ -332,44 +190,19 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                     </div>
                 )}
 
-                {/* Buzz button - shown while reading or during buzz timer, before buzz */}
+                {/* Buzz button */}
                 {(isReading || buzzTimeLeft !== null) && !hasBuzzed && !hasSubmitted && (
                     <div className="mb-6 flex justify-center">
                         <button
-                            onClick={() => {
-                                // Clear the buzz timer if it's running
-                                if (buzzTimerRef.current) {
-                                    clearInterval(buzzTimerRef.current);
-                                    buzzTimerRef.current = null;
-                                }
-                                setBuzzTimeLeft(null);
-
-                                // Freeze the current revealed choice texts
-                                if (question.questionCategory === "multiple_choice" && question.choices) {
-                                    const frozen = question.choices.map((_, index) => getRevealedChoiceText(index));
-                                    setFrozenChoiceTexts(frozen);
-                                }
-
-                                setHasBuzzed(true);
-                                setIsReading(false);
-                            }}
-                              className="
-                                bg-amber-700 hover:bg-amber-800
-                                text-white
-                                text-base font-semibold
-                                px-6 py-3
-                                rounded-md
-                                shadow-md shadow-amber-800/30
-                                transition-transform duration-150
-                                active:scale-95
-                            "
+                            onClick={handleBuzz}
+                            className="bg-amber-700 hover:bg-amber-800 text-white text-base font-semibold px-6 py-3 rounded-md shadow-md shadow-amber-800/30 transition-transform duration-150 active:scale-95"
                         >
                             Buzz (SPACE)
                         </button>
                     </div>
                 )}
 
-                {/* Only show answer options after buzzing */}
+                {/* Answer options after buzzing */}
                 {hasBuzzed && (
                     <>
                         {question.questionCategory === "identify_all" && question.attributes && (
@@ -382,6 +215,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                                     }
                                 }}
                                 disabled={hasSubmitted}
+                                frozenAttributeTexts={hasSubmitted ? undefined : frozenAttributeTexts}
                             />
                         )}
 
@@ -395,6 +229,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                                     }
                                 }}
                                 disabled={hasSubmitted}
+                                frozenAttributeTexts={hasSubmitted ? undefined : frozenAttributeTexts}
                             />
                         )}
 
@@ -427,7 +262,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                             </div>
                         )}
 
-                        {/* Only show text input for short answer questions */}
+                        {/* Text input for short answer questions */}
                         {question.questionCategory !== "multiple_choice" &&
                          question.questionCategory !== "identify_all" &&
                          question.questionCategory !== "rank" && (
@@ -456,7 +291,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                             </div>
                         )}
 
-                        {/* Submit button for multiple choice, identify_all, and rank questions */}
+                        {/* Submit button for multiple choice, identify_all, and rank */}
                         {(question.questionCategory === "multiple_choice" ||
                           question.questionCategory === "identify_all" ||
                           question.questionCategory === "rank") && (
@@ -483,7 +318,7 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
                     >
                         <div className="mb-2">
                             <strong className="text-white">Correct Answer:</strong>{" "}
-                            <span className="text-green-300">{renderAnswer()}</span>
+                            <span className="text-green-300">{renderAnswer(question)}</span>
                         </div>
 
                         <div className="text-lg font-bold">

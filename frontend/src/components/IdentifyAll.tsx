@@ -6,9 +6,10 @@ export type IdentifyAllProps = {
     selectedAnswer: string;
     onChange: (answer: string) => void;
     disabled?: boolean;
+    frozenAttributeTexts?: string[];
 }
 
-export function IdentifyAll({ question, onChange, selectedAnswer, disabled = false }: IdentifyAllProps) {
+export function IdentifyAll({ question, onChange, selectedAnswer, disabled = false, frozenAttributeTexts }: IdentifyAllProps) {
     if (
         question.questionCategory !== "identify_all" ||
         !question.attributes ||
@@ -83,6 +84,10 @@ export function IdentifyAll({ question, onChange, selectedAnswer, disabled = fal
             {question.attributes.map((attr, index) => {
                 const optionNumber = index + 1;
                 const isSelected = selectedOptions.has(optionNumber);
+                // Use frozen text if available, otherwise show full attribute
+                const displayText = frozenAttributeTexts && frozenAttributeTexts[index] !== undefined
+                    ? frozenAttributeTexts[index]
+                    : attr;
                 return (
                     <button
                         key={`${attr}-${index}`}
@@ -94,7 +99,7 @@ export function IdentifyAll({ question, onChange, selectedAnswer, disabled = fal
                                 : 'bg-slate-700 border border-slate-600 text-slate-100 hover:bg-slate-600 hover:border-[#7d70f1]/30'
                         } ${disabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
                     >
-                        <span className="text-white">{optionNumber}.</span> {attr}
+                        <span className="text-white">{optionNumber}.</span> {displayText}
                     </button>
                 );
             })}
