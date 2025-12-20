@@ -44,7 +44,7 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         run: |
-          python manage.py test --verbosity=2
+          python manage.py test --verbosity=2 --settings=backend.test_settings
         env:
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: False
@@ -53,7 +53,7 @@ jobs:
         working-directory: ./backend
         run: |
           pip install coverage
-          coverage run --source='.' manage.py test
+          coverage run --source='.' manage.py test --settings=backend.test_settings
           coverage report
           coverage html
         env:
