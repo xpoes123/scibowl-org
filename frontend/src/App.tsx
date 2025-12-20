@@ -6,14 +6,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useState } from "react";
-import { DatabasePage } from "./pages/QuestionsPage";
-import { PracticePage } from "./pages/PracticePage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { AvatarPreviewPage } from "./pages/AvatarPreviewPage";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { LoginModal } from "./components/LoginModal";
-import { SignupModal } from "./components/SignupModal";
-import { Avatar } from "./components/Avatar";
+import { QuestionsPage as DatabasePage } from "./features/questions";
+import { PracticePage } from "./features/practice";
+import { ProfilePage, AvatarPreviewPage, Avatar } from "./features/profile";
+import { AuthProvider, useAuth, LoginModal, SignupModal } from "./features/auth";
 
 function AppContent() {
   const { user, logout, loading } = useAuth();
