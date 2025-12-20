@@ -63,6 +63,22 @@ export const authAPI = {
     });
     return handleResponse(response);
   },
+
+  updateProfile: async (profileData: {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    bio?: string;
+    school?: string;
+    grade_level?: number;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(profileData),
+    });
+    return handleResponse(response);
+  },
 };
 
 // services/api.ts

@@ -168,6 +168,12 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         // Handle buzz-in (spacebar)
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
+                // Ignore hotkeys when typing in input fields or modals
+                if (e.target instanceof HTMLInputElement ||
+                    e.target instanceof HTMLTextAreaElement) {
+                    return;
+                }
+
                 if (e.key === " " && !hasBuzzed && !hasSubmitted && (isReading || buzzTimeLeft !== null)) {
                     e.preventDefault();
 
@@ -221,6 +227,12 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         // Enter to submit
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
+                // Ignore hotkeys when typing in input fields or modals
+                if (e.target instanceof HTMLInputElement ||
+                    e.target instanceof HTMLTextAreaElement) {
+                    return;
+                }
+
                 if (e.key === "Enter" && hasBuzzed && !hasSubmitted) {
                     e.preventDefault();
                     handleSubmit();
@@ -233,6 +245,12 @@ export const ReadingMode = forwardRef<HTMLInputElement, ReadingModeProps>(
         // Number keys (1-4) to select multiple choice after buzzing
         useEffect(() => {
             const handler = (e: KeyboardEvent) => {
+                // Ignore hotkeys when typing in input fields or modals
+                if (e.target instanceof HTMLInputElement ||
+                    e.target instanceof HTMLTextAreaElement) {
+                    return;
+                }
+
                 if (!hasBuzzed || hasSubmitted || question.questionCategory !== "multiple_choice" || !question.choices) {
                     return;
                 }

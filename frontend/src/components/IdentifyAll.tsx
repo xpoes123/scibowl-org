@@ -60,6 +60,12 @@ export function IdentifyAll({ question, onChange, selectedAnswer, disabled = fal
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
+            // Ignore hotkeys when typing in input fields or modals
+            if (e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement) {
+                return;
+            }
+
             if (disabled) return;
             const num = Number(e.key);
 
