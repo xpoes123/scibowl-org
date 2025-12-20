@@ -79,6 +79,13 @@ export const authAPI = {
     });
     return handleResponse(response);
   },
+
+  getUserProfile: async (username: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/users/${username}/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
 };
 
 // services/api.ts
@@ -171,7 +178,62 @@ export const questionsAPI = {
   },
 };
 
+// Tournaments API
+export const tournamentsAPI = {
+  getTournaments: async (filters?: {
+    status?: string;
+    division?: string;
+  }) => {
+    const params = new URLSearchParams();
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.division) params.append("division", filters.division);
+
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/?${params.toString()}`, {
+      headers: getAuthHeaders(),
+    });
+
+    const data = await handleResponse(response);
+    return unwrapList<any>(data);
+  },
+
+  getTournament: async (id: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${id}/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  getTournamentTeams: async (tournamentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/teams/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  getTournamentRooms: async (tournamentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/rooms/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  getTournamentRounds: async (tournamentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/rounds/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  getTournamentGames: async (tournamentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/games/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+};
+
 export default {
   auth: authAPI,
   questions: questionsAPI,
+  tournaments: tournamentsAPI,
 };

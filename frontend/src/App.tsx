@@ -11,7 +11,7 @@ import { QuestionsPage as DatabasePage } from "./features/questions";
 import { ProfilePage, AvatarPreviewPage, Avatar } from "./features/profile";
 import { AuthProvider, useAuth, LoginModal, SignupModal } from "./features/auth";
 import { StudyPage, FlashcardPracticePage, ReadingPracticePage } from "./features/study";
-import { TournamentsPage } from "./features/tournaments";
+import { TournamentsPage, TournamentDetailPage } from "./features/tournaments";
 import { CoachingPage } from "./features/coaching";
 import { MultiplayerPage } from "./features/multiplayer";
 import { SocialPage } from "./features/social";
@@ -245,12 +245,14 @@ function AppContent() {
           <Route path="/study" element={<StudyPage />} />
           <Route path="/multiplayer" element={<MultiplayerPage />} />
           <Route path="/tournaments" element={<TournamentsPage />} />
+          <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
           <Route path="/social" element={<SocialPage />} />
           <Route path="/coaching" element={<CoachingPage />} />
           <Route path="/database" element={<DatabasePage />} />
           <Route path="/study/flashcard" element={<FlashcardPracticePage />} />
           <Route path="/study/reading" element={<ReadingPracticePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/avatars" element={<AvatarPreviewPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

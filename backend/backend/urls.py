@@ -7,4 +7,5 @@ urlpatterns = [
     # API endpoints
     path('api/', include('users.urls')),
     path('api/questions/', include('questions.urls')),
+    path('api/', include('tournaments.urls')),
 ]

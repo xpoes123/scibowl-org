@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../auth/contexts/AuthContext';
 import { authAPI } from '../../../core/api/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Avatar } from '../components/Avatar';
 
 export const ProfilePage = () => {
+  const { username: urlUsername } = useParams<{ username?: string }>();
   const { user, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
+  const [profileUser, setProfileUser] = useState<any>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -20,24 +23,46 @@ export const ProfilePage = () => {
     grade_level: '',
   });
 
+  // Determine if viewing own profile or someone else's
+  const isOwnProfile = !urlUsername || (user && urlUsername === user.username);
+  const displayUser = isOwnProfile ? user : profileUser;
+
+  // Fetch profile data if viewing someone else's profile
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/practice');
+    if (urlUsername && urlUsername !== user?.username) {
+      setProfileLoading(true);
+      authAPI.getUserProfile(urlUsername)
+        .then((data) => {
+          setProfileUser(data);
+        })
+        .catch((error) => {
+          console.error('Failed to load user profile:', error);
+          navigate('/');
+        })
+        .finally(() => {
+          setProfileLoading(false);
+        });
     }
-  }, [user, authLoading, navigate]);
+  }, [urlUsername, user, navigate]);
 
   useEffect(() => {
-    if (user) {
+    if (!authLoading && !user && !urlUsername) {
+      navigate('/');
+    }
+  }, [user, authLoading, navigate, urlUsername]);
+
+  useEffect(() => {
+    if (displayUser && isOwnProfile) {
       setFormData({
-        email: user.email || '',
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
-        bio: user.bio || '',
-        school: user.school || '',
-        grade_level: user.grade_level?.toString() || '',
+        email: displayUser.email || '',
+        first_name: displayUser.first_name || '',
+        last_name: displayUser.last_name || '',
+        bio: displayUser.bio || '',
+        school: displayUser.school || '',
+        grade_level: displayUser.grade_level?.toString() || '',
       });
     }
-  }, [user]);
+  }, [displayUser, isOwnProfile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -90,10 +115,18 @@ export const ProfilePage = () => {
     setMessage(null);
   };
 
-  if (authLoading || !user) {
+  if (authLoading || profileLoading || (!isOwnProfile && !profileUser)) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
         <div className="text-slate-300 text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!displayUser) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <div className="text-slate-300 text-lg">User not found</div>
       </div>
     );
   }
@@ -103,24 +136,26 @@ export const ProfilePage = () => {
       {/* Hero Section with Avatar and Header */}
       <div className="bg-gradient-to-r from-purple-900/50 via-slate-800/50 to-purple-900/50 rounded-xl shadow-2xl border border-purple-500/30 p-8 mb-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-          <Avatar username={user.username} size={140} className="ring-4 ring-purple-500/50 shadow-lg" />
+          <Avatar username={displayUser.username} size={140} className="ring-4 ring-purple-500/50 shadow-lg" />
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-300 via-purple-200 to-purple-400 bg-clip-text text-transparent mb-2">
-              {user.username}
+              {displayUser.username}
             </h1>
-            <p className="text-slate-400 text-lg mb-4">
-              {user.email}
-            </p>
+            {isOwnProfile && (
+              <p className="text-slate-400 text-lg mb-4">
+                {displayUser.email}
+              </p>
+            )}
             <div className="flex flex-wrap gap-3 justify-center md:justify-start">
               <div className="px-4 py-2 bg-slate-900/50 border border-purple-500/30 rounded-lg">
-                <span className="text-purple-300 font-semibold">{user.school || 'No School Set'}</span>
+                <span className="text-purple-300 font-semibold">{displayUser.school || 'No School Set'}</span>
               </div>
               <div className="px-4 py-2 bg-slate-900/50 border border-purple-500/30 rounded-lg">
-                <span className="text-purple-300 font-semibold">Grade {user.grade_level || 'N/A'}</span>
+                <span className="text-purple-300 font-semibold">Grade {displayUser.grade_level || 'N/A'}</span>
               </div>
             </div>
           </div>
-          {!isEditing && (
+          {!isEditing && isOwnProfile && (
             <button
               onClick={() => setIsEditing(true)}
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-purple-600 transition-all shadow-lg hover:shadow-purple-500/50"
@@ -151,7 +186,7 @@ export const ProfilePage = () => {
             </svg>
           </div>
           <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">
-            {user.total_questions_answered}
+            {displayUser.total_questions_answered}
           </div>
         </div>
 
@@ -163,7 +198,7 @@ export const ProfilePage = () => {
             </svg>
           </div>
           <div className="text-4xl font-bold bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent">
-            {user.correct_answers}
+            {displayUser.correct_answers}
           </div>
         </div>
 
@@ -175,7 +210,7 @@ export const ProfilePage = () => {
             </svg>
           </div>
           <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-            {user.accuracy.toFixed(1)}%
+            {displayUser.accuracy.toFixed(1)}%
           </div>
         </div>
       </div>
@@ -225,20 +260,21 @@ export const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Profile Information Form */}
-      <div className="bg-slate-800/50 rounded-xl shadow-xl border border-purple-500/30 p-8">
-        <h2 className="text-2xl font-bold text-slate-200 mb-6">Profile Information</h2>
+      {/* Profile Information Form - Only show for own profile */}
+      {isOwnProfile && (
+        <div className="bg-slate-800/50 rounded-xl shadow-xl border border-purple-500/30 p-8">
+          <h2 className="text-2xl font-bold text-slate-200 mb-6">Profile Information</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Username (read-only) */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Username
-            </label>
-            <div className="px-4 py-2 bg-slate-900/50 border border-slate-700 rounded text-slate-400">
-              {user.username}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Username (read-only) */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Username
+              </label>
+              <div className="px-4 py-2 bg-slate-900/50 border border-slate-700 rounded text-slate-400">
+                {displayUser.username}
+              </div>
             </div>
-          </div>
 
           {/* Email */}
           <div>
@@ -384,6 +420,7 @@ export const ProfilePage = () => {
           )}
         </form>
       </div>
+      )}
     </div>
   );
 };

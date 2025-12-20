@@ -160,3 +160,89 @@ export function transformAPIQuestion(apiQuestion: APIQuestion | APIQuestionList,
     ...(attributes.length > 0 && { attributes })
   };
 }
+
+// Tournament Types
+export type TournamentFormat = 'ROUND_ROBIN' | 'DOUBLE_ELIM' | 'SINGLE_ELIM' | 'SWISS' | 'CUSTOM';
+export type TournamentDivision = 'HIGH_SCHOOL' | 'MIDDLE_SCHOOL' | 'COLLEGIATE' | 'OPEN';
+export type TournamentStatus = 'UPCOMING' | 'REGISTRATION' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+
+export interface TournamentDirector {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  bio: string;
+  school: string;
+}
+
+export interface Tournament {
+  id: number;
+  name: string;
+  description: string;
+  division: TournamentDivision;
+  format: TournamentFormat;
+  status: TournamentStatus;
+  tournament_date: string;
+  registration_deadline: string | null;
+  location: string;
+  venue: string;
+  host_organization: string;
+  max_teams: number | null;
+  current_teams: number;
+  website_url: string;
+  registration_url: string;
+  director?: TournamentDirector | null;
+  teams_count?: number;
+  rooms_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Team {
+  id: number;
+  name: string;
+  school: string;
+  seed: number | null;
+  players_count: number;
+}
+
+export interface Player {
+  id: number;
+  name: string;
+  grade_level: string;
+  team_name: string;
+  total_points: number;
+  tossups_heard: number;
+  correct_buzzes: number;
+  incorrect_buzzes: number;
+  accuracy: number;
+}
+
+export interface Room {
+  id: number;
+  name: string;
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'FINISHED';
+  current_round: number;
+}
+
+export interface Round {
+  id: number;
+  round_number: number;
+  name: string;
+  packet_name: string;
+}
+
+export interface Game {
+  id: number;
+  round_number: number;
+  room_name: string;
+  team1_name: string;
+  team2_name: string;
+  team1_score: number;
+  team2_score: number;
+  current_tossup: number;
+  is_complete: boolean;
+  winner_name: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+}

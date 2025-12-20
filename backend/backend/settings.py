@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # Local apps
     'users',
     'questions',
+    'tournaments',
 ]
 
 MIDDLEWARE = [
