@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
             'total_questions_answered', 'correct_answers', 'accuracy',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'username', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

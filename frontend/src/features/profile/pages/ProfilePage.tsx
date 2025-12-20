@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar } from '../components/Avatar';
 
 export const ProfilePage = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -61,20 +61,10 @@ export const ProfilePage = () => {
         grade_level: formData.grade_level ? parseInt(formData.grade_level) : undefined,
       });
 
-      // Refresh user data
-      const updatedProfile = await authAPI.getProfile();
+      // Refresh user data in the global context
+      await refreshUser();
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
       setIsEditing(false);
-
-      // Update form data with fresh data
-      setFormData({
-        email: updatedProfile.email || '',
-        first_name: updatedProfile.first_name || '',
-        last_name: updatedProfile.last_name || '',
-        bio: updatedProfile.bio || '',
-        school: updatedProfile.school || '',
-        grade_level: updatedProfile.grade_level?.toString() || '',
-      });
     } catch (error) {
       setMessage({
         type: 'error',

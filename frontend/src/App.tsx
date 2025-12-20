@@ -4,8 +4,9 @@ import {
   Route,
   Link,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { QuestionsPage as DatabasePage } from "./features/questions";
 import { PracticePage } from "./features/practice";
 import { ProfilePage, AvatarPreviewPage, Avatar } from "./features/profile";
@@ -15,6 +16,9 @@ function AppContent() {
   const { user, logout, loading } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleSwitchToSignup = () => {
     setShowLoginModal(false);
@@ -24,6 +28,33 @@ function AppContent() {
   const handleSwitchToLogin = () => {
     setShowSignupModal(false);
     setShowLoginModal(true);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
+  const handleProfileClick = () => {
+    setShowDropdown(false);
+    navigate("/profile");
+  };
+
+  const handleLogout = () => {
+    setShowDropdown(false);
+    logout();
   };
 
   return (
@@ -48,25 +79,30 @@ function AppContent() {
         {!loading && (
           <>
             {user ? (
-              <div className="flex items-center gap-4">
-                <Link
-                  to="/profile"
-                  className="text-slate-300 hover:text-purple-300 font-medium transition-all duration-200 hover:scale-105 transform"
-                >
-                  Profile
-                </Link>
-                <div className="flex items-center gap-3">
-                  <Avatar username={user.username} size={40} />
-                  <span className="text-slate-300">
-                    <span className="text-purple-400 font-medium">{user.username}</span>
-                  </span>
-                </div>
+              <div className="relative" ref={dropdownRef}>
                 <button
-                  onClick={logout}
-                  className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded transition-colors"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="flex items-center hover:opacity-80 transition-opacity"
                 >
-                  Logout
+                  <Avatar username={user.username} size={40} />
                 </button>
+
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-purple-500/30 rounded-lg shadow-lg shadow-purple-500/10 overflow-hidden">
+                    <button
+                      onClick={handleProfileClick}
+                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-purple-300 transition-colors"
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-purple-300 transition-colors border-t border-purple-500/20"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-3">
