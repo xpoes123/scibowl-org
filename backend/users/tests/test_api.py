@@ -50,7 +50,7 @@ class UserRegistrationTestCase(TestCase):
         user = User.objects.get(username='newuser')
         self.assertEqual(user.bio, 'Science enthusiast')
         self.assertEqual(user.school, 'Test High School')
-        self.assertEqual(user.grade_level, '10')
+        self.assertEqual(user.grade_level, 10)
 
     def test_register_password_mismatch(self):
         """Test registration fails when passwords don't match"""

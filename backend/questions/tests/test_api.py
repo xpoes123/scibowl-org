@@ -344,7 +344,7 @@ class BookmarkTestCase(TestCase):
         self.client.force_authenticate(user=self.user1)
 
         data = {
-            'question': self.question1.id,
+            'question_id': self.question1.id,
             'notes': 'Need to review this'
         }
 
@@ -366,7 +366,7 @@ class BookmarkTestCase(TestCase):
 
         # Try to create duplicate
         data = {
-            'question': self.question1.id,
+            'question_id': self.question1.id,
             'notes': 'Second note'
         }
 
