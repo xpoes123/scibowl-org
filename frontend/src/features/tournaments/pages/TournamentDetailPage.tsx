@@ -10,7 +10,7 @@ export function TournamentDetailPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'teams' | 'contact'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'teams' | 'pools' | 'contact'>('overview');
 
   useEffect(() => {
     if (id) {
@@ -170,6 +170,18 @@ export function TournamentDetailPage() {
           >
             Teams ({teams.length})
           </button>
+          {tournament.format === 'ROUND_ROBIN' && tournament.status === 'IN_PROGRESS' && (
+            <button
+              onClick={() => setActiveTab('pools')}
+              className={`px-4 py-2 font-medium transition-colors ${
+                activeTab === 'pools'
+                  ? 'text-purple-400 border-b-2 border-purple-400'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Pools
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('contact')}
             className={`px-4 py-2 font-medium transition-colors ${
@@ -233,6 +245,45 @@ export function TournamentDetailPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'pools' && (
+          <div className="space-y-6">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-white mb-2">Round Robin Pools</h2>
+              <p className="text-slate-400">4 Groups of 4 Teams</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              {['A', 'B', 'C', 'D'].map((pool) => {
+                const poolTeams = teams.filter((team) => team.pool === pool);
+                return (
+                  <div key={pool} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-bold text-purple-400 mb-4 text-center">Pool {pool}</h3>
+                    <div className="space-y-3">
+                      {poolTeams.length === 0 ? (
+                        <p className="text-slate-400 text-center">No teams assigned</p>
+                      ) : (
+                        poolTeams.map((team) => (
+                          <div key={team.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 hover:border-purple-500/30 transition-colors">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <div className="text-white font-semibold">{team.name}</div>
+                                <div className="text-slate-400 text-sm">{team.school}</div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-purple-400 text-sm font-medium">Seed #{team.seed}</div>
+                                <div className="text-slate-500 text-xs">{team.players_count} players</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

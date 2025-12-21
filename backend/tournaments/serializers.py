@@ -55,11 +55,11 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     """Serializer for teams."""
     players_count = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Team
-        fields = ['id', 'name', 'school', 'seed', 'players_count']
-    
+        fields = ['id', 'name', 'school', 'seed', 'pool', 'players_count']
+
     def get_players_count(self, obj):
         return obj.players.count()
 
