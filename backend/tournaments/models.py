@@ -91,6 +91,7 @@ class Team(models.Model):
     name = models.CharField(max_length=255)
     school = models.CharField(max_length=255)
     seed = models.IntegerField(null=True, blank=True)
+    pool = models.CharField(max_length=10, blank=True, help_text="Pool/Group assignment (e.g., 'A', 'B', 'C', 'D')")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
