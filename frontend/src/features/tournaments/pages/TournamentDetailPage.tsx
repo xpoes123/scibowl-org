@@ -637,7 +637,6 @@ export function TournamentDetailPage() {
                           <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
                             <span>{team.players_count} players</span>
                             {team.pool && team.pool !== 'Unassigned' && <span>Pool {team.pool}</span>}
-                            {team.seed !== null && <span>Seed #{team.seed}</span>}
                           </div>
                         </div>
                         {isAdmin && (
@@ -724,7 +723,6 @@ export function TournamentDetailPage() {
                         <div className="flex gap-4 text-sm text-slate-400">
                           <span>{selectedTeam.players_count} players</span>
                           {selectedTeam.pool && selectedTeam.pool !== 'Unassigned' && <span>Pool {selectedTeam.pool}</span>}
-                          {selectedTeam.seed !== null && <span>Seed #{selectedTeam.seed}</span>}
                         </div>
                       </div>
                     )}
@@ -1048,9 +1046,6 @@ export function TournamentDetailPage() {
                                     <div className="text-slate-400 text-sm">{team.school}</div>
                                   </div>
                                   <div className="text-right">
-                                    {team.seed !== null && (
-                                      <div className="text-purple-400 text-sm font-medium">Seed #{team.seed}</div>
-                                    )}
                                     <div className="text-slate-500 text-xs">{team.players_count} players</div>
                                   </div>
                                 </div>

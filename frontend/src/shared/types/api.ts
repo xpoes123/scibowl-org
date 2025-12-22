@@ -195,7 +195,6 @@ export interface Team {
   id: number;
   name: string;
   school: string;
-  seed: number | null;
   pool: string;
   players_count: number;
 }
