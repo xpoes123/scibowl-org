@@ -230,6 +230,59 @@ export const tournamentsAPI = {
     });
     return handleResponse(response);
   },
+
+  updateTeamPool: async (teamId: number, pool: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/teams/${teamId}/`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ pool }),
+    });
+    return handleResponse(response);
+  },
+
+  generateSchedule: async (tournamentId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/generate_schedule/`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  getTeamCoaches: async (teamId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/teams/${teamId}/coaches/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
+  addCoach: async (coachData: { name: string; email?: string; phone?: string; team: number }) => {
+    const response = await fetch(`${API_BASE_URL}/api/coaches/`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(coachData),
+    });
+    return handleResponse(response);
+  },
+
+  updateCoach: async (coachId: number, coachData: { name?: string; email?: string; phone?: string }) => {
+    const response = await fetch(`${API_BASE_URL}/api/coaches/${coachId}/`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(coachData),
+    });
+    return handleResponse(response);
+  },
+
+  deleteCoach: async (coachId: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/coaches/${coachId}/`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete coach');
+    }
+    return;
+  },
 };
 
 export default {
