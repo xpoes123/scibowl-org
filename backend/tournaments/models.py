@@ -104,6 +104,27 @@ class Team(models.Model):
         return f"{self.name} ({self.school})"
 
 
+class Coach(models.Model):
+    """
+    Represents a coach for a team.
+    """
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='coaches')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='coached_teams')
+
+    name = models.CharField(max_length=255)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name} ({self.team.name})"
+
+
 class Player(models.Model):
     """
     Represents an individual player on a team.
