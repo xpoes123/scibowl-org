@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tournament, Team, Player, Room, Round, Game
+from .models import Tournament, Team, Coach, Player, Room, Round, Game
 
 
 class TournamentDirectorSerializer(serializers.Serializer):
@@ -55,13 +55,26 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     """Serializer for teams."""
     players_count = serializers.SerializerMethodField()
+    coaches_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
-        fields = ['id', 'name', 'school', 'seed', 'pool', 'players_count']
+        fields = ['id', 'name', 'school', 'seed', 'pool', 'players_count', 'coaches_count']
 
     def get_players_count(self, obj):
         return obj.players.count()
+
+    def get_coaches_count(self, obj):
+        return obj.coaches.count()
+
+
+class CoachSerializer(serializers.ModelSerializer):
+    """Serializer for coaches."""
+    team_name = serializers.CharField(source='team.name', read_only=True)
+
+    class Meta:
+        model = Coach
+        fields = ['id', 'name', 'email', 'phone', 'team', 'team_name']
 
 
 class PlayerSerializer(serializers.ModelSerializer):
