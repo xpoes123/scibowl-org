@@ -1478,21 +1478,19 @@ export function TournamentDetailPage() {
 
                                         if (!game || !game.is_complete) {
                                           return (
-                                            <td key={opponent.id} className="border border-slate-700 bg-slate-800 p-2 text-center text-slate-500">
-                                              {isAdmin && game ? (
-                                                <button
-                                                  onClick={() => {
-                                                    setEditingGameScore(game.id);
-                                                    setTeam1Score(game.team1_score || 0);
-                                                    setTeam2Score(game.team2_score || 0);
-                                                  }}
-                                                  className="text-purple-400 hover:text-purple-300 text-[10px] px-2 py-1 hover:bg-slate-700 rounded transition-colors"
-                                                >
-                                                  Enter
-                                                </button>
-                                              ) : (
-                                                '-'
-                                              )}
+                                            <td
+                                              key={opponent.id}
+                                              className={`border border-slate-700 bg-slate-800 p-2 text-center text-slate-500 ${isAdmin && game ? 'cursor-pointer hover:bg-slate-700/50 transition-colors' : ''}`}
+                                              onClick={() => {
+                                                if (isAdmin && game) {
+                                                  setEditingGameScore(game.id);
+                                                  setTeam1Score(game.team1_score || 0);
+                                                  setTeam2Score(game.team2_score || 0);
+                                                }
+                                              }}
+                                              title={isAdmin && game ? 'Click to enter score' : ''}
+                                            >
+                                              -
                                             </td>
                                           );
                                         }

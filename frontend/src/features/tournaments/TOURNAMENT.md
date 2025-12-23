@@ -560,23 +560,38 @@ These features enable Tournament Directors to configure tournaments BEFORE they 
      - Auto-distribution algorithm (even team distribution)
      - HTML5 drag-and-drop team reassignment between pools
      - Batch save functionality with PATCH requests
-   * ✅ Read-only pool standings view (public)
+   * ✅ Pool standings with match matrix (public view)
+     - Standings table: Rank, Team, W-L record, Total Points
+     - N×N head-to-head results matrix
+     - Color-coded wins (green) and losses (red)
+     - Click-to-edit scores for admins
+     - Real-time standings updates based on game results
    * ✅ Round-robin schedule generation algorithm
 
-4. ✅ **Match Schedule Generation** (COMPLETED)
-   * Backend endpoint: `POST /api/tournaments/:id/generate_schedule/`
-   * Round-robin algorithm using `combinations(teams, 2)`
-   * Auto-distributes games across rooms
-   * Creates Game, Round objects atomically
-   * Prevents duplicate schedule generation
+4. ✅ **Schedule Tab - Match Schedule & Score Entry** (COMPLETED)
+   * ✅ Backend endpoint: `POST /api/tournaments/:id/generate_schedule/`
+   * ✅ Round-robin algorithm using circle method for balanced schedules
+   * ✅ Auto-distributes games across rooms
+   * ✅ Creates Game, Round objects atomically
+   * ✅ Prevents duplicate schedule generation
+   * ✅ Schedule display organized by rounds
+     - Shows all games grouped by round number
+     - Pool badges for each game
+     - Room assignments visible and editable (admin)
+   * ✅ Manual score entry (admin only)
+     - "Enter Score" button on incomplete games
+     - Inline score editing with number inputs
+     - Pre-fills existing scores when editing
+     - Marks games as complete when scores saved
+   * ✅ Room management interface
+     - Add/delete rooms
+     - View room status (Not Started, In Progress, Finished)
+     - Edit room assignments for games (admin)
+   * ✅ Clear schedule functionality (admin)
+     - Delete all games and rounds
+     - Reset tournament for schedule regeneration
 
-5. **Room & Match Assignment**
-   * Assign generated matches to rooms and round numbers
-   * Options: Auto-distribute across rooms OR manual assignment
-   * Handle concurrent games (multiple rooms running same round)
-   * UI: Drag-and-drop matches to rooms/time slots OR auto-assign button
-
-6. **Tournament Locking/Publishing** (Future)
+5. **Tournament Locking/Publishing** (Future)
    * "Publish Tournament" button finalizes configuration
    * Sets tournament status to IN_PROGRESS
    * Prevents further structural changes (no pool edits during tournament)
@@ -586,26 +601,27 @@ These features enable Tournament Directors to configure tournaments BEFORE they 
 
 These features display live tournament state. Philosophy: Visibility over control, read-heavy.
 
-7. **Tournament Dashboard - Live Monitoring** (Feature #1 from MVP)
+6. **Tournament Dashboard - Live Monitoring** (Feature #1 from MVP)
    * Implement live room status display
    * Add auto-refresh when MODAQ data arrives
    * Show current round and scores per room
 
-8. **Room View** (Feature #2 from MVP)
+7. **Room View** (Feature #2 from MVP)
    * Create room detail page showing:
      * Packet name
      * Current tossup index
      * Team scores
      * Individual player stats (read-only)
 
-9. **MODAQ Integration**
+8. **MODAQ Integration**
    * Design internal API endpoint for MODAQ to push data
    * Schema for game results payload
    * Update Room/Game/Player models when data arrives
+   * Replace manual score entry with automated MODAQ scoring
 
 #### **Post-Tournament (Analytics)**
 
-10. **Post-Tournament Analytics** (Feature #5 from MVP)
+9. **Post-Tournament Analytics** (Feature #5 from MVP)
    * Player performance breakdown
    * Question-level analysis
    * Category performance tracking
