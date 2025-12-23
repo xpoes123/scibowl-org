@@ -16,6 +16,8 @@ import { CoachingPage } from "./features/coaching";
 import { MultiplayerPage } from "./features/multiplayer";
 import { SocialPage } from "./features/social";
 import { HomePage } from "./pages/HomePage";
+import { TrophyIcon } from "@heroicons/react/24/outline";
+
 
 function AppContent() {
   const { user, logout, loading } = useAuth();
@@ -64,10 +66,10 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-slate-950">
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-screen bg-slate-900/50 border-r border-purple-500/30 flex flex-col transition-all duration-300 z-10 ${
+        className={`fixed left-0 top-0 h-screen bg-slate-900/80 border-r border-slate-700/50 flex flex-col transition-all duration-300 z-10 ${
           sidebarCollapsed ? 'w-20' : 'w-64'
         }`}
       >
@@ -75,7 +77,7 @@ function AppContent() {
           {!sidebarCollapsed ? (
             <Link to="/" className="flex items-center gap-3">
               <img src="/logo_big.png" alt="SciBowl" className="w-8 h-8" />
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-purple-200 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold text-slate-200">
                 SciBowl
               </span>
             </Link>
@@ -86,7 +88,7 @@ function AppContent() {
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className={`p-2 rounded-lg hover:bg-slate-800/50 transition-colors text-slate-400 hover:text-purple-300 ${sidebarCollapsed ? 'hidden' : ''}`}
+            className={`p-2 rounded-lg hover:bg-slate-800/50 transition-colors text-slate-400 hover:text-slate-200 ${sidebarCollapsed ? 'hidden' : ''}`}
             title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <svg
@@ -107,7 +109,7 @@ function AppContent() {
         <nav className="flex-1 px-3">
           <Link
             to="/study"
-            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 transition-colors"
             title="Study"
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +119,7 @@ function AppContent() {
           </Link>
           <Link
             to="/multiplayer"
-            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 transition-colors"
             title="Multiplayer"
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,17 +129,15 @@ function AppContent() {
           </Link>
           <Link
             to="/tournaments"
-            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 transition-colors"
             title="Tournaments"
           >
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-            </svg>
+            <TrophyIcon className="w-5 h-5 flex-shrink-0" />
             {!sidebarCollapsed && <span>Tournaments</span>}
           </Link>
           <Link
             to="/social"
-            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 transition-colors"
             title="Social"
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@ function AppContent() {
           </Link>
           <Link
             to="/coaching"
-            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-purple-300 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 mb-1 rounded-lg text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 transition-colors"
             title="Coaching"
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@ function AppContent() {
         </nav>
 
         {!loading && (
-          <div className="p-3 border-t border-purple-500/20">
+          <div className="p-3 border-t border-slate-700/50">
             {user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -173,18 +173,18 @@ function AppContent() {
                 </button>
 
                 {showDropdown && (
-                  <div className={`absolute bottom-full mb-2 bg-slate-800 border border-purple-500/30 rounded-lg shadow-lg overflow-hidden ${
+                  <div className={`absolute bottom-full mb-2 bg-slate-800 border border-slate-700 rounded-lg shadow-lg overflow-hidden ${
                     sidebarCollapsed ? 'left-0' : 'left-0 right-0'
                   }`}>
                     <button
                       onClick={handleProfileClick}
-                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-purple-300 transition-colors whitespace-nowrap"
+                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-slate-100 transition-colors whitespace-nowrap"
                     >
                       Profile
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-purple-300 transition-colors border-t border-purple-500/20 whitespace-nowrap"
+                      className="w-full px-4 py-3 text-left text-slate-300 hover:bg-slate-700 hover:text-slate-100 transition-colors border-t border-slate-700/50 whitespace-nowrap"
                     >
                       Logout
                     </button>
@@ -206,7 +206,7 @@ function AppContent() {
                     </button>
                     <button
                       onClick={() => setShowSignupModal(true)}
-                      className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                      className="w-full px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
                       title="Sign Up"
                     >
                       <svg className="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,7 +224,7 @@ function AppContent() {
                     </button>
                     <button
                       onClick={() => setShowSignupModal(true)}
-                      className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                      className="w-full px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
                     >
                       Sign Up
                     </button>
