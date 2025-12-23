@@ -49,6 +49,9 @@ export function TournamentDetailPage() {
   const [generatingSchedule, setGeneratingSchedule] = useState(false);
   const [editingGame, setEditingGame] = useState<number | null>(null);
   const [editingGameRoom, setEditingGameRoom] = useState<number | null>(null);
+  const [editingGameScore, setEditingGameScore] = useState<number | null>(null);
+  const [team1Score, setTeam1Score] = useState<number>(0);
+  const [team2Score, setTeam2Score] = useState<number>(0);
 
   // Check if current user is admin (tournament director)
   const isAdmin = currentUser && tournament?.director && currentUser.id === tournament.director.id;
@@ -63,6 +66,12 @@ export function TournamentDetailPage() {
   useEffect(() => {
     if (id && activeTab === 'schedule') {
       loadRooms();
+      loadGames();
+    }
+  }, [id, activeTab]);
+
+  useEffect(() => {
+    if (id && activeTab === 'pools') {
       loadGames();
     }
   }, [id, activeTab]);
@@ -668,6 +677,36 @@ export function TournamentDetailPage() {
     } catch (error) {
       console.error('Error updating game room:', error);
       alert('Failed to update room assignment. Please try again.');
+    }
+  };
+
+  const handleUpdateGameScore = async (gameId: number, team1: number, team2: number) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/games/${gameId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          team1_score: team1,
+          team2_score: team2,
+          is_complete: true,
+        }),
+      });
+
+      if (response.ok) {
+        // Reload games to get updated data
+        loadGames();
+        setEditingGameScore(null);
+        setTeam1Score(0);
+        setTeam2Score(0);
+      } else {
+        alert('Failed to update game score');
+      }
+    } catch (error) {
+      console.error('Error updating game score:', error);
+      alert('Failed to update game score. Please try again.');
     }
   };
 
@@ -1321,31 +1360,224 @@ export function TournamentDetailPage() {
                       : 'Pools not configured yet'}
                   </p>
                 </div>
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-8">
                   {Array.from(new Set(teams.map(t => t.pool).filter(p => p && p !== 'Unassigned'))).sort().map((pool) => {
                     const poolTeams = teams.filter((team) => team.pool === pool);
+                    const poolGames = games.filter((game) => game.pool === pool);
+
+                    // Calculate team stats
+                    const teamStats = poolTeams.map(team => {
+                      const teamGames = poolGames.filter(g =>
+                        g.team1_name === team.name || g.team2_name === team.name
+                      );
+                      const completedGames = teamGames.filter(g => g.is_complete);
+
+                      let wins = 0;
+                      let losses = 0;
+                      let totalPoints = 0;
+
+                      completedGames.forEach(game => {
+                        if (game.team1_name === team.name) {
+                          totalPoints += game.team1_score;
+                          if (game.team1_score > game.team2_score) wins++;
+                          else if (game.team1_score < game.team2_score) losses++;
+                        } else {
+                          totalPoints += game.team2_score;
+                          if (game.team2_score > game.team1_score) wins++;
+                          else if (game.team2_score < game.team1_score) losses++;
+                        }
+                      });
+
+                      return {
+                        ...team,
+                        wins,
+                        losses,
+                        totalPoints,
+                        gamesPlayed: completedGames.length
+                      };
+                    });
+
+                    // Sort by wins (desc), then total points (desc)
+                    teamStats.sort((a, b) => {
+                      if (b.wins !== a.wins) return b.wins - a.wins;
+                      return b.totalPoints - a.totalPoints;
+                    });
+
                     return (
                       <div key={pool} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-                        <h3 className="text-xl font-bold text-purple-400 mb-4 text-center">Pool {pool}</h3>
-                        <div className="space-y-3">
-                          {poolTeams.length === 0 ? (
-                            <p className="text-slate-400 text-center">No teams assigned</p>
-                          ) : (
-                            poolTeams.map((team) => (
-                              <div key={team.id} className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 hover:border-purple-500/30 transition-colors">
-                                <div className="flex justify-between items-center">
-                                  <div>
-                                    <div className="text-white font-semibold">{team.name}</div>
-                                    <div className="text-slate-400 text-sm">{team.school}</div>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className="text-slate-500 text-xs">{team.players_count} players</div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))
-                          )}
+                        <h3 className="text-xl font-bold text-purple-400 mb-4">Pool {pool}</h3>
+
+                        {/* Standings Table */}
+                        <div className="mb-6 overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead className="border-b border-slate-700">
+                              <tr className="text-slate-400">
+                                <th className="text-left py-2 px-2">Rank</th>
+                                <th className="text-left py-2 px-2">Team</th>
+                                <th className="text-center py-2 px-2">W</th>
+                                <th className="text-center py-2 px-2">L</th>
+                                <th className="text-center py-2 px-2">Pts</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {teamStats.map((team, index) => (
+                                <tr key={team.id} className="border-b border-slate-700/50 hover:bg-slate-700/30">
+                                  <td className="py-2 px-2 text-slate-300">{index + 1}</td>
+                                  <td className="py-2 px-2">
+                                    <div className="text-white font-medium">{team.name}</div>
+                                    <div className="text-slate-500 text-xs">{team.school}</div>
+                                  </td>
+                                  <td className="py-2 px-2 text-center text-green-400">{team.wins}</td>
+                                  <td className="py-2 px-2 text-center text-red-400">{team.losses}</td>
+                                  <td className="py-2 px-2 text-center text-slate-300">{team.totalPoints}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
                         </div>
+
+                        {/* Match Matrix */}
+                        {poolTeams.length > 1 && (
+                          <div>
+                            <h4 className="text-sm font-semibold text-slate-300 mb-3">Head-to-Head Results</h4>
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-xs border-collapse">
+                                <thead>
+                                  <tr>
+                                    <th className="border border-slate-700 bg-slate-900 p-2 text-left text-slate-400 sticky left-0 z-10">Team</th>
+                                    {poolTeams.map((opponent) => (
+                                      <th key={opponent.id} className="border border-slate-700 bg-slate-900 p-2 text-center text-slate-400 min-w-[60px]">
+                                        <div className="truncate max-w-[60px]" title={opponent.name}>
+                                          {opponent.name.substring(0, 8)}
+                                        </div>
+                                      </th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {poolTeams.map((team) => (
+                                    <tr key={team.id}>
+                                      <td className="border border-slate-700 bg-slate-900 p-2 text-white font-medium sticky left-0 z-10">
+                                        <div className="truncate max-w-[120px]" title={team.name}>
+                                          {team.name}
+                                        </div>
+                                      </td>
+                                      {poolTeams.map((opponent) => {
+                                        if (team.id === opponent.id) {
+                                          return (
+                                            <td key={opponent.id} className="border-2 border-slate-600 bg-slate-900/80 p-2 text-center">
+                                              <div className="text-slate-700 font-bold text-sm">X</div>
+                                            </td>
+                                          );
+                                        }
+
+                                        const game = poolGames.find(g =>
+                                          (g.team1_name === team.name && g.team2_name === opponent.name) ||
+                                          (g.team2_name === team.name && g.team1_name === opponent.name)
+                                        );
+
+                                        if (!game || !game.is_complete) {
+                                          return (
+                                            <td key={opponent.id} className="border border-slate-700 bg-slate-800 p-2 text-center text-slate-500">
+                                              {isAdmin && game ? (
+                                                <button
+                                                  onClick={() => {
+                                                    setEditingGameScore(game.id);
+                                                    setTeam1Score(game.team1_score || 0);
+                                                    setTeam2Score(game.team2_score || 0);
+                                                  }}
+                                                  className="text-purple-400 hover:text-purple-300 text-[10px] px-2 py-1 hover:bg-slate-700 rounded transition-colors"
+                                                >
+                                                  Enter
+                                                </button>
+                                              ) : (
+                                                '-'
+                                              )}
+                                            </td>
+                                          );
+                                        }
+
+                                        const teamScore = game.team1_name === team.name ? game.team1_score : game.team2_score;
+                                        const oppScore = game.team1_name === team.name ? game.team2_score : game.team1_score;
+                                        const won = teamScore > oppScore;
+
+                                        if (isAdmin && editingGameScore === game.id) {
+                                          // Inline editing mode
+                                          const isTeam1 = game.team1_name === team.name;
+                                          return (
+                                            <td key={opponent.id} className="border border-slate-700 bg-slate-700/50 p-1 text-center">
+                                              <div className="flex flex-col gap-1">
+                                                <div className="flex items-center justify-center gap-1">
+                                                  <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={isTeam1 ? team1Score : team2Score}
+                                                    onChange={(e) => isTeam1 ? setTeam1Score(parseInt(e.target.value) || 0) : setTeam2Score(parseInt(e.target.value) || 0)}
+                                                    className="w-10 px-1 py-0.5 bg-slate-900 border border-slate-600 rounded text-white text-[10px] text-center focus:ring-1 focus:ring-purple-500"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                  />
+                                                  <span className="text-slate-500 text-[10px]">-</span>
+                                                  <input
+                                                    type="number"
+                                                    min="0"
+                                                    value={isTeam1 ? team2Score : team1Score}
+                                                    onChange={(e) => isTeam1 ? setTeam2Score(parseInt(e.target.value) || 0) : setTeam1Score(parseInt(e.target.value) || 0)}
+                                                    className="w-10 px-1 py-0.5 bg-slate-900 border border-slate-600 rounded text-white text-[10px] text-center focus:ring-1 focus:ring-purple-500"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                  />
+                                                </div>
+                                                <div className="flex gap-1 justify-center">
+                                                  <button
+                                                    onClick={() => handleUpdateGameScore(game.id, team1Score, team2Score)}
+                                                    className="px-1.5 py-0.5 bg-green-600 text-white text-[9px] rounded hover:bg-green-700"
+                                                  >
+                                                    ✓
+                                                  </button>
+                                                  <button
+                                                    onClick={() => {
+                                                      setEditingGameScore(null);
+                                                      setTeam1Score(0);
+                                                      setTeam2Score(0);
+                                                    }}
+                                                    className="px-1.5 py-0.5 bg-slate-600 text-white text-[9px] rounded hover:bg-slate-700"
+                                                  >
+                                                    ✕
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            </td>
+                                          );
+                                        }
+
+                                        return (
+                                          <td
+                                            key={opponent.id}
+                                            className={`border border-slate-700 p-2 text-center ${won ? 'bg-green-900/20' : 'bg-red-900/20'} ${isAdmin ? 'cursor-pointer hover:bg-opacity-80 transition-colors' : ''}`}
+                                            onClick={() => {
+                                              if (isAdmin) {
+                                                setEditingGameScore(game.id);
+                                                setTeam1Score(game.team1_score);
+                                                setTeam2Score(game.team2_score);
+                                              }
+                                            }}
+                                            title={isAdmin ? 'Click to edit score' : ''}
+                                          >
+                                            <div className={won ? 'text-green-400' : 'text-red-400'}>
+                                              {teamScore}-{oppScore}
+                                            </div>
+                                            <div className="text-[10px] text-slate-500">
+                                              {won ? 'W' : 'L'}
+                                            </div>
+                                          </td>
+                                        );
+                                      })}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1557,7 +1789,8 @@ export function TournamentDetailPage() {
                                   </div>
                                 </div>
                               </div>
-                              {game.is_complete && (
+                              {/* Score Display/Entry */}
+                              {game.is_complete ? (
                                 <div className="flex items-center gap-4">
                                   <div className="text-sm">
                                     <span className="text-slate-400">{game.team1_score}</span>
@@ -1568,6 +1801,55 @@ export function TournamentDetailPage() {
                                     <span className="text-green-400 text-sm">Winner: {game.winner_name}</span>
                                   )}
                                 </div>
+                              ) : isAdmin && editingGameScore === game.id ? (
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    value={team1Score}
+                                    onChange={(e) => setTeam1Score(parseInt(e.target.value) || 0)}
+                                    placeholder="0"
+                                    className="w-16 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-white text-sm text-center focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                  />
+                                  <span className="text-slate-500">-</span>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    value={team2Score}
+                                    onChange={(e) => setTeam2Score(parseInt(e.target.value) || 0)}
+                                    placeholder="0"
+                                    className="w-16 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-white text-sm text-center focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                  />
+                                  <button
+                                    onClick={() => handleUpdateGameScore(game.id, team1Score, team2Score)}
+                                    className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setEditingGameScore(null);
+                                      setTeam1Score(0);
+                                      setTeam2Score(0);
+                                    }}
+                                    className="px-3 py-1 bg-slate-600 text-white text-xs rounded hover:bg-slate-700 transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : isAdmin ? (
+                                <button
+                                  onClick={() => {
+                                    setEditingGameScore(game.id);
+                                    setTeam1Score(game.team1_score || 0);
+                                    setTeam2Score(game.team2_score || 0);
+                                  }}
+                                  className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                                >
+                                  Enter Score
+                                </button>
+                              ) : (
+                                <span className="text-slate-500 text-sm">Not started</span>
                               )}
                             </div>
                           ))}
