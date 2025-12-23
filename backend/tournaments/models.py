@@ -220,6 +220,9 @@ class Game(models.Model):
     team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='games_as_team1')
     team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='games_as_team2')
 
+    # Pool assignment (set at game creation, doesn't change with team reassignments)
+    pool = models.CharField(max_length=10, blank=True, help_text="Pool this game belongs to")
+
     # Scores (set by MODAQ)
     team1_score = models.IntegerField(default=0)
     team2_score = models.IntegerField(default=0)

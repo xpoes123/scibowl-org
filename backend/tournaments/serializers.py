@@ -114,7 +114,6 @@ class GameSerializer(serializers.ModelSerializer):
     round_number = serializers.IntegerField(source='round.round_number', read_only=True)
     room_name = serializers.CharField(source='room.name', read_only=True)
     winner_name = serializers.SerializerMethodField()
-    pool = serializers.SerializerMethodField()
 
     class Meta:
         model = Game
@@ -129,8 +128,3 @@ class GameSerializer(serializers.ModelSerializer):
     def get_winner_name(self, obj):
         winner = obj.winner
         return winner.name if winner else None
-
-    def get_pool(self, obj):
-        """Get the pool this game belongs to (from either team)."""
-        # Both teams should be in the same pool for a valid game
-        return obj.team1.pool if obj.team1.pool else obj.team2.pool
