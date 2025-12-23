@@ -228,7 +228,9 @@ export interface Round {
 export interface Game {
   id: number;
   round_number: number;
+  room: number;
   room_name: string;
+  pool: string;
   team1_name: string;
   team2_name: string;
   team1_score: number;

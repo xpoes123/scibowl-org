@@ -10,7 +10,7 @@ export function TournamentDetailPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'teams' | 'pools' | 'contact'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'teams' | 'pools' | 'schedule' | 'contact'>('overview');
   const [currentUser, setCurrentUser] = useState<any>(null);
 
   // Pool editing state
@@ -35,6 +35,21 @@ export function TournamentDetailPage() {
   const [newCoachEmail, setNewCoachEmail] = useState('');
   const [newCoachPhone, setNewCoachPhone] = useState('');
 
+  // Add team state
+  const [showAddTeam, setShowAddTeam] = useState(false);
+  const [newTeamName, setNewTeamName] = useState('');
+  const [newTeamSchool, setNewTeamSchool] = useState('');
+
+  // Room and schedule state
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [games, setGames] = useState<any[]>([]);
+  const [showAddRoom, setShowAddRoom] = useState(false);
+  const [newRoomName, setNewRoomName] = useState('');
+  const [loadingRooms, setLoadingRooms] = useState(false);
+  const [generatingSchedule, setGeneratingSchedule] = useState(false);
+  const [editingGame, setEditingGame] = useState<number | null>(null);
+  const [editingGameRoom, setEditingGameRoom] = useState<number | null>(null);
+
   // Check if current user is admin (tournament director)
   const isAdmin = currentUser && tournament?.director && currentUser.id === tournament.director.id;
 
@@ -44,6 +59,13 @@ export function TournamentDetailPage() {
       loadCurrentUser();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (id && activeTab === 'schedule') {
+      loadRooms();
+      loadGames();
+    }
+  }, [id, activeTab]);
 
   const loadCurrentUser = async () => {
     try {
@@ -253,6 +275,43 @@ export function TournamentDetailPage() {
     }
   };
 
+  const handleAddTeam = async () => {
+    if (!tournament || !newTeamName.trim() || !newTeamSchool.trim()) {
+      alert('Please enter both team name and school');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/teams/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          name: newTeamName,
+          school: newTeamSchool,
+          tournament: tournament.id,
+        }),
+      });
+
+      if (response.ok) {
+        const newTeam = await response.json();
+        setTeams([...teams, newTeam]);
+        setNewTeamName('');
+        setNewTeamSchool('');
+        setShowAddTeam(false);
+        alert('Team added successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Failed to add team: ${error.detail || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error adding team:', error);
+      alert('Failed to add team. Please try again.');
+    }
+  };
+
   const handleDeleteTeam = async (teamId: number) => {
     if (!confirm('Are you sure you want to delete this team? This cannot be undone.')) {
       return;
@@ -428,6 +487,190 @@ export function TournamentDetailPage() {
     }
   };
 
+  // Room management handlers
+  const loadRooms = async () => {
+    if (!id) return;
+
+    setLoadingRooms(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/tournaments/${id}/rooms/`);
+      if (response.ok) {
+        const data = await response.json();
+        setRooms(data);
+      }
+    } catch (error) {
+      console.error('Error loading rooms:', error);
+    } finally {
+      setLoadingRooms(false);
+    }
+  };
+
+  const handleAddRoom = async () => {
+    if (!tournament || !newRoomName.trim()) {
+      alert('Please enter a room name');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/rooms/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          name: newRoomName,
+          tournament: tournament.id,
+        }),
+      });
+
+      if (response.ok) {
+        const newRoom = await response.json();
+        setRooms([...rooms, newRoom]);
+        setNewRoomName('');
+        setShowAddRoom(false);
+        alert('Room added successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Failed to add room: ${error.detail || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error adding room:', error);
+      alert('Failed to add room. Please try again.');
+    }
+  };
+
+  const handleDeleteRoom = async (roomId: number) => {
+    if (!confirm('Are you sure you want to delete this room?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/rooms/${roomId}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+
+      if (response.ok) {
+        setRooms(rooms.filter(r => r.id !== roomId));
+        alert('Room deleted successfully!');
+      } else {
+        alert('Failed to delete room');
+      }
+    } catch (error) {
+      console.error('Error deleting room:', error);
+      alert('Failed to delete room. Please try again.');
+    }
+  };
+
+  const handleClearSchedule = async () => {
+    if (!id) return;
+
+    if (!confirm('Delete all games and rounds? This cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/tournaments/${id}/clear_schedule/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(data.message);
+        loadGames();
+      } else {
+        alert('Failed to clear schedule');
+      }
+    } catch (error) {
+      console.error('Error clearing schedule:', error);
+      alert('Failed to clear schedule. Please try again.');
+    }
+  };
+
+  const handleGenerateSchedule = async () => {
+    if (!id) return;
+
+    if (!confirm('Generate round-robin schedule for all pools? This will create games for each team to play every other team in their pool.')) {
+      return;
+    }
+
+    setGeneratingSchedule(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/tournaments/${id}/generate_schedule/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Pool info:', data.pool_info);
+        alert(data.message);
+        // Reload games
+        loadGames();
+      } else {
+        const error = await response.json();
+        alert(`Failed to generate schedule: ${error.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error generating schedule:', error);
+      alert('Failed to generate schedule. Please try again.');
+    } finally {
+      setGeneratingSchedule(false);
+    }
+  };
+
+  const loadGames = async () => {
+    if (!id) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/tournaments/${id}/games/`);
+      if (response.ok) {
+        const data = await response.json();
+        setGames(data);
+      }
+    } catch (error) {
+      console.error('Error loading games:', error);
+    }
+  };
+
+  const handleUpdateGameRoom = async (gameId: number, newRoomId: number) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/games/${gameId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          room: newRoomId,
+        }),
+      });
+
+      if (response.ok) {
+        // Reload games to get updated data
+        loadGames();
+        setEditingGame(null);
+        setEditingGameRoom(null);
+      } else {
+        alert('Failed to update room assignment');
+      }
+    } catch (error) {
+      console.error('Error updating game room:', error);
+      alert('Failed to update room assignment. Please try again.');
+    }
+  };
+
   const formatDate = (dateString: string) => {
     // Parse date as local date to avoid timezone shifts
     const [year, month, day] = dateString.split('-').map(Number);
@@ -574,6 +817,16 @@ export function TournamentDetailPage() {
             </button>
           )}
           <button
+            onClick={() => setActiveTab('schedule')}
+            className={`px-4 py-2 font-medium transition-colors ${
+              activeTab === 'schedule'
+                ? 'text-purple-400 border-b-2 border-purple-400'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Schedule
+          </button>
+          <button
             onClick={() => setActiveTab('contact')}
             className={`px-4 py-2 font-medium transition-colors ${
               activeTab === 'contact'
@@ -615,7 +868,47 @@ export function TournamentDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - Teams List */}
             <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-              <h2 className="text-xl font-bold text-white mb-4">Registered Teams ({teams.length})</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white">Registered Teams ({teams.length})</h2>
+                {isAdmin && (
+                  <button
+                    onClick={() => setShowAddTeam(!showAddTeam)}
+                    className="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    {showAddTeam ? 'Cancel' : '+ Add Team'}
+                  </button>
+                )}
+              </div>
+
+              {/* Add Team Form */}
+              {isAdmin && showAddTeam && (
+                <div className="mb-4 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
+                  <h4 className="text-sm font-semibold text-white mb-3">Add New Team</h4>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="Team Name"
+                      value={newTeamName}
+                      onChange={(e) => setNewTeamName(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="School"
+                      value={newTeamSchool}
+                      onChange={(e) => setNewTeamSchool(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    />
+                    <button
+                      onClick={handleAddTeam}
+                      className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      Add Team
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {teams.length === 0 ? (
                 <p className="text-slate-400">No teams registered yet</p>
               ) : (
@@ -1064,6 +1357,227 @@ export function TournamentDetailPage() {
                 )}
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'schedule' && (
+          <div className="space-y-6">
+            {/* Rooms Section */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-white">Rooms ({rooms.length})</h2>
+                {isAdmin && (
+                  <button
+                    onClick={() => setShowAddRoom(!showAddRoom)}
+                    className="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    {showAddRoom ? 'Cancel' : '+ Add Room'}
+                  </button>
+                )}
+              </div>
+
+              {/* Add Room Form */}
+              {isAdmin && showAddRoom && (
+                <div className="mb-4 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
+                  <h4 className="text-sm font-semibold text-white mb-3">Add New Room</h4>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      placeholder="Room Name (e.g., Room 101, Auditorium)"
+                      value={newRoomName}
+                      onChange={(e) => setNewRoomName(e.target.value)}
+                      className="flex-1 px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    />
+                    <button
+                      onClick={handleAddRoom}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      Add Room
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {loadingRooms ? (
+                <div className="text-center py-8">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                  <p className="mt-2 text-sm text-slate-400">Loading rooms...</p>
+                </div>
+              ) : rooms.length === 0 ? (
+                <p className="text-slate-400 text-center py-8">No rooms configured yet. Add rooms to enable schedule generation.</p>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {rooms.map((room) => (
+                    <div
+                      key={room.id}
+                      className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 hover:border-slate-600 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="text-white font-semibold">{room.name}</div>
+                          <div className="text-slate-400 text-sm">
+                            {room.status === 'NOT_STARTED' && 'Not Started'}
+                            {room.status === 'IN_PROGRESS' && 'In Progress'}
+                            {room.status === 'FINISHED' && 'Finished'}
+                          </div>
+                        </div>
+                        {isAdmin && (
+                          <button
+                            onClick={() => handleDeleteRoom(room.id)}
+                            className="text-red-400 hover:text-red-300 p-2"
+                            title="Delete room"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Schedule Generation Section */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+              <h2 className="text-xl font-bold text-white mb-4">Round-Robin Schedule</h2>
+
+              {isAdmin && (
+                <div className="mb-6 p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                  <h3 className="text-lg font-semibold text-white mb-2">Generate Schedule</h3>
+                  <p className="text-slate-300 text-sm mb-4">
+                    This will create round-robin matchups for all teams in each pool. Each team will play every other team in their pool once.
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={handleGenerateSchedule}
+                      disabled={generatingSchedule || rooms.length === 0}
+                      className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      {generatingSchedule ? 'Generating...' : 'Generate Schedule'}
+                    </button>
+                    {games.length > 0 && (
+                      <button
+                        onClick={handleClearSchedule}
+                        className="px-6 py-2 bg-amber-800 text-white rounded-lg hover:bg-amber-900 transition-colors font-medium"
+                      >
+                        Clear Schedule
+                      </button>
+                    )}
+                    {rooms.length === 0 && (
+                      <p className="text-amber-400 text-sm">Add rooms first to generate schedule</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Games Display */}
+              {games.length === 0 ? (
+                <p className="text-slate-400 text-center py-8">
+                  {isAdmin ? 'No schedule generated yet. Click "Generate Schedule" above to create round-robin matchups.' : 'Schedule will be available once the tournament director generates it.'}
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {Array.from(new Set(games.map(g => g.round_number))).sort((a, b) => a - b).map((roundNum) => {
+                    const roundGames = games.filter(g => g.round_number === roundNum);
+                    return (
+                      <div key={roundNum} className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                        <h3 className="text-lg font-bold text-purple-400 mb-3">Round {roundNum}</h3>
+                        <div className="space-y-2">
+                          {roundGames.map((game) => (
+                            <div
+                              key={game.id}
+                              className="flex items-center justify-between bg-slate-800/50 border border-slate-700 rounded-lg p-3"
+                            >
+                              <div className="flex-1">
+                                <div className="flex items-center gap-4">
+                                  {/* Pool Badge */}
+                                  {game.pool && game.pool !== 'Unassigned' && (
+                                    <span className="px-2 py-1 bg-purple-500/20 text-purple-300 text-xs rounded border border-purple-500/30 font-medium">
+                                      Pool {game.pool}
+                                    </span>
+                                  )}
+
+                                  {/* Room Assignment - Editable for admins */}
+                                  {isAdmin && editingGame === game.id ? (
+                                    <select
+                                      value={editingGameRoom || game.room}
+                                      onChange={(e) => setEditingGameRoom(Number(e.target.value))}
+                                      className="px-2 py-1 bg-slate-900 border border-slate-600 rounded text-white text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                    >
+                                      {rooms.map((room) => (
+                                        <option key={room.id} value={room.id}>
+                                          {room.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    <span className="text-slate-400 text-sm min-w-[100px]">{game.room_name}</span>
+                                  )}
+
+                                  {/* Edit Room Button */}
+                                  {isAdmin && editingGame === game.id ? (
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() => handleUpdateGameRoom(game.id, editingGameRoom || game.room)}
+                                        className="text-green-400 hover:text-green-300 text-xs"
+                                      >
+                                        Save
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          setEditingGame(null);
+                                          setEditingGameRoom(null);
+                                        }}
+                                        className="text-slate-400 hover:text-slate-300 text-xs"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  ) : isAdmin && !game.is_complete ? (
+                                    <button
+                                      onClick={() => {
+                                        setEditingGame(game.id);
+                                        setEditingGameRoom(game.room);
+                                      }}
+                                      className="text-purple-400 hover:text-purple-300 text-xs"
+                                      title="Edit room assignment"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                      </svg>
+                                    </button>
+                                  ) : null}
+
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-white font-medium">{game.team1_name}</span>
+                                    <span className="text-slate-500">vs</span>
+                                    <span className="text-white font-medium">{game.team2_name}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              {game.is_complete && (
+                                <div className="flex items-center gap-4">
+                                  <div className="text-sm">
+                                    <span className="text-slate-400">{game.team1_score}</span>
+                                    <span className="text-slate-500 mx-1">-</span>
+                                    <span className="text-slate-400">{game.team2_score}</span>
+                                  </div>
+                                  {game.winner_name && (
+                                    <span className="text-green-400 text-sm">Winner: {game.winner_name}</span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
