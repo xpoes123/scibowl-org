@@ -202,7 +202,8 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
                                 round=round_obj,
                                 room=room,
                                 team1=team1,
-                                team2=team2
+                                team2=team2,
+                                pool=pool_name  # Store the pool assignment at game creation
                             )
 
                             generated_games.append({
