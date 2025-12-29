@@ -8,6 +8,27 @@ const END_TOKEN = "END" as const;
 
 type AttemptResult = "correct" | "incorrect";
 
+const DISPLAY_QUESTION_TYPE: Record<QuestionType, string> = {
+    TOSSUP: "Tossup",
+    BONUS: "Bonus",
+};
+
+const DISPLAY_CATEGORY: Record<string, string> = {
+    BIOLOGY: "Biology",
+    CHEMISTRY: "Chemistry",
+    EARTH_SPACE: "Earth and Space",
+    ENERGY: "Energy",
+    MATH: "Math",
+    PHYSICS: "Physics",
+};
+
+const DISPLAY_QUESTION_STYLE: Record<QuestionStyle, string> = {
+    MULTIPLE_CHOICE: "Multiple Choice",
+    SHORT_ANSWER: "Short Answer",
+    IDENTIFY_ALL: "Short Answer",
+    RANK: "Short Answer",
+};
+
 type AttemptLocation =
     | { kind: "question"; wordIndex: number }
     | { kind: "option"; optionIndex: number; wordIndex: number }
@@ -260,15 +281,15 @@ export default function App() {
                             <h1 className="title">
                                 {data.packet} ({data.year})
                             </h1>
-                            <p className="muted">
-                                Question {idx + 1} / {questions.length} · ID {q.id} · Pair {q.pair_id}
-                            </p>
                         </div>
 
                         <div className="pillRow">
-                            <span className="pill">{q.question_type}</span>
-                            <span className="pill">{q.question_style}</span>
-                            <span className="pill">{q.category}</span>
+                            <span className="pill">{DISPLAY_QUESTION_TYPE[q.question_type] ?? q.question_type}</span>
+                            <span className="pill">{q.pair_id}</span>
+                            <span className="pill">{DISPLAY_CATEGORY[q.category] ?? q.category}</span>
+                            <span className="pill">
+                                {DISPLAY_QUESTION_STYLE[q.question_style] ?? q.question_style}
+                            </span>
                         </div>
                     </div>
 
@@ -285,30 +306,35 @@ export default function App() {
                                             : "wordWrapIncorrect"
                                         : "";
                                 return (
-                                    <span
-                                        key={wordIndex}
-                                        className={["wordWrap", selected ? "wordWrapSelected" : "", correctnessClass]
-                                            .filter(Boolean)
-                                            .join(" ")}
-                                    >
-                                        <button
-                                            type="button"
-                                            className="word"
-                                            onClick={(e) =>
-                                                setAttemptSelection(
-                                                    q,
-                                                    {
-                                                        token: word,
-                                                        isEnd: false,
-                                                        location: { kind: "question", wordIndex },
-                                                    },
-                                                    e.currentTarget
-                                                )
-                                            }
+                                    <span key={wordIndex}>
+                                        <span
+                                            className={[
+                                                "wordWrap",
+                                                selected ? "wordWrapSelected" : "",
+                                                correctnessClass,
+                                            ]
+                                                .filter(Boolean)
+                                                .join(" ")}
                                         >
-                                            {word}
-                                        </button>
-                                        {wordIndex < questionWords.length - 1 ? " " : ""}
+                                            <button
+                                                type="button"
+                                                className="word"
+                                                onClick={(e) =>
+                                                    setAttemptSelection(
+                                                        q,
+                                                        {
+                                                            token: word,
+                                                            isEnd: false,
+                                                            location: { kind: "question", wordIndex },
+                                                        },
+                                                        e.currentTarget
+                                                    )
+                                                }
+                                            >
+                                                {word}
+                                            </button>
+                                        </span>
+                                        {wordIndex < questionWords.length - 1 ? " " : null}
                                     </span>
                                 );
                             })}
@@ -384,38 +410,39 @@ export default function App() {
                                                         : "";
 
                                                 return (
-                                                    <span
-                                                        key={wordIndex}
-                                                        className={[
-                                                            "wordWrap",
-                                                            selected ? "wordWrapSelected" : "",
-                                                            correctnessClass,
-                                                        ]
-                                                            .filter(Boolean)
-                                                            .join(" ")}
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className="word"
-                                                            onClick={(e) =>
-                                                                setAttemptSelection(
-                                                                    q,
-                                                                    {
-                                                                        token: word,
-                                                                        isEnd: false,
-                                                                        location: {
-                                                                            kind: "option",
-                                                                            optionIndex,
-                                                                            wordIndex,
-                                                                        },
-                                                                    },
-                                                                    e.currentTarget
-                                                                )
-                                                            }
+                                                    <span key={wordIndex}>
+                                                        <span
+                                                            className={[
+                                                                "wordWrap",
+                                                                selected ? "wordWrapSelected" : "",
+                                                                correctnessClass,
+                                                            ]
+                                                                .filter(Boolean)
+                                                                .join(" ")}
                                                         >
-                                                            {word}
-                                                        </button>
-                                                        {wordIndex < words.length - 1 ? " " : ""}
+                                                            <button
+                                                                type="button"
+                                                                className="word"
+                                                                onClick={(e) =>
+                                                                    setAttemptSelection(
+                                                                        q,
+                                                                        {
+                                                                            token: word,
+                                                                            isEnd: false,
+                                                                            location: {
+                                                                                kind: "option",
+                                                                                optionIndex,
+                                                                                wordIndex,
+                                                                            },
+                                                                        },
+                                                                        e.currentTarget
+                                                                    )
+                                                                }
+                                                            >
+                                                                {word}
+                                                            </button>
+                                                        </span>
+                                                        {wordIndex < words.length - 1 ? " " : null}
                                                     </span>
                                                 );
                                             })}
