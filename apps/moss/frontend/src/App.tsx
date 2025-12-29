@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import packetJson from "./assets/sample_packet.json";
 
 type QuestionType = "TOSSUP" | "BONUS";
@@ -8,11 +8,16 @@ const END_TOKEN = "END" as const;
 
 type AttemptResult = "correct" | "incorrect";
 
+type AttemptLocation =
+    | { kind: "question"; wordIndex: number }
+    | { kind: "option"; optionIndex: number; wordIndex: number }
+    | { kind: "end" };
+
 type Attempt = {
-    tokenIndex: number;
     token: string;
     isEnd: boolean;
     result?: AttemptResult;
+    location: AttemptLocation;
 };
 
 type Packet = {
@@ -55,9 +60,7 @@ function formatCorrectAnswer(q: Question): string {
 }
 
 function getQuestionTokens(questionText: string): string[] {
-    const tokens = questionText.trim().split(/\s+/).filter(Boolean);
-    if (tokens[tokens.length - 1] !== END_TOKEN) tokens.push(END_TOKEN);
-    return tokens;
+    return questionText.trim().split(/\s+/).filter(Boolean);
 }
 
 function pointsForAttempt(attempt: Attempt | undefined): number | undefined {
@@ -76,6 +79,54 @@ function formatAttempt(attempt: Attempt | undefined): string {
     return `${resultLabel} (${pointsLabel}) @ ${attempt.token}`;
 }
 
+type AnchorRect = { left: number; top: number; right: number; bottom: number; width: number; height: number };
+
+type AttemptEditor = {
+    questionId: number;
+    left: number;
+    top: number;
+};
+
+function getAnchorRect(el: HTMLElement): AnchorRect {
+    const r = el.getBoundingClientRect();
+    return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
+}
+
+function clamp(n: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, n));
+}
+
+function computePopupPosition(anchor: AnchorRect): { left: number; top: number } {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const margin = 12;
+    const popupWidth = 220;
+    const popupHeight = 128;
+
+    const rightLeft = anchor.right + margin;
+    if (rightLeft + popupWidth <= vw - 8) {
+        return { left: rightLeft, top: clamp(anchor.top, 8, vh - popupHeight - 8) };
+    }
+
+    const leftLeft = anchor.left - popupWidth - margin;
+    if (leftLeft >= 8) {
+        return { left: leftLeft, top: clamp(anchor.top, 8, vh - popupHeight - 8) };
+    }
+
+    const belowTop = anchor.bottom + margin;
+    if (belowTop + popupHeight <= vh - 8) {
+        return { left: clamp(anchor.left, 8, vw - popupWidth - 8), top: belowTop };
+    }
+
+    const aboveTop = anchor.top - popupHeight - margin;
+    if (aboveTop >= 8) {
+        return { left: clamp(anchor.left, 8, vw - popupWidth - 8), top: aboveTop };
+    }
+
+    return { left: 8, top: 8 };
+}
+
 export default function App() {
     const data = packetJson as Packet;
 
@@ -83,9 +134,14 @@ export default function App() {
     const [idx, setIdx] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const [attempts, setAttempts] = useState<Record<number, Attempt>>({});
+    const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
+    const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
     const q = questions[idx];
-    const tokens = useMemo(() => (q ? getQuestionTokens(q.question_text) : []), [q?.question_text]);
+    const questionWords = useMemo(
+        () => (q ? getQuestionTokens(q.question_text) : []),
+        [q?.question_text]
+    );
     const attempt = q ? attempts[q.id] : undefined;
 
     const pairRows = useMemo<PairRow[]>(() => {
@@ -125,25 +181,25 @@ export default function App() {
 
     function prev() {
         setShowAnswer(false);
+        setAttemptEditor(null);
         setIdx((v) => Math.max(0, v - 1));
     }
 
     function next() {
         setShowAnswer(false);
+        setAttemptEditor(null);
         setIdx((v) => Math.min(questions.length - 1, v + 1));
     }
 
-    function chooseAttemptToken(question: Question, tokenIndex: number, questionTokens: string[]) {
-        const chosenToken = questionTokens[tokenIndex] ?? "";
+    function setAttemptSelection(question: Question, selection: Omit<Attempt, "result">, anchorEl: HTMLElement) {
+        const anchor = getAnchorRect(anchorEl);
+        const position = computePopupPosition(anchor);
+
         setAttempts((prevState) => ({
             ...prevState,
-            [question.id]: {
-                tokenIndex,
-                token: chosenToken,
-                isEnd: chosenToken === END_TOKEN && tokenIndex === questionTokens.length - 1,
-                result: undefined,
-            },
+            [question.id]: { ...selection, result: undefined },
         }));
+        setAttemptEditor({ questionId: question.id, left: position.left, top: position.top });
     }
 
     function setAttemptResult(questionId: number, result: AttemptResult | undefined) {
@@ -159,6 +215,31 @@ export default function App() {
             return { ...prevState, [questionId]: { ...current, result } };
         });
     }
+
+    useEffect(() => {
+        if (!attemptEditor) return;
+
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") setAttemptEditor(null);
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [attemptEditor]);
+
+    useEffect(() => {
+        if (!attemptEditor) return;
+
+        function onMouseDown(e: MouseEvent) {
+            const el = attemptPopupRef.current;
+            if (!el) return;
+            if (el.contains(e.target as Node)) return;
+            setAttemptEditor(null);
+        }
+
+        window.addEventListener("mousedown", onMouseDown, true);
+        return () => window.removeEventListener("mousedown", onMouseDown, true);
+    }, [attemptEditor]);
 
     if (!q) {
         return (
@@ -195,51 +276,33 @@ export default function App() {
                     </div>
 
                     <div className="questionBlock">
-                        <div
-                            className="questionText tokens"
-                            aria-label="Question text (click a word to mark an attempt)"
-                        >
-                            {tokens.map((token, tokenIndex) => {
-                                const selected = attempt?.tokenIndex === tokenIndex;
-                                const isEnd = token === END_TOKEN && tokenIndex === tokens.length - 1;
-
+                        <div className="questionText readText" aria-label="Question text (click a word to mark)">
+                            {questionWords.map((word, wordIndex) => {
+                                const selected =
+                                    attempt?.location.kind === "question" &&
+                                    attempt.location.wordIndex === wordIndex;
                                 return (
-                                    <span key={tokenIndex} className="tokenWrap">
+                                    <span key={wordIndex}>
                                         <button
                                             type="button"
-                                            className={[
-                                                "tokenButton",
-                                                selected ? "tokenButtonSelected" : "",
-                                                isEnd ? "tokenButtonEnd" : "",
-                                            ]
+                                            className={["word", selected ? "wordSelected" : ""]
                                                 .filter(Boolean)
                                                 .join(" ")}
-                                            onClick={() => chooseAttemptToken(q, tokenIndex, tokens)}
+                                            onClick={(e) =>
+                                                setAttemptSelection(
+                                                    q,
+                                                    {
+                                                        token: word,
+                                                        isEnd: false,
+                                                        location: { kind: "question", wordIndex },
+                                                    },
+                                                    e.currentTarget
+                                                )
+                                            }
                                         >
-                                            {token}
+                                            {word}
                                         </button>
-
-                                        {selected && (
-                                            <select
-                                                className="tokenSelect"
-                                                value={attempt?.result ?? ""}
-                                                onClick={(e) => e.stopPropagation()}
-                                                onChange={(e) =>
-                                                    setAttemptResult(
-                                                        q.id,
-                                                        e.target.value
-                                                            ? (e.target.value as AttemptResult)
-                                                            : undefined
-                                                    )
-                                                }
-                                            >
-                                                <option value="">Mark...</option>
-                                                <option value="correct">Correct (+4)</option>
-                                                <option value="incorrect">
-                                                    Incorrect ({attempt?.isEnd ? "0" : "-4"})
-                                                </option>
-                                            </select>
-                                        )}
+                                        {wordIndex < questionWords.length - 1 ? " " : ""}
                                     </span>
                                 );
                             })}
@@ -247,11 +310,72 @@ export default function App() {
 
                         {q.options?.length > 0 && (
                             <ol className="options">
-                                {q.options.map((opt, i) => (
-                                    <li key={i}>{opt}</li>
-                                ))}
+                                {q.options.map((opt, optionIndex) => {
+                                    const words = getQuestionTokens(opt);
+                                    return (
+                                        <li key={optionIndex} className="readText">
+                                            {words.map((word, wordIndex) => {
+                                                const selected =
+                                                    attempt?.location.kind === "option" &&
+                                                    attempt.location.optionIndex === optionIndex &&
+                                                    attempt.location.wordIndex === wordIndex;
+
+                                                return (
+                                                    <span key={wordIndex}>
+                                                        <button
+                                                            type="button"
+                                                            className={["word", selected ? "wordSelected" : ""]
+                                                                .filter(Boolean)
+                                                                .join(" ")}
+                                                            onClick={(e) =>
+                                                                setAttemptSelection(
+                                                                    q,
+                                                                    {
+                                                                        token: word,
+                                                                        isEnd: false,
+                                                                        location: {
+                                                                            kind: "option",
+                                                                            optionIndex,
+                                                                            wordIndex,
+                                                                        },
+                                                                    },
+                                                                    e.currentTarget
+                                                                )
+                                                            }
+                                                        >
+                                                            {word}
+                                                        </button>
+                                                        {wordIndex < words.length - 1 ? " " : ""}
+                                                    </span>
+                                                );
+                                            })}
+                                        </li>
+                                    );
+                                })}
                             </ol>
                         )}
+
+                        <div className="endRow" aria-label="End of question token">
+                            <button
+                                type="button"
+                                className={[
+                                    "word",
+                                    "wordEnd",
+                                    attempt?.location.kind === "end" ? "wordSelected" : "",
+                                ]
+                                    .filter(Boolean)
+                                    .join(" ")}
+                                onClick={(e) =>
+                                    setAttemptSelection(
+                                        q,
+                                        { token: END_TOKEN, isEnd: true, location: { kind: "end" } },
+                                        e.currentTarget
+                                    )
+                                }
+                            >
+                                {END_TOKEN}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="controls">
@@ -328,6 +452,47 @@ export default function App() {
                     </div>
                 </div>
             </div>
+
+            {attemptEditor && attemptEditor.questionId === q.id && (
+                <div
+                    ref={attemptPopupRef}
+                    className="attemptPopup"
+                    role="dialog"
+                    aria-label="Mark attempt"
+                    style={{ left: attemptEditor.left, top: attemptEditor.top }}
+                >
+                    <div className="attemptPopupTitle">Mark attempt</div>
+                    {attempt && <div className="attemptPopupMeta">{attempt.token}</div>}
+
+                    <div className="attemptPopupButtons">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setAttemptResult(q.id, "correct");
+                                setAttemptEditor(null);
+                            }}
+                        >
+                            Correct (+4)
+                        </button>
+                        <button
+                            type="button"
+                            className="secondary"
+                            onClick={() => {
+                                setAttemptResult(q.id, "incorrect");
+                                setAttemptEditor(null);
+                            }}
+                        >
+                            Incorrect ({attempt?.isEnd ? "0" : "-4"})
+                        </button>
+                    </div>
+
+                    <div className="attemptPopupFooter">
+                        <button type="button" className="link" onClick={() => setAttemptEditor(null)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

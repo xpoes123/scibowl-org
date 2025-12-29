@@ -93,56 +93,12 @@ code {
   margin-bottom: 12px;
 }
 
-.tokens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
+.readText {
+  line-height: 1.45;
 }
 
-.tokenWrap {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-}
-
-button.tokenButton {
-  border: 1px solid #d6d6de;
-  background: white;
-  color: #111;
-  padding: 6px 8px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1.15;
-}
-
-button.tokenButton:hover {
-  background: #f5f6ff;
-  border-color: #cdd4ff;
-}
-
-button.tokenButtonSelected {
-  background: #111;
-  color: white;
-  border-color: #111;
-}
-
-button.tokenButtonEnd {
-  background: #f6f7fb;
-}
-
-button.tokenButtonEnd.tokenButtonSelected {
-  background: #111;
-}
-
-.tokenSelect {
-  border: 1px solid #d6d6de;
-  border-radius: 10px;
-  padding: 7px 10px;
-  background: white;
-  color: #111;
-  font-size: 14px;
+.endRow {
+  margin-top: 10px;
 }
 
 .options {
@@ -178,6 +134,84 @@ button.secondary {
 button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+button.word {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+  display: inline-block;
+  cursor: pointer;
+}
+
+button.word:focus {
+  outline: none;
+}
+
+button.word:focus-visible {
+  outline: 2px solid #cdd4ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button.wordSelected {
+  box-shadow: 0 0 0 1px #111;
+  border-radius: 4px;
+}
+
+button.wordEnd {
+  color: #666;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.attemptPopup {
+  position: fixed;
+  z-index: 1000;
+  width: 220px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e6e7ee;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.attemptPopupTitle {
+  font-weight: 600;
+}
+
+.attemptPopupMeta {
+  margin-top: 4px;
+  color: #666;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.attemptPopupButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.attemptPopupFooter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.attemptPopup button.link {
+  border: 0;
+  background: transparent;
+  color: #111;
+  padding: 6px 0;
+  text-decoration: underline;
 }
 
 .answer {
