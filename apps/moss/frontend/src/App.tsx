@@ -503,11 +503,11 @@ export default function App() {
 
                     <div className="controls">
                         <button onClick={prev} disabled={idx === 0} aria-label="Previous question">
-                            ←
+                            {"\u2190"}
                         </button>
 
                         <button onClick={next} disabled={idx === questions.length - 1} aria-label="Next question">
-                            →
+                            {"\u2192"}
                         </button>
                     </div>
                 </div>
