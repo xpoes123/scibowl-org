@@ -499,7 +499,6 @@ export default function App() {
                     <div className="answer">
                         <div className="answerTitle">Correct answer</div>
                         <div className="answerBody">{formatCorrectAnswer(q)}</div>
-                        {q.source && <div className="answerMeta muted">Source: {q.source}</div>}
                     </div>
 
                     <div className="controls">
