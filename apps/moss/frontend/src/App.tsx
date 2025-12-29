@@ -56,7 +56,7 @@ function formatCorrectAnswer(q: Question): string {
 
 function getQuestionTokens(questionText: string): string[] {
     const tokens = questionText.trim().split(/\s+/).filter(Boolean);
-    if (tokens.at(-1) !== END_TOKEN) tokens.push(END_TOKEN);
+    if (tokens[tokens.length - 1] !== END_TOKEN) tokens.push(END_TOKEN);
     return tokens;
 }
 
