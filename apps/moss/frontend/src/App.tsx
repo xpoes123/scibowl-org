@@ -106,6 +106,7 @@ type AttemptEditor = {
     questionId: number;
     left: number;
     top: number;
+    selection: Omit<Attempt, "result">;
 };
 
 function getAnchorRect(el: HTMLElement): AnchorRect {
@@ -163,6 +164,7 @@ export default function App() {
         [q?.question_text]
     );
     const attempt = q ? attempts[q.id] : undefined;
+    const activeSelection = attemptEditor?.questionId === q?.id ? attemptEditor.selection : attempt;
 
     const pairRows = useMemo<PairRow[]>(() => {
         const byPair = new Map<number, PairRow>();
@@ -213,25 +215,13 @@ export default function App() {
         const anchor = getAnchorRect(anchorEl);
         const position = computePopupPosition(anchor);
 
-        setAttempts((prevState) => ({
-            ...prevState,
-            [question.id]: { ...selection, result: undefined },
-        }));
-        setAttemptEditor({ questionId: question.id, left: position.left, top: position.top });
+        setAttemptEditor({ questionId: question.id, left: position.left, top: position.top, selection });
     }
 
-    function setAttemptResult(questionId: number, result: AttemptResult | undefined) {
-        setAttempts((prevState) => {
-            const current = prevState[questionId];
-            if (!current) return prevState;
-
-            if (!result) {
-                const { [questionId]: _removed, ...rest } = prevState;
-                return rest;
-            }
-
-            return { ...prevState, [questionId]: { ...current, result } };
-        });
+    function setAttemptResult(questionId: number, result: AttemptResult) {
+        const selection = attemptEditor?.questionId === questionId ? attemptEditor.selection : undefined;
+        if (!selection) return;
+        setAttempts((prevState) => ({ ...prevState, [questionId]: { ...selection, result } }));
     }
 
     useEffect(() => {
@@ -297,14 +287,18 @@ export default function App() {
                         <div className="questionText readText" aria-label="Question text (click a word to mark)">
                             {questionWords.map((word, wordIndex) => {
                                 const selected =
+                                    activeSelection?.location.kind === "question" &&
+                                    activeSelection.location.wordIndex === wordIndex;
+                                const marked =
                                     attempt?.location.kind === "question" &&
-                                    attempt.location.wordIndex === wordIndex;
+                                    attempt.location.wordIndex === wordIndex &&
+                                    attempt.result;
                                 const correctnessClass =
-                                    selected && attempt?.result
-                                        ? attempt.result === "correct"
-                                            ? "wordWrapCorrect"
-                                            : "wordWrapIncorrect"
-                                        : "";
+                                    marked === "correct"
+                                        ? "wordWrapCorrect"
+                                        : marked === "incorrect"
+                                            ? "wordWrapIncorrect"
+                                            : "";
                                 return (
                                     <span key={wordIndex}>
                                         <span
@@ -350,16 +344,21 @@ export default function App() {
                                             : String(optionIndex + 1);
                                     return (
                                         <li key={optionIndex} className="readText">
-                                            {(() => {
-                                                const selected =
-                                                    attempt?.location.kind === "option" &&
-                                                    attempt.location.optionIndex === optionIndex &&
-                                                    attempt.location.wordIndex === -1;
-                                                const correctnessClass =
-                                                    selected && attempt?.result
-                                                        ? attempt.result === "correct"
-                                                            ? "wordWrapCorrect"
-                                                            : "wordWrapIncorrect"
+                                        {(() => {
+                                            const selected =
+                                                activeSelection?.location.kind === "option" &&
+                                                activeSelection.location.optionIndex === optionIndex &&
+                                                activeSelection.location.wordIndex === -1;
+                                            const marked =
+                                                attempt?.location.kind === "option" &&
+                                                attempt.location.optionIndex === optionIndex &&
+                                                attempt.location.wordIndex === -1 &&
+                                                attempt.result;
+                                            const correctnessClass =
+                                                marked === "correct"
+                                                    ? "wordWrapCorrect"
+                                                    : marked === "incorrect"
+                                                        ? "wordWrapIncorrect"
                                                         : "";
 
                                                 return (
@@ -392,22 +391,28 @@ export default function App() {
                                                                 )
                                                             }
                                                         >
-                                                            {label}.
-                                                        </button>{" "}
+                                                            {label})
+                                                        </button>
                                                     </span>
                                                 );
                                             })()}
+                                            {words.length > 0 ? " " : null}
                                             {words.map((word, wordIndex) => {
                                                 const selected =
+                                                    activeSelection?.location.kind === "option" &&
+                                                    activeSelection.location.optionIndex === optionIndex &&
+                                                    activeSelection.location.wordIndex === wordIndex;
+                                                const marked =
                                                     attempt?.location.kind === "option" &&
                                                     attempt.location.optionIndex === optionIndex &&
-                                                    attempt.location.wordIndex === wordIndex;
+                                                    attempt.location.wordIndex === wordIndex &&
+                                                    attempt.result;
                                                 const correctnessClass =
-                                                    selected && attempt?.result
-                                                        ? attempt.result === "correct"
-                                                            ? "wordWrapCorrect"
-                                                            : "wordWrapIncorrect"
-                                                        : "";
+                                                    marked === "correct"
+                                                        ? "wordWrapCorrect"
+                                                        : marked === "incorrect"
+                                                            ? "wordWrapIncorrect"
+                                                            : "";
 
                                                 return (
                                                     <span key={wordIndex}>
@@ -454,16 +459,21 @@ export default function App() {
 
                         <div className="endRow" aria-label="End of question token">
                             {(() => {
-                                const selected = attempt?.location.kind === "end";
+                                const selected = activeSelection?.location.kind === "end";
+                                const marked = attempt?.location.kind === "end" && attempt.result;
                                 const correctnessClass =
-                                    selected && attempt?.result
-                                        ? attempt.result === "correct"
-                                            ? "wordWrapCorrect"
-                                            : "wordWrapIncorrect"
-                                        : "";
+                                    marked === "correct"
+                                        ? "wordWrapCorrect"
+                                        : marked === "incorrect"
+                                            ? "wordWrapIncorrect"
+                                            : "";
                                 return (
                                     <span
-                                        className={["wordWrap", selected ? "wordWrapSelected" : "", correctnessClass]
+                                        className={[
+                                            "wordWrap",
+                                            selected ? "wordWrapSelected" : "",
+                                            correctnessClass,
+                                        ]
                                             .filter(Boolean)
                                             .join(" ")}
                                     >
