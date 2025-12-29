@@ -564,7 +564,7 @@ export default function App() {
                                 setAttemptEditor(null);
                             }}
                         >
-                            Correct (+4)
+                            Correct
                         </button>
                         <button
                             type="button"
@@ -574,7 +574,7 @@ export default function App() {
                                 setAttemptEditor(null);
                             }}
                         >
-                            Incorrect ({attempt?.isEnd ? "0" : "-4"})
+                            Incorrect
                         </button>
                     </div>
                 </div>

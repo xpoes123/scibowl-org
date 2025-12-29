@@ -103,7 +103,8 @@ code {
 
 .options {
   margin: 0;
-  padding-left: 22px;
+  padding-left: 0;
+  list-style: none;
 }
 
 .options li {
