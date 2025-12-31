@@ -546,6 +546,23 @@ button.wordLabel {
   white-space: nowrap;
 }
 
+.pairLink {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pairLink:focus-visible {
+  outline: 2px solid #cdd4ff;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 .scoresheetNumberCell {
   text-align: right;
   font-variant-numeric: tabular-nums;

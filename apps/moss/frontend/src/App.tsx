@@ -180,7 +180,6 @@ export default function App() {
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
     const teams = game?.teams ?? [];
-    const activeSelection = attemptEditor ? attemptEditor.selection : null;
 
     const playersById = useMemo(() => {
         const entries: Array<[string, string]> = [];
@@ -971,7 +970,15 @@ export default function App() {
                                             key={row.pairId}
                                             className={isActivePair ? "scoresheetRowActive" : undefined}
                                         >
-                                            <td className="scoresheetPairCell">{row.pairId}</td>
+                                            <td className="scoresheetPairCell">
+                                                <button
+                                                    type="button"
+                                                    className="pairLink"
+                                                    onClick={() => goToPair(row.pairId)}
+                                                >
+                                                    {row.pairId}
+                                                </button>
+                                            </td>
                                             {row.perTeam.flatMap((teamRow) => {
                                                 const tossupResult = teamRow.tossupAttempt?.result;
                                                 const bonusResult = teamRow.bonusAttempt?.result;
