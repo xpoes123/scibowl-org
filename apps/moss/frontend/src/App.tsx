@@ -8,11 +8,6 @@ const END_TOKEN = "END" as const;
 
 type AttemptResult = "correct" | "incorrect";
 
-const DISPLAY_QUESTION_TYPE: Record<QuestionType, string> = {
-    TOSSUP: "Tossup",
-    BONUS: "Bonus",
-};
-
 const DISPLAY_CATEGORY: Record<string, string> = {
     BIOLOGY: "Biology",
     CHEMISTRY: "Chemistry",
@@ -889,12 +884,7 @@ export default function App() {
                         {bonusQ && (
                             <>
                                 <div className="qaDivider" />
-                                {renderQuestionSection(
-                                    bonusQ,
-                                    "Bonus",
-                                    !bonusEnabled,
-                                    "Answer the tossup correctly to enable"
-                                )}
+                                {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
                             </>
                         )}
                     </div>
