@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(python:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(rmdir:*)",
+      "Bash(git rm:*)"
     ]
   }
 }
