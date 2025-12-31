@@ -65,6 +65,21 @@ type PairRow = {
     bonus?: Question;
 };
 
+type Player = {
+    id: string;
+    name: string;
+};
+
+type Team = {
+    id: string;
+    name: string;
+    players: Player[];
+};
+
+type Game = {
+    teams: Team[];
+};
+
 function formatCorrectAnswer(q: Question): string {
     if (typeof q.correct_answer === "string") return q.correct_answer;
 
@@ -153,6 +168,9 @@ export default function App() {
     const data = packetJson as Packet;
 
     const questions = useMemo(() => data.questions ?? [], [data.questions]);
+    const [game, setGame] = useState<Game | null>(null);
+    const [isNewGameOpen, setIsNewGameOpen] = useState(false);
+    const [draftTeams, setDraftTeams] = useState<Team[]>([]);
     const [idx, setIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
@@ -201,6 +219,103 @@ export default function App() {
         return { rows, runningTotal };
     }, [attempts, pairRows]);
 
+    function openNewGame() {
+        function makeId(prefix: string) {
+            return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+        }
+
+        const initial: Team[] = [
+            {
+                id: makeId("team"),
+                name: "Team 1",
+                players: [
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                ],
+            },
+            {
+                id: makeId("team"),
+                name: "Team 2",
+                players: [
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "" },
+                ],
+            },
+        ];
+        setDraftTeams(initial);
+        setIsNewGameOpen(true);
+    }
+
+    function closeNewGame() {
+        setIsNewGameOpen(false);
+    }
+
+    function updateTeamName(teamId: string, name: string) {
+        setDraftTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, name } : t)));
+    }
+
+    function updatePlayerName(teamId: string, playerId: string, name: string) {
+        setDraftTeams((prev) =>
+            prev.map((t) =>
+                t.id !== teamId ? t : { ...t, players: t.players.map((p) => (p.id === playerId ? { ...p, name } : p)) }
+            )
+        );
+    }
+
+    function addPlayer(teamId: string) {
+        const id = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+        setDraftTeams((prev) =>
+            prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "" }] } : t))
+        );
+    }
+
+    function removePlayer(teamId: string, playerId: string) {
+        setDraftTeams((prev) =>
+            prev.map((t) =>
+                t.id !== teamId ? t : { ...t, players: t.players.filter((p) => p.id !== playerId) }
+            )
+        );
+    }
+
+    function addTeam() {
+        const teamId = `team_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+        const playerId = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+        setDraftTeams((prev) => [...prev, { id: teamId, name: `Team ${prev.length + 1}`, players: [{ id: playerId, name: "" }] }]);
+    }
+
+    function removeTeam(teamId: string) {
+        setDraftTeams((prev) => prev.filter((t) => t.id !== teamId));
+    }
+
+    const canStartNewGame = useMemo(() => {
+        if (draftTeams.length < 1) return false;
+        for (const team of draftTeams) {
+            if (!team.name.trim()) return false;
+            const nonEmptyPlayers = team.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name);
+            if (nonEmptyPlayers.length < 1) return false;
+        }
+        return true;
+    }, [draftTeams]);
+
+    function startNewGame() {
+        if (!canStartNewGame) return;
+        const teams = draftTeams.map((t) => ({
+            ...t,
+            name: t.name.trim(),
+            players: t.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name),
+        }));
+
+        setGame({ teams });
+        setIdx(0);
+        setAttempts({});
+        setAttemptEditor(null);
+        setIsNewGameOpen(false);
+    }
+
     function prev() {
         setAttemptEditor(null);
         setIdx((v) => Math.max(0, v - 1));
@@ -248,6 +363,124 @@ export default function App() {
         window.addEventListener("mousedown", onMouseDown, true);
         return () => window.removeEventListener("mousedown", onMouseDown, true);
     }, [attemptEditor]);
+
+    if (!game) {
+        return (
+            <div className="page">
+                <div className="card homeCard">
+                    <h1 className="title">MoSS</h1>
+                    <p className="muted">Moderator Scoring System</p>
+
+                    <div className="homeActions">
+                        <button className="homePrimary" onClick={openNewGame}>
+                            New Game
+                        </button>
+                        <button className="secondary" onClick={() => { }} disabled>
+                            Load...
+                        </button>
+                    </div>
+                </div>
+
+                {isNewGameOpen && (
+                    <div className="modalOverlay" role="dialog" aria-label="New Game" onClick={closeNewGame}>
+                        <div className="modal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle">New Game</h2>
+                            </div>
+
+                            <div className="modalBody">
+                                <div className="teamGrid">
+                                    {draftTeams.map((team, teamIndex) => (
+                                        <div key={team.id} className="teamCol">
+                                            <div className="fieldGroup">
+                                                <div className="fieldLabelRow">
+                                                    <div className="fieldLabel">
+                                                        {teamIndex === 0 ? "First team" : `Team ${teamIndex + 1}`}{" "}
+                                                        <span className="required">*</span>
+                                                    </div>
+                                                    {draftTeams.length > 1 && (
+                                                        <button
+                                                            type="button"
+                                                            className="iconButton"
+                                                            aria-label="Remove team"
+                                                            onClick={() => removeTeam(team.id)}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                <input
+                                                    className="textInput"
+                                                    value={team.name}
+                                                    onChange={(e) => updateTeamName(team.id, e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="fieldGroup">
+                                                <div className="fieldLabel">Names</div>
+                                                <div className="playerList">
+                                                    {team.players.map((player, playerIndex) => (
+                                                        <div key={player.id} className="playerRow">
+                                                            <input
+                                                                className="textInput"
+                                                                value={player.name}
+                                                                onChange={(e) =>
+                                                                    updatePlayerName(team.id, player.id, e.target.value)
+                                                                }
+                                                                placeholder={`Player ${playerIndex + 1}`}
+                                                            />
+                                                            {team.players.length > 1 && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="iconButton danger"
+                                                                    aria-label="Remove player"
+                                                                    onClick={() => removePlayer(team.id, player.id)}
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <button type="button" className="addRowButton" onClick={() => addPlayer(team.id)}>
+                                                    <span className="addIcon">+</span> Add player
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <div className="addTeamCol">
+                                        <button type="button" className="addTeamButton" onClick={addTeam}>
+                                            <span className="addIcon">+</span> Add team
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="modalFooter">
+                                    <div className="packetRow">
+                                        <div className="fieldLabel">
+                                            Packet <span className="required">*</span>
+                                        </div>
+                                        <button type="button" className="secondary" onClick={() => { }} disabled>
+                                            Load...
+                                        </button>
+                                        <div className="spacer" />
+                                        <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
+                                            Start
+                                        </button>
+                                        <button type="button" className="secondary" onClick={closeNewGame}>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     if (!q) {
         return (
@@ -344,22 +577,22 @@ export default function App() {
                                             : String(optionIndex + 1);
                                     return (
                                         <li key={optionIndex} className="readText">
-                                        {(() => {
-                                            const selected =
-                                                activeSelection?.location.kind === "option" &&
-                                                activeSelection.location.optionIndex === optionIndex &&
-                                                activeSelection.location.wordIndex === -1;
-                                            const marked =
-                                                attempt?.location.kind === "option" &&
-                                                attempt.location.optionIndex === optionIndex &&
-                                                attempt.location.wordIndex === -1 &&
-                                                attempt.result;
-                                            const correctnessClass =
-                                                marked === "correct"
-                                                    ? "wordWrapCorrect"
-                                                    : marked === "incorrect"
-                                                        ? "wordWrapIncorrect"
-                                                        : "";
+                                            {(() => {
+                                                const selected =
+                                                    activeSelection?.location.kind === "option" &&
+                                                    activeSelection.location.optionIndex === optionIndex &&
+                                                    activeSelection.location.wordIndex === -1;
+                                                const marked =
+                                                    attempt?.location.kind === "option" &&
+                                                    attempt.location.optionIndex === optionIndex &&
+                                                    attempt.location.wordIndex === -1 &&
+                                                    attempt.result;
+                                                const correctnessClass =
+                                                    marked === "correct"
+                                                        ? "wordWrapCorrect"
+                                                        : marked === "incorrect"
+                                                            ? "wordWrapIncorrect"
+                                                            : "";
 
                                                 return (
                                                     <span
