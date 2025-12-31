@@ -169,23 +169,18 @@ export default function App() {
     const data = packetJson as Packet;
 
     const questions = useMemo(() => data.questions ?? [], [data.questions]);
+    const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
     const [game, setGame] = useState<Game | null>(null);
     const [isNewGameOpen, setIsNewGameOpen] = useState(false);
     const [draftTeams, setDraftTeams] = useState<Team[]>([]);
-    const [idx, setIdx] = useState(0);
+    const [pairIdx, setPairIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
-    const q = questions[idx];
-    const questionWords = useMemo(
-        () => (q ? getQuestionTokens(q.question_text) : []),
-        [q?.question_text]
-    );
-    const questionAttempts = q ? attempts[q.id] ?? [] : [];
-    const activeSelection = attemptEditor?.questionId === q?.id ? attemptEditor.selection : null;
     const teams = game?.teams ?? [];
+    const activeSelection = attemptEditor ? attemptEditor.selection : null;
 
     const playersById = useMemo(() => {
         const entries: Array<[string, string]> = [];
@@ -222,6 +217,15 @@ export default function App() {
         }
         return map;
     }, [pairRows]);
+
+    const currentPair = pairRows[pairIdx];
+    const tossupQ = currentPair?.tossup;
+    const bonusQ = currentPair?.bonus;
+    const q = tossupQ ?? bonusQ;
+    const bonusEnabled = useMemo(() => {
+        if (!tossupQ || !bonusQ) return false;
+        return (attempts[tossupQ.id] ?? []).some((a) => a.result === "correct");
+    }, [attempts, bonusQ, tossupQ]);
 
     const scoredPairs = useMemo(() => {
         const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
@@ -346,7 +350,7 @@ export default function App() {
         }));
 
         setGame({ teams });
-        setIdx(0);
+        setPairIdx(0);
         setAttempts({});
         setAttemptEditor(null);
         setLastActor(null);
@@ -355,12 +359,20 @@ export default function App() {
 
     function prev() {
         setAttemptEditor(null);
-        setIdx((v) => Math.max(0, v - 1));
+        setPairIdx((v) => Math.max(0, v - 1));
     }
 
     function next() {
         setAttemptEditor(null);
-        setIdx((v) => Math.min(questions.length - 1, v + 1));
+        setPairIdx((v) => Math.min(pairRows.length - 1, v + 1));
+    }
+
+    function goToPair(pairId: number) {
+        const i = pairRows.findIndex((p) => p.pairId === pairId);
+        if (i < 0) return;
+        setAttemptEditor(null);
+        setPairIdx(i);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function setAttemptSelection(
@@ -497,9 +509,220 @@ export default function App() {
         return `${who}${resultLabel} ${pointsLabel} @ ${attemptValue.token}`;
     }
 
-    function markedResultForLocation(location: AttemptLocation): AttemptResult | undefined {
-        const found = questionAttempts.find((a) => isSameLocation(a.location, location));
+    function markedResultForQuestionLocation(questionId: number, location: AttemptLocation): AttemptResult | undefined {
+        const list = attempts[questionId] ?? [];
+        const found = list.find((a) => isSameLocation(a.location, location));
         return found?.result;
+    }
+
+    function renderQuestionSection(question: Question, title: string, disabled: boolean, disabledHint?: string) {
+        const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
+        const words = getQuestionTokens(question.question_text);
+        const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
+
+        return (
+            <div className={sectionClasses} aria-label={title} aria-disabled={disabled}>
+                <div className="qaHeader">
+                    <div className="qaTitle">{title}</div>
+                    {disabled && disabledHint && <div className="qaHint muted">{disabledHint}</div>}
+                    <div className="qaMeta">
+                        <span className="pill">{DISPLAY_CATEGORY[question.category] ?? question.category}</span>
+                        <span className="pill">{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</span>
+                    </div>
+                </div>
+
+                <div className="questionText readText">
+                    {words.map((word, wordIndex) => {
+                        const location: AttemptLocation = { kind: "question", wordIndex };
+                        const selected = selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
+                        const marked = markedResultForQuestionLocation(question.id, location);
+                        const correctnessClass =
+                            marked === "correct"
+                                ? "wordWrapCorrect"
+                                : marked === "incorrect"
+                                    ? "wordWrapIncorrect"
+                                    : "";
+
+                        return (
+                            <span key={wordIndex}>
+                                <span
+                                    className={[
+                                        "wordWrap",
+                                        selected ? "wordWrapSelected" : "",
+                                        correctnessClass,
+                                    ]
+                                        .filter(Boolean)
+                                        .join(" ")}
+                                >
+                                    <button
+                                        type="button"
+                                        className="word"
+                                        disabled={disabled}
+                                        onClick={(e) =>
+                                            setAttemptSelection(
+                                                question,
+                                                { token: word, isEnd: false, location },
+                                                e.currentTarget
+                                            )
+                                        }
+                                    >
+                                        {word}
+                                    </button>
+                                </span>
+                                {wordIndex < words.length - 1 ? " " : null}
+                            </span>
+                        );
+                    })}
+                </div>
+
+                {question.options?.length > 0 && (
+                    <ol className="options">
+                        {question.options.map((opt, optionIndex) => {
+                            const optionWords = getQuestionTokens(opt);
+                            const label =
+                                question.question_style === "MULTIPLE_CHOICE"
+                                    ? ["W", "X", "Y", "Z"][optionIndex] ?? String(optionIndex + 1)
+                                    : String(optionIndex + 1);
+
+                            const labelLocation: AttemptLocation = { kind: "option", optionIndex, wordIndex: -1 };
+                            const labelSelected =
+                                selection?.location.kind === "option" &&
+                                selection.location.optionIndex === optionIndex &&
+                                selection.location.wordIndex === -1;
+                            const labelMarked = markedResultForQuestionLocation(question.id, labelLocation);
+                            const labelCorrectnessClass =
+                                labelMarked === "correct"
+                                    ? "wordWrapCorrect"
+                                    : labelMarked === "incorrect"
+                                        ? "wordWrapIncorrect"
+                                        : "";
+
+                            return (
+                                <li key={optionIndex} className="readText">
+                                    <span
+                                        className={[
+                                            "wordWrap",
+                                            "wordWrapLabel",
+                                            labelSelected ? "wordWrapSelected" : "",
+                                            labelCorrectnessClass,
+                                        ]
+                                            .filter(Boolean)
+                                            .join(" ")}
+                                    >
+                                        <button
+                                            type="button"
+                                            className={["word", "wordLabel"].join(" ")}
+                                            disabled={disabled}
+                                            onClick={(e) =>
+                                                setAttemptSelection(
+                                                    question,
+                                                    { token: label, isEnd: false, location: labelLocation },
+                                                    e.currentTarget
+                                                )
+                                            }
+                                        >
+                                            {label})
+                                        </button>
+                                    </span>
+                                    {optionWords.length > 0 ? " " : null}
+
+                                    {optionWords.map((word, wordIndex) => {
+                                        const location: AttemptLocation = { kind: "option", optionIndex, wordIndex };
+                                        const selected =
+                                            selection?.location.kind === "option" &&
+                                            selection.location.optionIndex === optionIndex &&
+                                            selection.location.wordIndex === wordIndex;
+                                        const marked = markedResultForQuestionLocation(question.id, location);
+                                        const correctnessClass =
+                                            marked === "correct"
+                                                ? "wordWrapCorrect"
+                                                : marked === "incorrect"
+                                                    ? "wordWrapIncorrect"
+                                                    : "";
+
+                                        return (
+                                            <span key={wordIndex}>
+                                                <span
+                                                    className={[
+                                                        "wordWrap",
+                                                        selected ? "wordWrapSelected" : "",
+                                                        correctnessClass,
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(" ")}
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        className="word"
+                                                        disabled={disabled}
+                                                        onClick={(e) =>
+                                                            setAttemptSelection(
+                                                                question,
+                                                                { token: word, isEnd: false, location },
+                                                                e.currentTarget
+                                                            )
+                                                        }
+                                                    >
+                                                        {word}
+                                                    </button>
+                                                </span>
+                                                {wordIndex < optionWords.length - 1 ? " " : null}
+                                            </span>
+                                        );
+                                    })}
+                                </li>
+                            );
+                        })}
+                    </ol>
+                )}
+
+                <div className="endRow" aria-label={`${title} end token`}>
+                    {(() => {
+                        const location: AttemptLocation = { kind: "end" };
+                        const selected = selection?.location.kind === "end";
+                        const marked = markedResultForQuestionLocation(question.id, location);
+                        const correctnessClass =
+                            marked === "correct"
+                                ? "wordWrapCorrect"
+                                : marked === "incorrect"
+                                    ? "wordWrapIncorrect"
+                                    : "";
+
+                        return (
+                            <span
+                                className={[
+                                    "wordWrap",
+                                    selected ? "wordWrapSelected" : "",
+                                    correctnessClass,
+                                ]
+                                    .filter(Boolean)
+                                    .join(" ")}
+                            >
+                                <button
+                                    type="button"
+                                    className={["word", "wordEnd"].join(" ")}
+                                    disabled={disabled}
+                                    onClick={(e) =>
+                                        setAttemptSelection(
+                                            question,
+                                            { token: END_TOKEN, isEnd: true, location },
+                                            e.currentTarget
+                                        )
+                                    }
+                                >
+                                    {END_TOKEN}
+                                </button>
+                            </span>
+                        );
+                    })()}
+                </div>
+
+                <div className="answer answerInline">
+                    <div className="answerTitle">Correct answer</div>
+                    <div className="answerBody">{formatCorrectAnswer(question)}</div>
+                </div>
+            </div>
+        );
     }
 
     useEffect(() => {
@@ -673,226 +896,30 @@ export default function App() {
                     </div>
 
                     <div className="questionBlock">
-                        <div className="questionText readText" aria-label="Question text (click a word to mark)">
-                            {questionWords.map((word, wordIndex) => {
-                                const selected =
-                                    activeSelection?.location.kind === "question" &&
-                                    activeSelection.location.wordIndex === wordIndex;
-                                const marked = markedResultForLocation({ kind: "question", wordIndex });
-                                const correctnessClass =
-                                    marked === "correct"
-                                        ? "wordWrapCorrect"
-                                        : marked === "incorrect"
-                                            ? "wordWrapIncorrect"
-                                            : "";
-                                return (
-                                    <span key={wordIndex}>
-                                        <span
-                                            className={[
-                                                "wordWrap",
-                                                selected ? "wordWrapSelected" : "",
-                                                correctnessClass,
-                                            ]
-                                                .filter(Boolean)
-                                                .join(" ")}
-                                        >
-                                            <button
-                                                type="button"
-                                                className="word"
-                                                onClick={(e) =>
-                                                    setAttemptSelection(
-                                                        q,
-                                                        {
-                                                            token: word,
-                                                            isEnd: false,
-                                                            location: { kind: "question", wordIndex },
-                                                        },
-                                                        e.currentTarget
-                                                    )
-                                                }
-                                            >
-                                                {word}
-                                            </button>
-                                        </span>
-                                        {wordIndex < questionWords.length - 1 ? " " : null}
-                                    </span>
-                                );
-                            })}
-                        </div>
-
-                        {q.options?.length > 0 && (
-                            <ol className="options">
-                                {q.options.map((opt, optionIndex) => {
-                                    const words = getQuestionTokens(opt);
-                                    const label =
-                                        q.question_style === "MULTIPLE_CHOICE"
-                                            ? ["W", "X", "Y", "Z"][optionIndex] ?? String(optionIndex + 1)
-                                            : String(optionIndex + 1);
-                                    return (
-                                        <li key={optionIndex} className="readText">
-                                            {(() => {
-                                                const selected =
-                                                    activeSelection?.location.kind === "option" &&
-                                                    activeSelection.location.optionIndex === optionIndex &&
-                                                    activeSelection.location.wordIndex === -1;
-                                                const marked = markedResultForLocation({
-                                                    kind: "option",
-                                                    optionIndex,
-                                                    wordIndex: -1,
-                                                });
-                                                const correctnessClass =
-                                                    marked === "correct"
-                                                        ? "wordWrapCorrect"
-                                                        : marked === "incorrect"
-                                                            ? "wordWrapIncorrect"
-                                                            : "";
-
-                                                return (
-                                                    <span
-                                                        className={[
-                                                            "wordWrap",
-                                                            "wordWrapLabel",
-                                                            selected ? "wordWrapSelected" : "",
-                                                            correctnessClass,
-                                                        ]
-                                                            .filter(Boolean)
-                                                            .join(" ")}
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            className={["word", "wordLabel"].join(" ")}
-                                                            onClick={(e) =>
-                                                                setAttemptSelection(
-                                                                    q,
-                                                                    {
-                                                                        token: label,
-                                                                        isEnd: false,
-                                                                        location: {
-                                                                            kind: "option",
-                                                                            optionIndex,
-                                                                            wordIndex: -1,
-                                                                        },
-                                                                    },
-                                                                    e.currentTarget
-                                                                )
-                                                            }
-                                                        >
-                                                            {label})
-                                                        </button>
-                                                    </span>
-                                                );
-                                            })()}
-                                            {words.length > 0 ? " " : null}
-                                            {words.map((word, wordIndex) => {
-                                                const selected =
-                                                    activeSelection?.location.kind === "option" &&
-                                                    activeSelection.location.optionIndex === optionIndex &&
-                                                    activeSelection.location.wordIndex === wordIndex;
-                                                const marked = markedResultForLocation({
-                                                    kind: "option",
-                                                    optionIndex,
-                                                    wordIndex,
-                                                });
-                                                const correctnessClass =
-                                                    marked === "correct"
-                                                        ? "wordWrapCorrect"
-                                                        : marked === "incorrect"
-                                                            ? "wordWrapIncorrect"
-                                                            : "";
-
-                                                return (
-                                                    <span key={wordIndex}>
-                                                        <span
-                                                            className={[
-                                                                "wordWrap",
-                                                                selected ? "wordWrapSelected" : "",
-                                                                correctnessClass,
-                                                            ]
-                                                                .filter(Boolean)
-                                                                .join(" ")}
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                className="word"
-                                                                onClick={(e) =>
-                                                                    setAttemptSelection(
-                                                                        q,
-                                                                        {
-                                                                            token: word,
-                                                                            isEnd: false,
-                                                                            location: {
-                                                                                kind: "option",
-                                                                                optionIndex,
-                                                                                wordIndex,
-                                                                            },
-                                                                        },
-                                                                        e.currentTarget
-                                                                    )
-                                                                }
-                                                            >
-                                                                {word}
-                                                            </button>
-                                                        </span>
-                                                        {wordIndex < words.length - 1 ? " " : null}
-                                                    </span>
-                                                );
-                                            })}
-                                        </li>
-                                    );
-                                })}
-                            </ol>
+                        {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
+                        {bonusQ && (
+                            <>
+                                <div className="qaDivider" />
+                                {renderQuestionSection(
+                                    bonusQ,
+                                    "Bonus",
+                                    !bonusEnabled,
+                                    "Answer the tossup correctly to enable"
+                                )}
+                            </>
                         )}
-
-                        <div className="endRow" aria-label="End of question token">
-                            {(() => {
-                                const selected = activeSelection?.location.kind === "end";
-                                const marked = markedResultForLocation({ kind: "end" });
-                                const correctnessClass =
-                                    marked === "correct"
-                                        ? "wordWrapCorrect"
-                                        : marked === "incorrect"
-                                            ? "wordWrapIncorrect"
-                                            : "";
-                                return (
-                                    <span
-                                        className={[
-                                            "wordWrap",
-                                            selected ? "wordWrapSelected" : "",
-                                            correctnessClass,
-                                        ]
-                                            .filter(Boolean)
-                                            .join(" ")}
-                                    >
-                                        <button
-                                            type="button"
-                                            className={["word", "wordEnd"].join(" ")}
-                                            onClick={(e) =>
-                                                setAttemptSelection(
-                                                    q,
-                                                    { token: END_TOKEN, isEnd: true, location: { kind: "end" } },
-                                                    e.currentTarget
-                                                )
-                                            }
-                                        >
-                                            {END_TOKEN}
-                                        </button>
-                                    </span>
-                                );
-                            })()}
-                        </div>
-                    </div>
-
-                    <div className="answer">
-                        <div className="answerTitle">Correct answer</div>
-                        <div className="answerBody">{formatCorrectAnswer(q)}</div>
                     </div>
 
                     <div className="controls">
-                        <button onClick={prev} disabled={idx === 0} aria-label="Previous question">
+                        <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
                             {"\u2190"}
                         </button>
 
-                        <button onClick={next} disabled={idx === questions.length - 1} aria-label="Next question">
+                        <button
+                            onClick={next}
+                            disabled={pairIdx === pairRows.length - 1}
+                            aria-label="Next pair"
+                        >
                             {"\u2192"}
                         </button>
                     </div>
@@ -990,7 +1017,13 @@ export default function App() {
                 </div>
             </div>
 
-            {attemptEditor && attemptEditor.questionId === q.id && (
+            {(() => {
+                const popupQuestion = attemptEditor ? questionsById.get(attemptEditor.questionId) : undefined;
+                if (!attemptEditor || !popupQuestion) return null;
+
+                const editingAttempts = attempts[popupQuestion.id] ?? [];
+
+                return (
                 <div
                     ref={attemptPopupRef}
                     className="attemptPopup"
@@ -998,10 +1031,10 @@ export default function App() {
                     aria-label="Mark attempt"
                     style={{ left: attemptEditor.left, top: attemptEditor.top }}
                 >
-                    {q.question_type !== "BONUS" && (() => {
-                        const attemptedTeamIds = new Set(questionAttempts.map((a) => a.teamId));
+                    {popupQuestion.question_type !== "BONUS" && (() => {
+                        const attemptedTeamIds = new Set(editingAttempts.map((a) => a.teamId));
                         const attemptedPlayerIds = new Set(
-                            questionAttempts.flatMap((a) => (a.playerId ? [a.playerId] : []))
+                            editingAttempts.flatMap((a) => (a.playerId ? [a.playerId] : []))
                         );
 
                         return (
@@ -1066,25 +1099,26 @@ export default function App() {
                         <button
                             type="button"
                             onClick={() => {
-                                setAttemptResult(q.id, "correct");
+                                setAttemptResult(popupQuestion.id, "correct");
                                 setAttemptEditor(null);
                             }}
                         >
-                            {q.question_type === "BONUS" ? "Correct (+10)" : "Correct"}
+                            {popupQuestion.question_type === "BONUS" ? "Correct (+10)" : "Correct"}
                         </button>
                         <button
                             type="button"
                             className="secondary"
                             onClick={() => {
-                                setAttemptResult(q.id, "incorrect");
+                                setAttemptResult(popupQuestion.id, "incorrect");
                                 setAttemptEditor(null);
                             }}
                         >
-                            {q.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
+                            {popupQuestion.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
                         </button>
                     </div>
                 </div>
-            )}
+                );
+            })()}
         </div>
     );
 }

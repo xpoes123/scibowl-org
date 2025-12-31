@@ -273,6 +273,48 @@ button.addTeamButton {
   border-top: 1px solid #eee;
 }
 
+.qaSection {
+  padding: 14px 14px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+}
+
+.qaSection + .qaSection {
+  margin-top: 14px;
+}
+
+.qaSectionDisabled {
+  opacity: 0.55;
+}
+
+.qaHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.qaTitle {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.qaHint {
+  margin-top: -4px;
+}
+
+.qaMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.qaDivider {
+  height: 12px;
+}
+
 .questionText {
   font-size: 18px;
   margin-bottom: 12px;
@@ -443,6 +485,10 @@ button.wordLabel {
   border-radius: 12px;
   background: #f7fff5;
   border: 1px solid #d8f0d2;
+}
+
+.answerInline {
+  margin-top: 12px;
 }
 
 .answerTitle {
