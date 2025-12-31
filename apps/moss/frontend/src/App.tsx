@@ -517,8 +517,8 @@ export default function App() {
             <div className={sectionClasses} aria-label={title} aria-disabled={disabled}>
                 <div className="qaHeader">
                     <div className="qaTitle">{title}</div>
-                    {disabled && disabledHint && <div className="qaHint muted">{disabledHint}</div>}
                     <div className="qaMeta">
+                        <span className="pill">{question.pair_id}</span>
                         <span className="pill">{DISPLAY_CATEGORY[question.category] ?? question.category}</span>
                         <span className="pill">{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</span>
                     </div>
