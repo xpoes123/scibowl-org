@@ -502,10 +502,9 @@ export default function App() {
         if (!attemptValue?.result) return "";
         const points = pointsForAttempt(attemptValue, questionType);
         const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
-        const resultLabel = attemptValue.result === "correct" ? "C" : "I";
         const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
-        const who = player ? `${player}: ` : "";
-        return `${who}${resultLabel} ${pointsLabel} @ ${attemptValue.token}`;
+        const who = player ? ` (${player})` : "";
+        return `${pointsLabel} @ ${attemptValue.token}${who}`;
     }
 
     function markedResultForQuestionLocation(questionId: number, location: AttemptLocation): AttemptResult | undefined {
@@ -514,7 +513,7 @@ export default function App() {
         return found?.result;
     }
 
-    function renderQuestionSection(question: Question, title: string, disabled: boolean, disabledHint?: string) {
+    function renderQuestionSection(question: Question, title: string, disabled: boolean) {
         const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
         const words = getQuestionTokens(question.question_text);
         const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
