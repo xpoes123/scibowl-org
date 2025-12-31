@@ -39,6 +39,8 @@ type Attempt = {
     isEnd: boolean;
     result?: AttemptResult;
     location: AttemptLocation;
+    teamId: string;
+    playerId: string;
 };
 
 type Packet = {
@@ -105,16 +107,6 @@ function pointsForAttempt(attempt: Attempt | undefined): number | undefined {
     return attempt.isEnd ? 0 : -4;
 }
 
-function formatAttempt(attempt: Attempt | undefined): string {
-    if (!attempt) return "";
-    if (!attempt.result) return `Pending @ ${attempt.token}`;
-
-    const points = pointsForAttempt(attempt);
-    const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
-    const resultLabel = attempt.result === "correct" ? "C" : "I";
-    return `${resultLabel} (${pointsLabel}) @ ${attempt.token}`;
-}
-
 type AnchorRect = { left: number; top: number; right: number; bottom: number; width: number; height: number };
 
 type AttemptEditor = {
@@ -174,6 +166,7 @@ export default function App() {
     const [idx, setIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
+    const [lastActor, setLastActor] = useState<{ teamId: string; playerId: string } | null>(null);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
     const q = questions[idx];
@@ -183,6 +176,15 @@ export default function App() {
     );
     const attempt = q ? attempts[q.id] : undefined;
     const activeSelection = attemptEditor?.questionId === q?.id ? attemptEditor.selection : attempt;
+    const teams = game?.teams ?? [];
+
+    const playersById = useMemo(() => {
+        const entries: Array<[string, string]> = [];
+        for (const team of teams) {
+            for (const player of team.players) entries.push([player.id, player.name]);
+        }
+        return new Map(entries);
+    }, [teams]);
 
     const pairRows = useMemo<PairRow[]>(() => {
         const byPair = new Map<number, PairRow>();
@@ -197,27 +199,36 @@ export default function App() {
     }, [questions]);
 
     const scoredPairs = useMemo(() => {
-        let runningTotal = 0;
+        const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
+
         const rows = pairRows.map((pair) => {
-            const tossupAttempt = pair.tossup ? attempts[pair.tossup.id] : undefined;
-            const bonusAttempt = pair.bonus ? attempts[pair.bonus.id] : undefined;
+            const tossupAttemptAll = pair.tossup ? attempts[pair.tossup.id] : undefined;
+            const bonusAttemptAll = pair.bonus ? attempts[pair.bonus.id] : undefined;
 
-            const tossupPoints = pointsForAttempt(tossupAttempt) ?? 0;
-            const bonusPoints = pointsForAttempt(bonusAttempt) ?? 0;
-            const pairTotal = tossupPoints + bonusPoints;
-            runningTotal += pairTotal;
+            const perTeam = teams.map((team) => {
+                const tossupAttempt =
+                    tossupAttemptAll && tossupAttemptAll.teamId === team.id ? tossupAttemptAll : undefined;
+                const bonusAttempt = bonusAttemptAll && bonusAttemptAll.teamId === team.id ? bonusAttemptAll : undefined;
 
-            return {
-                ...pair,
-                tossupAttempt,
-                bonusAttempt,
-                pairTotal,
-                runningTotal,
-            };
+                const tossupPoints = pointsForAttempt(tossupAttempt) ?? 0;
+                const bonusPoints = pointsForAttempt(bonusAttempt) ?? 0;
+                const pairPoints = tossupPoints + bonusPoints;
+                runningByTeam[team.id] += pairPoints;
+
+                return {
+                    teamId: team.id,
+                    tossupAttempt,
+                    bonusAttempt,
+                    runningTotal: runningByTeam[team.id],
+                };
+            });
+
+            return { ...pair, perTeam };
         });
 
-        return { rows, runningTotal };
-    }, [attempts, pairRows]);
+        const totals = teams.map((t) => ({ teamId: t.id, total: runningByTeam[t.id] ?? 0 }));
+        return { rows, totals };
+    }, [attempts, pairRows, teams]);
 
     function openNewGame() {
         function makeId(prefix: string) {
@@ -313,6 +324,7 @@ export default function App() {
         setIdx(0);
         setAttempts({});
         setAttemptEditor(null);
+        setLastActor(null);
         setIsNewGameOpen(false);
     }
 
@@ -326,17 +338,40 @@ export default function App() {
         setIdx((v) => Math.min(questions.length - 1, v + 1));
     }
 
-    function setAttemptSelection(question: Question, selection: Omit<Attempt, "result">, anchorEl: HTMLElement) {
+    function setAttemptSelection(
+        question: Question,
+        selection: Pick<Attempt, "token" | "isEnd" | "location">,
+        anchorEl: HTMLElement
+    ) {
+        if (!game) return;
         const anchor = getAnchorRect(anchorEl);
         const position = computePopupPosition(anchor);
 
-        setAttemptEditor({ questionId: question.id, left: position.left, top: position.top, selection });
+        const firstTeam = game.teams[0];
+        const fallbackPlayer = firstTeam?.players[0];
+        const fallback = firstTeam && fallbackPlayer ? { teamId: firstTeam.id, playerId: fallbackPlayer.id } : null;
+
+        const preferred =
+            lastActor &&
+            game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId))
+                ? lastActor
+                : fallback;
+
+        if (!preferred) return;
+
+        setAttemptEditor({
+            questionId: question.id,
+            left: position.left,
+            top: position.top,
+            selection: { ...selection, ...preferred },
+        });
     }
 
     function setAttemptResult(questionId: number, result: AttemptResult) {
         const selection = attemptEditor?.questionId === questionId ? attemptEditor.selection : undefined;
         if (!selection) return;
         setAttempts((prevState) => ({ ...prevState, [questionId]: { ...selection, result } }));
+        setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
     }
 
     useEffect(() => {
@@ -349,6 +384,16 @@ export default function App() {
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [attemptEditor]);
+
+    function attemptCellText(attemptValue: Attempt | undefined): string {
+        if (!attemptValue?.result) return "";
+        const points = pointsForAttempt(attemptValue);
+        const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
+        const resultLabel = attemptValue.result === "correct" ? "C" : "I";
+        const player = playersById.get(attemptValue.playerId);
+        const who = player ? `${player}: ` : "";
+        return `${who}${resultLabel} ${pointsLabel} @ ${attemptValue.token}`;
+    }
 
     useEffect(() => {
         if (!attemptEditor) return;
@@ -749,7 +794,17 @@ export default function App() {
                     <div className="header">
                         <div>
                             <h2 className="title">Scoresheet</h2>
-                            <p className="muted">Running total: {scoredPairs.runningTotal}</p>
+                            <p className="muted">
+                                {scoredPairs.totals.map((t, i) => {
+                                    const teamName = teams.find((x) => x.id === t.teamId)?.name ?? "Team";
+                                    return (
+                                        <span key={t.teamId}>
+                                            {teamName}: {t.total}
+                                            {i < scoredPairs.totals.length - 1 ? " · " : ""}
+                                        </span>
+                                    );
+                                })}
+                            </p>
                         </div>
                     </div>
 
@@ -757,42 +812,24 @@ export default function App() {
                         <table className="scoresheetTable">
                             <thead>
                                 <tr>
-                                    <th>Pair</th>
-                                    <th>Tossup</th>
-                                    <th>Bonus</th>
-                                    <th>Pair total</th>
-                                    <th>Running</th>
+                                    <th rowSpan={2}>Pair</th>
+                                    {teams.map((team) => (
+                                        <th key={team.id} colSpan={3} className="scoresheetTeamHeader">
+                                            {team.name}
+                                        </th>
+                                    ))}
+                                </tr>
+                                <tr>
+                                    {teams.flatMap((team) => [
+                                        <th key={`${team.id}_t`}>T</th>,
+                                        <th key={`${team.id}_b`}>B</th>,
+                                        <th key={`${team.id}_r`}>Total</th>,
+                                    ])}
                                 </tr>
                             </thead>
                             <tbody>
                                 {scoredPairs.rows.map((row) => {
                                     const isActivePair = row.pairId === q.pair_id;
-                                    const tossupActive = row.tossup?.id === q.id;
-                                    const bonusActive = row.bonus?.id === q.id;
-                                    const tossupResult = row.tossupAttempt?.result;
-                                    const bonusResult = row.bonusAttempt?.result;
-
-                                    const tossupCellClass = [
-                                        tossupActive ? "scoresheetCellActive" : "",
-                                        tossupResult === "correct"
-                                            ? "scoresheetCellCorrect"
-                                            : tossupResult === "incorrect"
-                                                ? "scoresheetCellIncorrect"
-                                                : "",
-                                    ]
-                                        .filter(Boolean)
-                                        .join(" ");
-
-                                    const bonusCellClass = [
-                                        bonusActive ? "scoresheetCellActive" : "",
-                                        bonusResult === "correct"
-                                            ? "scoresheetCellCorrect"
-                                            : bonusResult === "incorrect"
-                                                ? "scoresheetCellIncorrect"
-                                                : "",
-                                    ]
-                                        .filter(Boolean)
-                                        .join(" ");
 
                                     return (
                                         <tr
@@ -800,14 +837,42 @@ export default function App() {
                                             className={isActivePair ? "scoresheetRowActive" : undefined}
                                         >
                                             <td className="scoresheetPairCell">{row.pairId}</td>
-                                            <td className={tossupCellClass || undefined}>
-                                                {formatAttempt(row.tossupAttempt)}
-                                            </td>
-                                            <td className={bonusCellClass || undefined}>
-                                                {formatAttempt(row.bonusAttempt)}
-                                            </td>
-                                            <td className="scoresheetNumberCell">{row.pairTotal}</td>
-                                            <td className="scoresheetNumberCell">{row.runningTotal}</td>
+                                            {row.perTeam.flatMap((teamRow) => {
+                                                const tossupResult = teamRow.tossupAttempt?.result;
+                                                const bonusResult = teamRow.bonusAttempt?.result;
+
+                                                const tossupCellClass = [
+                                                    tossupResult === "correct"
+                                                        ? "scoresheetCellCorrect"
+                                                        : tossupResult === "incorrect"
+                                                            ? "scoresheetCellIncorrect"
+                                                            : "",
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(" ");
+
+                                                const bonusCellClass = [
+                                                    bonusResult === "correct"
+                                                        ? "scoresheetCellCorrect"
+                                                        : bonusResult === "incorrect"
+                                                            ? "scoresheetCellIncorrect"
+                                                            : "",
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(" ");
+
+                                                return [
+                                                    <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                                                        {attemptCellText(teamRow.tossupAttempt)}
+                                                    </td>,
+                                                    <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                                                        {attemptCellText(teamRow.bonusAttempt)}
+                                                    </td>,
+                                                    <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                                                        {teamRow.runningTotal}
+                                                    </td>,
+                                                ];
+                                            })}
                                         </tr>
                                     );
                                 })}
@@ -825,6 +890,46 @@ export default function App() {
                     aria-label="Mark attempt"
                     style={{ left: attemptEditor.left, top: attemptEditor.top }}
                 >
+                    <div className="attemptPopupSelectors">
+                        <select
+                            className="selectInput"
+                            value={attemptEditor.selection.teamId}
+                            onChange={(e) => {
+                                const teamId = e.target.value;
+                                const team = teams.find((t) => t.id === teamId);
+                                const playerId = team?.players[0]?.id ?? attemptEditor.selection.playerId;
+                                setAttemptEditor((prev) =>
+                                    prev
+                                        ? { ...prev, selection: { ...prev.selection, teamId, playerId } }
+                                        : prev
+                                );
+                            }}
+                        >
+                            {teams.map((t) => (
+                                <option key={t.id} value={t.id}>
+                                    {t.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <select
+                            className="selectInput"
+                            value={attemptEditor.selection.playerId}
+                            onChange={(e) => {
+                                const playerId = e.target.value;
+                                setAttemptEditor((prev) =>
+                                    prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
+                                );
+                            }}
+                        >
+                            {(teams.find((t) => t.id === attemptEditor.selection.teamId)?.players ?? []).map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div className="attemptPopupButtons">
                         <button
                             type="button"
