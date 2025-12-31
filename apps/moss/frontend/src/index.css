@@ -49,6 +49,191 @@ code {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
+.homeCard {
+  max-width: 560px;
+  text-align: center;
+  padding: 34px 26px;
+}
+
+.homeActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+button.homePrimary {
+  padding: 12px 16px;
+  font-size: 16px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.35);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 3000;
+}
+
+.modal {
+  width: min(980px, 100%);
+  background: white;
+  border: 1px solid #e6e7ee;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  padding: 18px 20px 10px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 22px;
+}
+
+.modalBody {
+  padding: 18px 20px;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 170px;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.teamCol {
+  padding-right: 18px;
+  border-right: 1px solid #eee;
+}
+
+@media (max-width: 900px) {
+  .teamCol {
+    padding-right: 0;
+    border-right: 0;
+  }
+}
+
+.addTeamCol {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 44px;
+}
+
+.fieldGroup {
+  margin-bottom: 18px;
+}
+
+.fieldLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.fieldLabel {
+  font-weight: 600;
+}
+
+.required {
+  color: #b42318;
+}
+
+.textInput {
+  width: 100%;
+  border: 1px solid #d6d6de;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.playerList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.playerRow {
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  gap: 10px;
+  align-items: center;
+}
+
+button.iconButton {
+  border: 1px solid #e6e7ee;
+  background: white;
+  color: #111;
+  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  line-height: 1;
+}
+
+button.iconButton.danger {
+  color: #b42318;
+  border-color: #f1c6c6;
+}
+
+button.addRowButton,
+button.addTeamButton {
+  border: 0;
+  background: transparent;
+  color: #b46a3c;
+  padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.addIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #f6f7fb;
+  border: 1px solid #eee;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.modalFooter {
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+
+.packetRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.packetRow .spacer {
+  flex: 1;
+}
+
 .header {
   display: flex;
   gap: 16px;
@@ -217,6 +402,22 @@ button.wordLabel {
   border: 1px solid #e6e7ee;
   border-radius: 12px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.attemptPopupSelectors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.selectInput {
+  border: 1px solid #d6d6de;
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: white;
+  color: #111;
+  font-size: 14px;
 }
 
 .attemptPopupTitle {
