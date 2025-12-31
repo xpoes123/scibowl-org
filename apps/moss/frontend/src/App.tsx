@@ -908,7 +908,7 @@ export default function App() {
                     <div className="header">
                         <div>
                             <h2 className="title">Scoresheet</h2>
-                            <p className="muted">
+                            <p className="muted" style={{ display: "none" }}>
                                 {scoredPairs.totals.map((t, i) => {
                                     const teamName = teams.find((x) => x.id === t.teamId)?.name ?? "Team";
                                     return (
@@ -926,14 +926,20 @@ export default function App() {
                         <table className="scoresheetTable">
                             <thead>
                                 <tr>
-                                    <th rowSpan={2}>Pair</th>
+                                    <th aria-label="Pair number" />
                                     {teams.map((team) => (
                                         <th key={team.id} colSpan={3} className="scoresheetTeamHeader">
-                                            {team.name}
+                                            <div className="scoresheetTeamHeaderInner">
+                                                <span className="scoresheetTeamName">{team.name}</span>
+                                                <span className="pill scoresheetScorePill">
+                                                    {scoredPairs.totals.find((t) => t.teamId === team.id)?.total ?? 0}
+                                                </span>
+                                            </div>
                                         </th>
                                     ))}
                                 </tr>
                                 <tr>
+                                    <th aria-hidden="true" />
                                     {teams.flatMap((team) => [
                                         <th key={`${team.id}_t`}>T</th>,
                                         <th key={`${team.id}_b`}>B</th>,

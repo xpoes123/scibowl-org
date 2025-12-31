@@ -532,13 +532,36 @@ button.wordLabel {
 }
 
 .scoresheetTable th {
-  position: sticky;
-  top: 0;
   background: white;
-  z-index: 1;
   text-align: left;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.scoresheetTable thead tr:first-child th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 0 #eee;
+}
+
+.scoresheetTeamHeaderInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.scoresheetTeamName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scoresheetScorePill {
+  background: #f7f7fb;
+  border-color: #e6e7ee;
+  font-variant-numeric: tabular-nums;
 }
 
 .scoresheetPairCell {
