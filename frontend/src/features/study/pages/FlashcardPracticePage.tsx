@@ -201,17 +201,6 @@ export function FlashcardPracticePage() {
         return () => window.removeEventListener("keydown", handler);
     }, [hasSubmitted, goToRandomQuestion, hasStarted, practicePool.length]);
 
-    // Keyboard shortcuts - Skip (S)
-    useEffect(() => {
-        const handler = (e: KeyboardEvent) => {
-            if (e.key.toLowerCase() === "s" && !hasSubmitted && hasStarted && practicePool.length > 0) {
-                goToRandomQuestion();
-                setHasSubmitted(false);
-            }
-        };
-        window.addEventListener("keydown", handler);
-        return () => window.removeEventListener("keydown", handler);
-    }, [hasSubmitted, goToRandomQuestion, hasStarted, practicePool.length]);
 
     const handleSubmitResult = (wasCorrect: boolean) => {
         if (!currentQuestion) return;
@@ -343,17 +332,19 @@ export function FlashcardPracticePage() {
                     >
                         {hasStarted ? "Pause (P)" : "Start (S)"}
                     </button>
-                    <button
-                        onClick={goToRandomQuestion}
-                        disabled={!hasStarted || practicePool.length === 0}
-                        className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
-                            !hasStarted || practicePool.length === 0
-                                ? "bg-slate-600 cursor-not-allowed text-slate-400"
-                                : "bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 text-white shadow-lg shadow-purple-500/30"
-                        }`}
-                    >
-                        {hasSubmitted ? "Next (N)" : "Skip (S)"}
-                    </button>
+                    {hasSubmitted && (
+                        <button
+                            onClick={goToRandomQuestion}
+                            disabled={!hasStarted || practicePool.length === 0}
+                            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-all ${
+                                !hasStarted || practicePool.length === 0
+                                    ? "bg-slate-600 cursor-not-allowed text-slate-400"
+                                    : "bg-gradient-to-r from-purple-600 to-purple-400 hover:from-purple-700 hover:to-purple-500 text-white shadow-lg shadow-purple-500/30"
+                            }`}
+                        >
+                            Next (N)
+                        </button>
+                    )}
                 </div>
 
                 <div className="bg-slate-900/50 rounded-lg p-4 text-center border border-purple-500/20">
