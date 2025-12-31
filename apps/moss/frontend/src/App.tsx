@@ -34,6 +34,14 @@ type AttemptLocation =
     | { kind: "option"; optionIndex: number; wordIndex: number }
     | { kind: "end" };
 
+function isSameLocation(a: AttemptLocation, b: AttemptLocation): boolean {
+    if (a.kind !== b.kind) return false;
+    if (a.kind === "end") return true;
+    if (a.kind === "question" && b.kind === "question") return a.wordIndex === b.wordIndex;
+    if (a.kind === "option" && b.kind === "option") return a.optionIndex === b.optionIndex && a.wordIndex === b.wordIndex;
+    return false;
+}
+
 type Attempt = {
     token: string;
     isEnd: boolean;
@@ -165,7 +173,7 @@ export default function App() {
     const [isNewGameOpen, setIsNewGameOpen] = useState(false);
     const [draftTeams, setDraftTeams] = useState<Team[]>([]);
     const [idx, setIdx] = useState(0);
-    const [attempts, setAttempts] = useState<Record<number, Attempt>>({});
+    const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
@@ -175,8 +183,8 @@ export default function App() {
         () => (q ? getQuestionTokens(q.question_text) : []),
         [q?.question_text]
     );
-    const attempt = q ? attempts[q.id] : undefined;
-    const activeSelection = attemptEditor?.questionId === q?.id ? attemptEditor.selection : attempt;
+    const questionAttempts = q ? attempts[q.id] ?? [] : [];
+    const activeSelection = attemptEditor?.questionId === q?.id ? attemptEditor.selection : null;
     const teams = game?.teams ?? [];
 
     const playersById = useMemo(() => {
@@ -219,13 +227,12 @@ export default function App() {
         const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
 
         const rows = pairRows.map((pair) => {
-            const tossupAttemptAll = pair.tossup ? attempts[pair.tossup.id] : undefined;
-            const bonusAttemptAll = pair.bonus ? attempts[pair.bonus.id] : undefined;
+            const tossupAttemptAll = pair.tossup ? attempts[pair.tossup.id] ?? [] : [];
+            const bonusAttemptAll = pair.bonus ? attempts[pair.bonus.id] ?? [] : [];
 
             const perTeam = teams.map((team) => {
-                const tossupAttempt =
-                    tossupAttemptAll && tossupAttemptAll.teamId === team.id ? tossupAttemptAll : undefined;
-                const bonusAttempt = bonusAttemptAll && bonusAttemptAll.teamId === team.id ? bonusAttemptAll : undefined;
+                const tossupAttempt = tossupAttemptAll.find((a) => a.teamId === team.id);
+                const bonusAttempt = bonusAttemptAll.find((a) => a.teamId === team.id);
 
                 const tossupPoints = pointsForAttempt(tossupAttempt, pair.tossup?.question_type) ?? 0;
                 const bonusPoints = pointsForAttempt(bonusAttempt, pair.bonus?.question_type) ?? 0;
@@ -236,6 +243,7 @@ export default function App() {
                     teamId: team.id,
                     tossupAttempt,
                     bonusAttempt,
+                    pairPoints,
                     runningTotal: runningByTeam[team.id],
                 };
             });
@@ -364,8 +372,9 @@ export default function App() {
 
         if (question.question_type === "BONUS") {
             const tossup = tossupQuestionByPairId.get(question.pair_id);
-            const tossupAttempt = tossup ? attempts[tossup.id] : undefined;
-            if (tossupAttempt?.result !== "correct") return;
+            const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
+            const tossupCorrect = tossupAttempts.find((a) => a.result === "correct");
+            if (!tossupCorrect) return;
 
             const anchor = getAnchorRect(anchorEl);
             const position = computePopupPosition(anchor);
@@ -373,7 +382,7 @@ export default function App() {
                 questionId: question.id,
                 left: position.left,
                 top: position.top,
-                selection: { ...selection, teamId: tossupAttempt.teamId, playerId: undefined },
+                selection: { ...selection, teamId: tossupCorrect.teamId, playerId: undefined },
             });
             return;
         }
@@ -381,16 +390,37 @@ export default function App() {
         const anchor = getAnchorRect(anchorEl);
         const position = computePopupPosition(anchor);
 
-        const firstTeam = game.teams[0];
-        const fallbackPlayer = firstTeam?.players[0];
-        const fallback = firstTeam && fallbackPlayer ? { teamId: firstTeam.id, playerId: fallbackPlayer.id } : null;
+        const currentAttempts = attempts[question.id] ?? [];
+        const currentCorrect = currentAttempts.find((a) => a.result === "correct");
 
-        const preferred =
-            lastActor &&
-            lastActor.playerId &&
-            game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId))
-                ? { teamId: lastActor.teamId, playerId: lastActor.playerId }
-                : fallback;
+        const existingAtLocation = currentAttempts.find((a) => isSameLocation(a.location, selection.location));
+
+        function isPlayerAvailable(teamId: string, playerId: string) {
+            const teamAlready = currentAttempts.some((a) => a.teamId === teamId);
+            const playerAlready = currentAttempts.some((a) => a.playerId === playerId);
+            return !teamAlready && !playerAlready;
+        }
+
+        let preferred: { teamId: string; playerId: string } | null = null;
+        if (existingAtLocation?.playerId) {
+            preferred = { teamId: existingAtLocation.teamId, playerId: existingAtLocation.playerId };
+        } else if (currentCorrect?.playerId) {
+            preferred = { teamId: currentCorrect.teamId, playerId: currentCorrect.playerId };
+        } else if (
+            lastActor?.playerId &&
+            game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId)) &&
+            isPlayerAvailable(lastActor.teamId, lastActor.playerId)
+        ) {
+            preferred = { teamId: lastActor.teamId, playerId: lastActor.playerId };
+        } else {
+            for (const team of game.teams) {
+                if (currentAttempts.some((a) => a.teamId === team.id)) continue;
+                const candidate = team.players.find((p) => isPlayerAvailable(team.id, p.id));
+                if (!candidate) continue;
+                preferred = { teamId: team.id, playerId: candidate.id };
+                break;
+            }
+        }
 
         if (!preferred) return;
 
@@ -405,24 +435,45 @@ export default function App() {
     function setAttemptResult(questionId: number, result: AttemptResult) {
         const selection = attemptEditor?.questionId === questionId ? attemptEditor.selection : undefined;
         if (!selection) return;
+        const question = questions.find((qq) => qq.id === questionId);
+        if (!question) return;
+
         setAttempts((prevState) => {
-            const next: Record<number, Attempt> = { ...prevState, [questionId]: { ...selection, result } };
-            const question = questions.find((qq) => qq.id === questionId);
-            if (question?.question_type === "TOSSUP") {
-                const bonus = bonusQuestionByPairId.get(question.pair_id);
-                if (bonus) {
-                    const bonusAttempt = next[bonus.id];
-                    const eligibleTeamId = result === "correct" ? selection.teamId : null;
-                    if (!eligibleTeamId || (bonusAttempt && bonusAttempt.teamId !== eligibleTeamId)) {
-                        // remove invalid bonus marking if tossup changes
-                        const { [bonus.id]: _removed, ...rest } = next;
-                        return rest;
-                    }
+            if (question.question_type === "BONUS") {
+                return { ...prevState, [questionId]: [{ ...selection, result, playerId: undefined }] };
+            }
+
+            if (!selection.playerId) return prevState;
+            const current = prevState[questionId] ?? [];
+            const currentCorrect = current.find((a) => a.result === "correct");
+            if (currentCorrect && currentCorrect.playerId !== selection.playerId && result !== "correct") {
+                return prevState;
+            }
+
+            let nextList = current.filter(
+                (a) => a.teamId !== selection.teamId && a.playerId !== selection.playerId
+            );
+            if (result === "correct") nextList = nextList.filter((a) => a.result !== "correct");
+            nextList = [...nextList, { ...selection, result, playerId: selection.playerId }];
+
+            const next: Record<number, Attempt[]> = { ...prevState, [questionId]: nextList };
+
+            const bonus = bonusQuestionByPairId.get(question.pair_id);
+            if (bonus) {
+                const bonusAttempt = next[bonus.id]?.[0];
+                const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
+                if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
+                    const { [bonus.id]: _removed, ...rest } = next;
+                    return rest;
                 }
             }
+
             return next;
         });
-        if (selection.playerId) setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
+
+        if (question.question_type === "TOSSUP") {
+            setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
+        }
     }
 
     useEffect(() => {
@@ -444,6 +495,11 @@ export default function App() {
         const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
         const who = player ? `${player}: ` : "";
         return `${who}${resultLabel} ${pointsLabel} @ ${attemptValue.token}`;
+    }
+
+    function markedResultForLocation(location: AttemptLocation): AttemptResult | undefined {
+        const found = questionAttempts.find((a) => isSameLocation(a.location, location));
+        return found?.result;
     }
 
     useEffect(() => {
@@ -622,10 +678,7 @@ export default function App() {
                                 const selected =
                                     activeSelection?.location.kind === "question" &&
                                     activeSelection.location.wordIndex === wordIndex;
-                                const marked =
-                                    attempt?.location.kind === "question" &&
-                                    attempt.location.wordIndex === wordIndex &&
-                                    attempt.result;
+                                const marked = markedResultForLocation({ kind: "question", wordIndex });
                                 const correctnessClass =
                                     marked === "correct"
                                         ? "wordWrapCorrect"
@@ -682,11 +735,11 @@ export default function App() {
                                                     activeSelection?.location.kind === "option" &&
                                                     activeSelection.location.optionIndex === optionIndex &&
                                                     activeSelection.location.wordIndex === -1;
-                                                const marked =
-                                                    attempt?.location.kind === "option" &&
-                                                    attempt.location.optionIndex === optionIndex &&
-                                                    attempt.location.wordIndex === -1 &&
-                                                    attempt.result;
+                                                const marked = markedResultForLocation({
+                                                    kind: "option",
+                                                    optionIndex,
+                                                    wordIndex: -1,
+                                                });
                                                 const correctnessClass =
                                                     marked === "correct"
                                                         ? "wordWrapCorrect"
@@ -735,11 +788,11 @@ export default function App() {
                                                     activeSelection?.location.kind === "option" &&
                                                     activeSelection.location.optionIndex === optionIndex &&
                                                     activeSelection.location.wordIndex === wordIndex;
-                                                const marked =
-                                                    attempt?.location.kind === "option" &&
-                                                    attempt.location.optionIndex === optionIndex &&
-                                                    attempt.location.wordIndex === wordIndex &&
-                                                    attempt.result;
+                                                const marked = markedResultForLocation({
+                                                    kind: "option",
+                                                    optionIndex,
+                                                    wordIndex,
+                                                });
                                                 const correctnessClass =
                                                     marked === "correct"
                                                         ? "wordWrapCorrect"
@@ -793,7 +846,7 @@ export default function App() {
                         <div className="endRow" aria-label="End of question token">
                             {(() => {
                                 const selected = activeSelection?.location.kind === "end";
-                                const marked = attempt?.location.kind === "end" && attempt.result;
+                                const marked = markedResultForLocation({ kind: "end" });
                                 const correctnessClass =
                                     marked === "correct"
                                         ? "wordWrapCorrect"
@@ -945,7 +998,13 @@ export default function App() {
                     aria-label="Mark attempt"
                     style={{ left: attemptEditor.left, top: attemptEditor.top }}
                 >
-                    {q.question_type !== "BONUS" && (
+                    {q.question_type !== "BONUS" && (() => {
+                        const attemptedTeamIds = new Set(questionAttempts.map((a) => a.teamId));
+                        const attemptedPlayerIds = new Set(
+                            questionAttempts.flatMap((a) => (a.playerId ? [a.playerId] : []))
+                        );
+
+                        return (
                         <div className="attemptPopupSelectors">
                             <select
                                 className="selectInput"
@@ -953,7 +1012,12 @@ export default function App() {
                                 onChange={(e) => {
                                     const teamId = e.target.value;
                                     const team = teams.find((t) => t.id === teamId);
-                                    const playerId = team?.players[0]?.id ?? attemptEditor.selection.playerId;
+                                    const currentPlayerId = attemptEditor.selection.playerId;
+                                    const available =
+                                        team?.players.find(
+                                            (p) => !attemptedPlayerIds.has(p.id) || p.id === currentPlayerId
+                                        ) ?? team?.players[0];
+                                    const playerId = available?.id ?? currentPlayerId;
                                     setAttemptEditor((prev) =>
                                         prev
                                             ? { ...prev, selection: { ...prev.selection, teamId, playerId } }
@@ -962,7 +1026,11 @@ export default function App() {
                                 }}
                             >
                                 {teams.map((t) => (
-                                    <option key={t.id} value={t.id}>
+                                    <option
+                                        key={t.id}
+                                        value={t.id}
+                                        disabled={attemptedTeamIds.has(t.id) && t.id !== attemptEditor.selection.teamId}
+                                    >
                                         {t.name}
                                     </option>
                                 ))}
@@ -979,13 +1047,20 @@ export default function App() {
                                 }}
                             >
                                 {(teams.find((t) => t.id === attemptEditor.selection.teamId)?.players ?? []).map((p) => (
-                                    <option key={p.id} value={p.id}>
+                                    <option
+                                        key={p.id}
+                                        value={p.id}
+                                        disabled={
+                                            attemptedPlayerIds.has(p.id) && p.id !== attemptEditor.selection.playerId
+                                        }
+                                    >
                                         {p.name}
                                     </option>
                                 ))}
                             </select>
                         </div>
-                    )}
+                        );
+                    })()}
 
                     <div className="attemptPopupButtons">
                         <button
