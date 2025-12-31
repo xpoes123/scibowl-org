@@ -882,15 +882,6 @@ export default function App() {
                                 {data.packet} ({data.year})
                             </h1>
                         </div>
-
-                        <div className="pillRow">
-                            <span className="pill">{DISPLAY_QUESTION_TYPE[q.question_type] ?? q.question_type}</span>
-                            <span className="pill">{q.pair_id}</span>
-                            <span className="pill">{DISPLAY_CATEGORY[q.category] ?? q.category}</span>
-                            <span className="pill">
-                                {DISPLAY_QUESTION_STYLE[q.question_style] ?? q.question_style}
-                            </span>
-                        </div>
                     </div>
 
                     <div className="questionBlock">
