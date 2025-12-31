@@ -40,7 +40,7 @@ type Attempt = {
     result?: AttemptResult;
     location: AttemptLocation;
     teamId: string;
-    playerId: string;
+    playerId?: string;
 };
 
 type Packet = {
@@ -101,8 +101,9 @@ function getQuestionTokens(questionText: string): string[] {
     return questionText.trim().split(/\s+/).filter(Boolean);
 }
 
-function pointsForAttempt(attempt: Attempt | undefined): number | undefined {
+function pointsForAttempt(attempt: Attempt | undefined, questionType: QuestionType | undefined): number | undefined {
     if (!attempt?.result) return undefined;
+    if (questionType === "BONUS") return attempt.result === "correct" ? 10 : 0;
     if (attempt.result === "correct") return 4;
     return attempt.isEnd ? 0 : -4;
 }
@@ -166,7 +167,7 @@ export default function App() {
     const [idx, setIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
-    const [lastActor, setLastActor] = useState<{ teamId: string; playerId: string } | null>(null);
+    const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
     const q = questions[idx];
@@ -198,6 +199,22 @@ export default function App() {
         return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
     }, [questions]);
 
+    const tossupQuestionByPairId = useMemo(() => {
+        const map = new Map<number, Question>();
+        for (const row of pairRows) {
+            if (row.tossup) map.set(row.pairId, row.tossup);
+        }
+        return map;
+    }, [pairRows]);
+
+    const bonusQuestionByPairId = useMemo(() => {
+        const map = new Map<number, Question>();
+        for (const row of pairRows) {
+            if (row.bonus) map.set(row.pairId, row.bonus);
+        }
+        return map;
+    }, [pairRows]);
+
     const scoredPairs = useMemo(() => {
         const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
 
@@ -210,8 +227,8 @@ export default function App() {
                     tossupAttemptAll && tossupAttemptAll.teamId === team.id ? tossupAttemptAll : undefined;
                 const bonusAttempt = bonusAttemptAll && bonusAttemptAll.teamId === team.id ? bonusAttemptAll : undefined;
 
-                const tossupPoints = pointsForAttempt(tossupAttempt) ?? 0;
-                const bonusPoints = pointsForAttempt(bonusAttempt) ?? 0;
+                const tossupPoints = pointsForAttempt(tossupAttempt, pair.tossup?.question_type) ?? 0;
+                const bonusPoints = pointsForAttempt(bonusAttempt, pair.bonus?.question_type) ?? 0;
                 const pairPoints = tossupPoints + bonusPoints;
                 runningByTeam[team.id] += pairPoints;
 
@@ -344,6 +361,23 @@ export default function App() {
         anchorEl: HTMLElement
     ) {
         if (!game) return;
+
+        if (question.question_type === "BONUS") {
+            const tossup = tossupQuestionByPairId.get(question.pair_id);
+            const tossupAttempt = tossup ? attempts[tossup.id] : undefined;
+            if (tossupAttempt?.result !== "correct") return;
+
+            const anchor = getAnchorRect(anchorEl);
+            const position = computePopupPosition(anchor);
+            setAttemptEditor({
+                questionId: question.id,
+                left: position.left,
+                top: position.top,
+                selection: { ...selection, teamId: tossupAttempt.teamId, playerId: undefined },
+            });
+            return;
+        }
+
         const anchor = getAnchorRect(anchorEl);
         const position = computePopupPosition(anchor);
 
@@ -353,8 +387,9 @@ export default function App() {
 
         const preferred =
             lastActor &&
+            lastActor.playerId &&
             game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId))
-                ? lastActor
+                ? { teamId: lastActor.teamId, playerId: lastActor.playerId }
                 : fallback;
 
         if (!preferred) return;
@@ -370,8 +405,24 @@ export default function App() {
     function setAttemptResult(questionId: number, result: AttemptResult) {
         const selection = attemptEditor?.questionId === questionId ? attemptEditor.selection : undefined;
         if (!selection) return;
-        setAttempts((prevState) => ({ ...prevState, [questionId]: { ...selection, result } }));
-        setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
+        setAttempts((prevState) => {
+            const next: Record<number, Attempt> = { ...prevState, [questionId]: { ...selection, result } };
+            const question = questions.find((qq) => qq.id === questionId);
+            if (question?.question_type === "TOSSUP") {
+                const bonus = bonusQuestionByPairId.get(question.pair_id);
+                if (bonus) {
+                    const bonusAttempt = next[bonus.id];
+                    const eligibleTeamId = result === "correct" ? selection.teamId : null;
+                    if (!eligibleTeamId || (bonusAttempt && bonusAttempt.teamId !== eligibleTeamId)) {
+                        // remove invalid bonus marking if tossup changes
+                        const { [bonus.id]: _removed, ...rest } = next;
+                        return rest;
+                    }
+                }
+            }
+            return next;
+        });
+        if (selection.playerId) setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
     }
 
     useEffect(() => {
@@ -385,12 +436,12 @@ export default function App() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [attemptEditor]);
 
-    function attemptCellText(attemptValue: Attempt | undefined): string {
+    function attemptCellText(attemptValue: Attempt | undefined, questionType: QuestionType | undefined): string {
         if (!attemptValue?.result) return "";
-        const points = pointsForAttempt(attemptValue);
+        const points = pointsForAttempt(attemptValue, questionType);
         const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
         const resultLabel = attemptValue.result === "correct" ? "C" : "I";
-        const player = playersById.get(attemptValue.playerId);
+        const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
         const who = player ? `${player}: ` : "";
         return `${who}${resultLabel} ${pointsLabel} @ ${attemptValue.token}`;
     }
@@ -440,7 +491,11 @@ export default function App() {
                                             <div className="fieldGroup">
                                                 <div className="fieldLabelRow">
                                                     <div className="fieldLabel">
-                                                        {teamIndex === 0 ? "First team" : `Team ${teamIndex + 1}`}{" "}
+                                                        {teamIndex === 0
+                                                            ? "First team"
+                                                            : teamIndex === 1
+                                                                ? "Second team"
+                                                                : `Team ${teamIndex + 1}`}{" "}
                                                         <span className="required">*</span>
                                                     </div>
                                                     {draftTeams.length > 1 && (
@@ -474,7 +529,7 @@ export default function App() {
                                                                 }
                                                                 placeholder={`Player ${playerIndex + 1}`}
                                                             />
-                                                            {team.players.length > 1 && (
+                                                            {playerIndex > 0 && (
                                                                 <button
                                                                     type="button"
                                                                     className="iconButton danger"
@@ -863,10 +918,10 @@ export default function App() {
 
                                                 return [
                                                     <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                                                        {attemptCellText(teamRow.tossupAttempt)}
+                                                        {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
                                                     </td>,
                                                     <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                                                        {attemptCellText(teamRow.bonusAttempt)}
+                                                        {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
                                                     </td>,
                                                     <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
                                                         {teamRow.runningTotal}
@@ -890,45 +945,47 @@ export default function App() {
                     aria-label="Mark attempt"
                     style={{ left: attemptEditor.left, top: attemptEditor.top }}
                 >
-                    <div className="attemptPopupSelectors">
-                        <select
-                            className="selectInput"
-                            value={attemptEditor.selection.teamId}
-                            onChange={(e) => {
-                                const teamId = e.target.value;
-                                const team = teams.find((t) => t.id === teamId);
-                                const playerId = team?.players[0]?.id ?? attemptEditor.selection.playerId;
-                                setAttemptEditor((prev) =>
-                                    prev
-                                        ? { ...prev, selection: { ...prev.selection, teamId, playerId } }
-                                        : prev
-                                );
-                            }}
-                        >
-                            {teams.map((t) => (
-                                <option key={t.id} value={t.id}>
-                                    {t.name}
-                                </option>
-                            ))}
-                        </select>
+                    {q.question_type !== "BONUS" && (
+                        <div className="attemptPopupSelectors">
+                            <select
+                                className="selectInput"
+                                value={attemptEditor.selection.teamId}
+                                onChange={(e) => {
+                                    const teamId = e.target.value;
+                                    const team = teams.find((t) => t.id === teamId);
+                                    const playerId = team?.players[0]?.id ?? attemptEditor.selection.playerId;
+                                    setAttemptEditor((prev) =>
+                                        prev
+                                            ? { ...prev, selection: { ...prev.selection, teamId, playerId } }
+                                            : prev
+                                    );
+                                }}
+                            >
+                                {teams.map((t) => (
+                                    <option key={t.id} value={t.id}>
+                                        {t.name}
+                                    </option>
+                                ))}
+                            </select>
 
-                        <select
-                            className="selectInput"
-                            value={attemptEditor.selection.playerId}
-                            onChange={(e) => {
-                                const playerId = e.target.value;
-                                setAttemptEditor((prev) =>
-                                    prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
-                                );
-                            }}
-                        >
-                            {(teams.find((t) => t.id === attemptEditor.selection.teamId)?.players ?? []).map((p) => (
-                                <option key={p.id} value={p.id}>
-                                    {p.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                            <select
+                                className="selectInput"
+                                value={attemptEditor.selection.playerId ?? ""}
+                                onChange={(e) => {
+                                    const playerId = e.target.value;
+                                    setAttemptEditor((prev) =>
+                                        prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
+                                    );
+                                }}
+                            >
+                                {(teams.find((t) => t.id === attemptEditor.selection.teamId)?.players ?? []).map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
 
                     <div className="attemptPopupButtons">
                         <button
@@ -938,7 +995,7 @@ export default function App() {
                                 setAttemptEditor(null);
                             }}
                         >
-                            Correct
+                            {q.question_type === "BONUS" ? "Correct (+10)" : "Correct"}
                         </button>
                         <button
                             type="button"
@@ -948,7 +1005,7 @@ export default function App() {
                                 setAttemptEditor(null);
                             }}
                         >
-                            Incorrect
+                            {q.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
                         </button>
                     </div>
                 </div>
