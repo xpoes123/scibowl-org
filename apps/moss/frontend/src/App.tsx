@@ -1049,16 +1049,28 @@ export default function App() {
                                                     ))}
                                                 </div>
 
-                                                <button type="button" className="addRowButton" onClick={() => addPlayer(team.id)}>
-                                                    <span className="addIcon">+</span> Add player
+                                                <button
+                                                    type="button"
+                                                    className="addRowButton"
+                                                    onClick={() => addPlayer(team.id)}
+                                                    title="Add player"
+                                                    aria-label="Add player"
+                                                >
+                                                    <span className="addIcon">+</span>
                                                 </button>
                                             </div>
                                         </div>
                                     ))}
 
                                     <div className="addTeamCol">
-                                        <button type="button" className="addTeamButton" onClick={addTeam}>
-                                            <span className="addIcon">+</span> Add team
+                                        <button
+                                            type="button"
+                                            className="addTeamButton"
+                                            onClick={addTeam}
+                                            title="Add team"
+                                            aria-label="Add team"
+                                        >
+                                            <span className="addIcon">+</span>
                                         </button>
                                     </div>
                                 </div>
@@ -1069,47 +1081,53 @@ export default function App() {
                                             <div className="fieldLabel">
                                                 Packet <span className="required">*</span>
                                             </div>
-                                            {draftPacketChoice ? (
-                                                <>
-                                                    <div className="packetName">{draftPacketChoice.label}</div>
-                                                    <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                                                </>
-                                            ) : (
-                                                <div className="packetSubtext">Select a packet to start the game</div>
-                                            )}
-                                            {packetLoadError && <div className="packetError">{packetLoadError}</div>}
-                                            <button
-                                                type="button"
-                                                className="secondary packetChangeButton"
-                                                onClick={() => setIsPacketChooserOpen(true)}
-                                            >
-                                                {draftPacketChoice ? "Change…" : "Load…"}
-                                            </button>
+                                            <div className="packetBox">
+                                                {draftPacketChoice ? (
+                                                    <>
+                                                        <div className="packetName">{draftPacketChoice.label}</div>
+                                                        <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                                                    </>
+                                                ) : (
+                                                    <div className="packetSubtext">Select a packet to start the game</div>
+                                                )}
+                                                {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                                                <button
+                                                    type="button"
+                                                    className="secondary packetChangeButton"
+                                                    onClick={() => setIsPacketChooserOpen(true)}
+                                                >
+                                                    {draftPacketChoice ? "Change…" : "Load…"}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="spacer" />
-                                        <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
-                                            Start
-                                        </button>
-                                        <button type="button" className="secondary" onClick={closeNewGame}>
-                                            Cancel
-                                        </button>
+                                        <div className="packetActions">
+                                            <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
+                                                Start
+                                            </button>
+                                            <button type="button" className="secondary" onClick={closeNewGame}>
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <input
-                            ref={packetFileInputRef}
-                            type="file"
-                            accept="application/json,.json"
-                            style={{ display: "none" }}
-                            onChange={(e) => {
-                                const file = e.target.files?.[0] ?? null;
-                                e.target.value = "";
-                                void onPacketFilePicked(file);
-                            }}
-                        />
                     </div>
+                )}
+
+                {isNewGameOpen && (
+                    <input
+                        ref={packetFileInputRef}
+                        type="file"
+                        accept="application/json,.json"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            e.target.value = "";
+                            void onPacketFilePicked(file);
+                        }}
+                    />
                 )}
 
                 {isNewGameOpen && isPacketChooserOpen && (

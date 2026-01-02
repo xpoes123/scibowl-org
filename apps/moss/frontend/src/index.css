@@ -104,7 +104,7 @@ button.homePrimary {
   display: grid;
   grid-template-columns: 1fr 1fr 170px;
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 900px) {
@@ -128,8 +128,14 @@ button.homePrimary {
 .addTeamCol {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 44px;
+  align-items: center;
+  padding-top: 0;
+}
+
+@media (max-width: 900px) {
+  .addTeamCol {
+    padding-top: 10px;
+  }
 }
 
 .fieldGroup {
@@ -149,7 +155,7 @@ button.homePrimary {
 }
 
 .required {
-  color: #b42318;
+  color: inherit;
 }
 
 .textInput {
@@ -189,20 +195,34 @@ button.iconButton {
 }
 
 button.iconButton.danger {
-  color: #b42318;
-  border-color: #f1c6c6;
+  color: #111;
+  border-color: #e6e7ee;
 }
 
 button.addRowButton,
 button.addTeamButton {
   border: 0;
   background: transparent;
-  color: #b46a3c;
-  padding: 8px 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
+  color: #111;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+}
+
+button.addRowButton {
+  margin: 8px auto 0 auto;
+}
+
+button.addTeamButton {
+  margin: 0;
+}
+
+button.addRowButton:hover .addIcon,
+button.addTeamButton:hover .addIcon {
+  background: #f0f2ff;
+  border-color: #dbe0ff;
 }
 
 .addIcon {
@@ -225,7 +245,7 @@ button.addTeamButton {
 
 .packetRow {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 12px;
   flex-wrap: wrap;
 }
@@ -237,8 +257,18 @@ button.addTeamButton {
 .packetMeta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
   min-width: 240px;
+}
+
+.packetBox {
+  border: 1px solid #e6e7ee;
+  border-radius: 14px;
+  background: #f6f7fb;
+  padding: 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .packetName {
@@ -253,13 +283,20 @@ button.addTeamButton {
 
 .packetError {
   margin-top: 6px;
-  color: #b42318;
+  color: #666;
   font-size: 13px;
 }
 
 .packetChangeButton {
   margin-top: 8px;
   align-self: flex-start;
+}
+
+.packetActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
 }
 
 .chooserModal {
@@ -279,6 +316,7 @@ button.addTeamButton {
   border: 1px solid #e6e7ee;
   border-radius: 14px;
   background: white;
+  color: #111;
   cursor: pointer;
 }
 
