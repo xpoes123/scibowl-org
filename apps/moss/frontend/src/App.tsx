@@ -5,6 +5,8 @@ type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
 const END_TOKEN = "END" as const;
+const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
+const SCORESHEET_EXPORT_VERSION = 1 as const;
 
 type AttemptResult = "correct" | "incorrect";
 
@@ -104,6 +106,42 @@ function getQuestionTokens(questionText: string): string[] {
     return questionText.trim().split(/\s+/).filter(Boolean);
 }
 
+function canonicalizeJson(value: unknown): unknown {
+    if (value === null) return null;
+    if (Array.isArray(value)) return value.map(canonicalizeJson);
+    if (typeof value === "object") {
+        const obj = value as Record<string, unknown>;
+        const keys = Object.keys(obj).sort();
+        const out: Record<string, unknown> = {};
+        for (const key of keys) {
+            const v = obj[key];
+            if (v === undefined) continue;
+            out[key] = canonicalizeJson(v);
+        }
+        return out;
+    }
+    return value;
+}
+
+function stableJsonStringify(value: unknown): string {
+    return JSON.stringify(canonicalizeJson(value));
+}
+
+async function sha256Hex(text: string): Promise<string> {
+    if (!("crypto" in window) || !crypto.subtle) throw new Error("Web Crypto API not available");
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function safeFilenamePart(value: string): string {
+    return value
+        .trim()
+        .replace(/[^a-z0-9]+/gi, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 80) || "export";
+}
+
 function pointsForAttempt(attempt: Attempt | undefined, questionType: QuestionType | undefined): number | undefined {
     if (!attempt?.result) return undefined;
     if (questionType === "BONUS") return attempt.result === "correct" ? 10 : 0;
@@ -172,6 +210,7 @@ export default function App() {
     const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
 
     const teams = game?.teams ?? [];
@@ -252,6 +291,102 @@ export default function App() {
         const totals = teams.map((t) => ({ teamId: t.id, total: runningByTeam[t.id] ?? 0 }));
         return { rows, totals };
     }, [attempts, pairRows, teams]);
+
+    async function exportScoresheet() {
+        if (!game) return;
+
+        setIsExporting(true);
+        try {
+            const canonicalPacketJson = stableJsonStringify({
+                packet: data.packet,
+                year: data.year,
+                questions: data.questions ?? [],
+            });
+            const checksum = await sha256Hex(canonicalPacketJson);
+
+            function teamNameForId(teamId: string): string {
+                return teams.find((t) => t.id === teamId)?.name ?? teamId;
+            }
+
+            function playerNameForId(playerId: string | undefined): string | null {
+                if (!playerId) return null;
+                return playersById.get(playerId) ?? null;
+            }
+
+            function encodeLocation(location: AttemptLocation): unknown {
+                if (location.kind === "end") return { kind: "end" };
+                if (location.kind === "question") return { kind: "question", word_index: location.wordIndex };
+                return {
+                    kind: "option",
+                    option_index: location.optionIndex,
+                    word_index: location.wordIndex,
+                };
+            }
+
+            const attemptsByQuestionId: Record<string, unknown[]> = {};
+            for (const [questionId, list] of Object.entries(attempts)) {
+                const encoded = (list ?? [])
+                    .filter((a) => !!a.result)
+                    .map((a) => ({
+                        team: teamNameForId(a.teamId),
+                        player: playerNameForId(a.playerId),
+                        result: a.result,
+                        token: a.token,
+                        is_end: a.isEnd,
+                        location: encodeLocation(a.location),
+                    }));
+                if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
+            }
+
+            const exportedAt = new Date().toISOString();
+            const exportObj = {
+                format: SCORESHEET_EXPORT_FORMAT,
+                version: SCORESHEET_EXPORT_VERSION,
+                exported_at: exportedAt,
+                packet: {
+                    packet: data.packet,
+                    year: data.year,
+                    questions: data.questions ?? [],
+                },
+                packet_checksum: {
+                    algorithm: "sha256",
+                    canonicalization: "json_sorted_keys_utf8_no_ws",
+                    value: checksum,
+                },
+                game: {
+                    teams: teams.map((t) => ({
+                        name: t.name,
+                        players: t.players.map((p) => p.name),
+                    })),
+                },
+                rules: {
+                    tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
+                    bonus: { correct: 10, incorrect: 0 },
+                },
+                state: {
+                    pair_index: pairIdx,
+                    attempts_by_question_id: attemptsByQuestionId,
+                },
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const packetPart = safeFilenamePart(`${data.year}_${data.packet}`);
+            const timePart = exportedAt.replace(/[:.]/g, "-");
+            a.href = url;
+            a.download = `${SCORESHEET_EXPORT_FORMAT}_${packetPart}_${checksum.slice(0, 8)}_${timePart}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error(e);
+            alert("Export failed. See console for details.");
+        } finally {
+            setIsExporting(false);
+        }
+    }
 
     function openNewGame() {
         function makeId(prefix: string) {
@@ -470,6 +605,7 @@ export default function App() {
                 const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
                 if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
                     const { [bonus.id]: _removed, ...rest } = next;
+                    void _removed;
                     return rest;
                 }
             }
@@ -919,6 +1055,17 @@ export default function App() {
                                     );
                                 })}
                             </p>
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="secondary"
+                                onClick={exportScoresheet}
+                                disabled={!game || isExporting}
+                                aria-label="Export scoresheet"
+                            >
+                                {isExporting ? "Exporting..." : "Export"}
+                            </button>
                         </div>
                     </div>
 
