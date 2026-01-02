@@ -618,6 +618,23 @@ export default function App() {
         }
     }
 
+    function clearAttemptsForQuestion(question: Question) {
+        setAttempts((prev) => {
+            const next = { ...prev };
+            if (question.question_type === "BONUS") {
+                delete next[question.id];
+                return next;
+            }
+
+            delete next[question.id];
+            const bonus = bonusQuestionByPairId.get(question.pair_id);
+            if (bonus) delete next[bonus.id];
+            return next;
+        });
+
+        if (question.question_type === "TOSSUP") setLastActor(null);
+    }
+
     useEffect(() => {
         if (!attemptEditor) return;
 
@@ -1162,6 +1179,23 @@ export default function App() {
                 if (!attemptEditor || !popupQuestion) return null;
 
                 const editingAttempts = attempts[popupQuestion.id] ?? [];
+                const popupBonusEnabled =
+                    popupQuestion.question_type !== "BONUS"
+                        ? true
+                        : (() => {
+                            const tossup = tossupQuestionByPairId.get(popupQuestion.pair_id);
+                            if (!tossup) return false;
+                            return (attempts[tossup.id] ?? []).some((a) => a.result === "correct");
+                        })();
+
+                const popupHasClearableAttempts =
+                    popupQuestion.question_type === "BONUS"
+                        ? editingAttempts.length > 0
+                        : (() => {
+                            const bonus = bonusQuestionByPairId.get(popupQuestion.pair_id);
+                            const bonusAttempts = bonus ? attempts[bonus.id] ?? [] : [];
+                            return editingAttempts.length > 0 || bonusAttempts.length > 0;
+                        })();
 
                 return (
                 <div
@@ -1254,6 +1288,17 @@ export default function App() {
                             }}
                         >
                             {popupQuestion.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
+                        </button>
+                        <button
+                            type="button"
+                            className="secondary"
+                            disabled={!popupBonusEnabled || !popupHasClearableAttempts}
+                            onClick={() => {
+                                clearAttemptsForQuestion(popupQuestion);
+                                setAttemptEditor(null);
+                            }}
+                        >
+                            Clear
                         </button>
                     </div>
                 </div>
