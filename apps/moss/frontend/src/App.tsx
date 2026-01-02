@@ -54,6 +54,10 @@ type Packet = {
     questions: Question[];
 };
 
+type PacketChoice =
+    | { kind: "sample"; label: string; subtext: string; packet: Packet }
+    | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
+
 type Question = {
     id: number;
     pair_id: number;
@@ -198,20 +202,36 @@ function computePopupPosition(anchor: AnchorRect): { left: number; top: number }
     return { left: 8, top: 8 };
 }
 
+function parsePacketJson(jsonText: string): Packet {
+    const parsed = JSON.parse(jsonText) as unknown;
+    if (!parsed || typeof parsed !== "object") throw new Error("Packet JSON must be an object.");
+    const obj = parsed as Partial<Packet>;
+    if (typeof obj.packet !== "string") throw new Error("Packet JSON missing required string field: packet");
+    if (typeof obj.year !== "number") throw new Error("Packet JSON missing required number field: year");
+    if (!Array.isArray(obj.questions)) throw new Error("Packet JSON missing required array field: questions");
+    return obj as Packet;
+}
+
 export default function App() {
-    const data = packetJson as Packet;
+    const samplePacket = packetJson as Packet;
+    const [packet, setPacket] = useState<Packet | null>(null);
+    const data = packet ?? samplePacket;
 
     const questions = useMemo(() => data.questions ?? [], [data.questions]);
     const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
     const [game, setGame] = useState<Game | null>(null);
     const [isNewGameOpen, setIsNewGameOpen] = useState(false);
     const [draftTeams, setDraftTeams] = useState<Team[]>([]);
+    const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
+    const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
+    const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
     const [pairIdx, setPairIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
     const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
+    const packetFileInputRef = useRef<HTMLInputElement | null>(null);
 
     const teams = game?.teams ?? [];
 
@@ -416,10 +436,14 @@ export default function App() {
             },
         ];
         setDraftTeams(initial);
+        setDraftPacketChoice(null);
+        setPacketLoadError(null);
+        setIsPacketChooserOpen(false);
         setIsNewGameOpen(true);
     }
 
     function closeNewGame() {
+        setIsPacketChooserOpen(false);
         setIsNewGameOpen(false);
     }
 
@@ -462,28 +486,66 @@ export default function App() {
 
     const canStartNewGame = useMemo(() => {
         if (draftTeams.length < 1) return false;
+        if (!draftPacketChoice) return false;
         for (const team of draftTeams) {
             if (!team.name.trim()) return false;
             const nonEmptyPlayers = team.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name);
             if (nonEmptyPlayers.length < 1) return false;
         }
         return true;
-    }, [draftTeams]);
+    }, [draftPacketChoice, draftTeams]);
 
     function startNewGame() {
-        if (!canStartNewGame) return;
+        if (!canStartNewGame || !draftPacketChoice) return;
         const teams = draftTeams.map((t) => ({
             ...t,
             name: t.name.trim(),
             players: t.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name),
         }));
 
+        setPacket(draftPacketChoice.packet);
         setGame({ teams });
         setPairIdx(0);
         setAttempts({});
         setAttemptEditor(null);
         setLastActor(null);
         setIsNewGameOpen(false);
+    }
+
+    async function onPacketFilePicked(file: File | null) {
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const parsedPacket = parsePacketJson(text);
+            setDraftPacketChoice({
+                kind: "upload",
+                label: file.name,
+                fileName: file.name,
+                subtext: "Uploaded from computer",
+                packet: parsedPacket,
+            });
+            setPacketLoadError(null);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to load packet JSON.";
+            setPacketLoadError(msg);
+        }
+    }
+
+    function chooseSamplePacket() {
+        setDraftPacketChoice({
+            kind: "sample",
+            label: "Sample Packet",
+            subtext: "Built-in demo packet for testing",
+            packet: samplePacket,
+        });
+        setPacketLoadError(null);
+        setIsPacketChooserOpen(false);
+    }
+
+    function requestUploadPacket() {
+        setIsPacketChooserOpen(false);
+        setPacketLoadError(null);
+        packetFileInputRef.current?.click();
     }
 
     function prev() {
@@ -665,11 +727,33 @@ export default function App() {
         const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
         const words = getQuestionTokens(question.question_text);
         const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
+        const hasClearableAttempts = (() => {
+            const ownAttempts = attempts[question.id] ?? [];
+            if (question.question_type === "BONUS") return ownAttempts.length > 0;
+            const bonus = bonusQuestionByPairId.get(question.pair_id);
+            const bonusAttempts = bonus ? attempts[bonus.id] ?? [] : [];
+            return ownAttempts.length > 0 || bonusAttempts.length > 0;
+        })();
+        const clearDisabled = disabled || !hasClearableAttempts;
 
         return (
             <div className={sectionClasses} aria-label={title} aria-disabled={disabled}>
                 <div className="qaHeader">
-                    <div className="qaTitle">{title}</div>
+                    <div className="qaHeaderRow">
+                        <div className="qaTitle">{title}</div>
+                        <button
+                            type="button"
+                            className="secondary qaClearButton"
+                            disabled={clearDisabled}
+                            onClick={() => {
+                                setAttemptEditor(null);
+                                clearAttemptsForQuestion(question);
+                            }}
+                            aria-label={`Clear ${title} attempts`}
+                        >
+                            Clear
+                        </button>
+                    </div>
                     <div className="qaMeta">
                         <span className="pill">{question.pair_id}</span>
                         <span className="pill">{DISPLAY_CATEGORY[question.category] ?? question.category}</span>
@@ -896,9 +980,6 @@ export default function App() {
                         <button className="homePrimary" onClick={openNewGame}>
                             New Game
                         </button>
-                        <button className="secondary" onClick={() => { }} disabled>
-                            Load...
-                        </button>
                     </div>
                 </div>
 
@@ -984,12 +1065,27 @@ export default function App() {
 
                                 <div className="modalFooter">
                                     <div className="packetRow">
-                                        <div className="fieldLabel">
-                                            Packet <span className="required">*</span>
+                                        <div className="packetMeta">
+                                            <div className="fieldLabel">
+                                                Packet <span className="required">*</span>
+                                            </div>
+                                            {draftPacketChoice ? (
+                                                <>
+                                                    <div className="packetName">{draftPacketChoice.label}</div>
+                                                    <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                                                </>
+                                            ) : (
+                                                <div className="packetSubtext">Select a packet to start the game</div>
+                                            )}
+                                            {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                                            <button
+                                                type="button"
+                                                className="secondary packetChangeButton"
+                                                onClick={() => setIsPacketChooserOpen(true)}
+                                            >
+                                                {draftPacketChoice ? "Change…" : "Load…"}
+                                            </button>
                                         </div>
-                                        <button type="button" className="secondary" onClick={() => { }} disabled>
-                                            Load...
-                                        </button>
                                         <div className="spacer" />
                                         <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
                                             Start
@@ -998,6 +1094,57 @@ export default function App() {
                                             Cancel
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input
+                            ref={packetFileInputRef}
+                            type="file"
+                            accept="application/json,.json"
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                                const file = e.target.files?.[0] ?? null;
+                                e.target.value = "";
+                                void onPacketFilePicked(file);
+                            }}
+                        />
+                    </div>
+                )}
+
+                {isNewGameOpen && isPacketChooserOpen && (
+                    <div
+                        className="modalOverlay"
+                        role="dialog"
+                        aria-label="Choose packet"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsPacketChooserOpen(false);
+                        }}
+                    >
+                        <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle">Choose a packet</h2>
+                            </div>
+                            <div className="modalBody">
+                                <div className="chooserList">
+                                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
+                                        <div className="chooserOptionTitle">Use Sample Packet</div>
+                                        <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
+                                    </button>
+                                    <button type="button" className="chooserOption" onClick={requestUploadPacket}>
+                                        <div className="chooserOptionTitle">Upload Packet from Computer</div>
+                                        <div className="chooserOptionSubtext">Select a local packet file</div>
+                                    </button>
+                                    <button type="button" className="chooserOption" disabled>
+                                        <div className="chooserOptionTitle">Select Tournament Packet (disabled)</div>
+                                        <div className="chooserOptionSubtext">Provided by the tournament director</div>
+                                    </button>
+                                </div>
+                                <div className="chooserFooter">
+                                    <button type="button" className="secondary" onClick={() => setIsPacketChooserOpen(false)}>
+                                        Cancel
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1013,7 +1160,7 @@ export default function App() {
                 <div className="card">
                     <h1 className="title">No questions found</h1>
                     <p className="muted">
-                        Make sure your JSON is at <code>src/assets/sample_packet.json</code>.
+                        Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
                     </p>
                 </div>
             </div>
@@ -1179,23 +1326,6 @@ export default function App() {
                 if (!attemptEditor || !popupQuestion) return null;
 
                 const editingAttempts = attempts[popupQuestion.id] ?? [];
-                const popupBonusEnabled =
-                    popupQuestion.question_type !== "BONUS"
-                        ? true
-                        : (() => {
-                            const tossup = tossupQuestionByPairId.get(popupQuestion.pair_id);
-                            if (!tossup) return false;
-                            return (attempts[tossup.id] ?? []).some((a) => a.result === "correct");
-                        })();
-
-                const popupHasClearableAttempts =
-                    popupQuestion.question_type === "BONUS"
-                        ? editingAttempts.length > 0
-                        : (() => {
-                            const bonus = bonusQuestionByPairId.get(popupQuestion.pair_id);
-                            const bonusAttempts = bonus ? attempts[bonus.id] ?? [] : [];
-                            return editingAttempts.length > 0 || bonusAttempts.length > 0;
-                        })();
 
                 return (
                 <div
@@ -1288,17 +1418,6 @@ export default function App() {
                             }}
                         >
                             {popupQuestion.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
-                        </button>
-                        <button
-                            type="button"
-                            className="secondary"
-                            disabled={!popupBonusEnabled || !popupHasClearableAttempts}
-                            onClick={() => {
-                                clearAttemptsForQuestion(popupQuestion);
-                                setAttemptEditor(null);
-                            }}
-                        >
-                            Clear
                         </button>
                     </div>
                 </div>
