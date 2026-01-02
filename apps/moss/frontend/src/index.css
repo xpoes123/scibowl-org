@@ -63,9 +63,10 @@ code {
   flex-wrap: wrap;
 }
 
-button.homePrimary {
+.homeActions button {
   padding: 12px 16px;
   font-size: 16px;
+  min-width: 160px;
 }
 
 .modalOverlay {
@@ -86,6 +87,10 @@ button.homePrimary {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
 }
 
+.smallModal {
+  width: min(520px, 100%);
+}
+
 .modalHeader {
   padding: 18px 20px 10px 20px;
   border-bottom: 1px solid #eee;
@@ -104,7 +109,7 @@ button.homePrimary {
   display: grid;
   grid-template-columns: 1fr 1fr 170px;
   gap: 22px;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 900px) {
@@ -128,8 +133,14 @@ button.homePrimary {
 .addTeamCol {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 44px;
+  align-items: center;
+  padding-top: 0;
+}
+
+@media (max-width: 900px) {
+  .addTeamCol {
+    padding-top: 10px;
+  }
 }
 
 .fieldGroup {
@@ -149,7 +160,7 @@ button.homePrimary {
 }
 
 .required {
-  color: #b42318;
+  color: inherit;
 }
 
 .textInput {
@@ -189,20 +200,34 @@ button.iconButton {
 }
 
 button.iconButton.danger {
-  color: #b42318;
-  border-color: #f1c6c6;
+  color: #111;
+  border-color: #e6e7ee;
 }
 
 button.addRowButton,
 button.addTeamButton {
   border: 0;
   background: transparent;
-  color: #b46a3c;
-  padding: 8px 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
+  color: #111;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+}
+
+button.addRowButton {
+  margin: 8px auto 0 auto;
+}
+
+button.addTeamButton {
+  margin: 0;
+}
+
+button.addRowButton:hover .addIcon,
+button.addTeamButton:hover .addIcon {
+  background: #f0f2ff;
+  border-color: #dbe0ff;
 }
 
 .addIcon {
@@ -225,13 +250,104 @@ button.addTeamButton {
 
 .packetRow {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
   flex-wrap: wrap;
 }
 
 .packetRow .spacer {
   flex: 1;
+}
+
+.packetMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 240px;
+}
+
+.packetBox {
+  border: 1px solid #e6e7ee;
+  border-radius: 14px;
+  background: #f6f7fb;
+  padding: 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.packetName {
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.packetSubtext {
+  color: #666;
+  font-size: 13px;
+}
+
+.packetError {
+  margin-top: 6px;
+  color: #666;
+  font-size: 13px;
+}
+
+.packetChangeButton {
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.packetActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
+}
+
+.chooserModal {
+  width: min(560px, 100%);
+}
+
+.chooserList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chooserOption {
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid #e6e7ee;
+  border-radius: 14px;
+  background: white;
+  color: #111;
+  cursor: pointer;
+}
+
+.chooserOption:hover:not(:disabled) {
+  background: #f6f7fb;
+}
+
+.chooserOption:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.chooserOptionTitle {
+  font-weight: 600;
+}
+
+.chooserOptionSubtext {
+  margin-top: 3px;
+  color: #666;
+  font-size: 13px;
+}
+
+.chooserFooter {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .header {
@@ -294,11 +410,26 @@ button.addTeamButton {
   margin-bottom: 10px;
 }
 
+.qaHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .qaTitle {
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.qaClearButton {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .qaHint {

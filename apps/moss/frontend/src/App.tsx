@@ -5,6 +5,8 @@ type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
 const END_TOKEN = "END" as const;
+const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
+const SCORESHEET_EXPORT_VERSION = 1 as const;
 
 type AttemptResult = "correct" | "incorrect";
 
@@ -51,6 +53,10 @@ type Packet = {
     year: number;
     questions: Question[];
 };
+
+type PacketChoice =
+    | { kind: "sample"; label: string; subtext: string; packet: Packet }
+    | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
 
 type Question = {
     id: number;
@@ -102,6 +108,42 @@ function formatCorrectAnswer(q: Question): string {
 
 function getQuestionTokens(questionText: string): string[] {
     return questionText.trim().split(/\s+/).filter(Boolean);
+}
+
+function canonicalizeJson(value: unknown): unknown {
+    if (value === null) return null;
+    if (Array.isArray(value)) return value.map(canonicalizeJson);
+    if (typeof value === "object") {
+        const obj = value as Record<string, unknown>;
+        const keys = Object.keys(obj).sort();
+        const out: Record<string, unknown> = {};
+        for (const key of keys) {
+            const v = obj[key];
+            if (v === undefined) continue;
+            out[key] = canonicalizeJson(v);
+        }
+        return out;
+    }
+    return value;
+}
+
+function stableJsonStringify(value: unknown): string {
+    return JSON.stringify(canonicalizeJson(value));
+}
+
+async function sha256Hex(text: string): Promise<string> {
+    if (!("crypto" in window) || !crypto.subtle) throw new Error("Web Crypto API not available");
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function safeFilenamePart(value: string): string {
+    return value
+        .trim()
+        .replace(/[^a-z0-9]+/gi, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 80) || "export";
 }
 
 function pointsForAttempt(attempt: Attempt | undefined, questionType: QuestionType | undefined): number | undefined {
@@ -160,19 +202,41 @@ function computePopupPosition(anchor: AnchorRect): { left: number; top: number }
     return { left: 8, top: 8 };
 }
 
+function parsePacketJson(jsonText: string): Packet {
+    const parsed = JSON.parse(jsonText) as unknown;
+    if (!parsed || typeof parsed !== "object") throw new Error("Packet JSON must be an object.");
+    const obj = parsed as Partial<Packet>;
+    if (typeof obj.packet !== "string") throw new Error("Packet JSON missing required string field: packet");
+    if (typeof obj.year !== "number") throw new Error("Packet JSON missing required number field: year");
+    if (!Array.isArray(obj.questions)) throw new Error("Packet JSON missing required array field: questions");
+    return obj as Packet;
+}
+
 export default function App() {
-    const data = packetJson as Packet;
+    const samplePacket = packetJson as Packet;
+    const [packet, setPacket] = useState<Packet | null>(null);
+    const data = packet ?? samplePacket;
 
     const questions = useMemo(() => data.questions ?? [], [data.questions]);
     const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
     const [game, setGame] = useState<Game | null>(null);
     const [isNewGameOpen, setIsNewGameOpen] = useState(false);
+    const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
+    const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
+    const [loadGameError, setLoadGameError] = useState<string | null>(null);
+    const [isLoadingGame, setIsLoadingGame] = useState(false);
     const [draftTeams, setDraftTeams] = useState<Team[]>([]);
+    const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
+    const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
+    const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
     const [pairIdx, setPairIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
+    const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
+    const packetFileInputRef = useRef<HTMLInputElement | null>(null);
+    const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
     const teams = game?.teams ?? [];
 
@@ -253,6 +317,102 @@ export default function App() {
         return { rows, totals };
     }, [attempts, pairRows, teams]);
 
+    async function exportScoresheet() {
+        if (!game) return;
+
+        setIsExporting(true);
+        try {
+            const canonicalPacketJson = stableJsonStringify({
+                packet: data.packet,
+                year: data.year,
+                questions: data.questions ?? [],
+            });
+            const checksum = await sha256Hex(canonicalPacketJson);
+
+            function teamNameForId(teamId: string): string {
+                return teams.find((t) => t.id === teamId)?.name ?? teamId;
+            }
+
+            function playerNameForId(playerId: string | undefined): string | null {
+                if (!playerId) return null;
+                return playersById.get(playerId) ?? null;
+            }
+
+            function encodeLocation(location: AttemptLocation): unknown {
+                if (location.kind === "end") return { kind: "end" };
+                if (location.kind === "question") return { kind: "question", word_index: location.wordIndex };
+                return {
+                    kind: "option",
+                    option_index: location.optionIndex,
+                    word_index: location.wordIndex,
+                };
+            }
+
+            const attemptsByQuestionId: Record<string, unknown[]> = {};
+            for (const [questionId, list] of Object.entries(attempts)) {
+                const encoded = (list ?? [])
+                    .filter((a) => !!a.result)
+                    .map((a) => ({
+                        team: teamNameForId(a.teamId),
+                        player: playerNameForId(a.playerId),
+                        result: a.result,
+                        token: a.token,
+                        is_end: a.isEnd,
+                        location: encodeLocation(a.location),
+                    }));
+                if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
+            }
+
+            const exportedAt = new Date().toISOString();
+            const exportObj = {
+                format: SCORESHEET_EXPORT_FORMAT,
+                version: SCORESHEET_EXPORT_VERSION,
+                exported_at: exportedAt,
+                packet: {
+                    packet: data.packet,
+                    year: data.year,
+                    questions: data.questions ?? [],
+                },
+                packet_checksum: {
+                    algorithm: "sha256",
+                    canonicalization: "json_sorted_keys_utf8_no_ws",
+                    value: checksum,
+                },
+                game: {
+                    teams: teams.map((t) => ({
+                        name: t.name,
+                        players: t.players.map((p) => p.name),
+                    })),
+                },
+                rules: {
+                    tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
+                    bonus: { correct: 10, incorrect: 0 },
+                },
+                state: {
+                    pair_index: pairIdx,
+                    attempts_by_question_id: attemptsByQuestionId,
+                },
+            };
+
+            const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            const packetPart = safeFilenamePart(`${data.year}_${data.packet}`);
+            const timePart = exportedAt.replace(/[:.]/g, "-");
+            a.href = url;
+            a.download = `${SCORESHEET_EXPORT_FORMAT}_${packetPart}_${checksum.slice(0, 8)}_${timePart}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error(e);
+            alert("Export failed. See console for details.");
+        } finally {
+            setIsExporting(false);
+        }
+    }
+
     function openNewGame() {
         function makeId(prefix: string) {
             return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
@@ -281,10 +441,14 @@ export default function App() {
             },
         ];
         setDraftTeams(initial);
+        setDraftPacketChoice(null);
+        setPacketLoadError(null);
+        setIsPacketChooserOpen(false);
         setIsNewGameOpen(true);
     }
 
     function closeNewGame() {
+        setIsPacketChooserOpen(false);
         setIsNewGameOpen(false);
     }
 
@@ -327,28 +491,275 @@ export default function App() {
 
     const canStartNewGame = useMemo(() => {
         if (draftTeams.length < 1) return false;
+        if (!draftPacketChoice) return false;
         for (const team of draftTeams) {
             if (!team.name.trim()) return false;
             const nonEmptyPlayers = team.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name);
             if (nonEmptyPlayers.length < 1) return false;
         }
         return true;
-    }, [draftTeams]);
+    }, [draftPacketChoice, draftTeams]);
 
     function startNewGame() {
-        if (!canStartNewGame) return;
+        if (!canStartNewGame || !draftPacketChoice) return;
         const teams = draftTeams.map((t) => ({
             ...t,
             name: t.name.trim(),
             players: t.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name),
         }));
 
+        setPacket(draftPacketChoice.packet);
         setGame({ teams });
         setPairIdx(0);
         setAttempts({});
         setAttemptEditor(null);
         setLastActor(null);
         setIsNewGameOpen(false);
+    }
+
+    async function onPacketFilePicked(file: File | null) {
+        if (!file) return;
+        try {
+            const text = await file.text();
+            const parsedPacket = parsePacketJson(text);
+            setDraftPacketChoice({
+                kind: "upload",
+                label: file.name,
+                fileName: file.name,
+                subtext: "Uploaded from computer",
+                packet: parsedPacket,
+            });
+            setPacketLoadError(null);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to load packet JSON.";
+            setPacketLoadError(msg);
+        }
+    }
+
+    function chooseSamplePacket() {
+        setDraftPacketChoice({
+            kind: "sample",
+            label: "Sample Packet",
+            subtext: "Built-in demo packet for testing",
+            packet: samplePacket,
+        });
+        setPacketLoadError(null);
+        setIsPacketChooserOpen(false);
+    }
+
+    function requestUploadPacket() {
+        setIsPacketChooserOpen(false);
+        setPacketLoadError(null);
+        packetFileInputRef.current?.click();
+    }
+
+    function openLoadGame() {
+        setLoadGameError(null);
+        setLoadGameFile(null);
+        setIsLoadGameOpen(true);
+    }
+
+    function closeLoadGame() {
+        setLoadGameError(null);
+        setLoadGameFile(null);
+        setIsLoadGameOpen(false);
+    }
+
+    function requestUploadGame() {
+        setLoadGameError(null);
+        gameFileInputRef.current?.click();
+    }
+
+    async function openSelectedGameFile() {
+        if (!loadGameFile) return;
+        setIsLoadingGame(true);
+        setLoadGameError(null);
+        try {
+            const jsonText = await loadGameFile.text();
+            const parsed = JSON.parse(jsonText) as unknown;
+            if (!parsed || typeof parsed !== "object") throw new Error("Game file JSON must be an object.");
+
+            const obj = parsed as Record<string, unknown>;
+            if (obj.format !== SCORESHEET_EXPORT_FORMAT) throw new Error(`Unsupported format: ${String(obj.format)}`);
+            if (obj.version !== SCORESHEET_EXPORT_VERSION) throw new Error(`Unsupported version: ${String(obj.version)}`);
+
+            const packetObj = obj.packet;
+            const loadedPacket = parsePacketJson(JSON.stringify(packetObj));
+
+            const checksumObj = obj.packet_checksum;
+            if (!checksumObj || typeof checksumObj !== "object") throw new Error("Missing required field: packet_checksum");
+            const checksumRec = checksumObj as Record<string, unknown>;
+            if (checksumRec.algorithm !== "sha256") throw new Error("Unsupported packet_checksum.algorithm (expected sha256)");
+            if (checksumRec.canonicalization !== "json_sorted_keys_utf8_no_ws") {
+                throw new Error("Unsupported packet_checksum.canonicalization (expected json_sorted_keys_utf8_no_ws)");
+            }
+            if (typeof checksumRec.value !== "string") throw new Error("packet_checksum.value must be a string");
+
+            const canonicalPacketJson = stableJsonStringify({
+                packet: loadedPacket.packet,
+                year: loadedPacket.year,
+                questions: loadedPacket.questions ?? [],
+            });
+            const computedChecksum = await sha256Hex(canonicalPacketJson);
+            if (computedChecksum !== checksumRec.value) throw new Error("Packet checksum mismatch (file may be corrupted).");
+
+            const gameObj = obj.game;
+            if (!gameObj || typeof gameObj !== "object") throw new Error("Missing required field: game");
+            const gameRec = gameObj as Record<string, unknown>;
+            const gameTeams = gameRec.teams;
+            if (!Array.isArray(gameTeams)) throw new Error("game.teams must be an array");
+
+            function makeId(prefix: string) {
+                return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+            }
+
+            const teamIdByName = new Map<string, string>();
+            const playerIdByTeamNameThenPlayerName = new Map<string, string>();
+
+            const importedTeams: Team[] = gameTeams.map((t) => {
+                if (!t || typeof t !== "object") throw new Error("Each game.teams[] item must be an object");
+                const tr = t as Record<string, unknown>;
+                if (typeof tr.name !== "string" || !tr.name.trim()) throw new Error("Each team must have a non-empty name");
+                const teamName = tr.name.trim();
+                if (teamIdByName.has(teamName)) throw new Error(`Duplicate team name: ${teamName}`);
+                const teamId = makeId("team");
+                teamIdByName.set(teamName, teamId);
+
+                const playersRaw = tr.players;
+                if (!Array.isArray(playersRaw)) throw new Error(`Team ${teamName}: players must be an array`);
+                const players: Player[] = [];
+                for (const p of playersRaw) {
+                    if (typeof p !== "string") throw new Error(`Team ${teamName}: players must be strings`);
+                    const name = p.trim();
+                    if (!name) continue;
+                    const id = makeId("player");
+                    players.push({ id, name });
+                    playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
+                }
+
+                return { id: teamId, name: teamName, players };
+            });
+
+            function ensurePlayerId(teamName: string, playerName: string): string {
+                const key = `${teamName}\n${playerName}`;
+                const existing = playerIdByTeamNameThenPlayerName.get(key);
+                if (existing) return existing;
+                const team = importedTeams.find((tt) => tt.name === teamName);
+                if (!team) throw new Error(`Attempt references unknown team: ${teamName}`);
+                const id = makeId("player");
+                team.players.push({ id, name: playerName });
+                playerIdByTeamNameThenPlayerName.set(key, id);
+                return id;
+            }
+
+            const stateObj = obj.state;
+            if (!stateObj || typeof stateObj !== "object") throw new Error("Missing required field: state");
+            const stateRec = stateObj as Record<string, unknown>;
+            const importedPairIdx = stateRec.pair_index;
+            if (typeof importedPairIdx !== "number" || !Number.isFinite(importedPairIdx)) {
+                throw new Error("state.pair_index must be a number");
+            }
+
+            const attemptsByQuestionIdObj = stateRec.attempts_by_question_id;
+            if (!attemptsByQuestionIdObj || typeof attemptsByQuestionIdObj !== "object") {
+                throw new Error("state.attempts_by_question_id must be an object");
+            }
+
+            const questionIds = new Set((loadedPacket.questions ?? []).map((qq) => qq.id));
+
+            function decodeLocation(location: unknown): AttemptLocation {
+                if (!location || typeof location !== "object") throw new Error("Attempt.location must be an object");
+                const lr = location as Record<string, unknown>;
+                if (lr.kind === "end") return { kind: "end" };
+                if (lr.kind === "question") {
+                    if (typeof lr.word_index !== "number") throw new Error("Question location missing word_index");
+                    return { kind: "question", wordIndex: lr.word_index };
+                }
+                if (lr.kind === "option") {
+                    if (typeof lr.option_index !== "number") throw new Error("Option location missing option_index");
+                    if (typeof lr.word_index !== "number") throw new Error("Option location missing word_index");
+                    return { kind: "option", optionIndex: lr.option_index, wordIndex: lr.word_index };
+                }
+                throw new Error(`Unknown location kind: ${String(lr.kind)}`);
+            }
+
+            const attemptsByQuestionId = attemptsByQuestionIdObj as Record<string, unknown>;
+            const importedAttempts: Record<number, Attempt[]> = {};
+            for (const [questionIdStr, list] of Object.entries(attemptsByQuestionId)) {
+                const questionId = Number(questionIdStr);
+                if (!Number.isFinite(questionId)) continue;
+                if (!questionIds.has(questionId)) continue;
+                if (!Array.isArray(list)) throw new Error(`attempts_by_question_id.${questionIdStr} must be an array`);
+
+                const decoded: Attempt[] = [];
+                for (const item of list) {
+                    if (!item || typeof item !== "object") throw new Error("Attempt must be an object");
+                    const ar = item as Record<string, unknown>;
+                    if (typeof ar.team !== "string") throw new Error("Attempt.team must be a string");
+                    const teamName = ar.team.trim();
+                    const teamId = teamIdByName.get(teamName);
+                    if (!teamId) throw new Error(`Attempt references unknown team: ${teamName}`);
+
+                    const playerField = ar.player;
+                    const playerName = typeof playerField === "string" ? playerField.trim() : null;
+                    const playerId = playerName ? ensurePlayerId(teamName, playerName) : undefined;
+
+                    if (ar.result !== "correct" && ar.result !== "incorrect") throw new Error("Attempt.result invalid");
+                    if (typeof ar.token !== "string") throw new Error("Attempt.token must be a string");
+                    if (typeof ar.is_end !== "boolean") throw new Error("Attempt.is_end must be a boolean");
+
+                    decoded.push({
+                        teamId,
+                        playerId,
+                        result: ar.result,
+                        token: ar.token,
+                        isEnd: ar.is_end,
+                        location: decodeLocation(ar.location),
+                    });
+                }
+                if (decoded.length) importedAttempts[questionId] = decoded;
+            }
+
+            const byPair: Record<number, { tossupId?: number; bonusId?: number }> = {};
+            for (const qq of loadedPacket.questions ?? []) {
+                const row = byPair[qq.pair_id] ?? (byPair[qq.pair_id] = {});
+                if (qq.question_type === "TOSSUP") row.tossupId = qq.id;
+                if (qq.question_type === "BONUS") row.bonusId = qq.id;
+            }
+
+            for (const row of Object.values(byPair)) {
+                if (!row.bonusId || !row.tossupId) continue;
+                const tossupList = importedAttempts[row.tossupId] ?? [];
+                const winnerTeamId = tossupList.find((a) => a.result === "correct")?.teamId ?? null;
+                if (!winnerTeamId) {
+                    delete importedAttempts[row.bonusId];
+                    continue;
+                }
+
+                const bonusList = importedAttempts[row.bonusId] ?? [];
+                if (!bonusList.length) continue;
+                const first = bonusList[0];
+                importedAttempts[row.bonusId] = [{ ...first, teamId: winnerTeamId, playerId: undefined }];
+            }
+
+            const pairIdSet = new Set((loadedPacket.questions ?? []).map((qq) => qq.pair_id));
+            const pairCount = pairIdSet.size;
+            const clampedPairIdx = pairCount <= 0 ? 0 : clamp(importedPairIdx, 0, pairCount - 1);
+
+            setPacket(loadedPacket);
+            setGame({ teams: importedTeams });
+            setAttempts(importedAttempts);
+            setPairIdx(clampedPairIdx);
+            setAttemptEditor(null);
+            setLastActor(null);
+            setIsNewGameOpen(false);
+            closeLoadGame();
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to load game file.";
+            setLoadGameError(msg);
+        } finally {
+            setIsLoadingGame(false);
+        }
     }
 
     function prev() {
@@ -470,6 +881,7 @@ export default function App() {
                 const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
                 if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
                     const { [bonus.id]: _removed, ...rest } = next;
+                    void _removed;
                     return rest;
                 }
             }
@@ -480,6 +892,23 @@ export default function App() {
         if (question.question_type === "TOSSUP") {
             setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
         }
+    }
+
+    function clearAttemptsForQuestion(question: Question) {
+        setAttempts((prev) => {
+            const next = { ...prev };
+            if (question.question_type === "BONUS") {
+                delete next[question.id];
+                return next;
+            }
+
+            delete next[question.id];
+            const bonus = bonusQuestionByPairId.get(question.pair_id);
+            if (bonus) delete next[bonus.id];
+            return next;
+        });
+
+        if (question.question_type === "TOSSUP") setLastActor(null);
     }
 
     useEffect(() => {
@@ -512,11 +941,33 @@ export default function App() {
         const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
         const words = getQuestionTokens(question.question_text);
         const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
+        const hasClearableAttempts = (() => {
+            const ownAttempts = attempts[question.id] ?? [];
+            if (question.question_type === "BONUS") return ownAttempts.length > 0;
+            const bonus = bonusQuestionByPairId.get(question.pair_id);
+            const bonusAttempts = bonus ? attempts[bonus.id] ?? [] : [];
+            return ownAttempts.length > 0 || bonusAttempts.length > 0;
+        })();
+        const clearDisabled = disabled || !hasClearableAttempts;
 
         return (
             <div className={sectionClasses} aria-label={title} aria-disabled={disabled}>
                 <div className="qaHeader">
-                    <div className="qaTitle">{title}</div>
+                    <div className="qaHeaderRow">
+                        <div className="qaTitle">{title}</div>
+                        <button
+                            type="button"
+                            className="secondary qaClearButton"
+                            disabled={clearDisabled}
+                            onClick={() => {
+                                setAttemptEditor(null);
+                                clearAttemptsForQuestion(question);
+                            }}
+                            aria-label={`Clear ${title} attempts`}
+                        >
+                            Clear
+                        </button>
+                    </div>
                     <div className="qaMeta">
                         <span className="pill">{question.pair_id}</span>
                         <span className="pill">{DISPLAY_CATEGORY[question.category] ?? question.category}</span>
@@ -743,8 +1194,8 @@ export default function App() {
                         <button className="homePrimary" onClick={openNewGame}>
                             New Game
                         </button>
-                        <button className="secondary" onClick={() => { }} disabled>
-                            Load...
+                        <button type="button" className="secondary" onClick={openLoadGame}>
+                            Load Game
                         </button>
                     </div>
                 </div>
@@ -815,40 +1266,174 @@ export default function App() {
                                                     ))}
                                                 </div>
 
-                                                <button type="button" className="addRowButton" onClick={() => addPlayer(team.id)}>
-                                                    <span className="addIcon">+</span> Add player
+                                                <button
+                                                    type="button"
+                                                    className="addRowButton"
+                                                    onClick={() => addPlayer(team.id)}
+                                                    title="Add player"
+                                                    aria-label="Add player"
+                                                >
+                                                    <span className="addIcon">+</span>
                                                 </button>
                                             </div>
                                         </div>
                                     ))}
 
                                     <div className="addTeamCol">
-                                        <button type="button" className="addTeamButton" onClick={addTeam}>
-                                            <span className="addIcon">+</span> Add team
+                                        <button
+                                            type="button"
+                                            className="addTeamButton"
+                                            onClick={addTeam}
+                                            title="Add team"
+                                            aria-label="Add team"
+                                        >
+                                            <span className="addIcon">+</span>
                                         </button>
                                     </div>
                                 </div>
 
                                 <div className="modalFooter">
                                     <div className="packetRow">
-                                        <div className="fieldLabel">
-                                            Packet <span className="required">*</span>
+                                        <div className="packetMeta">
+                                            <div className="fieldLabel">
+                                                Packet <span className="required">*</span>
+                                            </div>
+                                            <div className="packetBox">
+                                                {draftPacketChoice ? (
+                                                    <>
+                                                        <div className="packetName">{draftPacketChoice.label}</div>
+                                                        <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                                                    </>
+                                                ) : (
+                                                    <div className="packetSubtext">Select a packet to start the game</div>
+                                                )}
+                                                {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                                                <button
+                                                    type="button"
+                                                    className="secondary packetChangeButton"
+                                                    onClick={() => setIsPacketChooserOpen(true)}
+                                                >
+                                                    {draftPacketChoice ? "Change…" : "Load…"}
+                                                </button>
+                                            </div>
                                         </div>
-                                        <button type="button" className="secondary" onClick={() => { }} disabled>
-                                            Load...
-                                        </button>
                                         <div className="spacer" />
-                                        <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
-                                            Start
-                                        </button>
-                                        <button type="button" className="secondary" onClick={closeNewGame}>
-                                            Cancel
-                                        </button>
+                                        <div className="packetActions">
+                                            <button type="button" onClick={startNewGame} disabled={!canStartNewGame}>
+                                                Start
+                                            </button>
+                                            <button type="button" className="secondary" onClick={closeNewGame}>
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                )}
+
+                {isNewGameOpen && (
+                    <input
+                        ref={packetFileInputRef}
+                        type="file"
+                        accept="application/json,.json"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            e.target.value = "";
+                            void onPacketFilePicked(file);
+                        }}
+                    />
+                )}
+
+                {isNewGameOpen && isPacketChooserOpen && (
+                    <div
+                        className="modalOverlay"
+                        role="dialog"
+                        aria-label="Choose packet"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsPacketChooserOpen(false);
+                        }}
+                    >
+                        <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle">Choose a packet</h2>
+                            </div>
+                            <div className="modalBody">
+                                <div className="chooserList">
+                                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
+                                        <div className="chooserOptionTitle">Use Sample Packet</div>
+                                        <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
+                                    </button>
+                                    <button type="button" className="chooserOption" onClick={requestUploadPacket}>
+                                        <div className="chooserOptionTitle">Upload Packet from Computer</div>
+                                        <div className="chooserOptionSubtext">Select a local packet file</div>
+                                    </button>
+                                    <button type="button" className="chooserOption" disabled>
+                                        <div className="chooserOptionTitle">Select Tournament Packet (disabled)</div>
+                                        <div className="chooserOptionSubtext">Provided by the tournament director</div>
+                                    </button>
+                                </div>
+                                <div className="chooserFooter">
+                                    <button type="button" className="secondary" onClick={() => setIsPacketChooserOpen(false)}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {isLoadGameOpen && (
+                    <div className="modalOverlay" role="dialog" aria-label="Load Game" onClick={closeLoadGame}>
+                        <div className="modal smallModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle">Load Game</h2>
+                            </div>
+                            <div className="modalBody">
+                                <div className="packetBox">
+                                    {!loadGameFile ? (
+                                        <div className="packetSubtext">Select a local game file</div>
+                                    ) : (
+                                        <div className="packetSubtext">Selected file {loadGameFile.name}</div>
+                                    )}
+                                    {loadGameError && <div className="packetError">{loadGameError}</div>}
+                                </div>
+                                <div className="packetActions" style={{ marginTop: 14 }}>
+                                    <button type="button" className="secondary" onClick={requestUploadGame}>
+                                        {loadGameFile ? "Change" : "Load"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={!loadGameFile || isLoadingGame}
+                                        onClick={() => void openSelectedGameFile()}
+                                    >
+                                        {isLoadingGame ? "Opening..." : "Open Game File"}
+                                    </button>
+                                    <button type="button" className="secondary" onClick={closeLoadGame}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {isLoadGameOpen && (
+                    <input
+                        ref={gameFileInputRef}
+                        type="file"
+                        accept="application/json,.json"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            e.target.value = "";
+                            setLoadGameError(null);
+                            setLoadGameFile(file);
+                        }}
+                    />
                 )}
             </div>
         );
@@ -860,7 +1445,7 @@ export default function App() {
                 <div className="card">
                     <h1 className="title">No questions found</h1>
                     <p className="muted">
-                        Make sure your JSON is at <code>src/assets/sample_packet.json</code>.
+                        Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
                     </p>
                 </div>
             </div>
@@ -919,6 +1504,17 @@ export default function App() {
                                     );
                                 })}
                             </p>
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="secondary"
+                                onClick={exportScoresheet}
+                                disabled={!game || isExporting}
+                                aria-label="Export scoresheet"
+                            >
+                                {isExporting ? "Exporting..." : "Export"}
+                            </button>
                         </div>
                     </div>
 
