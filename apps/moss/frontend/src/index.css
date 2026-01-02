@@ -86,6 +86,10 @@ button.homePrimary {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
 }
 
+.smallModal {
+  width: min(520px, 100%);
+}
+
 .modalHeader {
   padding: 18px 20px 10px 20px;
   border-bottom: 1px solid #eee;

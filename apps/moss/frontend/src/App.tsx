@@ -221,6 +221,10 @@ export default function App() {
     const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
     const [game, setGame] = useState<Game | null>(null);
     const [isNewGameOpen, setIsNewGameOpen] = useState(false);
+    const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
+    const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
+    const [loadGameError, setLoadGameError] = useState<string | null>(null);
+    const [isLoadingGame, setIsLoadingGame] = useState(false);
     const [draftTeams, setDraftTeams] = useState<Team[]>([]);
     const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
     const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
@@ -232,6 +236,7 @@ export default function App() {
     const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
     const packetFileInputRef = useRef<HTMLInputElement | null>(null);
+    const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
     const teams = game?.teams ?? [];
 
@@ -546,6 +551,215 @@ export default function App() {
         setIsPacketChooserOpen(false);
         setPacketLoadError(null);
         packetFileInputRef.current?.click();
+    }
+
+    function openLoadGame() {
+        setLoadGameError(null);
+        setLoadGameFile(null);
+        setIsLoadGameOpen(true);
+    }
+
+    function closeLoadGame() {
+        setLoadGameError(null);
+        setLoadGameFile(null);
+        setIsLoadGameOpen(false);
+    }
+
+    function requestUploadGame() {
+        setLoadGameError(null);
+        gameFileInputRef.current?.click();
+    }
+
+    async function openSelectedGameFile() {
+        if (!loadGameFile) return;
+        setIsLoadingGame(true);
+        setLoadGameError(null);
+        try {
+            const jsonText = await loadGameFile.text();
+            const parsed = JSON.parse(jsonText) as unknown;
+            if (!parsed || typeof parsed !== "object") throw new Error("Game file JSON must be an object.");
+
+            const obj = parsed as Record<string, unknown>;
+            if (obj.format !== SCORESHEET_EXPORT_FORMAT) throw new Error(`Unsupported format: ${String(obj.format)}`);
+            if (obj.version !== SCORESHEET_EXPORT_VERSION) throw new Error(`Unsupported version: ${String(obj.version)}`);
+
+            const packetObj = obj.packet;
+            const loadedPacket = parsePacketJson(JSON.stringify(packetObj));
+
+            const checksumObj = obj.packet_checksum;
+            if (!checksumObj || typeof checksumObj !== "object") throw new Error("Missing required field: packet_checksum");
+            const checksumRec = checksumObj as Record<string, unknown>;
+            if (checksumRec.algorithm !== "sha256") throw new Error("Unsupported packet_checksum.algorithm (expected sha256)");
+            if (checksumRec.canonicalization !== "json_sorted_keys_utf8_no_ws") {
+                throw new Error("Unsupported packet_checksum.canonicalization (expected json_sorted_keys_utf8_no_ws)");
+            }
+            if (typeof checksumRec.value !== "string") throw new Error("packet_checksum.value must be a string");
+
+            const canonicalPacketJson = stableJsonStringify({
+                packet: loadedPacket.packet,
+                year: loadedPacket.year,
+                questions: loadedPacket.questions ?? [],
+            });
+            const computedChecksum = await sha256Hex(canonicalPacketJson);
+            if (computedChecksum !== checksumRec.value) throw new Error("Packet checksum mismatch (file may be corrupted).");
+
+            const gameObj = obj.game;
+            if (!gameObj || typeof gameObj !== "object") throw new Error("Missing required field: game");
+            const gameRec = gameObj as Record<string, unknown>;
+            const gameTeams = gameRec.teams;
+            if (!Array.isArray(gameTeams)) throw new Error("game.teams must be an array");
+
+            function makeId(prefix: string) {
+                return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+            }
+
+            const teamIdByName = new Map<string, string>();
+            const playerIdByTeamNameThenPlayerName = new Map<string, string>();
+
+            const importedTeams: Team[] = gameTeams.map((t) => {
+                if (!t || typeof t !== "object") throw new Error("Each game.teams[] item must be an object");
+                const tr = t as Record<string, unknown>;
+                if (typeof tr.name !== "string" || !tr.name.trim()) throw new Error("Each team must have a non-empty name");
+                const teamName = tr.name.trim();
+                if (teamIdByName.has(teamName)) throw new Error(`Duplicate team name: ${teamName}`);
+                const teamId = makeId("team");
+                teamIdByName.set(teamName, teamId);
+
+                const playersRaw = tr.players;
+                if (!Array.isArray(playersRaw)) throw new Error(`Team ${teamName}: players must be an array`);
+                const players: Player[] = [];
+                for (const p of playersRaw) {
+                    if (typeof p !== "string") throw new Error(`Team ${teamName}: players must be strings`);
+                    const name = p.trim();
+                    if (!name) continue;
+                    const id = makeId("player");
+                    players.push({ id, name });
+                    playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
+                }
+
+                return { id: teamId, name: teamName, players };
+            });
+
+            function ensurePlayerId(teamName: string, playerName: string): string {
+                const key = `${teamName}\n${playerName}`;
+                const existing = playerIdByTeamNameThenPlayerName.get(key);
+                if (existing) return existing;
+                const team = importedTeams.find((tt) => tt.name === teamName);
+                if (!team) throw new Error(`Attempt references unknown team: ${teamName}`);
+                const id = makeId("player");
+                team.players.push({ id, name: playerName });
+                playerIdByTeamNameThenPlayerName.set(key, id);
+                return id;
+            }
+
+            const stateObj = obj.state;
+            if (!stateObj || typeof stateObj !== "object") throw new Error("Missing required field: state");
+            const stateRec = stateObj as Record<string, unknown>;
+            const importedPairIdx = stateRec.pair_index;
+            if (typeof importedPairIdx !== "number" || !Number.isFinite(importedPairIdx)) {
+                throw new Error("state.pair_index must be a number");
+            }
+
+            const attemptsByQuestionIdObj = stateRec.attempts_by_question_id;
+            if (!attemptsByQuestionIdObj || typeof attemptsByQuestionIdObj !== "object") {
+                throw new Error("state.attempts_by_question_id must be an object");
+            }
+
+            const questionIds = new Set((loadedPacket.questions ?? []).map((qq) => qq.id));
+
+            function decodeLocation(location: unknown): AttemptLocation {
+                if (!location || typeof location !== "object") throw new Error("Attempt.location must be an object");
+                const lr = location as Record<string, unknown>;
+                if (lr.kind === "end") return { kind: "end" };
+                if (lr.kind === "question") {
+                    if (typeof lr.word_index !== "number") throw new Error("Question location missing word_index");
+                    return { kind: "question", wordIndex: lr.word_index };
+                }
+                if (lr.kind === "option") {
+                    if (typeof lr.option_index !== "number") throw new Error("Option location missing option_index");
+                    if (typeof lr.word_index !== "number") throw new Error("Option location missing word_index");
+                    return { kind: "option", optionIndex: lr.option_index, wordIndex: lr.word_index };
+                }
+                throw new Error(`Unknown location kind: ${String(lr.kind)}`);
+            }
+
+            const attemptsByQuestionId = attemptsByQuestionIdObj as Record<string, unknown>;
+            const importedAttempts: Record<number, Attempt[]> = {};
+            for (const [questionIdStr, list] of Object.entries(attemptsByQuestionId)) {
+                const questionId = Number(questionIdStr);
+                if (!Number.isFinite(questionId)) continue;
+                if (!questionIds.has(questionId)) continue;
+                if (!Array.isArray(list)) throw new Error(`attempts_by_question_id.${questionIdStr} must be an array`);
+
+                const decoded: Attempt[] = [];
+                for (const item of list) {
+                    if (!item || typeof item !== "object") throw new Error("Attempt must be an object");
+                    const ar = item as Record<string, unknown>;
+                    if (typeof ar.team !== "string") throw new Error("Attempt.team must be a string");
+                    const teamName = ar.team.trim();
+                    const teamId = teamIdByName.get(teamName);
+                    if (!teamId) throw new Error(`Attempt references unknown team: ${teamName}`);
+
+                    const playerField = ar.player;
+                    const playerName = typeof playerField === "string" ? playerField.trim() : null;
+                    const playerId = playerName ? ensurePlayerId(teamName, playerName) : undefined;
+
+                    if (ar.result !== "correct" && ar.result !== "incorrect") throw new Error("Attempt.result invalid");
+                    if (typeof ar.token !== "string") throw new Error("Attempt.token must be a string");
+                    if (typeof ar.is_end !== "boolean") throw new Error("Attempt.is_end must be a boolean");
+
+                    decoded.push({
+                        teamId,
+                        playerId,
+                        result: ar.result,
+                        token: ar.token,
+                        isEnd: ar.is_end,
+                        location: decodeLocation(ar.location),
+                    });
+                }
+                if (decoded.length) importedAttempts[questionId] = decoded;
+            }
+
+            const byPair: Record<number, { tossupId?: number; bonusId?: number }> = {};
+            for (const qq of loadedPacket.questions ?? []) {
+                const row = byPair[qq.pair_id] ?? (byPair[qq.pair_id] = {});
+                if (qq.question_type === "TOSSUP") row.tossupId = qq.id;
+                if (qq.question_type === "BONUS") row.bonusId = qq.id;
+            }
+
+            for (const row of Object.values(byPair)) {
+                if (!row.bonusId || !row.tossupId) continue;
+                const tossupList = importedAttempts[row.tossupId] ?? [];
+                const winnerTeamId = tossupList.find((a) => a.result === "correct")?.teamId ?? null;
+                if (!winnerTeamId) {
+                    delete importedAttempts[row.bonusId];
+                    continue;
+                }
+
+                const bonusList = importedAttempts[row.bonusId] ?? [];
+                if (!bonusList.length) continue;
+                const first = bonusList[0];
+                importedAttempts[row.bonusId] = [{ ...first, teamId: winnerTeamId, playerId: undefined }];
+            }
+
+            const pairIdSet = new Set((loadedPacket.questions ?? []).map((qq) => qq.pair_id));
+            const pairCount = pairIdSet.size;
+            const clampedPairIdx = pairCount <= 0 ? 0 : clamp(importedPairIdx, 0, pairCount - 1);
+
+            setPacket(loadedPacket);
+            setGame({ teams: importedTeams });
+            setAttempts(importedAttempts);
+            setPairIdx(clampedPairIdx);
+            setAttemptEditor(null);
+            setLastActor(null);
+            setIsNewGameOpen(false);
+            closeLoadGame();
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to load game file.";
+            setLoadGameError(msg);
+        } finally {
+            setIsLoadingGame(false);
+        }
     }
 
     function prev() {
@@ -980,6 +1194,9 @@ export default function App() {
                         <button className="homePrimary" onClick={openNewGame}>
                             New Game
                         </button>
+                        <button type="button" className="secondary" onClick={openLoadGame}>
+                            Load Game
+                        </button>
                     </div>
                 </div>
 
@@ -1167,6 +1384,56 @@ export default function App() {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {isLoadGameOpen && (
+                    <div className="modalOverlay" role="dialog" aria-label="Load Game" onClick={closeLoadGame}>
+                        <div className="modal smallModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle">Load Game</h2>
+                            </div>
+                            <div className="modalBody">
+                                <div className="packetBox">
+                                    {!loadGameFile ? (
+                                        <div className="packetSubtext">Select a local game file</div>
+                                    ) : (
+                                        <div className="packetSubtext">Selected file {loadGameFile.name}</div>
+                                    )}
+                                    {loadGameError && <div className="packetError">{loadGameError}</div>}
+                                </div>
+                                <div className="packetActions" style={{ marginTop: 14 }}>
+                                    <button type="button" className="secondary" onClick={requestUploadGame}>
+                                        {loadGameFile ? "Change" : "Load"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={!loadGameFile || isLoadingGame}
+                                        onClick={() => void openSelectedGameFile()}
+                                    >
+                                        {isLoadingGame ? "Opening..." : "Open Game File"}
+                                    </button>
+                                    <button type="button" className="secondary" onClick={closeLoadGame}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {isLoadGameOpen && (
+                    <input
+                        ref={gameFileInputRef}
+                        type="file"
+                        accept="application/json,.json"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            e.target.value = "";
+                            setLoadGameError(null);
+                            setLoadGameFile(file);
+                        }}
+                    />
                 )}
             </div>
         );
