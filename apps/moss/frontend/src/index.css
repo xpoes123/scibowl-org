@@ -63,9 +63,10 @@ code {
   flex-wrap: wrap;
 }
 
-button.homePrimary {
+.homeActions button {
   padding: 12px 16px;
   font-size: 16px;
+  min-width: 160px;
 }
 
 .modalOverlay {
