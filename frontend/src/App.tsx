@@ -75,35 +75,44 @@ function AppContent() {
       >
         <div className="p-6 flex items-center justify-between">
           {!sidebarCollapsed ? (
-            <Link to="/" className="flex items-center gap-3">
-              <img src="/logo_big.png" alt="SciBowl" className="w-8 h-8" />
-              <span className="text-2xl font-bold text-slate-200">
-                SciBowl
-              </span>
-            </Link>
+            <>
+              <Link to="/" className="flex items-center gap-3">
+                <img src="/logo_big.png" alt="SciBowl" className="w-8 h-8" />
+                <span className="text-2xl font-bold text-slate-200">
+                  SciBowl
+                </span>
+              </Link>
+              <button
+                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                className="p-2 rounded-lg hover:bg-slate-800/50 transition-colors text-slate-400 hover:text-slate-200"
+                title="Collapse sidebar"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+              </button>
+            </>
           ) : (
-            <Link to="/" className="flex items-center justify-center w-full">
-              <img src="/logo_big.png" alt="SciBowl" className="w-8 h-8" />
-            </Link>
-          )}
-          <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className={`p-2 rounded-lg hover:bg-slate-800/50 transition-colors text-slate-400 hover:text-slate-200 ${sidebarCollapsed ? 'hidden' : ''}`}
-            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="w-full p-2 rounded-lg hover:bg-slate-800/50 transition-colors text-slate-400 hover:text-slate-200"
+              title="Expand sidebar"
             >
-              {sidebarCollapsed ? (
+              <svg
+                className="w-5 h-5 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              )}
-            </svg>
-          </button>
+              </svg>
+            </button>
+          )}
         </div>
 
         <nav className="flex-1 px-3">
