@@ -970,6 +970,26 @@ img {
   padding: 18px;
 }
 
+.sbTabStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sbTabSectionBody {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sbTabDivider {
+  height: 1px;
+  background: var(--sb-border);
+  width: 100%;
+  margin: 6px 0;
+}
+
 .sbOverviewGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
