@@ -5,6 +5,25 @@ import type { TournamentStatus, TournamentStatusParam } from "../types";
 import { parseStatusQueryParam } from "../utils/status";
 import { TournamentRow } from "../components/TournamentRow";
 
+function compareWithinStatus(status: TournamentStatus, aKey: { start_date: string; end_date?: string; updated_at?: string; name: string }, bKey: { start_date: string; end_date?: string; updated_at?: string; name: string }): number {
+  if (status === "LIVE") {
+    const aSort = aKey.updated_at ?? aKey.start_date;
+    const bSort = bKey.updated_at ?? bKey.start_date;
+    if (aSort !== bSort) return bSort.localeCompare(aSort);
+    return aKey.name.localeCompare(bKey.name);
+  }
+
+  if (status === "UPCOMING") {
+    if (aKey.start_date !== bKey.start_date) return aKey.start_date.localeCompare(bKey.start_date);
+    return aKey.name.localeCompare(bKey.name);
+  }
+
+  const aSort = aKey.end_date ?? aKey.start_date;
+  const bSort = bKey.end_date ?? bKey.start_date;
+  if (aSort !== bSort) return bSort.localeCompare(aSort);
+  return aKey.name.localeCompare(bKey.name);
+}
+
 function statusParamToStatus(param: TournamentStatusParam): TournamentStatus {
   switch (param) {
     case "live":
@@ -45,8 +64,13 @@ export function TournamentsPage() {
     }
 
     return list.slice().sort((a, b) => {
-      if (a.start_date !== b.start_date) return a.start_date.localeCompare(b.start_date);
-      return a.name.localeCompare(b.name);
+      if (statusParam === "all") {
+        const order: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
+        if (a.status !== b.status) return order[a.status] - order[b.status];
+        return compareWithinStatus(a.status, a, b);
+      }
+
+      return compareWithinStatus(statusParamToStatus(statusParam), a, b);
     });
   }, [query, statusParam, tournaments]);
 
