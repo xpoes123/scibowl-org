@@ -273,6 +273,13 @@ img {
   color: #333;
 }
 
+.sbBadgeImportant {
+  background: white;
+  border-color: #cfe3ff;
+  color: #134a9c;
+  font-weight: 650;
+}
+
 .sbBadgeUpcoming {
   background: #eef5ff;
   border-color: #cfe3ff;
@@ -850,6 +857,31 @@ img {
 .sbHeroMetaRowSecondary {
   color: var(--sb-muted);
   font-size: 13px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.sbHeroMetaGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sbHeroMetaGroupPrimary {
+  color: var(--sb-text);
+  font-weight: 650;
+}
+
+.sbHeroMetaGroupSecondary {
+  color: var(--sb-muted);
+  font-weight: 500;
+}
+
+.sbHeroMetaEmphasis {
+  color: var(--sb-text);
+  font-weight: 750;
 }
 
 .sbHeroMetaSep {
@@ -891,24 +923,30 @@ img {
   overflow: hidden;
 }
 
+.sbTabsCardSpaced {
+  margin-top: 8px;
+}
+
 .sbTabsBar {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 12px;
+  padding: 12px 14px 0;
   border-bottom: 1px solid var(--sb-border);
-  background: var(--sb-card);
+  background: var(--sb-bg);
 }
 
 .sbTab {
-  border: 0;
+  border: 1px solid transparent;
+  border-bottom: 0;
   background: transparent;
-  padding: 12px 10px 10px;
+  padding: 10px 12px;
   font-size: 14px;
   font-weight: 650;
-  color: var(--sb-muted);
-  border-bottom: 2px solid transparent;
+  color: #7a8198;
+  border-radius: 12px 12px 0 0;
   cursor: pointer;
+  margin-bottom: -1px;
 }
 
 .sbTab:hover {
@@ -923,7 +961,9 @@ img {
 
 .sbTabActive {
   color: var(--sb-text);
-  border-bottom-color: #134a9c;
+  background: white;
+  border-color: var(--sb-border);
+  font-weight: 750;
 }
 
 .sbTabsBody {
@@ -947,6 +987,14 @@ img {
 
 .sbOverviewSection {
   padding: 16px;
+}
+
+.sbOverviewSectionPrimary {
+  background: var(--sb-soft);
+}
+
+.sbOverviewSectionMuted {
+  color: var(--sb-muted);
 }
 
 .sbOverviewSection:nth-child(2),
@@ -976,8 +1024,91 @@ img {
 
 .sbSectionTitle {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 750;
+}
+
+.sbSectionSubtitle {
+  margin: 6px 0 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbRegistrationCta {
+  margin-top: 14px;
+}
+
+.sbDeadlinesBlock {
+  margin-top: 16px;
+}
+
+.sbCtaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  background: #134a9c;
+  color: white;
+  border: 1px solid #134a9c;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.sbCtaButton:hover {
+  background: #0f3d85;
+  border-color: #0f3d85;
+}
+
+.sbCtaButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbFormatSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sbFormatSummaryLine {
+  font-weight: 600;
+}
+
+.sbDetails {
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+  background: white;
+  overflow: hidden;
+}
+
+.sbDetailsSummary {
+  cursor: pointer;
+  padding: 10px 12px;
+  font-weight: 650;
+  color: var(--sb-text);
+  list-style: none;
+}
+
+.sbDetailsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.sbDetailsSummary::after {
+  content: "\u2193";
+  float: right;
+  color: var(--sb-muted);
+}
+
+details[open] > .sbDetailsSummary::after {
+  content: "\u2191";
+}
+
+.sbDetailsBody {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--sb-border);
 }
 
 .sbPreLine {
@@ -1045,6 +1176,11 @@ img {
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.sbContactName {
+  font-weight: 650;
+  color: var(--sb-text);
 }
 
 .sbInputWithIcon {
