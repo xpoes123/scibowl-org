@@ -5,6 +5,25 @@ type OverviewTabProps = {
   tournament: TournamentDetail;
 };
 
+function splitLogistics(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+
+  const byLine = trimmed
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (byLine.length > 1) return byLine;
+
+  const sentences = trimmed
+    .match(/[^.!?]+(?:[.!?]+|$)/g)
+    ?.map((sentence) => sentence.trim())
+    .filter(Boolean);
+  if (sentences && sentences.length > 1) return sentences;
+
+  return [trimmed];
+}
+
 function getRegistrationMethodLabel(method: TournamentDetail["registration"]["method"]): string {
   switch (method) {
     case "FORM":
@@ -21,49 +40,31 @@ function getRegistrationMethodLabel(method: TournamentDetail["registration"]["me
 }
 
 export function OverviewTab({ tournament }: OverviewTabProps) {
-  const locationLabel = `${tournament.location_city}, ${tournament.location_state}`;
-  const dateLabel = formatTournamentDateRange(tournament.start_date, tournament.end_date);
-  const levelLabel = tournament.levels.join(", ");
   const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
+  const logisticsBullets = tournament.logistics ? splitLogistics(tournament.logistics) : [];
 
   return (
     <div className="sbOverviewGrid" aria-label="Tournament overview">
-      <section className="sbOverviewSection" aria-label="Logistics">
+      <section className="sbOverviewSection sbOverviewSectionMuted" aria-label="Logistics">
         <header className="sbSectionHeader">
           <h2 className="sbSectionTitle">Logistics</h2>
         </header>
 
-        {tournament.logistics ? (
-          <p className="sbBody sbTopSpace">{tournament.logistics}</p>
+        {logisticsBullets.length > 0 ? (
+          <ul className="sbBulletList sbTopSpace" aria-label="Logistics notes">
+            {logisticsBullets.map((bullet, idx) => (
+              <li key={`${idx}-${bullet}`}>{bullet}</li>
+            ))}
+          </ul>
         ) : (
           <p className="sbMuted sbTopSpace">No logistics details yet.</p>
         )}
-
-        <div className="sbDetailRows sbTopSpace" aria-label="Logistics highlights">
-          <div className="sbDetailRow">
-            <span className="sbLabel">Location</span>
-            <span className="sbDetailValue">{locationLabel}</span>
-          </div>
-          <div className="sbDetailRow">
-            <span className="sbLabel">Dates</span>
-            <span className="sbDetailValue">{dateLabel}</span>
-          </div>
-          <div className="sbDetailRow">
-            <span className="sbLabel">Levels</span>
-            <span className="sbDetailValue">{levelLabel}</span>
-          </div>
-          {tournament.difficulty && (
-            <div className="sbDetailRow">
-              <span className="sbLabel">Difficulty</span>
-              <span className="sbDetailValue">{tournament.difficulty}</span>
-            </div>
-          )}
-        </div>
       </section>
 
-      <section className="sbOverviewSection" aria-label="Registration">
+      <section className="sbOverviewSection sbOverviewSectionPrimary" aria-label="Registration">
         <header className="sbSectionHeader">
           <h2 className="sbSectionTitle">Registration</h2>
+          <p className="sbSectionSubtitle">Primary info for teams and coaches.</p>
         </header>
 
         <div className="sbDetailRows sbTopSpace" aria-label="Registration summary">
@@ -82,15 +83,15 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
         <p className="sbBody sbTopSpace sbPreLine">{tournament.registration.instructions}</p>
 
         {tournament.registration.url && (
-          <div className="sbTopSpace">
-            <a className="sbActionLink" href={tournament.registration.url} target="_blank" rel="noreferrer">
+          <div className="sbRegistrationCta">
+            <a className="sbCtaButton" href={tournament.registration.url} target="_blank" rel="noreferrer">
               Open registration link
             </a>
           </div>
         )}
 
         {tournament.registration.deadlines.length > 0 && (
-          <div className="sbTopSpace" aria-label="Registration deadlines">
+          <div className="sbDeadlinesBlock" aria-label="Registration deadlines">
             <div className="sbLabel">Deadlines</div>
             <div className="sbDetailRows sbTopSpace">
               {tournament.registration.deadlines.map((deadline) => (
@@ -109,18 +110,9 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
           <h2 className="sbSectionTitle">Format</h2>
         </header>
 
-        <p className="sbBody sbTopSpace">{tournament.format.summary}</p>
-
-        {tournament.format.phases.length > 0 && (
-          <ul className="sbBulletList sbTopSpace" aria-label="Tournament phases">
-            {tournament.format.phases.map((phase) => (
-              <li key={phase.name}>
-                <span className="sbStrong">{phase.name}</span>
-                <span className="sbMuted sbSmall">{" — "}{phase.description}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className="sbFormatSummary sbTopSpace" aria-label="Format summary">
+          <div className="sbBody sbFormatSummaryLine">{tournament.format.summary}</div>
+        </div>
 
         <div className="sbDetailRows sbTopSpace" aria-label="Format details">
           {fieldCap && (
@@ -136,11 +128,28 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
             </div>
           )}
         </div>
+
+        {tournament.format.phases.length > 0 && (
+          <details className="sbDetails sbTopSpace">
+            <summary className="sbDetailsSummary">Phase breakdown</summary>
+            <div className="sbDetailsBody">
+              <ul className="sbBulletList" aria-label="Tournament phases">
+                {tournament.format.phases.map((phase) => (
+                  <li key={phase.name}>
+                    <span className="sbStrong">{phase.name}</span>
+                    <span className="sbMuted sbSmall">{" — "}{phase.description}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        )}
       </section>
 
       <section className="sbOverviewSection" aria-label="Contacts">
         <header className="sbSectionHeader">
           <h2 className="sbSectionTitle">Contacts</h2>
+          <p className="sbSectionSubtitle">Questions or need help? Reach out.</p>
         </header>
 
         {tournament.contacts.length === 0 ? (
@@ -149,7 +158,7 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
           <div className="sbDetailRows sbTopSpace" aria-label="Tournament contacts">
             {tournament.contacts.map((contact) => (
               <div key={contact.email ?? contact.name} className="sbContactRow">
-                <div className="sbStrong">{contact.name}</div>
+                <div className="sbContactName">{contact.name}</div>
                 <div className="sbContactMeta">
                   {contact.email && (
                     <a className="sbInlineLink" href={`mailto:${contact.email}`}>
@@ -166,4 +175,3 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
     </div>
   );
 }
-

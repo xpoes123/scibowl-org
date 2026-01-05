@@ -104,34 +104,6 @@ export function TournamentDetailPage() {
       ),
     });
   }
-  heroMetaItems.push({
-    key: "field_size",
-    node: (
-      <span>
-        <span className="sbLabelInline">Field size:</span> {fieldLabel}
-      </span>
-    ),
-  });
-  if (tournament.registration.cost) {
-    heroMetaItems.push({
-      key: "cost",
-      node: (
-        <span>
-          <span className="sbLabelInline">Cost:</span> {tournament.registration.cost}
-        </span>
-      ),
-    });
-  }
-  if (tournament.website_url) {
-    heroMetaItems.push({
-      key: "website",
-      node: (
-        <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
-          Website <span aria-hidden="true">{"\u2197"}</span>
-        </a>
-      ),
-    });
-  }
 
   return (
     <div className="sbStack">
@@ -145,26 +117,40 @@ export function TournamentDetailPage() {
             <h1 className="sbHeroTitle sbHeroTitleTight">{tournament.name}</h1>
 
             <div className="sbHeroMetaRow" aria-label="Tournament basics">
-              <span className="sbBadge sbBadgeNeutral">
+              <span className="sbBadge sbBadgeImportant">
                 <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
               </span>
-              <span className="sbBadge sbBadgeNeutral">
+              <span className="sbBadge sbBadgeImportant">
                 <CalendarDaysIcon className="sbIcon" aria-hidden="true" /> {dateLabel}
               </span>
               <LevelPills levels={tournament.levels} />
             </div>
 
             <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-              {heroMetaItems.map((item, idx) => (
-                <Fragment key={item.key}>
-                  {idx > 0 && (
-                    <span className="sbHeroMetaSep" aria-hidden="true">
-                      {"\u2022"}
-                    </span>
-                  )}
-                  {item.node}
-                </Fragment>
-              ))}
+              <div className="sbHeroMetaGroup sbHeroMetaGroupPrimary" aria-label="Participation info">
+                <span className="sbHeroMetaEmphasis">{fieldLabel}</span>
+                {tournament.registration.cost && <span className="sbHeroMetaEmphasis">{tournament.registration.cost}</span>}
+                {tournament.website_url && (
+                  <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
+                    Website <span aria-hidden="true">{"\u2197"}</span>
+                  </a>
+                )}
+              </div>
+
+              {(tournament.difficulty || tournament.writing_team) && (
+                <div className="sbHeroMetaGroup sbHeroMetaGroupSecondary" aria-label="Reference info">
+                  {heroMetaItems.map((item, idx) => (
+                    <Fragment key={item.key}>
+                      {idx > 0 && (
+                        <span className="sbHeroMetaSep" aria-hidden="true">
+                          {"\u2022"}
+                        </span>
+                      )}
+                      {item.node}
+                    </Fragment>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -174,7 +160,7 @@ export function TournamentDetailPage() {
         </div>
       </div>
 
-      <section className="card sbTabsCard" aria-label="Tournament content">
+      <section className="card sbTabsCard sbTabsCardSpaced" aria-label="Tournament content">
         <div className="sbTabsBar" role="tablist" aria-label="Tournament sections">
           <button
             type="button"
