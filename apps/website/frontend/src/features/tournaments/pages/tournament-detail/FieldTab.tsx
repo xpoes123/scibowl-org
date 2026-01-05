@@ -46,6 +46,9 @@ export function FieldTab({ tournament }: FieldTabProps) {
   const [level, setLevel] = useState<TeamLevelFilter>("all");
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
+  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
+  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
+
   const hasAnyStatus = useMemo(() => tournament.teams.some((team) => Boolean(team.status)), [tournament.teams]);
   const hasMixedLevels = useMemo(() => new Set(tournament.teams.map((team) => team.level)).size > 1, [tournament.teams]);
 
@@ -99,55 +102,56 @@ export function FieldTab({ tournament }: FieldTabProps) {
 
   return (
     <div className="sbStack">
-      <div className="card sbPageHeader">
-        <h2 className="sbTitle">Field</h2>
-        <p className="sbMuted sbTopSpace">Search and filter teams, then expand rows to view rosters.</p>
-
-        <div className="sbListingControls sbTopSpace">
-          <label className="sbField">
-            <span className="sbFieldLabel">Search</span>
-            <div className="sbInputWithIcon">
-              <MagnifyingGlassIcon className="sbInputIcon" aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="sbInput sbInputPadded"
-                placeholder={"Team, school, city/state\u2026"}
-              />
-            </div>
-          </label>
-
-          {hasAnyStatus && (
-            <label className="sbField">
-              <span className="sbFieldLabel">Status</span>
-              <select value={status} onChange={(e) => setStatus(e.target.value as TeamStatusFilter)} className="sbSelect">
-                <option value="all">All</option>
-                <option value="CONFIRMED">Confirmed</option>
-                <option value="WAITLIST">Waitlist</option>
-                <option value="DROPPED">Dropped</option>
-              </select>
-            </label>
-          )}
-
-          {hasMixedLevels && (
-            <label className="sbField">
-              <span className="sbFieldLabel">Level</span>
-              <select value={level} onChange={(e) => setLevel(e.target.value as TeamLevelFilter)} className="sbSelect">
-                <option value="all">All</option>
-                <option value="MS">MS</option>
-                <option value="HS">HS</option>
-              </select>
-            </label>
-          )}
+      <div className="sbFieldTabHeader">
+        <div className="sbMinW0">
+          <div className="sbLabel">Field size</div>
+          <div className="sbValue">{fieldLabel}</div>
         </div>
-
-        <div className="sbMuted sbSmall sbTopSpace">
+        <div className="sbMuted sbSmall">
           Showing <span className="sbStrong">{filteredTeams.length}</span> of <span className="sbStrong">{tournament.teams.length}</span> teams
         </div>
       </div>
 
-      <section className="card sbAccordion sbListingCard" aria-label="Tournament teams">
+      <div className="sbListingControls">
+        <label className="sbField">
+          <span className="sbFieldLabel">Search</span>
+          <div className="sbInputWithIcon">
+            <MagnifyingGlassIcon className="sbInputIcon" aria-hidden="true" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="sbInput sbInputPadded"
+              placeholder={"Team, school, city/state\u2026"}
+            />
+          </div>
+        </label>
+
+        {hasAnyStatus && (
+          <label className="sbField">
+            <span className="sbFieldLabel">Status</span>
+            <select value={status} onChange={(e) => setStatus(e.target.value as TeamStatusFilter)} className="sbSelect">
+              <option value="all">All</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="WAITLIST">Waitlist</option>
+              <option value="DROPPED">Dropped</option>
+            </select>
+          </label>
+        )}
+
+        {hasMixedLevels && (
+          <label className="sbField">
+            <span className="sbFieldLabel">Level</span>
+            <select value={level} onChange={(e) => setLevel(e.target.value as TeamLevelFilter)} className="sbSelect">
+              <option value="all">All</option>
+              <option value="MS">MS</option>
+              <option value="HS">HS</option>
+            </select>
+          </label>
+        )}
+      </div>
+
+      <div className="sbTeamList" aria-label="Tournament teams">
         <div className="sbRows">
           {filteredTeams.length === 0 ? (
             <div className="sbEmptyState">
@@ -249,7 +253,8 @@ export function FieldTab({ tournament }: FieldTabProps) {
             })
           )}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
+

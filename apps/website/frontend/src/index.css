@@ -304,7 +304,7 @@ img {
 }
 
 .sbTournamentCard {
-  padding: 18px 20px;
+  padding: 16px 18px;
 }
 
 .sbTournamentHeader {
@@ -824,15 +824,41 @@ img {
 /* Tournament detail */
 .sbHeroTitle {
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1.15;
   font-weight: 750;
 }
 
+.sbHeroTitleTight {
+  margin-top: 10px;
+}
+
 @media (max-width: 720px) {
   .sbHeroTitle {
-    font-size: 22px;
+    font-size: 21px;
   }
+}
+
+.sbHeroMetaRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sbHeroMetaRowSecondary {
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbHeroMetaSep {
+  color: #b2b7c8;
+}
+
+.sbLabelInline {
+  font-weight: 650;
+  color: var(--sb-muted);
 }
 
 .sbInlineLink {
@@ -845,6 +871,11 @@ img {
   font-size: 13px;
 }
 
+.sbInlineLinkSmall {
+  font-size: 13px;
+  font-weight: 650;
+}
+
 .sbInlineLink:hover {
   text-decoration: underline;
 }
@@ -855,22 +886,98 @@ img {
   border-radius: 10px;
 }
 
-.sbCardTitle {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 700;
+.sbTabsCard {
+  padding: 0;
+  overflow: hidden;
 }
 
-.sbDetailGrid {
+.sbTabsBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--sb-border);
+  background: var(--sb-card);
+}
+
+.sbTab {
+  border: 0;
+  background: transparent;
+  padding: 12px 10px 10px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--sb-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.sbTab:hover {
+  color: var(--sb-text);
+}
+
+.sbTab:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.sbTabActive {
+  color: var(--sb-text);
+  border-bottom-color: #134a9c;
+}
+
+.sbTabsBody {
+  padding: 18px;
+}
+
+.sbOverviewGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
 }
 
 @media (max-width: 900px) {
-  .sbDetailGrid {
+  .sbOverviewGrid {
     grid-template-columns: 1fr;
   }
+}
+
+.sbOverviewSection {
+  padding: 16px;
+}
+
+.sbOverviewSection:nth-child(2),
+.sbOverviewSection:nth-child(4) {
+  border-left: 1px solid var(--sb-border);
+}
+
+.sbOverviewSection:nth-child(n + 3) {
+  border-top: 1px solid var(--sb-border);
+}
+
+@media (max-width: 900px) {
+  .sbOverviewSection:nth-child(2),
+  .sbOverviewSection:nth-child(4) {
+    border-left: 0;
+  }
+
+  .sbOverviewSection + .sbOverviewSection {
+    border-top: 1px solid var(--sb-border);
+  }
+}
+
+.sbSectionHeader {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbSectionTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
 }
 
 .sbPreLine {
@@ -902,7 +1009,6 @@ img {
   border-top: 0;
 }
 
-.sbKeyValueList,
 .sbBulletList {
   list-style: none;
   padding: 0;
@@ -910,24 +1016,6 @@ img {
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.sbKeyValueList li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid var(--sb-border);
-  border-radius: 12px;
-  background: white;
-}
-
-@media (max-width: 520px) {
-  .sbKeyValueList li {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 .sbBulletList li {
@@ -1043,4 +1131,19 @@ img {
 
 .sbRosterMeta {
   margin-top: 2px;
+}
+
+.sbFieldTabHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sbTeamList {
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
 }

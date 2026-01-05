@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
@@ -83,18 +83,68 @@ export function TournamentDetailPage() {
   const fieldTabId = "tournament-tab-field";
   const panelId = "tournament-tabpanel";
 
+  const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
+  if (tournament.difficulty) {
+    heroMetaItems.push({
+      key: "difficulty",
+      node: (
+        <span>
+          <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
+        </span>
+      ),
+    });
+  }
+  if (tournament.writing_team) {
+    heroMetaItems.push({
+      key: "writing_team",
+      node: (
+        <span>
+          <span className="sbLabelInline">Writing team:</span> {tournament.writing_team}
+        </span>
+      ),
+    });
+  }
+  heroMetaItems.push({
+    key: "field_size",
+    node: (
+      <span>
+        <span className="sbLabelInline">Field size:</span> {fieldLabel}
+      </span>
+    ),
+  });
+  if (tournament.registration.cost) {
+    heroMetaItems.push({
+      key: "cost",
+      node: (
+        <span>
+          <span className="sbLabelInline">Cost:</span> {tournament.registration.cost}
+        </span>
+      ),
+    });
+  }
+  if (tournament.website_url) {
+    heroMetaItems.push({
+      key: "website",
+      node: (
+        <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
+          Website <span aria-hidden="true">{"\u2197"}</span>
+        </a>
+      ),
+    });
+  }
+
   return (
     <div className="sbStack">
-      <div className="card sbTournamentCard" aria-label="Tournament summary">
+      <div className="card sbTournamentCard sbHeroCard" aria-label="Tournament summary">
         <div className="sbTournamentHeader">
           <div className="sbMinW0">
             <Link to="/tournaments" className="sbInlineLink">
               <ArrowLeftIcon className="sbIcon" aria-hidden="true" /> Back
             </Link>
 
-            <h1 className="sbHeroTitle sbTopSpace">{tournament.name}</h1>
+            <h1 className="sbHeroTitle sbHeroTitleTight">{tournament.name}</h1>
 
-            <div className="sbBadgesRow">
+            <div className="sbHeroMetaRow" aria-label="Tournament basics">
               <span className="sbBadge sbBadgeNeutral">
                 <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
               </span>
@@ -103,83 +153,63 @@ export function TournamentDetailPage() {
               </span>
               <LevelPills levels={tournament.levels} />
             </div>
+
+            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
+              {heroMetaItems.map((item, idx) => (
+                <Fragment key={item.key}>
+                  {idx > 0 && (
+                    <span className="sbHeroMetaSep" aria-hidden="true">
+                      {"\u2022"}
+                    </span>
+                  )}
+                  {item.node}
+                </Fragment>
+              ))}
+            </div>
           </div>
 
           <div className="sbTournamentDate">
             <StatusBadge status={tournament.status} />
           </div>
         </div>
+      </div>
 
-        <div className="sbInfoGrid sbTopSpace" aria-label="Tournament metadata">
-          {tournament.difficulty && (
-            <div className="sbInfoItem">
-              <div className="sbLabel">Difficulty</div>
-              <div className="sbValue">{tournament.difficulty}</div>
-            </div>
-          )}
-          {tournament.writing_team && (
-            <div className="sbInfoItem">
-              <div className="sbLabel">Writing team</div>
-              <div className="sbValue">{tournament.writing_team}</div>
-            </div>
-          )}
-          <div className="sbInfoItem">
-            <div className="sbLabel">Field size</div>
-            <div className="sbValue">{fieldLabel}</div>
-          </div>
-          {tournament.registration.cost && (
-            <div className="sbInfoItem">
-              <div className="sbLabel">Cost</div>
-              <div className="sbValue">{tournament.registration.cost}</div>
-            </div>
-          )}
-          {tournament.website_url && (
-            <div className="sbInfoItem">
-              <div className="sbLabel">Website</div>
-              <div className="sbValue">
-                <a className="sbInlineLink" href={tournament.website_url} target="_blank" rel="noreferrer">
-                  Website <span aria-hidden="true">{"\u2197"}</span>
-                </a>
-              </div>
-            </div>
-          )}
+      <section className="card sbTabsCard" aria-label="Tournament content">
+        <div className="sbTabsBar" role="tablist" aria-label="Tournament sections">
+          <button
+            type="button"
+            id={overviewTabId}
+            role="tab"
+            aria-selected={tab === "overview"}
+            aria-controls={panelId}
+            className={tab === "overview" ? "sbTab sbTabActive" : "sbTab"}
+            onClick={() => setTab("overview")}
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            id={fieldTabId}
+            role="tab"
+            aria-selected={tab === "field"}
+            aria-controls={panelId}
+            className={tab === "field" ? "sbTab sbTabActive" : "sbTab"}
+            onClick={() => setTab("field")}
+          >
+            Field
+          </button>
         </div>
-      </div>
 
-      <div className="sbPills" role="tablist" aria-label="Tournament sections">
-        <button
-          type="button"
-          id={overviewTabId}
-          role="tab"
-          aria-selected={tab === "overview"}
-          aria-controls={panelId}
-          className={tab === "overview" ? "sbPill sbPillActive" : "sbPill"}
-          onClick={() => setTab("overview")}
+        <div
+          id={panelId}
+          role="tabpanel"
+          aria-labelledby={tab === "overview" ? overviewTabId : fieldTabId}
+          aria-label={tab === "overview" ? "Overview" : "Field"}
+          className="sbTabsBody"
         >
-          Overview
-        </button>
-        <button
-          type="button"
-          id={fieldTabId}
-          role="tab"
-          aria-selected={tab === "field"}
-          aria-controls={panelId}
-          className={tab === "field" ? "sbPill sbPillActive" : "sbPill"}
-          onClick={() => setTab("field")}
-        >
-          Field
-        </button>
-      </div>
-
-      <div
-        id={panelId}
-        role="tabpanel"
-        aria-labelledby={tab === "overview" ? overviewTabId : fieldTabId}
-        aria-label={tab === "overview" ? "Overview" : "Field"}
-      >
-        {tab === "overview" ? <OverviewTab tournament={tournament} /> : <FieldTab tournament={tournament} />}
-      </div>
+          {tab === "overview" ? <OverviewTab tournament={tournament} /> : <FieldTab tournament={tournament} />}
+        </div>
+      </section>
     </div>
   );
 }
-
