@@ -59,7 +59,7 @@ export const TournamentSection = memo(function TournamentSection({
           {showViewAll && (
             <div className="sbSectionFooter">
               <Link to={viewAllTo} className="sbViewAllLink">
-                {viewAllLabel} <span aria-hidden="true">→</span>
+                {viewAllLabel} <span aria-hidden="true">{"\u2192"}</span>
               </Link>
             </div>
           )}
@@ -68,4 +68,3 @@ export const TournamentSection = memo(function TournamentSection({
     </section>
   );
 });
-

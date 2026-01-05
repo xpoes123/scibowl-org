@@ -27,7 +27,7 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
                 {locationLabel}
               </span>
               <span className="sbRowMetaSep" aria-hidden="true">
-                •
+                {"\u2022"}
               </span>
               <span className="sbRowMetaItem">{dateLabel}</span>
             </div>
@@ -51,4 +51,3 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
     </Link>
   );
 });
-

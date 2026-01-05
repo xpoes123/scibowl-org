@@ -111,7 +111,7 @@ export function TournamentsPage() {
                 setSearchParams(next);
               }}
               className="sbInput"
-              placeholder="Search by name or location…"
+              placeholder={"Search by name or location\u2026"}
             />
           </label>
 
