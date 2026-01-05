@@ -24,3 +24,39 @@ export function formatTournamentDate(iso: string): string {
   return tournamentDateFormatter.format(date);
 }
 
+function formatMonthDayParts(date: Date): { month: string; day: string } {
+  const parts = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).formatToParts(date);
+  const month = parts.find((part) => part.type === "month")?.value ?? "";
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+  return { month, day };
+}
+
+export function formatTournamentDateRange(startIso: string, endIso?: string): string {
+  const start = parseISODateToLocalDate(startIso);
+  if (!start) return "";
+
+  const end = endIso ? parseISODateToLocalDate(endIso) : null;
+  if (!end) return tournamentDateFormatter.format(start);
+
+  const sameDay =
+    start.getFullYear() === end.getFullYear() &&
+    start.getMonth() === end.getMonth() &&
+    start.getDate() === end.getDate();
+  if (sameDay) return tournamentDateFormatter.format(start);
+
+  const sameYear = start.getFullYear() === end.getFullYear();
+  if (!sameYear) {
+    const withYear = new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "numeric" });
+    return `${withYear.format(start)}–${withYear.format(end)}`;
+  }
+
+  const { month: startMonth, day: startDay } = formatMonthDayParts(start);
+  const { month: endMonth, day: endDay } = formatMonthDayParts(end);
+  const year = String(start.getFullYear());
+
+  if (startMonth === endMonth) {
+    return `${startMonth} ${startDay}–${endDay}, ${year}`;
+  }
+
+  return `${startMonth} ${startDay}–${endMonth} ${endDay}, ${year}`;
+}
