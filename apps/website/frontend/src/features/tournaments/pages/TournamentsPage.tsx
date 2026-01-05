@@ -1,229 +1,172 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
-import { tournamentsAPI } from '../../../core/api/api';
-import type { Tournament } from '../../../shared/types/api';
+import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useTournaments } from "../hooks/useTournaments";
+import type { TournamentStatus, TournamentStatusParam } from "../types";
+import { parseStatusQueryParam } from "../utils/status";
+import { TournamentRow } from "../components/TournamentRow";
+
+function compareWithinStatus(status: TournamentStatus, aKey: { start_date: string; end_date?: string; updated_at?: string; name: string }, bKey: { start_date: string; end_date?: string; updated_at?: string; name: string }): number {
+  if (status === "LIVE") {
+    const aSort = aKey.updated_at ?? aKey.start_date;
+    const bSort = bKey.updated_at ?? bKey.start_date;
+    if (aSort !== bSort) return bSort.localeCompare(aSort);
+    return aKey.name.localeCompare(bKey.name);
+  }
+
+  if (status === "UPCOMING") {
+    if (aKey.start_date !== bKey.start_date) return aKey.start_date.localeCompare(bKey.start_date);
+    return aKey.name.localeCompare(bKey.name);
+  }
+
+  const aSort = aKey.end_date ?? aKey.start_date;
+  const bSort = bKey.end_date ?? bKey.start_date;
+  if (aSort !== bSort) return bSort.localeCompare(aSort);
+  return aKey.name.localeCompare(bKey.name);
+}
+
+function statusParamToStatus(param: TournamentStatusParam): TournamentStatus {
+  switch (param) {
+    case "live":
+      return "LIVE";
+    case "upcoming":
+      return "UPCOMING";
+    case "finished":
+      return "FINISHED";
+    default:
+      return "UPCOMING";
+  }
+}
 
 export function TournamentsPage() {
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'live' | 'finished'>('all');
+  const { tournaments } = useTournaments();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusParam = parseStatusQueryParam(searchParams.get("status"));
+  const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    loadTournaments();
-  }, [filter]);
+  const pageSize = 20;
+  const rawPage = Number(searchParams.get("page") ?? "1");
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1;
 
-  const loadTournaments = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      let filters = {};
-      if (filter === 'upcoming') {
-        filters = { status: 'UPCOMING,REGISTRATION' };
-      } else if (filter === 'live') {
-        filters = { status: 'IN_PROGRESS' };
-      } else if (filter === 'finished') {
-        filters = { status: 'COMPLETED' };
-      }
-      const data = await tournamentsAPI.getTournaments(filters);
-      setTournaments(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load tournaments');
-    } finally {
-      setLoading(false);
+  const filtered = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    let list = tournaments;
+    if (statusParam !== "all") {
+      const wanted = statusParamToStatus(statusParam);
+      list = list.filter((t) => t.status === wanted);
     }
+
+    if (normalizedQuery) {
+      list = list.filter((t) => {
+        const location = `${t.location_city}, ${t.location_state}`.toLowerCase();
+        return t.name.toLowerCase().includes(normalizedQuery) || location.includes(normalizedQuery);
+      });
+    }
+
+    return list.slice().sort((a, b) => {
+      if (statusParam === "all") {
+        const order: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
+        if (a.status !== b.status) return order[a.status] - order[b.status];
+        return compareWithinStatus(a.status, a, b);
+      }
+
+      return compareWithinStatus(statusParamToStatus(statusParam), a, b);
+    });
+  }, [query, statusParam, tournaments]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const clampedPage = Math.min(page, pageCount);
+  const pageItems = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
+
+  const setStatus = (nextStatus: "all" | TournamentStatusParam) => {
+    const next = new URLSearchParams(searchParams);
+    if (nextStatus === "all") next.delete("status");
+    else next.set("status", nextStatus);
+    next.delete("page");
+    setSearchParams(next);
   };
 
-  const getStatusBadge = (status: string) => {
-    const badges = {
-      UPCOMING: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-      REGISTRATION: 'bg-green-500/10 text-green-400 border-green-500/20',
-      IN_PROGRESS: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-      COMPLETED: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
-      CANCELLED: 'bg-red-500/10 text-red-400 border-red-500/20',
-    };
-    return badges[status as keyof typeof badges] || badges.UPCOMING;
-  };
-
-  const getDivisionBadge = (division: string) => {
-    const displayNames = {
-      HIGH_SCHOOL: 'High School',
-      MIDDLE_SCHOOL: 'Middle School',
-      COLLEGIATE: 'Collegiate',
-      OPEN: 'Open',
-    };
-    return displayNames[division as keyof typeof displayNames] || division;
-  };
-
-  const formatDate = (dateString: string) => {
-    // Parse date as local date to avoid timezone shifts
-    const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const setPage = (nextPage: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("page", String(nextPage));
+    setSearchParams(next);
   };
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Tournaments</h1>
-          <p className="text-slate-400">Browse and register for upcoming Science Bowl tournaments</p>
+    <div className="sbStack">
+      <div className="card sbPageHeader">
+        <h1 className="sbTitle">All Tournaments</h1>
+        <p className="sbMuted sbTopSpace">Search and filter tournaments.</p>
+
+        <div className="sbListingControls sbTopSpace">
+          <label className="sbField">
+            <span className="sbFieldLabel">Search</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                const next = new URLSearchParams(searchParams);
+                next.delete("page");
+                setSearchParams(next);
+              }}
+              className="sbInput"
+              placeholder={"Search by name or location\u2026"}
+            />
+          </label>
+
+          <label className="sbField">
+            <span className="sbFieldLabel">Status</span>
+            <select
+              value={statusParam}
+              onChange={(e) => setStatus(e.target.value as "all" | TournamentStatusParam)}
+              className="sbSelect"
+              aria-label="Filter tournaments by status"
+            >
+              <option value="all">All</option>
+              <option value="live">Live</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="finished">Finished</option>
+            </select>
+          </label>
         </div>
-
-        {/* Filter Slider */}
-        <div className="inline-flex bg-slate-800/50 rounded-lg p-1 mb-6 border border-slate-700">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-md transition-all ${
-              filter === 'all'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setFilter('upcoming')}
-            className={`px-4 py-2 rounded-md transition-all ${
-              filter === 'upcoming'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Upcoming
-          </button>
-          <button
-            onClick={() => setFilter('live')}
-            className={`px-4 py-2 rounded-md transition-all ${
-              filter === 'live'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Live
-          </button>
-          <button
-            onClick={() => setFilter('finished')}
-            className={`px-4 py-2 rounded-md transition-all ${
-              filter === 'finished'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Finished
-          </button>
-        </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-            <p className="text-slate-400 mt-4">Loading tournaments...</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400">
-            {error}
-          </div>
-        )}
-
-        {/* Tournaments List */}
-        {!loading && !error && (
-          <div className="space-y-4">
-            {tournaments.length === 0 ? (
-              <div className="text-center py-12 bg-slate-800/30 rounded-lg border border-slate-700">
-                <p className="text-slate-400">No tournaments found</p>
-              </div>
-            ) : (
-              tournaments.map((tournament) => (
-                <Link
-                  key={tournament.id}
-                  to={`/tournaments/${tournament.id}`}
-                  className="block bg-slate-800/50 hover:bg-slate-800/80 transition-colors rounded-lg border border-slate-700 hover:border-purple-600/50 p-6"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-1">{tournament.name}</h3>
-                      <div className="flex gap-2 items-center">
-                        <span className={`text-xs px-2 py-1 rounded border ${getStatusBadge(tournament.status)}`}>
-                          {tournament.status.replace('_', ' ')}
-                        </span>
-                        <span className="text-xs px-2 py-1 rounded border bg-slate-700/30 text-slate-300 border-slate-600">
-                          {getDivisionBadge(tournament.division)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-slate-400">Tournament Date</div>
-                      <div className="text-white font-semibold">{formatDate(tournament.tournament_date)}</div>
-                    </div>
-                  </div>
-
-                  <p className="text-slate-300 mb-4">{tournament.description}</p>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <div className="text-slate-500">Location</div>
-                      <div className="text-slate-200">{tournament.location}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Format</div>
-                      <div className="text-slate-200">{tournament.format.replace('_', ' ')}</div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Teams</div>
-                      <div className="text-slate-200">
-                        {tournament.current_teams}
-                        {tournament.max_teams && ` / ${tournament.max_teams}`}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-slate-500">Host</div>
-                      <div className="text-slate-200">{tournament.host_organization}</div>
-                    </div>
-                  </div>
-
-                  {(tournament.registration_deadline || tournament.website_url || tournament.registration_url) && (
-                    <div className="mt-4 pt-4 border-t border-slate-700 flex justify-between items-center">
-                      {tournament.registration_deadline && (
-                        <div className="text-sm text-slate-400">
-                          Registration closes: <span className="text-slate-200">{formatDate(tournament.registration_deadline)}</span>
-                        </div>
-                      )}
-                      <div className="flex gap-2 ml-auto">
-                        {tournament.website_url && (
-                          <a
-                            href={tournament.website_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-sm px-3 py-1 rounded border border-purple-500/30 bg-purple-500/10 text-purple-300 hover:bg-purple-500/20 transition-colors"
-                          >
-                            Website
-                          </a>
-                        )}
-                        {tournament.registration_url && (
-                          <a
-                            href={tournament.registration_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="text-sm px-3 py-1 rounded border border-green-500/30 bg-green-500/10 text-green-300 hover:bg-green-500/20 transition-colors"
-                          >
-                            Register
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </Link>
-              ))
-            )}
-          </div>
-        )}
       </div>
+
+      <section className="card sbAccordion sbListingCard" aria-label="Tournament list">
+        <div className="sbRows">
+          {pageItems.length === 0 ? (
+            <div className="sbEmptyState">
+              <p className="sbMuted">No tournaments found.</p>
+            </div>
+          ) : (
+            pageItems.map((tournament) => <TournamentRow key={tournament.id} tournament={tournament} />)
+          )}
+        </div>
+
+        {filtered.length > pageSize && (
+          <div className="sbPagination">
+            <button
+              type="button"
+              className="sbPageButton"
+              onClick={() => setPage(Math.max(1, clampedPage - 1))}
+              disabled={clampedPage === 1}
+            >
+              Prev
+            </button>
+            <div className="sbMuted sbSmall">
+              Page <span className="sbStrong">{clampedPage}</span> of <span className="sbStrong">{pageCount}</span>
+            </div>
+            <button
+              type="button"
+              className="sbPageButton"
+              onClick={() => setPage(Math.min(pageCount, clampedPage + 1))}
+              disabled={clampedPage === pageCount}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

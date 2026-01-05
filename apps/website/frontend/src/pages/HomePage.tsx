@@ -11,50 +11,16 @@ export function HomePage() {
               SciBowl
             </h1>
           </div>
-          <p className="text-lg text-slate-400">
-            A website like no other...
-          </p>
+          <p className="text-lg text-slate-400">Browse Science Bowl tournaments</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <Link
-            to="/study"
-            className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
-          >
-            <h2 className="text-xl font-bold text-white mb-2">Study</h2>
-            <p className="text-sm text-slate-400">Practice and learn</p>
-          </Link>
-
-          <Link
-            to="/multiplayer"
-            className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
-          >
-            <h2 className="text-xl font-bold text-white mb-2">Multiplayer</h2>
-            <p className="text-sm text-slate-400">Compete with others</p>
-          </Link>
-
           <Link
             to="/tournaments"
             className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
           >
             <h2 className="text-xl font-bold text-white mb-2">Tournaments</h2>
-            <p className="text-sm text-slate-400">Organize events</p>
-          </Link>
-
-          <Link
-            to="/social"
-            className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
-          >
-            <h2 className="text-xl font-bold text-white mb-2">Social</h2>
-            <p className="text-sm text-slate-400">Connect with community</p>
-          </Link>
-
-          <Link
-            to="/coaching"
-            className="rounded-lg border border-purple-500/30 bg-slate-800/50 p-6 hover:border-purple-400/50 transition-colors"
-          >
-            <h2 className="text-xl font-bold text-white mb-2">Coaching</h2>
-            <p className="text-sm text-slate-400">Team management</p>
+            <p className="text-sm text-slate-400">Browse upcoming events</p>
           </Link>
         </div>
       </div>

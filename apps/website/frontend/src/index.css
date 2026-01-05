@@ -2,9 +2,821 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --sb-bg: #f6f7fb;
+  --sb-card: #ffffff;
+  --sb-text: #111111;
+  --sb-muted: #666666;
+  --sb-border: #e6e7ee;
+  --sb-soft: #f0f2ff;
+  --sb-soft-border: #dbe0ff;
+  --sb-focus: #cdd4ff;
+  --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  line-height: 1.35;
+  color: var(--sb-text);
+  background: var(--sb-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #0a0e1f 0%, #1a1035 50%, #0f0a20 100%);
-  background-attachment: fixed;
+  margin: 0;
   min-height: 100vh;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: start center;
+  padding: 0;
+}
+
+.sbTopNav {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--sb-bg);
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbTopNavInner {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbTopNavBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--sb-text);
+  min-width: 0;
+}
+
+.sbTopNavLogo {
+  width: 30px;
+  height: 30px;
+}
+
+.sbTopNavBrandText {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbTopNavLinks {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+}
+
+.sbTopNavLink {
+  text-decoration: none;
+  color: var(--sb-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 12px 4px 10px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sbTopNavLink:hover {
+  color: var(--sb-text);
+}
+
+.sbTopNavLink:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbTopNavLinkActive {
+  color: var(--sb-text);
+  border-bottom-color: #134a9c;
+}
+
+.shell {
+  width: min(1100px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+
+.card {
+  background: var(--sb-card);
+  border: 1px solid var(--sb-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--sb-shadow);
+}
+
+.sbStack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sbHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbHeaderLink {
+  flex: 0 0 auto;
+  text-decoration: none;
+  color: #134a9c;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.sbHeaderLink:hover {
+  text-decoration: underline;
+}
+
+.sbBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sbLogo {
+  width: 44px;
+  height: 44px;
+}
+
+.sbTitle {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.sbMuted {
+  margin: 0;
+  color: var(--sb-muted);
+}
+
+.sbSmall {
+  font-size: 13px;
+}
+
+.sbStrong {
+  font-weight: 600;
+}
+
+.sbTopSpace {
+  margin-top: 10px;
+}
+
+.sbCenter {
+  text-align: center;
+  padding: 28px 20px;
+}
+
+.sbError {
+  border-color: #f3c4c4;
+  background: #fdeaea;
+  color: #7a1b1b;
+}
+
+.sbSpinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 2px solid var(--sb-border);
+  border-top-color: var(--sb-text);
+  margin: 0 auto;
+  animation: sb-spin 0.9s linear infinite;
+}
+
+@keyframes sb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sbPills {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--sb-border);
+  border-radius: 999px;
+  background: var(--sb-card);
+  flex-wrap: wrap;
+}
+
+.sbPill {
+  border: 1px solid var(--sb-border);
+  background: transparent;
+  color: var(--sb-text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sbPill:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbPill:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbPillActive {
+  background: var(--sb-text);
+  color: white;
+  border-color: var(--sb-text);
+}
+
+.sbBadge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--sb-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sbBadgeNeutral {
+  background: #f7f7fb;
+  color: #333;
+}
+
+.sbBadgeUpcoming {
+  background: #eef5ff;
+  border-color: #cfe3ff;
+  color: #134a9c;
+}
+
+.sbBadgeRegistration {
+  background: #e8f7ea;
+  border-color: #ccebd2;
+  color: #2b6b2b;
+}
+
+.sbBadgeInProgress {
+  background: #f0f2ff;
+  border-color: #dbe0ff;
+  color: #3730a3;
+}
+
+.sbBadgeCompleted {
+  background: #f7f7fb;
+  border-color: var(--sb-border);
+  color: #444;
+}
+
+.sbBadgeCancelled {
+  background: #fdeaea;
+  border-color: #f3c4c4;
+  color: #7a1b1b;
+}
+
+.sbTournamentCard {
+  padding: 18px 20px;
+}
+
+.sbTournamentHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.sbMinW0 {
+  min-width: 0;
+}
+
+.sbTournamentName {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sbBadgesRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sbTournamentDate {
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+.sbBody {
+  margin: 0;
+  color: var(--sb-text);
+}
+
+.sbInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .sbInfoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sbTournamentDate {
+    text-align: left;
+  }
+
+  .sbTournamentHeader {
+    flex-direction: column;
+  }
+}
+
+.sbInfoItem {
+  min-width: 0;
+}
+
+.sbLabel {
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbValue {
+  margin-top: 2px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sbTournamentFooter {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sbActions {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sbActionLink {
+  text-decoration: none;
+  border: 1px solid var(--sb-border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: var(--sb-text);
+  background: white;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.sbActionLink:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbActionLink:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+/* Tournaments landing + listing */
+.sbPageHeader {
+  padding: 22px;
+}
+
+.sbAccordion {
+  padding: 0;
+  overflow: hidden;
+}
+
+.sbAccordionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--sb-border);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sbAccordionHeader:hover {
+  background: var(--sb-soft);
+}
+
+.sbAccordionHeader:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+}
+
+.sbAccordionTitle {
+  font-size: 16px;
+  font-weight: 650;
+  min-width: 0;
+}
+
+.sbAccordionChevron {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  color: var(--sb-muted);
+  transition: transform 160ms ease, color 160ms ease;
+}
+
+.sbAccordionChevronOpen {
+  transform: rotate(180deg);
+  color: var(--sb-text);
+}
+
+.sbAccordionBody {
+  background: var(--sb-card);
+}
+
+.sbStatusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+.sbStatusDotLive {
+  background: #16a34a;
+}
+
+.sbStatusDotUpcoming {
+  background: #3b82f6;
+}
+
+.sbStatusDotFinished {
+  background: #9ca3af;
+}
+
+.sbRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.sbTournamentRow {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--sb-border);
+  background: transparent;
+}
+
+.sbRows .sbTournamentRow:first-child {
+  border-top: 0;
+}
+
+.sbTournamentRow:hover {
+  background: var(--sb-soft);
+}
+
+.sbTournamentRow:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+}
+
+.sbTournamentRowContent {
+  padding: 12px 16px;
+  display: grid;
+  /* Fixed columns so rows align across sections regardless of content (e.g. LIVE pill). */
+  grid-template-columns:
+    minmax(0, 1fr)
+    clamp(170px, 22vw, 240px)
+    clamp(110px, 14vw, 140px)
+    clamp(96px, 14vw, 140px)
+    32px;
+  align-items: center;
+  gap: 12px;
+}
+
+.sbRowMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.sbRowNameLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.sbRowName {
+  font-weight: 600;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 160ms ease;
+}
+
+.sbTournamentRow:hover .sbRowName {
+  color: #134a9c;
+}
+
+.sbIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--sb-muted);
+  flex: 0 0 auto;
+}
+
+.sbRowLocation {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--sb-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbRowLocationText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbRowDate {
+  color: var(--sb-muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.sbLevelPills {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.sbLevelPill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--sb-border);
+  background: #f7f7fb;
+  color: #333;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.sbBadgeLive {
+  background: #e8f7ea;
+  border-color: #ccebd2;
+  color: #2b6b2b;
+}
+
+.sbBadgeLiveInline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  padding-right: 10px;
+  overflow: hidden;
+}
+
+.sbRowRight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.sbRowChevron {
+  width: 16px;
+  height: 16px;
+  color: var(--sb-muted);
+  transition: color 160ms ease;
+}
+
+.sbTournamentRow:hover .sbRowChevron {
+  color: var(--sb-text);
+}
+
+.sbLivePulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #16a34a;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sbLivePulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.18);
+  transform: scale(0.7);
+  opacity: 0.65;
+  animation: sb-live-pulse 1.8s ease-in-out infinite;
+}
+
+.sbLivePulseInBadge::after {
+  inset: -4px;
+}
+
+@keyframes sb-live-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sbLivePulse::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.sbRowMetaMobile {
+  display: none;
+  margin-top: 4px;
+  color: var(--sb-muted);
+  font-size: 13px;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sbRowMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sbRowMetaSep {
+  color: #b2b7c8;
+}
+
+@media (max-width: 720px) {
+  .sbTopNavInner {
+    padding: 10px 16px;
+  }
+
+  .shell {
+    padding: 16px;
+  }
+
+  .sbTournamentRowContent {
+    grid-template-columns: minmax(0, 1fr) auto 32px;
+    gap: 10px;
+  }
+
+  .sbRowLocation,
+  .sbRowDate {
+    display: none;
+  }
+
+  .sbRowMetaMobile {
+    display: inline-flex;
+  }
+}
+
+.sbSectionFooter {
+  padding: 14px 16px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  justify-content: center;
+}
+
+.sbViewAllLink {
+  text-decoration: none;
+  color: #134a9c;
+  font-weight: 600;
+}
+
+.sbViewAllLink:hover {
+  text-decoration: underline;
+}
+
+.sbListingControls {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sbField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 260px;
+  min-width: 240px;
+}
+
+.sbFieldLabel {
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbInput,
+.sbSelect {
+  width: 100%;
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: white;
+  color: var(--sb-text);
+}
+
+.sbInput:focus-visible,
+.sbSelect:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbPagination {
+  padding: 14px 16px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbPageButton {
+  border: 1px solid var(--sb-border);
+  background: white;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--sb-text);
+}
+
+.sbPageButton:hover:not(:disabled) {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbPageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sbEmptyState {
+  padding: 22px 16px;
+  text-align: center;
 }
