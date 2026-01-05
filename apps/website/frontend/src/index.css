@@ -39,7 +39,79 @@ img {
   min-height: 100vh;
   display: grid;
   place-items: start center;
-  padding: 24px;
+  padding: 0;
+}
+
+.sbTopNav {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--sb-bg);
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbTopNavInner {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbTopNavBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--sb-text);
+  min-width: 0;
+}
+
+.sbTopNavLogo {
+  width: 30px;
+  height: 30px;
+}
+
+.sbTopNavBrandText {
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbTopNavLinks {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+}
+
+.sbTopNavLink {
+  text-decoration: none;
+  color: var(--sb-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 12px 4px 10px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sbTopNavLink:hover {
+  color: var(--sb-text);
+}
+
+.sbTopNavLink:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbTopNavLinkActive {
+  color: var(--sb-text);
+  border-bottom-color: #134a9c;
 }
 
 .shell {
@@ -47,6 +119,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 24px;
 }
 
 .card {
@@ -68,6 +141,18 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.sbHeaderLink {
+  flex: 0 0 auto;
+  text-decoration: none;
+  color: #134a9c;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.sbHeaderLink:hover {
+  text-decoration: underline;
 }
 
 .sbBrand {
@@ -441,7 +526,7 @@ img {
     clamp(170px, 22vw, 240px)
     clamp(110px, 14vw, 140px)
     clamp(96px, 14vw, 140px)
-    88px;
+    32px;
   align-items: center;
   gap: 12px;
 }
@@ -453,8 +538,16 @@ img {
   min-width: 0;
 }
 
+.sbRowNameLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .sbRowName {
   font-weight: 600;
+  flex: 1 1 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -520,6 +613,15 @@ img {
   color: #2b6b2b;
 }
 
+.sbBadgeLiveInline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  padding-right: 10px;
+  overflow: hidden;
+}
+
 .sbRowRight {
   display: inline-flex;
   align-items: center;
@@ -540,8 +642,8 @@ img {
 }
 
 .sbLivePulse {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
   background: #16a34a;
   position: relative;
@@ -557,6 +659,10 @@ img {
   transform: scale(0.7);
   opacity: 0.65;
   animation: sb-live-pulse 1.8s ease-in-out infinite;
+}
+
+.sbLivePulseInBadge::after {
+  inset: -4px;
 }
 
 @keyframes sb-live-pulse {
@@ -581,12 +687,6 @@ img {
   }
 }
 
-.sbLivePulseSpacer {
-  width: 10px;
-  height: 10px;
-  flex: 0 0 auto;
-}
-
 .sbRowMetaMobile {
   display: none;
   margin-top: 4px;
@@ -608,8 +708,16 @@ img {
 }
 
 @media (max-width: 720px) {
+  .sbTopNavInner {
+    padding: 10px 16px;
+  }
+
+  .shell {
+    padding: 16px;
+  }
+
   .sbTournamentRowContent {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto 32px;
     gap: 10px;
   }
 
