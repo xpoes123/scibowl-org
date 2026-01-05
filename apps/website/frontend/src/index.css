@@ -331,3 +331,371 @@ img {
   outline: 2px solid var(--sb-focus);
   outline-offset: 2px;
 }
+
+/* Tournaments landing + listing */
+.sbPageHeader {
+  padding: 22px;
+}
+
+.sbAccordion {
+  padding: 0;
+  overflow: hidden;
+}
+
+.sbAccordionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--sb-border);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sbAccordionHeader:hover {
+  background: var(--sb-soft);
+}
+
+.sbAccordionHeader:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+}
+
+.sbAccordionTitle {
+  font-size: 16px;
+  font-weight: 650;
+  min-width: 0;
+}
+
+.sbAccordionChevron {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  color: var(--sb-muted);
+  transition: transform 160ms ease, color 160ms ease;
+}
+
+.sbAccordionChevronOpen {
+  transform: rotate(180deg);
+  color: var(--sb-text);
+}
+
+.sbAccordionBody {
+  background: var(--sb-card);
+}
+
+.sbStatusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+.sbStatusDotLive {
+  background: #16a34a;
+}
+
+.sbStatusDotUpcoming {
+  background: #3b82f6;
+}
+
+.sbStatusDotFinished {
+  background: #9ca3af;
+}
+
+.sbRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.sbTournamentRow {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--sb-border);
+  background: transparent;
+}
+
+.sbRows .sbTournamentRow:first-child {
+  border-top: 0;
+}
+
+.sbTournamentRow:hover {
+  background: var(--sb-soft);
+}
+
+.sbTournamentRow:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+}
+
+.sbTournamentRowContent {
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.2fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.sbRowMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.sbRowName {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 160ms ease;
+}
+
+.sbTournamentRow:hover .sbRowName {
+  color: #134a9c;
+}
+
+.sbIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--sb-muted);
+  flex: 0 0 auto;
+}
+
+.sbRowLocation {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--sb-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbRowLocationText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbRowDate {
+  color: var(--sb-muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.sbLevelPills {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.sbLevelPill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--sb-border);
+  background: #f7f7fb;
+  color: #333;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.sbBadgeLive {
+  background: #e8f7ea;
+  border-color: #ccebd2;
+  color: #2b6b2b;
+}
+
+.sbRowRight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.sbRowChevron {
+  width: 16px;
+  height: 16px;
+  color: var(--sb-muted);
+  transition: color 160ms ease;
+}
+
+.sbTournamentRow:hover .sbRowChevron {
+  color: var(--sb-text);
+}
+
+.sbLivePulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #16a34a;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sbLivePulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.18);
+  transform: scale(0.7);
+  opacity: 0.65;
+  animation: sb-live-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes sb-live-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sbLivePulse::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.sbRowMetaMobile {
+  display: none;
+  margin-top: 4px;
+  color: var(--sb-muted);
+  font-size: 13px;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sbRowMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sbRowMetaSep {
+  color: #b2b7c8;
+}
+
+@media (max-width: 720px) {
+  .sbTournamentRowContent {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 10px;
+  }
+
+  .sbRowLocation,
+  .sbRowDate {
+    display: none;
+  }
+
+  .sbRowMetaMobile {
+    display: inline-flex;
+  }
+}
+
+.sbSectionFooter {
+  padding: 14px 16px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  justify-content: center;
+}
+
+.sbViewAllLink {
+  text-decoration: none;
+  color: #134a9c;
+  font-weight: 600;
+}
+
+.sbViewAllLink:hover {
+  text-decoration: underline;
+}
+
+.sbListingControls {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sbField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 260px;
+  min-width: 240px;
+}
+
+.sbFieldLabel {
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbInput,
+.sbSelect {
+  width: 100%;
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: white;
+  color: var(--sb-text);
+}
+
+.sbInput:focus-visible,
+.sbSelect:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbPagination {
+  padding: 14px 16px;
+  border-top: 1px solid var(--sb-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbPageButton {
+  border: 1px solid var(--sb-border);
+  background: white;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--sb-text);
+}
+
+.sbPageButton:hover:not(:disabled) {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbPageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sbEmptyState {
+  padding: 22px 16px;
+  text-align: center;
+}
