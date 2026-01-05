@@ -18,7 +18,7 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
     <Link to={`/tournaments/${tournament.id}`} className="sbTournamentRow">
       <div className="sbTournamentRowContent">
         <div className="sbRowMain">
-          {isLive && <span className="sbLivePulse" aria-hidden="true" />}
+          <span className={isLive ? "sbLivePulse" : "sbLivePulseSpacer"} aria-hidden="true" />
           <div className="sbMinW0">
             <div className="sbRowName">{tournament.name}</div>
             <div className="sbRowMetaMobile">

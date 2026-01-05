@@ -435,7 +435,13 @@ img {
 .sbTournamentRowContent {
   padding: 12px 16px;
   display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.2fr) auto auto auto;
+  /* Fixed columns so rows align across sections regardless of content (e.g. LIVE pill). */
+  grid-template-columns:
+    minmax(0, 1fr)
+    clamp(170px, 22vw, 240px)
+    clamp(110px, 14vw, 140px)
+    clamp(96px, 14vw, 140px)
+    88px;
   align-items: center;
   gap: 12px;
 }
@@ -519,6 +525,7 @@ img {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  white-space: nowrap;
 }
 
 .sbRowChevron {
@@ -572,6 +579,12 @@ img {
     animation: none;
     opacity: 0;
   }
+}
+
+.sbLivePulseSpacer {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
 }
 
 .sbRowMetaMobile {
