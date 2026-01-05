@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useTournaments } from "../hooks/useTournaments";
 import type { TournamentStatus, TournamentSummary } from "../types";
 import { getStatusLabel, getStatusQueryParam } from "../utils/status";
@@ -57,10 +58,17 @@ export function TournamentsLandingPage() {
   return (
     <div className="sbStack">
       <div className="card sbPageHeader">
-        <h1 className="sbTitle">Tournaments</h1>
-        <p className="sbMuted sbTopSpace">
-          Live scores, upcoming tournaments, and official results from Science Bowl events.
-        </p>
+        <div className="sbHeaderRow">
+          <div className="sbMinW0">
+            <h1 className="sbTitle">Tournaments</h1>
+            <p className="sbMuted sbTopSpace">
+              Live scores, upcoming tournaments, and official results from Science Bowl events.
+            </p>
+          </div>
+          <Link to="/tournaments" className="sbHeaderLink">
+            View all tournaments <span aria-hidden="true">{"\u2192"}</span>
+          </Link>
+        </div>
       </div>
 
       <TournamentSection
@@ -98,4 +106,3 @@ export function TournamentsLandingPage() {
     </div>
   );
 }
-

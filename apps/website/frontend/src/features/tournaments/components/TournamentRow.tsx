@@ -18,9 +18,16 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
     <Link to={`/tournaments/${tournament.id}`} className="sbTournamentRow">
       <div className="sbTournamentRowContent">
         <div className="sbRowMain">
-          <span className={isLive ? "sbLivePulse" : "sbLivePulseSpacer"} aria-hidden="true" />
           <div className="sbMinW0">
-            <div className="sbRowName">{tournament.name}</div>
+            <div className="sbRowNameLine">
+              <span className="sbRowName">{tournament.name}</span>
+              {isLive && (
+                <span className="sbBadge sbBadgeLive sbBadgeLiveInline">
+                  <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />
+                  LIVE
+                </span>
+              )}
+            </div>
             <div className="sbRowMetaMobile">
               <span className="sbRowMetaItem">
                 <MapPinIcon className="sbIcon" aria-hidden="true" />
@@ -44,7 +51,6 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
         <LevelPills levels={tournament.level} />
 
         <div className="sbRowRight">
-          {isLive && <span className="sbBadge sbBadgeLive">LIVE</span>}
           <ChevronRightIcon className="sbRowChevron" aria-hidden="true" />
         </div>
       </div>
