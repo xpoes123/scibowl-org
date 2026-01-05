@@ -1,216 +1,148 @@
-import { useEffect, useState } from 'react';
-import { tournamentsAPI } from '../../../core/api/api';
-import type { Tournament } from '../../../shared/types/api';
+import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useTournaments } from "../hooks/useTournaments";
+import type { TournamentStatus, TournamentStatusParam } from "../types";
+import { parseStatusQueryParam } from "../utils/status";
+import { TournamentRow } from "../components/TournamentRow";
+
+function statusParamToStatus(param: TournamentStatusParam): TournamentStatus {
+  switch (param) {
+    case "live":
+      return "LIVE";
+    case "upcoming":
+      return "UPCOMING";
+    case "finished":
+      return "FINISHED";
+    default:
+      return "UPCOMING";
+  }
+}
 
 export function TournamentsPage() {
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'upcoming' | 'live' | 'finished'>('all');
+  const { tournaments } = useTournaments();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusParam = parseStatusQueryParam(searchParams.get("status"));
+  const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    loadTournaments();
-  }, [filter]);
+  const pageSize = 20;
+  const rawPage = Number(searchParams.get("page") ?? "1");
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1;
 
-  const loadTournaments = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      let filters = {};
-      if (filter === 'upcoming') {
-        filters = { status: 'UPCOMING,REGISTRATION' };
-      } else if (filter === 'live') {
-        filters = { status: 'IN_PROGRESS' };
-      } else if (filter === 'finished') {
-        filters = { status: 'COMPLETED' };
-      }
-      const data = await tournamentsAPI.getTournaments(filters);
-      setTournaments(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load tournaments');
-    } finally {
-      setLoading(false);
+  const filtered = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    let list = tournaments;
+    if (statusParam !== "all") {
+      const wanted = statusParamToStatus(statusParam);
+      list = list.filter((t) => t.status === wanted);
     }
+
+    if (normalizedQuery) {
+      list = list.filter((t) => {
+        const location = `${t.location_city}, ${t.location_state}`.toLowerCase();
+        return t.name.toLowerCase().includes(normalizedQuery) || location.includes(normalizedQuery);
+      });
+    }
+
+    return list.slice().sort((a, b) => {
+      if (a.start_date !== b.start_date) return a.start_date.localeCompare(b.start_date);
+      return a.name.localeCompare(b.name);
+    });
+  }, [query, statusParam, tournaments]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const clampedPage = Math.min(page, pageCount);
+  const pageItems = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
+
+  const setStatus = (nextStatus: "all" | TournamentStatusParam) => {
+    const next = new URLSearchParams(searchParams);
+    if (nextStatus === "all") next.delete("status");
+    else next.set("status", nextStatus);
+    next.delete("page");
+    setSearchParams(next);
   };
 
-  const getStatusBadge = (status: string) => {
-    const badges = {
-      UPCOMING: 'sbBadge sbBadgeUpcoming',
-      REGISTRATION: 'sbBadge sbBadgeRegistration',
-      IN_PROGRESS: 'sbBadge sbBadgeInProgress',
-      COMPLETED: 'sbBadge sbBadgeCompleted',
-      CANCELLED: 'sbBadge sbBadgeCancelled',
-    };
-    return badges[status as keyof typeof badges] || badges.UPCOMING;
-  };
-
-  const getDivisionBadge = (division: string) => {
-    const displayNames = {
-      HIGH_SCHOOL: 'High School',
-      MIDDLE_SCHOOL: 'Middle School',
-      COLLEGIATE: 'Collegiate',
-      OPEN: 'Open',
-    };
-    return displayNames[division as keyof typeof displayNames] || division;
-  };
-
-  const formatDate = (dateString: string) => {
-    // Parse date as local date to avoid timezone shifts
-    const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const setPage = (nextPage: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("page", String(nextPage));
+    setSearchParams(next);
   };
 
   return (
     <div className="sbStack">
-      <div className="card">
-        <div className="sbHeaderRow">
-          <div className="sbBrand">
-            <img src="/logo_big.png" alt="SciBowl" className="sbLogo" />
-            <div>
-              <h1 className="sbTitle">Tournaments</h1>
-              <p className="sbMuted">Browse and register for upcoming Science Bowl tournaments</p>
-            </div>
-          </div>
-        </div>
+      <div className="card sbPageHeader">
+        <h1 className="sbTitle">All Tournaments</h1>
+        <p className="sbMuted sbTopSpace">Search and filter tournaments.</p>
 
-        <div className="sbPills" role="tablist" aria-label="Tournament filter">
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={filter === 'all' ? 'sbPill sbPillActive' : 'sbPill'}
-          >
-            All
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('upcoming')}
-            className={filter === 'upcoming' ? 'sbPill sbPillActive' : 'sbPill'}
-          >
-            Upcoming
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('live')}
-            className={filter === 'live' ? 'sbPill sbPillActive' : 'sbPill'}
-          >
-            Live
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('finished')}
-            className={filter === 'finished' ? 'sbPill sbPillActive' : 'sbPill'}
-          >
-            Finished
-          </button>
+        <div className="sbListingControls sbTopSpace">
+          <label className="sbField">
+            <span className="sbFieldLabel">Search</span>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                const next = new URLSearchParams(searchParams);
+                next.delete("page");
+                setSearchParams(next);
+              }}
+              className="sbInput"
+              placeholder="Search by name or location…"
+            />
+          </label>
+
+          <label className="sbField">
+            <span className="sbFieldLabel">Status</span>
+            <select
+              value={statusParam}
+              onChange={(e) => setStatus(e.target.value as "all" | TournamentStatusParam)}
+              className="sbSelect"
+              aria-label="Filter tournaments by status"
+            >
+              <option value="all">All</option>
+              <option value="live">Live</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="finished">Finished</option>
+            </select>
+          </label>
         </div>
       </div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="card sbCenter">
-            <div className="sbSpinner" aria-hidden="true" />
-            <p className="sbMuted sbTopSpace">Loading tournaments...</p>
+      <section className="card sbAccordion sbListingCard" aria-label="Tournament list">
+        <div className="sbRows">
+          {pageItems.length === 0 ? (
+            <div className="sbEmptyState">
+              <p className="sbMuted">No tournaments found.</p>
+            </div>
+          ) : (
+            pageItems.map((tournament) => <TournamentRow key={tournament.id} tournament={tournament} />)
+          )}
+        </div>
+
+        {filtered.length > pageSize && (
+          <div className="sbPagination">
+            <button
+              type="button"
+              className="sbPageButton"
+              onClick={() => setPage(Math.max(1, clampedPage - 1))}
+              disabled={clampedPage === 1}
+            >
+              Prev
+            </button>
+            <div className="sbMuted sbSmall">
+              Page <span className="sbStrong">{clampedPage}</span> of <span className="sbStrong">{pageCount}</span>
+            </div>
+            <button
+              type="button"
+              className="sbPageButton"
+              onClick={() => setPage(Math.min(pageCount, clampedPage + 1))}
+              disabled={clampedPage === pageCount}
+            >
+              Next
+            </button>
           </div>
         )}
-
-        {/* Error State */}
-        {error && (
-          <div className="card sbError">{error}</div>
-        )}
-
-        {/* Tournaments List */}
-        {!loading && !error && (
-          <div className="sbStack">
-            {tournaments.length === 0 ? (
-              <div className="card sbCenter">
-                <p className="sbMuted">No tournaments found</p>
-              </div>
-            ) : (
-              tournaments.map((tournament) => (
-                <div
-                  key={tournament.id}
-                  className="card sbTournamentCard"
-                >
-                  <div className="sbTournamentHeader">
-                    <div className="sbMinW0">
-                      <h3 className="sbTournamentName">{tournament.name}</h3>
-                      <div className="sbBadgesRow">
-                        <span className={getStatusBadge(tournament.status)}>
-                          {tournament.status.replace('_', ' ')}
-                        </span>
-                        <span className="sbBadge sbBadgeNeutral">
-                          {getDivisionBadge(tournament.division)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="sbTournamentDate">
-                      <div className="sbMuted sbSmall">Tournament Date</div>
-                      <div className="sbStrong">{formatDate(tournament.tournament_date)}</div>
-                    </div>
-                  </div>
-
-                  <p className="sbBody sbTopSpace">{tournament.description}</p>
-
-                  <div className="sbInfoGrid sbTopSpace">
-                    <div className="sbInfoItem">
-                      <div className="sbLabel">Location</div>
-                      <div className="sbValue">{tournament.location}</div>
-                    </div>
-                    <div className="sbInfoItem">
-                      <div className="sbLabel">Format</div>
-                      <div className="sbValue">{tournament.format.replace('_', ' ')}</div>
-                    </div>
-                    <div className="sbInfoItem">
-                      <div className="sbLabel">Teams</div>
-                      <div className="sbValue">
-                        {tournament.current_teams}
-                        {tournament.max_teams && ` / ${tournament.max_teams}`}
-                      </div>
-                    </div>
-                    <div className="sbInfoItem">
-                      <div className="sbLabel">Host</div>
-                      <div className="sbValue">{tournament.host_organization}</div>
-                    </div>
-                  </div>
-
-                  {(tournament.registration_deadline || tournament.website_url || tournament.registration_url) && (
-                    <div className="sbTournamentFooter">
-                      {tournament.registration_deadline && (
-                        <div className="sbMuted sbSmall">
-                          Registration closes:{' '}
-                          <span className="sbStrong">{formatDate(tournament.registration_deadline)}</span>
-                        </div>
-                      )}
-                      <div className="sbActions">
-                        {tournament.website_url && (
-                          <a
-                            href={tournament.website_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="sbActionLink"
-                          >
-                            Website
-                          </a>
-                        )}
-                        {tournament.registration_url && (
-                          <a
-                            href={tournament.registration_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="sbActionLink"
-                          >
-                            Register
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-        )}
+      </section>
     </div>
   );
 }

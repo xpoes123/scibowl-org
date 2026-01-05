@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { TournamentsPage } from "./features/tournaments";
+import { TournamentDetailPage, TournamentsLandingPage, TournamentsPage } from "./features/tournaments";
 import { isFeatureEnabled } from "./core/features";
 
 
@@ -17,9 +17,9 @@ function AppContent() {
         <Routes>
           {tournamentsEnabled ? (
             <>
-              <Route path="/" element={<TournamentsPage />} />
-              <Route path="/tournaments" element={<Navigate to="/" replace />} />
-              <Route path="/tournaments/:id" element={<Navigate to="/" replace />} />
+              <Route path="/" element={<TournamentsLandingPage />} />
+              <Route path="/tournaments" element={<TournamentsPage />} />
+              <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </>
           ) : (
