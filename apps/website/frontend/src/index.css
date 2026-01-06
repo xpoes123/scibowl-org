@@ -1117,13 +1117,13 @@ img {
 }
 
 .sbDetailsSummary::after {
-  content: "\u2193";
+  content: "\2193";
   float: right;
   color: var(--sb-muted);
 }
 
 details[open] > .sbDetailsSummary::after {
-  content: "\u2191";
+  content: "\2191";
 }
 
 .sbDetailsBody {
@@ -1176,7 +1176,7 @@ details[open] > .sbDetailsSummary::after {
 }
 
 .sbBulletList li::before {
-  content: "\u2022";
+  content: "\2022";
   color: #b2b7c8;
   flex: 0 0 auto;
 }

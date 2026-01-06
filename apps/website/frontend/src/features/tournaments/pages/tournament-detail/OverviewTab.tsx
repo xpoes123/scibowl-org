@@ -6,14 +6,14 @@ type OverviewTabProps = {
 
 function normalizeLogisticsItem(text: string): string {
   return text
-    .replace(/^\s*(?:(?:\\u2022|u2022|•|\u2022)\s*)+/g, "")
+    .replace(/^\s*(?:(?:\\u2022|u2022|\\2022|•|\u2022)\s*)+/gi, "")
     .replace(/^\s*[-*]\s+/g, "")
     .trim();
 }
 
 function normalizeFormatSummary(text: string): string {
   return text
-    .replace(/\s*ƒ\+'\s*/g, " \u2192 ")
+    .replace(/\s*\u0192\+'\s*/g, " \u2192 ")
     .replace(/\s*(?:->|\u2192)\s*/g, " \u2192 ")
     .replace(/\s{2,}/g, " ")
     .trim();
