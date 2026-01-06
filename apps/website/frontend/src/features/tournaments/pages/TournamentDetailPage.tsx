@@ -32,13 +32,16 @@ function getTournamentStatusBadgeClass(status: TournamentStatus): string {
 }
 
 function StatusBadge({ status }: { status: TournamentStatus }) {
-  const isLive = status === "LIVE";
-  return (
-    <span className={getTournamentStatusBadgeClass(status)}>
-      {isLive && <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />}
-      {status}
-    </span>
-  );
+  if (status === "LIVE") {
+    return (
+      <span className="sbBadge sbBadgeLive sbBadgeLiveInline">
+        <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />
+        LIVE
+      </span>
+    );
+  }
+
+  return <span className={getTournamentStatusBadgeClass(status)}>{status}</span>;
 }
 
 export function TournamentDetailPage() {
