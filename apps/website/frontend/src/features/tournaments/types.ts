@@ -17,12 +17,6 @@ export interface TournamentSummary {
   is_published?: boolean;
 }
 
-export interface TournamentContact {
-  name: string;
-  email?: string;
-  phone?: string;
-}
-
 export interface RegistrationInfo {
   method: "FORM" | "EMAIL" | "WEBSITE" | "OTHER";
   instructions: string;
@@ -72,7 +66,7 @@ export interface TournamentDetail {
   difficulty?: string;
   writing_team?: string;
   website_url?: string;
-  contacts: TournamentContact[];
+  contact_info?: string;
   logistics?: string;
   registration: RegistrationInfo;
   format: TournamentFormat;

@@ -5,16 +5,16 @@ import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
 import type { TournamentStatus } from "../types";
 import { formatTournamentDateRange } from "../utils/date";
-import { FieldTab } from "./tournament-detail/FieldTab";
 import { OverviewTab } from "./tournament-detail/OverviewTab";
 import { RegistrationTab } from "./tournament-detail/RegistrationTab";
+import { ContactTab } from "./tournament-detail/ContactTab";
 
-type TournamentTab = "overview" | "registration" | "field";
+type TournamentTab = "overview" | "registration" | "contact";
 
 function parseTab(value: string | null): TournamentTab {
   const normalized = (value ?? "").trim().toLowerCase();
   if (normalized === "registration") return "registration";
-  if (normalized === "field") return "field";
+  if (normalized === "contact") return "contact";
   return "overview";
 }
 
@@ -83,7 +83,7 @@ export function TournamentDetailPage() {
 
   const overviewTabId = "tournament-tab-overview";
   const registrationTabId = "tournament-tab-registration";
-  const fieldTabId = "tournament-tab-field";
+  const contactTabId = "tournament-tab-contact";
   const panelId = "tournament-tabpanel";
 
   const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
@@ -189,22 +189,22 @@ export function TournamentDetailPage() {
           </button>
           <button
             type="button"
-            id={fieldTabId}
+            id={contactTabId}
             role="tab"
-            aria-selected={tab === "field"}
+            aria-selected={tab === "contact"}
             aria-controls={panelId}
-            className={tab === "field" ? "sbTab sbTabActive" : "sbTab"}
-            onClick={() => setTab("field")}
+            className={tab === "contact" ? "sbTab sbTabActive" : "sbTab"}
+            onClick={() => setTab("contact")}
           >
-            Field
+            Contact
           </button>
         </div>
 
         <div
           id={panelId}
           role="tabpanel"
-          aria-labelledby={tab === "overview" ? overviewTabId : tab === "registration" ? registrationTabId : fieldTabId}
-          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : "Field"}
+          aria-labelledby={tab === "overview" ? overviewTabId : tab === "registration" ? registrationTabId : contactTabId}
+          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : "Contact"}
           className="sbTabsBody"
         >
           {tab === "overview" ? (
@@ -212,7 +212,7 @@ export function TournamentDetailPage() {
           ) : tab === "registration" ? (
             <RegistrationTab tournament={tournament} />
           ) : (
-            <FieldTab tournament={tournament} />
+            <ContactTab tournament={tournament} />
           )}
         </div>
       </section>

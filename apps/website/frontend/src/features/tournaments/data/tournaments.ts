@@ -38,13 +38,13 @@ export const TOURNAMENTS: TournamentSummary[] = [
   },
   {
     id: "203",
-    name: "Yale Science Bowl",
+    name: "Yale Science Bowl Invitational",
     location_city: "New Haven",
     location_state: "CT",
     start_date: "2026-01-17",
-    level: ["HS"],
+    level: ["MS", "HS"],
     status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
+    updated_at: "2026-01-06T01:15:00Z",
     is_published: true,
   },
   {

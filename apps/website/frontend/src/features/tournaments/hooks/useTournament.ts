@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTournamentById } from "../mock/mockTournamentDetail";
+import { getTournamentById } from "../data/tournamentDetails";
 import type { TournamentDetail } from "../types";
 
 type UseTournamentResult = {

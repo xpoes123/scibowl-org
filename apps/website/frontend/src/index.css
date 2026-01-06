@@ -1176,7 +1176,7 @@ details[open] > .sbDetailsSummary::after {
 }
 
 .sbBulletList li::before {
-  content: "\u2022";
+  content: "•";
   color: #b2b7c8;
   flex: 0 0 auto;
 }

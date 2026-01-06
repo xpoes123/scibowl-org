@@ -62,35 +62,6 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
           )}
         </div>
       </section>
-
-      <section className="sbTabSection" aria-label="Contacts">
-        <header className="sbSectionHeader">
-          <h2 className="sbSectionTitle">Contacts</h2>
-          <p className="sbSectionSubtitle">Questions or need help? Reach out.</p>
-        </header>
-
-        <div className="sbTabSectionBody">
-          {tournament.contacts.length === 0 ? (
-            <p className="sbMuted">No contacts listed.</p>
-          ) : (
-            <div className="sbDetailRows" aria-label="Tournament contacts">
-              {tournament.contacts.map((contact) => (
-                <div key={contact.email ?? contact.name} className="sbContactRow">
-                  <div className="sbContactName">{contact.name}</div>
-                  <div className="sbContactMeta">
-                    {contact.email && (
-                      <a className="sbInlineLink" href={`mailto:${contact.email}`}>
-                        {contact.email}
-                      </a>
-                    )}
-                    {contact.phone && <span className="sbMuted sbSmall">{contact.phone}</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
     </div>
   );
 }

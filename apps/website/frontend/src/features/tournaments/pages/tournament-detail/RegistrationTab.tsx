@@ -5,21 +5,6 @@ type RegistrationTabProps = {
   tournament: TournamentDetail;
 };
 
-function getRegistrationMethodLabel(method: TournamentDetail["registration"]["method"]): string {
-  switch (method) {
-    case "FORM":
-      return "Google Form";
-    case "EMAIL":
-      return "Email organizer";
-    case "WEBSITE":
-      return "Website";
-    case "OTHER":
-      return "Other";
-    default:
-      return method;
-  }
-}
-
 export function RegistrationTab({ tournament }: RegistrationTabProps) {
   return (
     <div className="sbTabStack" aria-label="Tournament registration">
@@ -30,25 +15,21 @@ export function RegistrationTab({ tournament }: RegistrationTabProps) {
         </header>
 
         <div className="sbTabSectionBody">
-          <div className="sbDetailRows" aria-label="Registration summary">
-            <div className="sbDetailRow">
-              <span className="sbLabel">Method</span>
-              <span className="sbDetailValue">{getRegistrationMethodLabel(tournament.registration.method)}</span>
-            </div>
-            {tournament.registration.cost && (
+          {tournament.registration.cost && (
+            <div className="sbDetailRows" aria-label="Registration summary">
               <div className="sbDetailRow">
                 <span className="sbLabel">Cost</span>
                 <span className="sbDetailValue">{tournament.registration.cost}</span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <p className="sbBody sbTopSpace sbPreLine">{tournament.registration.instructions}</p>
 
           {tournament.registration.url && (
             <div className="sbRegistrationCta">
               <a className="sbCtaButton" href={tournament.registration.url} target="_blank" rel="noreferrer">
-                Open registration link
+                Register now
               </a>
             </div>
           )}
