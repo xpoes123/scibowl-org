@@ -273,6 +273,13 @@ img {
   color: #333;
 }
 
+.sbBadgeImportant {
+  background: white;
+  border-color: #cfe3ff;
+  color: #134a9c;
+  font-weight: 650;
+}
+
 .sbBadgeUpcoming {
   background: #eef5ff;
   border-color: #cfe3ff;
@@ -304,7 +311,7 @@ img {
 }
 
 .sbTournamentCard {
-  padding: 18px 20px;
+  padding: 16px 18px;
 }
 
 .sbTournamentHeader {
@@ -634,7 +641,7 @@ img {
   width: 16px;
   height: 16px;
   color: var(--sb-muted);
-  transition: color 160ms ease;
+  transition: transform 160ms ease, color 160ms ease;
 }
 
 .sbTournamentRow:hover .sbRowChevron {
@@ -819,4 +826,480 @@ img {
 .sbEmptyState {
   padding: 22px 16px;
   text-align: center;
+}
+
+/* Tournament detail */
+.sbHeroTitle {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 750;
+}
+
+.sbHeroTitleTight {
+  margin-top: 10px;
+}
+
+@media (max-width: 720px) {
+  .sbHeroTitle {
+    font-size: 21px;
+  }
+}
+
+.sbHeroMetaRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sbHeroMetaRowSecondary {
+  color: var(--sb-muted);
+  font-size: 13px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.sbHeroMetaGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sbHeroMetaGroupPrimary {
+  color: var(--sb-text);
+  font-weight: 650;
+}
+
+.sbHeroMetaGroupSecondary {
+  color: var(--sb-muted);
+  font-weight: 500;
+}
+
+.sbHeroMetaEmphasis {
+  color: var(--sb-text);
+  font-weight: 750;
+}
+
+.sbHeroMetaSep {
+  color: #b2b7c8;
+}
+
+.sbLabelInline {
+  font-weight: 650;
+  color: var(--sb-muted);
+}
+
+.sbInlineLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #134a9c;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.sbInlineLinkSmall {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.sbInlineLink:hover {
+  text-decoration: underline;
+}
+
+.sbInlineLink:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.sbTabsCard {
+  padding: 0;
+  overflow: hidden;
+}
+
+.sbTabsCardSpaced {
+  margin-top: 8px;
+}
+
+.sbTabsBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px 0;
+  border-bottom: 1px solid var(--sb-border);
+  background: var(--sb-bg);
+}
+
+.sbTab {
+  border: 1px solid transparent;
+  border-bottom: 0;
+  background: transparent;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 650;
+  color: #7a8198;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.sbTab:hover {
+  color: var(--sb-text);
+}
+
+.sbTab:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.sbTabActive {
+  color: var(--sb-text);
+  background: white;
+  border-color: var(--sb-border);
+  font-weight: 750;
+}
+
+.sbTabsBody {
+  padding: 18px;
+}
+
+.sbTabStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sbTabSectionBody {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sbTabDivider {
+  height: 1px;
+  background: var(--sb-border);
+  width: 100%;
+  margin: 6px 0;
+}
+
+.sbOverviewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+}
+
+@media (max-width: 900px) {
+  .sbOverviewGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sbOverviewSection {
+  padding: 16px;
+}
+
+.sbOverviewSectionPrimary {
+  background: var(--sb-soft);
+}
+
+.sbOverviewSectionMuted {
+  color: var(--sb-muted);
+}
+
+.sbOverviewSection:nth-child(2),
+.sbOverviewSection:nth-child(4) {
+  border-left: 1px solid var(--sb-border);
+}
+
+.sbOverviewSection:nth-child(n + 3) {
+  border-top: 1px solid var(--sb-border);
+}
+
+@media (max-width: 900px) {
+  .sbOverviewSection:nth-child(2),
+  .sbOverviewSection:nth-child(4) {
+    border-left: 0;
+  }
+
+  .sbOverviewSection + .sbOverviewSection {
+    border-top: 1px solid var(--sb-border);
+  }
+}
+
+.sbSectionHeader {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbSectionTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.sbSectionSubtitle {
+  margin: 6px 0 0;
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
+.sbRegistrationCta {
+  margin-top: 14px;
+}
+
+.sbDeadlinesBlock {
+  margin-top: 16px;
+}
+
+.sbCtaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  background: #134a9c;
+  color: white;
+  border: 1px solid #134a9c;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.sbCtaButton:hover {
+  background: #0f3d85;
+  border-color: #0f3d85;
+}
+
+.sbCtaButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbFormatSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sbFormatSummaryLine {
+  font-weight: 600;
+}
+
+.sbDetails {
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+  background: white;
+  overflow: hidden;
+}
+
+.sbDetailsSummary {
+  cursor: pointer;
+  padding: 10px 12px;
+  font-weight: 650;
+  color: var(--sb-text);
+  list-style: none;
+}
+
+.sbDetailsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.sbDetailsSummary::after {
+  content: "\u2193";
+  float: right;
+  color: var(--sb-muted);
+}
+
+details[open] > .sbDetailsSummary::after {
+  content: "\u2191";
+}
+
+.sbDetailsBody {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--sb-border);
+}
+
+.sbPreLine {
+  white-space: pre-line;
+}
+
+.sbDetailValue {
+  font-size: 14px;
+  color: var(--sb-text);
+}
+
+.sbDetailRows {
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.sbDetailRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--sb-border);
+}
+
+.sbDetailRows > .sbDetailRow:first-child {
+  border-top: 0;
+}
+
+.sbBulletList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sbBulletList li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sbBulletList li::before {
+  content: "\u2022";
+  color: #b2b7c8;
+  flex: 0 0 auto;
+}
+
+.sbContactRow {
+  padding: 10px 12px;
+  border-top: 1px solid var(--sb-border);
+}
+
+.sbDetailRows > .sbContactRow:first-child {
+  border-top: 0;
+}
+
+.sbContactMeta {
+  margin-top: 4px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sbContactName {
+  font-weight: 650;
+  color: var(--sb-text);
+}
+
+.sbInputWithIcon {
+  position: relative;
+}
+
+.sbInputIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--sb-muted);
+  pointer-events: none;
+}
+
+.sbInputPadded {
+  padding-left: 36px;
+}
+
+.sbIconButton {
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sbIconButton:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbIconButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbRowChevronOpen {
+  transform: rotate(180deg);
+}
+
+.sbRowChevronSpacer {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+}
+
+.sbTeamRoster {
+  border-top: 1px solid var(--sb-border);
+  background: var(--sb-soft);
+  padding: 12px 16px;
+}
+
+.sbRosterGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .sbRosterGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sbRosterRow {
+  border: 1px solid var(--sb-border);
+  background: var(--sb-card);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.sbRosterName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sbRosterMeta {
+  margin-top: 2px;
+}
+
+.sbFieldTabHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sbTeamList {
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
 }
