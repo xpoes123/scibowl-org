@@ -77,6 +77,10 @@ export interface TournamentDetail {
   registration: RegistrationInfo;
   format: TournamentFormat;
   field_limit?: number;
+  set?: {
+    difficulty?: string;
+    writers?: string;
+  };
   teams: TournamentTeam[];
   updated_at?: string;
 }

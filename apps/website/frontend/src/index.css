@@ -894,14 +894,6 @@ img {
   font-weight: 500;
 }
 
-.sbHeroMetaGroupSecondaryRows {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: var(--sb-muted);
-  font-weight: 500;
-}
-
 .sbHeroMetaEmphasis {
   color: var(--sb-text);
   font-weight: 750;

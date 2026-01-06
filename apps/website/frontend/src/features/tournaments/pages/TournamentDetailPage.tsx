@@ -8,12 +8,14 @@ import { formatTournamentDateRange } from "../utils/date";
 import { FieldTab } from "./tournament-detail/FieldTab";
 import { OverviewTab } from "./tournament-detail/OverviewTab";
 import { RegistrationTab } from "./tournament-detail/RegistrationTab";
+import { SetTab } from "./tournament-detail/SetTab";
 
-type TournamentTab = "overview" | "registration" | "field";
+type TournamentTab = "overview" | "registration" | "set" | "field";
 
 function parseTab(value: string | null): TournamentTab {
   const normalized = (value ?? "").trim().toLowerCase();
   if (normalized === "registration") return "registration";
+  if (normalized === "set") return "set";
   if (normalized === "field") return "field";
   return "overview";
 }
@@ -84,6 +86,7 @@ export function TournamentDetailPage() {
 
   const overviewTabId = "tournament-tab-overview";
   const registrationTabId = "tournament-tab-registration";
+  const setTabId = "tournament-tab-set";
   const fieldTabId = "tournament-tab-field";
   const panelId = "tournament-tabpanel";
 
@@ -124,23 +127,6 @@ export function TournamentDetailPage() {
                 </>
               )}
             </div>
-
-            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-              {(tournament.difficulty || tournament.writing_team) && (
-                <div className="sbHeroMetaGroupSecondaryRows" aria-label="Reference info">
-                  {tournament.difficulty && (
-                    <div>
-                      <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
-                    </div>
-                  )}
-                  {tournament.writing_team && (
-                    <div>
-                      <span className="sbLabelInline">Writing team:</span> {tournament.writing_team}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
           </div>
 
           <div className="sbTournamentDate">
@@ -175,6 +161,17 @@ export function TournamentDetailPage() {
           </button>
           <button
             type="button"
+            id={setTabId}
+            role="tab"
+            aria-selected={tab === "set"}
+            aria-controls={panelId}
+            className={tab === "set" ? "sbTab sbTabActive" : "sbTab"}
+            onClick={() => setTab("set")}
+          >
+            Set
+          </button>
+          <button
+            type="button"
             id={fieldTabId}
             role="tab"
             aria-selected={tab === "field"}
@@ -189,14 +186,24 @@ export function TournamentDetailPage() {
         <div
           id={panelId}
           role="tabpanel"
-          aria-labelledby={tab === "overview" ? overviewTabId : tab === "registration" ? registrationTabId : fieldTabId}
-          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : "Field"}
+          aria-labelledby={
+            tab === "overview"
+              ? overviewTabId
+              : tab === "registration"
+                ? registrationTabId
+                : tab === "set"
+                  ? setTabId
+                  : fieldTabId
+          }
+          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : tab === "set" ? "Set" : "Field"}
           className="sbTabsBody"
         >
           {tab === "overview" ? (
             <OverviewTab tournament={tournament} />
           ) : tab === "registration" ? (
             <RegistrationTab tournament={tournament} />
+          ) : tab === "set" ? (
+            <SetTab tournament={tournament} />
           ) : (
             <FieldTab tournament={tournament} />
           )}
