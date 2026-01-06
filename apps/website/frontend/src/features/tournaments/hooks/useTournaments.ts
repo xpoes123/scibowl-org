@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { mockTournaments } from "../mock/mockTournaments";
+import { TOURNAMENTS } from "../data/tournaments";
 import type { TournamentSummary } from "../types";
 
 type UseTournamentsResult = {
@@ -8,10 +8,12 @@ type UseTournamentsResult = {
   error: string | null;
 };
 
+/**
+ * Hook to access the hardcoded tournament listings.
+ * Tournaments are managed via PR (see data/tournaments.ts).
+ */
 export function useTournaments(): UseTournamentsResult {
-  // TODO(API): Replace mock data with a real API call (e.g. `tournamentsAPI.getTournaments()`),
-  // keeping the return shape stable so pages/components remain unchanged.
-  const tournaments = useMemo(() => mockTournaments, []);
+  const tournaments = useMemo(() => TOURNAMENTS, []);
 
   return {
     tournaments,
