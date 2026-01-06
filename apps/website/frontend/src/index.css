@@ -860,6 +860,15 @@ img {
   flex-wrap: wrap;
 }
 
+.sbHeroMetaCompact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--sb-muted);
+  font-size: 13px;
+}
+
 .sbHeroMetaRowSecondary {
   color: var(--sb-muted);
   font-size: 13px;
@@ -881,6 +890,14 @@ img {
 }
 
 .sbHeroMetaGroupSecondary {
+  color: var(--sb-muted);
+  font-weight: 500;
+}
+
+.sbHeroMetaGroupSecondaryRows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   color: var(--sb-muted);
   font-weight: 500;
 }

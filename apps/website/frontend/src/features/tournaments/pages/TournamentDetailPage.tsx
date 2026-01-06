@@ -1,5 +1,5 @@
-import { ArrowLeftIcon, CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { Fragment, useMemo } from "react";
+import { ArrowLeftIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { useMemo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
@@ -81,35 +81,11 @@ export function TournamentDetailPage() {
 
   const locationLabel = `${tournament.location_city}, ${tournament.location_state}`;
   const dateLabel = formatTournamentDateRange(tournament.start_date, tournament.end_date);
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
 
   const overviewTabId = "tournament-tab-overview";
   const registrationTabId = "tournament-tab-registration";
   const fieldTabId = "tournament-tab-field";
   const panelId = "tournament-tabpanel";
-
-  const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
-  if (tournament.difficulty) {
-    heroMetaItems.push({
-      key: "difficulty",
-      node: (
-        <span>
-          <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
-        </span>
-      ),
-    });
-  }
-  if (tournament.writing_team) {
-    heroMetaItems.push({
-      key: "writing_team",
-      node: (
-        <span>
-          <span className="sbLabelInline">Writing team:</span> {tournament.writing_team}
-        </span>
-      ),
-    });
-  }
 
   return (
     <div className="sbStack">
@@ -123,38 +99,45 @@ export function TournamentDetailPage() {
             <h1 className="sbHeroTitle sbHeroTitleTight">{tournament.name}</h1>
 
             <div className="sbHeroMetaRow" aria-label="Tournament basics">
-              <span className="sbBadge sbBadgeImportant">
-                <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
-              </span>
-              <span className="sbBadge sbBadgeImportant">
-                <CalendarDaysIcon className="sbIcon" aria-hidden="true" /> {dateLabel}
+              <div className="sbHeroMetaCompact" aria-label="Tournament location and date">
+                <span className="sbRowMetaItem">
+                  <MapPinIcon className="sbIcon" aria-hidden="true" />
+                  {locationLabel}
+                </span>
+                <span className="sbRowMetaSep" aria-hidden="true">
+                  {"\u2022"}
+                </span>
+                <span className="sbRowMetaItem">{dateLabel}</span>
+              </div>
+              <span className="sbRowMetaSep" aria-hidden="true">
+                {"\u2022"}
               </span>
               <LevelPills levels={tournament.levels} />
-            </div>
-
-            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-              <div className="sbHeroMetaGroup sbHeroMetaGroupPrimary" aria-label="Participation info">
-                <span className="sbHeroMetaEmphasis">{fieldLabel}</span>
-                {tournament.registration.cost && <span className="sbHeroMetaEmphasis">{tournament.registration.cost}</span>}
-                {tournament.website_url && (
+              {tournament.website_url && (
+                <>
+                  <span className="sbRowMetaSep" aria-hidden="true">
+                    {"\u2022"}
+                  </span>
                   <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
                     Website <span aria-hidden="true">{"\u2197"}</span>
                   </a>
-                )}
-              </div>
+                </>
+              )}
+            </div>
 
+            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
               {(tournament.difficulty || tournament.writing_team) && (
-                <div className="sbHeroMetaGroup sbHeroMetaGroupSecondary" aria-label="Reference info">
-                  {heroMetaItems.map((item, idx) => (
-                    <Fragment key={item.key}>
-                      {idx > 0 && (
-                        <span className="sbHeroMetaSep" aria-hidden="true">
-                          {"\u2022"}
-                        </span>
-                      )}
-                      {item.node}
-                    </Fragment>
-                  ))}
+                <div className="sbHeroMetaGroupSecondaryRows" aria-label="Reference info">
+                  {tournament.difficulty && (
+                    <div>
+                      <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
+                    </div>
+                  )}
+                  {tournament.writing_team && (
+                    <div>
+                      <span className="sbLabelInline">Writing team:</span> {tournament.writing_team}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
