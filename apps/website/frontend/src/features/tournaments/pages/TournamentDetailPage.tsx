@@ -55,7 +55,7 @@ export function TournamentDetailPage() {
     const next = new URLSearchParams(searchParams);
     if (nextTab === "overview") next.delete("tab");
     else next.set("tab", nextTab);
-    setSearchParams(next, { replace: false });
+    setSearchParams(next, { replace: false, preventScrollReset: true });
   };
 
   if (loading) {
