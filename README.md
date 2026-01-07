@@ -1,86 +1,59 @@
-# 🧪 Scibowl Org (NSB Arena)
-### A Modern Science Bowl Practice & Competition Platform — React + TypeScript + Django
+# 🧪 Scibowl Org
+### A Modern Science Bowl Tournament & Practice Platform — React + TypeScript + Django
 
 **Scibowl Org** is a full-stack platform designed for **National Science Bowl (NSB)** students, teams, coaches, and tournament organizers.
 
 The mission:
 > **Build the most complete, modern, competitive, and community-driven Science Bowl platform online.**
 
-Scibowl Org offers solo practice tools, tournament organization features, live scorekeeping, and powerful analytics. With planned features for multiplayer buzzing, coaching dashboards, and social leaderboards, the platform aims to replace Google Sheets for tournament management while providing students with modern practice tools.
+Scibowl Org provides tournament discovery and management tools, live game moderation through MOSS (our moderator platform), question packet management, and powerful post-tournament analytics. The platform aims to modernize Science Bowl tournaments while providing students and coaches with better tools for practice and competition.
 
-The project is in **active MVP development** with a React + TypeScript frontend and Django REST backend fully integrated.
-
----
-
-## 🚀 Development Roadmap  
-Scibowl Org is built in **five major phases**:
+The project is in **active development** with a React + TypeScript frontend and Django REST backend.
 
 ---
 
-## **Phase 1 — Core Functions (✅ Complete)**
-Build the foundational practice experience:
+## 🎯 Core Features
 
-- ✅ Full question database with comprehensive filtering
-- ✅ Search engine (text, category, type, style, source filters)
-- ✅ Multiple question types: Short Answer, Multiple Choice, Identify All, Rank
-- ✅ Practice modes: Flashcard system with reveal mechanics, Reading mode
-- ✅ Session stats (accuracy, history tracking via backend)
-- ✅ Hotkey-driven UX (Enter/Skip/Next)
-- ✅ User authentication and profiles
-- ✅ Question bookmarking and answer history
+### **Tournament Discovery & Management**
+- **Tournament Listings**: Hardcoded tournament database with upcoming and past tournaments
+- **Tournament Details**: Registration info, logistics, format, contact information
+- **Post-Tournament Resources**: Results, statistics, and question packets
+- **JSON-Based Data**: Simple file-based tournament management via pull requests
+- **Community-Driven**: Tournament organizers can add their events via GitHub PRs
 
----
+### **MOSS - Moderator Platform**
+- **Live Game Moderation**: Platform for judges to read questions and track buzzes
+- **Buzz Tracking**: Record exactly where players buzz in each question
+- **Enhanced Statistics**: Detailed player and team analytics based on buzz points
+- **Better Tournament Insights**: Understand player strengths and weaknesses through buzz patterns
 
-## **Phase 2 — Multiplayer**
-Introduce competitive play:
+### **Question Packets**
+- **Packet Management**: Upload and organize Science Bowl question sets
+- **Post-Tournament Access**: Make packets available after tournaments conclude
+- **Community Resource**: Build a library of practice materials
 
-- 1v1 buzzing matches (polling → WebSockets later)
-- Question lockout + judging/override flow
-- Match results + basic rating system
-- Rooms and simple invites
-- Adjustable match settings (categories, difficulty, modes)
-
----
-
-## **Phase 3 — Tournament Organizer (TO) Tools (🔨 In Progress)**
-Support real events and scrimmages:
-
-- ✅ Tournament creation and management (name, division, format, dates, location)
-- ✅ Team and player management
-- ✅ Room assignment system
-- ✅ Round scheduling with packet assignments
-- ✅ Live tournament dashboard with room status
-- ✅ MODAQ integration (read-only API for game result ingestion)
-- ✅ Player stats tracking (points, buzzes, accuracy)
-- ✅ Game state tracking (current tossup, team scores)
-- 🔨 PDF packet upload and parsing
-- 🔨 Reader/Moderator UI for live games
-- 🔨 Results export and detailed statistics
-- 🔨 Pool play and bracket generation
+### **Practice Tools** (In Development)
+- Question database with comprehensive filtering
+- Practice modes: Flashcard system, reading mode
+- Session stats and answer history tracking
+- User authentication and profiles
 
 ---
 
-## **Phase 4 — Social & Community (📋 Planned)**
-Make the platform engaging and persistent:
+## 🚀 What Makes This Different
 
-- ✅ User accounts and profiles (basic implementation)
-- 📋 Leaderboards (weekly/monthly/all-time)
-- 📋 Achievements & streaks
-- 📋 Commenting + discussions on questions
-- 📋 Submission leaderboards
-- 📋 Enhanced study lists and bookmarking features
+**Traditional Science Bowl Tournaments:**
+- Google Sheets for scoring and standings
+- Manual stat tracking
+- No visibility into player buzz patterns
+- Limited post-tournament analytics
 
----
-
-## **Phase 5 — Coaching & Team Tools (📋 Planned)**
-Empower teams and coaches:
-
-- 📋 Team creation + roles
-- 📋 Coach dashboard with assignments
-- 📋 Player analytics (category weakness, accuracy trends)
-- 📋 Team scrimmage tools
-- 📋 Saved sessions + review pages
-- 📋 Heatmaps, buzzpoint patterns, growth tracking
+**Scibowl Org Platform:**
+- **MOSS**: Live game moderation with precise buzz tracking
+- **Detailed Analytics**: Know exactly where players buzz, identify strengths/weaknesses
+- **Tournament Discovery**: Centralized listing of Science Bowl tournaments
+- **Packet Repository**: Access to past tournament questions for practice
+- **Modern UX**: Built for speed and ease of use
 
 ---
 
@@ -91,7 +64,6 @@ Empower teams and coaches:
 - TypeScript 5.9
 - TailwindCSS 3.4
 - React Router 7.9
-- Hotkey-driven UX
 - Feature-based architecture
 
 ### **Backend**
@@ -108,39 +80,15 @@ Empower teams and coaches:
 
 ---
 
-## 📘 Current MVP Features
-
-### **Question Database & Practice**
-- **Comprehensive Filtering**: Category (Physics, Chemistry, Biology, Math, Energy, ESS), question type (Tossup/Bonus), style (Short Answer, Multiple Choice, Identify All, Rank), source (MIT, Regionals, Nationals)
-- **Text Search**: Full-text search across questions and answers
-- **Practice Modes**:
-  - Flashcard system with progressive reveal
-  - Reading mode with text disclosure
-  - Multiple choice practice
-  - Support for Identify-All and Rank questions
-- **Session Management**: Accuracy tracking, answer history, unseen question tracking
-- **Hotkey-Driven UX**: Enter to submit, keyboard shortcuts for navigation
-- **User Features**: Authentication, profiles, bookmarking, answer history
-
-### **Tournament Management**
-- **Tournament Creation**: Name, division (MS/HS), format, dates, location, organizer info
-- **Team & Player Management**: Team registration, player rosters with grade levels
-- **Room Assignment**: Physical/virtual room allocation with status tracking
-- **Round Scheduling**: Multiple rounds with packet assignments
-- **Live Dashboard**: Real-time tournament status, room progress monitoring
-- **MODAQ Integration**: Read-only API for external game result ingestion
-- **Player Statistics**: Points, buzzes, accuracy tracking from live games
-- **Game Tracking**: Current tossup number, team scores, completion status
-
----
-
 ## ▶️ Getting Started
 
 ### **Monorepo Structure**
 ```
-nsb-arena/
-├── frontend/         # React + TypeScript + Vite
-├── backend/          # Django + PostgreSQL API
+scibowl-org/
+├── apps/
+│   └── website/
+│       ├── frontend/     # React + TypeScript + Vite
+│       └── backend/      # Django + PostgreSQL API
 ├── docker-compose.yml
 └── README.md
 ```
@@ -160,7 +108,7 @@ docker-compose up
 
 **Frontend:**
 ```bash
-cd frontend
+cd apps/website/frontend
 npm install
 npm run dev
 # Runs on http://localhost:5173
@@ -168,7 +116,7 @@ npm run dev
 
 **Backend:**
 ```bash
-cd backend
+cd apps/website/backend
 
 # Create virtual environment
 python -m venv venv
@@ -189,152 +137,41 @@ python manage.py runserver
 
 ---
 
-## 🔧 Development Commands
-
-### **Docker Commands**
-```bash
-# Start all services
-docker-compose up
-
-# Start in background
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
-docker-compose down
-
-# Rebuild after code changes
-docker-compose up --build
-
-# Run Django commands
-docker-compose exec backend python manage.py <command>
-```
-
-### **Backend Commands**
-```bash
-# Create migrations
-docker-compose exec backend python manage.py makemigrations
-
-# Apply migrations
-docker-compose exec backend python manage.py migrate
-
-# Create superuser
-docker-compose exec backend python manage.py createsuperuser
-
-# Access Django shell
-docker-compose exec backend python manage.py shell
-```
-
----
-
 ## 📂 Project Structure
 
 ```
-nsb-arena/
-├── frontend/                 # React + TypeScript + Vite
-│   ├── src/
-│   │   ├── features/        # Feature modules
-│   │   │   ├── auth/        # Authentication (login/signup)
-│   │   │   ├── questions/   # Question database UI
-│   │   │   ├── study/       # Practice modes (flashcard, reading)
-│   │   │   ├── tournaments/ # Tournament browsing & management
-│   │   │   ├── profile/     # User profile management
-│   │   │   └── [multiplayer, social, coaching]/  # Future features
-│   │   ├── core/
-│   │   │   └── api/         # API client for backend communication
-│   │   ├── shared/
-│   │   │   ├── types/       # TypeScript type definitions
-│   │   │   └── utils/       # Shared utilities
-│   │   ├── pages/           # Top-level pages
-│   │   ├── App.tsx          # Main app router and layout
-│   │   └── main.tsx         # Entry point
-│   └── package.json
+scibowl-org/
+├── apps/
+│   └── website/
+│       ├── frontend/                 # React + TypeScript + Vite
+│       │   ├── src/
+│       │   │   ├── features/
+│       │   │   │   ├── tournaments/  # Tournament discovery & details
+│       │   │   │   │   ├── data/
+│       │   │   │   │   │   └── tournaments/  # JSON tournament files
+│       │   │   │   │   ├── pages/
+│       │   │   │   │   └── components/
+│       │   │   │   ├── auth/         # Authentication
+│       │   │   │   ├── questions/    # Question database
+│       │   │   │   └── study/        # Practice modes
+│       │   │   └── core/
+│       │   │       └── api/          # API client
+│       │   └── package.json
+│       │
+│       └── backend/                  # Django + PostgreSQL API
+│           ├── backend/              # Django project config
+│           ├── questions/            # Questions app
+│           ├── tournaments/          # Tournament management
+│           ├── users/                # User management
+│           └── requirements.txt
 │
-├── backend/                  # Django + PostgreSQL API
-│   ├── backend/             # Django project config
-│   ├── questions/           # Questions app (models, API, tests)
-│   ├── tournaments/         # Tournament management app
-│   ├── users/               # User management (custom User model)
-│   ├── manage.py
-│   ├── requirements.txt
-│   └── Dockerfile
-│
-├── docker-compose.yml       # Multi-container orchestration
-├── README.md
-├── TOURNAMENT.md            # Tournament system architecture docs
-└── TESTING_SETUP.md         # Testing guide
+├── docker-compose.yml
+└── README.md
 ```
-
----
-
-## 📡 API Endpoints
-
-### **Authentication** (`/api/`)
-- `POST /auth/register/` - Register new user
-- `POST /auth/login/` - Login (get JWT tokens)
-- `POST /auth/refresh/` - Refresh access token
-- `GET /profile/` - Get current user profile
-- `PUT /profile/` - Update profile
-
-### **Questions** (`/api/questions/`)
-- `GET /` - List questions (supports filtering by category, type, style, source)
-- `GET /<id>/` - Get question details
-- `POST /history/` - Submit answer
-- `GET /history/` - Get answer history
-- `POST /bookmarks/` - Bookmark question
-- `GET /bookmarks/` - List bookmarks
-
-### **Tournaments** (`/api/`)
-- `GET /tournaments/` - List tournaments (filterable by status, division)
-- `GET /tournaments/<id>/` - Tournament details
-- `GET /tournaments/<id>/teams/` - Tournament teams
-- `GET /tournaments/<id>/rooms/` - Tournament rooms
-- `GET /tournaments/<id>/rounds/` - Tournament rounds
-- `GET /tournaments/<id>/games/` - Tournament games
-- `GET /teams/` - Teams (with filtering)
-- `GET /rooms/` - Rooms (with filtering)
-- `GET /games/` - Games (with filtering)
-
-**Note**: Tournament endpoints are read-only in the MVP. Write operations are reserved for MODAQ integration.
-
----
-
-## 🏗️ Key Architectural Decisions
-
-1. **Monorepo Structure**: Frontend and backend in a single repository for tight integration and easier development
-2. **MODAQ Integration**: External buzzing/scoring system writes game results → Arena reads and displays (no score recalculation in Arena)
-3. **Read-Heavy MVP**: All tournament endpoints are read-only; write operations reserved for MODAQ
-4. **Feature-Based Frontend**: Modular folder structure organized by features for better scalability
-5. **JWT Authentication**: Stateless token-based authentication for API security
-6. **Docker-First Development**: Containerized environment ensures consistency across development and deployment
-7. **TypeScript Throughout**: Strong typing on frontend for better developer experience and fewer runtime errors
-
----
-
-## 🎯 Notable Features
-
-- **Hotkey-Driven UX**: Keyboard shortcuts for fast navigation (Enter to submit, Skip questions, Next)
-- **Multiple Question Types**: Support for Short Answer, Multiple Choice, Identify-All, and Rank questions
-- **Progressive Text Reveal**: Reading mode with controlled text disclosure for practice
-- **Question Randomization**: Smart selection with history tracking to avoid repeats
-- **MODAQ Integration**: Designed for seamless data ingestion from external buzzing systems
-- **Tournament Dashboard**: Real-time monitoring of tournament progress across multiple rooms
-- **Player Analytics**: Track performance metrics including points, buzzes, and accuracy
-
----
-
-## 📚 Additional Documentation
-
-- [TOURNAMENT.md](TOURNAMENT.md) - Tournament system architecture and design decisions
-- [TESTING_SETUP.md](TESTING_SETUP.md) - Testing guide and best practices
 
 ---
 
 ## 🤝 Contributing
-
-This project is in active development. The current focus is on completing Phase 3 (Tournament Organizer tools) and refining the MVP experience.
 
 ### Adding a Tournament
 
@@ -342,12 +179,71 @@ Tournament listings are **hardcoded in the repository** and managed through pull
 - Ensures all tournaments are reviewed before appearing on the site
 - Prevents spam and duplicate listings
 - Works well for Science Bowl's tournament volume (~20-30 per season)
+- Provides a git history audit trail
 
-To add your tournament:
+**To add your tournament:**
+
 1. Create a new JSON file in [`apps/website/frontend/src/features/tournaments/data/tournaments/`](apps/website/frontend/src/features/tournaments/data/tournaments/) with the next available ID (e.g., `26.json`)
-2. Add your tournament details following the existing JSON format
-3. Import the new JSON file in [`tournaments.ts`](apps/website/frontend/src/features/tournaments/data/tournaments.ts)
+
+2. Use this template:
+```json
+{
+  "id": "26",
+  "name": "Your Tournament Name",
+  "location_city": "City",
+  "location_state": "STATE",
+  "start_date": "2026-03-15",
+  "level": ["HS"],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T00:00:00Z",
+  "is_published": true,
+  "contact_info": "Contact info here",
+  "logistics": "Tournament logistics details",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Registration instructions",
+    "url": "https://forms.gle/...",
+    "cost": "$25 per team",
+    "deadlines": [
+      {
+        "label": "Registration closes",
+        "date": "2026-03-01"
+      }
+    ]
+  },
+  "format": {
+    "summary": "Tournament format description",
+    "field_limit": 24,
+    "phases": []
+  }
+}
+```
+
+3. Import your JSON file in [`tournaments.ts`](apps/website/frontend/src/features/tournaments/data/tournaments.ts)
+
 4. Submit a pull request
+
+**For finished tournaments**, add post-tournament resources:
+```json
+{
+  "results_url": "https://docs.google.com/spreadsheets/...",
+  "stats_url": "https://docs.google.com/spreadsheets/...",
+  "packets_url": "https://drive.google.com/drive/folders/..."
+}
+```
+
+See the [tournaments README](apps/website/frontend/src/features/tournaments/data/tournaments/README.md) for more details.
+
+---
+
+## 🏗️ Key Architectural Decisions
+
+1. **Hardcoded Tournament Data**: Simple JSON files managed via GitHub PRs for spam prevention and human review
+2. **MOSS Integration**: External moderation platform tracks game state and buzz points for enhanced analytics
+3. **Feature-Based Frontend**: Modular folder structure organized by features for better scalability
+4. **JWT Authentication**: Stateless token-based authentication for API security
+5. **Docker-First Development**: Containerized environment ensures consistency across development and deployment
+6. **TypeScript Throughout**: Strong typing on frontend for better developer experience and fewer runtime errors
 
 ---
 
