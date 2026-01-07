@@ -1,5 +1,5 @@
-import { ArrowLeftIcon, CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { Fragment, useMemo } from "react";
+import { ArrowLeftIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { useMemo } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
@@ -8,12 +8,14 @@ import { formatTournamentDateRange } from "../utils/date";
 import { FieldTab } from "./tournament-detail/FieldTab";
 import { OverviewTab } from "./tournament-detail/OverviewTab";
 import { RegistrationTab } from "./tournament-detail/RegistrationTab";
+import { SetTab } from "./tournament-detail/SetTab";
 
-type TournamentTab = "overview" | "registration" | "field";
+type TournamentTab = "overview" | "registration" | "set" | "field";
 
 function parseTab(value: string | null): TournamentTab {
   const normalized = (value ?? "").trim().toLowerCase();
   if (normalized === "registration") return "registration";
+  if (normalized === "set") return "set";
   if (normalized === "field") return "field";
   return "overview";
 }
@@ -32,13 +34,16 @@ function getTournamentStatusBadgeClass(status: TournamentStatus): string {
 }
 
 function StatusBadge({ status }: { status: TournamentStatus }) {
-  const isLive = status === "LIVE";
-  return (
-    <span className={getTournamentStatusBadgeClass(status)}>
-      {isLive && <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />}
-      {status}
-    </span>
-  );
+  if (status === "LIVE") {
+    return (
+      <span className="sbBadge sbBadgeLive sbBadgeLiveInline">
+        <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />
+        LIVE
+      </span>
+    );
+  }
+
+  return <span className={getTournamentStatusBadgeClass(status)}>{status}</span>;
 }
 
 export function TournamentDetailPage() {
@@ -52,7 +57,7 @@ export function TournamentDetailPage() {
     const next = new URLSearchParams(searchParams);
     if (nextTab === "overview") next.delete("tab");
     else next.set("tab", nextTab);
-    setSearchParams(next, { replace: false });
+    setSearchParams(next, { replace: false, preventScrollReset: true });
   };
 
   if (loading) {
@@ -78,35 +83,12 @@ export function TournamentDetailPage() {
 
   const locationLabel = `${tournament.location_city}, ${tournament.location_state}`;
   const dateLabel = formatTournamentDateRange(tournament.start_date, tournament.end_date);
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
 
   const overviewTabId = "tournament-tab-overview";
   const registrationTabId = "tournament-tab-registration";
+  const setTabId = "tournament-tab-set";
   const fieldTabId = "tournament-tab-field";
   const panelId = "tournament-tabpanel";
-
-  const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
-  if (tournament.difficulty) {
-    heroMetaItems.push({
-      key: "difficulty",
-      node: (
-        <span>
-          <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
-        </span>
-      ),
-    });
-  }
-  if (tournament.writing_team) {
-    heroMetaItems.push({
-      key: "writing_team",
-      node: (
-        <span>
-          <span className="sbLabelInline">Writing team:</span> {tournament.writing_team}
-        </span>
-      ),
-    });
-  }
 
   return (
     <div className="sbStack">
@@ -120,39 +102,29 @@ export function TournamentDetailPage() {
             <h1 className="sbHeroTitle sbHeroTitleTight">{tournament.name}</h1>
 
             <div className="sbHeroMetaRow" aria-label="Tournament basics">
-              <span className="sbBadge sbBadgeImportant">
-                <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
-              </span>
-              <span className="sbBadge sbBadgeImportant">
-                <CalendarDaysIcon className="sbIcon" aria-hidden="true" /> {dateLabel}
+              <div className="sbHeroMetaCompact" aria-label="Tournament location and date">
+                <span className="sbRowMetaItem">
+                  <MapPinIcon className="sbIcon" aria-hidden="true" />
+                  {locationLabel}
+                </span>
+                <span className="sbRowMetaSep" aria-hidden="true">
+                  {"\u2022"}
+                </span>
+                <span className="sbRowMetaItem">{dateLabel}</span>
+              </div>
+              <span className="sbRowMetaSep" aria-hidden="true">
+                {"\u2022"}
               </span>
               <LevelPills levels={tournament.levels} />
-            </div>
-
-            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-              <div className="sbHeroMetaGroup sbHeroMetaGroupPrimary" aria-label="Participation info">
-                <span className="sbHeroMetaEmphasis">{fieldLabel}</span>
-                {tournament.registration.cost && <span className="sbHeroMetaEmphasis">{tournament.registration.cost}</span>}
-                {tournament.website_url && (
+              {tournament.website_url && (
+                <>
+                  <span className="sbRowMetaSep" aria-hidden="true">
+                    {"\u2022"}
+                  </span>
                   <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
                     Website <span aria-hidden="true">{"\u2197"}</span>
                   </a>
-                )}
-              </div>
-
-              {(tournament.difficulty || tournament.writing_team) && (
-                <div className="sbHeroMetaGroup sbHeroMetaGroupSecondary" aria-label="Reference info">
-                  {heroMetaItems.map((item, idx) => (
-                    <Fragment key={item.key}>
-                      {idx > 0 && (
-                        <span className="sbHeroMetaSep" aria-hidden="true">
-                          {"\u2022"}
-                        </span>
-                      )}
-                      {item.node}
-                    </Fragment>
-                  ))}
-                </div>
+                </>
               )}
             </div>
           </div>
@@ -189,6 +161,17 @@ export function TournamentDetailPage() {
           </button>
           <button
             type="button"
+            id={setTabId}
+            role="tab"
+            aria-selected={tab === "set"}
+            aria-controls={panelId}
+            className={tab === "set" ? "sbTab sbTabActive" : "sbTab"}
+            onClick={() => setTab("set")}
+          >
+            Set
+          </button>
+          <button
+            type="button"
             id={fieldTabId}
             role="tab"
             aria-selected={tab === "field"}
@@ -203,14 +186,24 @@ export function TournamentDetailPage() {
         <div
           id={panelId}
           role="tabpanel"
-          aria-labelledby={tab === "overview" ? overviewTabId : tab === "registration" ? registrationTabId : fieldTabId}
-          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : "Field"}
+          aria-labelledby={
+            tab === "overview"
+              ? overviewTabId
+              : tab === "registration"
+                ? registrationTabId
+                : tab === "set"
+                  ? setTabId
+                  : fieldTabId
+          }
+          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : tab === "set" ? "Set" : "Field"}
           className="sbTabsBody"
         >
           {tab === "overview" ? (
             <OverviewTab tournament={tournament} />
           ) : tab === "registration" ? (
             <RegistrationTab tournament={tournament} />
+          ) : tab === "set" ? (
+            <SetTab tournament={tournament} />
           ) : (
             <FieldTab tournament={tournament} />
           )}
