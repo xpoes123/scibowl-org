@@ -28,6 +28,8 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
   const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
   const rounds = tournament.format.rounds;
   const formatSummary = tournament.format.summary;
+  const isFinished = tournament.status === "FINISHED";
+  const hasPostTournamentLinks = isFinished && (tournament.results_url || tournament.stats_url || tournament.packets_url);
 
   return (
     <div className="sbTabStack" aria-label="Tournament overview">
@@ -59,6 +61,48 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
               {fieldCap && rounds ? " \u2022 " : ""}
               {rounds ? `Rounds: ${rounds}` : ""}
             </div>
+          )}
+
+          {hasPostTournamentLinks && (
+            <>
+              <div className="sbTabDivider" role="separator" aria-hidden="true" />
+              <div className="sbLabel">Post-Tournament Resources</div>
+              <div className="sbTopSpace" style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                {tournament.results_url && (
+                  <a
+                    href={tournament.results_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="sbCtaButton"
+                    style={{ width: "fit-content" }}
+                  >
+                    View Results
+                  </a>
+                )}
+                {tournament.stats_url && (
+                  <a
+                    href={tournament.stats_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="sbCtaButton"
+                    style={{ width: "fit-content" }}
+                  >
+                    View Stats
+                  </a>
+                )}
+                {tournament.packets_url && (
+                  <a
+                    href={tournament.packets_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="sbCtaButton"
+                    style={{ width: "fit-content" }}
+                  >
+                    View Packets
+                  </a>
+                )}
+              </div>
+            </>
           )}
         </div>
       </section>

@@ -1,13 +1,44 @@
 {
   "id": "5",
-  "name": "Texas Science Bowl",
+  "name": "Texas Science Bowl 2026 Invitational",
   "location_city": "Online",
   "location_state": "TX",
   "start_date": "2026-01-18",
-  "level": [
-    "HS"
-  ],
+  "level": ["HS"],
   "status": "UPCOMING",
-  "updated_at": "2026-01-06T00:00:00Z",
-  "is_published": true
+  "updated_at": "2026-01-06T02:00:00Z",
+  "is_published": true,
+  "contact_info": "@walrusramen\nDiscord: https://discord.com/invite/VQwKMMud2x",
+  "logistics": "Virtual tournament. Opening Ceremony at 10:30 AM on January 18, 2026.",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Fill out the form once per team (rather than once per school). Payment is not due until after the registration deadline, so we can notify all teams who actually have a spot. 48 teams will participate.",
+    "url": "https://forms.gle/signup",
+    "cost": "$30 per team",
+    "deadlines": [
+      {
+        "label": "Registration due",
+        "date": "2026-01-03"
+      },
+      {
+        "label": "Payment deadline",
+        "date": "2026-01-10"
+      }
+    ]
+  },
+  "format": {
+    "summary": "48 teams compete in 8 divisions of 6 teams each for round-robin play, followed by a 16-team double-elimination bracket",
+    "field_limit": 48,
+    "rounds": 5,
+    "phases": [
+      {
+        "name": "Round-Robin",
+        "description": "5 round-robin rounds against all other teams in division. Teams receive 2 points per match won and 1 point per match drawn. Top 2 teams per division by index (1000 * match points + PPG) advance."
+      },
+      {
+        "name": "Double-Elimination Bracket",
+        "description": "16 teams seeded by index into double-elimination bracket. Continues until all but one team has lost two games."
+      }
+    ]
+  }
 }

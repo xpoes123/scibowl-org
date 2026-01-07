@@ -5,10 +5,10 @@
   "location_state": "MA",
   "start_date": "2025-11-15",
   "end_date": "2025-11-15",
-  "level": [
-    "HS"
-  ],
+  "level": ["HS"],
   "status": "FINISHED",
   "updated_at": "2025-11-16T00:00:00Z",
-  "is_published": true
+  "is_published": true,
+  "results_url": "https://docs.google.com/spreadsheets/d/1i1Nf6hZ5y671519OKh8t8PnJ3pDONxgMdWwr9NhkObI/edit?gid=0#gid=0",
+  "packets_url": "https://drive.google.com/drive/folders/1QqJU4NRSQ0FDYJXQaMVGqLhllj7CgNB7"
 }

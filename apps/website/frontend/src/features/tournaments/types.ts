@@ -73,4 +73,8 @@ export interface TournamentDetail {
   field_limit?: number;
   teams: TournamentTeam[];
   updated_at?: string;
+  // Post-tournament resources
+  results_url?: string;
+  stats_url?: string;
+  packets_url?: string;
 }

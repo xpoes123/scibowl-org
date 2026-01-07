@@ -1,13 +1,24 @@
 {
   "id": "6",
-  "name": "Bay Ultimate MS Scibowl",
+  "name": "BUMS - Bay Ultimate MS Scibowl",
   "location_city": "Online",
   "location_state": "CA",
   "start_date": "2026-01-24",
-  "level": [
-    "MS"
-  ],
+  "level": ["MS"],
   "status": "UPCOMING",
-  "updated_at": "2026-01-06T00:00:00Z",
-  "is_published": true
+  "updated_at": "2026-01-06T02:00:00Z",
+  "is_published": true,
+  "contact_info": "Hosted by students at BISV\nDiscord: https://discord.gg/szFQA4KPNv",
+  "logistics": "Online middle school science bowl competition. Looking for both competitors and moderators.",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Sign up if you or anyone you know are interested in playing or being a moderator.",
+    "url": "https://forms.gle/zBQ4UavqepzCqC8v5",
+    "deadlines": []
+  },
+  "format": {
+    "summary": "Online middle school science bowl competition hosted by BISV students",
+    "phases": []
+  },
+  "website_url": "https://docs.google.com/document/d/1h3sOw62K5F8r5V7CRcWu_LVcc4V17KoJ7a_A6cBHdaU/edit?usp=sharing"
 }

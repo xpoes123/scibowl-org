@@ -1,13 +1,30 @@
 {
   "id": "1",
-  "name": "East Brunswick Invitational",
+  "name": "East Brunswick Science Bowl Invitational",
   "location_city": "East Brunswick",
   "location_state": "NJ",
-  "start_date": "2025-01-10",
-  "level": [
-    "HS"
-  ],
+  "start_date": "2026-01-10",
+  "level": ["HS"],
   "status": "UPCOMING",
-  "updated_at": "2026-01-06T00:00:00Z",
-  "is_published": true
+  "updated_at": "2026-01-06T02:00:00Z",
+  "is_published": true,
+  "contact_info": "ebhs.scibowl@gmail.com",
+  "logistics": "In-person at East Brunswick High School (380 Cranbury Rd, East Brunswick, NJ). Tournament runs from approximately 9am to 3:30pm. All teams MUST be accompanied by a teacher from their school in order to participate.",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Registration is capped at 12 teams. You may register multiple teams from the same school (eg. A and B teams), but if we surpass the 12-team limit, we will prioritize A teams over B teams to increase the number of schools attending. Registration closes on November 23.",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSeXYsyDBpwQw88rW8NPo0fRcpM7OJ6K5kTpFtBoCEUc2FIjaA/viewform?usp=header",
+    "cost": "$25 per team, with a $5 discount per buzzer system brought (cash payments collected day-of)",
+    "deadlines": [
+      {
+        "label": "Registration closes",
+        "date": "2025-11-23"
+      }
+    ]
+  },
+  "format": {
+    "summary": "Fourth annual East Brunswick Science Bowl Invitational Tournament",
+    "field_limit": 12,
+    "phases": []
+  }
 }

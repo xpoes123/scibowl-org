@@ -3,11 +3,22 @@
   "name": "Stanford College+ Science Bowl",
   "location_city": "Online",
   "location_state": "CA",
-  "start_date": "2026-02-15",
-  "level": [
-    "HS"
-  ],
+  "start_date": "2026-02-21",
+  "end_date": "2026-02-22",
+  "level": ["UG"],
   "status": "UPCOMING",
-  "updated_at": "2026-01-06T00:00:00Z",
-  "is_published": true
+  "updated_at": "2026-01-06T02:00:00Z",
+  "is_published": true,
+  "contact_info": "Hosted by Stanford\nOrganizers: @draoethar and others",
+  "logistics": "Inaugural College+ Science Bowl Tournament for college students or older. Target date is Feb 21/22 weekend (subject to change based on competitor availability).",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Interest form is nonbinding. Complete if you might want to participate. Final date subject to change based on competitor availability.",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSfYxwr6mWOb5jgAoVUQO_93h57yPh2Yz23V2AqfUnFIEsvdMQ/viewform?usp=header",
+    "deadlines": []
+  },
+  "format": {
+    "summary": "Inaugural College+ tournament for college students or older",
+    "phases": []
+  }
 }

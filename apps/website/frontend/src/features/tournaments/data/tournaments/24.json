@@ -5,10 +5,9 @@
   "location_state": "CA",
   "start_date": "2025-06-01",
   "end_date": "2025-09-30",
-  "level": [
-    "HS"
-  ],
+  "level": ["HS"],
   "status": "FINISHED",
   "updated_at": "2025-10-01T00:00:00Z",
-  "is_published": true
+  "is_published": true,
+  "results_url": "https://challonge.com/5qr7sb3g/bracket"
 }

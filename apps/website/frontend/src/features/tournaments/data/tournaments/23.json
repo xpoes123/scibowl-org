@@ -5,10 +5,11 @@
   "location_state": "CA",
   "start_date": "2025-09-13",
   "end_date": "2025-09-13",
-  "level": [
-    "HS"
-  ],
+  "level": ["HS"],
   "status": "FINISHED",
   "updated_at": "2025-09-14T00:00:00Z",
-  "is_published": true
+  "is_published": true,
+  "results_url": "https://docs.google.com/spreadsheets/d/1airV3e-nIqmGHLazO9nInBiouhSwTlwXYcgMMk_-2oI/edit?gid=468752784#gid=468752784",
+  "stats_url": "https://docs.google.com/spreadsheets/d/1nhKQghNrGuob62nrP5t06rWyA4ITKDI8mY-Jm9MYNUI/edit?usp=sharing",
+  "packets_url": "https://drive.google.com/drive/folders/1zvlPxPE8UfG-Vxpy8B0OHg1u2rTvByD4?usp=sharing"
 }
