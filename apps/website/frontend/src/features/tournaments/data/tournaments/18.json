@@ -1,0 +1,14 @@
+{
+  "id": "18",
+  "name": "Brooklyn Tech Invitational",
+  "location_city": "Online",
+  "location_state": "NY",
+  "start_date": "2025-10-26",
+  "end_date": "2025-10-26",
+  "level": ["HS"],
+  "status": "FINISHED",
+  "updated_at": "2025-10-27T00:00:00Z",
+  "is_published": true,
+  "results_url": "https://docs.google.com/spreadsheets/d/1DCSR8NcXDwi8kdAGiRaVxIZJyeZQuwDv1kfdIkkiYv4/edit?gid=1167708747#gid=1167708747",
+  "packets_url": "https://docs.google.com/document/d/1NVRNr-nRXVQW6AefNX6r7MeJBYF2Tjc5p6SzFgllOz0/edit?usp=sharing"
+}

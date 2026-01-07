@@ -1,0 +1,46 @@
+{
+  "id": "9",
+  "name": "Johns Hopkins Invitational",
+  "location_city": "Baltimore",
+  "location_state": "MD",
+  "start_date": "2026-03-02",
+  "level": ["HS"],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T02:00:00Z",
+  "is_published": true,
+  "contact_info": "@draoethar",
+  "logistics": "In-person at JHU Homewood campus. Inaugural tournament. Mirror to Stanford Science Bowl (same question set). Schools can send up to three teams.",
+  "registration": {
+    "method": "FORM",
+    "instructions": "Targeted field size is 24 teams, with possible expansion to 36 teams if interest allows. Schools can send up to three teams.",
+    "url": "https://forms.gle/qKMLp25v39sHbLKG8",
+    "cost": "$40 per team",
+    "deadlines": [
+      {
+        "label": "Registration deadline",
+        "date": "2026-02-16"
+      },
+      {
+        "label": "Payment due",
+        "date": "2026-02-23"
+      }
+    ]
+  },
+  "format": {
+    "summary": "Five round robin rounds followed by a sixteen team double elimination bracket",
+    "field_limit": 24,
+    "rounds": 5,
+    "phases": [
+      {
+        "name": "Round Robin",
+        "description": "Five round robin rounds"
+      },
+      {
+        "name": "Double Elimination",
+        "description": "Sixteen team double elimination bracket"
+      }
+    ]
+  },
+  "website_url": "https://scibowl.stanford.edu/mirrors",
+  "writing_team": "Mirror to Stanford Science Bowl"
+}

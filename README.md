@@ -336,6 +336,19 @@ nsb-arena/
 
 This project is in active development. The current focus is on completing Phase 3 (Tournament Organizer tools) and refining the MVP experience.
 
+### Adding a Tournament
+
+Tournament listings are **hardcoded in the repository** and managed through pull requests. This approach:
+- Ensures all tournaments are reviewed before appearing on the site
+- Prevents spam and duplicate listings
+- Works well for Science Bowl's tournament volume (~20-30 per season)
+
+To add your tournament:
+1. Create a new JSON file in [`apps/website/frontend/src/features/tournaments/data/tournaments/`](apps/website/frontend/src/features/tournaments/data/tournaments/) with the next available ID (e.g., `26.json`)
+2. Add your tournament details following the existing JSON format
+3. Import the new JSON file in [`tournaments.ts`](apps/website/frontend/src/features/tournaments/data/tournaments.ts)
+4. Submit a pull request
+
 ---
 
 ## 📄 License

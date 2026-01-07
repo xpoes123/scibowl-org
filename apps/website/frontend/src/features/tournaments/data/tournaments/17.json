@@ -1,0 +1,14 @@
+{
+  "id": "17",
+  "name": "Dougherty Valley MS Invitational",
+  "location_city": "San Ramon",
+  "location_state": "CA",
+  "start_date": "2025-11-15",
+  "end_date": "2025-11-15",
+  "level": ["MS"],
+  "status": "FINISHED",
+  "updated_at": "2025-11-16T00:00:00Z",
+  "is_published": true,
+  "results_url": "https://docs.google.com/spreadsheets/d/1zuj9rqqZ7bO402TsmWvOrIQIuyLh_klUTcmlBLzE7pc/edit?gid=1444061919#gid=1444061919",
+  "packets_url": "https://drive.google.com/drive/folders/1Lhh-LG0yCRYQiQO5dat6eZWUadAxoTWA"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "20",
+  "name": "ICSBT 2",
+  "location_city": "Online",
+  "location_state": "CA",
+  "start_date": "2025-10-11",
+  "end_date": "2025-10-11",
+  "level": ["HS"],
+  "status": "FINISHED",
+  "updated_at": "2025-10-12T00:00:00Z",
+  "is_published": true,
+  "results_url": "https://docs.google.com/spreadsheets/d/1Opzth5l9JiNwdXNbkZcg76Tc1fol22Jl9mq6xBOGksw/edit?gid=204270256#gid=204270256",
+  "stats_url": "https://docs.google.com/spreadsheets/d/13GXSkBNPGoL9oAXxPs6th6zyTP2RaBVSpd0cuVirEKc/edit?usp=sharing"
+}
