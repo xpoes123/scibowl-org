@@ -1,22 +1,10 @@
 import { ArrowLeftIcon, CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { Fragment, useMemo } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Fragment } from "react";
+import { Link, useParams } from "react-router-dom";
 import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
 import type { TournamentStatus } from "../types";
 import { formatTournamentDateRange } from "../utils/date";
-import { OverviewTab } from "./tournament-detail/OverviewTab";
-import { RegistrationTab } from "./tournament-detail/RegistrationTab";
-import { ContactTab } from "./tournament-detail/ContactTab";
-
-type TournamentTab = "overview" | "registration" | "contact";
-
-function parseTab(value: string | null): TournamentTab {
-  const normalized = (value ?? "").trim().toLowerCase();
-  if (normalized === "registration") return "registration";
-  if (normalized === "contact") return "contact";
-  return "overview";
-}
 
 function getTournamentStatusBadgeClass(status: TournamentStatus): string {
   switch (status) {
@@ -41,19 +29,28 @@ function StatusBadge({ status }: { status: TournamentStatus }) {
   );
 }
 
+function splitLogistics(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+
+  const byLine = trimmed
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (byLine.length > 1) return byLine;
+
+  const sentences = trimmed
+    .match(/[^.!?]+(?:[.!?]+|$)/g)
+    ?.map((sentence) => sentence.trim())
+    .filter(Boolean);
+  if (sentences && sentences.length > 1) return sentences;
+
+  return [trimmed];
+}
+
 export function TournamentDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const tab = useMemo(() => parseTab(searchParams.get("tab")), [searchParams]);
-
   const { data: tournament, loading, error } = useTournament(id);
-
-  const setTab = (nextTab: TournamentTab) => {
-    const next = new URLSearchParams(searchParams);
-    if (nextTab === "overview") next.delete("tab");
-    else next.set("tab", nextTab);
-    setSearchParams(next, { replace: false });
-  };
 
   if (loading) {
     return (
@@ -78,13 +75,12 @@ export function TournamentDetailPage() {
 
   const locationLabel = `${tournament.location_city}, ${tournament.location_state}`;
   const dateLabel = formatTournamentDateRange(tournament.start_date, tournament.end_date);
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
-
-  const overviewTabId = "tournament-tab-overview";
-  const registrationTabId = "tournament-tab-registration";
-  const contactTabId = "tournament-tab-contact";
-  const panelId = "tournament-tabpanel";
+  const logisticsBullets = tournament.logistics ? splitLogistics(tournament.logistics) : [];
+  const rounds = tournament.format.rounds;
+  const formatSummary = tournament.format.summary;
+  const isFinished = tournament.status === "FINISHED";
+  const isUpcoming = tournament.status === "UPCOMING";
+  const hasPostTournamentLinks = isFinished && (tournament.results_url || tournament.stats_url || tournament.packets_url);
 
   const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
   if (tournament.difficulty) {
@@ -131,7 +127,6 @@ export function TournamentDetailPage() {
 
             <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
               <div className="sbHeroMetaGroup sbHeroMetaGroupPrimary" aria-label="Participation info">
-                <span className="sbHeroMetaEmphasis">{fieldLabel}</span>
                 {tournament.registration.cost && <span className="sbHeroMetaEmphasis">{tournament.registration.cost}</span>}
                 {tournament.website_url && (
                   <a className="sbInlineLink sbInlineLinkSmall" href={tournament.website_url} target="_blank" rel="noreferrer">
@@ -163,59 +158,139 @@ export function TournamentDetailPage() {
         </div>
       </div>
 
-      <section className="card sbTabsCard sbTabsCardSpaced" aria-label="Tournament content">
-        <div className="sbTabsBar" role="tablist" aria-label="Tournament sections">
-          <button
-            type="button"
-            id={overviewTabId}
-            role="tab"
-            aria-selected={tab === "overview"}
-            aria-controls={panelId}
-            className={tab === "overview" ? "sbTab sbTabActive" : "sbTab"}
-            onClick={() => setTab("overview")}
-          >
-            Overview
-          </button>
-          <button
-            type="button"
-            id={registrationTabId}
-            role="tab"
-            aria-selected={tab === "registration"}
-            aria-controls={panelId}
-            className={tab === "registration" ? "sbTab sbTabActive" : "sbTab"}
-            onClick={() => setTab("registration")}
-          >
-            Registration
-          </button>
-          <button
-            type="button"
-            id={contactTabId}
-            role="tab"
-            aria-selected={tab === "contact"}
-            aria-controls={panelId}
-            className={tab === "contact" ? "sbTab sbTabActive" : "sbTab"}
-            onClick={() => setTab("contact")}
-          >
-            Contact
-          </button>
-        </div>
+      <div className="card" aria-label="Tournament details">
+        {/* Registration Button - show for upcoming tournaments with registration URL */}
+        {isUpcoming && tournament.registration.url && (
+          <div style={{ padding: "1.5rem 1.5rem 0 1.5rem" }}>
+            <a
+              className="sbCtaButton"
+              href={tournament.registration.url}
+              target="_blank"
+              rel="noreferrer"
+              style={{ width: "fit-content" }}
+            >
+              Register now
+            </a>
+          </div>
+        )}
 
-        <div
-          id={panelId}
-          role="tabpanel"
-          aria-labelledby={tab === "overview" ? overviewTabId : tab === "registration" ? registrationTabId : contactTabId}
-          aria-label={tab === "overview" ? "Overview" : tab === "registration" ? "Registration" : "Contact"}
-          className="sbTabsBody"
-        >
-          {tab === "overview" ? (
-            <OverviewTab tournament={tournament} />
-          ) : tab === "registration" ? (
-            <RegistrationTab tournament={tournament} />
-          ) : (
-            <ContactTab tournament={tournament} />
+        <div className="sbTabStack" style={{ padding: "1.5rem" }}>
+          {/* Logistics Section */}
+          <section className="sbTabSection">
+            <header className="sbSectionHeader">
+              <h2 className="sbSectionTitle">Logistics</h2>
+            </header>
+            <div className="sbTabSectionBody">
+              {logisticsBullets.length > 0 ? (
+                <ul className="sbBulletList" aria-label="Logistics notes">
+                  {logisticsBullets.map((bullet, idx) => (
+                    <li key={`${idx}-${bullet}`}>{bullet}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="sbMuted">No logistics details yet.</p>
+              )}
+            </div>
+          </section>
+
+          {/* Format Section */}
+          <section className="sbTabSection">
+            <header className="sbSectionHeader">
+              <h2 className="sbSectionTitle">Format</h2>
+            </header>
+            <div className="sbTabSectionBody">
+              <div className="sbBody">{formatSummary}</div>
+              {rounds && (
+                <div className="sbMuted sbSmall sbTopSpace">
+                  Rounds: {rounds}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Registration Section - show for upcoming tournaments */}
+          {isUpcoming && (
+            <section className="sbTabSection">
+              <header className="sbSectionHeader">
+                <h2 className="sbSectionTitle">Registration</h2>
+              </header>
+              <div className="sbTabSectionBody">
+                <p className="sbBody sbPreLine">{tournament.registration.instructions}</p>
+                {tournament.registration.deadlines.length > 0 && (
+                  <div className="sbTopSpace">
+                    <div className="sbLabel">Deadlines</div>
+                    <ul className="sbBulletList sbTopSpace">
+                      {tournament.registration.deadlines.map((deadline) => (
+                        <li key={deadline.label}>
+                          <span className="sbLabelInline">{deadline.label}:</span> {deadline.date}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* Contact Section */}
+          {tournament.contact_info && (
+            <section className="sbTabSection">
+              <header className="sbSectionHeader">
+                <h2 className="sbSectionTitle">Contact</h2>
+              </header>
+              <div className="sbTabSectionBody">
+                <p className="sbBody sbPreLine">{tournament.contact_info}</p>
+              </div>
+            </section>
+          )}
+
+          {/* Post-Tournament Resources - show for finished tournaments */}
+          {hasPostTournamentLinks && (
+            <section className="sbTabSection">
+              <header className="sbSectionHeader">
+                <h2 className="sbSectionTitle">Post-Tournament Resources</h2>
+              </header>
+              <div className="sbTabSectionBody">
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  {tournament.results_url && (
+                    <a
+                      href={tournament.results_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="sbCtaButton"
+                      style={{ width: "fit-content" }}
+                    >
+                      View Results
+                    </a>
+                  )}
+                  {tournament.stats_url && (
+                    <a
+                      href={tournament.stats_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="sbCtaButton"
+                      style={{ width: "fit-content" }}
+                    >
+                      View Stats
+                    </a>
+                  )}
+                  {tournament.packets_url && (
+                    <a
+                      href={tournament.packets_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="sbCtaButton"
+                      style={{ width: "fit-content" }}
+                    >
+                      View Packets
+                    </a>
+                  )}
+                </div>
+              </div>
+            </section>
           )}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
