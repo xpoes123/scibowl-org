@@ -1,0 +1,13 @@
+{
+  "id": "7",
+  "name": "Lexington Biology Bowl",
+  "location_city": "Online",
+  "location_state": "MA",
+  "start_date": "2026-02-01",
+  "level": [
+    "HS"
+  ],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T00:00:00Z",
+  "is_published": true
+}

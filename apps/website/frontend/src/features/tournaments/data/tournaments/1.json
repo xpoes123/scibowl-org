@@ -1,0 +1,13 @@
+{
+  "id": "1",
+  "name": "East Brunswick Invitational",
+  "location_city": "East Brunswick",
+  "location_state": "NJ",
+  "start_date": "2025-01-10",
+  "level": [
+    "HS"
+  ],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T00:00:00Z",
+  "is_published": true
+}

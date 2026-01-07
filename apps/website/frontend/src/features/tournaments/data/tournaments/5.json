@@ -1,0 +1,13 @@
+{
+  "id": "5",
+  "name": "Texas Science Bowl",
+  "location_city": "Online",
+  "location_state": "TX",
+  "start_date": "2026-01-18",
+  "level": [
+    "HS"
+  ],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T00:00:00Z",
+  "is_published": true
+}

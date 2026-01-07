@@ -1,0 +1,14 @@
+{
+  "id": "16",
+  "name": "MIT Invitational",
+  "location_city": "Cambridge",
+  "location_state": "MA",
+  "start_date": "2025-11-15",
+  "end_date": "2025-11-15",
+  "level": [
+    "HS"
+  ],
+  "status": "FINISHED",
+  "updated_at": "2025-11-16T00:00:00Z",
+  "is_published": true
+}

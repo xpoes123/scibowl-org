@@ -1,0 +1,24 @@
+{
+  "id": "10",
+  "name": "Stanford Science Bowl",
+  "location_city": "Palo Alto",
+  "location_state": "CA",
+  "start_date": "2026-03-08",
+  "level": [
+    "HS"
+  ],
+  "status": "UPCOMING",
+  "updated_at": "2026-01-06T00:00:00Z",
+  "is_published": true,
+  "website_url": "https://stanfordsciencebowl.com",
+  "registration": {
+    "method": "WEBSITE",
+    "instructions": "Visit the website to register your team.",
+    "url": "https://stanfordsciencebowl.com/register",
+    "deadlines": []
+  },
+  "format": {
+    "summary": "Preliminary rounds followed by championship bracket",
+    "phases": []
+  }
+}

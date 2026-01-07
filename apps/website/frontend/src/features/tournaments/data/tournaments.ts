@@ -1,307 +1,71 @@
 import type { TournamentSummary } from "../types";
 
 /**
- * Hardcoded tournament listings for NSB Arena.
+ * Tournament data loader for NSB Arena.
  *
+ * Each tournament is stored as a JSON file in the tournaments/ directory.
  * To add a new tournament:
- * 1. Add a new entry to this array
- * 2. Submit a PR with your changes
- * 3. After review, it will be merged and deployed
+ * 1. Create a new JSON file in tournaments/ with the next available ID (e.g., 26.json)
+ * 2. Add the tournament data following the existing format
+ * 3. Submit a PR with your changes
  *
- * See CONTRIBUTING.md for detailed instructions.
+ * Tournament IDs are simply incremental (1, 2, 3, ...).
+ * The status field determines if the tournament is LIVE, UPCOMING, or FINISHED.
  *
  * Last updated: 1/6/2026
  */
-export const TOURNAMENTS: TournamentSummary[] = [
-  // === UPCOMING TOURNAMENTS ===
-  {
-    id: "201",
-    name: "East Brunswick Invitational",
-    location_city: "East Brunswick",
-    location_state: "NJ",
-    start_date: "2025-01-10",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "202",
-    name: "AVES 2",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-01-10",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "203",
-    name: "Yale Science Bowl Invitational",
-    location_city: "New Haven",
-    location_state: "CT",
-    start_date: "2026-01-17",
-    level: ["MS", "HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T01:15:00Z",
-    is_published: true,
-  },
-  {
-    id: "204",
-    name: "Collierville Ultimate Tournament",
-    location_city: "Collierville",
-    location_state: "TN",
-    start_date: "2026-01-17",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "205",
-    name: "Texas Science Bowl",
-    location_city: "Online",
-    location_state: "TX",
-    start_date: "2026-01-18",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "206",
-    name: "Bay Ultimate MS Scibowl",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2026-01-24",
-    level: ["MS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "207",
-    name: "Lexington Biology Bowl",
-    location_city: "Online",
-    location_state: "MA",
-    start_date: "2026-02-01",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "208",
-    name: "Stanford College+ Science Bowl",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2026-02-15",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "209",
-    name: "Johns Hopkins Science Bowl",
-    location_city: "Baltimore",
-    location_state: "MD",
-    start_date: "2026-03-01",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "210",
-    name: "Stanford Science Bowl",
-    location_city: "Palo Alto",
-    location_state: "CA",
-    start_date: "2026-03-08",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "211",
-    name: "Ward Melville Science Bowl",
-    location_city: "Online",
-    location_state: "NY",
-    start_date: "2026-03-15",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "212",
-    name: "UCLA Science Bowl",
-    location_city: "Los Angeles",
-    location_state: "CA",
-    start_date: "2026-04-15",
-    level: ["HS"],
-    status: "UPCOMING",
-    updated_at: "2026-01-06T00:00:00Z",
-    is_published: true,
-  },
 
-  // === FINISHED TOURNAMENTS (2025-26 Season) ===
-  {
-    id: "301",
-    name: "Berkeley Science Bowl",
-    location_city: "Berkeley",
-    location_state: "CA",
-    start_date: "2025-12-06",
-    end_date: "2025-12-06",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-12-07T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "302",
-    name: "Rice Science Bowl",
-    location_city: "Houston",
-    location_state: "TX",
-    start_date: "2025-12-06",
-    end_date: "2025-12-06",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-12-07T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "303",
-    name: "FE!M",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-11-23",
-    end_date: "2025-11-23",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-11-24T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "304",
-    name: "MIT Invitational",
-    location_city: "Cambridge",
-    location_state: "MA",
-    start_date: "2025-11-15",
-    end_date: "2025-11-15",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-11-16T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "305",
-    name: "Dougherty Valley MS Invitational",
-    location_city: "San Ramon",
-    location_state: "CA",
-    start_date: "2025-11-15",
-    end_date: "2025-11-15",
-    level: ["MS"],
-    status: "FINISHED",
-    updated_at: "2025-11-16T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "306",
-    name: "Brooklyn Tech Invitational",
-    location_city: "Online",
-    location_state: "NY",
-    start_date: "2025-10-26",
-    end_date: "2025-10-26",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-10-27T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "307",
-    name: "South Clemens Bonanza",
-    location_city: "Online",
-    location_state: "TX",
-    start_date: "2025-10-19",
-    end_date: "2025-10-19",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-10-20T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "308",
-    name: "ICSBT 2",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-10-11",
-    end_date: "2025-10-11",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-10-12T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "309",
-    name: "BASED Invitational",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-09-27",
-    end_date: "2025-09-27",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-09-28T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "310",
-    name: "College+ Science Bowl Tournament",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-09-27",
-    end_date: "2025-09-27",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-09-28T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "311",
-    name: "THUMB",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-09-13",
-    end_date: "2025-09-13",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-09-14T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "312",
-    name: "NSBA 3",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-06-01",
-    end_date: "2025-09-30",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-10-01T00:00:00Z",
-    is_published: true,
-  },
-  {
-    id: "313",
-    name: "Earth Science Scrimmage 2",
-    location_city: "Online",
-    location_state: "CA",
-    start_date: "2025-07-21",
-    end_date: "2025-08-10",
-    level: ["HS"],
-    status: "FINISHED",
-    updated_at: "2025-08-11T00:00:00Z",
-    is_published: true,
-  },
-];
+// Import all tournament JSON files
+import tournament1 from "./tournaments/1.json";
+import tournament2 from "./tournaments/2.json";
+import tournament3 from "./tournaments/3.json";
+import tournament4 from "./tournaments/4.json";
+import tournament5 from "./tournaments/5.json";
+import tournament6 from "./tournaments/6.json";
+import tournament7 from "./tournaments/7.json";
+import tournament8 from "./tournaments/8.json";
+import tournament9 from "./tournaments/9.json";
+import tournament10 from "./tournaments/10.json";
+import tournament11 from "./tournaments/11.json";
+import tournament12 from "./tournaments/12.json";
+import tournament13 from "./tournaments/13.json";
+import tournament14 from "./tournaments/14.json";
+import tournament15 from "./tournaments/15.json";
+import tournament16 from "./tournaments/16.json";
+import tournament17 from "./tournaments/17.json";
+import tournament18 from "./tournaments/18.json";
+import tournament19 from "./tournaments/19.json";
+import tournament20 from "./tournaments/20.json";
+import tournament21 from "./tournaments/21.json";
+import tournament22 from "./tournaments/22.json";
+import tournament23 from "./tournaments/23.json";
+import tournament24 from "./tournaments/24.json";
+import tournament25 from "./tournaments/25.json";
+
+export const TOURNAMENTS: TournamentSummary[] = [
+  tournament1,
+  tournament2,
+  tournament3,
+  tournament4,
+  tournament5,
+  tournament6,
+  tournament7,
+  tournament8,
+  tournament9,
+  tournament10,
+  tournament11,
+  tournament12,
+  tournament13,
+  tournament14,
+  tournament15,
+  tournament16,
+  tournament17,
+  tournament18,
+  tournament19,
+  tournament20,
+  tournament21,
+  tournament22,
+  tournament23,
+  tournament24,
+  tournament25,
+] as TournamentSummary[];

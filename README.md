@@ -344,11 +344,10 @@ Tournament listings are **hardcoded in the repository** and managed through pull
 - Works well for Science Bowl's tournament volume (~20-30 per season)
 
 To add your tournament:
-1. Edit [`apps/website/frontend/src/features/tournaments/data/tournaments.ts`](apps/website/frontend/src/features/tournaments/data/tournaments.ts)
-2. Add your tournament details following the existing format
-3. Submit a pull request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed step-by-step instructions.
+1. Create a new JSON file in [`apps/website/frontend/src/features/tournaments/data/tournaments/`](apps/website/frontend/src/features/tournaments/data/tournaments/) with the next available ID (e.g., `26.json`)
+2. Add your tournament details following the existing JSON format
+3. Import the new JSON file in [`tournaments.ts`](apps/website/frontend/src/features/tournaments/data/tournaments.ts)
+4. Submit a pull request
 
 ---
 

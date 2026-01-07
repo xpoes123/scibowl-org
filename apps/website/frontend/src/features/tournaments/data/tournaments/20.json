@@ -1,0 +1,14 @@
+{
+  "id": "20",
+  "name": "ICSBT 2",
+  "location_city": "Online",
+  "location_state": "CA",
+  "start_date": "2025-10-11",
+  "end_date": "2025-10-11",
+  "level": [
+    "HS"
+  ],
+  "status": "FINISHED",
+  "updated_at": "2025-10-12T00:00:00Z",
+  "is_published": true
+}

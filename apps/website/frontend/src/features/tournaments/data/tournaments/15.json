@@ -1,0 +1,14 @@
+{
+  "id": "15",
+  "name": "FE!M",
+  "location_city": "Online",
+  "location_state": "CA",
+  "start_date": "2025-11-23",
+  "end_date": "2025-11-23",
+  "level": [
+    "HS"
+  ],
+  "status": "FINISHED",
+  "updated_at": "2025-11-24T00:00:00Z",
+  "is_published": true
+}

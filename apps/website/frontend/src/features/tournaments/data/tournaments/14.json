@@ -1,0 +1,23 @@
+{
+  "id": "14",
+  "name": "Rice Science Bowl",
+  "location_city": "Houston",
+  "location_state": "TX",
+  "start_date": "2025-12-06",
+  "end_date": "2025-12-06",
+  "level": [
+    "HS"
+  ],
+  "status": "FINISHED",
+  "updated_at": "2025-12-07T00:00:00Z",
+  "is_published": true,
+  "registration": {
+    "method": "WEBSITE",
+    "instructions": "Registration is closed.",
+    "deadlines": []
+  },
+  "format": {
+    "summary": "Tournament format details to be added",
+    "phases": []
+  }
+}
