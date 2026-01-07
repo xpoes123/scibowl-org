@@ -152,27 +152,24 @@ export function TournamentDetailPage() {
             </div>
           </div>
 
-          <div className="sbTournamentDate">
+          <div className="sbTournamentDate" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
             <StatusBadge status={tournament.status} />
+            {/* Registration Button - show for upcoming tournaments with registration URL */}
+            {isUpcoming && tournament.registration.url && (
+              <a
+                className="sbCtaButton"
+                href={tournament.registration.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Register now
+              </a>
+            )}
           </div>
         </div>
       </div>
 
       <div className="card" aria-label="Tournament details">
-        {/* Registration Button - show for upcoming tournaments with registration URL */}
-        {isUpcoming && tournament.registration.url && (
-          <div style={{ padding: "1.5rem 1.5rem 0 1.5rem" }}>
-            <a
-              className="sbCtaButton"
-              href={tournament.registration.url}
-              target="_blank"
-              rel="noreferrer"
-              style={{ width: "fit-content" }}
-            >
-              Register now
-            </a>
-          </div>
-        )}
 
         <div className="sbTabStack" style={{ padding: "1.5rem" }}>
           {/* Logistics Section */}
