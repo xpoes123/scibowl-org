@@ -104,3 +104,7 @@ notes/
 scratch/
 *.local.js
 *.local.ts
+*.local.json
+
+# Claude Code local settings
+.claude/settings.local.json
