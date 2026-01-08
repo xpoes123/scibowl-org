@@ -1,5 +1,5 @@
 // Tournament Division/Level
-export type TournamentDivision = "MS" | "HS" | "OPEN";
+export type TournamentDivision = "MS" | "HS" | "OPEN" | "UG";
 
 // Publication Status
 export type PublicationStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";

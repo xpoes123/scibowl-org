@@ -1,0 +1,62 @@
+{
+  "slug": "my-tournament-2026",
+  "name": "My Science Bowl Tournament 2026",
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2026-03-15",
+    "end": "2026-03-15"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "San Francisco",
+    "state": "CA",
+    "address": "Example High School"
+  },
+  "difficulty": "Intermediate",
+  "notes": {
+    "logistics": "Check-in at 8:00 AM. Tournament runs 9:00 AM - 4:00 PM. Lunch will be provided.",
+    "writing_team": "Example Science Bowl Team"
+  },
+  "format": {
+    "summary": "Standard Science Bowl format with round-robin preliminaries and single-elimination playoffs",
+    "rounds_guaranteed": 6
+  },
+  "contacts": [
+    {
+      "type": "EMAIL",
+      "value": "director@example.org",
+      "label": "Tournament Director"
+    },
+    {
+      "type": "DISCORD",
+      "value": "discord.gg/example",
+      "label": "Discord Server"
+    }
+  ],
+  "registration": {
+    "method": "FORM",
+    "instructions": "Registration is first-come, first-served. Teams will be confirmed via email within 48 hours. Maximum 2 teams per school.",
+    "url": "https://forms.gle/example",
+    "cost": "$30 per team",
+    "deadlines": [
+      {
+        "label": "Registration closes",
+        "date": "2026-03-01"
+      },
+      {
+        "label": "Payment due",
+        "date": "2026-03-08"
+      }
+    ]
+  },
+  "links": [
+    {
+      "type": "WEBSITE",
+      "url": "https://example-tournament.org",
+      "label": "Tournament Website"
+    }
+  ],
+  "updated_at": "2026-01-08T12:00:00Z"
+}

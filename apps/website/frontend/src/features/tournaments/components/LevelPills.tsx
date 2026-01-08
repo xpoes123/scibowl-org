@@ -6,7 +6,7 @@ type LevelPillsProps = {
   className?: string;
 };
 
-const levelOrder: Record<TournamentDivision, number> = { MS: 0, HS: 1, OPEN: 2 };
+const levelOrder: Record<TournamentDivision, number> = { MS: 0, HS: 1, UG: 2, OPEN: 3 };
 
 export const LevelPills = memo(function LevelPills({ levels, className }: LevelPillsProps) {
   const normalized = useMemo(() => {
