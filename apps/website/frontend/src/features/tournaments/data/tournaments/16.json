@@ -1,14 +1,33 @@
 {
-  "id": "16",
+  "slug": "mit-invitational",
   "name": "MIT Invitational",
-  "location_city": "Cambridge",
-  "location_state": "MA",
-  "start_date": "2025-11-15",
-  "end_date": "2025-11-15",
-  "level": ["HS"],
-  "status": "FINISHED",
-  "updated_at": "2025-11-16T00:00:00Z",
-  "is_published": true,
-  "results_url": "https://docs.google.com/spreadsheets/d/1i1Nf6hZ5y671519OKh8t8PnJ3pDONxgMdWwr9NhkObI/edit?gid=0#gid=0",
-  "packets_url": "https://drive.google.com/drive/folders/1QqJU4NRSQ0FDYJXQaMVGqLhllj7CgNB7"
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/New_York",
+  "dates": {
+    "start": "2025-11-15",
+    "end": "2025-11-15"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "Cambridge",
+    "state": "MA"
+  },
+  "format": {
+    "summary": "MIT Invitational Science Bowl tournament"
+  },
+  "contacts": [],
+  "links": [
+    {
+      "type": "RESULTS",
+      "url": "https://docs.google.com/spreadsheets/d/1i1Nf6hZ5y671519OKh8t8PnJ3pDONxgMdWwr9NhkObI/edit?gid=0#gid=0",
+      "label": "Results"
+    },
+    {
+      "type": "PACKETS",
+      "url": "https://drive.google.com/drive/folders/1QqJU4NRSQ0FDYJXQaMVGqLhllj7CgNB7",
+      "label": "Packets"
+    }
+  ],
+  "updated_at": "2025-11-16T00:00:00Z"
 }

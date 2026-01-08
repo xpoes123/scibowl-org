@@ -1,13 +1,22 @@
 {
-  "id": "12",
+  "slug": "ucla-science-bowl",
   "name": "UCLA Science Bowl",
-  "location_city": "Los Angeles",
-  "location_state": "CA",
-  "start_date": "2026-04-15",
-  "level": [
-    "HS"
-  ],
-  "status": "UPCOMING",
-  "updated_at": "2026-01-06T00:00:00Z",
-  "is_published": true
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2026-04-15",
+    "end": "2026-04-15"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "Los Angeles",
+    "state": "CA"
+  },
+  "format": {
+    "summary": "UCLA Science Bowl tournament"
+  },
+  "contacts": [],
+  "links": [],
+  "updated_at": "2026-01-06T00:00:00Z"
 }

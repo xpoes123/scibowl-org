@@ -1,24 +1,43 @@
 {
-  "id": "3",
+  "slug": "yale-science-bowl-invitational",
   "name": "Yale Science Bowl Invitational",
-  "location_city": "New Haven",
-  "location_state": "CT",
-  "start_date": "2026-01-17",
-  "level": ["MS", "HS"],
-  "status": "UPCOMING",
-  "updated_at": "2026-01-06T01:15:00Z",
-  "is_published": true,
-  "website_url": "https://yalesciencebowl.org/",
-  "contact_info": "Yale Undergraduate Science Bowl Team",
-  "logistics": "In-person at Yale University. Event details and updates will be posted on the website.",
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/New_York",
+  "dates": {
+    "start": "2026-01-17",
+    "end": "2026-01-17"
+  },
+  "divisions": ["MS", "HS"],
+  "location": {
+    "city": "New Haven",
+    "state": "CT"
+  },
+  "notes": {
+    "logistics": "In-person at Yale University. Event details and updates will be posted on the website."
+  },
+  "format": {
+    "summary": "Annual academic competition for middle and high school students"
+  },
+  "contacts": [
+    {
+      "type": "EMAIL",
+      "value": "contact@yalesciencebowl.org",
+      "label": "Yale Undergraduate Science Bowl Team"
+    }
+  ],
   "registration": {
     "method": "FORM",
     "instructions": "Registration is open and will be accepted on a first-come, first-served basis. Please have only one member/coach per team fill out the form. There is a soft cap of two teams per school.",
     "url": "https://forms.gle/QFnxL6J6QWsPMtcv8",
     "deadlines": []
   },
-  "format": {
-    "summary": "Annual academic competition for middle and high school students",
-    "phases": []
-  }
+  "links": [
+    {
+      "type": "WEBSITE",
+      "url": "https://yalesciencebowl.org/",
+      "label": "Website"
+    }
+  ],
+  "updated_at": "2026-01-06T01:15:00Z"
 }

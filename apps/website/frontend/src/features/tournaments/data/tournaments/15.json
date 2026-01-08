@@ -1,15 +1,34 @@
 {
-  "id": "15",
+  "slug": "feim",
   "name": "FE!M",
-  "location_city": "Online",
-  "location_state": "CA",
-  "start_date": "2025-11-23",
-  "end_date": "2025-11-23",
-  "level": ["HS"],
-  "status": "FINISHED",
-  "updated_at": "2025-11-24T00:00:00Z",
-  "is_published": true,
-  "results_url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=2030484951#gid=2030484951",
-  "stats_url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=559831921#gid=559831921&range=A1",
-  "packets_url": "https://drive.google.com/drive/folders/1pbjCAO25spaXxLma6yZDt5tWcXVRtzgT"
+  "status": "PUBLISHED",
+  "mode": "ONLINE",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2025-11-23",
+    "end": "2025-11-23"
+  },
+  "divisions": ["HS"],
+  "format": {
+    "summary": "FE!M Science Bowl tournament"
+  },
+  "contacts": [],
+  "links": [
+    {
+      "type": "RESULTS",
+      "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=2030484951#gid=2030484951",
+      "label": "Results"
+    },
+    {
+      "type": "STATS",
+      "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=559831921#gid=559831921&range=A1",
+      "label": "Statistics"
+    },
+    {
+      "type": "PACKETS",
+      "url": "https://drive.google.com/drive/folders/1pbjCAO25spaXxLma6yZDt5tWcXVRtzgT",
+      "label": "Packets"
+    }
+  ],
+  "updated_at": "2025-11-24T00:00:00Z"
 }

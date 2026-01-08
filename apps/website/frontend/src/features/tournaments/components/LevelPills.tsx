@@ -1,12 +1,12 @@
 import { memo, useMemo } from "react";
-import type { TournamentLevel } from "../types";
+import type { TournamentDivision } from "../types";
 
 type LevelPillsProps = {
-  levels: TournamentLevel[];
+  levels: TournamentDivision[];
   className?: string;
 };
 
-const levelOrder: Record<TournamentLevel, number> = { MS: 0, HS: 1 };
+const levelOrder: Record<TournamentDivision, number> = { MS: 0, HS: 1, OPEN: 2 };
 
 export const LevelPills = memo(function LevelPills({ levels, className }: LevelPillsProps) {
   const normalized = useMemo(() => {

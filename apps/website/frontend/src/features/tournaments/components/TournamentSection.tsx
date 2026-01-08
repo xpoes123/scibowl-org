@@ -52,7 +52,7 @@ export const TournamentSection = memo(function TournamentSection({
         <div id={contentId} className="sbAccordionBody">
           <div className="sbRows">
             {visibleTournaments.map((tournament) => (
-              <TournamentRow key={tournament.id} tournament={tournament} />
+              <TournamentRow key={tournament.slug} tournament={tournament} />
             ))}
           </div>
 

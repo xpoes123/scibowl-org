@@ -5,21 +5,21 @@ import type { TournamentStatus, TournamentStatusParam } from "../types";
 import { parseStatusQueryParam } from "../utils/status";
 import { TournamentRow } from "../components/TournamentRow";
 
-function compareWithinStatus(status: TournamentStatus, aKey: { start_date: string; end_date?: string; updated_at?: string; name: string }, bKey: { start_date: string; end_date?: string; updated_at?: string; name: string }): number {
+function compareWithinStatus(status: TournamentStatus, aKey: { dates: { start: string; end: string }; updated_at?: string; name: string }, bKey: { dates: { start: string; end: string }; updated_at?: string; name: string }): number {
   if (status === "LIVE") {
-    const aSort = aKey.updated_at ?? aKey.start_date;
-    const bSort = bKey.updated_at ?? bKey.start_date;
+    const aSort = aKey.updated_at ?? aKey.dates.start;
+    const bSort = bKey.updated_at ?? bKey.dates.start;
     if (aSort !== bSort) return bSort.localeCompare(aSort);
     return aKey.name.localeCompare(bKey.name);
   }
 
   if (status === "UPCOMING") {
-    if (aKey.start_date !== bKey.start_date) return aKey.start_date.localeCompare(bKey.start_date);
+    if (aKey.dates.start !== bKey.dates.start) return aKey.dates.start.localeCompare(bKey.dates.start);
     return aKey.name.localeCompare(bKey.name);
   }
 
-  const aSort = aKey.end_date ?? aKey.start_date;
-  const bSort = bKey.end_date ?? bKey.start_date;
+  const aSort = aKey.dates.end;
+  const bSort = bKey.dates.end;
   if (aSort !== bSort) return bSort.localeCompare(aSort);
   return aKey.name.localeCompare(bKey.name);
 }
@@ -50,15 +50,26 @@ export function TournamentsPage() {
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    let list = tournaments;
+    // Determine lifecycle status from dates
+    const now = new Date();
+    const listWithStatus = tournaments.map(t => {
+      const startDate = new Date(t.dates.start);
+      const endDate = new Date(t.dates.end);
+      const isFinished = now > endDate;
+      const isUpcoming = now < startDate;
+      const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
+      return { ...t, lifecycleStatus };
+    });
+
+    let list = listWithStatus;
     if (statusParam !== "all") {
       const wanted = statusParamToStatus(statusParam);
-      list = list.filter((t) => t.status === wanted);
+      list = list.filter((t) => t.lifecycleStatus === wanted);
     }
 
     if (normalizedQuery) {
       list = list.filter((t) => {
-        const location = `${t.location_city}, ${t.location_state}`.toLowerCase();
+        const location = t.location ? `${t.location.city}, ${t.location.state}`.toLowerCase() : "online";
         return t.name.toLowerCase().includes(normalizedQuery) || location.includes(normalizedQuery);
       });
     }
@@ -66,8 +77,8 @@ export function TournamentsPage() {
     return list.slice().sort((a, b) => {
       if (statusParam === "all") {
         const order: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
-        if (a.status !== b.status) return order[a.status] - order[b.status];
-        return compareWithinStatus(a.status, a, b);
+        if (a.lifecycleStatus !== b.lifecycleStatus) return order[a.lifecycleStatus] - order[b.lifecycleStatus];
+        return compareWithinStatus(a.lifecycleStatus, a, b);
       }
 
       return compareWithinStatus(statusParamToStatus(statusParam), a, b);
@@ -139,7 +150,7 @@ export function TournamentsPage() {
               <p className="sbMuted">No tournaments found.</p>
             </div>
           ) : (
-            pageItems.map((tournament) => <TournamentRow key={tournament.id} tournament={tournament} />)
+            pageItems.map((tournament) => <TournamentRow key={tournament.slug} tournament={tournament} />)
           )}
         </div>
 

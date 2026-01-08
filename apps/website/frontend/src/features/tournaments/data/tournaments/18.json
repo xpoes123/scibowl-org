@@ -1,14 +1,29 @@
 {
-  "id": "18",
+  "slug": "brooklyn-tech-invitational",
   "name": "Brooklyn Tech Invitational",
-  "location_city": "Online",
-  "location_state": "NY",
-  "start_date": "2025-10-26",
-  "end_date": "2025-10-26",
-  "level": ["HS"],
-  "status": "FINISHED",
-  "updated_at": "2025-10-27T00:00:00Z",
-  "is_published": true,
-  "results_url": "https://docs.google.com/spreadsheets/d/1DCSR8NcXDwi8kdAGiRaVxIZJyeZQuwDv1kfdIkkiYv4/edit?gid=1167708747#gid=1167708747",
-  "packets_url": "https://docs.google.com/document/d/1NVRNr-nRXVQW6AefNX6r7MeJBYF2Tjc5p6SzFgllOz0/edit?usp=sharing"
+  "status": "PUBLISHED",
+  "mode": "ONLINE",
+  "timezone": "America/New_York",
+  "dates": {
+    "start": "2025-10-26",
+    "end": "2025-10-26"
+  },
+  "divisions": ["HS"],
+  "format": {
+    "summary": "Brooklyn Tech Science Bowl Invitational"
+  },
+  "contacts": [],
+  "links": [
+    {
+      "type": "RESULTS",
+      "url": "https://docs.google.com/spreadsheets/d/1DCSR8NcXDwi8kdAGiRaVxIZJyeZQuwDv1kfdIkkiYv4/edit?gid=1167708747#gid=1167708747",
+      "label": "Results"
+    },
+    {
+      "type": "PACKETS",
+      "url": "https://docs.google.com/document/d/1NVRNr-nRXVQW6AefNX6r7MeJBYF2Tjc5p6SzFgllOz0/edit?usp=sharing",
+      "label": "Packets"
+    }
+  ],
+  "updated_at": "2025-10-27T00:00:00Z"
 }

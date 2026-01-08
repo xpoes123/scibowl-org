@@ -1,15 +1,33 @@
 {
-  "id": "10",
+  "slug": "stanford-science-bowl",
   "name": "Stanford Science Bowl",
-  "location_city": "Palo Alto",
-  "location_state": "CA",
-  "start_date": "2026-03-08",
-  "level": ["HS"],
-  "status": "UPCOMING",
-  "updated_at": "2026-01-06T02:00:00Z",
-  "is_published": true,
-  "contact_info": "Visit website for contact information",
-  "logistics": "In-person on Stanford's campus. Tournament runs from approximately 9:00 AM to 6:00 PM. Round robin in the morning followed by double elimination and consolation in the afternoon.",
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2026-03-08",
+    "end": "2026-03-08"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "Palo Alto",
+    "state": "CA"
+  },
+  "difficulty": "Early regionals to mid-nationals",
+  "notes": {
+    "logistics": "In-person on Stanford's campus. Tournament runs from approximately 9:00 AM to 6:00 PM. Round robin in the morning followed by double elimination and consolation in the afternoon.",
+    "writing_team": "Stanford Science Bowl question set (used by several invitationals across the country)"
+  },
+  "format": {
+    "summary": "Round robin in the morning followed by double elimination and consolation bracket in the afternoon"
+  },
+  "contacts": [
+    {
+      "type": "EMAIL",
+      "value": "contact@scibowl.stanford.edu",
+      "label": "Visit website for contact information"
+    }
+  ],
   "registration": {
     "method": "WEBSITE",
     "instructions": "If more than 48 teams register, each school will be guaranteed a first team; all other spots will be decided by a lottery among second and (if space allows) third teams. No preference will be given by time of registration. Fill out the interest form to get updates and reminders.",
@@ -21,21 +39,12 @@
       }
     ]
   },
-  "format": {
-    "summary": "Round robin in the morning followed by double elimination and consolation bracket in the afternoon",
-    "field_limit": 48,
-    "phases": [
-      {
-        "name": "Round Robin",
-        "description": "Morning round robin rounds"
-      },
-      {
-        "name": "Double Elimination & Consolation",
-        "description": "Afternoon double elimination and consolation brackets"
-      }
-    ]
-  },
-  "website_url": "https://scibowl.stanford.edu/",
-  "difficulty": "Early regionals to mid-nationals",
-  "writing_team": "Stanford Science Bowl question set (used by several invitationals across the country)"
+  "links": [
+    {
+      "type": "WEBSITE",
+      "url": "https://scibowl.stanford.edu/",
+      "label": "Website"
+    }
+  ],
+  "updated_at": "2026-01-06T02:00:00Z"
 }

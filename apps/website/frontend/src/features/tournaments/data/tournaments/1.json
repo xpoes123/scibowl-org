@@ -1,15 +1,32 @@
 {
-  "id": "1",
+  "slug": "east-brunswick-science-bowl-invitational",
   "name": "East Brunswick Science Bowl Invitational",
-  "location_city": "East Brunswick",
-  "location_state": "NJ",
-  "start_date": "2026-01-10",
-  "level": ["HS"],
-  "status": "UPCOMING",
-  "updated_at": "2026-01-06T02:00:00Z",
-  "is_published": true,
-  "contact_info": "ebhs.scibowl@gmail.com",
-  "logistics": "In-person at East Brunswick High School (380 Cranbury Rd, East Brunswick, NJ). Tournament runs from approximately 9am to 3:30pm. All teams MUST be accompanied by a teacher from their school in order to participate.",
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/New_York",
+  "dates": {
+    "start": "2026-01-10",
+    "end": "2026-01-10"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "East Brunswick",
+    "state": "NJ",
+    "address": "East Brunswick High School, 380 Cranbury Rd, East Brunswick, NJ"
+  },
+  "notes": {
+    "logistics": "In-person at East Brunswick High School (380 Cranbury Rd, East Brunswick, NJ). Tournament runs from approximately 9am to 3:30pm. All teams MUST be accompanied by a teacher from their school in order to participate."
+  },
+  "format": {
+    "summary": "Fourth annual East Brunswick Science Bowl Invitational Tournament"
+  },
+  "contacts": [
+    {
+      "type": "EMAIL",
+      "value": "ebhs.scibowl@gmail.com",
+      "label": "Tournament Contact"
+    }
+  ],
   "registration": {
     "method": "FORM",
     "instructions": "Registration is capped at 12 teams. You may register multiple teams from the same school (eg. A and B teams), but if we surpass the 12-team limit, we will prioritize A teams over B teams to increase the number of schools attending. Registration closes on November 23.",
@@ -22,9 +39,6 @@
       }
     ]
   },
-  "format": {
-    "summary": "Fourth annual East Brunswick Science Bowl Invitational Tournament",
-    "field_limit": 12,
-    "phases": []
-  }
+  "links": [],
+  "updated_at": "2026-01-06T02:00:00Z"
 }

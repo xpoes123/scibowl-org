@@ -43,7 +43,7 @@ function AppContent() {
             <>
               <Route path="/" element={<TournamentsLandingPage />} />
               <Route path="/tournaments" element={<TournamentsPage />} />
-              <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
+              <Route path="/tournaments/:slug" element={<TournamentDetailPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </>
           ) : (

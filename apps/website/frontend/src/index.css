@@ -833,7 +833,7 @@ img {
   margin: 0;
   font-size: 24px;
   line-height: 1.15;
-  font-weight: 750;
+  font-weight: 600;
 }
 
 .sbHeroTitleTight {
@@ -889,7 +889,7 @@ img {
 }
 
 .sbLabelInline {
-  font-weight: 650;
+  font-weight: 500;
   color: var(--sb-muted);
 }
 
@@ -970,17 +970,64 @@ img {
   padding: 18px;
 }
 
+.sbTabNav {
+  display: flex;
+  gap: 4px;
+  padding: 8px 8px 0;
+  border-bottom: 1px solid var(--sb-border);
+  background: var(--sb-card-bg);
+  border-radius: 12px 12px 0 0;
+}
+
+.sbTabButton {
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: var(--sb-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
+  bottom: -1px;
+}
+
+.sbTabButton:hover {
+  color: var(--sb-text);
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 6px 6px 0 0;
+}
+
+.sbTabButtonActive {
+  color: var(--sb-purple);
+  border-bottom-color: var(--sb-purple);
+}
+
+.sbTabButtonActive:hover {
+  background: rgba(139, 92, 246, 0.08);
+}
+
 .sbTabStack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 32px;
+}
+
+.sbTabSection {
+  /* Spacing between sections */
+}
+
+.sbTabSection:not(:last-child) {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--sb-border);
 }
 
 .sbTabSectionBody {
-  margin-top: 12px;
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .sbTabDivider {
@@ -1038,14 +1085,15 @@ img {
 }
 
 .sbSectionHeader {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--sb-border);
+  margin-bottom: 16px;
 }
 
 .sbSectionTitle {
   margin: 0;
-  font-size: 16px;
-  font-weight: 750;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--sb-text);
+  letter-spacing: -0.01em;
 }
 
 .sbSectionSubtitle {

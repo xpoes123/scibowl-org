@@ -1,13 +1,24 @@
 {
-  "id": "24",
+  "slug": "nsba-3",
   "name": "NSBA 3",
-  "location_city": "Online",
-  "location_state": "CA",
-  "start_date": "2025-06-01",
-  "end_date": "2025-09-30",
-  "level": ["HS"],
-  "status": "FINISHED",
-  "updated_at": "2025-10-01T00:00:00Z",
-  "is_published": true,
-  "results_url": "https://challonge.com/5qr7sb3g/bracket"
+  "status": "PUBLISHED",
+  "mode": "ONLINE",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2025-06-01",
+    "end": "2025-09-30"
+  },
+  "divisions": ["HS"],
+  "format": {
+    "summary": "NSBA 3 Science Bowl tournament"
+  },
+  "contacts": [],
+  "links": [
+    {
+      "type": "RESULTS",
+      "url": "https://challonge.com/5qr7sb3g/bracket",
+      "label": "Results"
+    }
+  ],
+  "updated_at": "2025-10-01T00:00:00Z"
 }

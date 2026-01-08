@@ -1,41 +1,106 @@
-export type TournamentLevel = "MS" | "HS";
+// Tournament Division/Level
+export type TournamentDivision = "MS" | "HS" | "OPEN";
 
+// Publication Status
+export type PublicationStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
+
+// Tournament Lifecycle Status (for display purposes)
 export type TournamentStatus = "LIVE" | "UPCOMING" | "FINISHED";
-
 export type TournamentStatusParam = "live" | "upcoming" | "finished";
 
-export interface TournamentSummary {
-  id: string;
-  name: string;
-  location_city: string;
-  location_state: string;
-  start_date: string; // ISO (YYYY-MM-DD recommended)
-  end_date?: string; // ISO
-  level: TournamentLevel[]; // display as pills
-  status: TournamentStatus;
-  updated_at?: string; // ISO
-  is_published?: boolean;
+// Tournament Mode
+export type TournamentMode = "IN_PERSON" | "ONLINE";
+
+// Contact Type
+export type ContactType = "EMAIL" | "DISCORD" | "PHONE" | "OTHER";
+
+// Link Type
+export type LinkType = "WEBSITE" | "RESULTS" | "PACKETS" | "STATS" | "OTHER";
+
+// Location
+export interface TournamentLocation {
+  city: string;
+  state: string; // 2-letter state code
+  address?: string;
 }
 
-export interface RegistrationInfo {
+// Dates
+export interface TournamentDates {
+  start: string; // YYYY-MM-DD
+  end: string; // YYYY-MM-DD (same as start for single-day)
+}
+
+// Notes
+export interface TournamentNotes {
+  logistics?: string;
+  writing_team?: string;
+}
+
+// Format
+export interface TournamentFormat {
+  summary: string;
+  rounds_guaranteed?: number;
+}
+
+// Contact
+export interface TournamentContact {
+  type: ContactType;
+  value: string;
+  label?: string;
+}
+
+// Registration
+export interface TournamentRegistration {
   method: "FORM" | "EMAIL" | "WEBSITE" | "OTHER";
   instructions: string;
   url?: string;
-  deadlines: Array<{ label: string; date: string }>;
   cost?: string;
+  deadlines: Array<{ label: string; date: string }>;
 }
 
-export interface TournamentFormatPhase {
+// Link
+export interface TournamentLink {
+  type: LinkType;
+  url: string;
+  label: string;
+}
+
+// Main Tournament Interface
+export interface Tournament {
+  slug: string;
   name: string;
-  description: string;
+  status: PublicationStatus;
+  mode: TournamentMode;
+  timezone: string; // IANA timezone string
+  dates: TournamentDates;
+  divisions: TournamentDivision[];
+  location?: TournamentLocation | null; // Optional for online tournaments
+  difficulty?: string;
+  notes?: TournamentNotes;
+  format: TournamentFormat;
+  contacts?: TournamentContact[];
+  registration?: TournamentRegistration;
+  links?: TournamentLink[];
+  updated_at?: string; // ISO datetime
 }
 
-export interface TournamentFormat {
-  summary: string;
-  phases: TournamentFormatPhase[];
-  field_limit?: number;
-  rounds?: number;
+// Summary for tournament listing (lighter weight)
+export interface TournamentSummary {
+  slug: string;
+  name: string;
+  status: PublicationStatus;
+  mode: TournamentMode;
+  dates: TournamentDates;
+  divisions: TournamentDivision[];
+  location?: TournamentLocation | null;
+  updated_at?: string;
 }
+
+// Alias for backwards compatibility
+export type TournamentDetail = Tournament;
+
+// Legacy types (to be removed after full migration)
+export type TournamentLevel = TournamentDivision;
 
 export interface TeamRosterMember {
   name: string;
@@ -49,36 +114,7 @@ export interface TournamentTeam {
   school_name?: string;
   city?: string;
   state?: string;
-  level: TournamentLevel;
+  level: TournamentDivision;
   status?: "CONFIRMED" | "WAITLIST" | "DROPPED";
   roster?: TeamRosterMember[];
-}
-
-export interface TournamentDetail {
-  id: string;
-  name: string;
-  status: TournamentStatus;
-  levels: TournamentLevel[];
-  location_city: string;
-  location_state: string;
-  start_date: string;
-  end_date?: string;
-  difficulty?: string;
-  writing_team?: string;
-  website_url?: string;
-  contact_info?: string;
-  logistics?: string;
-  registration: RegistrationInfo;
-  format: TournamentFormat;
-  field_limit?: number;
-  set?: {
-    difficulty?: string;
-    writers?: string;
-  };
-  teams: TournamentTeam[];
-  updated_at?: string;
-  // Post-tournament resources
-  results_url?: string;
-  stats_url?: string;
-  packets_url?: string;
 }

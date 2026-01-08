@@ -1,15 +1,34 @@
 {
-  "id": "21",
+  "slug": "based-invitational",
   "name": "BASED Invitational",
-  "location_city": "Online",
-  "location_state": "CA",
-  "start_date": "2025-09-27",
-  "end_date": "2025-09-27",
-  "level": ["HS"],
-  "status": "FINISHED",
-  "updated_at": "2025-09-28T00:00:00Z",
-  "is_published": true,
-  "results_url": "https://docs.google.com/spreadsheets/d/1ikQAgONTqXdrVHdlPOvgrLS_L8C74zAfqD4dx5VGg5Q/edit?gid=1053469803#gid=1053469803",
-  "stats_url": "https://drive.google.com/drive/folders/1bYeVvloGyqFsAz3TZ5cAlTehkEzkGQf7?usp=sharing",
-  "packets_url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link"
+  "status": "PUBLISHED",
+  "mode": "ONLINE",
+  "timezone": "America/Los_Angeles",
+  "dates": {
+    "start": "2025-09-27",
+    "end": "2025-09-27"
+  },
+  "divisions": ["HS"],
+  "format": {
+    "summary": "BASED Invitational Science Bowl tournament"
+  },
+  "contacts": [],
+  "links": [
+    {
+      "type": "RESULTS",
+      "url": "https://docs.google.com/spreadsheets/d/1ikQAgONTqXdrVHdlPOvgrLS_L8C74zAfqD4dx5VGg5Q/edit?gid=1053469803#gid=1053469803",
+      "label": "Results"
+    },
+    {
+      "type": "STATS",
+      "url": "https://drive.google.com/drive/folders/1bYeVvloGyqFsAz3TZ5cAlTehkEzkGQf7?usp=sharing",
+      "label": "Statistics"
+    },
+    {
+      "type": "PACKETS",
+      "url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link",
+      "label": "Packets"
+    }
+  ],
+  "updated_at": "2025-09-28T00:00:00Z"
 }

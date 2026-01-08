@@ -8,7 +8,7 @@ type UseTournamentResult = {
   error: string | null;
 };
 
-export function useTournament(tournamentId: string | undefined): UseTournamentResult {
+export function useTournament(slug: string | undefined): UseTournamentResult {
   const [data, setData] = useState<TournamentDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export function useTournament(tournamentId: string | undefined): UseTournamentRe
     let cancelled = false;
 
     const run = async () => {
-      if (!tournamentId) {
+      if (!slug) {
         setData(null);
         setLoading(false);
         setError(null);
@@ -27,7 +27,7 @@ export function useTournament(tournamentId: string | undefined): UseTournamentRe
       try {
         setLoading(true);
         setError(null);
-        const result = await getTournamentById(tournamentId);
+        const result = await getTournamentById(slug);
         if (cancelled) return;
         setData(result);
       } catch (err) {
@@ -44,7 +44,7 @@ export function useTournament(tournamentId: string | undefined): UseTournamentRe
     return () => {
       cancelled = true;
     };
-  }, [tournamentId]);
+  }, [slug]);
 
   return { data, loading, error };
 }

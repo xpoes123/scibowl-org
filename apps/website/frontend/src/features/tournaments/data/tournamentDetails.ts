@@ -17,36 +17,19 @@ import { TOURNAMENTS } from "./tournaments";
  */
 
 /**
- * Get tournament detail by ID.
+ * Get tournament detail by slug.
  * Returns the tournament data from the JSON files.
  */
-export async function getTournamentById(id: string): Promise<TournamentDetail> {
+export async function getTournamentById(slug: string): Promise<TournamentDetail> {
   // Simulate async data fetching (for future API compatibility)
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const tournament = TOURNAMENTS.find((t) => t.id === id);
+  const tournament = TOURNAMENTS.find((t) => t.slug === slug);
 
   if (!tournament) {
-    throw new Error(`Tournament with id "${id}" not found`);
+    throw new Error(`Tournament with slug "${slug}" not found`);
   }
 
-  // Cast to TournamentDetail - JSON files may have additional detail fields
-  // that aren't in TournamentSummary but are in TournamentDetail
-  const detail: TournamentDetail = {
-    ...tournament,
-    levels: tournament.level, // Map level to levels for detail view
-    teams: [],
-    // Provide defaults for required fields if not present in JSON
-    registration: (tournament as any).registration || {
-      method: "OTHER" as const,
-      instructions: "Registration information not available.",
-      deadlines: [],
-    },
-    format: (tournament as any).format || {
-      summary: "Tournament format details to be added",
-      phases: [],
-    },
-  };
-
-  return detail;
+  // Cast to TournamentDetail - JSON files contain full tournament data
+  return tournament as TournamentDetail;
 }

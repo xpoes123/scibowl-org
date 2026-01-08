@@ -1,15 +1,33 @@
 {
-  "id": "9",
+  "slug": "johns-hopkins-invitational",
   "name": "Johns Hopkins Invitational",
-  "location_city": "Baltimore",
-  "location_state": "MD",
-  "start_date": "2026-03-02",
-  "level": ["HS"],
-  "status": "UPCOMING",
-  "updated_at": "2026-01-06T02:00:00Z",
-  "is_published": true,
-  "contact_info": "@draoethar",
-  "logistics": "In-person at JHU Homewood campus. Inaugural tournament. Mirror to Stanford Science Bowl (same question set). Schools can send up to three teams.",
+  "status": "PUBLISHED",
+  "mode": "IN_PERSON",
+  "timezone": "America/New_York",
+  "dates": {
+    "start": "2026-03-02",
+    "end": "2026-03-02"
+  },
+  "divisions": ["HS"],
+  "location": {
+    "city": "Baltimore",
+    "state": "MD"
+  },
+  "notes": {
+    "logistics": "In-person at JHU Homewood campus. Inaugural tournament. Mirror to Stanford Science Bowl (same question set). Schools can send up to three teams.",
+    "writing_team": "Mirror to Stanford Science Bowl"
+  },
+  "format": {
+    "summary": "Five round robin rounds followed by a sixteen team double elimination bracket",
+    "rounds_guaranteed": 5
+  },
+  "contacts": [
+    {
+      "type": "DISCORD",
+      "value": "@draoethar",
+      "label": "Tournament Contact"
+    }
+  ],
   "registration": {
     "method": "FORM",
     "instructions": "Targeted field size is 24 teams, with possible expansion to 36 teams if interest allows. Schools can send up to three teams.",
@@ -26,21 +44,12 @@
       }
     ]
   },
-  "format": {
-    "summary": "Five round robin rounds followed by a sixteen team double elimination bracket",
-    "field_limit": 24,
-    "rounds": 5,
-    "phases": [
-      {
-        "name": "Round Robin",
-        "description": "Five round robin rounds"
-      },
-      {
-        "name": "Double Elimination",
-        "description": "Sixteen team double elimination bracket"
-      }
-    ]
-  },
-  "website_url": "https://scibowl.stanford.edu/mirrors",
-  "writing_team": "Mirror to Stanford Science Bowl"
+  "links": [
+    {
+      "type": "WEBSITE",
+      "url": "https://scibowl.stanford.edu/mirrors",
+      "label": "Website"
+    }
+  ],
+  "updated_at": "2026-01-06T02:00:00Z"
 }
