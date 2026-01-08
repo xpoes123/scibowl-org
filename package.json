@@ -20,6 +20,7 @@
         "types-check": "tsc --noEmit"
     },
     "devDependencies": {
+        "fdir": "^6.5.0",
         "typescript": "~5.9.3"
     }
 }
