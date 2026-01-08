@@ -10,7 +10,7 @@ type UsePacketSetsResult = {
 
 /**
  * Hook to access the hardcoded packet set listings.
- * Packet sets are managed via PR (see data/packetSets/*.json).
+ * Packet sets are managed via PR (see data/sample-packets.json).
  */
 export function usePacketSets(): UsePacketSetsResult {
   const packetSets = useMemo(() => PACKET_SETS, []);
@@ -21,4 +21,3 @@ export function usePacketSets(): UsePacketSetsResult {
     error: null,
   };
 }
-
