@@ -1,0 +1,33 @@
+[
+    {
+        "slug": "2021-cast",
+        "name": "2021 Centennial Autumn Spring Tournament",
+        "packets": [
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/1.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/2.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/3.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/4.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/5.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/6.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/7.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/8.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/Cast/9.pdf"
+        ]
+    },
+    {
+        "slug": "2024-dast",
+        "name": "2024 Dulles Annual Science Bowl Tournament (DAST)",
+        "packets": [
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%201.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%202.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%203.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%204.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%205.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%206.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%207.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%208.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%209.pdf",
+            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%2010.pdf"
+        ]
+    }
+]

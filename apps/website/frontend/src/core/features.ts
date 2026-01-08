@@ -4,6 +4,7 @@
 
 export const features = {
     tournaments: true,
+    packets: true,
 
     auth: false,
     profile: false,
