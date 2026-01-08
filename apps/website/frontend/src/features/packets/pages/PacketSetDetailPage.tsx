@@ -27,6 +27,9 @@ export function PacketSetDetailPage() {
     );
   }
 
+  const pdfCount = packetSet.packets.length;
+  const pdfLabel = `${pdfCount} PDF${pdfCount === 1 ? "" : "s"}`;
+
   return (
     <div className="sbStack">
       <div className="card sbTournamentCard sbHeroCard" aria-label="Packet set summary">
@@ -38,7 +41,9 @@ export function PacketSetDetailPage() {
 
             <h1 className="sbHeroTitle sbHeroTitleTight">{packetSet.name}</h1>
 
-            <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Packet set metadata" />
+            <div className="sbHeroMetaRow" aria-label="Packet set metadata">
+              <span className="sbBadge sbBadgeNeutral">{pdfLabel}</span>
+            </div>
           </div>
         </div>
       </div>
