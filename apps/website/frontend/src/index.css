@@ -538,6 +538,14 @@ img {
   gap: 12px;
 }
 
+.sbPacketRowContent {
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 32px;
+  align-items: center;
+  gap: 12px;
+}
+
 .sbRowMain {
   display: flex;
   align-items: center;
@@ -724,6 +732,11 @@ img {
   }
 
   .sbTournamentRowContent {
+    grid-template-columns: minmax(0, 1fr) auto 32px;
+    gap: 10px;
+  }
+
+  .sbPacketRowContent {
     grid-template-columns: minmax(0, 1fr) auto 32px;
     gap: 10px;
   }

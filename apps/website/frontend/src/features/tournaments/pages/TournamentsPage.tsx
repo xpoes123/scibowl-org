@@ -105,7 +105,7 @@ export function TournamentsPage() {
 
   return (
     <div className="sbStack">
-      <div className="card sbPageHeader">
+      <div className="card sbTournamentCard sbHeroCard">
         <h1 className="sbTitle">All Tournaments</h1>
         <p className="sbMuted sbTopSpace">Search and filter tournaments.</p>
 
