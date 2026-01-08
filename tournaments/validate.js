@@ -139,7 +139,7 @@ function validateTournament(tournament, index) {
     }
   }
 
-  // Validate location (required for IN_PERSON)
+  // Validate location (required for IN_PERSON, must be omitted for ONLINE)
   if (tournament.mode === 'IN_PERSON') {
     if (!tournament.location) {
       error(slug, 'location is required for IN_PERSON tournaments');
@@ -149,11 +149,12 @@ function validateTournament(tournament, index) {
       if (tournament.location.state && tournament.location.state.length !== 2) {
         error(slug, `location.state must be a 2-letter state code, got: ${tournament.location.state}`);
       }
+      // address is optional for IN_PERSON tournaments
     }
   }
 
   if (tournament.mode === 'ONLINE' && tournament.location) {
-    warn(slug, 'Online tournament has location field (should be omitted or null)');
+    error(slug, 'ONLINE tournament must not have location field (should be omitted or null)');
   }
 
   // Validate format

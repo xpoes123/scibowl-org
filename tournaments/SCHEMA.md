@@ -71,7 +71,7 @@ Complete documentation for all tournament fields.
 ### `location` (conditional)
 - **Type**: `object | null`
 - **Required**: Only for `IN_PERSON` tournaments
-- **Omit**: For `ONLINE` tournaments (or set to `null`)
+- **Must be omitted or null**: For `ONLINE` tournaments
 - **Properties**:
   - `city` (required): `string` - City name
   - `state` (required): `string` - Two-letter state code
@@ -84,6 +84,9 @@ Complete documentation for all tournament fields.
     "address": "Stanford University"
   }
   ```
+- **Notes**:
+  - For `IN_PERSON` tournaments: `city` and `state` are required, `address` is optional
+  - For `ONLINE` tournaments: The entire `location` field must be omitted or set to `null`
 
 ## Tournament Details
 
