@@ -1,0 +1,55 @@
+name: Validate Tournament Data
+
+on:
+  pull_request:
+    paths:
+      - 'apps/website/frontend/src/features/tournaments/data/tournaments.json'
+      - 'tournaments/validate.js'
+  push:
+    branches:
+      - main
+      - tournaments
+    paths:
+      - 'apps/website/frontend/src/features/tournaments/data/tournaments.json'
+      - 'tournaments/validate.js'
+
+jobs:
+  validate:
+    name: Validate tournaments.json
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run validation script
+        run: node tournaments/validate.js
+
+      - name: Comment on PR (on failure)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Tournament validation failed!**\n\nPlease fix the errors and push again. Run `node tournaments/validate.js` locally to see detailed error messages.'
+            })
+
+      - name: Comment on PR (on success)
+        if: success() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Tournament validation passed!**\n\nAll tournament data is valid.'
+            })
