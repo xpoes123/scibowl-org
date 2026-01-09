@@ -1,906 +1,962 @@
 [
-  {
-    "slug": "east-brunswick-science-bowl-invitational",
-    "name": "East Brunswick Science Bowl Invitational",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2026-01-10",
-      "end": "2026-01-10"
-    },
-    "divisions": ["HS"],
-    "location": {
-      "city": "East Brunswick",
-      "state": "NJ",
-      "address": "East Brunswick High School, 380 Cranbury Rd, East Brunswick, NJ"
-    },
-    "notes": {
-      "logistics": "In-person at East Brunswick High School (380 Cranbury Rd, East Brunswick, NJ). Tournament runs from approximately 9am to 3:30pm. All teams MUST be accompanied by a teacher from their school in order to participate."
-    },
-    "format": {
-      "summary": "Fourth annual East Brunswick Science Bowl Invitational Tournament"
-    },
-    "contacts": [
-      {
-        "type": "EMAIL",
-        "value": "ebhs.scibowl@gmail.com",
-        "label": "Tournament Contact"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Registration is capped at 12 teams. You may register multiple teams from the same school (eg. A and B teams), but if we surpass the 12-team limit, we will prioritize A teams over B teams to increase the number of schools attending. Registration closes on November 23.",
-      "url": "https://docs.google.com/forms/d/e/1FAIpQLSeXYsyDBpwQw88rW8NPo0fRcpM7OJ6K5kTpFtBoCEUc2FIjaA/viewform?usp=header",
-      "cost": "$25 per team, with a $5 discount per buzzer system brought (cash payments collected day-of)",
-      "deadlines": [
-        {
-          "label": "Registration closes",
-          "date": "2025-11-23"
-        }
-      ]
-    },
-    "links": [],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "aves-2",
-    "name": "AVES 2",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2026-01-10",
-      "end": "2026-01-10"
-    },
-    "divisions": ["HS"],
-    "notes": {
-      "logistics": "Online tournament via Discord. Runs from 7:45 AM - 5:50 PM (PST). Participants must join the Discord server as soon as possible."
-    },
-    "format": {
-      "summary": "Amador Valley Extravaganza of Science 2 - Online Science Bowl tournament"
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "discord.gg/6RkVznYUJF",
-        "label": "Discord Server"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "One person from each school fills out the registration form. After registration, participants join the Discord server and each team pays the tournament fee. Field size is capped at 48 teams - due to high interest, teams are advised to register as soon as possible!",
-      "url": "https://docs.google.com/forms/d/e/1FAIpQLSfDzfplcXeVaas_T9UbCIsI1igBoXKk-PXAf36e8Ru0xlXXBA/viewform?usp=publish-editor",
-      "cost": "$25 per team",
-      "deadlines": [
-        {
-          "label": "Registration closes",
-          "date": "2026-01-03"
+    {
+        "slug": "east-brunswick-science-bowl-invitational",
+        "name": "East Brunswick Science Bowl Invitational",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-01-10",
+            "end": "2026-01-10"
         },
-        {
-          "label": "Payment due",
-          "date": "2026-01-07"
-        }
-      ]
-    },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://docs.google.com/document/d/1VvLcoj4IHw_Wx4wAHHKq710Ql5MutnyBjlcw6XTNQOw/edit?tab=t.0",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "yale-science-bowl-invitational",
-    "name": "Yale Science Bowl Invitational",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2026-01-17",
-      "end": "2026-01-17"
-    },
-    "divisions": ["MS", "HS"],
-    "location": {
-      "city": "New Haven",
-      "state": "CT"
-    },
-    "notes": {
-      "logistics": "In-person at Yale University. Event details and updates will be posted on the website."
-    },
-    "format": {
-      "summary": "Annual academic competition for middle and high school students"
-    },
-    "contacts": [
-      {
-        "type": "EMAIL",
-        "value": "contact@yalesciencebowl.org",
-        "label": "Yale Undergraduate Science Bowl Team"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Registration is open and will be accepted on a first-come, first-served basis. Please have only one member/coach per team fill out the form. There is a soft cap of two teams per school.",
-      "url": "https://forms.gle/QFnxL6J6QWsPMtcv8",
-      "deadlines": []
-    },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://yalesciencebowl.org/",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T01:15:00Z"
-  },
-  {
-    "slug": "collierville-ultimate-tournament",
-    "name": "Collierville Ultimate Tournament",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Chicago",
-    "dates": {
-      "start": "2026-01-17",
-      "end": "2026-01-17"
-    },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Collierville",
-      "state": "TN"
-    },
-    "notes": {
-      "logistics": "In-person tournament at Collierville High School. This tournament is intended to be a regionals mock tournament."
-    },
-    "format": {
-      "summary": "Regionals mock tournament hosted by Collierville High School"
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "@suminyy",
-        "label": "Tournament Contact"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Registration is now open, with priority given to teams that sign up first.",
-      "url": "https://forms.gle/MvMVmLFKyGqx8Nty6",
-      "deadlines": []
-    },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://docs.google.com/document/d/1c3jXaiuRWHLoYzWDIQG5stNr5kwTsGBd390Pzv1A7yA/edit?usp=sharing",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "texas-science-bowl-2026-invitational",
-    "name": "Texas Science Bowl 2026 Invitational",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Chicago",
-    "dates": {
-      "start": "2026-01-18",
-      "end": "2026-01-18"
-    },
-    "divisions": ["HS"],
-    "notes": {
-      "logistics": "Virtual tournament. Opening Ceremony at 10:30 AM on January 18, 2026."
-    },
-    "format": {
-      "summary": "48 teams compete in 8 divisions of 6 teams each for round-robin play, followed by a 16-team double-elimination bracket",
-      "rounds_guaranteed": 5
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "@walrusramen",
-        "label": "Tournament Contact"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Fill out the form once per team (rather than once per school). Payment is not due until after the registration deadline, so we can notify all teams who actually have a spot. 48 teams will participate.",
-      "url": "https://forms.gle/signup",
-      "cost": "$30 per team",
-      "deadlines": [
-        {
-          "label": "Registration due",
-          "date": "2026-01-03"
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "East Brunswick",
+            "state": "NJ",
+            "address": "East Brunswick High School, 380 Cranbury Rd, East Brunswick, NJ"
         },
-        {
-          "label": "Payment deadline",
-          "date": "2026-01-10"
-        }
-      ]
-    },
-    "links": [],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "bums-bay-ultimate-ms-scibowl",
-    "name": "BUMS - Bay Ultimate MS Scibowl",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2026-01-24",
-      "end": "2026-01-24"
-    },
-    "divisions": ["MS"],
-    "notes": {
-      "logistics": "Online middle school science bowl competition. Looking for both competitors and moderators."
-    },
-    "format": {
-      "summary": "Online middle school science bowl competition hosted by BISV students"
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "https://discord.gg/szFQA4KPNv",
-        "label": "Discord Server"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Sign up if you or anyone you know are interested in playing or being a moderator.",
-      "url": "https://forms.gle/zBQ4UavqepzCqC8v5",
-      "deadlines": []
-    },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://docs.google.com/document/d/1h3sOw62K5F8r5V7CRcWu_LVcc4V17KoJ7a_A6cBHdaU/edit?usp=sharing",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "lexington-biology-bowl",
-    "name": "Lexington Biology Bowl",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2026-02-01",
-      "end": "2026-02-01"
-    },
-    "divisions": ["HS"],
-    "notes": {
-      "logistics": "Biology-only Online Science Bowl invitational, similar to Earth and Space Scrimmage. Open to high school and college alumni. Overall difficulty expected to vary widely. Tournament date may be pushed back but won't be pushed forward."
-    },
-    "format": {
-      "summary": "Biology-only Science Bowl tournament with 24 teams. Format to be officially announced by January 1st."
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "@Extrino",
-        "label": "Tournament Contact"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Interest form is currently open. Official registration opens January 1st. Team composition (individuals, duos, or trios) depends on how many people show interest. Format will be officially announced when registrations open.",
-      "url": "https://docs.google.com/forms/d/1FYlfFmR6zlX5XDgGCho75AhoP1NPfGofgw7Xsa3l0VE/edit",
-      "deadlines": []
-    },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://docs.google.com/document/d/16yFf6uKrMGOMy4E0wOi6aE2cqL_KBIljO66_kADhVY8/edit?tab=t.0",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "stanford-college-plus-science-bowl",
-    "name": "Stanford College+ Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2026-02-21",
-      "end": "2026-02-22"
-    },
-    "divisions": ["UG"],
-    "notes": {
-      "logistics": "Inaugural College+ Science Bowl Tournament for college students or older. Target date is Feb 21/22 weekend (subject to change based on competitor availability)."
-    },
-    "format": {
-      "summary": "Inaugural College+ tournament for college students or older"
-    },
-    "contacts": [
-      {
-        "type": "EMAIL",
-        "value": "contact@stanford.edu",
-        "label": "Hosted by Stanford - Organizers: @draoethar and others"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Interest form is nonbinding. Complete if you might want to participate. Final date subject to change based on competitor availability.",
-      "url": "https://docs.google.com/forms/d/e/1FAIpQLSfYxwr6mWOb5jgAoVUQO_93h57yPh2Yz23V2AqfUnFIEsvdMQ/viewform?usp=header",
-      "deadlines": []
-    },
-    "links": [],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "johns-hopkins-invitational",
-    "name": "Johns Hopkins Invitational",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2026-03-02",
-      "end": "2026-03-02"
-    },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Baltimore",
-      "state": "MD"
-    },
-    "notes": {
-      "logistics": "In-person at JHU Homewood campus. Inaugural tournament. Mirror to Stanford Science Bowl (same question set). Schools can send up to three teams.",
-      "writing_team": "Mirror to Stanford Science Bowl"
-    },
-    "format": {
-      "summary": "Five round robin rounds followed by a sixteen team double elimination bracket",
-      "rounds_guaranteed": 5
-    },
-    "contacts": [
-      {
-        "type": "DISCORD",
-        "value": "@draoethar",
-        "label": "Tournament Contact"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Targeted field size is 24 teams, with possible expansion to 36 teams if interest allows. Schools can send up to three teams.",
-      "url": "https://forms.gle/qKMLp25v39sHbLKG8",
-      "cost": "$40 per team",
-      "deadlines": [
-        {
-          "label": "Registration deadline",
-          "date": "2026-02-16"
+        "notes": {
+            "logistics": "In-person at East Brunswick High School (380 Cranbury Rd, East Brunswick, NJ). Tournament runs from approximately 9am to 3:30pm. All teams MUST be accompanied by a teacher from their school in order to participate."
         },
-        {
-          "label": "Payment due",
-          "date": "2026-02-23"
-        }
-      ]
+        "format": {
+            "summary": "Fourth annual East Brunswick Science Bowl Invitational Tournament"
+        },
+        "contacts": [
+            {
+                "type": "EMAIL",
+                "value": "ebhs.scibowl@gmail.com",
+                "label": "Tournament Contact"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Registration is capped at 12 teams. You may register multiple teams from the same school (eg. A and B teams), but if we surpass the 12-team limit, we will prioritize A teams over B teams to increase the number of schools attending. Registration closes on November 23.",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSeXYsyDBpwQw88rW8NPo0fRcpM7OJ6K5kTpFtBoCEUc2FIjaA/viewform?usp=header",
+            "cost": "$25 per team, with a $5 discount per buzzer system brought (cash payments collected day-of)",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2025-11-23"
+                }
+            ]
+        },
+        "links": [],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://scibowl.stanford.edu/mirrors",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "stanford-science-bowl",
-    "name": "Stanford Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2026-03-08",
-      "end": "2026-03-08"
+    {
+        "slug": "aves-2",
+        "name": "AVES 2",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-01-10",
+            "end": "2026-01-10"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Online tournament via Discord. Runs from 7:45 AM - 5:50 PM (PST). Participants must join the Discord server as soon as possible."
+        },
+        "format": {
+            "summary": "Amador Valley Extravaganza of Science 2 - Online Science Bowl tournament"
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "discord.gg/6RkVznYUJF",
+                "label": "Discord Server"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "One person from each school fills out the registration form. After registration, participants join the Discord server and each team pays the tournament fee. Field size is capped at 48 teams - due to high interest, teams are advised to register as soon as possible!",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSfDzfplcXeVaas_T9UbCIsI1igBoXKk-PXAf36e8Ru0xlXXBA/viewform?usp=publish-editor",
+            "cost": "$25 per team",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-01-03"
+                },
+                {
+                    "label": "Payment due",
+                    "date": "2026-01-07"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1VvLcoj4IHw_Wx4wAHHKq710Ql5MutnyBjlcw6XTNQOw/edit?tab=t.0",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Palo Alto",
-      "state": "CA"
+    {
+        "slug": "yale-science-bowl-invitational",
+        "name": "Yale Science Bowl Invitational",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-01-17",
+            "end": "2026-01-17"
+        },
+        "divisions": [
+            "MS",
+            "HS"
+        ],
+        "location": {
+            "city": "New Haven",
+            "state": "CT"
+        },
+        "notes": {
+            "logistics": "In-person at Yale University. Event details and updates will be posted on the website."
+        },
+        "format": {
+            "summary": "Annual academic competition for middle and high school students"
+        },
+        "contacts": [
+            {
+                "type": "EMAIL",
+                "value": "contact@yalesciencebowl.org",
+                "label": "Yale Undergraduate Science Bowl Team"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Registration is open and will be accepted on a first-come, first-served basis. Please have only one member/coach per team fill out the form. There is a soft cap of two teams per school.",
+            "url": "https://forms.gle/QFnxL6J6QWsPMtcv8",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://yalesciencebowl.org/",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T01:15:00Z"
     },
-    "difficulty": "Early regionals to mid-nationals",
-    "notes": {
-      "logistics": "In-person on Stanford's campus. Tournament runs from approximately 9:00 AM to 6:00 PM. Round robin in the morning followed by double elimination and consolation in the afternoon.",
-      "writing_team": "Stanford Science Bowl question set (used by several invitationals across the country)"
+    {
+        "slug": "collierville-ultimate-tournament",
+        "name": "Collierville Ultimate Tournament",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2026-01-17",
+            "end": "2026-01-17"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Collierville",
+            "state": "TN"
+        },
+        "notes": {
+            "logistics": "In-person tournament at Collierville High School. This tournament is intended to be a regionals mock tournament."
+        },
+        "format": {
+            "summary": "Regionals mock tournament hosted by Collierville High School"
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "@suminyy",
+                "label": "Tournament Contact"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Registration is now open, with priority given to teams that sign up first.",
+            "url": "https://forms.gle/MvMVmLFKyGqx8Nty6",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1c3jXaiuRWHLoYzWDIQG5stNr5kwTsGBd390Pzv1A7yA/edit?usp=sharing",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "format": {
-      "summary": "Round robin in the morning followed by double elimination and consolation bracket in the afternoon"
+    {
+        "slug": "texas-science-bowl-2026-invitational",
+        "name": "Texas Science Bowl 2026 Invitational",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2026-01-18",
+            "end": "2026-01-18"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Virtual tournament. Opening Ceremony at 10:30 AM on January 18, 2026."
+        },
+        "format": {
+            "summary": "48 teams compete in 8 divisions of 6 teams each for round-robin play, followed by a 16-team double-elimination bracket",
+            "rounds_guaranteed": 5
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "@walrusramen",
+                "label": "Tournament Contact"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Fill out the form once per team (rather than once per school). Payment is not due until after the registration deadline, so we can notify all teams who actually have a spot. 48 teams will participate.",
+            "url": "https://forms.gle/signup",
+            "cost": "$30 per team",
+            "deadlines": [
+                {
+                    "label": "Registration due",
+                    "date": "2026-01-03"
+                },
+                {
+                    "label": "Payment deadline",
+                    "date": "2026-01-10"
+                }
+            ]
+        },
+        "links": [],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "contacts": [
-      {
-        "type": "EMAIL",
-        "value": "contact@scibowl.stanford.edu",
-        "label": "Visit website for contact information"
-      }
-    ],
-    "registration": {
-      "method": "WEBSITE",
-      "instructions": "If more than 48 teams register, each school will be guaranteed a first team; all other spots will be decided by a lottery among second and (if space allows) third teams. No preference will be given by time of registration. Fill out the interest form to get updates and reminders.",
-      "url": "https://scibowl.stanford.edu/register",
-      "deadlines": [
-        {
-          "label": "Registration closes",
-          "date": "2026-01-25"
-        }
-      ]
+    {
+        "slug": "bums-bay-ultimate-ms-scibowl",
+        "name": "BUMS - Bay Ultimate MS Scibowl",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-01-24",
+            "end": "2026-01-24"
+        },
+        "divisions": [
+            "MS"
+        ],
+        "notes": {
+            "logistics": "Online middle school science bowl competition. Looking for both competitors and moderators."
+        },
+        "format": {
+            "summary": "Online middle school science bowl competition hosted by BISV students"
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "https://discord.gg/szFQA4KPNv",
+                "label": "Discord Server"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Sign up if you or anyone you know are interested in playing or being a moderator.",
+            "url": "https://forms.gle/zBQ4UavqepzCqC8v5",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1h3sOw62K5F8r5V7CRcWu_LVcc4V17KoJ7a_A6cBHdaU/edit?usp=sharing",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "links": [
-      {
-        "type": "WEBSITE",
-        "url": "https://scibowl.stanford.edu/",
-        "label": "Website"
-      }
-    ],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "ward-melville-science-bowl",
-    "name": "Ward Melville Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2026-03-15",
-      "end": "2026-03-15"
+    {
+        "slug": "lexington-biology-bowl",
+        "name": "Lexington Biology Bowl",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-02-01",
+            "end": "2026-02-01"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Biology-only Online Science Bowl invitational, similar to Earth and Space Scrimmage. Open to high school and college alumni. Overall difficulty expected to vary widely. Tournament date may be pushed back but won't be pushed forward."
+        },
+        "format": {
+            "summary": "Biology-only Science Bowl tournament with 24 teams. Format to be officially announced by January 1st."
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "@Extrino",
+                "label": "Tournament Contact"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Interest form is currently open. Official registration opens January 1st. Team composition (individuals, duos, or trios) depends on how many people show interest. Format will be officially announced when registrations open.",
+            "url": "https://docs.google.com/forms/d/1FYlfFmR6zlX5XDgGCho75AhoP1NPfGofgw7Xsa3l0VE/edit",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/16yFf6uKrMGOMy4E0wOi6aE2cqL_KBIljO66_kADhVY8/edit?tab=t.0",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "divisions": ["HS"],
-    "notes": {
-      "logistics": "First-ever Science Bowl tournament hosted by Ward Melville High School. Tournament will be hosted on Discord."
+    {
+        "slug": "stanford-college-plus-science-bowl",
+        "name": "Stanford College+ Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-02-21",
+            "end": "2026-02-22"
+        },
+        "divisions": [
+            "UG"
+        ],
+        "notes": {
+            "logistics": "Inaugural College+ Science Bowl Tournament for college students or older. Target date is Feb 21/22 weekend (subject to change based on competitor availability)."
+        },
+        "format": {
+            "summary": "Inaugural College+ tournament for college students or older"
+        },
+        "contacts": [
+            {
+                "type": "EMAIL",
+                "value": "contact@stanford.edu",
+                "label": "Hosted by Stanford - Organizers: @draoethar and others"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Interest form is nonbinding. Complete if you might want to participate. Final date subject to change based on competitor availability.",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSfYxwr6mWOb5jgAoVUQO_93h57yPh2Yz23V2AqfUnFIEsvdMQ/viewform?usp=header",
+            "deadlines": []
+        },
+        "links": [],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "format": {
-      "summary": "Inaugural Ward Melville Science Bowl tournament"
+    {
+        "slug": "johns-hopkins-invitational",
+        "name": "Johns Hopkins Invitational",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-03-02",
+            "end": "2026-03-02"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Baltimore",
+            "state": "MD"
+        },
+        "notes": {
+            "logistics": "In-person at JHU Homewood campus. Inaugural tournament. Mirror to Stanford Science Bowl (same question set). Schools can send up to three teams.",
+            "writing_team": "Mirror to Stanford Science Bowl"
+        },
+        "format": {
+            "summary": "Five round robin rounds followed by a sixteen team double elimination bracket",
+            "rounds_guaranteed": 5
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "@draoethar",
+                "label": "Tournament Contact"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Targeted field size is 24 teams, with possible expansion to 36 teams if interest allows. Schools can send up to three teams.",
+            "url": "https://forms.gle/qKMLp25v39sHbLKG8",
+            "cost": "$40 per team",
+            "deadlines": [
+                {
+                    "label": "Registration deadline",
+                    "date": "2026-02-16"
+                },
+                {
+                    "label": "Payment due",
+                    "date": "2026-02-23"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://scibowl.stanford.edu/mirrors",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "contacts": [
-      {
-        "type": "EMAIL",
-        "value": "contact@wardmelville.edu",
-        "label": "Organizers: @Me, @annashuyi, @bdcl, @r67jriutiscool"
-      }
-    ],
-    "registration": {
-      "method": "FORM",
-      "instructions": "Interest form is non-binding. Fill out if you are interested in participating.",
-      "url": "https://docs.google.com/forms/d/1p6qLMv0mXG1gWIn9F06o8nLOO39Co2EW_BArjylUUeQ/edit",
-      "deadlines": []
+    {
+        "slug": "stanford-science-bowl",
+        "name": "Stanford Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-03-08",
+            "end": "2026-03-08"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Palo Alto",
+            "state": "CA"
+        },
+        "difficulty": "Early regionals to mid-nationals",
+        "notes": {
+            "logistics": "In-person on Stanford's campus. Tournament runs from approximately 9:00 AM to 6:00 PM. Round robin in the morning followed by double elimination and consolation in the afternoon.",
+            "writing_team": "Stanford Science Bowl question set (used by several invitationals across the country)"
+        },
+        "format": {
+            "summary": "Round robin in the morning followed by double elimination and consolation bracket in the afternoon"
+        },
+        "contacts": [
+            {
+                "type": "EMAIL",
+                "value": "contact@scibowl.stanford.edu",
+                "label": "Visit website for contact information"
+            }
+        ],
+        "registration": {
+            "method": "WEBSITE",
+            "instructions": "If more than 48 teams register, each school will be guaranteed a first team; all other spots will be decided by a lottery among second and (if space allows) third teams. No preference will be given by time of registration. Fill out the interest form to get updates and reminders.",
+            "url": "https://scibowl.stanford.edu/register",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-01-25"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://scibowl.stanford.edu/",
+                "label": "Website"
+            }
+        ],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "links": [],
-    "updated_at": "2026-01-06T02:00:00Z"
-  },
-  {
-    "slug": "ucla-science-bowl",
-    "name": "UCLA Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2026-04-15",
-      "end": "2026-04-15"
+    {
+        "slug": "ward-melville-science-bowl",
+        "name": "Ward Melville Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-03-15",
+            "end": "2026-03-15"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "First-ever Science Bowl tournament hosted by Ward Melville High School. Tournament will be hosted on Discord."
+        },
+        "format": {
+            "summary": "Inaugural Ward Melville Science Bowl tournament"
+        },
+        "contacts": [
+            {
+                "type": "EMAIL",
+                "value": "contact@wardmelville.edu",
+                "label": "Organizers"
+            },
+            {
+                "type": "DISCORD",
+                "value": "@Me, @annashuyi, @bdcl, @r67jriutiscool",
+                "label": "Organizers"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Interest form is non-binding. Fill out if you are interested in participating.",
+            "url": "https://docs.google.com/forms/d/1p6qLMv0mXG1gWIn9F06o8nLOO39Co2EW_BArjylUUeQ/edit",
+            "deadlines": []
+        },
+        "links": [],
+        "updated_at": "2026-01-06T02:00:00Z"
     },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Los Angeles",
-      "state": "CA"
+    {
+        "slug": "ucla-science-bowl",
+        "name": "UCLA Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-04-15",
+            "end": "2026-04-15"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Los Angeles",
+            "state": "CA"
+        },
+        "format": {
+            "summary": "UCLA Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [],
+        "updated_at": "2026-01-06T00:00:00Z"
     },
-    "format": {
-      "summary": "UCLA Science Bowl tournament"
+    {
+        "slug": "berkeley-science-bowl",
+        "name": "Berkeley Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-12-06",
+            "end": "2025-12-06"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Berkeley",
+            "state": "CA"
+        },
+        "format": {
+            "summary": "Round robin preliminary rounds followed by playoff bracket"
+        },
+        "contacts": [],
+        "registration": {
+            "method": "WEBSITE",
+            "instructions": "Registration is closed.",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1Yv7DF6YPq3L3qgKwbtOgErgpnUgQLrc6frRpA0UgA4M/edit?gid=1959367049#gid=1959367049",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1ZNmI5PtUwu6gqVRhZadluGzDl31OXrZyZ8K0z6pOLgM/edit?gid=0#gid=0",
+                "label": "Statistics"
+            }
+        ],
+        "updated_at": "2025-12-07T00:00:00Z"
     },
-    "contacts": [],
-    "links": [],
-    "updated_at": "2026-01-06T00:00:00Z"
-  },
-  {
-    "slug": "berkeley-science-bowl",
-    "name": "Berkeley Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-12-06",
-      "end": "2025-12-06"
+    {
+        "slug": "rice-science-bowl",
+        "name": "Rice Science Bowl",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2025-12-06",
+            "end": "2025-12-06"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Houston",
+            "state": "TX"
+        },
+        "format": {
+            "summary": "Tournament format details to be added"
+        },
+        "contacts": [],
+        "registration": {
+            "method": "WEBSITE",
+            "instructions": "Registration is closed.",
+            "deadlines": []
+        },
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1jyj6Rwihc5R3n-8u3Jcq45Xge5tu6dbSw1q315u9dUk/edit?gid=1885827931#gid=1885827931",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1jyj6Rwihc5R3n-8u3Jcq45Xge5tu6dbSw1q315u9dUk/edit?gid=887655473#gid=887655473",
+                "label": "Statistics"
+            }
+        ],
+        "updated_at": "2025-12-07T00:00:00Z"
     },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Berkeley",
-      "state": "CA"
+    {
+        "slug": "feim",
+        "name": "FE!M",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-11-23",
+            "end": "2025-11-23"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "FE!M Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=2030484951#gid=2030484951",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=559831921#gid=559831921&range=A1",
+                "label": "Statistics"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1pbjCAO25spaXxLma6yZDt5tWcXVRtzgT",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-11-24T00:00:00Z"
     },
-    "format": {
-      "summary": "Round robin preliminary rounds followed by playoff bracket"
+    {
+        "slug": "mit-invitational",
+        "name": "MIT Invitational",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2025-11-15",
+            "end": "2025-11-15"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Cambridge",
+            "state": "MA"
+        },
+        "format": {
+            "summary": "MIT Invitational Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1i1Nf6hZ5y671519OKh8t8PnJ3pDONxgMdWwr9NhkObI/edit?gid=0#gid=0",
+                "label": "Results"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1QqJU4NRSQ0FDYJXQaMVGqLhllj7CgNB7",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-11-16T00:00:00Z"
     },
-    "contacts": [],
-    "registration": {
-      "method": "WEBSITE",
-      "instructions": "Registration is closed.",
-      "deadlines": []
+    {
+        "slug": "dougherty-valley-ms-invitational",
+        "name": "Dougherty Valley MS Invitational",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-11-15",
+            "end": "2025-11-15"
+        },
+        "divisions": [
+            "MS"
+        ],
+        "location": {
+            "city": "San Ramon",
+            "state": "CA"
+        },
+        "format": {
+            "summary": "Dougherty Valley Middle School Invitational"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1zuj9rqqZ7bO402TsmWvOrIQIuyLh_klUTcmlBLzE7pc/edit?gid=1444061919#gid=1444061919",
+                "label": "Results"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1Lhh-LG0yCRYQiQO5dat6eZWUadAxoTWA",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-11-16T00:00:00Z"
     },
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1Yv7DF6YPq3L3qgKwbtOgErgpnUgQLrc6frRpA0UgA4M/edit?gid=1959367049#gid=1959367049",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1ZNmI5PtUwu6gqVRhZadluGzDl31OXrZyZ8K0z6pOLgM/edit?gid=0#gid=0",
-        "label": "Statistics"
-      }
-    ],
-    "updated_at": "2025-12-07T00:00:00Z"
-  },
-  {
-    "slug": "rice-science-bowl",
-    "name": "Rice Science Bowl",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Chicago",
-    "dates": {
-      "start": "2025-12-06",
-      "end": "2025-12-06"
+    {
+        "slug": "brooklyn-tech-invitational",
+        "name": "Brooklyn Tech Invitational",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2025-10-26",
+            "end": "2025-10-26"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "Brooklyn Tech Science Bowl Invitational"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1DCSR8NcXDwi8kdAGiRaVxIZJyeZQuwDv1kfdIkkiYv4/edit?gid=1167708747#gid=1167708747",
+                "label": "Results"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://docs.google.com/document/d/1NVRNr-nRXVQW6AefNX6r7MeJBYF2Tjc5p6SzFgllOz0/edit?usp=sharing",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-10-27T00:00:00Z"
     },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Houston",
-      "state": "TX"
+    {
+        "slug": "south-clemens-bonanza",
+        "name": "South Clemens Bonanza",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2025-10-19",
+            "end": "2025-10-19"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "South Clemens Bonanza Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/10NKJgFzRuP1bF7lRkKfSLjSxH5NtwL2nlkyOLykvfk4/edit?gid=1049059372#gid=1049059372",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1hgLRgHUu8JcRPuAihcCMob_3h9Y6wRCPrUy_ZkleC2A/edit?usp=sharing",
+                "label": "Statistics"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-10-20T00:00:00Z"
     },
-    "format": {
-      "summary": "Tournament format details to be added"
+    {
+        "slug": "icsbt-2",
+        "name": "ICSBT 2",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-10-11",
+            "end": "2025-10-11"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "ICSBT 2 Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1Opzth5l9JiNwdXNbkZcg76Tc1fol22Jl9mq6xBOGksw/edit?gid=204270256#gid=204270256",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/13GXSkBNPGoL9oAXxPs6th6zyTP2RaBVSpd0cuVirEKc/edit?usp=sharing",
+                "label": "Statistics"
+            }
+        ],
+        "updated_at": "2025-10-12T00:00:00Z"
     },
-    "contacts": [],
-    "registration": {
-      "method": "WEBSITE",
-      "instructions": "Registration is closed.",
-      "deadlines": []
+    {
+        "slug": "based-invitational",
+        "name": "BASED Invitational",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-09-27",
+            "end": "2025-09-27"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "BASED Invitational Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1ikQAgONTqXdrVHdlPOvgrLS_L8C74zAfqD4dx5VGg5Q/edit?gid=1053469803#gid=1053469803",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://drive.google.com/drive/folders/1bYeVvloGyqFsAz3TZ5cAlTehkEzkGQf7?usp=sharing",
+                "label": "Statistics"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-09-28T00:00:00Z"
     },
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1jyj6Rwihc5R3n-8u3Jcq45Xge5tu6dbSw1q315u9dUk/edit?gid=1885827931#gid=1885827931",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1jyj6Rwihc5R3n-8u3Jcq45Xge5tu6dbSw1q315u9dUk/edit?gid=887655473#gid=887655473",
-        "label": "Statistics"
-      }
-    ],
-    "updated_at": "2025-12-07T00:00:00Z"
-  },
-  {
-    "slug": "feim",
-    "name": "FE!M",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-11-23",
-      "end": "2025-11-23"
+    {
+        "slug": "college-plus-science-bowl-tournament",
+        "name": "College+ Science Bowl Tournament",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-09-27",
+            "end": "2025-09-27"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "College+ Science Bowl Tournament"
+        },
+        "contacts": [],
+        "links": [],
+        "updated_at": "2025-09-28T00:00:00Z"
     },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "FE!M Science Bowl tournament"
+    {
+        "slug": "thumb",
+        "name": "THUMB",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-09-13",
+            "end": "2025-09-13"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "THUMB Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://docs.google.com/spreadsheets/d/1airV3e-nIqmGHLazO9nInBiouhSwTlwXYcgMMk_-2oI/edit?gid=468752784#gid=468752784",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1nhKQghNrGuob62nrP5t06rWyA4ITKDI8mY-Jm9MYNUI/edit?usp=sharing",
+                "label": "Statistics"
+            },
+            {
+                "type": "PACKETS",
+                "url": "https://drive.google.com/drive/folders/1zvlPxPE8UfG-Vxpy8B0OHg1u2rTvByD4?usp=sharing",
+                "label": "Packets"
+            }
+        ],
+        "updated_at": "2025-09-14T00:00:00Z"
     },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=2030484951#gid=2030484951",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1WQ-yrxn58hwX6ivqABMdKeA8i12qNxUVy678c1aVXao/edit?gid=559831921#gid=559831921&range=A1",
-        "label": "Statistics"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1pbjCAO25spaXxLma6yZDt5tWcXVRtzgT",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-11-24T00:00:00Z"
-  },
-  {
-    "slug": "mit-invitational",
-    "name": "MIT Invitational",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2025-11-15",
-      "end": "2025-11-15"
+    {
+        "slug": "nsba-3",
+        "name": "NSBA 3",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-06-01",
+            "end": "2025-09-30"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "format": {
+            "summary": "NSBA 3 Science Bowl tournament"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://challonge.com/5qr7sb3g/bracket",
+                "label": "Results"
+            }
+        ],
+        "updated_at": "2025-10-01T00:00:00Z"
     },
-    "divisions": ["HS"],
-    "location": {
-      "city": "Cambridge",
-      "state": "MA"
-    },
-    "format": {
-      "summary": "MIT Invitational Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1i1Nf6hZ5y671519OKh8t8PnJ3pDONxgMdWwr9NhkObI/edit?gid=0#gid=0",
-        "label": "Results"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1QqJU4NRSQ0FDYJXQaMVGqLhllj7CgNB7",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-11-16T00:00:00Z"
-  },
-  {
-    "slug": "dougherty-valley-ms-invitational",
-    "name": "Dougherty Valley MS Invitational",
-    "status": "PUBLISHED",
-    "mode": "IN_PERSON",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-11-15",
-      "end": "2025-11-15"
-    },
-    "divisions": ["MS"],
-    "location": {
-      "city": "San Ramon",
-      "state": "CA"
-    },
-    "format": {
-      "summary": "Dougherty Valley Middle School Invitational"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1zuj9rqqZ7bO402TsmWvOrIQIuyLh_klUTcmlBLzE7pc/edit?gid=1444061919#gid=1444061919",
-        "label": "Results"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1Lhh-LG0yCRYQiQO5dat6eZWUadAxoTWA",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-11-16T00:00:00Z"
-  },
-  {
-    "slug": "brooklyn-tech-invitational",
-    "name": "Brooklyn Tech Invitational",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/New_York",
-    "dates": {
-      "start": "2025-10-26",
-      "end": "2025-10-26"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "Brooklyn Tech Science Bowl Invitational"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1DCSR8NcXDwi8kdAGiRaVxIZJyeZQuwDv1kfdIkkiYv4/edit?gid=1167708747#gid=1167708747",
-        "label": "Results"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://docs.google.com/document/d/1NVRNr-nRXVQW6AefNX6r7MeJBYF2Tjc5p6SzFgllOz0/edit?usp=sharing",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-10-27T00:00:00Z"
-  },
-  {
-    "slug": "south-clemens-bonanza",
-    "name": "South Clemens Bonanza",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Chicago",
-    "dates": {
-      "start": "2025-10-19",
-      "end": "2025-10-19"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "South Clemens Bonanza Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/10NKJgFzRuP1bF7lRkKfSLjSxH5NtwL2nlkyOLykvfk4/edit?gid=1049059372#gid=1049059372",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1hgLRgHUu8JcRPuAihcCMob_3h9Y6wRCPrUy_ZkleC2A/edit?usp=sharing",
-        "label": "Statistics"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-10-20T00:00:00Z"
-  },
-  {
-    "slug": "icsbt-2",
-    "name": "ICSBT 2",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-10-11",
-      "end": "2025-10-11"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "ICSBT 2 Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1Opzth5l9JiNwdXNbkZcg76Tc1fol22Jl9mq6xBOGksw/edit?gid=204270256#gid=204270256",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/13GXSkBNPGoL9oAXxPs6th6zyTP2RaBVSpd0cuVirEKc/edit?usp=sharing",
-        "label": "Statistics"
-      }
-    ],
-    "updated_at": "2025-10-12T00:00:00Z"
-  },
-  {
-    "slug": "based-invitational",
-    "name": "BASED Invitational",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-09-27",
-      "end": "2025-09-27"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "BASED Invitational Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1ikQAgONTqXdrVHdlPOvgrLS_L8C74zAfqD4dx5VGg5Q/edit?gid=1053469803#gid=1053469803",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://drive.google.com/drive/folders/1bYeVvloGyqFsAz3TZ5cAlTehkEzkGQf7?usp=sharing",
-        "label": "Statistics"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1L3mTHcjmVeCcpPPlpb0xPyG9quj-ITlP?usp=drive_link",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-09-28T00:00:00Z"
-  },
-  {
-    "slug": "college-plus-science-bowl-tournament",
-    "name": "College+ Science Bowl Tournament",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-09-27",
-      "end": "2025-09-27"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "College+ Science Bowl Tournament"
-    },
-    "contacts": [],
-    "links": [],
-    "updated_at": "2025-09-28T00:00:00Z"
-  },
-  {
-    "slug": "thumb",
-    "name": "THUMB",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-09-13",
-      "end": "2025-09-13"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "THUMB Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://docs.google.com/spreadsheets/d/1airV3e-nIqmGHLazO9nInBiouhSwTlwXYcgMMk_-2oI/edit?gid=468752784#gid=468752784",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1nhKQghNrGuob62nrP5t06rWyA4ITKDI8mY-Jm9MYNUI/edit?usp=sharing",
-        "label": "Statistics"
-      },
-      {
-        "type": "PACKETS",
-        "url": "https://drive.google.com/drive/folders/1zvlPxPE8UfG-Vxpy8B0OHg1u2rTvByD4?usp=sharing",
-        "label": "Packets"
-      }
-    ],
-    "updated_at": "2025-09-14T00:00:00Z"
-  },
-  {
-    "slug": "nsba-3",
-    "name": "NSBA 3",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-06-01",
-      "end": "2025-09-30"
-    },
-    "divisions": ["HS"],
-    "format": {
-      "summary": "NSBA 3 Science Bowl tournament"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://challonge.com/5qr7sb3g/bracket",
-        "label": "Results"
-      }
-    ],
-    "updated_at": "2025-10-01T00:00:00Z"
-  },
-  {
-    "slug": "earth-science-scrimmage-2",
-    "name": "Earth Science Scrimmage 2",
-    "status": "PUBLISHED",
-    "mode": "ONLINE",
-    "timezone": "America/Los_Angeles",
-    "dates": {
-      "start": "2025-07-21",
-      "end": "2025-08-10"
-    },
-    "divisions": ["HS"],
-    "notes": {
-      "logistics": "Asynchronous online tournament. Questions released July 21, submissions due August 10."
-    },
-    "format": {
-      "summary": "Earth Science focused scrimmage with async format"
-    },
-    "contacts": [],
-    "links": [
-      {
-        "type": "RESULTS",
-        "url": "https://bit.ly/ess2hub",
-        "label": "Results"
-      },
-      {
-        "type": "STATS",
-        "url": "https://docs.google.com/spreadsheets/d/1LfLZonv-F20LVrwcsMn2L5oDs_3XsMlInwxbQr45ST4/edit?gid=230593902#gid=230593902",
-        "label": "Statistics"
-      }
-    ],
-    "updated_at": "2025-08-11T00:00:00Z"
-  }
+    {
+        "slug": "earth-science-scrimmage-2",
+        "name": "Earth Science Scrimmage 2",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2025-07-21",
+            "end": "2025-08-10"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Asynchronous online tournament. Questions released July 21, submissions due August 10."
+        },
+        "format": {
+            "summary": "Earth Science focused scrimmage with async format"
+        },
+        "contacts": [],
+        "links": [
+            {
+                "type": "RESULTS",
+                "url": "https://bit.ly/ess2hub",
+                "label": "Results"
+            },
+            {
+                "type": "STATS",
+                "url": "https://docs.google.com/spreadsheets/d/1LfLZonv-F20LVrwcsMn2L5oDs_3XsMlInwxbQr45ST4/edit?gid=230593902#gid=230593902",
+                "label": "Statistics"
+            }
+        ],
+        "updated_at": "2025-08-11T00:00:00Z"
+    }
 ]
