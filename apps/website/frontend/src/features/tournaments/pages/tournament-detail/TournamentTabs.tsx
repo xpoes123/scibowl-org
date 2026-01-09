@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { TournamentDetail, TournamentLink } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
+import { formatTournamentDate } from "../../utils/date";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -178,13 +179,14 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                   <h2 className="sbSectionTitle">Deadlines</h2>
                 </header>
                 <div className="sbTabSectionBody">
-                  <ul className="sbBulletList" aria-label="Registration deadlines">
+                  <div className="sbInlineRows" aria-label="Registration deadlines">
                     {deadlines.map((deadline) => (
-                      <li key={`${deadline.label}-${deadline.date}`}>
-                        <span className="sbLabelInline">{deadline.label}:</span> {deadline.date}
-                      </li>
+                      <div key={`${deadline.label}-${deadline.date}`} className="sbInlineRow">
+                        <span className="sbInlineRowLabel">{deadline.label}</span>
+                        <span className="sbInlineRowValue">{formatTournamentDate(deadline.date) || deadline.date}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </section>
             )}
@@ -249,4 +251,3 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     </div>
   );
 }
-

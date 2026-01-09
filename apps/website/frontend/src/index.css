@@ -949,6 +949,18 @@ img {
   margin-top: 14px;
 }
 
+.sbFiltersGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 520px) {
+  .sbFiltersGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .sbModalSectionTitle {
   margin: 0 0 8px;
   font-size: 13px;
@@ -1428,6 +1440,28 @@ details[open] > .sbDetailsSummary::after {
 
 .sbDetailRows > .sbContactRow:first-child {
   border-top: 0;
+}
+
+.sbInlineRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sbInlineRow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.sbInlineRowLabel {
+  color: var(--sb-muted);
+  min-width: 18ch;
+  max-width: 26ch;
+}
+
+.sbInlineRowValue {
+  color: var(--sb-text);
 }
 
 .sbContactMeta {
