@@ -7,7 +7,7 @@ export function getStatusLabel(status: TournamentStatus): string {
     case "UPCOMING":
       return "Upcoming";
     case "FINISHED":
-      return "Recently Finished";
+      return "Finished";
     default:
       return status;
   }
