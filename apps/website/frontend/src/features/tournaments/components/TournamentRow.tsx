@@ -1,13 +1,36 @@
 import { ChevronRightIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
-import type { TournamentSummary } from "../types";
+import type { TournamentStatus, TournamentSummary } from "../types";
 import { formatTournamentDate } from "../utils/date";
 import { LevelPills } from "./LevelPills";
 
 type TournamentRowProps = {
   tournament: TournamentSummary;
 };
+
+function getTournamentStatusBadgeClass(status: TournamentStatus): string {
+  switch (status) {
+    case "LIVE":
+      return "sbBadge sbBadgeLive";
+    case "UPCOMING":
+      return "sbBadge sbBadgeUpcoming";
+    case "FINISHED":
+      return "sbBadge sbBadgeCompleted";
+    default:
+      return "sbBadge sbBadgeNeutral";
+  }
+}
+
+function StatusBadge({ status }: { status: TournamentStatus }) {
+  const isLive = status === "LIVE";
+  return (
+    <span className={getTournamentStatusBadgeClass(status)}>
+      {isLive && <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />}
+      {status}
+    </span>
+  );
+}
 
 export const TournamentRow = memo(function TournamentRow({ tournament }: TournamentRowProps) {
   // Determine lifecycle status from dates
@@ -16,24 +39,18 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
   const endDate = new Date(tournament.dates.end);
   const isFinished = now > endDate;
   const isUpcoming = now < startDate;
-  const isLive = !isFinished && !isUpcoming;
+  const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
 
   const dateLabel = useMemo(() => formatTournamentDate(tournament.dates.start), [tournament.dates.start]);
   const locationLabel = tournament.location ? `${tournament.location.city}, ${tournament.location.state}` : "Online";
 
   return (
     <Link to={`/tournaments/${tournament.slug}`} className="sbTournamentRow">
-      <div className="sbTournamentRowContent">
+      <div className="sbTournamentRowContent sbTournamentRowContentStatus">
         <div className="sbRowMain">
           <div className="sbMinW0">
             <div className="sbRowNameLine">
               <span className="sbRowName">{tournament.name}</span>
-              {isLive && (
-                <span className="sbBadge sbBadgeLive sbBadgeLiveInline">
-                  <span className="sbLivePulse sbLivePulseInBadge" aria-hidden="true" />
-                  LIVE
-                </span>
-              )}
             </div>
             <div className="sbRowMetaMobile">
               <span className="sbRowMetaItem">
@@ -56,6 +73,10 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
         <div className="sbRowDate">{dateLabel}</div>
 
         <LevelPills levels={tournament.divisions} />
+
+        <div className="sbRowStatus" aria-label="Tournament status">
+          <StatusBadge status={lifecycleStatus} />
+        </div>
 
         <div className="sbRowRight">
           <ChevronRightIcon className="sbRowChevron" aria-hidden="true" />
