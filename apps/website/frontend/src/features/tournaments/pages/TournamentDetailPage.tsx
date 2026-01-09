@@ -192,8 +192,8 @@ export function TournamentDetailPage() {
         <TournamentTabs tournament={tournament} variant="UPCOMING" />
       ) : (
         /* LIVE tournaments - to be implemented */
-        <div className="card" aria-label="Tournament details">
-          <div className="sbTabStack" style={{ padding: "1.5rem" }}>
+        <div className="card sbTabsCard" aria-label="Tournament details">
+          <div className="sbTabsBody sbTabStack">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
                 <h2 className="sbSectionTitle">Live Tournament</h2>

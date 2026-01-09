@@ -1158,7 +1158,7 @@ img {
 }
 
 .sbTabsBody {
-  padding: 18px;
+  padding: 24px;
 }
 
 .sbTabNav {
@@ -1167,7 +1167,7 @@ img {
   padding: 8px 8px 0;
   border-bottom: 1px solid var(--sb-border);
   background: var(--sb-card-bg);
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 
 .sbTabButton {
@@ -1219,16 +1219,15 @@ img {
 }
 
 .sbTabSection {
-  /* Spacing between sections */
 }
 
 .sbTabSection:not(:last-child) {
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--sb-border);
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .sbTabSectionBody {
-  margin-top: 16px;
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1289,7 +1288,10 @@ img {
 }
 
 .sbSectionHeader {
-  margin-bottom: 16px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .sbSectionTitle {
@@ -1301,17 +1303,17 @@ img {
 }
 
 .sbSectionSubtitle {
-  margin: 6px 0 0;
+  margin: 0;
   color: var(--sb-muted);
   font-size: 13px;
 }
 
 .sbRegistrationCta {
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 .sbDeadlinesBlock {
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .sbCtaButton {

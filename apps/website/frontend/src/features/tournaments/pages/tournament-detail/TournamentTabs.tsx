@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { TournamentDetail, TournamentLink } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
@@ -71,6 +71,15 @@ function findLink(tournament: TournamentDetail, type: TournamentLink["type"]) {
   return tournament.links?.find((link) => link.type === type);
 }
 
+function OverviewSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="py-6 first:pt-0 border-t border-[var(--sb-border)] first:border-t-0">
+      <h2 className="m-0 text-base font-semibold leading-6">{title}</h2>
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
+
 export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const resultsLink = useMemo(() => findLink(tournament, "RESULTS"), [tournament]);
   const statsLink = useMemo(() => findLink(tournament, "STATS"), [tournament]);
@@ -101,7 +110,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const deadlines = variant === "UPCOMING" ? (tournament.registration?.deadlines ?? []) : [];
 
   return (
-    <div className="card" aria-label="Tournament details">
+    <div className="card sbTabsCard" aria-label="Tournament details">
       <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
         {tabs.map((tab) => (
           <button
@@ -123,89 +132,64 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         ))}
       </div>
 
-      <div className="sbTabStack" style={{ padding: "1.5rem" }}>
+      <div className="sbTabsBody sbTabStack">
         {activeTab === "overview" && (
           <div role="tabpanel" id="tab-panel-overview" aria-labelledby="tab-overview">
-            <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Logistics</h2>
-              </header>
-              <div className="sbTabSectionBody">
-                {logisticsBullets.length > 0 ? (
-                  <ul className="sbBulletList" aria-label="Logistics notes">
-                    {logisticsBullets.map((bullet, idx) => (
-                      <li key={`${idx}-${bullet}`}>{bullet}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="sbMuted">No logistics details available.</p>
-                )}
-              </div>
-            </section>
+            <OverviewSection title="Logistics">
+              {logisticsBullets.length > 0 ? (
+                <ul className="sbBulletList m-0 space-y-2" aria-label="Logistics notes">
+                  {logisticsBullets.map((bullet, idx) => (
+                    <li key={`${idx}-${bullet}`}>{bullet}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="sbMuted m-0">No logistics details available.</p>
+              )}
+            </OverviewSection>
 
-            <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Format</h2>
-              </header>
-              <div className="sbTabSectionBody">
-                <div className="sbBody">{formatSummary}</div>
-                {rounds && (
-                  <div className="sbMuted sbSmall sbTopSpace">
-                    Rounds: {rounds}
-                  </div>
-                )}
+            <OverviewSection title="Format">
+              <div className="space-y-2">
+                <p className="sbBody m-0">{formatSummary}</p>
+                {rounds && <p className="sbMuted sbSmall m-0">Rounds: {rounds}</p>}
               </div>
-            </section>
+            </OverviewSection>
 
             {variant === "UPCOMING" && tournament.registration && (
-              <section className="sbTabSection">
-                <header className="sbSectionHeader">
-                  <h2 className="sbSectionTitle">Registration</h2>
-                </header>
-                <div className="sbTabSectionBody">
+              <OverviewSection title="Registration">
+                <div className="space-y-3">
                   {tournament.registration.cost && (
-                    <div className="sbBody">
+                    <p className="sbBody m-0">
                       <span className="sbLabelInline">Cost:</span> {tournament.registration.cost}
-                    </div>
+                    </p>
                   )}
-                  <p className="sbBody sbPreLine sbTopSpace">{tournament.registration.instructions}</p>
+                  <p className="sbBody sbPreLine m-0">{tournament.registration.instructions}</p>
                 </div>
-              </section>
+              </OverviewSection>
             )}
 
             {variant === "UPCOMING" && deadlines.length > 0 && (
-              <section className="sbTabSection">
-                <header className="sbSectionHeader">
-                  <h2 className="sbSectionTitle">Deadlines</h2>
-                </header>
-                <div className="sbTabSectionBody">
-                  <div className="sbInlineRows" aria-label="Registration deadlines">
-                    {deadlines.map((deadline) => (
-                      <div key={`${deadline.label}-${deadline.date}`} className="sbInlineRow">
-                        <span className="sbInlineRowLabel">{deadline.label}</span>
-                        <span className="sbInlineRowValue">{formatTournamentDate(deadline.date) || deadline.date}</span>
-                      </div>
-                    ))}
-                  </div>
+              <OverviewSection title="Deadlines">
+                <div className="sbInlineRows" aria-label="Registration deadlines">
+                  {deadlines.map((deadline) => (
+                    <div key={`${deadline.label}-${deadline.date}`} className="sbInlineRow">
+                      <span className="sbInlineRowLabel">{deadline.label}</span>
+                      <span className="sbInlineRowValue">{formatTournamentDate(deadline.date) || deadline.date}</span>
+                    </div>
+                  ))}
                 </div>
-              </section>
+              </OverviewSection>
             )}
 
             {tournament.contacts && tournament.contacts.length > 0 && <ContactTab contacts={tournament.contacts} />}
 
             {variant === "FINISHED" && packetsLink && (
-              <section className="sbTabSection">
-                <header className="sbSectionHeader">
-                  <h2 className="sbSectionTitle">Question Packets</h2>
-                </header>
-                <div className="sbTabSectionBody">
-                  <div className="sbBody">
-                    <a href={packetsLink.url} target="_blank" rel="noreferrer" className="sbInlineLink">
-                      View packets <span aria-hidden="true">{"\u2197"}</span>
-                    </a>
-                  </div>
-                </div>
-              </section>
+              <OverviewSection title="Question Packets">
+                <p className="sbBody m-0">
+                  <a href={packetsLink.url} target="_blank" rel="noreferrer" className="sbInlineLink">
+                    View packets <span aria-hidden="true">{"\u2197"}</span>
+                  </a>
+                </p>
+              </OverviewSection>
             )}
           </div>
         )}
