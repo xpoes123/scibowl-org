@@ -97,6 +97,7 @@ export function TournamentsLandingPage() {
         defaultOpen
         viewAllTo={`/tournaments?status=${getStatusQueryParam("LIVE")}`}
         viewAllLabel="View all live tournaments"
+        showStatusPill={false}
       />
 
       <TournamentSection
@@ -108,6 +109,7 @@ export function TournamentsLandingPage() {
         defaultOpen
         viewAllTo={`/tournaments?status=${getStatusQueryParam("UPCOMING")}`}
         viewAllLabel="View all upcoming tournaments"
+        showStatusPill={false}
       />
 
       <TournamentSection
@@ -119,6 +121,7 @@ export function TournamentsLandingPage() {
         defaultOpen={false}
         viewAllTo={`/tournaments?status=${getStatusQueryParam("FINISHED")}`}
         viewAllLabel="View all finished tournaments"
+        showStatusPill={false}
       />
     </div>
   );

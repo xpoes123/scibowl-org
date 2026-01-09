@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 export function HomePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-6xl w-full">
+    <div className="px-4 py-8">
+      <div className="max-w-6xl w-full mx-auto">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-4">
             <img src="/logo_big.png" alt="SciBowl" className="w-16 h-16" />

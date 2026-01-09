@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { FunnelIcon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTournaments } from "../hooks/useTournaments";
-import type { TournamentStatus, TournamentStatusParam } from "../types";
-import { parseStatusQueryParam } from "../utils/status";
+import type { TournamentDivision, TournamentStatus, TournamentStatusParam } from "../types";
+import { getStatusLabel, parseStatusQueryParam } from "../utils/status";
 import { TournamentRow } from "../components/TournamentRow";
 
 function compareWithinStatus(status: TournamentStatus, aKey: { dates: { start: string; end: string }; updated_at?: string; name: string }, bKey: { dates: { start: string; end: string }; updated_at?: string; name: string }): number {
@@ -37,15 +38,47 @@ function statusParamToStatus(param: TournamentStatusParam): TournamentStatus {
   }
 }
 
+const ALL_STATUSES: TournamentStatus[] = ["LIVE", "UPCOMING", "FINISHED"];
+const statusOrder: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
+const DIVISION_OPTIONS: Array<{ key: TournamentDivision; label: string }> = [
+  { key: "MS", label: "Middle School" },
+  { key: "HS", label: "High School" },
+  { key: "UG", label: "Undergraduate" },
+];
+
 export function TournamentsPage() {
   const { tournaments } = useTournaments();
   const [searchParams, setSearchParams] = useSearchParams();
   const statusParam = parseStatusQueryParam(searchParams.get("status"));
   const [query, setQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedStatuses, setSelectedStatuses] = useState<Set<TournamentStatus>>(() => {
+    if (statusParam === "all") return new Set(ALL_STATUSES);
+    return new Set([statusParamToStatus(statusParam)]);
+  });
+  const [selectedDivisions, setSelectedDivisions] = useState<Set<TournamentDivision>>(() => new Set());
 
   const pageSize = 20;
   const rawPage = Number(searchParams.get("page") ?? "1");
   const page = Number.isFinite(rawPage) && rawPage > 0 ? Math.floor(rawPage) : 1;
+
+  useEffect(() => {
+    if (statusParam === "all") setSelectedStatuses(new Set(ALL_STATUSES));
+    else setSelectedStatuses(new Set([statusParamToStatus(statusParam)]));
+  }, [statusParam]);
+
+  useEffect(() => {
+    if (!filtersOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFiltersOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -62,9 +95,12 @@ export function TournamentsPage() {
     });
 
     let list = listWithStatus;
-    if (statusParam !== "all") {
-      const wanted = statusParamToStatus(statusParam);
-      list = list.filter((t) => t.lifecycleStatus === wanted);
+    if (selectedStatuses.size > 0 && selectedStatuses.size !== ALL_STATUSES.length) {
+      list = list.filter((t) => selectedStatuses.has(t.lifecycleStatus));
+    }
+
+    if (selectedDivisions.size > 0) {
+      list = list.filter((t) => t.divisions.some((div) => selectedDivisions.has(div)));
     }
 
     if (normalizedQuery) {
@@ -75,27 +111,20 @@ export function TournamentsPage() {
     }
 
     return list.slice().sort((a, b) => {
-      if (statusParam === "all") {
-        const order: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
-        if (a.lifecycleStatus !== b.lifecycleStatus) return order[a.lifecycleStatus] - order[b.lifecycleStatus];
+      if (selectedStatuses.size !== 1) {
+        if (a.lifecycleStatus !== b.lifecycleStatus) return statusOrder[a.lifecycleStatus] - statusOrder[b.lifecycleStatus];
         return compareWithinStatus(a.lifecycleStatus, a, b);
       }
 
-      return compareWithinStatus(statusParamToStatus(statusParam), a, b);
+      const onlyStatus = Array.from(selectedStatuses)[0] ?? "UPCOMING";
+      return compareWithinStatus(onlyStatus, a, b);
+
     });
-  }, [query, statusParam, tournaments]);
+  }, [query, selectedDivisions, selectedStatuses, tournaments]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
   const clampedPage = Math.min(page, pageCount);
   const pageItems = filtered.slice((clampedPage - 1) * pageSize, clampedPage * pageSize);
-
-  const setStatus = (nextStatus: "all" | TournamentStatusParam) => {
-    const next = new URLSearchParams(searchParams);
-    if (nextStatus === "all") next.delete("status");
-    else next.set("status", nextStatus);
-    next.delete("page");
-    setSearchParams(next);
-  };
 
   const setPage = (nextPage: number) => {
     const next = new URLSearchParams(searchParams);
@@ -103,43 +132,95 @@ export function TournamentsPage() {
     setSearchParams(next);
   };
 
+  const resetToPageOne = () => {
+    const next = new URLSearchParams(searchParams);
+    next.delete("page");
+    setSearchParams(next);
+  };
+
+  const setAllStatuses = () => {
+    setSelectedStatuses(new Set(ALL_STATUSES));
+    resetToPageOne();
+  };
+
+  const toggleStatus = (status: TournamentStatus) => {
+    setSelectedStatuses((prev) => {
+      const next = new Set(prev);
+      if (next.has(status)) next.delete(status);
+      else next.add(status);
+      return next.size === 0 ? new Set(ALL_STATUSES) : next;
+    });
+    resetToPageOne();
+  };
+
+  const setAllDivisions = () => {
+    setSelectedDivisions(new Set());
+    resetToPageOne();
+  };
+
+  const toggleDivision = (division: TournamentDivision) => {
+    setSelectedDivisions((prev) => {
+      const universe = DIVISION_OPTIONS.map((opt) => opt.key);
+      const next = prev.size === 0 ? new Set(universe) : new Set(prev);
+      if (next.has(division)) next.delete(division);
+      else next.add(division);
+      if (next.size === 0 || next.size === universe.length) return new Set();
+      return next;
+    });
+    resetToPageOne();
+  };
+
+  const clearFilters = () => {
+    setAllStatuses();
+    setAllDivisions();
+  };
+
+  const allStatusesSelected = selectedStatuses.size === ALL_STATUSES.length;
+  const allDivisionsSelected = selectedDivisions.size === 0;
+
   return (
     <div className="sbStack">
       <div className="card sbTournamentCard sbHeroCard">
-        <h1 className="sbTitle">All Tournaments</h1>
-        <p className="sbMuted sbTopSpace">Search and filter tournaments.</p>
+        <h1 className="sbTitle">Tournaments</h1>
 
         <div className="sbListingControls sbTopSpace">
-          <label className="sbField">
-            <span className="sbFieldLabel">Search</span>
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                const next = new URLSearchParams(searchParams);
-                next.delete("page");
-                setSearchParams(next);
-              }}
-              className="sbInput"
-              placeholder={"Search by name or location\u2026"}
-            />
-          </label>
+          <div className="sbField">
+            <div className="sbInputWithIcon">
+              <button
+                type="button"
+                className="sbInputIconButton"
+                aria-label="Search tournaments"
+                onClick={() => {
+                  resetToPageOne();
+                  searchInputRef.current?.focus();
+                }}
+              >
+                <MagnifyingGlassIcon className="sbIcon" aria-hidden="true" />
+              </button>
+              <input
+                ref={searchInputRef}
+                type="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  resetToPageOne();
+                }}
+                className="sbInput sbInputPadded"
+                placeholder={"Search by name or location\u2026"}
+                aria-label="Search by name or location"
+              />
+            </div>
+          </div>
 
-          <label className="sbField">
-            <span className="sbFieldLabel">Status</span>
-            <select
-              value={statusParam}
-              onChange={(e) => setStatus(e.target.value as "all" | TournamentStatusParam)}
-              className="sbSelect"
-              aria-label="Filter tournaments by status"
-            >
-              <option value="all">All</option>
-              <option value="live">Live</option>
-              <option value="upcoming">Upcoming</option>
-              <option value="finished">Finished</option>
-            </select>
-          </label>
+          <button
+            type="button"
+            className={filtersOpen ? "sbSquareButton sbSquareButtonActive" : "sbSquareButton"}
+            onClick={() => setFiltersOpen((prev) => !prev)}
+            aria-label="Open filters"
+            title="Filters"
+          >
+            <FunnelIcon className="sbIcon" aria-hidden="true" />
+          </button>
         </div>
       </div>
 
@@ -178,6 +259,84 @@ export function TournamentsPage() {
           </div>
         )}
       </section>
+
+      {filtersOpen && (
+        <div
+          className="sbModalOverlay"
+          role="presentation"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setFiltersOpen(false);
+          }}
+        >
+          <div
+            className="sbModal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Tournament filters"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className="sbModalHeader">
+              <h2 className="sbModalTitle">Filters</h2>
+              <button type="button" className="sbIconButton" onClick={() => setFiltersOpen(false)} aria-label="Close filters">
+                <XMarkIcon className="sbIcon" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div className="sbModalSection">
+              <h3 className="sbModalSectionTitle">Status</h3>
+              <div className="sbCheckboxList">
+                <label className="sbCheckboxRow">
+                  <input type="checkbox" checked={allStatusesSelected} onChange={setAllStatuses} />
+                  All
+                </label>
+                <div className="sbCheckboxChildren sbCheckboxList">
+                  {ALL_STATUSES.map((status) => (
+                    <label key={status} className="sbCheckboxRow">
+                      <input
+                        type="checkbox"
+                        checked={selectedStatuses.has(status)}
+                        onChange={() => toggleStatus(status)}
+                      />
+                      {getStatusLabel(status)}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="sbModalSection">
+              <h3 className="sbModalSectionTitle">Divisions</h3>
+              <div className="sbCheckboxList">
+                <label className="sbCheckboxRow">
+                  <input type="checkbox" checked={allDivisionsSelected} onChange={setAllDivisions} />
+                  All
+                </label>
+                <div className="sbCheckboxChildren sbCheckboxList">
+                  {DIVISION_OPTIONS.map((div) => (
+                    <label key={div.key} className="sbCheckboxRow">
+                      <input
+                        type="checkbox"
+                        checked={allDivisionsSelected ? true : selectedDivisions.has(div.key)}
+                        onChange={() => toggleDivision(div.key)}
+                      />
+                      {div.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="sbModalFooter">
+              <button type="button" className="sbPageButton" onClick={clearFilters}>
+                Clear
+              </button>
+              <button type="button" className="sbPageButton" onClick={() => setFiltersOpen(false)}>
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

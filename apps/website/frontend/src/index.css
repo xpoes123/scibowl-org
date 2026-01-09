@@ -12,6 +12,7 @@
   --sb-soft-border: #dbe0ff;
   --sb-focus: #cdd4ff;
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --sb-control-height: 42px;
 
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height: 1.35;
@@ -21,6 +22,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -36,9 +41,7 @@ img {
 }
 
 .page {
-  min-height: 100vh;
-  display: grid;
-  place-items: start center;
+  width: 100%;
   padding: 0;
 }
 
@@ -68,6 +71,7 @@ img {
   text-decoration: none;
   color: var(--sb-text);
   min-width: 0;
+  height: var(--sb-control-height);
 }
 
 .sbTopNavLogo {
@@ -77,6 +81,7 @@ img {
 
 .sbTopNavBrandText {
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -95,7 +100,10 @@ img {
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
-  padding: 12px 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  height: var(--sb-control-height);
+  padding: 0 4px;
   font-size: 14px;
   line-height: 1;
 }
@@ -116,6 +124,7 @@ img {
 
 .shell {
   width: min(1100px, 100%);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -538,6 +547,11 @@ img {
   gap: 12px;
 }
 
+.sbTournamentRowContentStatus {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 0.75fr) minmax(0, 0.5fr) minmax(0, 0.5fr) 32px;
+  justify-items: start;
+}
+
 .sbPacketRowContent {
   padding: 12px 16px;
   display: grid;
@@ -586,6 +600,7 @@ img {
   gap: 8px;
   min-width: 0;
   color: var(--sb-muted);
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -607,6 +622,10 @@ img {
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.sbTournamentRowContentStatus .sbLevelPills {
   justify-content: flex-start;
 }
 
@@ -643,6 +662,13 @@ img {
   justify-content: flex-end;
   gap: 10px;
   white-space: nowrap;
+}
+
+.sbRowStatus {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  justify-self: start;
 }
 
 .sbRowChevron {
@@ -736,6 +762,10 @@ img {
     gap: 10px;
   }
 
+  .sbTournamentRowContentStatus {
+    grid-template-columns: minmax(0, 1fr) auto auto 32px;
+  }
+
   .sbPacketRowContent {
     grid-template-columns: minmax(0, 1fr) auto 32px;
     gap: 10px;
@@ -796,6 +826,7 @@ img {
   border-radius: 12px;
   padding: 10px 12px;
   font-size: 14px;
+  min-height: var(--sb-control-height);
   background: white;
   color: var(--sb-text);
 }
@@ -804,6 +835,35 @@ img {
 .sbSelect:focus-visible {
   outline: 2px solid var(--sb-focus);
   outline-offset: 2px;
+}
+
+.sbSquareButton {
+  width: var(--sb-control-height);
+  height: var(--sb-control-height);
+  border: 1px solid var(--sb-border);
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.sbSquareButton:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbSquareButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbSquareButtonActive {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
 }
 
 .sbPagination {
@@ -839,6 +899,80 @@ img {
 .sbEmptyState {
   padding: 22px 16px;
   text-align: center;
+}
+
+.sbModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 96px 16px 16px;
+}
+
+.sbModal {
+  width: min(420px, 100%);
+  background: var(--sb-card);
+  border: 1px solid var(--sb-border);
+  border-radius: 16px;
+  box-shadow: var(--sb-shadow);
+  padding: 16px;
+}
+
+.sbModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbModalTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.sbModalSection {
+  margin-top: 14px;
+}
+
+.sbModalSectionTitle {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--sb-muted);
+}
+
+.sbCheckboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sbCheckboxChildren {
+  padding-left: 18px;
+}
+
+.sbCheckboxRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.sbCheckboxRow input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.sbModalFooter {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 /* Tournament detail */
@@ -1279,8 +1413,34 @@ details[open] > .sbDetailsSummary::after {
   pointer-events: none;
 }
 
+.sbInputIconButton {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sbInputIconButton:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbInputIconButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
 .sbInputPadded {
-  padding-left: 36px;
+  padding-left: 44px;
 }
 
 .sbIconButton {

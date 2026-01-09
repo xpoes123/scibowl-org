@@ -1,4 +1,5 @@
 import {
+  useLocation,
   BrowserRouter,
   Routes,
   Route,
@@ -6,6 +7,7 @@ import {
   Link,
   NavLink,
 } from "react-router-dom";
+import { useEffect } from "react";
 import { TournamentDetailPage, TournamentsLandingPage, TournamentsPage } from "./features/tournaments";
 import { isFeatureEnabled } from "./core/features";
 import { PacketSetDetailPage, PacketsPage } from "./features/packets";
@@ -45,6 +47,16 @@ function TopNav() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname, search]);
+
+  return null;
+}
+
 function AppContent() {
   const tournamentsEnabled = isFeatureEnabled("tournaments");
   const packetsEnabled = isFeatureEnabled("packets");
@@ -53,6 +65,7 @@ function AppContent() {
   return (
     <div className="page">
       <TopNav />
+      <ScrollToTop />
       <div className="shell">
         <Routes>
           {hasAnyFeatures ? (
