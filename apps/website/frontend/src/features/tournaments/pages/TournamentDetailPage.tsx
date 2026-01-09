@@ -5,8 +5,7 @@ import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
 import type { TournamentStatus } from "../types";
 import { formatTournamentDateRange } from "../utils/date";
-import { FinishedTabs } from "./tournament-detail/FinishedTabs";
-import { UpcomingTabs } from "./tournament-detail/UpcomingTabs";
+import { TournamentTabs } from "./tournament-detail/TournamentTabs";
 
 function getTournamentStatusBadgeClass(status: TournamentStatus): string {
   switch (status) {
@@ -188,9 +187,9 @@ export function TournamentDetailPage() {
 
       {/* Render different content based on tournament status */}
       {isFinished ? (
-        <FinishedTabs tournament={tournament} />
+        <TournamentTabs tournament={tournament} variant="FINISHED" />
       ) : isUpcoming ? (
-        <UpcomingTabs tournament={tournament} />
+        <TournamentTabs tournament={tournament} variant="UPCOMING" />
       ) : (
         /* LIVE tournaments - to be implemented */
         <div className="card" aria-label="Tournament details">
