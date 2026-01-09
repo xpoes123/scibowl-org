@@ -66,7 +66,7 @@ function AppContent() {
               {tournamentsEnabled && (
                 <>
                   <Route path="/tournaments" element={<TournamentsPage />} />
-                  <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
+                  <Route path="/tournaments/:slug" element={<TournamentDetailPage />} />
                 </>
               )}
 
