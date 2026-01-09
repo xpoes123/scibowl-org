@@ -14,6 +14,7 @@ type TournamentSectionProps = {
   defaultOpen: boolean;
   viewAllTo: string;
   viewAllLabel: string;
+  showStatusPill?: boolean;
 };
 
 export const TournamentSection = memo(function TournamentSection({
@@ -25,6 +26,7 @@ export const TournamentSection = memo(function TournamentSection({
   defaultOpen,
   viewAllTo,
   viewAllLabel,
+  showStatusPill = true,
 }: TournamentSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
   const contentId = useId();
@@ -52,7 +54,7 @@ export const TournamentSection = memo(function TournamentSection({
         <div id={contentId} className="sbAccordionBody">
           <div className="sbRows">
             {visibleTournaments.map((tournament) => (
-              <TournamentRow key={tournament.slug} tournament={tournament} />
+              <TournamentRow key={tournament.slug} tournament={tournament} showStatusPill={showStatusPill} />
             ))}
           </div>
 

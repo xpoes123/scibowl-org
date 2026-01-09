@@ -7,6 +7,7 @@ import { LevelPills } from "./LevelPills";
 
 type TournamentRowProps = {
   tournament: TournamentSummary;
+  showStatusPill?: boolean;
 };
 
 function getTournamentStatusBadgeClass(status: TournamentStatus): string {
@@ -32,7 +33,7 @@ function StatusBadge({ status }: { status: TournamentStatus }) {
   );
 }
 
-export const TournamentRow = memo(function TournamentRow({ tournament }: TournamentRowProps) {
+export const TournamentRow = memo(function TournamentRow({ tournament, showStatusPill = true }: TournamentRowProps) {
   // Determine lifecycle status from dates
   const now = new Date();
   const startDate = new Date(tournament.dates.start);
@@ -74,8 +75,8 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
 
         <LevelPills levels={tournament.divisions} />
 
-        <div className="sbRowStatus" aria-label="Tournament status">
-          <StatusBadge status={lifecycleStatus} />
+        <div className="sbRowStatus" aria-hidden={!showStatusPill} aria-label={showStatusPill ? "Tournament status" : undefined}>
+          {showStatusPill ? <StatusBadge status={lifecycleStatus} /> : null}
         </div>
 
         <div className="sbRowRight">
