@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTournaments } from "../hooks/useTournaments";
 import type { TournamentDivision, TournamentStatus, TournamentStatusParam } from "../types";
-import { parseStatusQueryParam } from "../utils/status";
+import { getStatusLabel, parseStatusQueryParam } from "../utils/status";
 import { TournamentRow } from "../components/TournamentRow";
 
 function compareWithinStatus(status: TournamentStatus, aKey: { dates: { start: string; end: string }; updated_at?: string; name: string }, bKey: { dates: { start: string; end: string }; updated_at?: string; name: string }): number {
@@ -40,6 +40,11 @@ function statusParamToStatus(param: TournamentStatusParam): TournamentStatus {
 
 const ALL_STATUSES: TournamentStatus[] = ["LIVE", "UPCOMING", "FINISHED"];
 const statusOrder: Record<TournamentStatus, number> = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
+const DIVISION_OPTIONS: Array<{ key: TournamentDivision; label: string }> = [
+  { key: "MS", label: "Middle School" },
+  { key: "HS", label: "High School" },
+  { key: "UG", label: "Undergraduate" },
+];
 
 export function TournamentsPage() {
   const { tournaments } = useTournaments();
@@ -74,15 +79,6 @@ export function TournamentsPage() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [filtersOpen]);
-
-  const availableDivisions = useMemo(() => {
-    const unique = new Set<TournamentDivision>();
-    tournaments.forEach((t) => {
-      t.divisions.forEach((div) => unique.add(div));
-    });
-    const ordered: TournamentDivision[] = ["MS", "HS", "UG", "OPEN"];
-    return ordered.filter((div) => unique.has(div));
-  }, [tournaments]);
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -142,31 +138,45 @@ export function TournamentsPage() {
     setSearchParams(next);
   };
 
+  const setAllStatuses = () => {
+    setSelectedStatuses(new Set(ALL_STATUSES));
+    resetToPageOne();
+  };
+
   const toggleStatus = (status: TournamentStatus) => {
     setSelectedStatuses((prev) => {
       const next = new Set(prev);
       if (next.has(status)) next.delete(status);
       else next.add(status);
-      return next;
+      return next.size === 0 ? new Set(ALL_STATUSES) : next;
     });
+    resetToPageOne();
+  };
+
+  const setAllDivisions = () => {
+    setSelectedDivisions(new Set());
     resetToPageOne();
   };
 
   const toggleDivision = (division: TournamentDivision) => {
     setSelectedDivisions((prev) => {
-      const next = new Set(prev);
+      const universe = DIVISION_OPTIONS.map((opt) => opt.key);
+      const next = prev.size === 0 ? new Set(universe) : new Set(prev);
       if (next.has(division)) next.delete(division);
       else next.add(division);
+      if (next.size === 0 || next.size === universe.length) return new Set();
       return next;
     });
     resetToPageOne();
   };
 
   const clearFilters = () => {
-    setSelectedStatuses(new Set(ALL_STATUSES));
-    setSelectedDivisions(new Set());
-    resetToPageOne();
+    setAllStatuses();
+    setAllDivisions();
   };
+
+  const allStatusesSelected = selectedStatuses.size === ALL_STATUSES.length;
+  const allDivisionsSelected = selectedDivisions.size === 0;
 
   return (
     <div className="sbStack">
@@ -180,9 +190,12 @@ export function TournamentsPage() {
                 type="button"
                 className="sbInputIconButton"
                 aria-label="Search tournaments"
-                onClick={() => searchInputRef.current?.focus()}
+                onClick={() => {
+                  resetToPageOne();
+                  searchInputRef.current?.focus();
+                }}
               >
-                <MagnifyingGlassIcon className="sbInputIcon" aria-hidden="true" />
+                <MagnifyingGlassIcon className="sbIcon" aria-hidden="true" />
               </button>
               <input
                 ref={searchInputRef}
@@ -201,11 +214,10 @@ export function TournamentsPage() {
 
           <button
             type="button"
-            className="sbPageButton"
-            onClick={() => setFiltersOpen(true)}
+            className={filtersOpen ? "sbSquareButton sbSquareButtonActive" : "sbSquareButton"}
+            onClick={() => setFiltersOpen((prev) => !prev)}
             aria-label="Open filters"
             title="Filters"
-            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px", flex: "0 0 auto" }}
           >
             <FunnelIcon className="sbIcon" aria-hidden="true" />
           </button>
@@ -273,36 +285,46 @@ export function TournamentsPage() {
             <div className="sbModalSection">
               <h3 className="sbModalSectionTitle">Status</h3>
               <div className="sbCheckboxList">
-                {ALL_STATUSES.map((status) => (
-                  <label key={status} className="sbCheckboxRow">
-                    <input
-                      type="checkbox"
-                      checked={selectedStatuses.has(status)}
-                      onChange={() => toggleStatus(status)}
-                    />
-                    {status}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {availableDivisions.length > 0 && (
-              <div className="sbModalSection">
-                <h3 className="sbModalSectionTitle">Divisions</h3>
-                <div className="sbCheckboxList">
-                  {availableDivisions.map((div) => (
-                    <label key={div} className="sbCheckboxRow">
+                <label className="sbCheckboxRow">
+                  <input type="checkbox" checked={allStatusesSelected} onChange={setAllStatuses} />
+                  All
+                </label>
+                <div className="sbCheckboxChildren sbCheckboxList">
+                  {ALL_STATUSES.map((status) => (
+                    <label key={status} className="sbCheckboxRow">
                       <input
                         type="checkbox"
-                        checked={selectedDivisions.has(div)}
-                        onChange={() => toggleDivision(div)}
+                        checked={selectedStatuses.has(status)}
+                        onChange={() => toggleStatus(status)}
                       />
-                      {div}
+                      {getStatusLabel(status)}
                     </label>
                   ))}
                 </div>
               </div>
-            )}
+            </div>
+
+            <div className="sbModalSection">
+              <h3 className="sbModalSectionTitle">Divisions</h3>
+              <div className="sbCheckboxList">
+                <label className="sbCheckboxRow">
+                  <input type="checkbox" checked={allDivisionsSelected} onChange={setAllDivisions} />
+                  All
+                </label>
+                <div className="sbCheckboxChildren sbCheckboxList">
+                  {DIVISION_OPTIONS.map((div) => (
+                    <label key={div.key} className="sbCheckboxRow">
+                      <input
+                        type="checkbox"
+                        checked={allDivisionsSelected ? true : selectedDivisions.has(div.key)}
+                        onChange={() => toggleDivision(div.key)}
+                      />
+                      {div.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             <div className="sbModalFooter">
               <button type="button" className="sbPageButton" onClick={clearFilters}>
