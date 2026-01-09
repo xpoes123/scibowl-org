@@ -137,7 +137,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
           <div role="tabpanel" id="tab-panel-overview" aria-labelledby="tab-overview">
             <OverviewSection title="Logistics">
               {logisticsBullets.length > 0 ? (
-                <ul className="sbBulletList m-0 space-y-2" aria-label="Logistics notes">
+                <ul className="sbBulletList m-0 gap-0" aria-label="Logistics notes">
                   {logisticsBullets.map((bullet, idx) => (
                     <li key={`${idx}-${bullet}`}>{bullet}</li>
                   ))}
