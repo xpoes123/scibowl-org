@@ -539,7 +539,7 @@ img {
 }
 
 .sbTournamentRowContentStatus {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.5fr) minmax(0, 1fr) 32px;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 0.75fr) minmax(0, 0.5fr) minmax(0, 0.5fr) 32px;
   justify-items: start;
 }
 
@@ -658,8 +658,8 @@ img {
 .sbRowStatus {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  justify-self: end;
+  justify-content: flex-start;
+  justify-self: start;
 }
 
 .sbRowChevron {
