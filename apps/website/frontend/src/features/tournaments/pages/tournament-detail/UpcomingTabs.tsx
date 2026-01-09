@@ -6,12 +6,12 @@ type UpcomingTabsProps = {
   tournament: TournamentDetail;
 };
 
-type TabId = "general" | "schedule" | "field" | "sponsors" | "contact";
+type TabId = "general" | "results" | "statistics";
 
 interface Tab {
   id: TabId;
   label: string;
-  available: boolean;
+  disabled: boolean;
 }
 
 function splitLogistics(text: string): string[] {
@@ -35,15 +35,12 @@ function splitLogistics(text: string): string[] {
 
 export function UpcomingTabs({ tournament }: UpcomingTabsProps) {
   const tabs: Tab[] = [
-    { id: "general", label: "General Info", available: true },
-    { id: "schedule", label: "Schedule", available: true },
-    { id: "field", label: "Field", available: true },
-    { id: "sponsors", label: "Sponsors", available: true },
-    { id: "contact", label: "Contact", available: !!(tournament.contacts && tournament.contacts.length > 0) },
+    { id: "general", label: "General Info", disabled: false },
+    { id: "results", label: "Results", disabled: true },
+    { id: "statistics", label: "Statistics", disabled: true },
   ];
 
-  const availableTabs = tabs.filter((tab) => tab.available);
-  const [activeTab, setActiveTab] = useState<TabId>(availableTabs[0]?.id || "general");
+  const [activeTab, setActiveTab] = useState<TabId>("general");
 
   const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
   const rounds = tournament.format.rounds_guaranteed;
@@ -53,14 +50,20 @@ export function UpcomingTabs({ tournament }: UpcomingTabsProps) {
     <div className="card" aria-label="Tournament details">
       {/* Tab Navigation */}
       <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
-        {availableTabs.map((tab) => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
+            id={`tab-${tab.id}`}
             role="tab"
             aria-selected={activeTab === tab.id}
+            aria-disabled={tab.disabled}
             aria-controls={`tab-panel-${tab.id}`}
+            disabled={tab.disabled}
             className={activeTab === tab.id ? "sbTabButton sbTabButtonActive" : "sbTabButton"}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              if (tab.disabled) return;
+              setActiveTab(tab.id);
+            }}
           >
             {tab.label}
           </button>
@@ -130,55 +133,34 @@ export function UpcomingTabs({ tournament }: UpcomingTabsProps) {
                 </div>
               </section>
             )}
+
+            {tournament.contacts && tournament.contacts.length > 0 && <ContactTab contacts={tournament.contacts} />}
           </div>
         )}
 
-        {/* Schedule Tab */}
-        {activeTab === "schedule" && (
-          <div role="tabpanel" id="tab-panel-schedule" aria-labelledby="tab-schedule">
+        {activeTab === "results" && (
+          <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Tournament Schedule</h2>
+                <h2 className="sbSectionTitle">Results</h2>
               </header>
               <div className="sbTabSectionBody">
-                <p className="sbMuted">Schedule information coming soon.</p>
+                <p className="sbMuted">Results will be available after the tournament.</p>
               </div>
             </section>
           </div>
         )}
 
-        {/* Field Tab */}
-        {activeTab === "field" && (
-          <div role="tabpanel" id="tab-panel-field" aria-labelledby="tab-field">
+        {activeTab === "statistics" && (
+          <div role="tabpanel" id="tab-panel-statistics" aria-labelledby="tab-statistics">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Registered Teams</h2>
+                <h2 className="sbSectionTitle">Statistics</h2>
               </header>
               <div className="sbTabSectionBody">
-                <p className="sbMuted">Team list coming soon.</p>
+                <p className="sbMuted">Statistics will be available after the tournament.</p>
               </div>
             </section>
-          </div>
-        )}
-
-        {/* Sponsors Tab */}
-        {activeTab === "sponsors" && (
-          <div role="tabpanel" id="tab-panel-sponsors" aria-labelledby="tab-sponsors">
-            <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Tournament Sponsors</h2>
-              </header>
-              <div className="sbTabSectionBody">
-                <p className="sbMuted">Sponsor information coming soon.</p>
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* Contact Tab */}
-        {activeTab === "contact" && tournament.contacts && tournament.contacts.length > 0 && (
-          <div role="tabpanel" id="tab-panel-contact" aria-labelledby="tab-contact">
-            <ContactTab contacts={tournament.contacts} />
           </div>
         )}
       </div>

@@ -6,12 +6,12 @@ type FinishedTabsProps = {
   tournament: TournamentDetail;
 };
 
-type TabId = "logistics" | "results" | "statistics" | "packets";
+type TabId = "general" | "results" | "statistics";
 
 interface Tab {
   id: TabId;
   label: string;
-  available: boolean;
+  disabled: boolean;
 }
 
 function splitLogistics(text: string): string[] {
@@ -77,17 +77,14 @@ function GoogleSheetEmbed({ url }: { url: string }) {
 export function FinishedTabs({ tournament }: FinishedTabsProps) {
   const resultsLink = tournament.links?.find(link => link.type === "RESULTS");
   const statsLink = tournament.links?.find(link => link.type === "STATS");
-  const packetsLink = tournament.links?.find(link => link.type === "PACKETS");
 
   const tabs: Tab[] = [
-    { id: "logistics", label: "Logistics", available: true },
-    { id: "results", label: "Results", available: !!resultsLink },
-    { id: "statistics", label: "Statistics", available: !!statsLink },
-    { id: "packets", label: "Packets", available: !!packetsLink },
+    { id: "general", label: "General Info", disabled: false },
+    { id: "results", label: "Results", disabled: !resultsLink },
+    { id: "statistics", label: "Statistics", disabled: !statsLink },
   ];
 
-  const availableTabs = tabs.filter((tab) => tab.available);
-  const [activeTab, setActiveTab] = useState<TabId>(availableTabs[0]?.id || "logistics");
+  const [activeTab, setActiveTab] = useState<TabId>("general");
 
   const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
   const rounds = tournament.format.rounds_guaranteed;
@@ -97,14 +94,20 @@ export function FinishedTabs({ tournament }: FinishedTabsProps) {
     <div className="card" aria-label="Tournament details">
       {/* Tab Navigation */}
       <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
-        {availableTabs.map((tab) => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
+            id={`tab-${tab.id}`}
             role="tab"
             aria-selected={activeTab === tab.id}
+            aria-disabled={tab.disabled}
             aria-controls={`tab-panel-${tab.id}`}
+            disabled={tab.disabled}
             className={activeTab === tab.id ? "sbTabButton sbTabButtonActive" : "sbTabButton"}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              if (tab.disabled) return;
+              setActiveTab(tab.id);
+            }}
           >
             {tab.label}
           </button>
@@ -113,9 +116,9 @@ export function FinishedTabs({ tournament }: FinishedTabsProps) {
 
       {/* Tab Content */}
       <div className="sbTabStack" style={{ padding: "1.5rem" }}>
-        {/* Logistics Tab */}
-        {activeTab === "logistics" && (
-          <div role="tabpanel" id="tab-panel-logistics" aria-labelledby="tab-logistics">
+        {/* General Info Tab */}
+        {activeTab === "general" && (
+          <div role="tabpanel" id="tab-panel-general" aria-labelledby="tab-general">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
                 <h2 className="sbSectionTitle">Logistics</h2>
@@ -154,47 +157,28 @@ export function FinishedTabs({ tournament }: FinishedTabsProps) {
         )}
 
         {/* Results Tab */}
-        {activeTab === "results" && resultsLink && (
+        {activeTab === "results" && (
           <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
                 <h2 className="sbSectionTitle">Results</h2>
               </header>
               <div className="sbTabSectionBody">
-                <GoogleSheetEmbed url={resultsLink.url} />
+                {resultsLink ? <GoogleSheetEmbed url={resultsLink.url} /> : <p className="sbMuted">Results are not available.</p>}
               </div>
             </section>
           </div>
         )}
 
         {/* Statistics Tab */}
-        {activeTab === "statistics" && statsLink && (
+        {activeTab === "statistics" && (
           <div role="tabpanel" id="tab-panel-statistics" aria-labelledby="tab-statistics">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
                 <h2 className="sbSectionTitle">Statistics</h2>
               </header>
               <div className="sbTabSectionBody">
-                <GoogleSheetEmbed url={statsLink.url} />
-              </div>
-            </section>
-          </div>
-        )}
-
-        {/* Packets Tab */}
-        {activeTab === "packets" && packetsLink && (
-          <div role="tabpanel" id="tab-panel-packets" aria-labelledby="tab-packets">
-            <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Question Packets</h2>
-              </header>
-              <div className="sbTabSectionBody">
-                <div className="sbBody">
-                  <a href={packetsLink.url} target="_blank" rel="noreferrer" className="sbInlineLink">
-                    View packets <span aria-hidden="true">{"\u2197"}</span>
-                  </a>
-                  <p className="sbMuted sbTopSpace">PDF viewer coming soon.</p>
-                </div>
+                {statsLink ? <GoogleSheetEmbed url={statsLink.url} /> : <p className="sbMuted">Statistics are not available.</p>}
               </div>
             </section>
           </div>
