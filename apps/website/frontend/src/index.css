@@ -353,6 +353,13 @@ img {
   flex: 0 0 auto;
 }
 
+.sbTournamentDateHero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
 .sbBody {
   margin: 0;
   color: var(--sb-text);
@@ -371,6 +378,10 @@ img {
 
   .sbTournamentDate {
     text-align: left;
+  }
+
+  .sbTournamentDateHero {
+    align-items: flex-start;
   }
 
   .sbTournamentHeader {
@@ -1001,6 +1012,24 @@ img {
   flex-wrap: wrap;
 }
 
+.sbHeroMetaLine {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--sb-muted);
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.sbHeroMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .sbHeroMetaRowSecondary {
   color: var(--sb-muted);
   font-size: 13px;
@@ -1033,6 +1062,9 @@ img {
 
 .sbHeroMetaSep {
   color: #b2b7c8;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .sbLabelInline {
@@ -1144,6 +1176,19 @@ img {
   color: var(--sb-text);
   background: rgba(139, 92, 246, 0.05);
   border-radius: 6px 6px 0 0;
+}
+
+.sbTabButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  color: var(--sb-muted);
+  background: none;
+}
+
+.sbTabButton:disabled:hover {
+  color: var(--sb-muted);
+  background: none;
+  border-radius: 0;
 }
 
 .sbTabButtonActive {
