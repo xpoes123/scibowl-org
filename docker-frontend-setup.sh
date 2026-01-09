@@ -3,17 +3,20 @@
 
 cd /workspace
 
-echo "Installing root dependencies..."
-npm install --legacy-peer-deps --silent
+echo "Cleaning node_modules..."
+rm -rf node_modules apps/website/frontend/node_modules apps/moss/frontend/node_modules
 
-echo "Running website frontend..."
+echo "Installing all workspace dependencies..."
+npm ci || npm install
+
+echo "Running website frontend on port 5173..."
 cd /workspace/apps/website/frontend
-npm run dev -- --host &
+npm run dev -- --host --port 5173 &
 WEBSITE_PID=$!
 
-echo "Running moss frontend..."
+echo "Running moss frontend on port 5174..."
 cd /workspace/apps/moss/frontend
-npm run dev -- --host &
+npm run dev -- --host --port 5174 &
 MOSS_PID=$!
 
 echo "Both frontends started. Waiting..."
