@@ -3,11 +3,8 @@
 
 cd /workspace
 
-echo "Cleaning node_modules..."
-rm -rf node_modules apps/website/frontend/node_modules apps/moss/frontend/node_modules
-
 echo "Installing all workspace dependencies..."
-npm ci || npm install
+npm install
 
 echo "Running website frontend on port 5173..."
 cd /workspace/apps/website/frontend
@@ -19,5 +16,8 @@ cd /workspace/apps/moss/frontend
 npm run dev -- --host --port 5174 &
 MOSS_PID=$!
 
-echo "Both frontends started. Waiting..."
+echo "Both frontends started."
+echo "Website PID: $WEBSITE_PID"
+echo "MOSS PID: $MOSS_PID"
+echo "Waiting for processes..."
 wait $WEBSITE_PID $MOSS_PID
