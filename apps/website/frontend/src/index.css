@@ -71,6 +71,7 @@ img {
   text-decoration: none;
   color: var(--sb-text);
   min-width: 0;
+  height: var(--sb-control-height);
 }
 
 .sbTopNavLogo {
@@ -80,6 +81,7 @@ img {
 
 .sbTopNavBrandText {
   font-weight: 700;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -98,7 +100,10 @@ img {
   background: transparent;
   border: 0;
   border-bottom: 2px solid transparent;
-  padding: 12px 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  height: var(--sb-control-height);
+  padding: 0 4px;
   font-size: 14px;
   line-height: 1;
 }
