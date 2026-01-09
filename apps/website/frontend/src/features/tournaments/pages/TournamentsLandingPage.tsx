@@ -10,8 +10,8 @@ function sortByStatus(status: TournamentStatus, tournaments: TournamentSummary[]
 
   if (status === "LIVE") {
     sorted.sort((a, b) => {
-      const aKey = a.updated_at ?? a.start_date;
-      const bKey = b.updated_at ?? b.start_date;
+      const aKey = a.updated_at ?? a.dates.start;
+      const bKey = b.updated_at ?? b.dates.start;
       if (aKey !== bKey) return bKey.localeCompare(aKey);
       return a.name.localeCompare(b.name);
     });
@@ -20,15 +20,15 @@ function sortByStatus(status: TournamentStatus, tournaments: TournamentSummary[]
 
   if (status === "UPCOMING") {
     sorted.sort((a, b) => {
-      if (a.start_date !== b.start_date) return a.start_date.localeCompare(b.start_date);
+      if (a.dates.start !== b.dates.start) return a.dates.start.localeCompare(b.dates.start);
       return a.name.localeCompare(b.name);
     });
     return sorted;
   }
 
   sorted.sort((a, b) => {
-    const aKey = a.end_date ?? a.start_date;
-    const bKey = b.end_date ?? b.start_date;
+    const aKey = a.dates.end;
+    const bKey = b.dates.end;
     if (aKey !== bKey) return bKey.localeCompare(aKey);
     return a.name.localeCompare(b.name);
   });
@@ -39,9 +39,26 @@ export function TournamentsLandingPage() {
   const { tournaments } = useTournaments();
 
   const byStatus = useMemo(() => {
-    const live = tournaments.filter((t) => t.status === "LIVE");
-    const upcoming = tournaments.filter((t) => t.status === "UPCOMING");
-    const finished = tournaments.filter((t) => t.status === "FINISHED");
+    // Determine lifecycle status from dates
+    const now = new Date();
+    const live: TournamentSummary[] = [];
+    const upcoming: TournamentSummary[] = [];
+    const finished: TournamentSummary[] = [];
+
+    tournaments.forEach(t => {
+      const startDate = new Date(t.dates.start);
+      const endDate = new Date(t.dates.end);
+      const isFinished = now > endDate;
+      const isUpcoming = now < startDate;
+
+      if (isFinished) {
+        finished.push(t);
+      } else if (isUpcoming) {
+        upcoming.push(t);
+      } else {
+        live.push(t);
+      }
+    });
 
     return {
       live: sortByStatus("LIVE", live),

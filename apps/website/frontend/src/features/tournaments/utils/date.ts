@@ -31,11 +31,11 @@ function formatMonthDayParts(date: Date): { month: string; day: string } {
   return { month, day };
 }
 
-export function formatTournamentDateRange(startIso: string, endIso?: string): string {
+export function formatTournamentDateRange(startIso: string, endIso: string): string {
   const start = parseISODateToLocalDate(startIso);
   if (!start) return "";
 
-  const end = endIso ? parseISODateToLocalDate(endIso) : null;
+  const end = parseISODateToLocalDate(endIso);
   if (!end) return tournamentDateFormatter.format(start);
 
   const sameDay =

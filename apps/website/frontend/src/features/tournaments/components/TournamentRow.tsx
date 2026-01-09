@@ -10,12 +10,19 @@ type TournamentRowProps = {
 };
 
 export const TournamentRow = memo(function TournamentRow({ tournament }: TournamentRowProps) {
-  const isLive = tournament.status === "LIVE";
-  const dateLabel = useMemo(() => formatTournamentDate(tournament.start_date), [tournament.start_date]);
-  const locationLabel = `${tournament.location_city}, ${tournament.location_state}`;
+  // Determine lifecycle status from dates
+  const now = new Date();
+  const startDate = new Date(tournament.dates.start);
+  const endDate = new Date(tournament.dates.end);
+  const isFinished = now > endDate;
+  const isUpcoming = now < startDate;
+  const isLive = !isFinished && !isUpcoming;
+
+  const dateLabel = useMemo(() => formatTournamentDate(tournament.dates.start), [tournament.dates.start]);
+  const locationLabel = tournament.location ? `${tournament.location.city}, ${tournament.location.state}` : "Online";
 
   return (
-    <Link to={`/tournaments/${tournament.id}`} className="sbTournamentRow">
+    <Link to={`/tournaments/${tournament.slug}`} className="sbTournamentRow">
       <div className="sbTournamentRowContent">
         <div className="sbRowMain">
           <div className="sbMinW0">
@@ -48,7 +55,7 @@ export const TournamentRow = memo(function TournamentRow({ tournament }: Tournam
 
         <div className="sbRowDate">{dateLabel}</div>
 
-        <LevelPills levels={tournament.level} />
+        <LevelPills levels={tournament.divisions} />
 
         <div className="sbRowRight">
           <ChevronRightIcon className="sbRowChevron" aria-hidden="true" />
