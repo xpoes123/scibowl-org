@@ -12,6 +12,7 @@
   --sb-soft-border: #dbe0ff;
   --sb-focus: #cdd4ff;
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --sb-control-height: 42px;
 
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height: 1.35;
@@ -538,13 +539,8 @@ img {
 }
 
 .sbTournamentRowContentStatus {
-  grid-template-columns:
-    minmax(0, 1fr)
-    clamp(170px, 22vw, 240px)
-    clamp(110px, 14vw, 140px)
-    clamp(96px, 14vw, 140px)
-    clamp(110px, 12vw, 130px)
-    32px;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.5fr) minmax(0, 1fr) 32px;
+  justify-items: start;
 }
 
 .sbPacketRowContent {
@@ -621,7 +617,7 @@ img {
 }
 
 .sbTournamentRowContentStatus .sbLevelPills {
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .sbLevelPill {
@@ -660,9 +656,10 @@ img {
 }
 
 .sbRowStatus {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
+  justify-self: end;
 }
 
 .sbRowChevron {
@@ -820,6 +817,7 @@ img {
   border-radius: 12px;
   padding: 10px 12px;
   font-size: 14px;
+  min-height: var(--sb-control-height);
   background: white;
   color: var(--sb-text);
 }
@@ -828,6 +826,35 @@ img {
 .sbSelect:focus-visible {
   outline: 2px solid var(--sb-focus);
   outline-offset: 2px;
+}
+
+.sbSquareButton {
+  width: var(--sb-control-height);
+  height: var(--sb-control-height);
+  border: 1px solid var(--sb-border);
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 auto;
+}
+
+.sbSquareButton:hover {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
+}
+
+.sbSquareButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbSquareButtonActive {
+  background: var(--sb-soft);
+  border-color: var(--sb-soft-border);
 }
 
 .sbPagination {
@@ -913,6 +940,10 @@ img {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.sbCheckboxChildren {
+  padding-left: 18px;
 }
 
 .sbCheckboxRow {
@@ -1400,7 +1431,7 @@ details[open] > .sbDetailsSummary::after {
 }
 
 .sbInputPadded {
-  padding-left: 36px;
+  padding-left: 44px;
 }
 
 .sbIconButton {
