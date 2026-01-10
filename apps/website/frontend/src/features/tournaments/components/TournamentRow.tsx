@@ -34,13 +34,33 @@ function StatusBadge({ status }: { status: TournamentStatus }) {
 }
 
 export const TournamentRow = memo(function TournamentRow({ tournament, showStatusPill = true }: TournamentRowProps) {
-  // Determine lifecycle status from dates
-  const now = new Date();
-  const startDate = new Date(tournament.dates.start);
-  const endDate = new Date(tournament.dates.end);
-  const isFinished = now > endDate;
-  const isUpcoming = now < startDate;
-  const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
+  // Determine lifecycle status from dates in tournament's timezone
+  const lifecycleStatus: TournamentStatus = useMemo(() => {
+    const now = new Date();
+    const startDateStr = `${tournament.dates.start}T00:00:00`;
+    const endDateStr = `${tournament.dates.end}T23:59:59`;
+
+    // Get current time in tournament's timezone
+    const nowInTournamentTZStr = now.toLocaleString('en-US', {
+      timeZone: tournament.timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+
+    // Parse to ISO format for comparison
+    const [datePart, timePart] = nowInTournamentTZStr.split(', ');
+    const [month, day, year] = datePart.split('/');
+    const nowInTournamentTZISOStr = `${year}-${month}-${day}T${timePart}`;
+
+    const isFinished = nowInTournamentTZISOStr > endDateStr;
+    const isUpcoming = nowInTournamentTZISOStr < startDateStr;
+    return isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
+  }, [tournament.dates.start, tournament.dates.end, tournament.timezone]);
 
   const dateLabel = useMemo(() => formatTournamentDate(tournament.dates.start), [tournament.dates.start]);
   const locationLabel = tournament.location ? `${tournament.location.city}, ${tournament.location.state}` : "Online";

@@ -83,13 +83,31 @@ export function TournamentsPage() {
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    // Determine lifecycle status from dates
+    // Determine lifecycle status from dates in tournament's timezone
     const now = new Date();
     const listWithStatus = tournaments.map(t => {
-      const startDate = new Date(t.dates.start);
-      const endDate = new Date(t.dates.end);
-      const isFinished = now > endDate;
-      const isUpcoming = now < startDate;
+      const startDateStr = `${t.dates.start}T00:00:00`;
+      const endDateStr = `${t.dates.end}T23:59:59`;
+
+      // Get current time in tournament's timezone
+      const nowInTournamentTZStr = now.toLocaleString('en-US', {
+        timeZone: t.timezone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      // Parse to ISO format for comparison
+      const [datePart, timePart] = nowInTournamentTZStr.split(', ');
+      const [month, day, year] = datePart.split('/');
+      const nowInTournamentTZISOStr = `${year}-${month}-${day}T${timePart}`;
+
+      const isFinished = nowInTournamentTZISOStr > endDateStr;
+      const isUpcoming = nowInTournamentTZISOStr < startDateStr;
       const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
       return { ...t, lifecycleStatus };
     });

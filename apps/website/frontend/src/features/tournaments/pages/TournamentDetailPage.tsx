@@ -61,16 +61,33 @@ export function TournamentDetailPage() {
 
   // Determine lifecycle status from publication status and dates in tournament's timezone
   const now = new Date();
-  const startDate = new Date(tournament.dates.start + 'T00:00:00');
-  const endDate = new Date(tournament.dates.end + 'T23:59:59');
 
-  // Get current date in tournament's timezone
-  const nowInTournamentTZ = new Date(now.toLocaleString('en-US', { timeZone: tournament.timezone }));
-  const startDateInTournamentTZ = new Date(startDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
-  const endDateInTournamentTZ = new Date(endDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
+  // Create dates in the tournament's timezone by using ISO string format with timezone
+  // The tournament dates are stored as YYYY-MM-DD, which we interpret as midnight in the tournament's timezone
+  const startDateStr = `${tournament.dates.start}T00:00:00`;
+  const endDateStr = `${tournament.dates.end}T23:59:59`;
 
-  const isFinished = nowInTournamentTZ > endDateInTournamentTZ;
-  const isUpcoming = nowInTournamentTZ < startDateInTournamentTZ;
+  // Get the current time string in the tournament's timezone
+  const nowInTournamentTZStr = now.toLocaleString('en-US', {
+    timeZone: tournament.timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  // Parse the formatted string back to a Date for comparison
+  // Format will be: MM/DD/YYYY, HH:mm:ss
+  const [datePart, timePart] = nowInTournamentTZStr.split(', ');
+  const [month, day, year] = datePart.split('/');
+  const nowInTournamentTZISOStr = `${year}-${month}-${day}T${timePart}`;
+
+  // Compare ISO strings directly (more reliable than Date objects with timezones)
+  const isFinished = nowInTournamentTZISOStr > endDateStr;
+  const isUpcoming = nowInTournamentTZISOStr < startDateStr;
 
   const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
   if (tournament.difficulty) {

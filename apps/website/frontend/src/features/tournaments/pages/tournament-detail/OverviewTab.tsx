@@ -30,13 +30,28 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
 
   // Check if tournament is finished based on dates in tournament's timezone
   const now = new Date();
-  const endDate = new Date(tournament.dates.end + 'T23:59:59'); // End of day in local time
+  const endDateStr = `${tournament.dates.end}T23:59:59`;
 
-  // Get current date in tournament's timezone
-  const nowInTournamentTZ = new Date(now.toLocaleString('en-US', { timeZone: tournament.timezone }));
-  const endDateInTournamentTZ = new Date(endDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
+  // Get the current time string in the tournament's timezone
+  const nowInTournamentTZStr = now.toLocaleString('en-US', {
+    timeZone: tournament.timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
 
-  const isFinished = nowInTournamentTZ > endDateInTournamentTZ;
+  // Parse the formatted string to ISO format
+  // Format will be: MM/DD/YYYY, HH:mm:ss
+  const [datePart, timePart] = nowInTournamentTZStr.split(', ');
+  const [month, day, year] = datePart.split('/');
+  const nowInTournamentTZISOStr = `${year}-${month}-${day}T${timePart}`;
+
+  // Compare ISO strings directly
+  const isFinished = nowInTournamentTZISOStr > endDateStr;
 
   const resultsLink = tournament.links?.find(link => link.type === 'RESULTS');
   const statsLink = tournament.links?.find(link => link.type === 'STATS');
