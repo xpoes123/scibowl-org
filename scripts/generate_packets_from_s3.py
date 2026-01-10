@@ -46,9 +46,19 @@ def format_display_name(folder_name: str) -> str:
     name = folder_name.replace('-', ' ').replace('_', ' ')
     # Remove extra spaces
     name = re.sub(r'\s+', ' ', name)
-    # Title case
-    name = name.title()
-    return name.strip()
+
+    # Title case, but preserve all-caps words
+    words = name.split()
+    formatted_words = []
+    for word in words:
+        # If word is all caps (and length > 1), keep it as-is
+        if word.isupper() and len(word) > 1:
+            formatted_words.append(word)
+        else:
+            # Otherwise use title case
+            formatted_words.append(word.title())
+
+    return ' '.join(formatted_words).strip()
 
 
 def get_tournament_folders(s3_client) -> List[str]:
