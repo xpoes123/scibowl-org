@@ -65,28 +65,6 @@ export function TournamentDetailPage() {
   const isFinished = now > endDate;
   const isUpcoming = now < startDate;
 
-  const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
-  if (tournament.difficulty) {
-    heroMetaItems.push({
-      key: "difficulty",
-      node: (
-        <span>
-          <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
-        </span>
-      ),
-    });
-  }
-  if (tournament.notes?.writing_team) {
-    heroMetaItems.push({
-      key: "writing_team",
-      node: (
-        <span>
-          <span className="sbLabelInline">Writing team:</span> {tournament.notes.writing_team}
-        </span>
-      ),
-    });
-  }
-
   const websiteLink = tournament.links?.find(link => link.type === "WEBSITE");
   const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
 
@@ -147,25 +125,6 @@ export function TournamentDetailPage() {
                 </Fragment>
               ))}
             </div>
-
-            {(tournament.difficulty || tournament.notes?.writing_team) && (
-              <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-                {(tournament.difficulty || tournament.notes?.writing_team) && (
-                  <div className="sbHeroMetaGroup sbHeroMetaGroupSecondary" aria-label="Reference info">
-                    {heroMetaItems.map((item, idx) => (
-                      <Fragment key={item.key}>
-                        {idx > 0 && (
-                          <span className="sbHeroMetaSep" aria-hidden="true">
-                            {"\u2022"}
-                          </span>
-                        )}
-                        {item.node}
-                      </Fragment>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
 
           <div className="sbTournamentDate sbTournamentDateHero">
