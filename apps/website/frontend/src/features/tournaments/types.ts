@@ -90,6 +90,7 @@ export interface TournamentSummary {
   name: string;
   status: PublicationStatus;
   mode: TournamentMode;
+  timezone: string; // IANA timezone string (needed for status calculation)
   dates: TournamentDates;
   divisions: TournamentDivision[];
   location?: TournamentLocation | null;
