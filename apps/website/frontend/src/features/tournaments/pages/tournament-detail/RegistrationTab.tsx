@@ -45,7 +45,7 @@ export function RegistrationTab({ tournament }: RegistrationTabProps) {
           {tournament.registration.url && (
             <div className="sbRegistrationCta">
               <a className="sbCtaButton" href={tournament.registration.url} target="_blank" rel="noreferrer">
-                Register now
+                Register
               </a>
             </div>
           )}
