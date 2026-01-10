@@ -88,6 +88,11 @@
         "type": "WEBSITE",
         "url": "https://docs.google.com/document/d/1VvLcoj4IHw_Wx4wAHHKq710Ql5MutnyBjlcw6XTNQOw/edit?tab=t.0",
         "label": "Website"
+      },
+      {
+        "type": "RESULTS",
+        "url": "https://eyrieshub.fly.dev/rrscores",
+        "label": "Results"
       }
     ],
     "updated_at": "2026-01-06T02:00:00Z"
