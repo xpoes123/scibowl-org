@@ -137,7 +137,7 @@ export function TournamentDetailPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Register now
+                Register
               </a>
             )}
           </div>
