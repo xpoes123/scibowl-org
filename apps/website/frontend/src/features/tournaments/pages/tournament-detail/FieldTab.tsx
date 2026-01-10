@@ -58,15 +58,15 @@ export function FieldTab({ tournament }: FieldTabProps) {
 
     let list = teams.slice();
     if (hasAnyStatus && status !== "all") {
-      list = list.filter((team) => team.status === status);
+      list = list.filter((team: any) => team.status === status);
     }
 
     if (hasMixedLevels && level !== "all") {
-      list = list.filter((team) => team.level === level);
+      list = list.filter((team: any) => team.level === level);
     }
 
     if (normalized) {
-      list = list.filter((team) => {
+      list = list.filter((team: any) => {
         const location = `${team.city ?? ""} ${team.state ?? ""}`.trim().toLowerCase();
         return (
           team.team_name.toLowerCase().includes(normalized) ||
@@ -109,7 +109,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
           <div className="sbValue">{fieldLabel}</div>
         </div>
         <div className="sbMuted sbSmall">
-          Showing <span className="sbStrong">{filteredTeams.length}</span> of <span className="sbStrong">{tournament.teams.length}</span> teams
+          Showing <span className="sbStrong">{filteredTeams.length}</span> of <span className="sbStrong">{teams.length}</span> teams
         </div>
       </div>
 
@@ -162,7 +162,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
               </button>
             </div>
           ) : (
-            filteredTeams.map((team) => {
+            filteredTeams.map((team: any) => {
               const locationLabel = team.city && team.state ? `${team.city}, ${team.state}` : null;
               const hasRoster = Boolean(team.roster && team.roster.length > 0);
               const isExpanded = expanded.has(team.id);
