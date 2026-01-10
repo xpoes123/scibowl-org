@@ -236,7 +236,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
                   {hasRoster && isExpanded && (
                     <div id={panelId} className="sbTeamRoster">
                       <div className="sbRosterGrid" role="list">
-                        {team.roster!.map((member) => (
+                        {team.roster!.map((member: { name: string; grade?: number; role?: string }) => (
                           <div key={`${team.id}-${member.name}-${member.role ?? ""}-${member.grade ?? ""}`} className="sbRosterRow" role="listitem">
                             <div className="sbStrong sbMinW0 sbRosterName">{member.name}</div>
                             <div className="sbMuted sbSmall sbRosterMeta">

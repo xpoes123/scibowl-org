@@ -151,6 +151,7 @@ export function transformAPIQuestion(apiQuestion: APIQuestion | APIQuestionList,
     category: (categoryDisplayNames[apiQuestion.category] || apiQuestion.category) as Category,
     type: apiQuestion.question_type.toLowerCase() as "tossup" | "bonus",
     questionCategory: questionStyleMap[apiQuestion.question_style],
+    source: apiQuestion.source,
     ...(choices.length > 0 && { choices }),
     ...(attributes.length > 0 && { attributes })
   };

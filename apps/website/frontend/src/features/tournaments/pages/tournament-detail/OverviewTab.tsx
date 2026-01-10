@@ -24,12 +24,19 @@ function splitLogistics(text: string): string[] {
 }
 
 export function OverviewTab({ tournament }: OverviewTabProps) {
-  const logisticsBullets = tournament.logistics ? splitLogistics(tournament.logistics) : [];
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const rounds = tournament.format.rounds;
+  const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
+  const fieldCap = tournament.format.rounds_guaranteed;
   const formatSummary = tournament.format.summary;
-  const isFinished = tournament.status === "FINISHED";
-  const hasPostTournamentLinks = isFinished && (tournament.results_url || tournament.stats_url || tournament.packets_url);
+
+  // Check if tournament is finished based on dates
+  const now = new Date();
+  const endDate = new Date(tournament.dates.end);
+  const isFinished = now > endDate;
+
+  const resultsLink = tournament.links?.find(link => link.type === 'RESULTS');
+  const statsLink = tournament.links?.find(link => link.type === 'STATS');
+  const packetsLink = tournament.links?.find(link => link.type === 'PACKETS');
+  const hasPostTournamentLinks = isFinished && (resultsLink || statsLink || packetsLink);
 
   return (
     <div className="sbTabStack" aria-label="Tournament overview">
@@ -55,11 +62,9 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
 
           <div className="sbLabel">Format</div>
           <div className="sbBody sbTopSpace">{formatSummary}</div>
-          {(fieldCap || rounds) && (
+          {fieldCap && (
             <div className="sbMuted sbSmall sbTopSpace">
-              {fieldCap ? `Field cap: ${fieldCap} teams` : ""}
-              {fieldCap && rounds ? " \u2022 " : ""}
-              {rounds ? `Rounds: ${rounds}` : ""}
+              Rounds guaranteed: {fieldCap}
             </div>
           )}
 
@@ -68,37 +73,37 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
               <div className="sbTabDivider" role="separator" aria-hidden="true" />
               <div className="sbLabel">Post-Tournament Resources</div>
               <div className="sbTopSpace" style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                {tournament.results_url && (
+                {resultsLink && (
                   <a
-                    href={tournament.results_url}
+                    href={resultsLink.url}
                     target="_blank"
                     rel="noreferrer"
                     className="sbCtaButton"
                     style={{ width: "fit-content" }}
                   >
-                    View Results
+                    {resultsLink.label || 'View Results'}
                   </a>
                 )}
-                {tournament.stats_url && (
+                {statsLink && (
                   <a
-                    href={tournament.stats_url}
+                    href={statsLink.url}
                     target="_blank"
                     rel="noreferrer"
                     className="sbCtaButton"
                     style={{ width: "fit-content" }}
                   >
-                    View Stats
+                    {statsLink.label || 'View Stats'}
                   </a>
                 )}
-                {tournament.links?.find(link => link.type === 'PACKETS') && (
+                {packetsLink && (
                   <a
-                    href={tournament.links?.find(link => link.type === 'PACKETS')?.url}
+                    href={packetsLink.url}
                     target="_blank"
                     rel="noreferrer"
                     className="sbCtaButton"
                     style={{ width: "fit-content" }}
                   >
-                    View Packets
+                    {packetsLink.label || 'View Packets'}
                   </a>
                 )}
               </div>
