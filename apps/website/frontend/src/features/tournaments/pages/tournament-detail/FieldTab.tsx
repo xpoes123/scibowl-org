@@ -46,16 +46,17 @@ export function FieldTab({ tournament }: FieldTabProps) {
   const [level, setLevel] = useState<TeamLevelFilter>("all");
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
+  const teams = (tournament as any).teams || [];
+  const fieldCap = tournament.format.rounds_guaranteed;
+  const fieldLabel = fieldCap ? `${teams.length} teams / ${fieldCap} cap` : `${teams.length} teams`;
 
-  const hasAnyStatus = useMemo(() => tournament.teams.some((team) => Boolean(team.status)), [tournament.teams]);
-  const hasMixedLevels = useMemo(() => new Set(tournament.teams.map((team) => team.level)).size > 1, [tournament.teams]);
+  const hasAnyStatus = useMemo(() => teams.some((team: any) => Boolean(team.status)), [teams]);
+  const hasMixedLevels = useMemo(() => new Set(teams.map((team: any) => team.level)).size > 1, [teams]);
 
   const filteredTeams = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    let list = tournament.teams.slice();
+    let list = teams.slice();
     if (hasAnyStatus && status !== "all") {
       list = list.filter((team) => team.status === status);
     }
@@ -75,7 +76,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
       });
     }
 
-    list.sort((a, b) => {
+    list.sort((a: any, b: any) => {
       const statusCmp = compareTeamStatus(a.status, b.status);
       if (statusCmp !== 0) return statusCmp;
       if (a.level !== b.level) return a.level.localeCompare(b.level);
@@ -83,7 +84,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
     });
 
     return list;
-  }, [hasAnyStatus, hasMixedLevels, level, query, status, tournament.teams]);
+  }, [hasAnyStatus, hasMixedLevels, level, query, status, teams]);
 
   const clearFilters = () => {
     setQuery("");

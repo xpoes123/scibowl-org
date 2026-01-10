@@ -14,8 +14,15 @@ export function ContactTab({ tournament }: ContactTabProps) {
         </header>
 
         <div className="sbTabSectionBody">
-          {tournament.contact_info ? (
-            <p className="sbBody sbPreLine">{tournament.contact_info}</p>
+          {tournament.contacts && tournament.contacts.length > 0 ? (
+            <div className="sbDetailRows">
+              {tournament.contacts.map((contact, idx) => (
+                <div key={idx} className="sbDetailRow">
+                  <span className="sbLabel">{contact.label || contact.type}</span>
+                  <span className="sbDetailValue">{contact.value}</span>
+                </div>
+              ))}
+            </div>
           ) : (
             <p className="sbMuted">No contact information listed.</p>
           )}
