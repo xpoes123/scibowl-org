@@ -1,5 +1,5 @@
 import type { PacketSet } from "../types";
 
-import sampleQuestionSets from "./sample_question_sets.json";
+import packetSets from "./packet_sets.json";
 
-export const PACKET_SETS: PacketSet[] = sampleQuestionSets as PacketSet[];
+export const PACKET_SETS: PacketSet[] = packetSets as PacketSet[];

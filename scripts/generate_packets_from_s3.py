@@ -26,7 +26,7 @@ from botocore.exceptions import ClientError
 BUCKET_NAME = 'scibowl'
 PREFIX = 'cleaned_packets/'
 REGION = 'us-east-2'
-OUTPUT_FILE = 'apps/website/frontend/src/features/packets/data/sample_question_sets.json'
+OUTPUT_FILE = 'apps/website/frontend/src/features/packets/data/packet_sets.json'
 
 # S3 URL format
 S3_URL_BASE = f'https://{BUCKET_NAME}.s3.{REGION}.amazonaws.com'
@@ -38,6 +38,17 @@ def create_slug(name: str) -> str:
     slug = re.sub(r'[^\w\s-]', '', name.lower())
     slug = re.sub(r'[-\s]+', '-', slug)
     return slug.strip('-')
+
+
+def format_display_name(folder_name: str) -> str:
+    """Convert folder name to human-readable display name."""
+    # Replace dashes and underscores with spaces
+    name = folder_name.replace('-', ' ').replace('_', ' ')
+    # Remove extra spaces
+    name = re.sub(r'\s+', ' ', name)
+    # Title case
+    name = name.title()
+    return name.strip()
 
 
 def get_tournament_folders(s3_client) -> List[str]:
@@ -102,18 +113,19 @@ def generate_packet_sets() -> List[Dict]:
         pdfs = get_pdfs_in_folder(s3_client, folder)
 
         if not pdfs:
-            print(f"  ⚠️  No PDFs found in {folder}, skipping")
+            print(f"  ! No PDFs found in {folder}, skipping")
             continue
 
-        # Create packet set
+        # Create packet set with formatted display name
+        display_name = format_display_name(folder)
         packet_set = {
             "slug": create_slug(folder),
-            "name": folder,
+            "name": display_name,
             "packets": pdfs
         }
 
         packet_sets.append(packet_set)
-        print(f"  ✓ Added {len(pdfs)} packets")
+        print(f"  + Added {len(pdfs)} packets as '{display_name}'")
 
     return packet_sets
 
@@ -128,7 +140,7 @@ def main():
     packet_sets = generate_packet_sets()
 
     if not packet_sets:
-        print("\n❌ No packet sets generated. Check S3 bucket access.")
+        print("\nX No packet sets generated. Check S3 bucket access.")
         return
 
     # Write to JSON file
@@ -139,8 +151,8 @@ def main():
         json.dump(packet_sets, f, indent=2, ensure_ascii=False)
 
     print("\n" + "=" * 60)
-    print(f"✅ Generated {len(packet_sets)} packet sets")
-    print(f"📄 Output: {OUTPUT_FILE}")
+    print(f"+ Generated {len(packet_sets)} packet sets")
+    print(f"* Output: {OUTPUT_FILE}")
     print("=" * 60)
 
     # Show sample
