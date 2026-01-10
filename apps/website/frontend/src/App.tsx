@@ -20,8 +20,8 @@ function TopNav() {
     <header className="sbTopNav" role="banner">
       <div className="sbTopNavInner">
         <Link to="/" className="sbTopNavBrand" aria-label="Go to home">
-          <img src="/logo_big.png" alt="Science Bowl Central" className="sbTopNavLogo" />
-          <span className="sbTopNavBrandText">Science Bowl Central</span>
+          <img src="/logo_big.png" alt="SciBowl" className="sbTopNavLogo" />
+          <span className="sbTopNavBrandText">SciBowl</span>
         </Link>
 
         <nav aria-label="Primary" className="sbTopNavLinks">
