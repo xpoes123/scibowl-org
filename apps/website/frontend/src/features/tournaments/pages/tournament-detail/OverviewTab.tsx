@@ -28,10 +28,15 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
   const fieldCap = tournament.format.rounds_guaranteed;
   const formatSummary = tournament.format.summary;
 
-  // Check if tournament is finished based on dates
+  // Check if tournament is finished based on dates in tournament's timezone
   const now = new Date();
-  const endDate = new Date(tournament.dates.end);
-  const isFinished = now > endDate;
+  const endDate = new Date(tournament.dates.end + 'T23:59:59'); // End of day in local time
+
+  // Get current date in tournament's timezone
+  const nowInTournamentTZ = new Date(now.toLocaleString('en-US', { timeZone: tournament.timezone }));
+  const endDateInTournamentTZ = new Date(endDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
+
+  const isFinished = nowInTournamentTZ > endDateInTournamentTZ;
 
   const resultsLink = tournament.links?.find(link => link.type === 'RESULTS');
   const statsLink = tournament.links?.find(link => link.type === 'STATS');

@@ -59,12 +59,18 @@ export function TournamentDetailPage() {
   const locationLabel = tournament.location ? `${tournament.location.city}, ${tournament.location.state}` : "Online";
   const dateLabel = formatTournamentDateRange(tournament.dates.start, tournament.dates.end);
 
-  // Determine lifecycle status from publication status and dates
+  // Determine lifecycle status from publication status and dates in tournament's timezone
   const now = new Date();
-  const startDate = new Date(tournament.dates.start);
-  const endDate = new Date(tournament.dates.end);
-  const isFinished = now > endDate;
-  const isUpcoming = now < startDate;
+  const startDate = new Date(tournament.dates.start + 'T00:00:00');
+  const endDate = new Date(tournament.dates.end + 'T23:59:59');
+
+  // Get current date in tournament's timezone
+  const nowInTournamentTZ = new Date(now.toLocaleString('en-US', { timeZone: tournament.timezone }));
+  const startDateInTournamentTZ = new Date(startDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
+  const endDateInTournamentTZ = new Date(endDate.toLocaleString('en-US', { timeZone: tournament.timezone }));
+
+  const isFinished = nowInTournamentTZ > endDateInTournamentTZ;
+  const isUpcoming = nowInTournamentTZ < startDateInTournamentTZ;
 
   const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
   if (tournament.difficulty) {
