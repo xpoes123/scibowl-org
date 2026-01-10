@@ -5,13 +5,12 @@ import { LevelPills } from "../components/LevelPills";
 import { useTournament } from "../hooks/useTournament";
 import type { TournamentStatus } from "../types";
 import { formatTournamentDateRange } from "../utils/date";
-import { FinishedTabs } from "./tournament-detail/FinishedTabs";
-import { UpcomingTabs } from "./tournament-detail/UpcomingTabs";
+import { TournamentTabs } from "./tournament-detail/TournamentTabs";
 
 function getTournamentStatusBadgeClass(status: TournamentStatus): string {
   switch (status) {
     case "LIVE":
-      return "sbBadge sbBadgeLive";
+      return "sbBadge sbBadgeLive sbBadgeLiveInline";
     case "UPCOMING":
       return "sbBadge sbBadgeUpcoming";
     case "FINISHED":
@@ -89,30 +88,42 @@ export function TournamentDetailPage() {
   const isFinished = nowInTournamentTZISOStr > endDateStr;
   const isUpcoming = nowInTournamentTZISOStr < startDateStr;
 
-  const heroMetaItems: Array<{ key: string; node: React.ReactNode }> = [];
-  if (tournament.difficulty) {
-    heroMetaItems.push({
-      key: "difficulty",
-      node: (
-        <span>
-          <span className="sbLabelInline">Difficulty:</span> {tournament.difficulty}
-        </span>
-      ),
-    });
-  }
-  if (tournament.notes?.writing_team) {
-    heroMetaItems.push({
-      key: "writing_team",
-      node: (
-        <span>
-          <span className="sbLabelInline">Writing team:</span> {tournament.notes.writing_team}
-        </span>
-      ),
-    });
-  }
-
   const websiteLink = tournament.links?.find(link => link.type === "WEBSITE");
   const lifecycleStatus: TournamentStatus = isFinished ? "FINISHED" : isUpcoming ? "UPCOMING" : "LIVE";
+
+  const heroMetaItemsPrimary: Array<{ key: string; node: React.ReactNode }> = [
+    {
+      key: "location",
+      node: (
+        <span className="sbHeroMetaItem">
+          <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
+        </span>
+      ),
+    },
+    {
+      key: "date",
+      node: (
+        <span className="sbHeroMetaItem">
+          <CalendarDaysIcon className="sbIcon" aria-hidden="true" /> {dateLabel}
+        </span>
+      ),
+    },
+    {
+      key: "divisions",
+      node: <LevelPills levels={tournament.divisions} />,
+    },
+  ];
+
+  if (websiteLink) {
+    heroMetaItemsPrimary.push({
+      key: "website",
+      node: (
+        <a className="sbInlineLink sbInlineLinkSmall" href={websiteLink.url} target="_blank" rel="noreferrer">
+          Website <span aria-hidden="true">{"\u2197"}</span>
+        </a>
+      ),
+    });
+  }
 
   return (
     <div className="sbStack">
@@ -125,45 +136,21 @@ export function TournamentDetailPage() {
 
             <h1 className="sbHeroTitle sbHeroTitleTight">{tournament.name}</h1>
 
-            <div className="sbHeroMetaRow" aria-label="Tournament basics">
-              <span className="sbBadge sbBadgeImportant">
-                <MapPinIcon className="sbIcon" aria-hidden="true" /> {locationLabel}
-              </span>
-              <span className="sbBadge sbBadgeImportant">
-                <CalendarDaysIcon className="sbIcon" aria-hidden="true" /> {dateLabel}
-              </span>
-              <LevelPills levels={tournament.divisions} />
+            <div className="sbHeroMetaLine" aria-label="Tournament basics">
+              {heroMetaItemsPrimary.map((item, idx) => (
+                <Fragment key={item.key}>
+                  {idx > 0 && (
+                    <span className="sbHeroMetaSep" aria-hidden="true">
+                      {"\u2022"}
+                    </span>
+                  )}
+                  {item.node}
+                </Fragment>
+              ))}
             </div>
-
-            {(websiteLink || tournament.difficulty || tournament.notes?.writing_team) && (
-              <div className="sbHeroMetaRow sbHeroMetaRowSecondary" aria-label="Tournament details">
-                {websiteLink && (
-                  <div className="sbHeroMetaGroup sbHeroMetaGroupPrimary" aria-label="Participation info">
-                    <a className="sbInlineLink sbInlineLinkSmall" href={websiteLink.url} target="_blank" rel="noreferrer">
-                      Website <span aria-hidden="true">{"\u2197"}</span>
-                    </a>
-                  </div>
-                )}
-
-                {(tournament.difficulty || tournament.notes?.writing_team) && (
-                  <div className="sbHeroMetaGroup sbHeroMetaGroupSecondary" aria-label="Reference info">
-                    {heroMetaItems.map((item, idx) => (
-                      <Fragment key={item.key}>
-                        {idx > 0 && (
-                          <span className="sbHeroMetaSep" aria-hidden="true">
-                            {"\u2022"}
-                          </span>
-                        )}
-                        {item.node}
-                      </Fragment>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
 
-          <div className="sbTournamentDate" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
+          <div className="sbTournamentDate sbTournamentDateHero">
             <StatusBadge status={lifecycleStatus} />
             {/* Registration Button - show for upcoming tournaments with registration URL */}
             {isUpcoming && tournament.registration?.url && (
@@ -173,7 +160,7 @@ export function TournamentDetailPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Register now
+                Register
               </a>
             )}
           </div>
@@ -182,13 +169,13 @@ export function TournamentDetailPage() {
 
       {/* Render different content based on tournament status */}
       {isFinished ? (
-        <FinishedTabs tournament={tournament} />
+        <TournamentTabs tournament={tournament} variant="FINISHED" />
       ) : isUpcoming ? (
-        <UpcomingTabs tournament={tournament} />
+        <TournamentTabs tournament={tournament} variant="UPCOMING" />
       ) : (
         /* LIVE tournaments - to be implemented */
-        <div className="card" aria-label="Tournament details">
-          <div className="sbTabStack" style={{ padding: "1.5rem" }}>
+        <div className="card sbTabsCard" aria-label="Tournament details">
+          <div className="sbTabsBody sbTabStack">
             <section className="sbTabSection">
               <header className="sbSectionHeader">
                 <h2 className="sbSectionTitle">Live Tournament</h2>

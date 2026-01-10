@@ -353,6 +353,13 @@ img {
   flex: 0 0 auto;
 }
 
+.sbTournamentDateHero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
 .sbBody {
   margin: 0;
   color: var(--sb-text);
@@ -371,6 +378,10 @@ img {
 
   .sbTournamentDate {
     text-align: left;
+  }
+
+  .sbTournamentDateHero {
+    align-items: flex-start;
   }
 
   .sbTournamentHeader {
@@ -938,6 +949,18 @@ img {
   margin-top: 14px;
 }
 
+.sbFiltersGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 520px) {
+  .sbFiltersGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .sbModalSectionTitle {
   margin: 0 0 8px;
   font-size: 13px;
@@ -1001,6 +1024,24 @@ img {
   flex-wrap: wrap;
 }
 
+.sbHeroMetaLine {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  color: var(--sb-muted);
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.sbHeroMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .sbHeroMetaRowSecondary {
   color: var(--sb-muted);
   font-size: 13px;
@@ -1033,6 +1074,9 @@ img {
 
 .sbHeroMetaSep {
   color: #b2b7c8;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .sbLabelInline {
@@ -1114,7 +1158,7 @@ img {
 }
 
 .sbTabsBody {
-  padding: 18px;
+  padding: 24px;
 }
 
 .sbTabNav {
@@ -1123,7 +1167,7 @@ img {
   padding: 8px 8px 0;
   border-bottom: 1px solid var(--sb-border);
   background: var(--sb-card-bg);
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 
 .sbTabButton {
@@ -1146,6 +1190,19 @@ img {
   border-radius: 6px 6px 0 0;
 }
 
+.sbTabButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  color: var(--sb-muted);
+  background: none;
+}
+
+.sbTabButton:disabled:hover {
+  color: var(--sb-muted);
+  background: none;
+  border-radius: 0;
+}
+
 .sbTabButtonActive {
   color: var(--sb-purple);
   border-bottom-color: var(--sb-purple);
@@ -1162,16 +1219,15 @@ img {
 }
 
 .sbTabSection {
-  /* Spacing between sections */
 }
 
 .sbTabSection:not(:last-child) {
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--sb-border);
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .sbTabSectionBody {
-  margin-top: 16px;
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1232,7 +1288,10 @@ img {
 }
 
 .sbSectionHeader {
-  margin-bottom: 16px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .sbSectionTitle {
@@ -1244,17 +1303,17 @@ img {
 }
 
 .sbSectionSubtitle {
-  margin: 6px 0 0;
+  margin: 0;
   color: var(--sb-muted);
   font-size: 13px;
 }
 
 .sbRegistrationCta {
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 .sbDeadlinesBlock {
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .sbCtaButton {
@@ -1383,6 +1442,28 @@ details[open] > .sbDetailsSummary::after {
 
 .sbDetailRows > .sbContactRow:first-child {
   border-top: 0;
+}
+
+.sbInlineRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sbInlineRow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.sbInlineRowLabel {
+  color: var(--sb-muted);
+  min-width: 18ch;
+  max-width: 26ch;
+}
+
+.sbInlineRowValue {
+  color: var(--sb-text);
 }
 
 .sbContactMeta {

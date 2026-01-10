@@ -46,6 +46,12 @@ const DIVISION_OPTIONS: Array<{ key: TournamentDivision; label: string }> = [
   { key: "UG", label: "Undergraduate" },
 ];
 
+type LocationModeFilter = "ONLINE" | "IN_PERSON";
+const MODE_OPTIONS: Array<{ key: LocationModeFilter; label: string }> = [
+  { key: "ONLINE", label: "Online" },
+  { key: "IN_PERSON", label: "In-person" },
+];
+
 export function TournamentsPage() {
   const { tournaments } = useTournaments();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -59,6 +65,17 @@ export function TournamentsPage() {
     return new Set([statusParamToStatus(statusParam)]);
   });
   const [selectedDivisions, setSelectedDivisions] = useState<Set<TournamentDivision>>(() => new Set());
+  const [selectedModes, setSelectedModes] = useState<Set<LocationModeFilter>>(() => new Set());
+  const [selectedYears, setSelectedYears] = useState<Set<number>>(() => new Set());
+
+  const yearOptions = useMemo(() => {
+    const years = new Set<number>();
+    tournaments.forEach((t) => {
+      const year = Number(t.dates.start.slice(0, 4));
+      if (Number.isFinite(year)) years.add(year);
+    });
+    return Array.from(years).sort((a, b) => b - a);
+  }, [tournaments]);
 
   const pageSize = 20;
   const rawPage = Number(searchParams.get("page") ?? "1");
@@ -121,6 +138,17 @@ export function TournamentsPage() {
       list = list.filter((t) => t.divisions.some((div) => selectedDivisions.has(div)));
     }
 
+    if (selectedModes.size > 0) {
+      list = list.filter((t) => {
+        const mode: LocationModeFilter = t.location ? "IN_PERSON" : "ONLINE";
+        return selectedModes.has(mode);
+      });
+    }
+
+    if (selectedYears.size > 0) {
+      list = list.filter((t) => selectedYears.has(Number(t.dates.start.slice(0, 4))));
+    }
+
     if (normalizedQuery) {
       list = list.filter((t) => {
         const location = t.location ? `${t.location.city}, ${t.location.state}`.toLowerCase() : "online";
@@ -138,7 +166,7 @@ export function TournamentsPage() {
       return compareWithinStatus(onlyStatus, a, b);
 
     });
-  }, [query, selectedDivisions, selectedStatuses, tournaments]);
+  }, [query, selectedDivisions, selectedModes, selectedStatuses, selectedYears, tournaments]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
   const clampedPage = Math.min(page, pageCount);
@@ -188,13 +216,52 @@ export function TournamentsPage() {
     resetToPageOne();
   };
 
+  const setAllModes = () => {
+    setSelectedModes(new Set());
+    resetToPageOne();
+  };
+
+  const toggleMode = (mode: LocationModeFilter) => {
+    setSelectedModes((prev) => {
+      const universe = MODE_OPTIONS.map((opt) => opt.key);
+      const next = prev.size === 0 ? new Set(universe) : new Set(prev);
+      if (next.has(mode)) next.delete(mode);
+      else next.add(mode);
+      if (next.size === 0 || next.size === universe.length) return new Set();
+      return next;
+    });
+    resetToPageOne();
+  };
+
+  const setAllYears = () => {
+    setSelectedYears(new Set());
+    resetToPageOne();
+  };
+
+  const toggleYear = (year: number) => {
+    setSelectedYears((prev) => {
+      if (yearOptions.length === 0) return new Set();
+      const universe = yearOptions;
+      const next = prev.size === 0 ? new Set(universe) : new Set(prev);
+      if (next.has(year)) next.delete(year);
+      else next.add(year);
+      if (next.size === 0 || next.size === universe.length) return new Set();
+      return next;
+    });
+    resetToPageOne();
+  };
+
   const clearFilters = () => {
     setAllStatuses();
     setAllDivisions();
+    setAllModes();
+    setAllYears();
   };
 
   const allStatusesSelected = selectedStatuses.size === ALL_STATUSES.length;
   const allDivisionsSelected = selectedDivisions.size === 0;
+  const allModesSelected = selectedModes.size === 0;
+  const allYearsSelected = selectedYears.size === 0;
 
   return (
     <div className="sbStack">
@@ -300,46 +367,96 @@ export function TournamentsPage() {
               </button>
             </div>
 
-            <div className="sbModalSection">
-              <h3 className="sbModalSectionTitle">Status</h3>
-              <div className="sbCheckboxList">
-                <label className="sbCheckboxRow">
-                  <input type="checkbox" checked={allStatusesSelected} onChange={setAllStatuses} />
-                  All
-                </label>
-                <div className="sbCheckboxChildren sbCheckboxList">
-                  {ALL_STATUSES.map((status) => (
-                    <label key={status} className="sbCheckboxRow">
-                      <input
-                        type="checkbox"
-                        checked={selectedStatuses.has(status)}
-                        onChange={() => toggleStatus(status)}
-                      />
-                      {getStatusLabel(status)}
+            <div className="sbFiltersGrid">
+              <div>
+                <div className="sbModalSection">
+                  <h3 className="sbModalSectionTitle">Location</h3>
+                  <div className="sbCheckboxList">
+                    <label className="sbCheckboxRow">
+                      <input type="checkbox" checked={allModesSelected} onChange={setAllModes} />
+                      All
                     </label>
-                  ))}
+                    <div className="sbCheckboxChildren sbCheckboxList">
+                      {MODE_OPTIONS.map((opt) => (
+                        <label key={opt.key} className="sbCheckboxRow">
+                          <input
+                            type="checkbox"
+                            checked={allModesSelected ? true : selectedModes.has(opt.key)}
+                            onChange={() => toggleMode(opt.key)}
+                          />
+                          {opt.label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sbModalSection">
+                  <h3 className="sbModalSectionTitle">Year</h3>
+                  <div className="sbCheckboxList">
+                    <label className="sbCheckboxRow">
+                      <input type="checkbox" checked={allYearsSelected} onChange={setAllYears} />
+                      All
+                    </label>
+                    <div className="sbCheckboxChildren sbCheckboxList">
+                      {yearOptions.map((year) => (
+                        <label key={year} className="sbCheckboxRow">
+                          <input
+                            type="checkbox"
+                            checked={allYearsSelected ? true : selectedYears.has(year)}
+                            onChange={() => toggleYear(year)}
+                          />
+                          {year}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="sbModalSection">
-              <h3 className="sbModalSectionTitle">Divisions</h3>
-              <div className="sbCheckboxList">
-                <label className="sbCheckboxRow">
-                  <input type="checkbox" checked={allDivisionsSelected} onChange={setAllDivisions} />
-                  All
-                </label>
-                <div className="sbCheckboxChildren sbCheckboxList">
-                  {DIVISION_OPTIONS.map((div) => (
-                    <label key={div.key} className="sbCheckboxRow">
-                      <input
-                        type="checkbox"
-                        checked={allDivisionsSelected ? true : selectedDivisions.has(div.key)}
-                        onChange={() => toggleDivision(div.key)}
-                      />
-                      {div.label}
+              <div>
+                <div className="sbModalSection">
+                  <h3 className="sbModalSectionTitle">Divisions</h3>
+                  <div className="sbCheckboxList">
+                    <label className="sbCheckboxRow">
+                      <input type="checkbox" checked={allDivisionsSelected} onChange={setAllDivisions} />
+                      All
                     </label>
-                  ))}
+                    <div className="sbCheckboxChildren sbCheckboxList">
+                      {DIVISION_OPTIONS.map((div) => (
+                        <label key={div.key} className="sbCheckboxRow">
+                          <input
+                            type="checkbox"
+                            checked={allDivisionsSelected ? true : selectedDivisions.has(div.key)}
+                            onChange={() => toggleDivision(div.key)}
+                          />
+                          {div.label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sbModalSection">
+                  <h3 className="sbModalSectionTitle">Status</h3>
+                  <div className="sbCheckboxList">
+                    <label className="sbCheckboxRow">
+                      <input type="checkbox" checked={allStatusesSelected} onChange={setAllStatuses} />
+                      All
+                    </label>
+                    <div className="sbCheckboxChildren sbCheckboxList">
+                      {ALL_STATUSES.map((status) => (
+                        <label key={status} className="sbCheckboxRow">
+                          <input
+                            type="checkbox"
+                            checked={selectedStatuses.has(status)}
+                            onChange={() => toggleStatus(status)}
+                          />
+                          {getStatusLabel(status)}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
