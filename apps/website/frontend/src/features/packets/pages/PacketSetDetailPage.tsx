@@ -53,13 +53,18 @@ export function PacketSetDetailPage() {
           <p className="sbMuted">No packets available yet.</p>
         ) : (
           <ul className="sbBulletList">
-            {packetSet.packets.map((url, idx) => (
-              <li key={url}>
-                <a className="sbInlineLink" href={url} target="_blank" rel="noreferrer">
-                  Packet {idx + 1}
-                </a>
-              </li>
-            ))}
+            {packetSet.packets.map((url) => {
+              // Extract filename from URL and decode it
+              const filename = decodeURIComponent(url.split('/').pop() || 'Unknown');
+
+              return (
+                <li key={url}>
+                  <a className="sbInlineLink" href={url} target="_blank" rel="noreferrer">
+                    {filename}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

@@ -90,9 +90,9 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
                     View Stats
                   </a>
                 )}
-                {tournament.packets_url && (
+                {tournament.links?.find(link => link.type === 'PACKETS') && (
                   <a
-                    href={tournament.packets_url}
+                    href={tournament.links?.find(link => link.type === 'PACKETS')?.url}
                     target="_blank"
                     rel="noreferrer"
                     className="sbCtaButton"

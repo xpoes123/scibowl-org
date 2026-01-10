@@ -1,33 +1,1279 @@
 [
-    {
-        "slug": "2021-cast",
-        "name": "2021 Centennial Autumn Spring Tournament",
-        "packets": [
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/1.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/2.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/3.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/4.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/5.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/6.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/7.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/8.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/Cast/9.pdf"
-        ]
-    },
-    {
-        "slug": "2024-dast",
-        "name": "2024 Dulles Annual Science Bowl Tournament (DAST)",
-        "packets": [
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%201.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%202.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%203.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%204.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%205.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%206.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%207.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%208.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%209.pdf",
-            "https://oly.mehvix.com/#pdfs/scibowl/DAST/Round%2010.pdf"
-        ]
-    }
+  {
+    "slug": "aves-2025",
+    "name": "AVES-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/AVES-2025/AVES%20RR5.pdf"
+    ]
+  },
+  {
+    "slug": "based-2025",
+    "name": "BASED-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Double%20Elimination%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Round%20Robin%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Round%20Robin%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Round%20Robin%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Round%20Robin%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASED-2025/BASED%20-%20Round%20Robin%205.pdf"
+    ]
+  },
+  {
+    "slug": "basis-peoria-rounds",
+    "name": "BASIS Peoria Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%941.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%942.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%943.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%944.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%945.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%946.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%947.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%948.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20DE%E2%80%949.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20NATS%E2%80%941.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20NATS%E2%80%942.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20NATS%E2%80%943.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20NATS%E2%80%944.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20README.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20RR%E2%80%941.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20RR%E2%80%942.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20RR%E2%80%943.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BASIS%20Peoria%20Rounds/Copy%20of%20Copy%20of%20RR%E2%80%944.pdf"
+    ]
+  },
+  {
+    "slug": "bths-2025",
+    "name": "BTHS-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/BTHS-2025/2025%20BTHS%20Fall%20Invitational%20Packet%20Release.pdf"
+    ]
+  },
+  {
+    "slug": "berkeley-2023",
+    "name": "Berkeley-2023",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Berkeley-2023/BSB%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "ccwt",
+    "name": "CCWT",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/Bamiters%2BEditers%20-%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/Langley%2BEditors%20-%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/Lexington%2BMakorn%20-%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/Tesla%20-%202%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/Westview%20-%204%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/mike%20oxlong%2Beditors%20-%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWT/shittier%20kids%20-%202.pdf"
+    ]
+  },
+  {
+    "slug": "ccwtwo",
+    "name": "CCWTWO",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/Blair_C_Packet_1_CCWTWO.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/CCWT%20Round.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/CCWTWO%20Packet%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/Copy%20of%20Van%20Nuys%20Science%20Bowl_%20CCTWO%20Questions.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/Scibowl_Blair_B_Set_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CCWTWO/mnms%20ccwt.pdf"
+    ]
+  },
+  {
+    "slug": "csbl",
+    "name": "CSBL",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Playoff_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Playoff_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Playoff_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/CSBL_Round_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_1%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_10%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_2%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_3%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_4%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_5%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_6%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_7%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_8%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSBL/Round_9%20%281%29.pdf"
+    ]
+  },
+  {
+    "slug": "csub",
+    "name": "CSUB",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround01.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround02.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround03.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround04.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround05.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround06.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround08.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround09.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround1-9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround10-17.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround14.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround15.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround16.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/CSUB/rround17.pdf"
+    ]
+  },
+  {
+    "slug": "cast",
+    "name": "Cast",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%201%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Cast/Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "dast1",
+    "name": "DAST1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/DAST1/DAST%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "dasoni-comp1",
+    "name": "Dasoni Comp1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Comp1/DASONI%20Competitive%20RR3.pdf"
+    ]
+  },
+  {
+    "slug": "dasoni-standard1",
+    "name": "Dasoni Standard1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Dasoni%20Standard1/DASONI%20Standard%20RR3.pdf"
+    ]
+  },
+  {
+    "slug": "david-rounds",
+    "name": "David Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/David%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/MHS%20Round%203pdf.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/MHS%20Round%204%2C%203_29_20.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/MHS%20Round%206%20%28winter%20tourney%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/MHS%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/MHS_Round_5_4_10_20%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/David%20Rounds/Middleton%202.pdf"
+    ]
+  },
+  {
+    "slug": "deadbird-invitational",
+    "name": "Deadbird Invitational",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Deadbird%20Invitational/DBHSST%20tiebreaks_replacement%20questions.pdf"
+    ]
+  },
+  {
+    "slug": "esbot-1",
+    "name": "ESBOT 1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/DE%209.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/RR%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/RR%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/RR%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/RR%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/RR%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%201/Seeding%20Round.pdf"
+    ]
+  },
+  {
+    "slug": "esbot-2",
+    "name": "ESBOT 2",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/DE9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ESBOT%202/RR5.pdf"
+    ]
+  },
+  {
+    "slug": "fem-2025",
+    "name": "FE!M-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/FE%21M_Writers.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/FE%21M-2025/RR5.pdf"
+    ]
+  },
+  {
+    "slug": "gwhs-rounds",
+    "name": "GWHS Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2015.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2016.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%2017.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/GWHS%20Rounds/Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "icsbt-2025",
+    "name": "ICSBT-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ICSBT-2025/RR3.pdf"
+    ]
+  },
+  {
+    "slug": "ignis-2022",
+    "name": "IGNIS 2022",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_DE9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/IGNIS%202022/Ignis_RR5.pdf"
+    ]
+  },
+  {
+    "slug": "isbi-2025",
+    "name": "ISBI-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20Replacement%20Questions.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20SE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20SE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20SE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBI-2025/2025%20ISBI%20Template.pdf"
+    ]
+  },
+  {
+    "slug": "isbl",
+    "name": "ISBL",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20ALL%20Replacements.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20RR1%20-%20Final.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20RR2%20-%20Final.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20RR3%20-%20Final.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20SE1%20-%20Final.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20SE2%20-%20Final.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/ISBL/2024%20ISBI%20SE3%20-%20Final.pdf"
+    ]
+  },
+  {
+    "slug": "lost-1",
+    "name": "LOST 1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%201-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2010-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2011%20Visual%20Bonuses-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2011-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2012%20Visual%20Bonuses-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2012-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2013%20Visual%20Bonuses-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%2013-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%202-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%203-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%204-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%205-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%206-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%207-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%208-unlocked.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%201/LOST%20Round%209-unlocked.pdf"
+    ]
+  },
+  {
+    "slug": "lost-2",
+    "name": "LOST 2",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_11_Visual_Bonuses.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_12_Visual_Bonuses.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_13_Visual_Bonuses.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LOST%202/Round_9.pdf"
+    ]
+  },
+  {
+    "slug": "lexscibowl",
+    "name": "LexSciBowl",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/LexSciBowl/Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "mehs-rounds",
+    "name": "MEHS Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/.README.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2015.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2016.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%2017.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MEHS%20Rounds/ME%20HS%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "mhs-rounds",
+    "name": "MHS Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%2080%20Question%20Energy%20Packet%20_yaw_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20Extra%20Questions.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2010%20%28CB%20done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2011%20%28CB%20done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2012%20%28C%20B%20Done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2013%20%28CB%20DONE%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2015%20%28CB%20done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2016.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%2017.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MHS%20Rounds/Copy%20of%20MHS%20Set%202%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2020",
+    "name": "MIT-2020",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/Information%20and%20Changelog.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2020/round9.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2021",
+    "name": "MIT-2021",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2021/round9.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2022",
+    "name": "MIT-2022",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/README.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Round_9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2022/Tiebreak_9.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2023",
+    "name": "MIT-2023",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2023/Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2024",
+    "name": "MIT-2024",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_12.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_13.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_14.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/2024_MIT_Science_Bowl_Round_9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2024/README.pdf"
+    ]
+  },
+  {
+    "slug": "mit-2025",
+    "name": "MIT-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/%21README.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2015.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%2016.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Round%209.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Wildcard%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Wildcard%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MIT-2025/Wildcard%20Round%203.pdf"
+    ]
+  },
+  {
+    "slug": "mnsbt-2024",
+    "name": "MNSBT-2024",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MNSBT-2024/RR5.pdf"
+    ]
+  },
+  {
+    "slug": "mosfet-2",
+    "name": "MOSFET-2",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%207%20.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/MOSFET-2/Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "moose",
+    "name": "Moose",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Moose/DAST%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "nesb",
+    "name": "NESB",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/de_9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/extra.PDF",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/rr_9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NESB/tiebreak.pdf"
+    ]
+  },
+  {
+    "slug": "nnhs-rounds",
+    "name": "NNHS Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%201-4%20%28Regionals%20RR%29/NNHS%202020-21%20Round%201%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%201-4%20%28Regionals%20RR%29/NNHS%202020-21%20Round%202%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%201-4%20%28Regionals%20RR%29/NNHS%202020-21%20Round%203%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%201-4%20%28Regionals%20RR%29/NNHS%202020-21%20Round%204%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%2014-17%20%28Nationals%20RR-DE%29/NNHS%202020-21%20Round%2014%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%2014-17%20%28Nationals%20RR-DE%29/NNHS%202020-21%20Round%2015%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%2014-17%20%28Nationals%20RR-DE%29/NNHS%202020-21%20Round%2016%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%2014-17%20%28Nationals%20RR-DE%29/NNHS%202020-21%20Round%2017%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%2010%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%2011%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%2012%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%2013%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%205%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%206%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%207%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%208%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NNHS%20Rounds/NNHS%20Rounds%205-13%20%28Regionals%20DE%29/NNHS%202020-21%20Round%209%20%28done%29.pdf"
+    ]
+  },
+  {
+    "slug": "nsba1",
+    "name": "NSBA1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Finals%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/NSBA%20Combine.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%201.1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%201.2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%201.3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%202.1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%202.2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/Playoffs%202.3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR10.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR11.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR5%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA1/RR9%20%281%29.pdf"
+    ]
+  },
+  {
+    "slug": "nsba2",
+    "name": "NSBA2",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR1%20%282%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR2%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR3%20%283%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR4%20%281%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR5%20%283%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSBA2/RR6%20%282%29.pdf"
+    ]
+  },
+  {
+    "slug": "nsi_2024",
+    "name": "NSI_2024",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_Finals.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_Quarters.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_SE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NSI_2024/NSI2_Semis.pdf"
+    ]
+  },
+  {
+    "slug": "nwi-2025",
+    "name": "NWI-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI-2025/NWI2%20RR3.pdf"
+    ]
+  },
+  {
+    "slug": "nwi_2024",
+    "name": "NWI_2024",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/NWI_2024/Round%207.pdf"
+    ]
+  },
+  {
+    "slug": "prometheus-2021",
+    "name": "Prometheus 2021",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE_Finals_1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_DE_Finals_2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202021/Prometheus_RR7.pdf"
+    ]
+  },
+  {
+    "slug": "prometheus-2023",
+    "name": "Prometheus 2023",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_DE8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Prometheus%202023/Olympus_RR5.pdf"
+    ]
+  },
+  {
+    "slug": "random-stuff",
+    "name": "Random Stuff",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Copy%20of%20GideonDanielSean.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Earth%20Science%20Packet%20%28summer%20tourney%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Kylari%20Practice%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/LACES_Venice%20Science%20Bowl%20Scrimmage%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/MS%20ESS%20Packet%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Set%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Tesla%20STEM%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Westview%20-%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Westview%20-%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/Westview%20-%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Random%20Stuff/bravo%20set.pdf"
+    ]
+  },
+  {
+    "slug": "sbl",
+    "name": "SBL",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Comp%20Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Comp%20Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Comp%20Finals%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Finals%201%20%28Standard%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Finals%202%20%28Standard%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Finals%203%20%28Standard%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Quarterfinals%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Quarterfinals%20%28Standard%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2010%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2010%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2011%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2011%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2013%20%28Stan%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2013%20-%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2014%20-%20Stan.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2015%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%2015%20-%20Stan.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%205%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%205%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%206%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%207%20%28Comp%29%20READ%20THIS%20ONE%20FOR%20COMP.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%207%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%208%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%208%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Round%209%20%28Stand%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Fall%20Round%209.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/SBL%20Rounds%20Editing.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Semifinals%20%28Comp%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/Semifinals%20%28Standard%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBL/wtf%20did%20you%20guys%20do%20to%20this.pdf"
+    ]
+  },
+  {
+    "slug": "sbst",
+    "name": "SBST",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/Round%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/Round%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST/SBSTWO/SBST%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "sbst-spring",
+    "name": "SBST (Spring)",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%2010%20EDITED.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%2011%20EDITED.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%2012%20EDITED.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%2013%20EDITED.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%2014%20FINAL.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%206%20EDITED.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%207%20FINAL.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%208%20FINAL.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SBST%20%28Spring%29/Spring%20Tournament%20Round%209%20FINAL.pdf"
+    ]
+  },
+  {
+    "slug": "scb-2025",
+    "name": "SCB-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SCB-2025/SCB%20RR5.pdf"
+    ]
+  },
+  {
+    "slug": "smh-2025",
+    "name": "SMH-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE1_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20DE6_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20Finals%201_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20Finals%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20RR3_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20RR5_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20Replacements.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SMH-2025/2024%20SMH%20Invitational%20Cup%20-%20boss%20battle.pdf"
+    ]
+  },
+  {
+    "slug": "ssbt-2023",
+    "name": "SSBT-2023",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20FINALS%202_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20FINALS.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Playoffs%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Prelim%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Prelim%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/SSBT-2023/Copy%20of%20SSBT%20Prelim%203.pdf"
+    ]
+  },
+  {
+    "slug": "stanford_2025",
+    "name": "Stanford_2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb-2025-rr1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb-2025-rr2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de8.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_de9.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_rr3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_rr4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Stanford_2025/ssb_2025_rr5.pdf"
+    ]
+  },
+  {
+    "slug": "summer",
+    "name": "Summer",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Summer/Dan_s%20Packet.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Summer/Round%203%20Summer%20Tournament.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Summer/Summer%20Round%202.pdf"
+    ]
+  },
+  {
+    "slug": "thumb-2025",
+    "name": "THUMB-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20RR5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20SE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20SE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20SE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/THUMB-2025/THUMB%20SE4%20%28Finals%29.pdf"
+    ]
+  },
+  {
+    "slug": "wisc-2021",
+    "name": "WISC-2021",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WISC-2021/Round%208.pdf"
+    ]
+  },
+  {
+    "slug": "wsbt",
+    "name": "WSBT",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%201%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%202%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%203%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%204%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%205%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%206%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%207%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/Playoff%20Round%208%20WSBT.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/WSBT%20FINALS%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/WSBT/WSBT%20FINALS%202.pdf"
+    ]
+  },
+  {
+    "slug": "walton-rounds",
+    "name": "Walton Rounds",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2013.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2014.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2015.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2016.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%2017.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20ROUND%209.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Walton%20Rounds/Copy%20of%20Round%208.pdf"
+    ]
+  },
+  {
+    "slug": "bash-2025",
+    "name": "bash-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE5.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE6.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/DE7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/Finals%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/Finals%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/RR4.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/bash-2025/RR5.pdf"
+    ]
+  },
+  {
+    "slug": "dast-2025",
+    "name": "dast-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%2010.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%2011.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%2012.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dast-2025/DAST%20Round%209.pdf"
+    ]
+  },
+  {
+    "slug": "dvhs-2025",
+    "name": "dvhs-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Bio%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Chem%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/DV%202025%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/DV%202025%20Round%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/ESS%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Math%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Physics%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%2010%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%2011%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%203%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%204%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%205%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%206%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%207%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%208%20Supplemental.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/dvhs-2025/Round%209%20Supplemental.pdf"
+    ]
+  },
+  {
+    "slug": "mosfet1",
+    "name": "mosfet1",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%201%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%2010%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%2011%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%2012%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%202%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%203%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%204%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%205%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%206%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%207%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%208%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/MOSFET%20Round%209%20%28done%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/mosfet1/Tiebreaks_Replacements.pdf"
+    ]
+  },
+  {
+    "slug": "pohaku-2024",
+    "name": "pohaku-2024",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/RR1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/RR2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/RR3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/SE1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/SE2.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/SE3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/pohaku-2024/SE4.pdf"
+    ]
+  },
+  {
+    "slug": "random",
+    "name": "random",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/2016-12-14_AnkaJoshuaSophia.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/2020-02-04_A.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Constantine%20Round.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/DVHS%20Set%202%20Round%202%20%289_6_2019%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/DVHS%20Set%202%20Round%203%20%289_27_2019%29.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Lexington%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Mira_21-22_Round1.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/NHS%202019-2020%20Indiv.%20Round%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/NHS%202019-2020%20Round%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/NHS_2019-2020_Round_7.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/NoHo%20Packet.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Round%2010%20.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Round_3.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/Round_7_.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/seta.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/random/vNSB_PrelimRegional_Rounds.pdf"
+    ]
+  },
+  {
+    "slug": "texas_sci_bowl_2025",
+    "name": "texas_sci_bowl_2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%201%20%5BRR1%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%2010%20%5BDE5%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%2011%20%5BDE6%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%2012%20%5BDE7%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%2013%20%5BFinals1%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%2014%20%5BFinals2%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%202%20%5BRR2%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%203%20%5BRR3%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%204%20%5BRR4%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%205%20%5BRR5%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%206%20%5BDE1%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%207%20%5BDE2%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%208%20%5BDE3%5D.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/texas_sci_bowl_2025/Round%209%20%5BDE4%5D.pdf"
+    ]
+  },
+  {
+    "slug": "tjsbt-2025",
+    "name": "tjsbt-2025",
+    "packets": [
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%205.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%206.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%207.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/double%20elimination%208.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/round%20robin%201.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/round%20robin%202.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/round%20robin%203.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/round%20robin%204.pdf",
+      "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/tjsbt-2025/round%20robin%205.pdf"
+    ]
+  }
 ]
