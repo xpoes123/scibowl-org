@@ -73,27 +73,27 @@ export const TournamentRow = memo(function TournamentRow({ tournament, showStatu
             <div className="sbRowNameLine">
               <span className="sbRowName">{tournament.name}</span>
             </div>
-            <div className="sbRowMetaMobile">
-              <span className="sbRowMetaItem">
-                <MapPinIcon className="sbIcon" aria-hidden="true" />
-                {locationLabel}
-              </span>
-              <span className="sbRowMetaSep" aria-hidden="true">
-                {"\u2022"}
-              </span>
-              <span className="sbRowMetaItem">{dateLabel}</span>
-            </div>
           </div>
         </div>
 
-        <div className="sbRowLocation">
-          <MapPinIcon className="sbIcon" aria-hidden="true" />
-          <span className="sbRowLocationText">{locationLabel}</span>
+        <div className="sbTournamentRowMeta">
+          <div className="sbRowLocation">
+            <MapPinIcon className="sbIcon" aria-hidden="true" />
+            <span className="sbRowLocationText">{locationLabel}</span>
+          </div>
+
+          <span className="sbTournamentRowMetaSep" aria-hidden="true">
+            {"\u2022"}
+          </span>
+
+          <div className="sbRowDate">{dateLabel}</div>
+
+          <span className="sbTournamentRowMetaSep" aria-hidden="true">
+            {"\u2022"}
+          </span>
+
+          <LevelPills levels={tournament.divisions} />
         </div>
-
-        <div className="sbRowDate">{dateLabel}</div>
-
-        <LevelPills levels={tournament.divisions} />
 
         <div className="sbRowStatus" aria-hidden={!showStatusPill} aria-label={showStatusPill ? "Tournament status" : undefined}>
           {showStatusPill ? <StatusBadge status={lifecycleStatus} /> : null}
