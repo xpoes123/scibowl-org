@@ -759,6 +759,63 @@ img {
   color: #b2b7c8;
 }
 
+.sbTournamentRowMeta {
+  display: contents;
+}
+
+.sbTournamentRowMetaSep {
+  display: none;
+  color: #b2b7c8;
+}
+
+@media (max-width: 960px) {
+  .sbTournamentRowContentStatus {
+    grid-template-columns: minmax(0, 1fr) max-content 32px;
+    grid-template-rows: auto auto;
+    row-gap: 6px;
+  }
+
+  .sbTournamentRowContentStatus .sbRowMain {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .sbTournamentRowContentStatus .sbTournamentRowMeta {
+    display: flex;
+    grid-column: 1 / 3;
+    grid-row: 2;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .sbTournamentRowContentStatus .sbTournamentRowMetaSep {
+    display: inline-flex;
+  }
+
+  .sbTournamentRowContentStatus .sbTournamentRowMeta .sbRowLocation,
+  .sbTournamentRowContentStatus .sbTournamentRowMeta .sbRowDate {
+    font-size: 13px;
+  }
+
+  .sbTournamentRowContentStatus .sbTournamentRowMeta .sbRowDate {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .sbTournamentRowContentStatus .sbRowStatus {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .sbTournamentRowContentStatus .sbRowRight {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+}
+
 @media (max-width: 720px) {
   .sbTopNavInner {
     padding: 10px 16px;
@@ -774,7 +831,8 @@ img {
   }
 
   .sbTournamentRowContentStatus {
-    grid-template-columns: minmax(0, 1fr) auto auto 32px;
+    grid-template-columns: minmax(0, 1fr) max-content 32px;
+    grid-template-rows: auto auto;
   }
 
   .sbPacketRowContent {
@@ -782,12 +840,12 @@ img {
     gap: 10px;
   }
 
-  .sbRowLocation,
-  .sbRowDate {
+  .sbTeamRow .sbRowLocation,
+  .sbTeamRow .sbRowDate {
     display: none;
   }
 
-  .sbRowMetaMobile {
+  .sbTeamRow .sbRowMetaMobile {
     display: inline-flex;
   }
 }
