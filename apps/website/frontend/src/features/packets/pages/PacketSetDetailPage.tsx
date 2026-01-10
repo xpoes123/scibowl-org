@@ -28,7 +28,7 @@ export function PacketSetDetailPage() {
   }
 
   const pdfCount = packetSet.packets.length;
-  const pdfLabel = `${pdfCount} PDF${pdfCount === 1 ? "" : "s"}`;
+  const pdfLabel = `${pdfCount} Packet${pdfCount === 1 ? "" : "s"}`;
 
   return (
     <div className="sbStack">
@@ -48,7 +48,7 @@ export function PacketSetDetailPage() {
         </div>
       </div>
 
-      <div className="card" aria-label="Packet PDFs">
+      <div className="card" aria-label="Packets">
         {packetSet.packets.length === 0 ? (
           <p className="sbMuted">No packets available yet.</p>
         ) : (
