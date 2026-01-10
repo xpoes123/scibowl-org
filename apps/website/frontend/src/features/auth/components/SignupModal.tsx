@@ -14,6 +14,7 @@ export const SignupModal = ({ isOpen, onClose, onSwitchToLogin }: SignupModalPro
     email: '',
     password: '',
     password_confirm: '',
+    grade_level: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
