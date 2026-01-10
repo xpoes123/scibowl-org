@@ -114,7 +114,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter basename={import.meta.env.PROD ? "/scibowl-org" : ""}>
+    <BrowserRouter>
       <AppContent />
     </BrowserRouter>
   );
