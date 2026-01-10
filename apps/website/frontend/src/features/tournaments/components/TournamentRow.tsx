@@ -13,7 +13,7 @@ type TournamentRowProps = {
 function getTournamentStatusBadgeClass(status: TournamentStatus): string {
   switch (status) {
     case "LIVE":
-      return "sbBadge sbBadgeLive";
+      return "sbBadge sbBadgeLive sbBadgeLiveInline";
     case "UPCOMING":
       return "sbBadge sbBadgeUpcoming";
     case "FINISHED":
