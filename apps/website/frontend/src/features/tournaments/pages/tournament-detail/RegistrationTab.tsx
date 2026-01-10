@@ -6,6 +6,22 @@ type RegistrationTabProps = {
 };
 
 export function RegistrationTab({ tournament }: RegistrationTabProps) {
+  if (!tournament.registration) {
+    return (
+      <div className="sbTabStack" aria-label="Tournament registration">
+        <section className="sbTabSection" aria-label="Registration">
+          <header className="sbSectionHeader">
+            <h2 className="sbSectionTitle">Registration</h2>
+            <p className="sbSectionSubtitle">Primary info for teams and coaches.</p>
+          </header>
+          <div className="sbTabSectionBody">
+            <p className="sbMuted">Registration information not available.</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="sbTabStack" aria-label="Tournament registration">
       <section className="sbTabSection" aria-label="Registration">
@@ -34,14 +50,14 @@ export function RegistrationTab({ tournament }: RegistrationTabProps) {
             </div>
           )}
 
-          {tournament.registration.deadlines.length > 0 && (
+          {tournament.registration.deadlines && tournament.registration.deadlines.length > 0 && (
             <div className="sbDeadlinesBlock" aria-label="Registration deadlines">
               <div className="sbLabel">Deadlines</div>
               <div className="sbDetailRows sbTopSpace">
                 {tournament.registration.deadlines.map((deadline) => (
                   <div key={`${deadline.label}-${deadline.date}`} className="sbDetailRow">
                     <span className="sbDetailValue">{deadline.label}</span>
-                    <span className="sbMuted sbSmall">{formatTournamentDateRange(deadline.date)}</span>
+                    <span className="sbMuted sbSmall">{formatTournamentDateRange(deadline.date, deadline.date)}</span>
                   </div>
                 ))}
               </div>

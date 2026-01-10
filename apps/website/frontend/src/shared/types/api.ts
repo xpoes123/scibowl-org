@@ -68,6 +68,8 @@ export interface APIQuestionList {
 // Transformed type for frontend use (matches current Question type structure)
 export type MCLabel = "W" | "X" | "Y" | "Z";
 
+export type Source = string;
+
 export interface TransformedQuestion {
   id: number;
   text: string;
@@ -146,7 +148,7 @@ export function transformAPIQuestion(apiQuestion: APIQuestion | APIQuestionList,
     id: apiQuestion.id,
     text: apiQuestion.question_text,
     answer: includeAnswer && 'correct_answer' in apiQuestion ? apiQuestion.correct_answer : "",
-    category: categoryDisplayNames[apiQuestion.category] || apiQuestion.category,
+    category: (categoryDisplayNames[apiQuestion.category] || apiQuestion.category) as Category,
     type: apiQuestion.question_type.toLowerCase() as "tossup" | "bonus",
     questionCategory: questionStyleMap[apiQuestion.question_style],
     ...(choices.length > 0 && { choices }),

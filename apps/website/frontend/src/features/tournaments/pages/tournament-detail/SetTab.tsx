@@ -5,8 +5,8 @@ type SetTabProps = {
 };
 
 export function SetTab({ tournament }: SetTabProps) {
-  const difficulty = tournament.set?.difficulty ?? tournament.difficulty;
-  const writers = tournament.set?.writers ?? tournament.writing_team;
+  const difficulty = tournament.difficulty;
+  const writers = tournament.notes?.writing_team;
 
   return (
     <div className="sbTabStack" aria-label="Tournament set">
