@@ -104,7 +104,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
   const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
-  const rounds = tournament.format.rounds_guaranteed;
   const formatSummary = tournament.format.summary;
 
   const deadlines = variant === "UPCOMING" ? (tournament.registration?.deadlines ?? []) : [];
@@ -150,7 +149,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
             <OverviewSection title="Format">
               <div className="space-y-2">
                 <p className="sbBody m-0">{formatSummary}</p>
-                {rounds && <p className="sbMuted sbSmall m-0">Rounds: {rounds}</p>}
               </div>
             </OverviewSection>
 
