@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { QuestionList } from "../components/QuestionList";
-import type { Category, QuestionCategory, APIQuestionList, TransformedQuestion } from "../../../shared/types/api";
+import type { Category, QuestionCategory, APIQuestion, TransformedQuestion } from "../../../shared/types/api";
 import { filterQuestions } from "../utils/filterQuestions";
 import { CategoryFilter } from "../../practice/components/CategoryFilter";
 import { QuestionCategoryFilter } from "../components/QuestionCategoriesFilter";

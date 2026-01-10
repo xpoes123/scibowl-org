@@ -46,26 +46,27 @@ export function FieldTab({ tournament }: FieldTabProps) {
   const [level, setLevel] = useState<TeamLevelFilter>("all");
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
-  const fieldCap = tournament.field_limit ?? tournament.format.field_limit;
-  const fieldLabel = fieldCap ? `${tournament.teams.length} teams / ${fieldCap} cap` : `${tournament.teams.length} teams`;
+  const teams = (tournament as any).teams || [];
+  const fieldCap = tournament.format.rounds_guaranteed;
+  const fieldLabel = fieldCap ? `${teams.length} teams / ${fieldCap} cap` : `${teams.length} teams`;
 
-  const hasAnyStatus = useMemo(() => tournament.teams.some((team) => Boolean(team.status)), [tournament.teams]);
-  const hasMixedLevels = useMemo(() => new Set(tournament.teams.map((team) => team.level)).size > 1, [tournament.teams]);
+  const hasAnyStatus = useMemo(() => teams.some((team: any) => Boolean(team.status)), [teams]);
+  const hasMixedLevels = useMemo(() => new Set(teams.map((team: any) => team.level)).size > 1, [teams]);
 
   const filteredTeams = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    let list = tournament.teams.slice();
+    let list = teams.slice();
     if (hasAnyStatus && status !== "all") {
-      list = list.filter((team) => team.status === status);
+      list = list.filter((team: any) => team.status === status);
     }
 
     if (hasMixedLevels && level !== "all") {
-      list = list.filter((team) => team.level === level);
+      list = list.filter((team: any) => team.level === level);
     }
 
     if (normalized) {
-      list = list.filter((team) => {
+      list = list.filter((team: any) => {
         const location = `${team.city ?? ""} ${team.state ?? ""}`.trim().toLowerCase();
         return (
           team.team_name.toLowerCase().includes(normalized) ||
@@ -75,7 +76,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
       });
     }
 
-    list.sort((a, b) => {
+    list.sort((a: any, b: any) => {
       const statusCmp = compareTeamStatus(a.status, b.status);
       if (statusCmp !== 0) return statusCmp;
       if (a.level !== b.level) return a.level.localeCompare(b.level);
@@ -83,7 +84,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
     });
 
     return list;
-  }, [hasAnyStatus, hasMixedLevels, level, query, status, tournament.teams]);
+  }, [hasAnyStatus, hasMixedLevels, level, query, status, teams]);
 
   const clearFilters = () => {
     setQuery("");
@@ -108,7 +109,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
           <div className="sbValue">{fieldLabel}</div>
         </div>
         <div className="sbMuted sbSmall">
-          Showing <span className="sbStrong">{filteredTeams.length}</span> of <span className="sbStrong">{tournament.teams.length}</span> teams
+          Showing <span className="sbStrong">{filteredTeams.length}</span> of <span className="sbStrong">{teams.length}</span> teams
         </div>
       </div>
 
@@ -161,7 +162,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
               </button>
             </div>
           ) : (
-            filteredTeams.map((team) => {
+            filteredTeams.map((team: any) => {
               const locationLabel = team.city && team.state ? `${team.city}, ${team.state}` : null;
               const hasRoster = Boolean(team.roster && team.roster.length > 0);
               const isExpanded = expanded.has(team.id);
@@ -236,7 +237,7 @@ export function FieldTab({ tournament }: FieldTabProps) {
                   {hasRoster && isExpanded && (
                     <div id={panelId} className="sbTeamRoster">
                       <div className="sbRosterGrid" role="list">
-                        {team.roster!.map((member) => (
+                        {team.roster!.map((member: { name: string; grade?: number; role?: string }) => (
                           <div key={`${team.id}-${member.name}-${member.role ?? ""}-${member.grade ?? ""}`} className="sbRosterRow" role="listitem">
                             <div className="sbStrong sbMinW0 sbRosterName">{member.name}</div>
                             <div className="sbMuted sbSmall sbRosterMeta">

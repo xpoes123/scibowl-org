@@ -90,7 +90,7 @@ export const authAPI = {
 
 // services/api.ts
 
-type Paginated<T> = {
+export type Paginated<T> = {
   count: number;
   next: string | null;
   previous: string | null;
