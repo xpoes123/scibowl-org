@@ -152,8 +152,8 @@ export function TournamentDetailPage() {
 
           <div className="sbTournamentDate sbTournamentDateHero">
             <StatusBadge status={lifecycleStatus} />
-            {/* Registration Button - show for upcoming tournaments with registration URL */}
-            {isUpcoming && tournament.registration?.url && (
+            {/* Registration Button - show for non-finished tournaments with registration URL */}
+            {lifecycleStatus !== "FINISHED" && tournament.registration?.url && (
               <a
                 className="sbCtaButton"
                 href={tournament.registration.url}
@@ -170,22 +170,8 @@ export function TournamentDetailPage() {
       {/* Render different content based on tournament status */}
       {isFinished ? (
         <TournamentTabs tournament={tournament} variant="FINISHED" />
-      ) : isUpcoming ? (
-        <TournamentTabs tournament={tournament} variant="UPCOMING" />
       ) : (
-        /* LIVE tournaments - to be implemented */
-        <div className="card sbTabsCard" aria-label="Tournament details">
-          <div className="sbTabsBody sbTabStack">
-            <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Live Tournament</h2>
-              </header>
-              <div className="sbTabSectionBody">
-                <p className="sbMuted">Live tournament view coming soon.</p>
-              </div>
-            </section>
-          </div>
-        </div>
+        <TournamentTabs tournament={tournament} variant="UPCOMING" />
       )}
     </div>
   );
