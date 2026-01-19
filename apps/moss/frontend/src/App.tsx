@@ -1478,11 +1478,13 @@ export default function App() {
             <div className="sbAppFrame">
                 <MossTopNav />
                 <div className="page">
-                    <div className="card">
-                        <h1 className="title">No questions found</h1>
-                        <p className="muted">
-                            Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
-                        </p>
+                    <div className="shell">
+                        <div className="card">
+                            <h1 className="title">No questions found</h1>
+                            <p className="muted">
+                                Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

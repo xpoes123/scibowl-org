@@ -18,6 +18,16 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: scroll;
+  }
+}
+
 body {
   margin: 0;
   background: var(--sb-bg);
@@ -221,7 +231,6 @@ code {
 
 .card {
   width: 100%;
-  max-width: 920px;
   background: var(--sb-card);
   border: 1px solid var(--sb-border);
   border-radius: 16px;
