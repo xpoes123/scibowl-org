@@ -133,8 +133,25 @@ function formatCorrectAnswer(q: Question): string {
     return String(q.correct_answer);
 }
 
-function getQuestionTokens(questionText: string): string[] {
-    return questionText.trim().split(/\s+/).filter(Boolean);
+type TextSegment = { kind: "word" | "sep"; text: string };
+
+function tokenizeText(text: string): TextSegment[] {
+    const splitRe = /(\s+|[\p{Pd}\u2212\u00AD]+)/gu;
+    const parts = text.split(splitRe).filter((p) => p !== "");
+
+    return parts
+        .map((part) => {
+            if (/^\s+$/.test(part)) return { kind: "sep" as const, text: " " };
+            if (/^[\p{Pd}\u2212\u00AD]+$/u.test(part)) return { kind: "sep" as const, text: part.replaceAll("\u00AD", "") };
+            return { kind: "word" as const, text: part };
+        })
+        .filter((p) => p.text !== "");
+}
+
+function trimLeadingSpaces(segments: TextSegment[]): TextSegment[] {
+    let start = 0;
+    while (segments[start]?.kind === "sep" && segments[start]?.text === " ") start++;
+    return segments.slice(start);
 }
 
 function canonicalizeJson(value: unknown): unknown {
@@ -1006,7 +1023,7 @@ export default function App() {
 
     function renderQuestionSection(question: Question, title: string, disabled: boolean) {
         const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
-        const words = getQuestionTokens(question.question_text);
+        const wordSegments = trimLeadingSpaces(tokenizeText(question.question_text));
         const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
         const isBonus = question.question_type === "BONUS";
         const hasClearableAttempts = (() => {
@@ -1046,64 +1063,76 @@ export default function App() {
                         <em>{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</em>{" "}
                     </span>
                     {isBonus ? (
-                        <span>{words.join(" ")}</span>
+                        <span>{question.question_text}</span>
                     ) : (
-                        words.map((word, wordIndex) => {
-                            const location: AttemptLocation = { kind: "question", wordIndex };
-                            const selected =
-                                selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
-                            const marked = markedResultForQuestionLocation(question.id, location);
-                            const correctnessClass =
-                                marked === "correct"
-                                    ? "wordWrapCorrect"
-                                    : marked === "incorrect"
-                                        ? "wordWrapIncorrect"
-                                        : "";
+                        (() => {
+                            let wordIndex = 0;
+                            return wordSegments.map((seg, segIndex) => {
+                                if (seg.kind === "sep") {
+                                    return (
+                                        <span key={`q-sep-${segIndex}`} aria-hidden="true">
+                                            {seg.text}
+                                        </span>
+                                    );
+                                }
 
-                            return (
-                                <span key={wordIndex}>
-                                    <span
-                                        className={[
-                                            "wordWrap",
-                                            selected ? "wordWrapSelected" : "",
-                                            correctnessClass,
-                                        ]
-                                            .filter(Boolean)
-                                            .join(" ")}
-                                    >
-                                        <button
-                                            type="button"
-                                            className="word"
-                                            disabled={disabled}
-                                            onClick={(e) =>
-                                                setAttemptSelection(
-                                                    question,
-                                                    { token: word, isEnd: false, location },
-                                                    e.currentTarget
-                                                )
-                                            }
+                                const location: AttemptLocation = { kind: "question", wordIndex };
+                                const selected =
+                                    selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
+                                const marked = markedResultForQuestionLocation(question.id, location);
+                                const correctnessClass =
+                                    marked === "correct"
+                                        ? "wordWrapCorrect"
+                                        : marked === "incorrect"
+                                            ? "wordWrapIncorrect"
+                                            : "";
+
+                                wordIndex++;
+
+                                return (
+                                    <span key={`q-word-${segIndex}`}>
+                                        <span
+                                            className={[
+                                                "wordWrap",
+                                                selected ? "wordWrapSelected" : "",
+                                                correctnessClass,
+                                            ]
+                                                .filter(Boolean)
+                                                .join(" ")}
                                         >
-                                            {word}
-                                        </button>
+                                            <button
+                                                type="button"
+                                                className="word"
+                                                disabled={disabled}
+                                                onClick={(e) =>
+                                                    setAttemptSelection(
+                                                        question,
+                                                        { token: seg.text, isEnd: false, location },
+                                                        e.currentTarget
+                                                    )
+                                                }
+                                            >
+                                                {seg.text}
+                                            </button>
+                                        </span>
                                     </span>
-                                    {wordIndex < words.length - 1 ? " " : null}
-                                </span>
-                            );
-                        })
+                                );
+                            });
+                        })()
                     )}
                 </div>
 
                 {question.options?.length > 0 && (
                     <ol className="options">
                         {question.options.map((opt, optionIndex) => {
-                            const optionWords = getQuestionTokens(opt);
+                            const optionSegments = trimLeadingSpaces(tokenizeText(opt));
                             const label =
                                 question.question_style === "MULTIPLE_CHOICE"
                                     ? ["W", "X", "Y", "Z"][optionIndex] ?? String(optionIndex + 1)
                                     : String(optionIndex + 1);
 
                             if (isBonus) {
-                                const optionText = optionWords.join(" ");
+                                const optionText = opt.trim();
                                 return (
                                     <li key={optionIndex} className="readText">
                                         <span className="optionLabel">{label})</span>
@@ -1152,52 +1181,64 @@ export default function App() {
                                             {label})
                                         </button>
                                     </span>
-                                    {optionWords.length > 0 ? " " : null}
+                                    {optionSegments.length > 0 ? " " : null}
 
-                                    {optionWords.map((word, wordIndex) => {
-                                        const location: AttemptLocation = { kind: "option", optionIndex, wordIndex };
-                                        const selected =
-                                            selection?.location.kind === "option" &&
-                                            selection.location.optionIndex === optionIndex &&
-                                            selection.location.wordIndex === wordIndex;
-                                        const marked = markedResultForQuestionLocation(question.id, location);
-                                        const correctnessClass =
-                                            marked === "correct"
-                                                ? "wordWrapCorrect"
-                                                : marked === "incorrect"
-                                                    ? "wordWrapIncorrect"
-                                                    : "";
+                                    {(() => {
+                                        let wordIndex = 0;
+                                        return optionSegments.map((seg, segIndex) => {
+                                            if (seg.kind === "sep") {
+                                                return (
+                                                    <span key={`o-sep-${optionIndex}-${segIndex}`} aria-hidden="true">
+                                                        {seg.text}
+                                                    </span>
+                                                );
+                                            }
 
-                                        return (
-                                            <span key={wordIndex}>
-                                                <span
-                                                    className={[
-                                                        "wordWrap",
-                                                        selected ? "wordWrapSelected" : "",
-                                                        correctnessClass,
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(" ")}
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        className="word"
-                                                        disabled={disabled}
-                                                        onClick={(e) =>
-                                                            setAttemptSelection(
-                                                                question,
-                                                                { token: word, isEnd: false, location },
-                                                                e.currentTarget
-                                                            )
-                                                        }
+                                            const location: AttemptLocation = { kind: "option", optionIndex, wordIndex };
+                                            const selected =
+                                                selection?.location.kind === "option" &&
+                                                selection.location.optionIndex === optionIndex &&
+                                                selection.location.wordIndex === wordIndex;
+                                            const marked = markedResultForQuestionLocation(question.id, location);
+                                            const correctnessClass =
+                                                marked === "correct"
+                                                    ? "wordWrapCorrect"
+                                                    : marked === "incorrect"
+                                                        ? "wordWrapIncorrect"
+                                                        : "";
+
+                                            wordIndex++;
+
+                                            return (
+                                                <span key={`o-word-${optionIndex}-${segIndex}`}>
+                                                    <span
+                                                        className={[
+                                                            "wordWrap",
+                                                            selected ? "wordWrapSelected" : "",
+                                                            correctnessClass,
+                                                        ]
+                                                            .filter(Boolean)
+                                                            .join(" ")}
                                                     >
-                                                        {word}
-                                                    </button>
+                                                        <button
+                                                            type="button"
+                                                            className="word"
+                                                            disabled={disabled}
+                                                            onClick={(e) =>
+                                                                setAttemptSelection(
+                                                                    question,
+                                                                    { token: seg.text, isEnd: false, location },
+                                                                    e.currentTarget
+                                                                )
+                                                            }
+                                                        >
+                                                            {seg.text}
+                                                        </button>
+                                                    </span>
                                                 </span>
-                                                {wordIndex < optionWords.length - 1 ? " " : null}
-                                            </span>
-                                        );
-                                    })}
+                                            );
+                                        });
+                                    })()}
                                 </li>
                             );
                         })}
