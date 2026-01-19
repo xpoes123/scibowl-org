@@ -1,8 +1,17 @@
 :root {
+  --sb-bg: #f6f7fb;
+  --sb-card: #ffffff;
+  --sb-text: #111111;
+  --sb-muted: #666666;
+  --sb-border: #e6e7ee;
+  --sb-focus: #cdd4ff;
+  --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --sb-control-height: 42px;
+
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height: 1.35;
-  color: #111;
-  background: #f6f7fb;
+  color: var(--sb-text);
+  background: var(--sb-bg);
 }
 
 * {
@@ -11,6 +20,8 @@
 
 body {
   margin: 0;
+  background: var(--sb-bg);
+  color: var(--sb-text);
 }
 
 code {
@@ -18,8 +29,89 @@ code {
   font-size: 0.95em;
 }
 
+.sbAppFrame {
+  width: 100%;
+}
+
+.sbTopNav {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--sb-bg);
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbTopNavInner {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sbTopNavBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--sb-text);
+  min-width: 0;
+  height: var(--sb-control-height);
+}
+
+.sbTopNavLogo {
+  width: 30px;
+  height: 30px;
+}
+
+.sbTopNavBrandText {
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sbTopNavLinks {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+}
+
+.sbTopNavLink {
+  text-decoration: none;
+  color: var(--sb-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  height: var(--sb-control-height);
+  padding: 0 4px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.sbTopNavLink:hover {
+  color: var(--sb-text);
+}
+
+.sbTopNavLink:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.sbTopNavLinkActive {
+  color: var(--sb-text);
+  border-bottom-color: #134a9c;
+}
+
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   display: grid;
   place-items: start center;
   padding: 24px;
