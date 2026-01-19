@@ -91,16 +91,43 @@ type Game = {
     teams: Team[];
 };
 
+function formatMultipleChoiceAnswerLabel(answer: string, options: string[]): string | undefined {
+    const raw = answer.trim();
+    const firstToken = raw.match(/[A-Za-z]|\d+/)?.[0];
+    if (!firstToken) return undefined;
+
+    const label = /[A-Za-z]/.test(firstToken) ? firstToken.toUpperCase() : firstToken;
+
+    const index =
+        "WXYZ".includes(label) ? "WXYZ".indexOf(label) :
+        "ABCD".includes(label) ? "ABCD".indexOf(label) :
+        /^\d+$/.test(label) ? Number(label) - 1 :
+        -1;
+
+    const option = options[index];
+    if (!option) return undefined;
+
+    const alreadyLabeled = new RegExp(`^\\s*${label}\\s*[\\)\\.]\\s*`, "i").test(option);
+    return alreadyLabeled ? option : `${label}) ${option}`;
+}
+
 function formatCorrectAnswer(q: Question): string {
-    if (typeof q.correct_answer === "string") return q.correct_answer;
+    if (typeof q.correct_answer === "string") {
+        if (q.question_style === "MULTIPLE_CHOICE" && Array.isArray(q.options) && q.options.length > 0) {
+            return formatMultipleChoiceAnswerLabel(q.correct_answer, q.options) ?? q.correct_answer;
+        }
+        return q.correct_answer;
+    }
 
     if (Array.isArray(q.correct_answer)) {
         const indices = q.correct_answer;
         const labels = indices.map((i) => {
             const opt = q.options?.[i - 1];
-            return opt ? `${i}. ${opt}` : String(i);
+            if (!opt) return String(i);
+            const alreadyNumbered = new RegExp(`^\\s*${i}\\s*[\\)\\.]\\s*`).test(opt);
+            return alreadyNumbered ? opt : `${i}) ${opt}`;
         });
-        return labels.join(", ");
+        return labels.join("; ");
     }
 
     return String(q.correct_answer);
