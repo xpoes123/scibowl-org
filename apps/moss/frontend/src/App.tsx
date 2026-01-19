@@ -1217,19 +1217,21 @@ export default function App() {
             <div className="sbAppFrame">
                 <MossTopNav />
                 <div className="page">
-                <div className="card homeCard">
-                    <h1 className="title">MoSS</h1>
-                    <p className="muted">Moderator Scoring System</p>
+                    <div className="shell">
+                        <div className="card sbCenter">
+                            <h1 className="sbTitle">MoSS</h1>
+                            <p className="sbMuted">Moderator Scoring System</p>
 
-                    <div className="homeActions">
-                        <button className="homePrimary" onClick={openNewGame}>
-                            New Game
-                        </button>
-                        <button type="button" className="secondary" onClick={openLoadGame}>
-                            Load Game
-                        </button>
+                            <div className="sbActions sbTopSpace">
+                                <button className="sbCtaButton" onClick={openNewGame}>
+                                    New Game
+                                </button>
+                                <button type="button" className="sbSecondaryButton" onClick={openLoadGame}>
+                                    Load Game
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
                 {isNewGameOpen && (
                     <div className="modalOverlay" role="dialog" aria-label="New Game" onClick={closeNewGame}>
