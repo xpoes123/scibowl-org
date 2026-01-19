@@ -57,6 +57,52 @@ function ScrollToTop() {
   return null;
 }
 
+function MossRedirectPage() {
+  const location = useLocation();
+  const mossBaseUrl =
+    import.meta.env.VITE_MOSS_URL ?? (import.meta.env.DEV ? "http://localhost:5174/" : undefined);
+
+  const targetHref = (() => {
+    if (!mossBaseUrl) return undefined;
+
+    const base = new URL(mossBaseUrl, window.location.origin);
+    const suffix = location.pathname.replace(/^\/moss\/?/, "");
+
+    if (suffix) {
+      const basePath = base.pathname.endsWith("/") ? base.pathname : `${base.pathname}/`;
+      base.pathname = `${basePath}${suffix.replace(/^\/+/, "")}`;
+    }
+
+    base.search = location.search;
+    base.hash = location.hash;
+    return base.toString();
+  })();
+
+  useEffect(() => {
+    if (!targetHref) return;
+    if (targetHref === window.location.href) return;
+    window.location.replace(targetHref);
+  }, [targetHref]);
+
+  return (
+    <div className="card sbCenter" role="status" aria-live="polite">
+      <h1 className="sbTitle">MoSS</h1>
+      {targetHref ? (
+        <>
+          <p className="sbMuted">Redirecting to the moderator platform...</p>
+          <a className="sbHeaderLink sbTopSpace" href={targetHref}>
+            Continue
+          </a>
+        </>
+      ) : (
+        <p className="sbMuted">
+          MoSS is not configured for this deployment. Set <code>VITE_MOSS_URL</code> to enable this route.
+        </p>
+      )}
+    </div>
+  );
+}
+
 function AppContent() {
   const tournamentsEnabled = isFeatureEnabled("tournaments");
   const packetsEnabled = isFeatureEnabled("packets");
@@ -68,6 +114,7 @@ function AppContent() {
       <ScrollToTop />
       <div className="shell">
         <Routes>
+          <Route path="/moss/*" element={<MossRedirectPage />} />
           {hasAnyFeatures ? (
             <>
               {tournamentsEnabled ? (
