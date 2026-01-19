@@ -1024,14 +1024,14 @@ export default function App() {
                             Clear
                         </button>
                     </div>
-                    <div className="qaMeta">
-                        <span className="pill">{question.pair_id}</span>
-                        <span className="pill">{DISPLAY_CATEGORY[question.category] ?? question.category}</span>
-                        <span className="pill">{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</span>
-                    </div>
                 </div>
 
                 <div className="questionText readText">
+                    <span className="questionMetaInline">
+                        {question.pair_id}){" "}
+                        {(DISPLAY_CATEGORY[question.category] ?? question.category).toUpperCase()}{" "}
+                        <em>{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</em>{" "}
+                    </span>
                     {words.map((word, wordIndex) => {
                         const location: AttemptLocation = { kind: "question", wordIndex };
                         const selected = selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
