@@ -49,6 +49,8 @@ services:
       - "5174:5174"
     environment:
       - VITE_API_URL=http://localhost:8000
+      - VITE_MOSS_URL=http://localhost:5174
+      - VITE_WEBSITE_URL=http://localhost:5173/
     stdin_open: true
     tty: true
     depends_on:

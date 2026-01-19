@@ -212,6 +212,35 @@ function parsePacketJson(jsonText: string): Packet {
     return obj as Packet;
 }
 
+function MossTopNav() {
+    const websiteHref = (() => {
+        const raw = (import.meta.env as Record<string, unknown>)["VITE_WEBSITE_URL"];
+        if (typeof raw === "string" && raw.trim()) return raw;
+        if (import.meta.env.DEV) return "http://localhost:5173/";
+        return "/";
+    })();
+
+    const websiteUrl = new URL(websiteHref, window.location.origin);
+    const logoSrc = new URL("/logo_big.png", websiteUrl).toString();
+
+    return (
+        <header className="sbTopNav" role="banner">
+            <div className="sbTopNavInner">
+                <a href={websiteHref} className="sbTopNavBrand" aria-label="Go to SciBowl website">
+                    <img src={logoSrc} alt="SciBowl" className="sbTopNavLogo" />
+                    <span className="sbTopNavBrandText">SciBowl</span>
+                </a>
+
+                <nav aria-label="Primary" className="sbTopNavLinks">
+                    <a href={import.meta.env.BASE_URL} className="sbTopNavLink sbTopNavLinkActive" aria-current="page">
+                        MoSS
+                    </a>
+                </nav>
+            </div>
+        </header>
+    );
+}
+
 export default function App() {
     const samplePacket = packetJson as Packet;
     const [packet, setPacket] = useState<Packet | null>(null);
@@ -1185,20 +1214,24 @@ export default function App() {
 
     if (!game) {
         return (
-            <div className="page">
-                <div className="card homeCard">
-                    <h1 className="title">MoSS</h1>
-                    <p className="muted">Moderator Scoring System</p>
+            <div className="sbAppFrame">
+                <MossTopNav />
+                <div className="page">
+                    <div className="shell">
+                        <div className="card sbCenter">
+                            <h1 className="sbTitle">MoSS</h1>
+                            <p className="sbMuted">Moderator Scoring System</p>
 
-                    <div className="homeActions">
-                        <button className="homePrimary" onClick={openNewGame}>
-                            New Game
-                        </button>
-                        <button type="button" className="secondary" onClick={openLoadGame}>
-                            Load Game
-                        </button>
+                            <div className="sbActions sbTopSpace">
+                                <button className="sbCtaButton" onClick={openNewGame}>
+                                    New Game
+                                </button>
+                                <button type="button" className="sbSecondaryButton" onClick={openLoadGame}>
+                                    Load Game
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
                 {isNewGameOpen && (
                     <div className="modalOverlay" role="dialog" aria-label="New Game" onClick={closeNewGame}>
@@ -1435,25 +1468,33 @@ export default function App() {
                         }}
                     />
                 )}
+                </div>
             </div>
         );
     }
 
     if (!q) {
         return (
-            <div className="page">
-                <div className="card">
-                    <h1 className="title">No questions found</h1>
-                    <p className="muted">
-                        Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
-                    </p>
+            <div className="sbAppFrame">
+                <MossTopNav />
+                <div className="page">
+                    <div className="shell">
+                        <div className="card">
+                            <h1 className="title">No questions found</h1>
+                            <p className="muted">
+                                Make sure your packet JSON is valid and includes a non-empty <code>questions</code> array.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="page">
+        <div className="sbAppFrame">
+            <MossTopNav />
+            <div className="page">
             <div className="layout">
                 <div className="card">
                     <div className="header">
@@ -1708,6 +1749,7 @@ export default function App() {
                 </div>
                 );
             })()}
+            </div>
         </div>
     );
 }
