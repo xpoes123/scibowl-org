@@ -671,11 +671,61 @@ button.addTeamButton:hover .addIcon {
   margin: 6px 0;
 }
 
+.optionLabel {
+  font-weight: 400;
+}
+
 .controls {
   display: flex;
   gap: 10px;
   margin-top: 12px;
   flex-wrap: wrap;
+}
+
+.bonusResultControl {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.bonusSegmented {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--sb-border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: white;
+}
+
+button.bonusSegment {
+  border: 0;
+  background: transparent;
+  color: var(--sb-text);
+  padding: 10px 12px;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  width: 120px;
+  text-align: center;
+}
+
+button.bonusSegment + button.bonusSegment {
+  border-left: 1px solid var(--sb-border);
+}
+
+button.bonusSegment[aria-pressed="true"] {
+  background: #134a9c;
+  color: white;
+}
+
+button.bonusSegment:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+}
+
+button.bonusSegment:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 button {
@@ -765,7 +815,7 @@ button.word {
 }
 
 button.wordLabel {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .attemptPopup {
