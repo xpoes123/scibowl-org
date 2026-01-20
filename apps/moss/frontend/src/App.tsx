@@ -314,6 +314,22 @@ export default function App() {
 
     const teams = game?.teams ?? [];
 
+    useEffect(() => {
+        if (!game) return;
+
+        const message =
+            "You are now leaving MoSS. Please ensure you have exported any game data. All game data will be lost upon leaving this page.";
+
+        function onBeforeUnload(e: BeforeUnloadEvent) {
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+        }
+
+        window.addEventListener("beforeunload", onBeforeUnload);
+        return () => window.removeEventListener("beforeunload", onBeforeUnload);
+    }, [game]);
+
     const playersById = useMemo(() => {
         const entries: Array<[string, string]> = [];
         for (const team of teams) {
