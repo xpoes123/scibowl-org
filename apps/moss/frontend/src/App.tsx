@@ -270,20 +270,15 @@ function MossTopNav() {
 
     const websiteUrl = new URL(websiteHref, window.location.origin);
     const logoSrc = new URL("/logo_big.png", websiteUrl).toString();
+    const mossHomeHref = import.meta.env.BASE_URL;
 
     return (
         <header className="sbTopNav" role="banner">
             <div className="sbTopNavInner">
-                <a href={websiteHref} className="sbTopNavBrand" aria-label="Go to SciBowl website">
-                    <img src={logoSrc} alt="SciBowl" className="sbTopNavLogo" />
-                    <span className="sbTopNavBrandText">SciBowl</span>
+                <a href={mossHomeHref} className="sbTopNavBrand" aria-label="Go to MoSS home">
+                    <img src={logoSrc} alt="MoSS" className="sbTopNavLogo" />
+                    <span className="sbTopNavBrandText">MoSS</span>
                 </a>
-
-                <nav aria-label="Primary" className="sbTopNavLinks">
-                    <a href={import.meta.env.BASE_URL} className="sbTopNavLink sbTopNavLinkActive" aria-current="page">
-                        MoSS
-                    </a>
-                </nav>
             </div>
         </header>
     );
@@ -1376,16 +1371,30 @@ export default function App() {
                 <MossTopNav />
                 <div className="page">
                     <div className="shell">
-                        <div className="card sbCenter">
+                        <div className="card mossHeroCard">
                             <h1 className="sbTitle">MoSS</h1>
                             <p className="sbMuted">Moderator Scoring System</p>
 
-                            <div className="sbActions sbTopSpace">
-                                <button className="sbCtaButton" onClick={openNewGame}>
-                                    New Game
+                            <div className="mossHeroActions">
+                                <button type="button" className="mossHeroAction" onClick={openNewGame}>
+                                    <span className="mossHeroActionText">
+                                        <span className="mossHeroActionTitle">New Game</span>
+                                        <span className="mossHeroActionSubtext">Start a new match</span>
+                                    </span>
+                                    <span className="mossHeroActionArrow" aria-hidden="true">
+                                        →
+                                    </span>
                                 </button>
-                                <button type="button" className="sbSecondaryButton" onClick={openLoadGame}>
-                                    Load Game
+                                <button type="button" className="mossHeroAction" onClick={openLoadGame}>
+                                    <span className="mossHeroActionText">
+                                        <span className="mossHeroActionTitle">Load Game</span>
+                                        <span className="mossHeroActionSubtext">
+                                            Load match from existing game file
+                                        </span>
+                                    </span>
+                                    <span className="mossHeroActionArrow" aria-hidden="true">
+                                        →
+                                    </span>
                                 </button>
                             </div>
                         </div>
