@@ -57,8 +57,7 @@ code {
 }
 
 .sbTopNavInner {
-  width: min(1100px, 100%);
-  margin: 0 auto;
+  width: 100%;
   padding: 10px 24px;
   display: flex;
   align-items: center;
