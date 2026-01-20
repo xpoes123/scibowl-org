@@ -218,7 +218,7 @@ code {
 }
 
 .layout {
-  width: min(1400px, 100%);
+  width: min(1800px, 100%);
   display: grid;
   grid-template-columns: 1fr 480px;
   gap: 18px;
