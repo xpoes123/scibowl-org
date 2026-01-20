@@ -211,6 +211,10 @@ function getAnchorRect(el: HTMLElement): AnchorRect {
     return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
 }
 
+function getAnchorRectFromPoint(x: number, y: number): AnchorRect {
+    return { left: x, top: y, right: x, bottom: y, width: 0, height: 0 };
+}
+
 function clamp(n: number, min: number, max: number): number {
     return Math.max(min, Math.min(max, n));
 }
@@ -305,9 +309,11 @@ export default function App() {
     const [pairIdx, setPairIdx] = useState(0);
     const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
     const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
+    const [bonusResultEditor, setBonusResultEditor] = useState<{ questionId: number; left: number; top: number } | null>(null);
     const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
     const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
+    const bonusPopupRef = useRef<HTMLDivElement | null>(null);
     const packetFileInputRef = useRef<HTMLInputElement | null>(null);
     const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -932,6 +938,22 @@ export default function App() {
         });
     }
 
+    function openBonusResultEditor(question: Question, anchorX: number, anchorY: number) {
+        if (question.question_type !== "BONUS") return;
+        if (!bonusEnabled) return;
+
+        const tossup = tossupQuestionByPairId.get(question.pair_id);
+        const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
+        const winnerTeamId = tossupAttempts.find((a) => a.result === "correct")?.teamId ?? null;
+        if (!winnerTeamId) return;
+
+        const anchor = getAnchorRectFromPoint(anchorX, anchorY);
+        const position = computePopupPosition(anchor);
+
+        setAttemptEditor(null);
+        setBonusResultEditor({ questionId: question.id, left: position.left, top: position.top });
+    }
+
     function setAttemptResult(questionId: number, result: AttemptResult) {
         const selection = attemptEditor?.questionId === questionId ? attemptEditor.selection : undefined;
         if (!selection) return;
@@ -1005,6 +1027,31 @@ export default function App() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [attemptEditor]);
 
+    useEffect(() => {
+        if (!bonusResultEditor) return;
+
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") setBonusResultEditor(null);
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [bonusResultEditor]);
+
+    useEffect(() => {
+        if (!bonusResultEditor) return;
+
+        function onMouseDown(e: MouseEvent) {
+            const el = bonusPopupRef.current;
+            if (!el) return;
+            if (el.contains(e.target as Node)) return;
+            setBonusResultEditor(null);
+        }
+
+        window.addEventListener("mousedown", onMouseDown, true);
+        return () => window.removeEventListener("mousedown", onMouseDown, true);
+    }, [bonusResultEditor]);
+
     function attemptCellText(attemptValue: Attempt | undefined, questionType: QuestionType | undefined): string {
         if (!attemptValue?.result) return "";
         const points = pointsForAttempt(attemptValue, questionType);
@@ -1034,10 +1081,19 @@ export default function App() {
             return ownAttempts.length > 0 || bonusAttempts.length > 0;
         })();
         const clearDisabled = disabled || !hasClearableAttempts;
-        const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
 
         return (
-            <div className={sectionClasses} aria-label={title} aria-disabled={disabled}>
+            <div
+                className={[sectionClasses, isBonus ? "qaSectionClickable" : ""].filter(Boolean).join(" ")}
+                aria-label={title}
+                aria-disabled={disabled}
+                onClick={(e) => {
+                    if (!isBonus) return;
+                    if (disabled) return;
+                    if (e.target instanceof HTMLElement && e.target.closest("button, a, input, select, textarea")) return;
+                    openBonusResultEditor(question, e.clientX, e.clientY);
+                }}
+            >
                 <div className="qaHeader">
                     <div className="qaHeaderRow">
                         <div className="qaTitle">{title}</div>
@@ -1046,6 +1102,7 @@ export default function App() {
                             className="secondary qaClearButton"
                             disabled={clearDisabled}
                             onClick={() => {
+                                setBonusResultEditor(null);
                                 setAttemptEditor(null);
                                 clearAttemptsForQuestion(question);
                             }}
@@ -1245,30 +1302,7 @@ export default function App() {
                     </ol>
                 )}
 
-                {isBonus ? (
-                    <div className="bonusResultControl" aria-label={`${title} result`}>
-                        <div className="bonusSegmented" role="group" aria-label="Bonus result">
-                            <button
-                                type="button"
-                                className="bonusSegment"
-                                aria-pressed={bonusResult === "correct"}
-                                disabled={disabled}
-                                onClick={() => setBonusResult(question, "correct")}
-                            >
-                                Correct
-                            </button>
-                            <button
-                                type="button"
-                                className="bonusSegment"
-                                aria-pressed={bonusResult === "incorrect"}
-                                disabled={disabled}
-                                onClick={() => setBonusResult(question, "incorrect")}
-                            >
-                                Incorrect
-                            </button>
-                        </div>
-                    </div>
-                ) : (
+                {isBonus ? null : (
                     <div className="endRow" aria-label={`${title} end token`}>
                         {(() => {
                             const location: AttemptLocation = { kind: "end" };
@@ -1868,6 +1902,47 @@ export default function App() {
                         </button>
                     </div>
                 </div>
+                );
+            })()}
+
+            {(() => {
+                if (!bonusResultEditor) return null;
+                const bonusQuestion = questionsById.get(bonusResultEditor.questionId);
+                if (!bonusQuestion || bonusQuestion.question_type !== "BONUS") return null;
+                const disabled = !bonusEnabled;
+
+                return (
+                    <div
+                        ref={bonusPopupRef}
+                        className="attemptPopup"
+                        role="dialog"
+                        aria-label="Mark bonus"
+                        style={{ left: bonusResultEditor.left, top: bonusResultEditor.top }}
+                    >
+                        <div className="attemptPopupButtons">
+                            <button
+                                type="button"
+                                disabled={disabled}
+                                onClick={() => {
+                                    setBonusResult(bonusQuestion, "correct");
+                                    setBonusResultEditor(null);
+                                }}
+                            >
+                                Correct (+10)
+                            </button>
+                            <button
+                                type="button"
+                                className="secondary"
+                                disabled={disabled}
+                                onClick={() => {
+                                    setBonusResult(bonusQuestion, "incorrect");
+                                    setBonusResultEditor(null);
+                                }}
+                            >
+                                Incorrect (0)
+                            </button>
+                        </div>
+                    </div>
                 );
             })()}
             </div>
