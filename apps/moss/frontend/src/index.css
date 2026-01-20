@@ -7,6 +7,10 @@
   --sb-focus: #cdd4ff;
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   --sb-control-height: 42px;
+  --sb-correct-bg: #eefbf0;
+  --sb-correct-border: #a7e3b5;
+  --sb-incorrect-bg: #fff1f1;
+  --sb-incorrect-border: #f3b4b4;
 
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height: 1.35;
@@ -588,6 +592,16 @@ button.addTeamButton:hover .addIcon {
   border-radius: 14px;
 }
 
+.qaSectionCorrect {
+  background: var(--sb-correct-bg);
+  border-color: var(--sb-correct-border);
+}
+
+.qaSectionIncorrect {
+  background: var(--sb-incorrect-bg);
+  border-color: var(--sb-incorrect-border);
+}
+
 .qaSection + .qaSection {
   margin-top: 14px;
 }
@@ -763,13 +777,13 @@ button.wordEnd {
 }
 
 .wordWrapCorrect::before {
-  background: #e8f7ea;
-  box-shadow: inset 0 0 0 1px #2b6b2b;
+  background: var(--sb-correct-bg);
+  box-shadow: inset 0 0 0 1px var(--sb-correct-border);
 }
 
 .wordWrapIncorrect::before {
-  background: #fdeaea;
-  box-shadow: inset 0 0 0 1px #b42318;
+  background: var(--sb-incorrect-bg);
+  box-shadow: inset 0 0 0 1px var(--sb-incorrect-border);
 }
 
 button.word {

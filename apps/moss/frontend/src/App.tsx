@@ -1073,6 +1073,7 @@ export default function App() {
         const wordSegments = trimLeadingSpaces(tokenizeText(question.question_text));
         const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
         const isBonus = question.question_type === "BONUS";
+        const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
         const hasClearableAttempts = (() => {
             const ownAttempts = attempts[question.id] ?? [];
             if (isBonus) return ownAttempts.length > 0;
@@ -1081,10 +1082,12 @@ export default function App() {
             return ownAttempts.length > 0 || bonusAttempts.length > 0;
         })();
         const clearDisabled = disabled || !hasClearableAttempts;
+        const bonusTintClass =
+            isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
 
         return (
             <div
-                className={[sectionClasses, isBonus ? "qaSectionClickable" : ""].filter(Boolean).join(" ")}
+                className={[sectionClasses, bonusTintClass, isBonus ? "qaSectionClickable" : ""].filter(Boolean).join(" ")}
                 aria-label={title}
                 aria-disabled={disabled}
                 onClick={(e) => {
