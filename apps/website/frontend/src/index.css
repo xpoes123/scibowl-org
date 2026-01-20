@@ -14,7 +14,7 @@
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   --sb-control-height: 42px;
 
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica;
   line-height: 1.35;
   color: var(--sb-text);
   background: var(--sb-bg);

@@ -7,8 +7,12 @@
   --sb-focus: #cdd4ff;
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   --sb-control-height: 42px;
+  --sb-correct-bg: #eefbf0;
+  --sb-correct-border: #a7e3b5;
+  --sb-incorrect-bg: #fff1f1;
+  --sb-incorrect-border: #f3b4b4;
 
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica;
   line-height: 1.35;
   color: var(--sb-text);
   background: var(--sb-bg);
@@ -53,8 +57,7 @@ code {
 }
 
 .sbTopNavInner {
-  width: min(1100px, 100%);
-  margin: 0 auto;
+  width: 100%;
   padding: 10px 24px;
   display: flex;
   align-items: center;
@@ -215,7 +218,7 @@ code {
 }
 
 .layout {
-  width: min(1400px, 100%);
+  width: min(1800px, 100%);
   display: grid;
   grid-template-columns: 1fr 480px;
   gap: 18px;
@@ -260,6 +263,84 @@ code {
   padding: 12px 16px;
   font-size: 16px;
   min-width: 160px;
+}
+
+.mossHeroCard {
+  text-align: left;
+  padding: 34px 26px;
+}
+
+.mossHeroActions {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mossHeroAction {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--sb-border);
+  background: white;
+  color: var(--sb-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.mossHeroAction:hover {
+  background: var(--sb-correct-bg);
+  border-color: var(--sb-correct-border);
+}
+
+.mossHeroAction:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+}
+
+.mossHeroActionText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.mossHeroActionTitle {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  transition: color 160ms ease;
+}
+
+.mossHeroActionSubtext {
+  margin-top: 4px;
+  color: var(--sb-muted);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.mossHeroActionArrow {
+  flex: 0 0 auto;
+  font-size: 18px;
+  color: var(--sb-muted);
+  transition: transform 120ms ease, color 120ms ease;
+}
+
+.mossHeroAction:hover .mossHeroActionArrow {
+  transform: translateX(2px);
+  color: var(--sb-text);
+}
+
+.mossHeroAction:hover .mossHeroActionTitle {
+  color: #134a9c;
 }
 
 .modalOverlay {
@@ -588,12 +669,31 @@ button.addTeamButton:hover .addIcon {
   border-radius: 14px;
 }
 
+.qaSectionCorrect {
+  background: var(--sb-correct-bg);
+  border-color: var(--sb-correct-border);
+}
+
+.qaSectionIncorrect {
+  background: var(--sb-incorrect-bg);
+  border-color: var(--sb-incorrect-border);
+}
+
 .qaSection + .qaSection {
   margin-top: 14px;
 }
 
 .qaSectionDisabled {
   opacity: 0.55;
+}
+
+.qaSectionClickable {
+  cursor: pointer;
+}
+
+.qaSectionClickable:focus-within {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
 }
 
 .qaHeader {
@@ -640,8 +740,17 @@ button.addTeamButton:hover .addIcon {
 }
 
 .questionText {
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 12px;
+}
+
+.questionMetaInline {
+  font-weight: 400;
+}
+
+.questionMetaInline em {
+  font-style: italic;
+  font-weight: 400;
 }
 
 .readText {
@@ -662,6 +771,10 @@ button.addTeamButton:hover .addIcon {
   margin: 6px 0;
 }
 
+.optionLabel {
+  font-weight: 400;
+}
+
 .controls {
   display: flex;
   gap: 10px;
@@ -676,6 +789,8 @@ button {
   padding: 10px 12px;
   border-radius: 10px;
   cursor: pointer;
+  font: inherit;
+  line-height: inherit;
 }
 
 button.secondary {
@@ -741,13 +856,13 @@ button.wordEnd {
 }
 
 .wordWrapCorrect::before {
-  background: #e8f7ea;
-  box-shadow: inset 0 0 0 1px #2b6b2b;
+  background: var(--sb-correct-bg);
+  box-shadow: inset 0 0 0 1px var(--sb-correct-border);
 }
 
 .wordWrapIncorrect::before {
-  background: #fdeaea;
-  box-shadow: inset 0 0 0 1px #b42318;
+  background: var(--sb-incorrect-bg);
+  box-shadow: inset 0 0 0 1px var(--sb-incorrect-border);
 }
 
 button.word {
@@ -756,7 +871,7 @@ button.word {
 }
 
 button.wordLabel {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .attemptPopup {
