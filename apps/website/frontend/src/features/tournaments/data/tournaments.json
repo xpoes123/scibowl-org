@@ -1,5 +1,56 @@
 [
     {
+        "slug": "dasoni-2",
+        "name": "DASONI 2",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/New_York",
+        "dates": {
+            "start": "2026-04-04",
+            "end": "2026-04-04"
+        },
+        "divisions": ["HS"],
+        "notes": {
+            "logistics": "Online tournament held on Discord. 48-team field with 5 round robin rounds and 8 double elimination rounds. $15 fee must be paid by Wednesday, April 1st.",
+            "writing_team": "Davidson Academy"
+        },
+        "format": {
+            "summary": "Davidson Academy Scibowl Online National Invitational 2 (DASONI 2) - 48-team field, 5 RR rounds + 8 DE rounds",
+            "rounds_guaranteed": 5
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "https://discord.gg/emhBtVfBP9",
+                "label": "Discord Server"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Register once per school. $15 fee must be paid by Wednesday, April 1st.",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSf1n2ysprZWPaPOxNRAe7KCxrOMmeUAVgfynoDLlSnELmCnsA/viewform?usp=header",
+            "cost": "$15 per team",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-03-28"
+                },
+                {
+                    "label": "Payment due",
+                    "date": "2026-04-01"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1sy7GP4K5FWJgHUTr5sgoseGAQsYx8Gtn1q8cZWYJPRI/edit?usp=sharing",
+                "label": "Tournament Info"
+            }
+        ],
+        "updated_at": "2026-01-10T00:00:00Z"
+    },
+    {
         "slug": "east-brunswick-science-bowl-invitational",
         "name": "East Brunswick Science Bowl Invitational",
         "status": "PUBLISHED",
