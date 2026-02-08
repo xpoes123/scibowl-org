@@ -3,3 +3,6 @@
 Producer/consumer implementation:
 - `apps/moss/frontend/src/App.tsx` (search for `moss_scoresheet`)
 
+Notes:
+- `game.teams[].lineup_segments` is supported as an optional field (still `version: 1`).
+

@@ -16,7 +16,19 @@
     "teams": [
       {
         "name": "Team 1",
-        "players": ["Player A", "Player B"]
+        "players": ["Player A", "Player B", "Player C", "Player D", "Player E"],
+        "lineup_segments": [
+          {
+            "start_tossup": 1,
+            "end_tossup": 11,
+            "active_players": ["Player A", "Player B", "Player C", "Player D"]
+          },
+          {
+            "start_tossup": 12,
+            "end_tossup": null,
+            "active_players": ["Player A", "Player C", "Player D", "Player E"]
+          }
+        ]
       }
     ]
   },

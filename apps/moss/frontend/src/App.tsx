@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import packetJson from "./assets/sample_packet.json";
 
 type QuestionType = "TOSSUP" | "BONUS";
@@ -81,10 +81,17 @@ type Player = {
     name: string;
 };
 
+type LineupSegment = {
+    startTossup: number;
+    endTossup: number | null;
+    activePlayers: string[];
+};
+
 type Team = {
     id: string;
     name: string;
     players: Player[];
+    lineupSegments?: LineupSegment[];
 };
 
 type Game = {
@@ -309,10 +316,38 @@ export default function App() {
     const [isExporting, setIsExporting] = useState(false);
     const attemptPopupRef = useRef<HTMLDivElement | null>(null);
     const bonusPopupRef = useRef<HTMLDivElement | null>(null);
+    const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
     const packetFileInputRef = useRef<HTMLInputElement | null>(null);
     const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
     const teams = game?.teams ?? [];
+
+    type ScoresheetMarkerKind = "HALFTIME" | "BREAK";
+    type ScoresheetBoundaryPopupState = { boundaryBeforeQuestion: number; left: number; top: number } | null;
+
+    const [scoresheetMarkers, setScoresheetMarkers] = useState<Record<number, ScoresheetMarkerKind>>({});
+    const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
+
+    function setScoresheetMarker(boundaryBeforeQuestion: number, kind: ScoresheetMarkerKind) {
+        setScoresheetMarkers((prev) => {
+            if (prev[boundaryBeforeQuestion] === kind) return prev;
+            return { ...prev, [boundaryBeforeQuestion]: kind };
+        });
+    }
+
+    function removeScoresheetMarker(boundaryBeforeQuestion: number) {
+        setScoresheetMarkers((prev) => {
+            if (!(boundaryBeforeQuestion in prev)) return prev;
+            const next = { ...prev };
+            delete next[boundaryBeforeQuestion];
+            return next;
+        });
+    }
+
+    function openScoresheetBoundaryPopup(boundaryBeforeQuestion: number, anchor: HTMLElement) {
+        const pos = computePopupPosition(getAnchorRect(anchor));
+        setScoresheetBoundaryPopup({ boundaryBeforeQuestion, left: pos.left, top: pos.top });
+    }
 
     useEffect(() => {
         if (!game) return;
@@ -329,6 +364,28 @@ export default function App() {
         window.addEventListener("beforeunload", onBeforeUnload);
         return () => window.removeEventListener("beforeunload", onBeforeUnload);
     }, [game]);
+
+    useEffect(() => {
+        if (!scoresheetBoundaryPopup) return;
+
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") setScoresheetBoundaryPopup(null);
+        }
+
+        function onMouseDown(e: MouseEvent) {
+            const el = scoresheetBoundaryPopupRef.current;
+            if (!el) return;
+            if (el.contains(e.target as Node)) return;
+            setScoresheetBoundaryPopup(null);
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("mousedown", onMouseDown, true);
+        return () => {
+            window.removeEventListener("keydown", onKeyDown);
+            window.removeEventListener("mousedown", onMouseDown, true);
+        };
+    }, [scoresheetBoundaryPopup]);
 
     const playersById = useMemo(() => {
         const entries: Array<[string, string]> = [];
@@ -472,6 +529,15 @@ export default function App() {
                     teams: teams.map((t) => ({
                         name: t.name,
                         players: t.players.map((p) => p.name),
+                        ...(t.lineupSegments
+                            ? {
+                                lineup_segments: t.lineupSegments.map((seg) => ({
+                                    start_tossup: seg.startTossup,
+                                    end_tossup: seg.endTossup,
+                                    active_players: seg.activePlayers,
+                                })),
+                            }
+                            : {}),
                     })),
                 },
                 rules: {
@@ -604,6 +670,8 @@ export default function App() {
         setAttempts({});
         setAttemptEditor(null);
         setLastActor(null);
+        setScoresheetMarkers({});
+        setScoresheetBoundaryPopup(null);
         setIsNewGameOpen(false);
     }
 
@@ -703,6 +771,12 @@ export default function App() {
                 return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
             }
 
+            const maxTossupNumber = (() => {
+                const tossups = (loadedPacket.questions ?? []).filter((qq) => qq.question_type === "TOSSUP");
+                const ids = tossups.map((qq) => qq.pair_id).filter((n) => Number.isFinite(n));
+                return ids.length ? Math.max(...ids) : 0;
+            })();
+
             const teamIdByName = new Map<string, string>();
             const playerIdByTeamNameThenPlayerName = new Map<string, string>();
 
@@ -727,7 +801,83 @@ export default function App() {
                     playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
                 }
 
-                return { id: teamId, name: teamName, players };
+                const lineupSegmentsRaw = tr.lineup_segments;
+                let lineupSegments: LineupSegment[] | undefined = undefined;
+                if (lineupSegmentsRaw !== undefined) {
+                    if (!Array.isArray(lineupSegmentsRaw)) {
+                        throw new Error(`Team ${teamName}: lineup_segments must be an array`);
+                    }
+
+                    const segs: LineupSegment[] = [];
+                    let lastCoveredEnd = 0;
+                    for (const seg of lineupSegmentsRaw) {
+                        if (!seg || typeof seg !== "object") throw new Error(`Team ${teamName}: lineup_segments[] must be objects`);
+                        const sr = seg as Record<string, unknown>;
+                        const startRaw = sr.start_tossup;
+                        const endRaw = sr.end_tossup;
+                        const activeRaw = sr.active_players;
+
+                        if (typeof startRaw !== "number" || !Number.isFinite(startRaw)) {
+                            throw new Error(`Team ${teamName}: lineup_segments[].start_tossup must be a number`);
+                        }
+                        const startTossup = Math.trunc(startRaw);
+                        if (startTossup !== startRaw) throw new Error(`Team ${teamName}: lineup_segments[].start_tossup must be an integer`);
+                        if (startTossup < 1) throw new Error(`Team ${teamName}: lineup_segments[].start_tossup must be >= 1`);
+                        if (maxTossupNumber > 0 && startTossup > maxTossupNumber) {
+                            throw new Error(`Team ${teamName}: lineup_segments[].start_tossup exceeds max tossup (${maxTossupNumber})`);
+                        }
+
+                        const endTossup = (() => {
+                            if (endRaw === undefined || endRaw === null) return null;
+                            if (typeof endRaw !== "number" || !Number.isFinite(endRaw)) {
+                                throw new Error(`Team ${teamName}: lineup_segments[].end_tossup must be a number or null`);
+                            }
+                            const v = Math.trunc(endRaw);
+                            if (v !== endRaw) throw new Error(`Team ${teamName}: lineup_segments[].end_tossup must be an integer`);
+                            return v;
+                        })();
+
+                        const effectiveEnd = endTossup ?? (maxTossupNumber > 0 ? maxTossupNumber : startTossup);
+                        if (endTossup !== null) {
+                            if (endTossup < startTossup) {
+                                throw new Error(`Team ${teamName}: lineup_segments[].end_tossup must be >= start_tossup`);
+                            }
+                            if (maxTossupNumber > 0 && endTossup > maxTossupNumber) {
+                                throw new Error(`Team ${teamName}: lineup_segments[].end_tossup exceeds max tossup (${maxTossupNumber})`);
+                            }
+                        }
+
+                        if (startTossup <= lastCoveredEnd) {
+                            throw new Error(`Team ${teamName}: lineup_segments must be sorted and non-overlapping`);
+                        }
+                        if (maxTossupNumber > 0 && effectiveEnd < startTossup) {
+                            throw new Error(`Team ${teamName}: lineup_segments[].end_tossup invalid for packet`);
+                        }
+
+                        if (!Array.isArray(activeRaw)) throw new Error(`Team ${teamName}: lineup_segments[].active_players must be an array`);
+                        const activePlayers: string[] = [];
+                        for (const ap of activeRaw) {
+                            if (typeof ap !== "string") throw new Error(`Team ${teamName}: lineup_segments[].active_players must be strings`);
+                            const name = ap.trim();
+                            if (!name) continue;
+                            if (activePlayers.includes(name)) continue;
+                            activePlayers.push(name);
+                            const key = `${teamName}\n${name}`;
+                            if (!playerIdByTeamNameThenPlayerName.has(key)) {
+                                const id = makeId("player");
+                                players.push({ id, name });
+                                playerIdByTeamNameThenPlayerName.set(key, id);
+                            }
+                        }
+
+                        segs.push({ startTossup, endTossup, activePlayers });
+                        lastCoveredEnd = effectiveEnd;
+                    }
+
+                    lineupSegments = segs;
+                }
+
+                return { id: teamId, name: teamName, players, lineupSegments };
             });
 
             function ensurePlayerId(teamName: string, playerName: string): string {
@@ -842,6 +992,8 @@ export default function App() {
             setPairIdx(clampedPairIdx);
             setAttemptEditor(null);
             setLastActor(null);
+            setScoresheetMarkers({});
+            setScoresheetBoundaryPopup(null);
             setIsNewGameOpen(false);
             closeLoadGame();
         } catch (e) {
@@ -1768,67 +1920,181 @@ export default function App() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {scoredPairs.rows.map((row) => {
-                                    const isActivePair = row.pairId === q.pair_id;
+                                {(() => {
+                                    const colSpan = 1 + teams.length * 3;
+                                    const nodes: ReactNode[] = [];
 
-                                    return (
-                                        <tr
-                                            key={row.pairId}
-                                            className={isActivePair ? "scoresheetRowActive" : undefined}
-                                        >
-                                            <td className="scoresheetPairCell">
-                                                <button
-                                                    type="button"
-                                                    className="pairLink"
-                                                    onClick={() => goToPair(row.pairId)}
-                                                >
-                                                    {row.pairId}
-                                                </button>
-                                            </td>
-                                            {row.perTeam.flatMap((teamRow) => {
-                                                const tossupResult = teamRow.tossupAttempt?.result;
-                                                const bonusResult = teamRow.bonusAttempt?.result;
+                                    for (let i = 0; i < scoredPairs.rows.length; i++) {
+                                        const row = scoredPairs.rows[i];
+                                        const isActivePair = row.pairId === q.pair_id;
+                                        nodes.push(
+                                            <tr
+                                                key={row.pairId}
+                                                className={isActivePair ? "scoresheetRowActive" : undefined}
+                                            >
+                                                <td className="scoresheetPairCell">
+                                                    <button
+                                                        type="button"
+                                                        className="pairLink"
+                                                        onClick={() => goToPair(row.pairId)}
+                                                    >
+                                                        {row.pairId}
+                                                    </button>
+                                                </td>
+                                                {row.perTeam.flatMap((teamRow) => {
+                                                    const tossupResult = teamRow.tossupAttempt?.result;
+                                                    const bonusResult = teamRow.bonusAttempt?.result;
 
-                                                const tossupCellClass = [
-                                                    tossupResult === "correct"
-                                                        ? "scoresheetCellCorrect"
-                                                        : tossupResult === "incorrect"
-                                                            ? "scoresheetCellIncorrect"
-                                                            : "",
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(" ");
+                                                    const tossupCellClass = [
+                                                        tossupResult === "correct"
+                                                            ? "scoresheetCellCorrect"
+                                                            : tossupResult === "incorrect"
+                                                                ? "scoresheetCellIncorrect"
+                                                                : "",
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(" ");
 
-                                                const bonusCellClass = [
-                                                    bonusResult === "correct"
-                                                        ? "scoresheetCellCorrect"
-                                                        : bonusResult === "incorrect"
-                                                            ? "scoresheetCellIncorrect"
-                                                            : "",
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(" ");
+                                                    const bonusCellClass = [
+                                                        bonusResult === "correct"
+                                                            ? "scoresheetCellCorrect"
+                                                            : bonusResult === "incorrect"
+                                                                ? "scoresheetCellIncorrect"
+                                                                : "",
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(" ");
 
-                                                return [
-                                                    <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                                                        {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
-                                                    </td>,
-                                                    <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                                                        {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
-                                                    </td>,
-                                                    <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
-                                                        {teamRow.runningTotal}
-                                                    </td>,
-                                                ];
-                                            })}
-                                        </tr>
-                                    );
-                                })}
+                                                    return [
+                                                        <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                                                            {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
+                                                        </td>,
+                                                        <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                                                            {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
+                                                        </td>,
+                                                        <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                                                            {teamRow.runningTotal}
+                                                        </td>,
+                                                    ];
+                                                })}
+                                            </tr>
+                                        );
+
+                                        const nextRow = scoredPairs.rows[i + 1];
+                                        if (!nextRow) continue;
+                                        const boundaryBeforeQuestion = nextRow.pairId;
+                                        const markerKind = scoresheetMarkers[boundaryBeforeQuestion];
+
+                                        if (markerKind) {
+                                            nodes.push(
+                                                <tr key={`marker_${boundaryBeforeQuestion}`} className="scoresheetMarkerRow">
+                                                    <td colSpan={colSpan}>
+                                                        <button
+                                                            type="button"
+                                                            className="scoresheetMarkerButton"
+                                                            onClick={(e) => openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget)}
+                                                            aria-label={`Edit marker before question ${boundaryBeforeQuestion}`}
+                                                        >
+                                                            {markerKind}
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        } else {
+                                            nodes.push(
+                                                <tr key={`divider_${boundaryBeforeQuestion}`} className="scoresheetDividerRow">
+                                                    <td colSpan={colSpan}>
+                                                        <button
+                                                            type="button"
+                                                            className="scoresheetDividerButton"
+                                                            onClick={(e) => openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget)}
+                                                            aria-label={`Add marker before question ${boundaryBeforeQuestion}`}
+                                                        >
+                                                            <span className="scoresheetDividerAffordance">+ Add break here</span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    }
+
+                                    return nodes;
+                                })()}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            {(() => {
+                if (!scoresheetBoundaryPopup) return null;
+                const boundary = scoresheetBoundaryPopup.boundaryBeforeQuestion;
+                const existing = scoresheetMarkers[boundary];
+
+                return (
+                    <div
+                        ref={scoresheetBoundaryPopupRef}
+                        className="attemptPopup scoresheetBoundaryPopup"
+                        role="dialog"
+                        aria-label={existing ? "Edit marker" : "Add marker"}
+                        style={{ left: scoresheetBoundaryPopup.left, top: scoresheetBoundaryPopup.top }}
+                    >
+                        <div className="attemptPopupButtons">
+                            {!existing ? (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setScoresheetMarker(boundary, "HALFTIME");
+                                            setScoresheetBoundaryPopup(null);
+                                        }}
+                                    >
+                                        Add Halftime
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="secondary"
+                                        onClick={() => {
+                                            setScoresheetMarker(boundary, "BREAK");
+                                            setScoresheetBoundaryPopup(null);
+                                        }}
+                                    >
+                                        Add Break
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            removeScoresheetMarker(boundary);
+                                            setScoresheetBoundaryPopup(null);
+                                        }}
+                                    >
+                                        Remove
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="secondary"
+                                        disabled={existing === "HALFTIME"}
+                                        onClick={() => setScoresheetMarker(boundary, "HALFTIME")}
+                                    >
+                                        Change to Halftime
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="secondary"
+                                        disabled={existing === "BREAK"}
+                                        onClick={() => setScoresheetMarker(boundary, "BREAK")}
+                                    >
+                                        Change to Break
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                );
+            })()}
 
             {(() => {
                 const popupQuestion = attemptEditor ? questionsById.get(attemptEditor.questionId) : undefined;
