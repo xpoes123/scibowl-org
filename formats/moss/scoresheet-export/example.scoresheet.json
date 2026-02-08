@@ -1,0 +1,32 @@
+{
+  "format": "moss_scoresheet",
+  "version": 1,
+  "exported_at": "2026-01-01T00:00:00.000Z",
+  "packet": {
+    "packet": "Round 1",
+    "year": 2025,
+    "questions": []
+  },
+  "packet_checksum": {
+    "algorithm": "sha256",
+    "canonicalization": "json_sorted_keys_utf8_no_ws",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "game": {
+    "teams": [
+      {
+        "name": "Team 1",
+        "players": ["Player A", "Player B"]
+      }
+    ]
+  },
+  "rules": {
+    "tossup": { "correct": 4, "incorrect": -4, "no_penalty": 0 },
+    "bonus": { "correct": 10, "incorrect": 0 }
+  },
+  "state": {
+    "pair_index": 0,
+    "attempts_by_question_id": {}
+  }
+}
+

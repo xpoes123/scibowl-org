@@ -1,0 +1,9 @@
+{
+  "slug": "example-2026",
+  "name": "Example 2026",
+  "packets": [
+    "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Example-2026/Round%201.pdf",
+    "https://scibowl.s3.us-east-2.amazonaws.com/cleaned_packets/Example-2026/Round%202.pdf"
+  ]
+}
+
