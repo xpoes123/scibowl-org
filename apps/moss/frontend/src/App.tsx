@@ -777,7 +777,7 @@ export default function App() {
     function addPlayer(teamId: string) {
         const id = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
         setDraftTeams((prev) =>
-            prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: true }] } : t))
+            prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: false }] } : t))
         );
     }
 
