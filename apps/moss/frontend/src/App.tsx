@@ -331,9 +331,10 @@ export default function App() {
     const teams = game?.teams ?? [];
 
     type ScoresheetMarkerKind = "HALFTIME" | "BREAK";
+    type LineupPhase = ScoresheetMarkerKind | "START";
     type ScoresheetBoundaryPopupState = { boundaryBeforeQuestion: number; left: number; top: number } | null;
     type LineupChangeModalState = {
-        phase: ScoresheetMarkerKind;
+        phase: LineupPhase;
         boundaryBeforeQuestion: number;
         isCreatingMarker: boolean;
         draftInByTeamId: Record<string, Record<string, boolean>>;
@@ -429,7 +430,7 @@ export default function App() {
         setScoresheetBoundaryPopup({ boundaryBeforeQuestion, left: pos.left, top: pos.top });
     }
 
-    function openLineupChangeModal(phase: ScoresheetMarkerKind, boundaryBeforeQuestion: number, isCreatingMarker: boolean) {
+    function openLineupChangeModal(phase: LineupPhase, boundaryBeforeQuestion: number, isCreatingMarker: boolean) {
         if (!game) return;
 
         const draft: Record<string, Record<string, boolean>> = {};
@@ -1782,26 +1783,29 @@ export default function App() {
                                                 <div className="fieldLabel">Names</div>
                                                 <div className="playerList">
                                                     {team.players.map((player, playerIndex) => (
-                                                        <div key={player.id} className="playerRowWithToggle">
-                                                            <button
-                                                                type="button"
-                                                                className={["inOutToggle", player.isIn ? "in" : "out"].join(" ")}
-                                                                onClick={() => toggleDraftPlayerIn(team.id, player.id)}
-                                                            >
-                                                                {player.isIn ? "In" : "Out"}
-                                                            </button>
-                                                            <input
-                                                                className="textInput"
-                                                                value={player.name}
-                                                                onChange={(e) =>
-                                                                    updatePlayerName(team.id, player.id, e.target.value)
-                                                                }
-                                                                placeholder={`Player ${playerIndex + 1}`}
-                                                            />
-                                                            {playerIndex > 0 && (
-                                                                <button
-                                                                    type="button"
-                                                                    className="iconButton danger"
+                                    <div key={player.id} className="playerRowWithToggle">
+                                        <input
+                                            className="textInput"
+                                            value={player.name}
+                                            onChange={(e) =>
+                                                updatePlayerName(team.id, player.id, e.target.value)
+                                            }
+                                            placeholder={`Player ${playerIndex + 1}`}
+                                        />
+                                        <button
+                                            type="button"
+                                            role="switch"
+                                            aria-checked={player.isIn}
+                                            className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
+                                            onClick={() => toggleDraftPlayerIn(team.id, player.id)}
+                                            aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
+                                        >
+                                            {player.isIn ? "Active" : "Bench"}
+                                        </button>
+                                        {playerIndex > 0 && (
+                                            <button
+                                                type="button"
+                                                className="iconButton danger"
                                                                     aria-label="Remove player"
                                                                     onClick={() => removePlayer(team.id, player.id)}
                                                                 >
@@ -2098,106 +2102,113 @@ export default function App() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(() => {
-                                    const colSpan = 1 + teams.length * 3;
-                                    const nodes: ReactNode[] = [];
+                                    {(() => {
+                                        const colSpan = 1 + teams.length * 3;
+                                        const nodes: ReactNode[] = [];
 
-                                    for (let i = 0; i < scoredPairs.rows.length; i++) {
-                                        const row = scoredPairs.rows[i];
-                                        const isActivePair = row.pairId === q.pair_id;
-                                        nodes.push(
-                                            <tr
-                                                key={row.pairId}
-                                                className={isActivePair ? "scoresheetRowActive" : undefined}
-                                            >
-                                                <td className="scoresheetPairCell">
-                                                    <button
-                                                        type="button"
-                                                        className="pairLink"
-                                                        onClick={() => goToPair(row.pairId)}
-                                                    >
-                                                        {row.pairId}
-                                                    </button>
-                                                </td>
-                                                {row.perTeam.flatMap((teamRow) => {
-                                                    const tossupResult = teamRow.tossupAttempt?.result;
-                                                    const bonusResult = teamRow.bonusAttempt?.result;
+                                        for (let i = 0; i < scoredPairs.rows.length; i++) {
+                                            const row = scoredPairs.rows[i];
+                                            const boundaryBeforeQuestion = row.pairId;
+                                            const isStartBoundary = i === 0;
+                                            const markerKind: ScoresheetMarkerKind | "START" | undefined =
+                                                isStartBoundary ? "START" : scoresheetMarkers[boundaryBeforeQuestion];
+                                            const isSpacedMarker = markerKind !== undefined && markerKind !== "START";
 
-                                                    const tossupCellClass = [
-                                                        tossupResult === "correct"
-                                                            ? "scoresheetCellCorrect"
-                                                            : tossupResult === "incorrect"
-                                                                ? "scoresheetCellIncorrect"
-                                                                : "",
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(" ");
-
-                                                    const bonusCellClass = [
-                                                        bonusResult === "correct"
-                                                            ? "scoresheetCellCorrect"
-                                                            : bonusResult === "incorrect"
-                                                                ? "scoresheetCellIncorrect"
-                                                                : "",
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(" ");
-
-                                                    return [
-                                                        <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                                                            {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
-                                                        </td>,
-                                                        <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                                                            {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
-                                                        </td>,
-                                                        <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
-                                                            {teamRow.runningTotal}
-                                                        </td>,
-                                                    ];
-                                                })}
-                                            </tr>
-                                        );
-
-                                        const nextRow = scoredPairs.rows[i + 1];
-                                        if (!nextRow) continue;
-                                        const boundaryBeforeQuestion = nextRow.pairId;
-                                        const markerKind = scoresheetMarkers[boundaryBeforeQuestion];
-
-                                        if (markerKind) {
                                             nodes.push(
-                                                <tr key={`marker_${boundaryBeforeQuestion}`} className="scoresheetMarkerRow">
+                                                <tr
+                                                    key={`boundary_${boundaryBeforeQuestion}`}
+                                                    className={[
+                                                        "scoresheetBoundaryRow",
+                                                        isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
+                                                        markerKind === "START" ? "scoresheetBoundaryRowStart" : "",
+                                                    ].filter(Boolean).join(" ")}
+                                                >
                                                     <td colSpan={colSpan}>
                                                         <button
                                                             type="button"
-                                                            className="scoresheetMarkerButton"
-                                                            onClick={(e) => openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget)}
-                                                            aria-label={`Edit marker before question ${boundaryBeforeQuestion}`}
+                                                            className={["scoresheetBoundaryButton", isSpacedMarker ? "scoresheetBoundaryButtonMarked" : ""].filter(Boolean).join(" ")}
+                                                            onClick={(e) => {
+                                                                if (markerKind === "START") {
+                                                                    openLineupChangeModal("START", boundaryBeforeQuestion, false);
+                                                                    return;
+                                                                }
+                                                                openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget);
+                                                            }}
+                                                            aria-label={
+                                                                markerKind === "START"
+                                                                    ? "Edit starting lineup"
+                                                                    : markerKind
+                                                                        ? `Edit marker before question ${boundaryBeforeQuestion}`
+                                                                        : `Add marker before question ${boundaryBeforeQuestion}`
+                                                            }
                                                         >
-                                                            {markerKind}
+                                                            {markerKind ? (
+                                                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                                                            ) : (
+                                                                <span className="scoresheetBoundaryAffordance">+ Add break here</span>
+                                                            )}
                                                         </button>
                                                     </td>
                                                 </tr>
                                             );
-                                        } else {
+
+                                            const isActivePair = row.pairId === q.pair_id;
                                             nodes.push(
-                                                <tr key={`divider_${boundaryBeforeQuestion}`} className="scoresheetDividerRow">
-                                                    <td colSpan={colSpan}>
+                                                <tr
+                                                    key={row.pairId}
+                                                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                                                >
+                                                    <td className="scoresheetPairCell">
                                                         <button
                                                             type="button"
-                                                            className="scoresheetDividerButton"
-                                                            onClick={(e) => openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget)}
-                                                            aria-label={`Add marker before question ${boundaryBeforeQuestion}`}
+                                                            className="pairLink"
+                                                            onClick={() => goToPair(row.pairId)}
                                                         >
-                                                            <span className="scoresheetDividerAffordance">+ Add break here</span>
+                                                            {row.pairId}
                                                         </button>
                                                     </td>
+                                                    {row.perTeam.flatMap((teamRow) => {
+                                                        const tossupResult = teamRow.tossupAttempt?.result;
+                                                        const bonusResult = teamRow.bonusAttempt?.result;
+
+                                                        const tossupCellClass = [
+                                                            tossupResult === "correct"
+                                                                ? "scoresheetCellCorrect"
+                                                                : tossupResult === "incorrect"
+                                                                    ? "scoresheetCellIncorrect"
+                                                                    : "",
+                                                        ]
+                                                            .filter(Boolean)
+                                                            .join(" ");
+
+                                                        const bonusCellClass = [
+                                                            bonusResult === "correct"
+                                                                ? "scoresheetCellCorrect"
+                                                                : bonusResult === "incorrect"
+                                                                    ? "scoresheetCellIncorrect"
+                                                                    : "",
+                                                        ]
+                                                            .filter(Boolean)
+                                                            .join(" ");
+
+                                                        return [
+                                                            <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                                                                {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
+                                                            </td>,
+                                                            <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                                                                {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
+                                                            </td>,
+                                                            <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                                                                {teamRow.runningTotal}
+                                                            </td>,
+                                                        ];
+                                                    })}
                                                 </tr>
                                             );
                                         }
-                                    }
 
-                                    return nodes;
-                                })()}
+                                        return nodes;
+                                    })()}
                             </tbody>
                         </table>
                     </div>
@@ -2255,27 +2266,21 @@ export default function App() {
                                         type="button"
                                         className="secondary"
                                         onClick={() => {
+                                            setScoresheetMarker(boundary, existing === "HALFTIME" ? "BREAK" : "HALFTIME");
+                                            setScoresheetBoundaryPopup(null);
+                                        }}
+                                    >
+                                        {existing === "HALFTIME" ? "Change to Break" : "Change to Halftime"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="secondary"
+                                        onClick={() => {
                                             removeScoresheetMarker(boundary);
                                             setScoresheetBoundaryPopup(null);
                                         }}
                                     >
                                         Remove
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="secondary"
-                                        disabled={existing === "HALFTIME"}
-                                        onClick={() => setScoresheetMarker(boundary, "HALFTIME")}
-                                    >
-                                        Change to Halftime
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="secondary"
-                                        disabled={existing === "BREAK"}
-                                        onClick={() => setScoresheetMarker(boundary, "BREAK")}
-                                    >
-                                        Change to Break
                                     </button>
                                 </>
                             )}
@@ -2287,7 +2292,12 @@ export default function App() {
             {(() => {
                 if (!lineupChangeModal) return null;
                 const boundary = lineupChangeModal.boundaryBeforeQuestion;
-                const phaseLabel = lineupChangeModal.phase === "HALFTIME" ? "Halftime" : "Break";
+                const phaseLabel =
+                    lineupChangeModal.phase === "START"
+                        ? "Start"
+                        : lineupChangeModal.phase === "HALFTIME"
+                            ? "Halftime"
+                            : "Break";
 
                 return (
                     <div
@@ -2322,20 +2332,22 @@ export default function App() {
                                                         const isIn = !!lineupChangeModal.draftInByTeamId[team.id]?.[player.id];
                                                         return (
                                                             <div key={player.id} className="playerRowWithToggle noRemove">
-                                                                <button
-                                                                    type="button"
-                                                                    className={["inOutToggle", isIn ? "in" : "out"].join(" ")}
-                                                                    onClick={() => toggleLineupDraft(team.id, player.id)}
-                                                                    aria-label={`${isIn ? "Set Out" : "Set In"}: ${player.name || `Player ${playerIndex + 1}`}`}
-                                                                >
-                                                                    {isIn ? "In" : "Out"}
-                                                                </button>
                                                                 <input
                                                                     className="textInput"
                                                                     value={player.name}
                                                                     readOnly
                                                                     placeholder={`Player ${playerIndex + 1}`}
                                                                 />
+                                                                <button
+                                                                    type="button"
+                                                                    role="switch"
+                                                                    aria-checked={isIn}
+                                                                    className={["inOutToggle", isIn ? "active" : "bench"].join(" ")}
+                                                                    onClick={() => toggleLineupDraft(team.id, player.id)}
+                                                                    aria-label={`${isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
+                                                                >
+                                                                    {isIn ? "Active" : "Bench"}
+                                                                </button>
                                                             </div>
                                                         );
                                                     })}
