@@ -2523,4 +2523,7 @@ export default function App() {
             </div>
           );
         })()}
-        <Analytics />
+        <Analytics />      </div>
+    </div>
+  );
+}
