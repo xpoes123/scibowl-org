@@ -2304,6 +2304,7 @@ export default function App() {
                         : lineupChangeModal.phase === "HALFTIME"
                             ? "Halftime"
                             : "Break";
+                const canSave = teams.every((t) => t.players.some((p) => !!lineupChangeModal.draftInByTeamId[t.id]?.[p.id]));
 
                 return (
                     <div
@@ -2314,15 +2315,11 @@ export default function App() {
                     >
                         <div className="modal lineupModal" onClick={(e) => e.stopPropagation()}>
                             <div className="modalHeader">
-                                <h2 className="modalTitle modalTitleCentered">Lineup Change</h2>
+                                <h2 className="modalTitle">Lineup Change: {phaseLabel}</h2>
+                                <p className="muted">Effective starting Question {boundary}</p>
                             </div>
 
                             <div className="modalBody">
-                                <div className="lineupMeta">
-                                    <div className="lineupMetaRow">Phase: {phaseLabel}</div>
-                                    <div className="lineupMetaRow">Effective starting Question {boundary}</div>
-                                </div>
-
                                 <div className="lineupTeamGrid">
                                     {teams.map((team) => (
                                         <div key={team.id} className="lineupTeamCol">
@@ -2368,7 +2365,7 @@ export default function App() {
                                         <button type="button" className="secondary" onClick={() => setLineupChangeModal(null)}>
                                             Cancel
                                         </button>
-                                        <button type="button" onClick={saveLineupChangeModal}>
+                                        <button type="button" disabled={!canSave} onClick={saveLineupChangeModal}>
                                             Save
                                         </button>
                                     </div>
