@@ -7,6 +7,6 @@
         "allowSyntheticDefaultImports": true
     },
     "include": [
-        "vite.env.d.ts"
+        "vite-env.d.ts"
     ]
 }

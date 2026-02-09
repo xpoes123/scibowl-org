@@ -482,7 +482,7 @@ export default function App() {
       return { ...prev, teams: nextTeams };
     });
 
-    if (isCreatingMarker) setScoresheetMarker(boundaryBeforeQuestion, phase);
+    if (isCreatingMarker && phase !== "START") setScoresheetMarker(boundaryBeforeQuestion, phase);
     setLineupChangeModal(null);
     setScoresheetBoundaryPopup(null);
   }
@@ -1196,6 +1196,7 @@ export default function App() {
     anchorEl: HTMLElement
   ) {
     if (!game) return;
+    const currentGame = game;
 
     if (question.question_type === "BONUS") return;
 
@@ -1214,7 +1215,7 @@ export default function App() {
     }
 
     function isPlayerActive(teamId: string, playerId: string) {
-      const team = game.teams.find((t) => t.id === teamId);
+      const team = currentGame.teams.find((t) => t.id === teamId);
       if (!team) return false;
       return activePlayerIdsForTeamAtTossup(team, question.pair_id).has(playerId);
     }
@@ -1230,12 +1231,12 @@ export default function App() {
       preferred = { teamId: currentCorrect.teamId, playerId: currentCorrect.playerId };
     } else if (
       lastActor?.playerId &&
-      game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId)) &&
+      currentGame.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId)) &&
       isPlayerSelectable(lastActor.teamId, lastActor.playerId)
     ) {
       preferred = { teamId: lastActor.teamId, playerId: lastActor.playerId };
     } else {
-      for (const team of game.teams) {
+      for (const team of currentGame.teams) {
         if (currentAttempts.some((a) => a.teamId === team.id)) continue;
         const active = activePlayerIdsForTeamAtTossup(team, question.pair_id);
         const candidate = team.players.find((p) => active.has(p.id) && isPlayerAvailable(team.id, p.id));
