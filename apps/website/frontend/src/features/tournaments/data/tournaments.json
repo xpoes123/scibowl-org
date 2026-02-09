@@ -1,5 +1,49 @@
 [
     {
+        "slug": "clash",
+        "name": "CLASH",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2026-05-16",
+            "end": "2026-05-16"
+        },
+        "divisions": ["HS", "MS"],
+        "notes": {
+            "logistics": "Online tournament. Runs from 9:45 AM to 7:00 PM CDT. Dual-division: 48-team (tentative) high school division and 16-team (tentative) middle school division.",
+            "writing_team": "Hustler's University"
+        },
+        "format": {
+            "summary": "Chandler\u2013Louisiana Acuminous Science Hullabaloo (CLASH) - Dual-division online tournament presented by Hustler's University"
+        },
+        "contacts": [],
+        "registration": {
+            "method": "FORM",
+            "instructions": "One person from your school should register. $30/team fee due by May 13th. If registering before mid-to-late March, do not pay until more information is sent out. Extensions can be given.",
+            "url": "https://forms.gle/twQpo2BUKR1j3quS7",
+            "cost": "$30 per team",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-05-10"
+                },
+                {
+                    "label": "Payment due",
+                    "date": "2026-05-13"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/127YO5lc3kj5a0RNcyxzxKL4y94XqHy91CY6sAwnVgwQ/edit?usp=sharing",
+                "label": "Rules Document"
+            }
+        ],
+        "updated_at": "2026-01-10T00:00:00Z"
+    },
+    {
         "slug": "dasoni-2",
         "name": "DASONI 2",
         "status": "PUBLISHED",
