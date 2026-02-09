@@ -498,34 +498,35 @@ code {
 
 .playerRowWithToggle {
   display: grid;
-  grid-template-columns: 54px 1fr 34px;
+  grid-template-columns: 1fr auto 34px;
   gap: 10px;
   align-items: center;
 }
 
 .playerRowWithToggle.noRemove {
-  grid-template-columns: 54px 1fr;
+  grid-template-columns: 1fr auto;
 }
 
 button.inOutToggle {
   border: 1px solid #e6e7ee;
   background: white;
   color: #111;
-  border-radius: 999px;
+  border-radius: 12px;
   height: 34px;
   padding: 0 10px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  min-width: 76px;
 }
 
-button.inOutToggle.in {
+button.inOutToggle.active {
   background: #e8f7ea;
   border-color: #d8f0d2;
   color: #1f6b2a;
 }
 
-button.inOutToggle.out {
+button.inOutToggle.bench {
   background: #fdeaea;
   border-color: #f2caca;
   color: #8f1d1d;
@@ -1043,7 +1044,6 @@ button.wordLabel {
 .scoresheetTable th,
 .scoresheetTable td {
   padding: 10px 10px;
-  border-bottom: 1px solid #eee;
   vertical-align: top;
 }
 
@@ -1052,6 +1052,19 @@ button.wordLabel {
   text-align: left;
   font-weight: 600;
   white-space: nowrap;
+  border-bottom: 1px solid #eee;
+}
+
+.scoresheetTable thead tr:last-child th {
+  border-bottom: 0;
+}
+
+.scoresheetTable td {
+  border-bottom: 0;
+}
+
+.scoresheetTable tbody tr:last-child td {
+  border-bottom: 1px solid #eee;
 }
 
 .scoresheetTable thead tr:first-child th {
@@ -1125,15 +1138,16 @@ button.wordLabel {
   background: #fdeaea;
 }
 
-.scoresheetDividerRow td,
-.scoresheetMarkerRow td {
+.scoresheetBoundaryRow td {
   padding: 0;
   border-bottom: 0;
 }
 
-.scoresheetDividerButton {
+.scoresheetBoundaryButton {
   width: 100%;
-  height: 18px;
+  height: 0;
+  padding: 0;
+  margin: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -1141,21 +1155,47 @@ button.wordLabel {
   display: block;
 }
 
-.scoresheetDividerButton::before {
+.scoresheetBoundaryButton::before {
   content: "";
   position: absolute;
   left: 10px;
   right: 10px;
-  top: 50%;
+  top: 0;
   height: 1px;
   background: #eee;
+}
+
+.scoresheetBoundaryButton::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -7px;
+  height: 14px;
+}
+
+.scoresheetBoundaryRowStart .scoresheetBoundaryButton {
+  height: 22px;
+}
+
+.scoresheetBoundaryRowStart .scoresheetBoundaryButton::before {
+  top: 50%;
   transform: translateY(-50%);
 }
 
-.scoresheetDividerAffordance {
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton {
+  height: 22px;
+}
+
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton::before {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.scoresheetBoundaryAffordance,
+.scoresheetBoundaryLabel {
   position: absolute;
   left: 50%;
-  top: 50%;
   transform: translate(-50%, -50%);
   padding: 2px 8px;
   border-radius: 999px;
@@ -1163,43 +1203,32 @@ button.wordLabel {
   border: 1px solid #e6e7ee;
   font-size: 12px;
   color: #666;
-  opacity: 0;
-  transition: opacity 120ms ease;
   pointer-events: none;
   white-space: nowrap;
 }
 
-.scoresheetDividerButton:hover .scoresheetDividerAffordance,
-.scoresheetDividerButton:focus-visible .scoresheetDividerAffordance {
+.scoresheetBoundaryAffordance {
+  top: 0;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.scoresheetBoundaryLabel {
+  top: 50%;
+  opacity: 1;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: #111;
+  font-size: 13px;
+}
+
+.scoresheetBoundaryButton:hover .scoresheetBoundaryAffordance,
+.scoresheetBoundaryButton:focus-visible .scoresheetBoundaryAffordance {
   opacity: 1;
 }
 
-.scoresheetDividerButton:focus-visible {
-  outline: 2px solid #cdd4ff;
-  outline-offset: 2px;
-  border-radius: 10px;
-}
-
-.scoresheetMarkerButton {
-  width: 100%;
-  border: 1px solid #e6e7ee;
-  border-left: 0;
-  border-right: 0;
-  background: #f7f7fb;
-  color: #444;
-  cursor: pointer;
-  padding: 8px 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 12px;
-}
-
-.scoresheetMarkerButton:hover {
-  background: #f0f2ff;
-}
-
-.scoresheetMarkerButton:focus-visible {
+.scoresheetBoundaryButton:focus-visible {
   outline: 2px solid #cdd4ff;
   outline-offset: 2px;
   border-radius: 10px;
