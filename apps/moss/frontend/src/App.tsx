@@ -1754,17 +1754,14 @@ export default function App() {
                             </div>
 
                             <div className="modalBody">
+                                <div className="teamGridScroll">
                                 <div className="teamGrid">
                                     {draftTeams.map((team, teamIndex) => (
                                         <div key={team.id} className="teamCol">
                                             <div className="fieldGroup">
                                                 <div className="fieldLabelRow">
                                                     <div className="fieldLabel">
-                                                        {teamIndex === 0
-                                                            ? "First team"
-                                                            : teamIndex === 1
-                                                                ? "Second team"
-                                                                : `Team ${teamIndex + 1}`}{" "}
+                                                        {`Team ${teamIndex + 1}`}{" "}
                                                         <span className="required">*</span>
                                                     </div>
                                                     {draftTeams.length > 1 && (
@@ -1786,11 +1783,11 @@ export default function App() {
                                             </div>
 
                                             <div className="fieldGroup">
-                                                <div className="fieldLabel">Names</div>
+                                                <div className="fieldLabel">Players</div>
                                                 <div className="playerList">
                                                     {team.players.map((player, playerIndex) => (
-                                    <div key={player.id} className="playerRowWithToggle">
-                                        <input
+                                                        <div key={player.id} className="playerRowWithToggle">
+                                                            <input
                                             className="textInput"
                                             value={player.name}
                                             onChange={(e) =>
@@ -1846,6 +1843,7 @@ export default function App() {
                                             <span className="addIcon">+</span>
                                         </button>
                                     </div>
+                                </div>
                                 </div>
 
                                 <div className="modalFooter">
@@ -2329,7 +2327,7 @@ export default function App() {
                                             </div>
 
                                             <div className="fieldGroup">
-                                                <div className="fieldLabel">Names</div>
+                                                <div className="fieldLabel">Players</div>
                                                 <div className="playerList">
                                                     {team.players.map((player, playerIndex) => {
                                                         const isIn = !!lineupChangeModal.draftInByTeamId[team.id]?.[player.id];
