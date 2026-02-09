@@ -464,6 +464,12 @@ export default function App() {
         if (!game) return;
         const { boundaryBeforeQuestion, phase, isCreatingMarker, draftInByTeamId } = lineupChangeModal;
 
+        for (const t of game.teams) {
+            const teamDraft = draftInByTeamId[t.id];
+            const activeCount = t.players.filter((p) => !!teamDraft?.[p.id]).length;
+            if (activeCount <= 0) return;
+        }
+
         setGame((prev) => {
             if (!prev) return prev;
             const nextTeams = prev.teams.map((t) => {
