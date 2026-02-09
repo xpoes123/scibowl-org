@@ -81,10 +81,14 @@ type Player = {
     name: string;
 };
 
+type DraftPlayer = Player & {
+    isIn: boolean;
+};
+
 type LineupSegment = {
     startTossup: number;
     endTossup: number | null;
-    activePlayers: string[];
+    activePlayerIds: string[];
 };
 
 type Team = {
@@ -92,6 +96,10 @@ type Team = {
     name: string;
     players: Player[];
     lineupSegments?: LineupSegment[];
+};
+
+type DraftTeam = Omit<Team, "players" | "lineupSegments"> & {
+    players: DraftPlayer[];
 };
 
 type Game = {
@@ -304,7 +312,7 @@ export default function App() {
     const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
     const [loadGameError, setLoadGameError] = useState<string | null>(null);
     const [isLoadingGame, setIsLoadingGame] = useState(false);
-    const [draftTeams, setDraftTeams] = useState<Team[]>([]);
+    const [draftTeams, setDraftTeams] = useState<DraftTeam[]>([]);
     const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
     const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
     const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
@@ -324,9 +332,76 @@ export default function App() {
 
     type ScoresheetMarkerKind = "HALFTIME" | "BREAK";
     type ScoresheetBoundaryPopupState = { boundaryBeforeQuestion: number; left: number; top: number } | null;
+    type LineupChangeModalState = {
+        phase: ScoresheetMarkerKind;
+        boundaryBeforeQuestion: number;
+        isCreatingMarker: boolean;
+        draftInByTeamId: Record<string, Record<string, boolean>>;
+    } | null;
 
     const [scoresheetMarkers, setScoresheetMarkers] = useState<Record<number, ScoresheetMarkerKind>>({});
     const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
+    const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
+
+    function uniq<T>(items: T[]): T[] {
+        return Array.from(new Set(items));
+    }
+
+    function sortLineupSegments(segments: LineupSegment[]): LineupSegment[] {
+        const sorted = [...segments].sort((a, b) => a.startTossup - b.startTossup);
+        const dedupedStarts: LineupSegment[] = [];
+        for (const seg of sorted) {
+            const prev = dedupedStarts[dedupedStarts.length - 1];
+            const next = { ...seg, activePlayerIds: uniq(seg.activePlayerIds) };
+            if (prev && prev.startTossup === next.startTossup) {
+                dedupedStarts[dedupedStarts.length - 1] = next;
+                continue;
+            }
+            dedupedStarts.push(next);
+        }
+        return dedupedStarts;
+    }
+
+    function normalizeLineupSegments(segments: LineupSegment[]): LineupSegment[] {
+        const dedupedStarts = sortLineupSegments(segments);
+
+        return dedupedStarts.map((seg, idx) => ({
+            ...seg,
+            endTossup: idx < dedupedStarts.length - 1 ? dedupedStarts[idx + 1].startTossup - 1 : null,
+        }));
+    }
+
+    function defaultLineupSegmentsForTeam(team: Team): LineupSegment[] {
+        return [{ startTossup: 1, endTossup: null, activePlayerIds: team.players.map((p) => p.id) }];
+    }
+
+    function activePlayerIdsForTeamAtTossup(team: Team, tossupNumber: number): Set<string> {
+        const segments = team.lineupSegments?.length ? sortLineupSegments(team.lineupSegments) : null;
+        if (!segments) return new Set(team.players.map((p) => p.id));
+
+        let chosen: LineupSegment | null = null;
+        for (const seg of segments) {
+            if (seg.startTossup > tossupNumber) break;
+            const end = seg.endTossup ?? Number.POSITIVE_INFINITY;
+            if (tossupNumber <= end) chosen = seg;
+        }
+        if (!chosen) return new Set(team.players.map((p) => p.id));
+        return new Set(chosen.activePlayerIds);
+    }
+
+    function applyLineupChange(team: Team, boundaryBeforeQuestion: number, activePlayerIds: string[]): Team {
+        const baseSegments = team.lineupSegments?.length ? normalizeLineupSegments(team.lineupSegments) : defaultLineupSegmentsForTeam(team);
+        const kept = baseSegments.filter((seg) => seg.startTossup !== boundaryBeforeQuestion);
+        kept.push({ startTossup: boundaryBeforeQuestion, endTossup: null, activePlayerIds: uniq(activePlayerIds) });
+        return { ...team, lineupSegments: normalizeLineupSegments(kept) };
+    }
+
+    function removeLineupChange(team: Team, boundaryBeforeQuestion: number): Team {
+        if (!team.lineupSegments?.length) return team;
+        const filtered = team.lineupSegments.filter((seg) => seg.startTossup !== boundaryBeforeQuestion);
+        if (filtered.length === team.lineupSegments.length) return team;
+        return { ...team, lineupSegments: normalizeLineupSegments(filtered) };
+    }
 
     function setScoresheetMarker(boundaryBeforeQuestion: number, kind: ScoresheetMarkerKind) {
         setScoresheetMarkers((prev) => {
@@ -342,11 +417,66 @@ export default function App() {
             delete next[boundaryBeforeQuestion];
             return next;
         });
+
+        setGame((prev) => {
+            if (!prev) return prev;
+            return { ...prev, teams: prev.teams.map((t) => removeLineupChange(t, boundaryBeforeQuestion)) };
+        });
     }
 
     function openScoresheetBoundaryPopup(boundaryBeforeQuestion: number, anchor: HTMLElement) {
         const pos = computePopupPosition(getAnchorRect(anchor));
         setScoresheetBoundaryPopup({ boundaryBeforeQuestion, left: pos.left, top: pos.top });
+    }
+
+    function openLineupChangeModal(phase: ScoresheetMarkerKind, boundaryBeforeQuestion: number, isCreatingMarker: boolean) {
+        if (!game) return;
+
+        const draft: Record<string, Record<string, boolean>> = {};
+        for (const team of game.teams) {
+            const active = activePlayerIdsForTeamAtTossup(team, boundaryBeforeQuestion);
+            const map: Record<string, boolean> = {};
+            for (const p of team.players) map[p.id] = active.has(p.id);
+            draft[team.id] = map;
+        }
+
+        setLineupChangeModal({ phase, boundaryBeforeQuestion, isCreatingMarker, draftInByTeamId: draft });
+    }
+
+    function toggleLineupDraft(teamId: string, playerId: string) {
+        setLineupChangeModal((prev) => {
+            if (!prev) return prev;
+            const teamDraft = prev.draftInByTeamId[teamId] ?? {};
+            const current = !!teamDraft[playerId];
+            return {
+                ...prev,
+                draftInByTeamId: {
+                    ...prev.draftInByTeamId,
+                    [teamId]: { ...teamDraft, [playerId]: !current },
+                },
+            };
+        });
+    }
+
+    function saveLineupChangeModal() {
+        if (!lineupChangeModal) return;
+        if (!game) return;
+        const { boundaryBeforeQuestion, phase, isCreatingMarker, draftInByTeamId } = lineupChangeModal;
+
+        setGame((prev) => {
+            if (!prev) return prev;
+            const nextTeams = prev.teams.map((t) => {
+                const teamDraft = draftInByTeamId[t.id];
+                if (!teamDraft) return t;
+                const activeIds = t.players.filter((p) => !!teamDraft[p.id]).map((p) => p.id);
+                return applyLineupChange(t, boundaryBeforeQuestion, activeIds);
+            });
+            return { ...prev, teams: nextTeams };
+        });
+
+        if (isCreatingMarker) setScoresheetMarker(boundaryBeforeQuestion, phase);
+        setLineupChangeModal(null);
+        setScoresheetBoundaryPopup(null);
     }
 
     useEffect(() => {
@@ -386,6 +516,17 @@ export default function App() {
             window.removeEventListener("mousedown", onMouseDown, true);
         };
     }, [scoresheetBoundaryPopup]);
+
+    useEffect(() => {
+        if (!lineupChangeModal) return;
+
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") setLineupChangeModal(null);
+        }
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [lineupChangeModal]);
 
     const playersById = useMemo(() => {
         const entries: Array<[string, string]> = [];
@@ -531,10 +672,12 @@ export default function App() {
                         players: t.players.map((p) => p.name),
                         ...(t.lineupSegments
                             ? {
-                                lineup_segments: t.lineupSegments.map((seg) => ({
+                                lineup_segments: sortLineupSegments(t.lineupSegments).map((seg) => ({
                                     start_tossup: seg.startTossup,
                                     end_tossup: seg.endTossup,
-                                    active_players: seg.activePlayers,
+                                    active_players: seg.activePlayerIds
+                                        .map((id) => playersById.get(id) ?? null)
+                                        .filter((name): name is string => !!name),
                                 })),
                             }
                             : {}),
@@ -574,25 +717,25 @@ export default function App() {
             return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
         }
 
-        const initial: Team[] = [
+        const initial: DraftTeam[] = [
             {
                 id: makeId("team"),
                 name: "Team 1",
                 players: [
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
                 ],
             },
             {
                 id: makeId("team"),
                 name: "Team 2",
                 players: [
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
-                    { id: makeId("player"), name: "" },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
+                    { id: makeId("player"), name: "", isIn: true },
                 ],
             },
         ];
@@ -620,10 +763,20 @@ export default function App() {
         );
     }
 
+    function toggleDraftPlayerIn(teamId: string, playerId: string) {
+        setDraftTeams((prev) =>
+            prev.map((t) =>
+                t.id !== teamId
+                    ? t
+                    : { ...t, players: t.players.map((p) => (p.id === playerId ? { ...p, isIn: !p.isIn } : p)) }
+            )
+        );
+    }
+
     function addPlayer(teamId: string) {
         const id = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
         setDraftTeams((prev) =>
-            prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "" }] } : t))
+            prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: true }] } : t))
         );
     }
 
@@ -638,7 +791,7 @@ export default function App() {
     function addTeam() {
         const teamId = `team_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
         const playerId = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-        setDraftTeams((prev) => [...prev, { id: teamId, name: `Team ${prev.length + 1}`, players: [{ id: playerId, name: "" }] }]);
+        setDraftTeams((prev) => [...prev, { id: teamId, name: `Team ${prev.length + 1}`, players: [{ id: playerId, name: "", isIn: true }] }]);
     }
 
     function removeTeam(teamId: string) {
@@ -658,11 +811,15 @@ export default function App() {
 
     function startNewGame() {
         if (!canStartNewGame || !draftPacketChoice) return;
-        const teams = draftTeams.map((t) => ({
-            ...t,
-            name: t.name.trim(),
-            players: t.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name),
-        }));
+        const teams: Team[] = draftTeams.map((t) => {
+            const roster = t.players
+                .map((p) => ({ ...p, name: p.name.trim() }))
+                .filter((p) => p.name);
+            const players: Player[] = roster.map(({ id, name }) => ({ id, name }));
+            const activePlayerIds = roster.filter((p) => p.isIn).map((p) => p.id);
+            const lineupSegments: LineupSegment[] = [{ startTossup: 1, endTossup: null, activePlayerIds }];
+            return { id: t.id, name: t.name.trim(), players, lineupSegments };
+        });
 
         setPacket(draftPacketChoice.packet);
         setGame({ teams });
@@ -672,6 +829,7 @@ export default function App() {
         setLastActor(null);
         setScoresheetMarkers({});
         setScoresheetBoundaryPopup(null);
+        setLineupChangeModal(null);
         setIsNewGameOpen(false);
     }
 
@@ -855,22 +1013,23 @@ export default function App() {
                         }
 
                         if (!Array.isArray(activeRaw)) throw new Error(`Team ${teamName}: lineup_segments[].active_players must be an array`);
-                        const activePlayers: string[] = [];
+                        const activePlayerIds: string[] = [];
                         for (const ap of activeRaw) {
                             if (typeof ap !== "string") throw new Error(`Team ${teamName}: lineup_segments[].active_players must be strings`);
                             const name = ap.trim();
                             if (!name) continue;
-                            if (activePlayers.includes(name)) continue;
-                            activePlayers.push(name);
                             const key = `${teamName}\n${name}`;
-                            if (!playerIdByTeamNameThenPlayerName.has(key)) {
-                                const id = makeId("player");
-                                players.push({ id, name });
-                                playerIdByTeamNameThenPlayerName.set(key, id);
-                            }
+                            const id = playerIdByTeamNameThenPlayerName.get(key) ?? (() => {
+                                const created = makeId("player");
+                                players.push({ id: created, name });
+                                playerIdByTeamNameThenPlayerName.set(key, created);
+                                return created;
+                            })();
+                            if (activePlayerIds.includes(id)) continue;
+                            activePlayerIds.push(id);
                         }
 
-                        segs.push({ startTossup, endTossup, activePlayers });
+                        segs.push({ startTossup, endTossup, activePlayerIds });
                         lastCoveredEnd = effectiveEnd;
                     }
 
@@ -994,6 +1153,7 @@ export default function App() {
             setLastActor(null);
             setScoresheetMarkers({});
             setScoresheetBoundaryPopup(null);
+            setLineupChangeModal(null);
             setIsNewGameOpen(false);
             closeLoadGame();
         } catch (e) {
@@ -1045,21 +1205,32 @@ export default function App() {
             return !teamAlready && !playerAlready;
         }
 
+        function isPlayerActive(teamId: string, playerId: string) {
+            const team = game.teams.find((t) => t.id === teamId);
+            if (!team) return false;
+            return activePlayerIdsForTeamAtTossup(team, question.pair_id).has(playerId);
+        }
+
+        function isPlayerSelectable(teamId: string, playerId: string) {
+            return isPlayerAvailable(teamId, playerId) && isPlayerActive(teamId, playerId);
+        }
+
         let preferred: { teamId: string; playerId: string } | null = null;
-        if (existingAtLocation?.playerId) {
+        if (existingAtLocation?.playerId && isPlayerSelectable(existingAtLocation.teamId, existingAtLocation.playerId)) {
             preferred = { teamId: existingAtLocation.teamId, playerId: existingAtLocation.playerId };
-        } else if (currentCorrect?.playerId) {
+        } else if (currentCorrect?.playerId && isPlayerSelectable(currentCorrect.teamId, currentCorrect.playerId)) {
             preferred = { teamId: currentCorrect.teamId, playerId: currentCorrect.playerId };
         } else if (
             lastActor?.playerId &&
             game.teams.some((t) => t.id === lastActor.teamId && t.players.some((p) => p.id === lastActor.playerId)) &&
-            isPlayerAvailable(lastActor.teamId, lastActor.playerId)
+            isPlayerSelectable(lastActor.teamId, lastActor.playerId)
         ) {
             preferred = { teamId: lastActor.teamId, playerId: lastActor.playerId };
         } else {
             for (const team of game.teams) {
                 if (currentAttempts.some((a) => a.teamId === team.id)) continue;
-                const candidate = team.players.find((p) => isPlayerAvailable(team.id, p.id));
+                const active = activePlayerIdsForTeamAtTossup(team, question.pair_id);
+                const candidate = team.players.find((p) => active.has(p.id) && isPlayerAvailable(team.id, p.id));
                 if (!candidate) continue;
                 preferred = { teamId: team.id, playerId: candidate.id };
                 break;
@@ -1611,7 +1782,14 @@ export default function App() {
                                                 <div className="fieldLabel">Names</div>
                                                 <div className="playerList">
                                                     {team.players.map((player, playerIndex) => (
-                                                        <div key={player.id} className="playerRow">
+                                                        <div key={player.id} className="playerRowWithToggle">
+                                                            <button
+                                                                type="button"
+                                                                className={["inOutToggle", player.isIn ? "in" : "out"].join(" ")}
+                                                                onClick={() => toggleDraftPlayerIn(team.id, player.id)}
+                                                            >
+                                                                {player.isIn ? "In" : "Out"}
+                                                            </button>
                                                             <input
                                                                 className="textInput"
                                                                 value={player.name}
@@ -2045,7 +2223,7 @@ export default function App() {
                                     <button
                                         type="button"
                                         onClick={() => {
-                                            setScoresheetMarker(boundary, "HALFTIME");
+                                            openLineupChangeModal("HALFTIME", boundary, true);
                                             setScoresheetBoundaryPopup(null);
                                         }}
                                     >
@@ -2055,7 +2233,7 @@ export default function App() {
                                         type="button"
                                         className="secondary"
                                         onClick={() => {
-                                            setScoresheetMarker(boundary, "BREAK");
+                                            openLineupChangeModal("BREAK", boundary, true);
                                             setScoresheetBoundaryPopup(null);
                                         }}
                                     >
@@ -2066,6 +2244,16 @@ export default function App() {
                                 <>
                                     <button
                                         type="button"
+                                        onClick={() => {
+                                            openLineupChangeModal(existing, boundary, false);
+                                            setScoresheetBoundaryPopup(null);
+                                        }}
+                                    >
+                                        Lineup Change...
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="secondary"
                                         onClick={() => {
                                             removeScoresheetMarker(boundary);
                                             setScoresheetBoundaryPopup(null);
@@ -2097,6 +2285,83 @@ export default function App() {
             })()}
 
             {(() => {
+                if (!lineupChangeModal) return null;
+                const boundary = lineupChangeModal.boundaryBeforeQuestion;
+                const phaseLabel = lineupChangeModal.phase === "HALFTIME" ? "Halftime" : "Break";
+
+                return (
+                    <div
+                        className="modalOverlay"
+                        role="dialog"
+                        aria-label="Lineup Change"
+                        onClick={() => setLineupChangeModal(null)}
+                    >
+                        <div className="modal lineupModal" onClick={(e) => e.stopPropagation()}>
+                            <div className="modalHeader">
+                                <h2 className="modalTitle modalTitleCentered">Lineup Change</h2>
+                            </div>
+
+                            <div className="modalBody">
+                                <div className="lineupMeta">
+                                    <div className="lineupMetaRow">Phase: {phaseLabel}</div>
+                                    <div className="lineupMetaRow">Effective starting Question {boundary}</div>
+                                </div>
+
+                                <div className="lineupTeamGrid">
+                                    {teams.map((team) => (
+                                        <div key={team.id} className="lineupTeamCol">
+                                            <div className="fieldGroup">
+                                                <div className="fieldLabel">Team</div>
+                                                <input className="textInput" value={team.name} readOnly />
+                                            </div>
+
+                                            <div className="fieldGroup">
+                                                <div className="fieldLabel">Names</div>
+                                                <div className="playerList">
+                                                    {team.players.map((player, playerIndex) => {
+                                                        const isIn = !!lineupChangeModal.draftInByTeamId[team.id]?.[player.id];
+                                                        return (
+                                                            <div key={player.id} className="playerRowWithToggle noRemove">
+                                                                <button
+                                                                    type="button"
+                                                                    className={["inOutToggle", isIn ? "in" : "out"].join(" ")}
+                                                                    onClick={() => toggleLineupDraft(team.id, player.id)}
+                                                                    aria-label={`${isIn ? "Set Out" : "Set In"}: ${player.name || `Player ${playerIndex + 1}`}`}
+                                                                >
+                                                                    {isIn ? "In" : "Out"}
+                                                                </button>
+                                                                <input
+                                                                    className="textInput"
+                                                                    value={player.name}
+                                                                    readOnly
+                                                                    placeholder={`Player ${playerIndex + 1}`}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="modalFooter">
+                                    <div className="modalActionsRight">
+                                        <button type="button" className="secondary" onClick={() => setLineupChangeModal(null)}>
+                                            Cancel
+                                        </button>
+                                        <button type="button" onClick={saveLineupChangeModal}>
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })()}
+
+            {(() => {
                 const popupQuestion = attemptEditor ? questionsById.get(attemptEditor.questionId) : undefined;
                 if (!attemptEditor || !popupQuestion) return null;
 
@@ -2115,6 +2380,10 @@ export default function App() {
                         const attemptedPlayerIds = new Set(
                             editingAttempts.flatMap((a) => (a.playerId ? [a.playerId] : []))
                         );
+                        const tossupNumber = popupQuestion.pair_id;
+                        const selectedTeam = teams.find((t) => t.id === attemptEditor.selection.teamId);
+                        const activeSet = selectedTeam ? activePlayerIdsForTeamAtTossup(selectedTeam, tossupNumber) : new Set<string>();
+                        const activePlayers = (selectedTeam?.players ?? []).filter((p) => activeSet.has(p.id));
 
                         return (
                         <div className="attemptPopupSelectors">
@@ -2125,10 +2394,11 @@ export default function App() {
                                     const teamId = e.target.value;
                                     const team = teams.find((t) => t.id === teamId);
                                     const currentPlayerId = attemptEditor.selection.playerId;
+                                    const active = team ? activePlayerIdsForTeamAtTossup(team, tossupNumber) : new Set<string>();
                                     const available =
                                         team?.players.find(
-                                            (p) => !attemptedPlayerIds.has(p.id) || p.id === currentPlayerId
-                                        ) ?? team?.players[0];
+                                            (p) => active.has(p.id) && (!attemptedPlayerIds.has(p.id) || p.id === currentPlayerId)
+                                        ) ?? team?.players.find((p) => active.has(p.id));
                                     const playerId = available?.id ?? currentPlayerId;
                                     setAttemptEditor((prev) =>
                                         prev
@@ -2158,7 +2428,7 @@ export default function App() {
                                     );
                                 }}
                             >
-                                {(teams.find((t) => t.id === attemptEditor.selection.teamId)?.players ?? []).map((p) => (
+                                {activePlayers.map((p) => (
                                     <option
                                         key={p.id}
                                         value={p.id}

@@ -375,8 +375,45 @@ code {
   font-size: 22px;
 }
 
+.modalTitleCentered {
+  text-align: center;
+}
+
 .modalBody {
   padding: 18px 20px;
+}
+
+.lineupModal {
+  width: min(820px, 100%);
+}
+
+.lineupMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  color: #444;
+}
+
+.lineupMetaRow {
+  font-size: 14px;
+}
+
+.lineupTeamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+.lineupTeamCol {
+  min-width: 0;
+}
+
+.modalActionsRight {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .teamGrid {
@@ -457,6 +494,46 @@ code {
   grid-template-columns: 1fr 34px;
   gap: 10px;
   align-items: center;
+}
+
+.playerRowWithToggle {
+  display: grid;
+  grid-template-columns: 54px 1fr 34px;
+  gap: 10px;
+  align-items: center;
+}
+
+.playerRowWithToggle.noRemove {
+  grid-template-columns: 54px 1fr;
+}
+
+button.inOutToggle {
+  border: 1px solid #e6e7ee;
+  background: white;
+  color: #111;
+  border-radius: 999px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.inOutToggle.in {
+  background: #e8f7ea;
+  border-color: #d8f0d2;
+  color: #1f6b2a;
+}
+
+button.inOutToggle.out {
+  background: #fdeaea;
+  border-color: #f2caca;
+  color: #8f1d1d;
+}
+
+button.inOutToggle:focus-visible {
+  outline: 2px solid #cdd4ff;
+  outline-offset: 2px;
 }
 
 button.iconButton {
