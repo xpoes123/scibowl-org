@@ -416,32 +416,34 @@ code {
   gap: 10px;
 }
 
+.teamGridScroll {
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
 .teamGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 170px;
-  gap: 22px;
+  display: flex;
+  gap: 0;
   align-items: stretch;
 }
 
-@media (max-width: 900px) {
-  .teamGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .teamCol {
-  padding-right: 18px;
-  border-right: 1px solid #eee;
+  flex: 0 0 340px;
+  padding: 0 22px;
 }
 
-@media (max-width: 900px) {
-  .teamCol {
-    padding-right: 0;
-    border-right: 0;
-  }
+.teamCol:first-child {
+  padding-left: 0;
+}
+
+.teamCol + .teamCol {
+  border-left: 1px solid #eee;
 }
 
 .addTeamCol {
+  flex: 0 0 170px;
+  border-left: 1px solid #eee;
+  padding-left: 22px;
   display: flex;
   justify-content: center;
   align-items: center;
