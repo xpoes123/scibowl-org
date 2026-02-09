@@ -8,6 +8,7 @@ import {
   NavLink,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { TournamentDetailPage, TournamentsLandingPage, TournamentsPage } from "./features/tournaments";
 import { isFeatureEnabled } from "./core/features";
 import { PacketSetDetailPage, PacketsPage } from "./features/packets";
@@ -155,6 +156,7 @@ function AppContent() {
           )}
         </Routes>
       </div>
+      <Analytics />
     </div>
   );
 }
