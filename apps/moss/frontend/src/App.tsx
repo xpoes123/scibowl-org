@@ -2168,7 +2168,7 @@ export default function App() {
                               {markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (
-                                <span className="scoresheetBoundaryAffordance">+ Add break here</span>
+                                <span className="scoresheetBoundaryAffordance">+ Add break</span>
                               )}
                             </button>
                           </td>
