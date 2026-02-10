@@ -5,7 +5,7 @@ import packetJson from "./assets/sample_packet.json";
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
-const END_TOKEN = "END" as const;
+const END_TOKEN = "NO PENALTY" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
 const SCORESHEET_EXPORT_VERSION = 1 as const;
 
@@ -2163,7 +2163,9 @@ export default function App() {
                                     : `Add marker before question ${boundaryBeforeQuestion}`
                               }
                             >
-                              {isStartBoundary ? null : markerKind ? (
+                              {isStartBoundary ? (
+                                <span className="scoresheetBoundaryAffordance">Change starting lineup</span>
+                              ) : markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (
                                 <span className="scoresheetBoundaryAffordance">+ Add break</span>
