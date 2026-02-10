@@ -2133,9 +2133,8 @@ export default function App() {
                       const row = scoredPairs.rows[i];
                       const boundaryBeforeQuestion = row.pairId;
                       const isStartBoundary = i === 0;
-                      const markerKind: ScoresheetMarkerKind | "START" | undefined =
-                        isStartBoundary ? "START" : scoresheetMarkers[boundaryBeforeQuestion];
-                      const isSpacedMarker = markerKind !== undefined && markerKind !== "START";
+                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+                      const isSpacedMarker = markerKind !== undefined;
 
                       nodes.push(
                         <tr
@@ -2143,7 +2142,6 @@ export default function App() {
                           className={[
                             "scoresheetBoundaryRow",
                             isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
-                            markerKind === "START" ? "scoresheetBoundaryRowStart" : "",
                           ].filter(Boolean).join(" ")}
                         >
                           <td colSpan={colSpan}>
@@ -2151,21 +2149,21 @@ export default function App() {
                               type="button"
                               className={["scoresheetBoundaryButton", isSpacedMarker ? "scoresheetBoundaryButtonMarked" : ""].filter(Boolean).join(" ")}
                               onClick={(e) => {
-                                if (markerKind === "START") {
+                                if (isStartBoundary) {
                                   openLineupChangeModal("START", boundaryBeforeQuestion, false);
                                   return;
                                 }
                                 openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget);
                               }}
                               aria-label={
-                                markerKind === "START"
+                                isStartBoundary
                                   ? "Edit starting lineup"
                                   : markerKind
                                     ? `Edit marker before question ${boundaryBeforeQuestion}`
                                     : `Add marker before question ${boundaryBeforeQuestion}`
                               }
                             >
-                              {markerKind ? (
+                              {isStartBoundary ? null : markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (
                                 <span className="scoresheetBoundaryAffordance">+ Add break</span>
