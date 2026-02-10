@@ -1709,7 +1709,7 @@ export default function App() {
         )}
 
         <div className="answer answerInline">
-          <div className="answerTitle">Correct answer</div>
+          <div className="answerTitle">Answer</div>
           <div className="answerBody">{formatCorrectAnswer(question)}</div>
         </div>
       </div>
