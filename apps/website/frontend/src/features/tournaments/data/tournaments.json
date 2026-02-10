@@ -376,8 +376,8 @@
         "mode": "ONLINE",
         "timezone": "America/New_York",
         "dates": {
-            "start": "2026-02-01",
-            "end": "2026-02-01"
+            "start": "2026-02-15",
+            "end": "2026-02-15"
         },
         "divisions": [
             "HS"
@@ -417,7 +417,7 @@
         "mode": "ONLINE",
         "timezone": "America/Los_Angeles",
         "dates": {
-            "start": "2026-02-21",
+            "start": "2026-02-22",
             "end": "2026-02-22"
         },
         "divisions": [
@@ -452,8 +452,8 @@
         "mode": "IN_PERSON",
         "timezone": "America/New_York",
         "dates": {
-            "start": "2026-03-02",
-            "end": "2026-03-02"
+            "start": "2026-03-01",
+            "end": "2026-03-01"
         },
         "divisions": [
             "HS"
