@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import packetJson from "./assets/sample_packet.json";
+import { renderPacketText } from "./text/renderPacketText";
 
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
@@ -1425,7 +1426,8 @@ export default function App() {
 
   function renderQuestionSection(question: Question, title: string, disabled: boolean) {
     const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
-    const wordSegments = trimLeadingSpaces(tokenizeText(question.question_text));
+    const questionText = renderPacketText(question.question_text);
+    const wordSegments = trimLeadingSpaces(tokenizeText(questionText));
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
@@ -1483,7 +1485,7 @@ export default function App() {
             <em>{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</em>{" "}
           </span>
           {isBonus ? (
-            <span>{question.question_text}</span>
+            <span>{questionText}</span>
           ) : (
             (() => {
               let wordIndex = 0;
@@ -1545,14 +1547,15 @@ export default function App() {
         {question.options?.length > 0 && (
           <ol className="options">
             {question.options.map((opt, optionIndex) => {
-              const optionSegments = trimLeadingSpaces(tokenizeText(opt));
+              const optText = renderPacketText(opt);
+              const optionSegments = trimLeadingSpaces(tokenizeText(optText));
               const label =
                 question.question_style === "MULTIPLE_CHOICE"
                   ? ["W", "X", "Y", "Z"][optionIndex] ?? String(optionIndex + 1)
                   : String(optionIndex + 1);
 
               if (isBonus) {
-                const optionText = opt.trim();
+                const optionText = optText.trim();
                 return (
                   <li key={optionIndex} className="readText">
                     <span className="optionLabel">{label})</span>
@@ -1710,7 +1713,7 @@ export default function App() {
 
         <div className="answer answerInline">
           <div className="answerTitle">Answer</div>
-          <div className="answerBody">{formatCorrectAnswer(question)}</div>
+          <div className="answerBody">{renderPacketText(formatCorrectAnswer(question))}</div>
         </div>
       </div>
     );
