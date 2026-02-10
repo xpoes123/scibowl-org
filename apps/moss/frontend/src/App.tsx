@@ -1383,11 +1383,23 @@ export default function App() {
 
   useEffect(() => {
     if (!bonusResultEditor) return;
+    const currentBonusResultEditor = bonusResultEditor;
 
     function onMouseDown(e: MouseEvent) {
       const el = bonusPopupRef.current;
       if (!el) return;
       if (el.contains(e.target as Node)) return;
+
+      if (e.target instanceof HTMLElement) {
+        const toggleEl = e.target.closest("[data-bonus-question-id]");
+        if (
+          toggleEl &&
+          toggleEl.getAttribute("data-bonus-question-id") === String(currentBonusResultEditor.questionId)
+        ) {
+          return;
+        }
+      }
+
       setBonusResultEditor(null);
     }
 
@@ -1431,12 +1443,17 @@ export default function App() {
     return (
       <div
         className={[sectionClasses, bonusTintClass, isBonus ? "qaSectionClickable" : ""].filter(Boolean).join(" ")}
+        data-bonus-question-id={isBonus ? String(question.id) : undefined}
         aria-label={title}
         aria-disabled={disabled}
         onClick={(e) => {
           if (!isBonus) return;
           if (disabled) return;
           if (e.target instanceof HTMLElement && e.target.closest("button, a, input, select, textarea")) return;
+          if (bonusResultEditor?.questionId === question.id) {
+            setBonusResultEditor(null);
+            return;
+          }
           openBonusResultEditor(question, e.clientX, e.clientY);
         }}
       >
