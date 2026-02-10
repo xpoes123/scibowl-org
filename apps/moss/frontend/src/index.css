@@ -1165,6 +1165,13 @@ button.wordLabel {
   top: 0;
   height: 1px;
   background: #eee;
+  transition: background 120ms ease, box-shadow 120ms ease;
+}
+
+.scoresheetBoundaryButton:hover::before,
+.scoresheetBoundaryButton:focus-visible::before {
+  background: #cdd4ff;
+  box-shadow: 0 0 8px rgba(124, 153, 255, 0.45);
 }
 
 .scoresheetBoundaryButton::after {
