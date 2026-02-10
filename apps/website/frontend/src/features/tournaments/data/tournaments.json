@@ -376,8 +376,8 @@
         "mode": "ONLINE",
         "timezone": "America/New_York",
         "dates": {
-            "start": "2026-02-01",
-            "end": "2026-02-01"
+            "start": "2026-02-15",
+            "end": "2026-02-15"
         },
         "divisions": [
             "HS"
