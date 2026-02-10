@@ -1002,8 +1002,8 @@ button.wordLabel {
   margin-top: 12px;
   padding: 14px;
   border-radius: 12px;
-  background: #f7fff5;
-  border: 1px solid #d8f0d2;
+  background: white;
+  border: 1px solid #eee;
 }
 
 .answerInline {
