@@ -2281,7 +2281,7 @@ export default function App() {
                         setScoresheetBoundaryPopup(null);
                       }}
                     >
-                      Lineup Change...
+                      Lineup Change
                     </button>
                     <button
                       type="button"
