@@ -5,7 +5,7 @@ import packetJson from "./assets/sample_packet.json";
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
-const END_TOKEN = "END" as const;
+const END_TOKEN = "NO PENALTY" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
 const SCORESHEET_EXPORT_VERSION = 1 as const;
 
@@ -1383,11 +1383,23 @@ export default function App() {
 
   useEffect(() => {
     if (!bonusResultEditor) return;
+    const currentBonusResultEditor = bonusResultEditor;
 
     function onMouseDown(e: MouseEvent) {
       const el = bonusPopupRef.current;
       if (!el) return;
       if (el.contains(e.target as Node)) return;
+
+      if (e.target instanceof HTMLElement) {
+        const toggleEl = e.target.closest("[data-bonus-question-id]");
+        if (
+          toggleEl &&
+          toggleEl.getAttribute("data-bonus-question-id") === String(currentBonusResultEditor.questionId)
+        ) {
+          return;
+        }
+      }
+
       setBonusResultEditor(null);
     }
 
@@ -1431,12 +1443,17 @@ export default function App() {
     return (
       <div
         className={[sectionClasses, bonusTintClass, isBonus ? "qaSectionClickable" : ""].filter(Boolean).join(" ")}
+        data-bonus-question-id={isBonus ? String(question.id) : undefined}
         aria-label={title}
         aria-disabled={disabled}
         onClick={(e) => {
           if (!isBonus) return;
           if (disabled) return;
           if (e.target instanceof HTMLElement && e.target.closest("button, a, input, select, textarea")) return;
+          if (bonusResultEditor?.questionId === question.id) {
+            setBonusResultEditor(null);
+            return;
+          }
           openBonusResultEditor(question, e.clientX, e.clientY);
         }}
       >
@@ -1692,7 +1709,7 @@ export default function App() {
         )}
 
         <div className="answer answerInline">
-          <div className="answerTitle">Correct answer</div>
+          <div className="answerTitle">Answer</div>
           <div className="answerBody">{formatCorrectAnswer(question)}</div>
         </div>
       </div>
@@ -2116,9 +2133,8 @@ export default function App() {
                       const row = scoredPairs.rows[i];
                       const boundaryBeforeQuestion = row.pairId;
                       const isStartBoundary = i === 0;
-                      const markerKind: ScoresheetMarkerKind | "START" | undefined =
-                        isStartBoundary ? "START" : scoresheetMarkers[boundaryBeforeQuestion];
-                      const isSpacedMarker = markerKind !== undefined && markerKind !== "START";
+                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+                      const isSpacedMarker = markerKind !== undefined;
 
                       nodes.push(
                         <tr
@@ -2126,7 +2142,6 @@ export default function App() {
                           className={[
                             "scoresheetBoundaryRow",
                             isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
-                            markerKind === "START" ? "scoresheetBoundaryRowStart" : "",
                           ].filter(Boolean).join(" ")}
                         >
                           <td colSpan={colSpan}>
@@ -2134,24 +2149,26 @@ export default function App() {
                               type="button"
                               className={["scoresheetBoundaryButton", isSpacedMarker ? "scoresheetBoundaryButtonMarked" : ""].filter(Boolean).join(" ")}
                               onClick={(e) => {
-                                if (markerKind === "START") {
+                                if (isStartBoundary) {
                                   openLineupChangeModal("START", boundaryBeforeQuestion, false);
                                   return;
                                 }
                                 openScoresheetBoundaryPopup(boundaryBeforeQuestion, e.currentTarget);
                               }}
                               aria-label={
-                                markerKind === "START"
+                                isStartBoundary
                                   ? "Edit starting lineup"
                                   : markerKind
                                     ? `Edit marker before question ${boundaryBeforeQuestion}`
                                     : `Add marker before question ${boundaryBeforeQuestion}`
                               }
                             >
-                              {markerKind ? (
+                              {isStartBoundary ? (
+                                <span className="scoresheetBoundaryAffordance">Change starting lineup</span>
+                              ) : markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (
-                                <span className="scoresheetBoundaryAffordance">+ Add break here</span>
+                                <span className="scoresheetBoundaryAffordance">+ Add break</span>
                               )}
                             </button>
                           </td>
@@ -2266,7 +2283,7 @@ export default function App() {
                         setScoresheetBoundaryPopup(null);
                       }}
                     >
-                      Lineup Change...
+                      Lineup Change
                     </button>
                     <button
                       type="button"

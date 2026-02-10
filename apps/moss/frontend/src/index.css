@@ -916,6 +916,7 @@ button.wordEnd {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .wordWrapSelected::before,
@@ -1002,8 +1003,8 @@ button.wordLabel {
   margin-top: 12px;
   padding: 14px;
   border-radius: 12px;
-  background: #f7fff5;
-  border: 1px solid #d8f0d2;
+  background: #f7f7fb;
+  border: 1px solid #eee;
 }
 
 .answerInline {
@@ -1165,6 +1166,13 @@ button.wordLabel {
   top: 0;
   height: 1px;
   background: #eee;
+  transition: background 120ms ease, box-shadow 120ms ease;
+}
+
+.scoresheetBoundaryButton:hover::before,
+.scoresheetBoundaryButton:focus-visible::before {
+  background: #cdd4ff;
+  box-shadow: 0 0 8px rgba(124, 153, 255, 0.45);
 }
 
 .scoresheetBoundaryButton::after {
