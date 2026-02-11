@@ -278,15 +278,7 @@ function parsePacketJson(jsonText: string): Packet {
 }
 
 function MossTopNav() {
-  const websiteHref = (() => {
-    const raw = (import.meta.env as Record<string, unknown>)["VITE_WEBSITE_URL"];
-    if (typeof raw === "string" && raw.trim()) return raw;
-    if (import.meta.env.DEV) return "http://localhost:5173/";
-    return "/";
-  })();
-
-  const websiteUrl = new URL(websiteHref, window.location.origin);
-  const logoSrc = new URL("/logo_big.png", websiteUrl).toString();
+  const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
 
   return (
