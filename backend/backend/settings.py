@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'users',
     'questions',
     'tournaments',
+    'moss',
 ]
 
 MIDDLEWARE = [
