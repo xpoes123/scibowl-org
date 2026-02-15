@@ -2,8 +2,8 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
-from itertools import combinations
 from .models import Tournament, Team, Coach, Player, Room, Round, Game
+from moss import models as moss_models
 from .serializers import (
     TournamentListSerializer, TournamentDetailSerializer,
     TeamSerializer, CoachSerializer, PlayerSerializer, RoomSerializer,
@@ -81,12 +81,15 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
 
         games_count = tournament.games.count()
         rounds_count = tournament.rounds.count()
+        moss_games_count = moss_models.Game.objects.filter(tournament=tournament).count()
 
         tournament.games.all().delete()
         tournament.rounds.all().delete()
+        moss_models.Game.objects.filter(tournament=tournament).delete()
 
         return Response({
-            'message': f'Deleted {games_count} games and {rounds_count} rounds'
+            'message': f'Deleted {games_count} games and {rounds_count} rounds',
+            'moss_games_deleted': moss_games_count,
         }, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
@@ -125,6 +128,28 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         generated_games = []
 
         with transaction.atomic():
+            moss_team_by_team_id = {}
+            for team in teams:
+                defaults = {
+                    "school": team.school or "",
+                    "pool": team.pool or "",
+                }
+                moss_team, _ = moss_models.TournamentTeam.objects.get_or_create(
+                    tournament=tournament,
+                    name=team.name,
+                    defaults=defaults,
+                )
+                update_fields = []
+                if moss_team.school != defaults["school"]:
+                    moss_team.school = defaults["school"]
+                    update_fields.append("school")
+                if moss_team.pool != defaults["pool"]:
+                    moss_team.pool = defaults["pool"]
+                    update_fields.append("pool")
+                if update_fields:
+                    moss_team.save(update_fields=update_fields)
+                moss_team_by_team_id[team.id] = moss_team
+
             # Generate round-robin schedules for each pool using round-robin algorithm
             from collections import deque
 
@@ -205,6 +230,24 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
                                 team2=team2,
                                 pool=pool_name  # Store the pool assignment at game creation
                             )
+
+                            moss_game = moss_models.Game.objects.create(
+                                tournament=tournament,
+                                round=round_obj,
+                                room=room,
+                                status="SCHEDULED",
+                            )
+                            moss_models.GameTeam.objects.create(
+                                game=moss_game,
+                                tournament_team=moss_team_by_team_id[team1.id],
+                                slot=1,
+                            )
+                            moss_models.GameTeam.objects.create(
+                                game=moss_game,
+                                tournament_team=moss_team_by_team_id[team2.id],
+                                slot=2,
+                            )
+                            moss_models.Scoresheet.objects.create(game=moss_game)
 
                             generated_games.append({
                                 'id': game.id,
