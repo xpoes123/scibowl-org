@@ -1663,3 +1663,45 @@ details[open] > .sbDetailsSummary::after {
   overflow: hidden;
   background: white;
 }
+
+.sbDataTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--sb-border);
+  border-radius: 12px;
+}
+
+.sbDataTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  background: var(--sb-card);
+}
+
+.sbDataTable th,
+.sbDataTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--sb-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.sbDataTable th {
+  position: sticky;
+  top: 0;
+  background: var(--sb-card);
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--sb-muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sbDataTable tr:last-child td {
+  border-bottom: 0;
+}
+
+.sbNum {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
