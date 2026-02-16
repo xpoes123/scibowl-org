@@ -2,6 +2,8 @@ import { useMemo, useState, type ReactNode } from "react";
 import type { TournamentDetail, TournamentLink } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
+import { useTournamentStandings } from "../../hooks/useTournamentStandings";
+import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -85,6 +87,9 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const statsLink = useMemo(() => findLink(tournament, "STATS"), [tournament]);
   const packetsLink = useMemo(() => findLink(tournament, "PACKETS"), [tournament]);
 
+  const { data: standings, loading: standingsLoading } = useTournamentStandings(tournament.slug, variant === "FINISHED");
+  const hasStandings = (standings?.team_standings?.length ?? 0) > 0;
+
   const tabs: Tab[] = useMemo(() => {
     if (variant === "UPCOMING") {
       return [
@@ -96,10 +101,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
     return [
       { id: "overview", label: "Overview", disabled: false },
-      { id: "results", label: "Results", disabled: !resultsLink },
+      { id: "results", label: "Results", disabled: !resultsLink && !hasStandings },
       { id: "statistics", label: "Statistics", disabled: !statsLink },
     ];
-  }, [resultsLink, statsLink, variant]);
+  }, [hasStandings, resultsLink, statsLink, variant]);
 
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
@@ -201,6 +206,23 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
               <div className="sbTabSectionBody">
                 {variant === "UPCOMING" ? (
                   <p className="sbMuted">Results will be available after the tournament.</p>
+                ) : standingsLoading ? (
+                  <p className="sbMuted">Loading results…</p>
+                ) : hasStandings && standings ? (
+                  <div className="sbTabStack">
+                    <div>
+                      <h3 className="m-0 text-sm font-semibold">Team Standings</h3>
+                      <div className="sbTopSpace">
+                        <TeamStandingsTable rows={standings.team_standings} />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="m-0 text-sm font-semibold">Individual Standings</h3>
+                      <div className="sbTopSpace">
+                        <IndividualStandingsTable rows={standings.individual_standings} />
+                      </div>
+                    </div>
+                  </div>
                 ) : resultsLink ? (
                   <GoogleSheetEmbed url={resultsLink.url} />
                 ) : (
