@@ -1,0 +1,184 @@
+from django.test import TestCase
+
+from moss.services.export_facts import reduce_scoresheet_export_to_facts
+
+
+class ExportFactsReducerTestCase(TestCase):
+    def _base_export(self, *, version: int) -> dict:
+        return {
+            "format": "moss_scoresheet",
+            "version": version,
+            "exported_at": "2026-02-13T00:00:00Z",
+            "packet": {
+                "packet": "Round 1",
+                "year": 2022,
+                "questions": [
+                    {"id": 1, "pair_id": 1, "question_type": "TOSSUP"},
+                    {"id": 2, "pair_id": 1, "question_type": "BONUS"},
+                    {"id": 3, "pair_id": 2, "question_type": "TOSSUP"},
+                    {"id": 4, "pair_id": 2, "question_type": "BONUS"},
+                ],
+            },
+            "packet_checksum": {
+                "algorithm": "sha256",
+                "canonicalization": "json_sorted_keys_utf8_no_ws",
+                "value": "0" * 64,
+            },
+            "game": {
+                "teams": [
+                    {
+                        "name": "Team A",
+                        "players": ["Alice", "Bob"],
+                        "lineup_segments": [
+                            {"start_tossup": 1, "end_tossup": None, "active_players": ["Alice", "Bob"]}
+                        ],
+                    },
+                    {
+                        "name": "Team B",
+                        "players": ["Carol", "Dan"],
+                        "lineup_segments": [
+                            {"start_tossup": 1, "end_tossup": None, "active_players": ["Carol", "Dan"]}
+                        ],
+                    },
+                ]
+            },
+            "rules": {
+                "tossup": {"correct": 4, "incorrect": -4, "no_penalty": 0},
+                "bonus": {"correct": 10, "incorrect": 0},
+            },
+        }
+
+    def test_v1_basic_scoring_and_no_penalty(self):
+        export_obj = self._base_export(version=1)
+        export_obj["state"] = {
+            "pair_index": 1,
+            "attempts_by_question_id": {
+                # Pair 1 tossup
+                "1": [
+                    {
+                        "team": "Team A",
+                        "player": "Alice",
+                        "result": "correct",
+                        "token": "X",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 0},
+                    },
+                    {
+                        "team": "Team B",
+                        "player": "Carol",
+                        "result": "incorrect",
+                        "token": "NO PENALTY",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    },
+                ],
+                # Pair 1 bonus
+                "2": [
+                    {
+                        "team": "Team A",
+                        "player": None,
+                        "result": "correct",
+                        "token": "BONUS",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    }
+                ],
+                # Pair 2 tossup
+                "3": [
+                    {
+                        "team": "Team A",
+                        "player": "Bob",
+                        "result": "incorrect",
+                        "token": "buzz",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 1},
+                    },
+                    {
+                        "team": "Team B",
+                        "player": "Dan",
+                        "result": "incorrect",
+                        "token": "NO PENALTY",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    },
+                ],
+                # Pair 2 bonus omitted for Team A (treated as 0 points)
+            },
+        }
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 2)
+
+        team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
+        team_b = next(t for t in facts.team_facts if t.team_name == "Team B")
+
+        self.assertEqual(team_a.tossups_heard, 2)
+        self.assertEqual(team_a.tossups_4, 1)
+        self.assertEqual(team_a.tossups_neg, 1)
+        self.assertEqual(team_a.tossups_0, 0)
+        self.assertEqual(team_a.bonuses_heard, 1)
+        self.assertEqual(team_a.bonus_points, 10)
+        self.assertEqual(team_a.points, 10)
+
+        self.assertEqual(team_b.tossups_heard, 2)
+        self.assertEqual(team_b.tossups_4, 0)
+        self.assertEqual(team_b.tossups_neg, 0)
+        self.assertEqual(team_b.tossups_0, 2)
+        self.assertEqual(team_b.bonuses_heard, 0)
+        self.assertEqual(team_b.bonus_points, 0)
+        self.assertEqual(team_b.points, 0)
+
+        alice = next(p for p in facts.player_facts if p.player_name == "Alice")
+        bob = next(p for p in facts.player_facts if p.player_name == "Bob")
+        self.assertEqual(alice.tossups_heard, 2)
+        self.assertEqual(alice.tossups_4, 1)
+        self.assertEqual(alice.tossups_neg, 0)
+        self.assertEqual(alice.tossup_points, 4)
+        self.assertEqual(bob.tossups_heard, 2)
+        self.assertEqual(bob.tossups_4, 0)
+        self.assertEqual(bob.tossups_neg, 1)
+        self.assertEqual(bob.tossup_points, -4)
+
+    def test_v2_uses_state_when_present(self):
+        export_obj = self._base_export(version=2)
+        export_obj["state"] = {
+            "pair_index": 0,
+            "attempts_by_question_id": {
+                "1": [
+                    {
+                        "team": "Team A",
+                        "player": "Alice",
+                        "result": "correct",
+                        "token": "X",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 0},
+                    }
+                ]
+            },
+        }
+        export_obj["event_log"] = {"scoresheet_id": None, "next_seq": 1, "events": []}
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 1)
+        team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
+        self.assertEqual(team_a.tossups_4, 1)
+
+    def test_pairs_played_infers_from_attempts_when_cursor_missing(self):
+        export_obj = self._base_export(version=1)
+        export_obj["state"] = {
+            "attempts_by_question_id": {
+                "3": [
+                    {
+                        "team": "Team A",
+                        "player": "Bob",
+                        "result": "incorrect",
+                        "token": "buzz",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 1},
+                    }
+                ]
+            }
+        }
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 2)
+

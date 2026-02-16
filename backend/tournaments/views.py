@@ -2,8 +2,12 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
-from itertools import combinations
+from django.shortcuts import get_object_or_404
+from django.db.models import Case, Count, F, IntegerField, Sum, When
+from django.db.models.functions import Coalesce
+from django.db.models.expressions import OuterRef, Subquery
 from .models import Tournament, Team, Coach, Player, Room, Round, Game
+from moss import models as moss_models
 from .serializers import (
     TournamentListSerializer, TournamentDetailSerializer,
     TeamSerializer, CoachSerializer, PlayerSerializer, RoomSerializer,
@@ -18,6 +22,24 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Tournament.objects.all()
     permission_classes = [permissions.AllowAny]
+    lookup_field = "slug"
+
+    def get_object(self):
+        """
+        Lookup tournaments by slug, with a backward-compatible fallback to numeric id.
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+        raw = self.kwargs.get(self.lookup_field)
+        if raw is None:
+            return super().get_object()
+
+        if isinstance(raw, str) and raw.isdigit():
+            obj = queryset.filter(slug=raw).first()
+            if obj is not None:
+                return obj
+            return get_object_or_404(queryset, pk=int(raw))
+
+        return get_object_or_404(queryset, slug=raw)
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -41,7 +63,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
     
     @action(detail=True, methods=['get'])
-    def teams(self, request, pk=None):
+    def teams(self, request, *args, **kwargs):
         """Get all teams for a tournament."""
         tournament = self.get_object()
         teams = tournament.teams.all()
@@ -49,7 +71,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def rooms(self, request, pk=None):
+    def rooms(self, request, *args, **kwargs):
         """Get all rooms for a tournament."""
         tournament = self.get_object()
         rooms = tournament.rooms.all()
@@ -57,7 +79,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def rounds(self, request, pk=None):
+    def rounds(self, request, *args, **kwargs):
         """Get all rounds for a tournament."""
         tournament = self.get_object()
         rounds = tournament.rounds.all()
@@ -65,15 +87,141 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def games(self, request, pk=None):
+    def games(self, request, *args, **kwargs):
         """Get all games for a tournament."""
         tournament = self.get_object()
         games = tournament.games.all()
         serializer = GameSerializer(games, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=["get"])
+    def standings(self, request, *args, **kwargs):
+        """
+        Aggregate standings from moss fact tables for this tournament.
+
+        Returns both team standings and individual standings suitable for the website Results tab.
+        """
+        tournament = self.get_object()
+
+        team_fact_model = moss_models.GameTeamFact
+        player_fact_model = moss_models.GamePlayerFact
+
+        # Team standings.
+        opp_points = Subquery(
+            team_fact_model.objects.filter(game_id=OuterRef("game_id"))
+            .exclude(tournament_team_id=OuterRef("tournament_team_id"))
+            .values("points")[:1]
+        )
+        base = team_fact_model.objects.filter(game__tournament=tournament).annotate(opp_points=opp_points)
+
+        team_rows = (
+            base.values("tournament_team_id", "tournament_team__name")
+            .annotate(
+                games_played=Count("game_id", distinct=True),
+                wins=Coalesce(
+                    Sum(
+                        Case(
+                            When(points__gt=F("opp_points"), then=1),
+                            default=0,
+                            output_field=IntegerField(),
+                        )
+                    ),
+                    0,
+                ),
+                losses=Coalesce(
+                    Sum(
+                        Case(
+                            When(points__lt=F("opp_points"), then=1),
+                            default=0,
+                            output_field=IntegerField(),
+                        )
+                    ),
+                    0,
+                ),
+                points=Coalesce(Sum("points"), 0),
+                tossups_heard=Coalesce(Sum("tossups_heard"), 0),
+                tossups_4=Coalesce(Sum("tossups_4"), 0),
+                tossups_neg=Coalesce(Sum("tossups_neg"), 0),
+                tossups_0=Coalesce(Sum("tossups_0"), 0),
+                bonuses_heard=Coalesce(Sum("bonuses_heard"), 0),
+                bonus_points=Coalesce(Sum("bonus_points"), 0),
+            )
+            .order_by("-wins", "-points", "tournament_team__name")
+        )
+
+        team_standings = []
+        for idx, row in enumerate(team_rows, start=1):
+            games_played = int(row["games_played"] or 0)
+            points = int(row["points"] or 0)
+            bonuses_heard = int(row["bonuses_heard"] or 0)
+            bonus_points = int(row["bonus_points"] or 0)
+            team_standings.append(
+                {
+                    "rank": idx,
+                    "team_id": row["tournament_team_id"],
+                    "name": row["tournament_team__name"],
+                    "wins": int(row["wins"] or 0),
+                    "losses": int(row["losses"] or 0),
+                    "points_per_game": (points / games_played) if games_played else 0.0,
+                    "4s": int(row["tossups_4"] or 0),
+                    "-4s": int(row["tossups_neg"] or 0),
+                    "0s": int(row["tossups_0"] or 0),
+                    "tossups_heard": int(row["tossups_heard"] or 0),
+                    "bonuses_heard": bonuses_heard,
+                    "bonus_points": bonus_points,
+                    "points_per_bonus": (bonus_points / bonuses_heard) if bonuses_heard else 0.0,
+                }
+            )
+
+        # Individual standings.
+        player_rows = (
+            player_fact_model.objects.filter(game__tournament=tournament)
+            .values(
+                "tournament_player_id",
+                "tournament_player__name",
+                "tournament_team__name",
+            )
+            .annotate(
+                games_played=Count("game_id", distinct=True),
+                tossups_heard=Coalesce(Sum("tossups_heard"), 0),
+                tossups_4=Coalesce(Sum("tossups_4"), 0),
+                tossups_neg=Coalesce(Sum("tossups_neg"), 0),
+                tossups_0=Coalesce(Sum("tossups_0"), 0),
+                tossup_points=Coalesce(Sum("tossup_points"), 0),
+            )
+            .order_by("-tossup_points", "-tossups_4", "tournament_player__name")
+        )
+
+        individual_standings = []
+        for idx, row in enumerate(player_rows, start=1):
+            games_played = int(row["games_played"] or 0)
+            tossup_points = int(row["tossup_points"] or 0)
+            individual_standings.append(
+                {
+                    "rank": idx,
+                    "player_id": row["tournament_player_id"],
+                    "name": row["tournament_player__name"],
+                    "team": row["tournament_team__name"],
+                    "games_played": games_played,
+                    "4s": int(row["tossups_4"] or 0),
+                    "-4s": int(row["tossups_neg"] or 0),
+                    "0s": int(row["tossups_0"] or 0),
+                    "tossups_heard": int(row["tossups_heard"] or 0),
+                    "tossup_points": tossup_points,
+                    "points_per_game": (tossup_points / games_played) if games_played else 0.0,
+                }
+            )
+
+        return Response(
+            {
+                "tournament": {"id": tournament.id, "slug": tournament.slug, "name": tournament.name},
+                "team_standings": team_standings,
+                "individual_standings": individual_standings,
+            }
+        )
+
     @action(detail=True, methods=['delete'])
-    def clear_schedule(self, request, pk=None):
+    def clear_schedule(self, request, *args, **kwargs):
         """
         Delete all games and rounds for this tournament.
         """
@@ -81,16 +229,19 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
 
         games_count = tournament.games.count()
         rounds_count = tournament.rounds.count()
+        moss_games_count = moss_models.Game.objects.filter(tournament=tournament).count()
 
         tournament.games.all().delete()
         tournament.rounds.all().delete()
+        moss_models.Game.objects.filter(tournament=tournament).delete()
 
         return Response({
-            'message': f'Deleted {games_count} games and {rounds_count} rounds'
+            'message': f'Deleted {games_count} games and {rounds_count} rounds',
+            'moss_games_deleted': moss_games_count,
         }, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
-    def generate_schedule(self, request, pk=None):
+    def generate_schedule(self, request, *args, **kwargs):
         """
         Generate round-robin matches for all pools in the tournament.
         Creates Game objects for all teams in each pool to play each other once.
@@ -125,6 +276,28 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         generated_games = []
 
         with transaction.atomic():
+            moss_team_by_team_id = {}
+            for team in teams:
+                defaults = {
+                    "school": team.school or "",
+                    "pool": team.pool or "",
+                }
+                moss_team, _ = moss_models.TournamentTeam.objects.get_or_create(
+                    tournament=tournament,
+                    name=team.name,
+                    defaults=defaults,
+                )
+                update_fields = []
+                if moss_team.school != defaults["school"]:
+                    moss_team.school = defaults["school"]
+                    update_fields.append("school")
+                if moss_team.pool != defaults["pool"]:
+                    moss_team.pool = defaults["pool"]
+                    update_fields.append("pool")
+                if update_fields:
+                    moss_team.save(update_fields=update_fields)
+                moss_team_by_team_id[team.id] = moss_team
+
             # Generate round-robin schedules for each pool using round-robin algorithm
             from collections import deque
 
@@ -205,6 +378,24 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
                                 team2=team2,
                                 pool=pool_name  # Store the pool assignment at game creation
                             )
+
+                            moss_game = moss_models.Game.objects.create(
+                                tournament=tournament,
+                                round=round_obj,
+                                room=room,
+                                status="SCHEDULED",
+                            )
+                            moss_models.GameTeam.objects.create(
+                                game=moss_game,
+                                tournament_team=moss_team_by_team_id[team1.id],
+                                slot=1,
+                            )
+                            moss_models.GameTeam.objects.create(
+                                game=moss_game,
+                                tournament_team=moss_team_by_team_id[team2.id],
+                                slot=2,
+                            )
+                            moss_models.Scoresheet.objects.create(game=moss_game)
 
                             generated_games.append({
                                 'id': game.id,

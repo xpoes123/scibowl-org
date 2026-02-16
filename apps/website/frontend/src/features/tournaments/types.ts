@@ -97,6 +97,42 @@ export interface TournamentSummary {
   updated_at?: string;
 }
 
+export type TeamStandingsRow = {
+  rank: number;
+  team_id: number;
+  name: string;
+  wins: number;
+  losses: number;
+  points_per_game: number;
+  "4s": number;
+  "-4s": number;
+  "0s": number;
+  tossups_heard: number;
+  bonuses_heard: number;
+  bonus_points: number;
+  points_per_bonus: number;
+};
+
+export type IndividualStandingsRow = {
+  rank: number;
+  player_id: number;
+  name: string;
+  team: string;
+  games_played: number;
+  "4s": number;
+  "-4s": number;
+  "0s": number;
+  tossups_heard: number;
+  tossup_points: number;
+  points_per_game: number;
+};
+
+export type TournamentStandingsResponse = {
+  tournament: { id: number; slug: string | null; name: string };
+  team_standings: TeamStandingsRow[];
+  individual_standings: IndividualStandingsRow[];
+};
+
 // Alias for backwards compatibility
 export type TournamentDetail = Tournament;
 

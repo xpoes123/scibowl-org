@@ -1,11 +1,11 @@
-﻿# MoSS Scoresheet Export JSON (v1)
+﻿# MoSS Scoresheet Export JSON (v1/v2)
 
 This document specifies the JSON format used to export a MoSS match scoresheet (i.e., the marking state that drives the live scoresheet UI).
 
 ## File identification
 
 - `format` (string, required): Must be `"moss_scoresheet"`.
-- `version` (number, required): Format version. This document describes `1`.
+- `version` (number, required): Format version. This document describes `1` and `2`.
 - `exported_at` (string, required): ISO-8601 timestamp (UTC recommended), e.g. `"2026-01-01T00:00:00Z"`.
 
 These fields allow importers to quickly recognize the file type and to handle future schema changes.
@@ -57,7 +57,22 @@ Scoring rules used to interpret attempts.
   - `correct` (number, required)
   - `incorrect` (number, required)
 
-### `state` (object, required)
+### `event_log` (object, v2+)
+The authoritative event stream for the scoresheet. Exported in v2 and later.
+
+- `scoresheet_id` (number or null): Backend scoresheet id, if available.
+- `next_seq` (number): Next sequence number after the last event.
+- `events` (array): Ordered list of events.
+
+#### Event object
+- `seq` (number, required): Event sequence number.
+- `client_event_id` (string, required): Client-generated UUID or id.
+- `type` (string, required): Event type identifier.
+- `version` (number, required): Event payload version (currently 1).
+- `client_ts` (string or null, optional): Client timestamp.
+- `payload` (object, required): Event payload.
+
+### `state` (object, required in v1, optional in v2)
 The canonical marking state. A scoresheet table is not exported because it is derivable.
 
 - `pair_index` (number, required): Zero-based index of the current pair (UI position).
@@ -79,15 +94,15 @@ The canonical marking state. A scoresheet table is not exported because it is de
   - If `kind == "end"`: no additional fields.
 
 Notes:
-- Absence of an attempt means nothing happened for that team/question (there is no separate “no attempt” record).
+- Absence of an attempt means nothing happened for that team/question (there is no separate "no attempt" record).
 - This format assumes team names are unique within the export.
 
-## Example
+## Example (v2)
 
 ```json
 {
   "format": "moss_scoresheet",
-  "version": 1,
+  "version": 2,
   "exported_at": "2026-01-01T00:00:00Z",
   "packet": {
     "packet": "Round 1",
@@ -108,6 +123,28 @@ Notes:
   "rules": {
     "tossup": { "correct": 4, "incorrect": -4, "no_penalty": 0 },
     "bonus": { "correct": 10, "incorrect": 0 }
+  },
+  "event_log": {
+    "scoresheet_id": 123,
+    "next_seq": 2,
+    "events": [
+      {
+        "seq": 1,
+        "client_event_id": "00000000-0000-0000-0000-000000000001",
+        "type": "attempt.recorded",
+        "version": 1,
+        "client_ts": "2026-01-01T00:00:00Z",
+        "payload": {
+          "question_id": 1,
+          "team_id": 1,
+          "player_id": 10,
+          "result": "correct",
+          "token": "Alps",
+          "is_end": false,
+          "location": { "kind": "question", "word_index": 2 }
+        }
+      }
+    ]
   },
   "state": {
     "pair_index": 0,

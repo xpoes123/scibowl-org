@@ -203,6 +203,13 @@ export const tournamentsAPI = {
     return handleResponse(response);
   },
 
+  getTournamentStandings: async (slug: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/${encodeURIComponent(slug)}/standings/`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(response);
+  },
+
   getTournamentTeams: async (tournamentId: number) => {
     const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/teams/`, {
       headers: getAuthHeaders(),

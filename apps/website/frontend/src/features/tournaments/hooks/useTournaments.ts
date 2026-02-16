@@ -13,7 +13,8 @@ type UseTournamentsResult = {
  * Tournaments are managed via PR (see data/tournaments.ts).
  */
 export function useTournaments(): UseTournamentsResult {
-  const tournaments = useMemo(() => TOURNAMENTS, []);
+  // Hide draft tournaments from the public listing/search, while still allowing direct URL access.
+  const tournaments = useMemo(() => TOURNAMENTS.filter((t) => t.status !== "DRAFT"), []);
 
   return {
     tournaments,
