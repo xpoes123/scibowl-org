@@ -9,7 +9,10 @@
             "start": "2026-05-16",
             "end": "2026-05-16"
         },
-        "divisions": ["HS", "MS"],
+        "divisions": [
+            "HS",
+            "MS"
+        ],
         "notes": {
             "logistics": "Online tournament. Runs from 9:45 AM to 7:00 PM CDT. Dual-division: 48-team (tentative) high school division and 16-team (tentative) middle school division.",
             "writing_team": "Hustler's University"
@@ -53,7 +56,9 @@
             "start": "2026-04-04",
             "end": "2026-04-04"
         },
-        "divisions": ["HS"],
+        "divisions": [
+            "HS"
+        ],
         "notes": {
             "logistics": "Online tournament held on Discord. 48-team field with 5 round robin rounds and 8 double elimination rounds. $15 fee must be paid by Wednesday, April 1st.",
             "writing_team": "Davidson Academy"
@@ -368,6 +373,29 @@
             }
         ],
         "updated_at": "2026-01-06T02:00:00Z"
+    },
+    {
+        "slug": "pilot-scrimmage-1",
+        "name": "Pilot Scrimmage 1",
+        "status": "DRAFT",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-02-12",
+            "end": "2026-02-12"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Internal test tournament for validating snapshot-derived results and statistics. Not publicly listed."
+        },
+        "format": {
+            "summary": "Scrimmage used to validate generating team and individual standings from MoSS snapshot exports."
+        },
+        "contacts": [],
+        "links": [],
+        "updated_at": "2026-02-16T00:00:00Z"
     },
     {
         "slug": "lexington-biology-bowl",
