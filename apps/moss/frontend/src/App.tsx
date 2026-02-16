@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import packetJson from "./assets/sample_packet.json";
 import { renderPacketText } from "./text/renderPacketText";
+import { getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
 import {
   buildScoresheetEvent,
   encodeLocationForEvent,
@@ -343,9 +344,34 @@ export default function App() {
 
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
+  const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
+  const remoteReady = useMemo(() => {
+    if (!remoteScoresheetId || !game) return false;
+    return game.teams.every((team) => {
+      if (!Number.isFinite(Number(team.id))) return false;
+      return team.players.every((player) => Number.isFinite(Number(player.id)));
+    });
+  }, [remoteScoresheetId, game]);
 
   function appendScoresheetEvents(newEvents: ScoresheetEvent[]) {
     if (!newEvents.length) return;
+    const startSeq = scoresheetState.lastSeq + 1;
+    if (remoteScoresheetId && !remoteReady) {
+      console.warn("Remote scoresheet configured but local team ids are not numeric; skipping remote post.");
+    }
+    if (remoteReady && remoteScoresheetId) {
+      void (async () => {
+        for (let i = 0; i < newEvents.length; i += 1) {
+          const event = newEvents[i];
+          try {
+            await postScoresheetEvent(remoteScoresheetId, event, startSeq + i);
+          } catch (err) {
+            console.warn("Failed to post scoresheet event", err);
+            break;
+          }
+        }
+      })();
+    }
     setScoresheetEvents((prev) => {
       const lastSeq = prev.length ? prev[prev.length - 1].seq ?? prev.length : 0;
       const withSeq = newEvents.map((event, idx) => ({ ...event, seq: lastSeq + idx + 1 }));
