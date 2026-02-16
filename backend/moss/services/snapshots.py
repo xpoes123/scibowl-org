@@ -31,7 +31,7 @@ def maybe_write_snapshot(scoresheet_id: int, upto_seq: int, reason: str = "inter
         scoresheet = Scoresheet.objects.select_for_update().get(pk=scoresheet_id)
 
         latest_seq = scoresheet.latest_snapshot_seq or 0
-        if upto_seq - latest_seq < SNAPSHOT_INTERVAL:
+        if reason == "interval" and upto_seq - latest_seq < SNAPSHOT_INTERVAL:
             return None
 
         existing = ScoresheetSnapshot.objects.filter(scoresheet=scoresheet, seq=upto_seq).first()
