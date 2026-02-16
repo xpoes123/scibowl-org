@@ -33,6 +33,13 @@ class Tournament(models.Model):
     ]
 
     name = models.CharField(max_length=255)
+    slug = models.SlugField(
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="URL slug used by the website (e.g. pilot-scrimmage)",
+    )
     description = models.TextField(blank=True)
     division = models.CharField(max_length=20, choices=DIVISION_CHOICES)
     format = models.CharField(max_length=20, choices=FORMAT_CHOICES)
