@@ -8,6 +8,7 @@ from .serializers import (
     ScoresheetEventOutSerializer,
     ScoresheetEventPostSerializer,
 )
+from .services.snapshots import maybe_write_snapshot
 
 
 class ScoresheetEventsView(APIView):
@@ -111,6 +112,15 @@ class ScoresheetEventsView(APIView):
             )
             scoresheet.next_seq = seq + 1
             scoresheet.save(update_fields=["next_seq", "updated_at"])
+
+            def _enqueue_snapshot(scoresheet_pk: int, snapshot_seq: int) -> None:
+                try:
+                    maybe_write_snapshot(scoresheet_pk, snapshot_seq, reason="interval")
+                except Exception:
+                    # Snapshot failures should not block event append.
+                    return
+
+            transaction.on_commit(lambda: _enqueue_snapshot(scoresheet.id, seq))
 
         out = ScoresheetEventOutSerializer(event).data
         return Response({
