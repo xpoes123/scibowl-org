@@ -17,7 +17,7 @@ class TournamentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tournament
         fields = [
-            'id', 'name', 'description', 'division', 'format', 'status',
+            'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
             'website_url', 'registration_url'
@@ -33,7 +33,7 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tournament
         fields = [
-            'id', 'name', 'description', 'division', 'format', 'status',
+            'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
             'website_url', 'registration_url',
