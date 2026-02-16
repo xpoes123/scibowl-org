@@ -179,3 +179,69 @@ class ScoresheetSnapshot(models.Model):
 
     def __str__(self) -> str:
         return f"{self.scoresheet_id}@{self.seq}"
+
+
+class GameTeamFact(models.Model):
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name="team_facts",
+    )
+    tournament_team = models.ForeignKey(
+        TournamentTeam,
+        on_delete=models.CASCADE,
+        related_name="game_facts",
+    )
+
+    points = models.IntegerField(default=0)
+    tossups_heard = models.PositiveIntegerField(default=0)
+    tossups_4 = models.PositiveIntegerField(default=0)
+    tossups_neg = models.PositiveIntegerField(default=0)
+    tossups_0 = models.PositiveIntegerField(default=0)
+
+    bonuses_heard = models.PositiveIntegerField(default=0)
+    bonus_points = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = [("game", "tournament_team")]
+        ordering = ["game_id", "tournament_team_id"]
+
+    def __str__(self) -> str:
+        return f"Game {self.game_id}: {self.tournament_team.name}"
+
+
+class GamePlayerFact(models.Model):
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name="player_facts",
+    )
+    tournament_player = models.ForeignKey(
+        TournamentPlayer,
+        on_delete=models.CASCADE,
+        related_name="game_facts",
+    )
+    tournament_team = models.ForeignKey(
+        TournamentTeam,
+        on_delete=models.CASCADE,
+        related_name="player_game_facts",
+    )
+
+    tossups_heard = models.PositiveIntegerField(default=0)
+    tossups_4 = models.PositiveIntegerField(default=0)
+    tossups_neg = models.PositiveIntegerField(default=0)
+    tossups_0 = models.PositiveIntegerField(default=0)
+    tossup_points = models.IntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = [("game", "tournament_player")]
+        ordering = ["game_id", "tournament_team_id", "tournament_player_id"]
+
+    def __str__(self) -> str:
+        return f"Game {self.game_id}: {self.tournament_player.name} ({self.tournament_team.name})"
