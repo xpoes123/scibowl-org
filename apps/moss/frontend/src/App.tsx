@@ -2,6 +2,22 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import packetJson from "./assets/sample_packet.json";
 import { renderPacketText } from "./text/renderPacketText";
+import {
+  buildScoresheetEvent,
+  encodeLocationForEvent,
+  type ScoresheetEvent,
+} from "./domain/scoresheetEvents";
+import {
+  initialScoresheetState,
+  reduceScoresheetEvents,
+  type ScoresheetState,
+} from "./domain/scoresheetReducer";
+import type {
+  Attempt,
+  AttemptLocation,
+  AttemptResult,
+  ScoresheetMarkerKind,
+} from "./domain/scoresheetTypes";
 
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
@@ -9,8 +25,6 @@ type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK
 const END_TOKEN = "NO PENALTY" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
 const SCORESHEET_EXPORT_VERSION = 1 as const;
-
-type AttemptResult = "correct" | "incorrect";
 
 const DISPLAY_CATEGORY: Record<string, string> = {
   BIOLOGY: "Biology",
@@ -28,11 +42,6 @@ const DISPLAY_QUESTION_STYLE: Record<QuestionStyle, string> = {
   RANK: "Short Answer",
 };
 
-type AttemptLocation =
-  | { kind: "question"; wordIndex: number }
-  | { kind: "option"; optionIndex: number; wordIndex: number }
-  | { kind: "end" };
-
 function isSameLocation(a: AttemptLocation, b: AttemptLocation): boolean {
   if (a.kind !== b.kind) return false;
   if (a.kind === "end") return true;
@@ -40,15 +49,6 @@ function isSameLocation(a: AttemptLocation, b: AttemptLocation): boolean {
   if (a.kind === "option" && b.kind === "option") return a.optionIndex === b.optionIndex && a.wordIndex === b.wordIndex;
   return false;
 }
-
-type Attempt = {
-  token: string;
-  isEnd: boolean;
-  result?: AttemptResult;
-  location: AttemptLocation;
-  teamId: string;
-  playerId?: string;
-};
 
 type Packet = {
   packet: string;
@@ -310,8 +310,16 @@ export default function App() {
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
-  const [pairIdx, setPairIdx] = useState(0);
-  const [attempts, setAttempts] = useState<Record<number, Attempt[]>>({});
+  const [scoresheetBaseState, setScoresheetBaseState] = useState<ScoresheetState>(() => initialScoresheetState());
+  const [scoresheetEvents, setScoresheetEvents] = useState<ScoresheetEvent[]>([]);
+  const scoresheetState = useMemo(
+    () => reduceScoresheetEvents(scoresheetEvents, scoresheetBaseState),
+    [scoresheetBaseState, scoresheetEvents]
+  );
+  const pairIdx = scoresheetState.pairIndex;
+  const attempts = scoresheetState.attemptsByQuestionId;
+  const scoresheetMarkers = scoresheetState.markers;
+  const lineupsByTeamId = scoresheetState.lineupsByTeamId;
   const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
   const [bonusResultEditor, setBonusResultEditor] = useState<{ questionId: number; left: number; top: number } | null>(null);
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
@@ -324,7 +332,6 @@ export default function App() {
 
   const teams = game?.teams ?? [];
 
-  type ScoresheetMarkerKind = "HALFTIME" | "BREAK";
   type LineupPhase = ScoresheetMarkerKind | "START";
   type ScoresheetBoundaryPopupState = { boundaryBeforeQuestion: number; left: number; top: number } | null;
   type LineupChangeModalState = {
@@ -334,9 +341,21 @@ export default function App() {
     draftInByTeamId: Record<string, Record<string, boolean>>;
   } | null;
 
-  const [scoresheetMarkers, setScoresheetMarkers] = useState<Record<number, ScoresheetMarkerKind>>({});
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
+
+  function appendScoresheetEvents(newEvents: ScoresheetEvent[]) {
+    if (!newEvents.length) return;
+    setScoresheetEvents((prev) => {
+      const lastSeq = prev.length ? prev[prev.length - 1].seq ?? prev.length : 0;
+      const withSeq = newEvents.map((event, idx) => ({ ...event, seq: lastSeq + idx + 1 }));
+      return [...prev, ...withSeq];
+    });
+  }
+
+  function appendScoresheetEvent(event: ScoresheetEvent) {
+    appendScoresheetEvents([event]);
+  }
 
   function uniq<T>(items: T[]): T[] {
     return Array.from(new Set(items));
@@ -366,57 +385,61 @@ export default function App() {
     }));
   }
 
-  function defaultLineupSegmentsForTeam(team: Team): LineupSegment[] {
-    return [{ startTossup: 1, endTossup: null, activePlayerIds: team.players.map((p) => p.id) }];
-  }
-
   function activePlayerIdsForTeamAtTossup(team: Team, tossupNumber: number): Set<string> {
-    const segments = team.lineupSegments?.length ? sortLineupSegments(team.lineupSegments) : null;
-    if (!segments) return new Set(team.players.map((p) => p.id));
+    const teamLineups = lineupsByTeamId[team.id];
+    if (!teamLineups) return new Set(team.players.map((p) => p.id));
 
-    let chosen: LineupSegment | null = null;
-    for (const seg of segments) {
-      if (seg.startTossup > tossupNumber) break;
-      const end = seg.endTossup ?? Number.POSITIVE_INFINITY;
-      if (tossupNumber <= end) chosen = seg;
+    const boundaries = Object.keys(teamLineups)
+      .map((n) => Number(n))
+      .filter((n) => Number.isFinite(n))
+      .sort((a, b) => a - b);
+
+    let activeIds: string[] | null = null;
+    for (const boundary of boundaries) {
+      if (boundary > tossupNumber) break;
+      activeIds = teamLineups[boundary] ?? null;
     }
-    if (!chosen) return new Set(team.players.map((p) => p.id));
-    return new Set(chosen.activePlayerIds);
+
+    if (!activeIds?.length) return new Set(team.players.map((p) => p.id));
+    return new Set(activeIds);
   }
 
-  function applyLineupChange(team: Team, boundaryBeforeQuestion: number, activePlayerIds: string[]): Team {
-    const baseSegments = team.lineupSegments?.length ? normalizeLineupSegments(team.lineupSegments) : defaultLineupSegmentsForTeam(team);
-    const kept = baseSegments.filter((seg) => seg.startTossup !== boundaryBeforeQuestion);
-    kept.push({ startTossup: boundaryBeforeQuestion, endTossup: null, activePlayerIds: uniq(activePlayerIds) });
-    return { ...team, lineupSegments: normalizeLineupSegments(kept) };
-  }
-
-  function removeLineupChange(team: Team, boundaryBeforeQuestion: number): Team {
-    if (!team.lineupSegments?.length) return team;
-    const filtered = team.lineupSegments.filter((seg) => seg.startTossup !== boundaryBeforeQuestion);
-    if (filtered.length === team.lineupSegments.length) return team;
-    return { ...team, lineupSegments: normalizeLineupSegments(filtered) };
+  function lineupSegmentsForTeam(team: Team): LineupSegment[] | null {
+    const teamLineups = lineupsByTeamId[team.id];
+    if (!teamLineups || !Object.keys(teamLineups).length) return null;
+    const segments: LineupSegment[] = [];
+    for (const [boundary, activeIds] of Object.entries(teamLineups)) {
+      const startTossup = Number(boundary);
+      if (!Number.isFinite(startTossup)) continue;
+      segments.push({
+        startTossup,
+        endTossup: null,
+        activePlayerIds: uniq(activeIds),
+      });
+    }
+    return normalizeLineupSegments(segments);
   }
 
   function setScoresheetMarker(boundaryBeforeQuestion: number, kind: ScoresheetMarkerKind) {
-    setScoresheetMarkers((prev) => {
-      if (prev[boundaryBeforeQuestion] === kind) return prev;
-      return { ...prev, [boundaryBeforeQuestion]: kind };
-    });
+    if (scoresheetMarkers[boundaryBeforeQuestion] === kind) return;
+    appendScoresheetEvent(buildScoresheetEvent("marker.set", {
+      boundary_before_question: boundaryBeforeQuestion,
+      kind,
+    }));
   }
 
   function removeScoresheetMarker(boundaryBeforeQuestion: number) {
-    setScoresheetMarkers((prev) => {
-      if (!(boundaryBeforeQuestion in prev)) return prev;
-      const next = { ...prev };
-      delete next[boundaryBeforeQuestion];
-      return next;
-    });
-
-    setGame((prev) => {
-      if (!prev) return prev;
-      return { ...prev, teams: prev.teams.map((t) => removeLineupChange(t, boundaryBeforeQuestion)) };
-    });
+    if (!(boundaryBeforeQuestion in scoresheetMarkers)) return;
+    const events: ScoresheetEvent[] = [
+      buildScoresheetEvent("marker.removed", { boundary_before_question: boundaryBeforeQuestion }),
+    ];
+    for (const team of teams) {
+      events.push(buildScoresheetEvent("lineup.removed", {
+        team_id: team.id,
+        boundary_before_question: boundaryBeforeQuestion,
+      }));
+    }
+    appendScoresheetEvents(events);
   }
 
   function openScoresheetBoundaryPopup(boundaryBeforeQuestion: number, anchor: HTMLElement) {
@@ -464,18 +487,26 @@ export default function App() {
       if (activeCount <= 0) return;
     }
 
-    setGame((prev) => {
-      if (!prev) return prev;
-      const nextTeams = prev.teams.map((t) => {
-        const teamDraft = draftInByTeamId[t.id];
-        if (!teamDraft) return t;
-        const activeIds = t.players.filter((p) => !!teamDraft[p.id]).map((p) => p.id);
-        return applyLineupChange(t, boundaryBeforeQuestion, activeIds);
-      });
-      return { ...prev, teams: nextTeams };
-    });
+    const events: ScoresheetEvent[] = [];
+    for (const t of game.teams) {
+      const teamDraft = draftInByTeamId[t.id];
+      if (!teamDraft) continue;
+      const activeIds = t.players.filter((p) => !!teamDraft[p.id]).map((p) => p.id);
+      events.push(buildScoresheetEvent("lineup.set", {
+        team_id: t.id,
+        boundary_before_question: boundaryBeforeQuestion,
+        active_player_ids: activeIds,
+      }));
+    }
 
-    if (isCreatingMarker && phase !== "START") setScoresheetMarker(boundaryBeforeQuestion, phase);
+    if (isCreatingMarker && phase !== "START") {
+      events.push(buildScoresheetEvent("marker.set", {
+        boundary_before_question: boundaryBeforeQuestion,
+        kind: phase,
+      }));
+    }
+
+    appendScoresheetEvents(events);
     setLineupChangeModal(null);
     setScoresheetBoundaryPopup(null);
   }
@@ -668,21 +699,24 @@ export default function App() {
           value: checksum,
         },
         game: {
-          teams: teams.map((t) => ({
-            name: t.name,
-            players: t.players.map((p) => p.name),
-            ...(t.lineupSegments
-              ? {
-                lineup_segments: sortLineupSegments(t.lineupSegments).map((seg) => ({
-                  start_tossup: seg.startTossup,
-                  end_tossup: seg.endTossup,
-                  active_players: seg.activePlayerIds
-                    .map((id) => playersById.get(id) ?? null)
-                    .filter((name): name is string => !!name),
-                })),
-              }
-              : {}),
-          })),
+          teams: teams.map((t) => {
+            const segments = lineupSegmentsForTeam(t);
+            return {
+              name: t.name,
+              players: t.players.map((p) => p.name),
+              ...(segments
+                ? {
+                  lineup_segments: segments.map((seg) => ({
+                    start_tossup: seg.startTossup,
+                    end_tossup: seg.endTossup,
+                    active_players: seg.activePlayerIds
+                      .map((id) => playersById.get(id) ?? null)
+                      .filter((name): name is string => !!name),
+                  })),
+                }
+                : {}),
+            };
+          }),
         },
         rules: {
           tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
@@ -812,23 +846,25 @@ export default function App() {
 
   function startNewGame() {
     if (!canStartNewGame || !draftPacketChoice) return;
+    const lineupsByTeamId: Record<string, Record<number, string[]>> = {};
     const teams: Team[] = draftTeams.map((t) => {
       const roster = t.players
         .map((p) => ({ ...p, name: p.name.trim() }))
         .filter((p) => p.name);
       const players: Player[] = roster.map(({ id, name }) => ({ id, name }));
       const activePlayerIds = roster.filter((p) => p.isIn).map((p) => p.id);
-      const lineupSegments: LineupSegment[] = [{ startTossup: 1, endTossup: null, activePlayerIds }];
-      return { id: t.id, name: t.name.trim(), players, lineupSegments };
+      lineupsByTeamId[t.id] = { 1: activePlayerIds };
+      return { id: t.id, name: t.name.trim(), players };
     });
 
     setPacket(draftPacketChoice.packet);
     setGame({ teams });
-    setPairIdx(0);
-    setAttempts({});
+    const baseState = initialScoresheetState();
+    baseState.lineupsByTeamId = lineupsByTeamId;
+    setScoresheetBaseState(baseState);
+    setScoresheetEvents([]);
     setAttemptEditor(null);
     setLastActor(null);
-    setScoresheetMarkers({});
     setScoresheetBoundaryPopup(null);
     setLineupChangeModal(null);
     setIsNewGameOpen(false);
@@ -939,6 +975,7 @@ export default function App() {
       const teamIdByName = new Map<string, string>();
       const playerIdByTeamNameThenPlayerName = new Map<string, string>();
 
+      const importedLineupsByTeamId: Record<string, Record<number, string[]>> = {};
       const importedTeams: Team[] = gameTeams.map((t) => {
         if (!t || typeof t !== "object") throw new Error("Each game.teams[] item must be an object");
         const tr = t as Record<string, unknown>;
@@ -1037,7 +1074,15 @@ export default function App() {
           lineupSegments = segs;
         }
 
-        return { id: teamId, name: teamName, players, lineupSegments };
+        if (lineupSegments?.length) {
+          const map: Record<number, string[]> = {};
+          for (const seg of lineupSegments) {
+            map[seg.startTossup] = [...seg.activePlayerIds];
+          }
+          importedLineupsByTeamId[teamId] = map;
+        }
+
+        return { id: teamId, name: teamName, players };
       });
 
       function ensurePlayerId(teamName: string, playerName: string): string {
@@ -1148,11 +1193,14 @@ export default function App() {
 
       setPacket(loadedPacket);
       setGame({ teams: importedTeams });
-      setAttempts(importedAttempts);
-      setPairIdx(clampedPairIdx);
+      const baseState = initialScoresheetState();
+      baseState.pairIndex = clampedPairIdx;
+      baseState.attemptsByQuestionId = importedAttempts;
+      baseState.lineupsByTeamId = importedLineupsByTeamId;
+      setScoresheetBaseState(baseState);
+      setScoresheetEvents([]);
       setAttemptEditor(null);
       setLastActor(null);
-      setScoresheetMarkers({});
       setScoresheetBoundaryPopup(null);
       setLineupChangeModal(null);
       setIsNewGameOpen(false);
@@ -1167,19 +1215,27 @@ export default function App() {
 
   function prev() {
     setAttemptEditor(null);
-    setPairIdx((v) => Math.max(0, v - 1));
+    const nextIndex = Math.max(0, pairIdx - 1);
+    if (nextIndex !== pairIdx) {
+      appendScoresheetEvent(buildScoresheetEvent("cursor.pair_index_set", { pair_index: nextIndex }));
+    }
   }
 
   function next() {
     setAttemptEditor(null);
-    setPairIdx((v) => Math.min(pairRows.length - 1, v + 1));
+    const nextIndex = Math.min(pairRows.length - 1, pairIdx + 1);
+    if (nextIndex !== pairIdx) {
+      appendScoresheetEvent(buildScoresheetEvent("cursor.pair_index_set", { pair_index: nextIndex }));
+    }
   }
 
   function goToPair(pairId: number) {
     const i = pairRows.findIndex((p) => p.pairId === pairId);
     if (i < 0) return;
     setAttemptEditor(null);
-    setPairIdx(i);
+    if (i !== pairIdx) {
+      appendScoresheetEvent(buildScoresheetEvent("cursor.pair_index_set", { pair_index: i }));
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -1253,25 +1309,16 @@ export default function App() {
     if (question.question_type !== "BONUS") return;
 
     setAttemptEditor(null);
-    setAttempts((prev) => {
-      const tossup = tossupQuestionByPairId.get(question.pair_id);
-      const tossupAttempts = tossup ? prev[tossup.id] ?? [] : [];
-      const winnerTeamId = tossupAttempts.find((a) => a.result === "correct")?.teamId ?? null;
-      if (!winnerTeamId) return prev;
+    const tossup = tossupQuestionByPairId.get(question.pair_id);
+    const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
+    const winnerTeamId = tossupAttempts.find((a) => a.result === "correct")?.teamId ?? null;
+    if (!winnerTeamId) return;
 
-      const next: Record<number, Attempt[]> = { ...prev };
-      next[question.id] = [
-        {
-          token: "BONUS",
-          isEnd: true,
-          result,
-          location: { kind: "end" },
-          teamId: winnerTeamId,
-          playerId: undefined,
-        },
-      ];
-      return next;
-    });
+    appendScoresheetEvent(buildScoresheetEvent("bonus.result_set", {
+      bonus_question_id: question.id,
+      team_id: winnerTeamId,
+      result,
+    }));
   }
 
   function openBonusResultEditor(question: Question, anchorX: number, anchorY: number) {
@@ -1296,39 +1343,50 @@ export default function App() {
     const question = questions.find((qq) => qq.id === questionId);
     if (!question) return;
 
-    setAttempts((prevState) => {
-      if (question.question_type === "BONUS") {
-        return { ...prevState, [questionId]: [{ ...selection, result, playerId: undefined }] };
+    if (question.question_type === "BONUS") {
+      appendScoresheetEvent(buildScoresheetEvent("bonus.result_set", {
+        bonus_question_id: questionId,
+        team_id: selection.teamId,
+        result,
+      }));
+      return;
+    }
+
+    if (!selection.playerId) return;
+    const current = attempts[questionId] ?? [];
+    const currentCorrect = current.find((a) => a.result === "correct");
+    if (currentCorrect && currentCorrect.playerId !== selection.playerId && result !== "correct") {
+      return;
+    }
+
+    let nextList = current.filter(
+      (a) => a.teamId !== selection.teamId && a.playerId !== selection.playerId
+    );
+    if (result === "correct") nextList = nextList.filter((a) => a.result !== "correct");
+    nextList = [...nextList, { ...selection, result, playerId: selection.playerId }];
+
+    const events: ScoresheetEvent[] = [
+      buildScoresheetEvent("attempt.recorded", {
+        question_id: questionId,
+        team_id: selection.teamId,
+        player_id: selection.playerId,
+        result,
+        token: selection.token,
+        is_end: selection.isEnd,
+        location: encodeLocationForEvent(selection.location),
+      }),
+    ];
+
+    const bonus = bonusQuestionByPairId.get(question.pair_id);
+    if (bonus) {
+      const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
+      const bonusAttempt = attempts[bonus.id]?.[0];
+      if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
+        events.push(buildScoresheetEvent("attempts.question_cleared", { question_id: bonus.id }));
       }
+    }
 
-      if (!selection.playerId) return prevState;
-      const current = prevState[questionId] ?? [];
-      const currentCorrect = current.find((a) => a.result === "correct");
-      if (currentCorrect && currentCorrect.playerId !== selection.playerId && result !== "correct") {
-        return prevState;
-      }
-
-      let nextList = current.filter(
-        (a) => a.teamId !== selection.teamId && a.playerId !== selection.playerId
-      );
-      if (result === "correct") nextList = nextList.filter((a) => a.result !== "correct");
-      nextList = [...nextList, { ...selection, result, playerId: selection.playerId }];
-
-      const next: Record<number, Attempt[]> = { ...prevState, [questionId]: nextList };
-
-      const bonus = bonusQuestionByPairId.get(question.pair_id);
-      if (bonus) {
-        const bonusAttempt = next[bonus.id]?.[0];
-        const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
-        if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
-          const { [bonus.id]: _removed, ...rest } = next;
-          void _removed;
-          return rest;
-        }
-      }
-
-      return next;
-    });
+    appendScoresheetEvents(events);
 
     if (question.question_type === "TOSSUP") {
       setLastActor({ teamId: selection.teamId, playerId: selection.playerId });
@@ -1336,18 +1394,18 @@ export default function App() {
   }
 
   function clearAttemptsForQuestion(question: Question) {
-    setAttempts((prev) => {
-      const next = { ...prev };
-      if (question.question_type === "BONUS") {
-        delete next[question.id];
-        return next;
-      }
+    const events: ScoresheetEvent[] = [
+      buildScoresheetEvent("attempts.question_cleared", { question_id: question.id }),
+    ];
 
-      delete next[question.id];
+    if (question.question_type === "TOSSUP") {
       const bonus = bonusQuestionByPairId.get(question.pair_id);
-      if (bonus) delete next[bonus.id];
-      return next;
-    });
+      if (bonus) {
+        events.push(buildScoresheetEvent("attempts.question_cleared", { question_id: bonus.id }));
+      }
+    }
+
+    appendScoresheetEvents(events);
 
     if (question.question_type === "TOSSUP") setLastActor(null);
   }
