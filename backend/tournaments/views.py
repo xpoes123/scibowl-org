@@ -63,7 +63,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
     
     @action(detail=True, methods=['get'])
-    def teams(self, request, pk=None):
+    def teams(self, request, *args, **kwargs):
         """Get all teams for a tournament."""
         tournament = self.get_object()
         teams = tournament.teams.all()
@@ -71,7 +71,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def rooms(self, request, pk=None):
+    def rooms(self, request, *args, **kwargs):
         """Get all rooms for a tournament."""
         tournament = self.get_object()
         rooms = tournament.rooms.all()
@@ -79,7 +79,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def rounds(self, request, pk=None):
+    def rounds(self, request, *args, **kwargs):
         """Get all rounds for a tournament."""
         tournament = self.get_object()
         rounds = tournament.rounds.all()
@@ -87,7 +87,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True, methods=['get'])
-    def games(self, request, pk=None):
+    def games(self, request, *args, **kwargs):
         """Get all games for a tournament."""
         tournament = self.get_object()
         games = tournament.games.all()
@@ -95,7 +95,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
-    def standings(self, request, pk=None):
+    def standings(self, request, *args, **kwargs):
         """
         Aggregate standings from moss fact tables for this tournament.
 
@@ -221,7 +221,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         )
 
     @action(detail=True, methods=['delete'])
-    def clear_schedule(self, request, pk=None):
+    def clear_schedule(self, request, *args, **kwargs):
         """
         Delete all games and rounds for this tournament.
         """
@@ -241,7 +241,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         }, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
-    def generate_schedule(self, request, pk=None):
+    def generate_schedule(self, request, *args, **kwargs):
         """
         Generate round-robin matches for all pools in the tournament.
         Creates Game objects for all teams in each pool to play each other once.
