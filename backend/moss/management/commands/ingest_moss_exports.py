@@ -9,6 +9,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils.dateparse import parse_datetime
 
+from tournaments.models import Tournament
 from moss.models import (
     Game,
     GamePlayerFact,
@@ -42,8 +43,13 @@ class Command(BaseCommand):
         parser.add_argument(
             "--tournament-id",
             type=int,
-            required=True,
             help="tournaments.Tournament id to attach the imported games to.",
+        )
+        parser.add_argument(
+            "--tournament-slug",
+            type=str,
+            required=False,
+            help="tournaments.Tournament slug to attach the imported games to.",
         )
         parser.add_argument(
             "--dry-run",
@@ -57,9 +63,19 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options) -> None:
-        tournament_id: int = options["tournament_id"]
+        tournament_id: int | None = options.get("tournament_id")
+        tournament_slug: str | None = options.get("tournament_slug")
         dry_run: bool = options["dry_run"]
         paths: list[str] = options["paths"]
+
+        if tournament_id is None and not tournament_slug:
+            raise CommandError("One of --tournament-id or --tournament-slug is required")
+
+        if tournament_id is None and tournament_slug:
+            tournament = Tournament.objects.filter(slug=tournament_slug).first()
+            if not tournament:
+                raise CommandError(f'Tournament not found for slug "{tournament_slug}"')
+            tournament_id = tournament.id
 
         total = 0
         created = 0
@@ -236,4 +252,3 @@ def _require_str(value: Any, path: str) -> str:
     if not isinstance(value, str):
         raise CommandError(f"{path} must be a string")
     return value
-
