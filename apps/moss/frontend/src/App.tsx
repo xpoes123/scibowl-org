@@ -25,7 +25,7 @@ type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK
 
 const END_TOKEN = "NO PENALTY" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
-const SCORESHEET_EXPORT_VERSION = 1 as const;
+const SCORESHEET_EXPORT_VERSION = 2 as const;
 
 const DISPLAY_CATEGORY: Record<string, string> = {
   BIOLOGY: "Biology",
@@ -710,6 +710,29 @@ export default function App() {
       }
 
       const exportedAt = new Date().toISOString();
+      const sortedEvents = [...scoresheetEvents].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
+      const eventLog = sortedEvents.map((event, idx) => ({
+        seq: event.seq ?? idx + 1,
+        client_event_id: event.id,
+        type: event.type,
+        version: 1,
+        client_ts: event.clientTs ?? null,
+        payload: event.payload ?? {},
+      }));
+      const normalizedEventLog = (() => {
+        if (eventLog.length) return eventLog;
+        if (pairIdx === 0) return eventLog;
+        return [
+          {
+            seq: 1,
+            client_event_id: "export_cursor_seed",
+            type: "cursor.pair_index_set",
+            version: 1,
+            client_ts: exportedAt,
+            payload: { pair_index: pairIdx },
+          },
+        ];
+      })();
       const exportObj = {
         format: SCORESHEET_EXPORT_FORMAT,
         version: SCORESHEET_EXPORT_VERSION,
@@ -747,6 +770,11 @@ export default function App() {
         rules: {
           tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
           bonus: { correct: 10, incorrect: 0 },
+        },
+        event_log: {
+          scoresheet_id: remoteScoresheetId,
+          next_seq: scoresheetState.lastSeq + 1,
+          events: normalizedEventLog,
         },
         state: {
           pair_index: pairIdx,
@@ -872,23 +900,26 @@ export default function App() {
 
   function startNewGame() {
     if (!canStartNewGame || !draftPacketChoice) return;
-    const lineupsByTeamId: Record<string, Record<number, string[]>> = {};
+    const initialEvents: ScoresheetEvent[] = [];
     const teams: Team[] = draftTeams.map((t) => {
       const roster = t.players
         .map((p) => ({ ...p, name: p.name.trim() }))
         .filter((p) => p.name);
       const players: Player[] = roster.map(({ id, name }) => ({ id, name }));
       const activePlayerIds = roster.filter((p) => p.isIn).map((p) => p.id);
-      lineupsByTeamId[t.id] = { 1: activePlayerIds };
+      initialEvents.push(buildScoresheetEvent("lineup.set", {
+        team_id: t.id,
+        boundary_before_question: 1,
+        active_player_ids: activePlayerIds,
+      }));
       return { id: t.id, name: t.name.trim(), players };
     });
 
     setPacket(draftPacketChoice.packet);
     setGame({ teams });
     const baseState = initialScoresheetState();
-    baseState.lineupsByTeamId = lineupsByTeamId;
     setScoresheetBaseState(baseState);
-    setScoresheetEvents([]);
+    setScoresheetEvents(initialEvents.map((event, idx) => ({ ...event, seq: idx + 1 })));
     setAttemptEditor(null);
     setLastActor(null);
     setScoresheetBoundaryPopup(null);
@@ -960,7 +991,9 @@ export default function App() {
 
       const obj = parsed as Record<string, unknown>;
       if (obj.format !== SCORESHEET_EXPORT_FORMAT) throw new Error(`Unsupported format: ${String(obj.format)}`);
-      if (obj.version !== SCORESHEET_EXPORT_VERSION) throw new Error(`Unsupported version: ${String(obj.version)}`);
+      if (obj.version !== 1 && obj.version !== SCORESHEET_EXPORT_VERSION) {
+        throw new Error(`Unsupported version: ${String(obj.version)}`);
+      }
 
       const packetObj = obj.packet;
       const loadedPacket = parsePacketJson(JSON.stringify(packetObj));
@@ -1124,15 +1157,14 @@ export default function App() {
       }
 
       const stateObj = obj.state;
-      if (!stateObj || typeof stateObj !== "object") throw new Error("Missing required field: state");
-      const stateRec = stateObj as Record<string, unknown>;
-      const importedPairIdx = stateRec.pair_index;
-      if (typeof importedPairIdx !== "number" || !Number.isFinite(importedPairIdx)) {
+      const stateRec = (stateObj && typeof stateObj === "object") ? (stateObj as Record<string, unknown>) : null;
+      const importedPairIdx = stateRec?.pair_index;
+      if (stateRec && (typeof importedPairIdx !== "number" || !Number.isFinite(importedPairIdx))) {
         throw new Error("state.pair_index must be a number");
       }
 
-      const attemptsByQuestionIdObj = stateRec.attempts_by_question_id;
-      if (!attemptsByQuestionIdObj || typeof attemptsByQuestionIdObj !== "object") {
+      const attemptsByQuestionIdObj = stateRec?.attempts_by_question_id;
+      if (stateRec && (!attemptsByQuestionIdObj || typeof attemptsByQuestionIdObj !== "object")) {
         throw new Error("state.attempts_by_question_id must be an object");
       }
 
@@ -1154,7 +1186,7 @@ export default function App() {
         throw new Error(`Unknown location kind: ${String(lr.kind)}`);
       }
 
-      const attemptsByQuestionId = attemptsByQuestionIdObj as Record<string, unknown>;
+      const attemptsByQuestionId = (attemptsByQuestionIdObj ?? {}) as Record<string, unknown>;
       const importedAttempts: Record<number, Attempt[]> = {};
       for (const [questionIdStr, list] of Object.entries(attemptsByQuestionId)) {
         const questionId = Number(questionIdStr);
@@ -1215,16 +1247,49 @@ export default function App() {
 
       const pairIdSet = new Set((loadedPacket.questions ?? []).map((qq) => qq.pair_id));
       const pairCount = pairIdSet.size;
-      const clampedPairIdx = pairCount <= 0 ? 0 : clamp(importedPairIdx, 0, pairCount - 1);
+      const clampedPairIdx = typeof importedPairIdx === "number"
+        ? (pairCount <= 0 ? 0 : clamp(importedPairIdx, 0, pairCount - 1))
+        : 0;
+
+      let importedEventLog: ScoresheetEvent[] = [];
+      if (obj.version === SCORESHEET_EXPORT_VERSION) {
+        const eventLogObj = obj.event_log;
+        if (eventLogObj && typeof eventLogObj === "object") {
+          const eventLogRec = eventLogObj as Record<string, unknown>;
+          const eventsRaw = eventLogRec.events;
+          if (Array.isArray(eventsRaw)) {
+            importedEventLog = eventsRaw
+              .filter((ev) => !!ev && typeof ev === "object")
+              .map((ev, idx) => {
+                const rec = ev as Record<string, unknown>;
+                const seq = typeof rec.seq === "number" ? rec.seq : idx + 1;
+                const type = typeof rec.type === "string" ? rec.type : "";
+                const payload = (rec.payload ?? {}) as Record<string, unknown>;
+                const clientEventId = typeof rec.client_event_id === "string" ? rec.client_event_id : `imported_${idx}`;
+                const clientTs = typeof rec.client_ts === "string" ? rec.client_ts : undefined;
+                return {
+                  id: clientEventId,
+                  type: type as ScoresheetEvent["type"],
+                  payload: payload as ScoresheetEvent["payload"],
+                  clientTs,
+                  seq,
+                };
+              })
+              .filter((ev) => !!ev.type);
+          }
+        }
+      }
 
       setPacket(loadedPacket);
       setGame({ teams: importedTeams });
       const baseState = initialScoresheetState();
       baseState.pairIndex = clampedPairIdx;
-      baseState.attemptsByQuestionId = importedAttempts;
       baseState.lineupsByTeamId = importedLineupsByTeamId;
+      if (!importedEventLog.length) {
+        baseState.attemptsByQuestionId = importedAttempts;
+      }
       setScoresheetBaseState(baseState);
-      setScoresheetEvents([]);
+      setScoresheetEvents(importedEventLog.length ? importedEventLog : []);
       setAttemptEditor(null);
       setLastActor(null);
       setScoresheetBoundaryPopup(null);
