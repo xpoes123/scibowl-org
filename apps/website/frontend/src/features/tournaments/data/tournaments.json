@@ -375,8 +375,8 @@
         "updated_at": "2026-01-06T02:00:00Z"
     },
     {
-        "slug": "pilot-scrimmage-1",
-        "name": "Pilot Scrimmage 1",
+        "slug": "pilot-scrimmage",
+        "name": "Pilot Scrimmage",
         "status": "DRAFT",
         "mode": "ONLINE",
         "timezone": "America/Los_Angeles",
