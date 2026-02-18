@@ -152,7 +152,6 @@ class Command(BaseCommand):
                         if isinstance(item, dict) and isinstance(item.get("sha256"), str):
                             existing_sources_sha256.add(item["sha256"])
 
-        exports: list[dict[str, Any]] = []
         export_inputs: list[tuple[Path, bytes, dict[str, Any]]] = []
         sources: list[dict[str, Any]] = []
         seen: set[str] = set()
@@ -177,7 +176,6 @@ class Command(BaseCommand):
                 raise CommandError(f"Invalid JSON: {path} ({e})") from e
             export_obj = _require_dict(export_obj_any, f"{path} (top-level)")
 
-            exports.append(export_obj)
             export_inputs.append((path, data, export_obj))
             sources.append(
                 {
@@ -213,25 +211,28 @@ class Command(BaseCommand):
 
             _safe_wipe_output_dir(output_dir)
 
-        # Build everything using an ephemeral local SQLite DB so the stats views are
-        # defined by queries on the fact tables rather than bespoke transformations.
+        # Build everything using an ephemeral local SQLite DB (separate alias) so we
+        # never touch any configured persistent DB, even if one exists locally.
+        db_alias = "moss_stats"
+        original_databases = dict(settings.DATABASES)
+        if db_alias in settings.DATABASES:
+            raise CommandError(f"Unexpected DATABASES entry already present: {db_alias}")
+
         original_default = dict(settings.DATABASES.get("default", {}))
         try:
             with tempfile.TemporaryDirectory() as tmpdir:
                 sqlite_path = str(Path(tmpdir) / "moss_stats.sqlite3")
-                settings.DATABASES["default"] = {
+                settings.DATABASES[db_alias] = {
                     "ENGINE": "django.db.backends.sqlite3",
                     "NAME": sqlite_path,
                 }
-                # Ensure Django uses the updated DB config.
                 connections.close_all()
-                connections.databases["default"] = settings.DATABASES["default"]
 
                 # Create schema.
-                call_command("migrate", verbosity=0, interactive=False)
+                call_command("migrate", verbosity=0, interactive=False, database=db_alias)
 
                 # Minimal tournament row required by moss FK relationships.
-                tournament = Tournament.objects.create(
+                tournament = Tournament.objects.using(db_alias).create(
                     name=name,
                     slug=slug,
                     description="",
@@ -251,15 +252,25 @@ class Command(BaseCommand):
                 )
 
                 try:
-                    ingest_scoresheet_exports(tournament_id=tournament.id, exports=export_inputs)
+                    ingest_scoresheet_exports(
+                        tournament_id=tournament.id,
+                        exports=export_inputs,
+                        using=db_alias,
+                    )
                 except ValueError as e:
                     raise CommandError(str(e)) from e
 
-                standings_payload: dict[str, Any] = build_tournament_standings_view(tournament=tournament)
+                standings_payload: dict[str, Any] = build_tournament_standings_view(
+                    tournament=tournament,
+                    using=db_alias,
+                )
         finally:
             connections.close_all()
-            settings.DATABASES["default"] = original_default
-            connections.databases["default"] = settings.DATABASES["default"]
+            # Restore DB settings.
+            settings.DATABASES.clear()
+            settings.DATABASES.update(original_databases)
+            if "default" not in settings.DATABASES:
+                settings.DATABASES["default"] = original_default
 
         manifest_payload: dict[str, Any] = {
             "schema_version": 1,

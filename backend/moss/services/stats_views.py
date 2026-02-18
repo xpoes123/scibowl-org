@@ -8,7 +8,7 @@ from moss import models as moss_models
 from tournaments.models import Tournament
 
 
-def build_tournament_standings_view(*, tournament: Tournament) -> dict:
+def build_tournament_standings_view(*, tournament: Tournament, using: str = "default") -> dict:
     """
     Aggregate standings from MoSS fact tables for the given tournament.
 
@@ -20,11 +20,15 @@ def build_tournament_standings_view(*, tournament: Tournament) -> dict:
 
     # Team standings.
     opp_points = Subquery(
-        team_fact_model.objects.filter(game_id=OuterRef("game_id"))
+        team_fact_model.objects.using(using).filter(game_id=OuterRef("game_id"))
         .exclude(tournament_team_id=OuterRef("tournament_team_id"))
         .values("points")[:1]
     )
-    base = team_fact_model.objects.filter(game__tournament=tournament).annotate(opp_points=opp_points)
+    base = (
+        team_fact_model.objects.using(using)
+        .filter(game__tournament=tournament)
+        .annotate(opp_points=opp_points)
+    )
 
     team_rows = (
         base.values("tournament_team_id", "tournament_team__name")
@@ -87,7 +91,7 @@ def build_tournament_standings_view(*, tournament: Tournament) -> dict:
 
     # Individual standings.
     player_rows = (
-        player_fact_model.objects.filter(game__tournament=tournament)
+        player_fact_model.objects.using(using).filter(game__tournament=tournament)
         .values(
             "tournament_player_id",
             "tournament_player__name",
@@ -129,4 +133,3 @@ def build_tournament_standings_view(*, tournament: Tournament) -> dict:
         "team_standings": team_standings,
         "individual_standings": individual_standings,
     }
-

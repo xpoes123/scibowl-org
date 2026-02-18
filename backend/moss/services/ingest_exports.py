@@ -37,6 +37,7 @@ def ingest_scoresheet_exports(
     *,
     tournament_id: int,
     exports: Iterable[tuple[Path, bytes, dict[str, Any]]],
+    using: str = "default",
 ) -> None:
     """
     Ingest MoSS scoresheet export objects (v1/v2) into the MoSS fact tables.
@@ -67,8 +68,8 @@ def ingest_scoresheet_exports(
         exported_at = export_obj.get("exported_at")
         exported_dt = parse_datetime(exported_at) if isinstance(exported_at, str) else None
 
-        with transaction.atomic():
-            game = Game.objects.create(
+        with transaction.atomic(using=using):
+            game = Game.objects.using(using).create(
                 tournament_id=tournament_id,
                 status="COMPLETED",
                 started_at=None,
@@ -78,7 +79,7 @@ def ingest_scoresheet_exports(
             # Upsert tournament teams and game teams.
             tournament_teams: dict[str, TournamentTeam] = {}
             for name in team_names:
-                team, _ = TournamentTeam.objects.get_or_create(
+                team, _ = TournamentTeam.objects.using(using).get_or_create(
                     tournament_id=tournament_id,
                     name=name,
                     defaults={"school": "", "pool": ""},
@@ -87,7 +88,7 @@ def ingest_scoresheet_exports(
 
             # game team slots follow the export's order.
             for slot, name in enumerate(team_names, start=1):
-                GameTeam.objects.create(game=game, tournament_team=tournament_teams[name], slot=slot)
+                GameTeam.objects.using(using).create(game=game, tournament_team=tournament_teams[name], slot=slot)
 
             # Players: accept either ["Name", ...] or [{"name": "Name"}, ...] just in case.
             roster_by_team: dict[str, list[str]] = {}
@@ -111,7 +112,7 @@ def ingest_scoresheet_exports(
             for team_name, roster in roster_by_team.items():
                 team = tournament_teams[team_name]
                 for player_name in roster:
-                    player, _ = TournamentPlayer.objects.get_or_create(
+                    player, _ = TournamentPlayer.objects.using(using).get_or_create(
                         tournament_team=team,
                         name=player_name,
                         defaults={"grade_level": ""},
@@ -119,13 +120,13 @@ def ingest_scoresheet_exports(
                     tournament_players[(team_name, player_name)] = player
 
             # Create scoresheet + snapshot for audit/debugging.
-            scoresheet = Scoresheet.objects.create(
+            scoresheet = Scoresheet.objects.using(using).create(
                 game=game,
                 schema_version=1,
                 next_seq=1,
                 latest_snapshot_seq=1,
             )
-            ScoresheetSnapshot.objects.create(
+            ScoresheetSnapshot.objects.using(using).create(
                 scoresheet=scoresheet,
                 seq=1,
                 reason=import_reason,
@@ -146,7 +147,7 @@ def ingest_scoresheet_exports(
             # Persist facts.
             for team_fact in export_facts.team_facts:
                 tteam = tournament_teams[team_fact.team_name]
-                GameTeamFact.objects.create(
+                GameTeamFact.objects.using(using).create(
                     game=game,
                     tournament_team=tteam,
                     points=team_fact.points,
@@ -157,18 +158,20 @@ def ingest_scoresheet_exports(
                     bonuses_heard=team_fact.bonuses_heard,
                     bonus_points=team_fact.bonus_points,
                 )
-                GameTeam.objects.filter(game=game, tournament_team=tteam).update(score_cached=team_fact.points)
+                GameTeam.objects.using(using).filter(game=game, tournament_team=tteam).update(
+                    score_cached=team_fact.points
+                )
 
             for player_fact in export_facts.player_facts:
                 tteam = tournament_teams[player_fact.team_name]
                 player = tournament_players.get((player_fact.team_name, player_fact.player_name))
                 if player is None:
-                    player, _ = TournamentPlayer.objects.get_or_create(
+                    player, _ = TournamentPlayer.objects.using(using).get_or_create(
                         tournament_team=tteam,
                         name=player_fact.player_name,
                         defaults={"grade_level": ""},
                     )
-                GamePlayerFact.objects.create(
+                GamePlayerFact.objects.using(using).create(
                     game=game,
                     tournament_player=player,
                     tournament_team=tteam,
@@ -178,4 +181,3 @@ def ingest_scoresheet_exports(
                     tossups_0=player_fact.tossups_0,
                     tossup_points=player_fact.tossup_points,
                 )
-
