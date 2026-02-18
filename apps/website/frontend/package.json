@@ -5,8 +5,9 @@
     "type": "module",
     "homepage": "https://xpoes123.github.io/scibowl-org/",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc -b && vite build",
+        "sync-stats": "node scripts/sync-stats.mjs",
+        "dev": "npm run sync-stats && vite",
+        "build": "npm run sync-stats && tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
         "predeploy": "npm run build",
