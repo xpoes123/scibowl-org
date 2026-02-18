@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import sys
 from typing import Any
 
 from django.core.management.base import BaseCommand, CommandError
@@ -36,6 +37,16 @@ def _require_dict(value: Any, path: str) -> dict[str, Any]:
     return value
 
 
+def _prompt_yes_no(*, prompt: str, default: bool = False) -> bool:
+    if not sys.stdin or not sys.stdin.isatty():
+        raise CommandError('Refusing to prompt in non-interactive mode. Pass "--yes" to overwrite.')
+    suffix = " [Y/n] " if default else " [y/N] "
+    raw = input(prompt + suffix).strip().lower()
+    if not raw:
+        return default
+    return raw in {"y", "yes"}
+
+
 class Command(BaseCommand):
     help = "Ingest MoSS scoresheet export JSON files (v1/v2) into moss fact tables."
 
@@ -57,6 +68,11 @@ class Command(BaseCommand):
             help="Parse and reduce files, but do not write any database rows.",
         )
         parser.add_argument(
+            "--yes",
+            action="store_true",
+            help="Do not prompt; overwrite previously imported games for identical export files.",
+        )
+        parser.add_argument(
             "paths",
             nargs="+",
             help="One or more moss_scoresheet export JSON files.",
@@ -66,6 +82,7 @@ class Command(BaseCommand):
         tournament_id: int | None = options.get("tournament_id")
         tournament_slug: str | None = options.get("tournament_slug")
         dry_run: bool = options["dry_run"]
+        assume_yes: bool = options["yes"]
         paths: list[str] = options["paths"]
 
         if tournament_id is None and not tournament_slug:
@@ -79,6 +96,7 @@ class Command(BaseCommand):
 
         total = 0
         created = 0
+        replaced = 0
         skipped = 0
 
         for raw_path in paths:
@@ -89,16 +107,35 @@ class Command(BaseCommand):
             file_hash = _sha256_bytes(data)
             import_reason = f"import_export:{file_hash}"
 
+            existing_games_qs = Game.objects.filter(
+                tournament_id=tournament_id,
+                scoresheet__snapshots__reason=import_reason,
+            ).distinct()
+            existing_game_ids = list(existing_games_qs.values_list("id", flat=True))
+
+            if existing_game_ids:
+                if dry_run:
+                    skipped += 1
+                    total += 1
+                    self.stdout.write(f"DRY  {path.name} (already imported; would prompt to re-import)")
+                    continue
+
+                if not assume_yes:
+                    ids_str = ", ".join(str(i) for i in sorted(existing_game_ids)[:5])
+                    suffix = "" if len(existing_game_ids) <= 5 else f", ... (+{len(existing_game_ids) - 5})"
+                    prompt = (
+                        f"{path.name} already imported as game_id(s) {ids_str}{suffix}. "
+                        "Re-import and replace?"
+                    )
+                    if not _prompt_yes_no(prompt=prompt, default=False):
+                        skipped += 1
+                        total += 1
+                        self.stdout.write(f"SKIP {path.name} (already imported)")
+                        continue
+
             export_obj = json.loads(data)
             if not isinstance(export_obj, dict):
                 raise CommandError(f"Top-level JSON must be an object: {path}")
-
-            # Idempotency: if we've already imported this exact file bytes, skip.
-            if ScoresheetSnapshot.objects.filter(reason=import_reason).exists():
-                skipped += 1
-                total += 1
-                self.stdout.write(f"SKIP {path.name} (already imported)")
-                continue
 
             export_facts = reduce_scoresheet_export_to_facts(export_obj)
 
@@ -127,6 +164,10 @@ class Command(BaseCommand):
                 continue
 
             with transaction.atomic():
+                if existing_game_ids:
+                    existing_games_qs.delete()
+                    replaced += 1
+
                 game = Game.objects.create(
                     tournament_id=tournament_id,
                     status="COMPLETED",
@@ -243,7 +284,7 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Done. files={total} created={created} skipped={skipped} dry_run={dry_run}"
+                f"Done. files={total} created={created} replaced={replaced} skipped={skipped} dry_run={dry_run}"
             )
         )
 
