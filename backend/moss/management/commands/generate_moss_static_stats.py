@@ -27,6 +27,50 @@ def _require_dict(value: Any, path: str) -> dict[str, Any]:
     return value
 
 
+def _prompt_yes_no(*, prompt: str, default: bool = False) -> bool:
+    suffix = " [Y/n] " if default else " [y/N] "
+    raw = input(prompt + suffix).strip().lower()
+    if not raw:
+        return default
+    return raw in {"y", "yes"}
+
+
+def _safe_wipe_output_dir(output_dir: Path) -> None:
+    """
+    Remove previously generated artifacts so stale files don't linger.
+
+    Keeps common human-authored placeholder files.
+    """
+    keep_names = {"README.md", ".gitkeep"}
+
+    if not output_dir.exists():
+        return
+
+    # Delete files first.
+    for path in sorted(output_dir.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if path.is_dir():
+            continue
+        if path.name in keep_names:
+            continue
+        try:
+            path.unlink()
+        except OSError as e:
+            raise CommandError(f"Failed to delete file: {path} ({e})") from e
+
+    # Then delete empty directories (but keep the root).
+    for path in sorted(output_dir.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if not path.is_dir():
+            continue
+        try:
+            next(path.iterdir())
+        except StopIteration:
+            try:
+                path.rmdir()
+            except OSError:
+                # Best-effort: ignore dirs that aren't empty due to kept files.
+                pass
+
+
 class Command(BaseCommand):
     help = "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2)."
 
@@ -55,6 +99,11 @@ class Command(BaseCommand):
             help="Write pretty-printed JSON (indented).",
         )
         parser.add_argument(
+            "--yes",
+            action="store_true",
+            help="Do not prompt; overwrite existing artifacts if present.",
+        )
+        parser.add_argument(
             "--no-dedupe",
             action="store_true",
             help="Do not deduplicate identical exports by file bytes hash.",
@@ -70,19 +119,33 @@ class Command(BaseCommand):
         tournament_slug: str | None = options.get("tournament_slug")
         tournament_name: str | None = options.get("tournament_name")
         pretty: bool = options["pretty"]
+        assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
         paths: list[str] = options["paths"]
-
-        output_dir.mkdir(parents=True, exist_ok=True)
 
         slug = (tournament_slug or output_dir.name).strip()
         if not slug:
             raise CommandError("Could not infer tournament slug; pass --tournament-slug.")
         name = (tournament_name or slug).strip()
 
+        existing_sources_sha256: set[str] = set()
+        existing_manifest = output_dir / "manifest.json"
+        if existing_manifest.exists():
+            try:
+                existing_obj = json.loads(existing_manifest.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                existing_obj = None
+            if isinstance(existing_obj, dict):
+                sources_any = existing_obj.get("sources")
+                if isinstance(sources_any, list):
+                    for item in sources_any:
+                        if isinstance(item, dict) and isinstance(item.get("sha256"), str):
+                            existing_sources_sha256.add(item["sha256"])
+
         exports: list[dict[str, Any]] = []
         sources: list[dict[str, Any]] = []
         seen: set[str] = set()
+        duplicate_with_existing: list[str] = []
 
         for raw_path in paths:
             path = Path(raw_path)
@@ -90,6 +153,8 @@ class Command(BaseCommand):
                 raise CommandError(f"File not found: {path}")
             data = path.read_bytes()
             file_hash = _sha256_bytes(data)
+            if file_hash in existing_sources_sha256:
+                duplicate_with_existing.append(str(path))
             if not no_dedupe and file_hash in seen:
                 self.stdout.write(f"SKIP {path.name} (duplicate sha256)")
                 continue
@@ -111,6 +176,30 @@ class Command(BaseCommand):
                     "packet_checksum": export_obj.get("packet_checksum"),
                 }
             )
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        existing_artifacts = any((output_dir / name).exists() for name in ("standings.json", "manifest.json"))
+        if existing_artifacts or duplicate_with_existing:
+            reasons: list[str] = []
+            if existing_artifacts:
+                reasons.append("existing artifacts in output directory")
+            if duplicate_with_existing:
+                reasons.append(f"{len(duplicate_with_existing)} input export(s) already listed in manifest.json")
+
+            if not assume_yes:
+                self.stdout.write("This run would overwrite previously generated stats artifacts.")
+                self.stdout.write(f"Reason(s): {', '.join(reasons)}")
+                if duplicate_with_existing:
+                    shown = duplicate_with_existing[:5]
+                    for p in shown:
+                        self.stdout.write(f"  - {p}")
+                    if len(duplicate_with_existing) > 5:
+                        self.stdout.write(f"  ... and {len(duplicate_with_existing) - 5} more")
+                if not _prompt_yes_no(prompt="Regenerate and replace artifacts?", default=False):
+                    raise CommandError("Aborted.")
+
+            _safe_wipe_output_dir(output_dir)
 
         try:
             standings = build_standings_view_from_exports(exports)

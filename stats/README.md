@@ -20,3 +20,4 @@ From the repo root:
 python backend/manage.py generate_moss_static_stats --pretty --output-dir stats/pilot-scrimmage path/to/export1.json path/to/export2.json
 ```
 
+If `stats/<tournament_slug>/` already contains generated artifacts, the command will prompt before replacing them. Use `--yes` to overwrite without prompting (useful for CI).

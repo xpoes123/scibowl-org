@@ -150,3 +150,27 @@ class StaticStatsTestCase(TestCase):
         self.assertEqual(player_rows[1]["name"], "Carol")
         self.assertEqual(player_rows[1]["tossup_points"], 4)
 
+    def test_generate_command_wipes_extra_json_files(self):
+        # This test targets the wipe helper used by the management command.
+        from pathlib import Path
+        import tempfile
+
+        from moss.management.commands.generate_moss_static_stats import _safe_wipe_output_dir
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "pilot-scrimmage"
+            out.mkdir(parents=True, exist_ok=True)
+            (out / "README.md").write_text("keep\n", encoding="utf-8")
+            (out / "standings.json").write_text("old\n", encoding="utf-8")
+            (out / "manifest.json").write_text("old\n", encoding="utf-8")
+            (out / "extra.json").write_text("old\n", encoding="utf-8")
+            (out / "nested").mkdir()
+            (out / "nested" / "stale.json").write_text("old\n", encoding="utf-8")
+
+            _safe_wipe_output_dir(out)
+
+            self.assertTrue((out / "README.md").exists())
+            self.assertFalse((out / "standings.json").exists())
+            self.assertFalse((out / "manifest.json").exists())
+            self.assertFalse((out / "extra.json").exists())
+            self.assertFalse((out / "nested" / "stale.json").exists())
