@@ -7,6 +7,18 @@ function formatNumber(value: number, digits = 2): string {
   return value.toFixed(digits);
 }
 
+function formatFixedNumber(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return (0).toFixed(digits);
+  return value.toFixed(digits);
+}
+
+function toTitleCase(value: string): string {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return value;
+
+  return normalized.replace(/(^|[\s\-/'"])([a-z])/g, (_, prefix: string, letter: string) => `${prefix}${letter.toUpperCase()}`);
+}
+
 function DataTable({ headers, rows }: { headers: Array<{ key: string; label: string; numeric?: boolean }>; rows: Array<Record<string, ReactNode>> }) {
   return (
     <div className="sbDataTableWrap">
@@ -48,16 +60,16 @@ export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
     { key: "0s", label: "0s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
     { key: "bh", label: "BH", numeric: true },
-    { key: "bp", label: "Bonus Pts", numeric: true },
+    { key: "bp", label: "BPTs", numeric: true },
     { key: "ppb", label: "PPB", numeric: true },
   ];
 
   const tableRows = rows.map((r) => ({
     rank: r.rank,
-    name: r.name,
+    name: toTitleCase(r.name),
     wins: r.wins,
     losses: r.losses,
-    ppg: formatNumber(r.points_per_game),
+    ppg: formatFixedNumber(r.points_per_game, 2),
     "4s": r["4s"],
     "-4s": r["-4s"],
     "0s": r["0s"],
@@ -81,20 +93,20 @@ export function IndividualStandingsTable({ rows }: { rows: IndividualStandingsRo
     { key: "0s", label: "0s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
     { key: "tp", label: "TU Pts", numeric: true },
-    { key: "ppg", label: "Pts/G", numeric: true },
+    { key: "ppg", label: "PPG", numeric: true },
   ];
 
   const tableRows = rows.map((r) => ({
     rank: r.rank,
-    name: r.name,
-    team: r.team,
+    name: toTitleCase(r.name),
+    team: toTitleCase(r.team),
     gp: r.games_played,
     "4s": r["4s"],
     "-4s": r["-4s"],
     "0s": r["0s"],
     tuh: r.tossups_heard,
     tp: r.tossup_points,
-    ppg: formatNumber(r.points_per_game),
+    ppg: formatFixedNumber(r.points_per_game, 2),
   }));
 
   return <DataTable headers={headers} rows={tableRows} />;

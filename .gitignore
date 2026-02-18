@@ -92,6 +92,9 @@ ENV/
 # Project-specific artifacts
 # -----------------------------
 
+# Generated copy of repo-level /stats for the website build
+apps/website/frontend/public/stats/
+
 # Question data caches
 questions.json
 questions_cache/

@@ -1,6 +1,7 @@
 // API Service for connecting to Django backend
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const STATS_BASE_URL = import.meta.env.VITE_STATS_URL || "";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('access_token');
@@ -204,10 +205,15 @@ export const tournamentsAPI = {
   },
 
   getTournamentStandings: async (slug: string) => {
-    const response = await fetch(`${API_BASE_URL}/api/tournaments/${encodeURIComponent(slug)}/standings/`, {
-      headers: getAuthHeaders(),
-    });
-    return handleResponse(response);
+    const encodedSlug = encodeURIComponent(slug);
+    const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
+    const statsUrl = trimmedStatsBaseUrl
+      ? `${trimmedStatsBaseUrl}/stats/${encodedSlug}/standings.json`
+      : `${import.meta.env.BASE_URL}stats/${encodedSlug}/standings.json`;
+
+    const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
+    if (!response.ok) throw new Error("Failed to load standings");
+    return response.json();
   },
 
   getTournamentTeams: async (tournamentId: number) => {
