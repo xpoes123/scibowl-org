@@ -219,58 +219,83 @@ class Command(BaseCommand):
             raise CommandError(f"Unexpected DATABASES entry already present: {db_alias}")
 
         original_default = dict(settings.DATABASES.get("default", {}))
+        tmp = tempfile.TemporaryDirectory()
         try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                sqlite_path = str(Path(tmpdir) / "moss_stats.sqlite3")
-                settings.DATABASES[db_alias] = {
+            sqlite_path = str(Path(tmp.name) / "moss_stats.sqlite3")
+            settings.DATABASES[db_alias] = {
+                    # Keep this in sync with Django's defaults in
+                    # django.db.utils.ConnectionHandler.configure_settings().
                     "ENGINE": "django.db.backends.sqlite3",
                     "NAME": sqlite_path,
-                }
-                connections.close_all()
+                    "ATOMIC_REQUESTS": False,
+                    "AUTOCOMMIT": True,
+                    "CONN_MAX_AGE": 0,
+                    "CONN_HEALTH_CHECKS": False,
+                    "OPTIONS": {},
+                    "TIME_ZONE": None,
+                    "USER": "",
+                    "PASSWORD": "",
+                    "HOST": "",
+                    "PORT": "",
+                    "TEST": {
+                        "CHARSET": None,
+                        "COLLATION": None,
+                        "MIGRATE": True,
+                        "MIRROR": None,
+                        "NAME": None,
+                    },
+            }
+            connections.close_all()
 
-                # Create schema.
-                call_command("migrate", verbosity=0, interactive=False, database=db_alias)
+            # Create schema.
+            call_command("migrate", verbosity=0, interactive=False, database=db_alias)
 
-                # Minimal tournament row required by moss FK relationships.
-                tournament = Tournament.objects.using(db_alias).create(
-                    name=name,
-                    slug=slug,
-                    description="",
-                    division="HIGH_SCHOOL",
-                    format="ROUND_ROBIN",
-                    status="COMPLETED",
-                    tournament_date=now().date(),
-                    registration_deadline=None,
-                    location="",
-                    venue="",
-                    host_organization="",
-                    tournament_director=None,
-                    max_teams=None,
-                    current_teams=0,
-                    website_url="",
-                    registration_url="",
-                )
+            # Minimal tournament row required by moss FK relationships.
+            tournament = Tournament.objects.using(db_alias).create(
+                name=name,
+                slug=slug,
+                description="",
+                division="HIGH_SCHOOL",
+                format="ROUND_ROBIN",
+                status="COMPLETED",
+                tournament_date=now().date(),
+                registration_deadline=None,
+                location="",
+                venue="",
+                host_organization="",
+                tournament_director=None,
+                max_teams=None,
+                current_teams=0,
+                website_url="",
+                registration_url="",
+            )
 
-                try:
-                    ingest_scoresheet_exports(
-                        tournament_id=tournament.id,
-                        exports=export_inputs,
-                        using=db_alias,
-                    )
-                except ValueError as e:
-                    raise CommandError(str(e)) from e
-
-                standings_payload: dict[str, Any] = build_tournament_standings_view(
-                    tournament=tournament,
+            try:
+                ingest_scoresheet_exports(
+                    tournament_id=tournament.id,
+                    exports=export_inputs,
                     using=db_alias,
                 )
+            except ValueError as e:
+                raise CommandError(str(e)) from e
+
+            standings_payload: dict[str, Any] = build_tournament_standings_view(
+                tournament=tournament,
+                using=db_alias,
+            )
         finally:
+            # On Windows, the SQLite file can't be deleted while any connection remains open.
+            try:
+                connections[db_alias].close()
+            except Exception:
+                pass
             connections.close_all()
             # Restore DB settings.
             settings.DATABASES.clear()
             settings.DATABASES.update(original_databases)
             if "default" not in settings.DATABASES:
                 settings.DATABASES["default"] = original_default
+            tmp.cleanup()
 
         manifest_payload: dict[str, Any] = {
             "schema_version": 1,
