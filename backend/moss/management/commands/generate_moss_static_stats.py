@@ -2,13 +2,20 @@ from __future__ import annotations
 
 import hashlib
 import json
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from django.conf import settings
+from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
+from django.db import connections
+from django.utils.timezone import now
 
-from moss.services.static_stats import build_standings_view_from_exports
+from moss.services.ingest_exports import ingest_scoresheet_exports
+from moss.services.stats_views import build_tournament_standings_view
+from tournaments.models import Tournament
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -72,7 +79,10 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
 
 
 class Command(BaseCommand):
-    help = "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2)."
+    help = (
+        "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2) "
+        "using a temporary local SQLite database."
+    )
 
     def add_arguments(self, parser) -> None:
         parser.add_argument(
@@ -143,6 +153,7 @@ class Command(BaseCommand):
                             existing_sources_sha256.add(item["sha256"])
 
         exports: list[dict[str, Any]] = []
+        export_inputs: list[tuple[Path, bytes, dict[str, Any]]] = []
         sources: list[dict[str, Any]] = []
         seen: set[str] = set()
         duplicate_with_existing: list[str] = []
@@ -167,6 +178,7 @@ class Command(BaseCommand):
             export_obj = _require_dict(export_obj_any, f"{path} (top-level)")
 
             exports.append(export_obj)
+            export_inputs.append((path, data, export_obj))
             sources.append(
                 {
                     "path": str(path),
@@ -201,16 +213,53 @@ class Command(BaseCommand):
 
             _safe_wipe_output_dir(output_dir)
 
+        # Build everything using an ephemeral local SQLite DB so the stats views are
+        # defined by queries on the fact tables rather than bespoke transformations.
+        original_default = dict(settings.DATABASES.get("default", {}))
         try:
-            standings = build_standings_view_from_exports(exports)
-        except ValueError as e:
-            raise CommandError(str(e)) from e
+            with tempfile.TemporaryDirectory() as tmpdir:
+                sqlite_path = str(Path(tmpdir) / "moss_stats.sqlite3")
+                settings.DATABASES["default"] = {
+                    "ENGINE": "django.db.backends.sqlite3",
+                    "NAME": sqlite_path,
+                }
+                # Ensure Django uses the updated DB config.
+                connections.close_all()
+                connections.databases["default"] = settings.DATABASES["default"]
 
-        standings_payload: dict[str, Any] = {
-            "tournament": {"id": 0, "slug": slug, "name": name},
-            "team_standings": standings.team_standings,
-            "individual_standings": standings.individual_standings,
-        }
+                # Create schema.
+                call_command("migrate", verbosity=0, interactive=False)
+
+                # Minimal tournament row required by moss FK relationships.
+                tournament = Tournament.objects.create(
+                    name=name,
+                    slug=slug,
+                    description="",
+                    division="HIGH_SCHOOL",
+                    format="ROUND_ROBIN",
+                    status="COMPLETED",
+                    tournament_date=now().date(),
+                    registration_deadline=None,
+                    location="",
+                    venue="",
+                    host_organization="",
+                    tournament_director=None,
+                    max_teams=None,
+                    current_teams=0,
+                    website_url="",
+                    registration_url="",
+                )
+
+                try:
+                    ingest_scoresheet_exports(tournament_id=tournament.id, exports=export_inputs)
+                except ValueError as e:
+                    raise CommandError(str(e)) from e
+
+                standings_payload: dict[str, Any] = build_tournament_standings_view(tournament=tournament)
+        finally:
+            connections.close_all()
+            settings.DATABASES["default"] = original_default
+            connections.databases["default"] = settings.DATABASES["default"]
 
         manifest_payload: dict[str, Any] = {
             "schema_version": 1,
