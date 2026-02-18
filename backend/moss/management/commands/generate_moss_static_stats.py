@@ -88,8 +88,13 @@ class Command(BaseCommand):
         parser.add_argument(
             "--output-dir",
             type=str,
-            required=True,
-            help="Directory to write generated artifacts into (e.g. stats/pilot-scrimmage).",
+            required=False,
+            default=None,
+            help=(
+                "Directory to write generated artifacts into. "
+                "Relative paths are resolved from the repo root. "
+                "Defaults to <repo>/stats/<tournament-slug>."
+            ),
         )
         parser.add_argument(
             "--tournament-slug",
@@ -125,13 +130,23 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options) -> None:
-        output_dir = Path(options["output_dir"])
         tournament_slug: str | None = options.get("tournament_slug")
         tournament_name: str | None = options.get("tournament_name")
         pretty: bool = options["pretty"]
         assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
         paths: list[str] = options["paths"]
+
+        repo_root = Path(settings.BASE_DIR).parent
+        raw_output_dir: str | None = options.get("output_dir")
+        if raw_output_dir:
+            output_dir_path = Path(raw_output_dir)
+            output_dir = output_dir_path if output_dir_path.is_absolute() else (repo_root / output_dir_path)
+        else:
+            slug_for_default = (tournament_slug or "").strip()
+            if not slug_for_default:
+                raise CommandError("Pass --tournament-slug (or --output-dir) to choose an output folder.")
+            output_dir = repo_root / "stats" / slug_for_default
 
         slug = (tournament_slug or output_dir.name).strip()
         if not slug:

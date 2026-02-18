@@ -20,8 +20,13 @@ From the repo root:
 python backend/manage.py generate_moss_static_stats --pretty --output-dir stats/pilot-scrimmage path/to/export1.json path/to/export2.json
 ```
 
+From anywhere (recommended):
+
+```bash
+python backend/manage.py generate_moss_static_stats --pretty --tournament-slug pilot-scrimmage path/to/export1.json path/to/export2.json
+```
+
 Notes:
 
 - The command always uses a temporary local SQLite database; it does not require Postgres.
 - If `stats/<tournament_slug>/` already contains generated artifacts, the command will prompt before replacing them (use `--yes` for CI).
-
