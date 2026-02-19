@@ -460,6 +460,82 @@ code {
   margin-bottom: 18px;
 }
 
+.scoreToggle {
+  display: flex;
+  border: 1px solid #d6d6de;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.scoreToggle button {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #111;
+  padding: 10px 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scoreToggle button + button {
+  border-left: 1px solid #e6e7ee;
+}
+
+.scoreToggle button:hover {
+  background: #f6f7fb;
+}
+
+.scoreToggle button.active {
+  background: #f0f2ff;
+  box-shadow: inset 0 0 0 1px var(--sb-focus);
+}
+
+.scoreToggle button:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
+}
+
+.scoresheetEditPopup {
+  z-index: 3100;
+  width: 320px;
+}
+
+.scoresheetEditPopup .selectInput {
+  width: 100%;
+  height: 34px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.scoresheetEditPopup .scoreToggle {
+  height: 34px;
+}
+
+.scoresheetEditPopup .scoreToggle button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.scoresheetEditPopupBody {
+  margin-top: 10px;
+}
+
+.scoresheetEditPopupActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 .fieldLabelRow {
   display: flex;
   align-items: center;
@@ -743,10 +819,42 @@ button.addTeamButton:hover .addIcon {
   border-top: 1px solid #eee;
 }
 
+.questionPane {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.endOfRoundSeparator {
+  height: 1px;
+  background: #e6e7ee;
+}
+
+.endOfRoundNotice {
+  text-align: center;
+  color: #111;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.endOfRoundTitle {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.endOfRoundWarning {
+  font-weight: 700;
+}
+
 .qaSection {
   padding: 14px 14px;
   border: 1px solid #eee;
   border-radius: 14px;
+  transition: box-shadow 120ms ease;
 }
 
 .qaSectionCorrect {
@@ -769,6 +877,10 @@ button.addTeamButton:hover .addIcon {
 
 .qaSectionClickable {
   cursor: pointer;
+}
+
+.qaSectionClickable:not(.qaSectionDisabled):hover {
+  box-shadow: 0 0 0 1px var(--sb-focus);
 }
 
 .qaSectionClickable:focus-within {
@@ -946,6 +1058,19 @@ button.wordEnd {
   box-shadow: inset 0 0 0 1px var(--sb-incorrect-border);
 }
 
+.wordWrapClickable:not(.wordWrapSelected):not(.wordWrapCorrect):not(.wordWrapIncorrect):hover::before,
+.wordWrapClickable:not(.wordWrapSelected):not(.wordWrapCorrect):not(.wordWrapIncorrect):focus-within::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: -1px;
+  bottom: -1px;
+  border-radius: 4px;
+  z-index: 0;
+  box-shadow: inset 0 0 0 1px var(--sb-focus);
+}
+
 button.word {
   position: relative;
   z-index: 1;
@@ -1077,6 +1202,23 @@ button.wordLabel {
   box-shadow: 0 1px 0 #eee;
 }
 
+.scoresheetExportRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoresheetExportMeta {
+  color: #666;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.scoresheetCard .header {
+  align-items: center;
+  margin-top: -2px;
+}
+
 .scoresheetTeamHeaderInner {
   display: flex;
   align-items: center;
@@ -1126,6 +1268,39 @@ button.wordLabel {
 
 .scoresheetRowActive {
   background: #f0f2ff;
+}
+
+.scoresheetAttemptCell {
+  padding: 0;
+}
+
+.scoresheetAttemptCellButton {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  padding: 10px 10px;
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.scoresheetAttemptCellButton:disabled {
+  cursor: default;
+}
+
+.scoresheetAttemptCellButton:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1px var(--sb-focus);
+}
+
+.scoresheetAttemptCellButton:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--sb-focus);
 }
 
 .scoresheetCellActive {

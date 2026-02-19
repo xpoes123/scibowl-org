@@ -23,7 +23,7 @@ import type {
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
-const END_TOKEN = "NO PENALTY" as const;
+const END_TOKEN = "END" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
 const SCORESHEET_EXPORT_VERSION = 2 as const;
 
@@ -224,6 +224,28 @@ type AttemptEditor = {
   selection: Omit<Attempt, "result">;
 };
 
+type ScoresheetAttemptEditScore = "plus" | "minus" | "zero";
+type ScoresheetAttemptEditModalState = {
+  questionId: number;
+  teamId: string;
+  token: string;
+  location: AttemptLocation;
+  isEnd: boolean;
+  score: ScoresheetAttemptEditScore;
+  playerId: string;
+  left: number;
+  top: number;
+} | null;
+
+type ScoresheetBonusEditScore = "plus" | "zero";
+type ScoresheetBonusEditModalState = {
+  questionId: number;
+  teamId: string;
+  score: ScoresheetBonusEditScore;
+  left: number;
+  top: number;
+} | null;
+
 function getAnchorRect(el: HTMLElement): AnchorRect {
   const r = el.getBoundingClientRect();
   return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
@@ -235,6 +257,21 @@ function getAnchorRectFromPoint(x: number, y: number): AnchorRect {
 
 function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
+}
+
+function formatRelativeTime(iso: string, nowMs: number): string {
+  const thenMs = new Date(iso).getTime();
+  if (!Number.isFinite(thenMs)) return iso;
+  const diffSecRaw = Math.floor((nowMs - thenMs) / 1000);
+  const diffSec = Math.max(0, diffSecRaw);
+  if (diffSec < 3) return "just now";
+  if (diffSec < 60) return "less than a minute ago";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
 }
 
 function computePopupPosition(anchor: AnchorRect): { left: number; top: number } {
@@ -302,6 +339,8 @@ export default function App() {
   const questions = useMemo(() => data.questions ?? [], [data.questions]);
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
+  const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
+  const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
@@ -323,11 +362,15 @@ export default function App() {
   const lineupsByTeamId = scoresheetState.lineupsByTeamId;
   const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
   const [bonusResultEditor, setBonusResultEditor] = useState<{ questionId: number; left: number; top: number } | null>(null);
+  const [scoresheetAttemptEditModal, setScoresheetAttemptEditModal] = useState<ScoresheetAttemptEditModalState>(null);
+  const [scoresheetBonusEditModal, setScoresheetBonusEditModal] = useState<ScoresheetBonusEditModalState>(null);
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
+  const scoresheetAttemptEditPopupRef = useRef<HTMLDivElement | null>(null);
+  const scoresheetBonusEditPopupRef = useRef<HTMLDivElement | null>(null);
   const packetFileInputRef = useRef<HTMLInputElement | null>(null);
   const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -344,6 +387,18 @@ export default function App() {
 
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
+  const isScoresheetExported = !!lastExport && lastExport.atEnd && lastExport.lastSeq === scoresheetState.lastSeq;
+
+  useEffect(() => {
+    setLastExport(null);
+  }, [game]);
+
+  useEffect(() => {
+    if (!lastExport) return;
+    const id = window.setInterval(() => setNowMs(Date.now()), 15000);
+    return () => window.clearInterval(id);
+  }, [lastExport]);
+
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const remoteReady = useMemo(() => {
     if (!remoteScoresheetId || !game) return false;
@@ -538,22 +593,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (!game) return;
-
-    const message =
-      "You are now leaving MoSS. Please ensure you have exported any game data. All game data will be lost upon leaving this page.";
-
-    function onBeforeUnload(e: BeforeUnloadEvent) {
-      e.preventDefault();
-      e.returnValue = message;
-      return message;
-    }
-
-    window.addEventListener("beforeunload", onBeforeUnload);
-    return () => window.removeEventListener("beforeunload", onBeforeUnload);
-  }, [game]);
-
-  useEffect(() => {
     if (!scoresheetBoundaryPopup) return;
 
     function onKeyDown(e: KeyboardEvent) {
@@ -586,6 +625,45 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [lineupChangeModal]);
 
+  useEffect(() => {
+    if (!scoresheetAttemptEditModal) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setScoresheetAttemptEditModal(null);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [scoresheetAttemptEditModal]);
+
+  useEffect(() => {
+    if (!scoresheetBonusEditModal) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setScoresheetBonusEditModal(null);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [scoresheetBonusEditModal]);
+
+  useEffect(() => {
+    if (!scoresheetAttemptEditModal && !scoresheetBonusEditModal) return;
+
+    function onMouseDown(e: MouseEvent) {
+      const elAttempt = scoresheetAttemptEditPopupRef.current;
+      const elBonus = scoresheetBonusEditPopupRef.current;
+      const target = e.target as Node;
+      if (elAttempt && elAttempt.contains(target)) return;
+      if (elBonus && elBonus.contains(target)) return;
+      setScoresheetAttemptEditModal(null);
+      setScoresheetBonusEditModal(null);
+    }
+
+    window.addEventListener("mousedown", onMouseDown, true);
+    return () => window.removeEventListener("mousedown", onMouseDown, true);
+  }, [scoresheetAttemptEditModal, scoresheetBonusEditModal]);
+
   const playersById = useMemo(() => {
     const entries: Array<[string, string]> = [];
     for (const team of teams) {
@@ -605,6 +683,23 @@ export default function App() {
 
     return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
   }, [questions]);
+
+  useEffect(() => {
+    if (!game) return;
+    if (isScoresheetExported) return;
+
+    const message =
+      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
+
+    function onBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = message;
+      return message;
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [game, isScoresheetExported]);
 
   const tossupQuestionByPairId = useMemo(() => {
     const map = new Map<number, Question>();
@@ -668,6 +763,9 @@ export default function App() {
 
     setIsExporting(true);
     try {
+      const exportedSeq = scoresheetState.lastSeq;
+      const exportedAtEnd = pairIdx === pairRows.length - 1;
+      const exportedAtIso = new Date().toISOString();
       const canonicalPacketJson = stableJsonStringify({
         packet: data.packet,
         year: data.year,
@@ -709,7 +807,7 @@ export default function App() {
         if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
       }
 
-      const exportedAt = new Date().toISOString();
+      const exportedAt = exportedAtIso;
       const sortedEvents = [...scoresheetEvents].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
       const eventLog = sortedEvents.map((event, idx) => ({
         seq: event.seq ?? idx + 1,
@@ -793,6 +891,7 @@ export default function App() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      setLastExport({ atEnd: exportedAtEnd, lastSeq: exportedSeq, exportedAtIso });
     } catch (e) {
       console.error(e);
       alert("Export failed. See console for details.");
@@ -1556,7 +1655,149 @@ export default function App() {
     if (questionType === "BONUS") return pointsLabel;
     const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
     const who = player ? ` (${player})` : "";
-    return `${pointsLabel} @ ${attemptValue.token}${who}`;
+    const tokenLabel = attemptValue.isEnd ? END_TOKEN : attemptValue.token;
+    return `${pointsLabel} @ ${tokenLabel}${who}`;
+  }
+
+  function openScoresheetAttemptEditModal(question: Question, teamId: string, anchorEl: HTMLElement) {
+    if (!game) return;
+    if (question.question_type !== "TOSSUP") return;
+
+    const attempt = (attempts[question.id] ?? []).find((a) => a.teamId === teamId);
+    if (!attempt?.result || !attempt.playerId) return;
+
+    const anchor = getAnchorRect(anchorEl);
+    const position = computePopupPosition(anchor);
+
+    setAttemptEditor(null);
+    setBonusResultEditor(null);
+    setScoresheetBonusEditModal(null);
+
+    setScoresheetAttemptEditModal({
+      questionId: question.id,
+      teamId,
+      token: attempt.token,
+      location: attempt.location,
+      isEnd: attempt.isEnd,
+      score: attempt.result === "correct" ? "plus" : attempt.isEnd ? "zero" : "minus",
+      playerId: attempt.playerId,
+      left: position.left,
+      top: position.top,
+    });
+  }
+
+  function openScoresheetBonusEditModal(question: Question, teamId: string, anchorEl: HTMLElement) {
+    if (!game) return;
+    if (question.question_type !== "BONUS") return;
+
+    const attempt = (attempts[question.id] ?? []).find((a) => a.teamId === teamId);
+    if (!attempt?.result) return;
+
+    const anchor = getAnchorRect(anchorEl);
+    const position = computePopupPosition(anchor);
+
+    setAttemptEditor(null);
+    setBonusResultEditor(null);
+    setScoresheetAttemptEditModal(null);
+
+    setScoresheetBonusEditModal({
+      questionId: question.id,
+      teamId,
+      score: attempt.result === "correct" ? "plus" : "zero",
+      left: position.left,
+      top: position.top,
+    });
+  }
+
+  function saveScoresheetAttemptEditModal() {
+    const state = scoresheetAttemptEditModal;
+    if (!state) return;
+
+    const question = questionsById.get(state.questionId);
+    if (!question || question.question_type !== "TOSSUP") return;
+
+    const team = teams.find((t) => t.id === state.teamId);
+    if (!team) return;
+
+    const activeIds = activePlayerIdsForTeamAtTossup(team, question.pair_id);
+    if (!activeIds.has(state.playerId)) return;
+
+    const current = attempts[question.id] ?? [];
+    const baseAttempt: Attempt = {
+      token: state.token,
+      isEnd: state.isEnd,
+      location: state.location,
+      teamId: state.teamId,
+      playerId: state.playerId,
+      result: state.score === "plus" ? "correct" : "incorrect",
+    };
+
+    const nextAttempt: Attempt = (() => {
+      if (state.score !== "zero") {
+        if (state.score === "minus") return { ...baseAttempt, isEnd: false };
+        return baseAttempt;
+      }
+
+      return {
+        ...baseAttempt,
+        token: END_TOKEN,
+        isEnd: true,
+        location: { kind: "end" },
+      };
+    })();
+
+    const events: ScoresheetEvent[] = [
+      buildScoresheetEvent("attempt.recorded", {
+        question_id: question.id,
+        team_id: nextAttempt.teamId,
+        player_id: nextAttempt.playerId,
+        result: nextAttempt.result,
+        token: nextAttempt.token,
+        is_end: nextAttempt.isEnd,
+        location: encodeLocationForEvent(nextAttempt.location),
+      }),
+    ];
+
+    const nextList = (() => {
+      let next = current.filter((a) => a.teamId !== nextAttempt.teamId && a.playerId !== nextAttempt.playerId);
+      if (nextAttempt.result === "correct") next = next.filter((a) => a.result !== "correct");
+      return [...next, nextAttempt];
+    })();
+
+    const bonus = bonusQuestionByPairId.get(question.pair_id);
+    if (bonus) {
+      const winnerTeamId = nextList.find((a) => a.result === "correct")?.teamId ?? null;
+      const bonusAttempt = attempts[bonus.id]?.[0];
+      if (!winnerTeamId || (bonusAttempt && bonusAttempt.teamId !== winnerTeamId)) {
+        events.push(buildScoresheetEvent("attempts.question_cleared", { question_id: bonus.id }));
+      }
+    }
+
+    appendScoresheetEvents(events);
+    setLastActor({ teamId: nextAttempt.teamId, playerId: nextAttempt.playerId });
+    setScoresheetAttemptEditModal(null);
+  }
+
+  function saveScoresheetBonusEditModal() {
+    const state = scoresheetBonusEditModal;
+    if (!state) return;
+
+    const question = questionsById.get(state.questionId);
+    if (!question || question.question_type !== "BONUS") return;
+
+    const tossup = tossupQuestionByPairId.get(question.pair_id);
+    const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
+    const winnerTeamId = tossupAttempts.find((a) => a.result === "correct")?.teamId ?? null;
+    if (!winnerTeamId) return;
+    if (winnerTeamId !== state.teamId) return;
+
+    appendScoresheetEvent(buildScoresheetEvent("bonus.result_set", {
+      bonus_question_id: question.id,
+      team_id: winnerTeamId,
+      result: state.score === "plus" ? "correct" : "incorrect",
+    }));
+
+    setScoresheetBonusEditModal(null);
   }
 
   function markedResultForQuestionLocation(questionId: number, location: AttemptLocation): AttemptResult | undefined {
@@ -1571,6 +1812,7 @@ export default function App() {
     const wordSegments = trimLeadingSpaces(tokenizeText(questionText));
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
+    const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
     const hasClearableAttempts = (() => {
       const ownAttempts = attempts[question.id] ?? [];
@@ -1657,6 +1899,7 @@ export default function App() {
                     <span
                       className={[
                         "wordWrap",
+                        wordWrapClickableClass,
                         selected ? "wordWrapSelected" : "",
                         correctnessClass,
                       ]
@@ -1724,6 +1967,7 @@ export default function App() {
                     className={[
                       "wordWrap",
                       "wordWrapLabel",
+                      wordWrapClickableClass,
                       labelSelected ? "wordWrapSelected" : "",
                       labelCorrectnessClass,
                     ]
@@ -1778,6 +2022,7 @@ export default function App() {
                           <span
                             className={[
                               "wordWrap",
+                              wordWrapClickableClass,
                               selected ? "wordWrapSelected" : "",
                               correctnessClass,
                             ]
@@ -1826,6 +2071,7 @@ export default function App() {
                 <span
                   className={[
                     "wordWrap",
+                    wordWrapClickableClass,
                     selected ? "wordWrapSelected" : "",
                     correctnessClass,
                   ]
@@ -2180,38 +2426,51 @@ export default function App() {
       <MossTopNav />
       <div className="page">
         <div className="layout">
-          <div className="card">
-            <div className="header">
-              <div>
-                <h1 className="title">
-                  {data.packet} ({data.year})
-                </h1>
+          <div className="questionPane">
+            <div className="card">
+              <div className="header">
+                <div>
+                  <h1 className="title">
+                    {data.packet} ({data.year})
+                  </h1>
+                </div>
+              </div>
+
+              <div className="questionBlock">
+                {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
+                {bonusQ && (
+                  <>
+                    <div className="qaDivider" />
+                    {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
+                  </>
+                )}
+              </div>
+
+              <div className="controls">
+                <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
+                  {"\u2190"}
+                </button>
+
+                <button
+                  onClick={next}
+                  disabled={pairIdx === pairRows.length - 1}
+                  aria-label="Next pair"
+                >
+                  {"\u2192"}
+                </button>
               </div>
             </div>
 
-            <div className="questionBlock">
-              {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
-              {bonusQ && (
-                <>
-                  <div className="qaDivider" />
-                  {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
-                </>
-              )}
-            </div>
-
-            <div className="controls">
-              <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
-                {"\u2190"}
-              </button>
-
-              <button
-                onClick={next}
-                disabled={pairIdx === pairRows.length - 1}
-                aria-label="Next pair"
-              >
-                {"\u2192"}
-              </button>
-            </div>
+            {pairIdx === pairRows.length - 1 && (
+              <>
+                <div className="endOfRoundSeparator" aria-hidden="true" />
+                <div className="endOfRoundNotice" aria-label="End of round notice">
+                  <div className="endOfRoundTitle">END OF ROUND</div>
+                  <div>Export the scoresheet and save it to your computer.</div>
+                  <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="card scoresheetCard" aria-label="Scoresheet">
@@ -2231,15 +2490,22 @@ export default function App() {
                 </p>
               </div>
               <div>
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={exportScoresheet}
-                  disabled={!game || isExporting}
-                  aria-label="Export scoresheet"
-                >
-                  {isExporting ? "Exporting..." : "Export"}
-                </button>
+                <div className="scoresheetExportRow" aria-label="Export scoresheet controls">
+                  {lastExport && (
+                    <div className="scoresheetExportMeta" aria-label="Last exported">
+                      Last exported {formatRelativeTime(lastExport.exportedAtIso, nowMs)}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={exportScoresheet}
+                    disabled={!game || isExporting}
+                    aria-label="Export scoresheet"
+                  >
+                    {isExporting ? "Exporting..." : "Export"}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -2339,6 +2605,7 @@ export default function App() {
                             const bonusResult = teamRow.bonusAttempt?.result;
 
                             const tossupCellClass = [
+                              "scoresheetAttemptCell",
                               tossupResult === "correct"
                                 ? "scoresheetCellCorrect"
                                 : tossupResult === "incorrect"
@@ -2349,6 +2616,7 @@ export default function App() {
                               .join(" ");
 
                             const bonusCellClass = [
+                              "scoresheetAttemptCell",
                               bonusResult === "correct"
                                 ? "scoresheetCellCorrect"
                                 : bonusResult === "incorrect"
@@ -2360,10 +2628,32 @@ export default function App() {
 
                             return [
                               <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                                {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
+                                <button
+                                  type="button"
+                                  className="scoresheetAttemptCellButton"
+                                  disabled={!row.tossup || !teamRow.tossupAttempt?.result}
+                                  onClick={(e) => {
+                                    if (!row.tossup) return;
+                                    openScoresheetAttemptEditModal(row.tossup, teamRow.teamId, e.currentTarget);
+                                  }}
+                                  aria-label={`Edit tossup for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
+                                >
+                                  {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
+                                </button>
                               </td>,
                               <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                                {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
+                                <button
+                                  type="button"
+                                  className="scoresheetAttemptCellButton"
+                                  disabled={!row.bonus || !teamRow.bonusAttempt?.result}
+                                  onClick={(e) => {
+                                    if (!row.bonus) return;
+                                    openScoresheetBonusEditModal(row.bonus, teamRow.teamId, e.currentTarget);
+                                  }}
+                                  aria-label={`Edit bonus for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
+                                >
+                                  {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
+                                </button>
                               </td>,
                               <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
                                 {teamRow.runningTotal}
@@ -2531,6 +2821,153 @@ export default function App() {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {(() => {
+          if (!scoresheetAttemptEditModal) return null;
+          const question = questionsById.get(scoresheetAttemptEditModal.questionId);
+          if (!question) return null;
+          const team = teams.find((t) => t.id === scoresheetAttemptEditModal.teamId);
+          if (!team) return null;
+
+          const activeIds = activePlayerIdsForTeamAtTossup(team, question.pair_id);
+          const activePlayers = team.players.filter((p) => activeIds.has(p.id));
+          const selectedPlayerActive = activeIds.has(scoresheetAttemptEditModal.playerId);
+          const canSave = selectedPlayerActive && activePlayers.length > 0;
+
+          const title = `Edit: Tossup ${question.pair_id} (${team.name})`;
+
+          return (
+            <div
+              ref={scoresheetAttemptEditPopupRef}
+              className="attemptPopup scoresheetEditPopup"
+              role="dialog"
+              aria-label={title}
+              style={{ left: scoresheetAttemptEditModal.left, top: scoresheetAttemptEditModal.top }}
+            >
+              <div className="attemptPopupTitle">{title}</div>
+
+              <div className="scoresheetEditPopupBody">
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Score</div>
+                  </div>
+                  <div className="scoreToggle" role="group" aria-label="Score">
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "plus" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
+                    >
+                      +4
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "minus" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "minus" } : prev))}
+                    >
+                      -4
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "zero" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
+                    >
+                      0
+                    </button>
+                  </div>
+                </div>
+
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Player</div>
+                  </div>
+                  <select
+                    className="selectInput"
+                    value={scoresheetAttemptEditModal.playerId}
+                    onChange={(e) => {
+                      const playerId = e.target.value;
+                      setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
+                    }}
+                  >
+                    {!selectedPlayerActive && (
+                      <option value={scoresheetAttemptEditModal.playerId} disabled>
+                        {(playersById.get(scoresheetAttemptEditModal.playerId) ?? scoresheetAttemptEditModal.playerId) + " (not in lineup)"}
+                      </option>
+                    )}
+                    {activePlayers.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="scoresheetEditPopupActions">
+                  <button type="button" className="secondary" onClick={() => setScoresheetAttemptEditModal(null)}>
+                    Cancel
+                  </button>
+                  <button type="button" disabled={!canSave} onClick={saveScoresheetAttemptEditModal}>
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {(() => {
+          if (!scoresheetBonusEditModal) return null;
+          const question = questionsById.get(scoresheetBonusEditModal.questionId);
+          if (!question || question.question_type !== "BONUS") return null;
+          const team = teams.find((t) => t.id === scoresheetBonusEditModal.teamId);
+          if (!team) return null;
+
+          const title = `Edit: Bonus ${question.pair_id} (${team.name})`;
+
+          return (
+            <div
+              ref={scoresheetBonusEditPopupRef}
+              className="attemptPopup scoresheetEditPopup"
+              role="dialog"
+              aria-label={title}
+              style={{ left: scoresheetBonusEditModal.left, top: scoresheetBonusEditModal.top }}
+            >
+              <div className="attemptPopupTitle">{title}</div>
+
+              <div className="scoresheetEditPopupBody">
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Score</div>
+                  </div>
+                  <div className="scoreToggle" role="group" aria-label="Bonus score">
+                    <button
+                      type="button"
+                      className={scoresheetBonusEditModal.score === "plus" ? "active" : ""}
+                      onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
+                    >
+                      +10
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetBonusEditModal.score === "zero" ? "active" : ""}
+                      onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
+                    >
+                      0
+                    </button>
+                  </div>
+                </div>
+
+                <div className="scoresheetEditPopupActions">
+                  <button type="button" className="secondary" onClick={() => setScoresheetBonusEditModal(null)}>
+                    Cancel
+                  </button>
+                  <button type="button" onClick={saveScoresheetBonusEditModal}>
+                    Save
+                  </button>
                 </div>
               </div>
             </div>

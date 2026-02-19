@@ -141,16 +141,24 @@ class Command(BaseCommand):
         raw_output_dir: str | None = options.get("output_dir")
         if raw_output_dir:
             output_dir_path = Path(raw_output_dir)
-            output_dir = output_dir_path if output_dir_path.is_absolute() else (repo_root / output_dir_path)
+            output_dir = (
+                output_dir_path
+                if output_dir_path.is_absolute()
+                else (repo_root / output_dir_path)
+            )
         else:
             slug_for_default = (tournament_slug or "").strip()
             if not slug_for_default:
-                raise CommandError("Pass --tournament-slug (or --output-dir) to choose an output folder.")
+                raise CommandError(
+                    "Pass --tournament-slug (or --output-dir) to choose an output folder."
+                )
             output_dir = repo_root / "stats" / slug_for_default
 
         slug = (tournament_slug or output_dir.name).strip()
         if not slug:
-            raise CommandError("Could not infer tournament slug; pass --tournament-slug.")
+            raise CommandError(
+                "Could not infer tournament slug; pass --tournament-slug."
+            )
         name = (tournament_name or slug).strip()
 
         existing_sources_sha256: set[str] = set()
@@ -164,7 +172,9 @@ class Command(BaseCommand):
                 sources_any = existing_obj.get("sources")
                 if isinstance(sources_any, list):
                     for item in sources_any:
-                        if isinstance(item, dict) and isinstance(item.get("sha256"), str):
+                        if isinstance(item, dict) and isinstance(
+                            item.get("sha256"), str
+                        ):
                             existing_sources_sha256.add(item["sha256"])
 
         export_inputs: list[tuple[Path, bytes, dict[str, Any]]] = []
@@ -204,61 +214,73 @@ class Command(BaseCommand):
 
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        existing_artifacts = any((output_dir / name).exists() for name in ("standings.json", "manifest.json"))
+        existing_artifacts = any(
+            (output_dir / name).exists() for name in ("standings.json", "manifest.json")
+        )
         if existing_artifacts or duplicate_with_existing:
             reasons: list[str] = []
             if existing_artifacts:
                 reasons.append("existing artifacts in output directory")
             if duplicate_with_existing:
-                reasons.append(f"{len(duplicate_with_existing)} input export(s) already listed in manifest.json")
+                reasons.append(
+                    f"{len(duplicate_with_existing)} input export(s) already listed in manifest.json"
+                )
 
             if not assume_yes:
-                self.stdout.write("This run would overwrite previously generated stats artifacts.")
+                self.stdout.write(
+                    "This run would overwrite previously generated stats artifacts."
+                )
                 self.stdout.write(f"Reason(s): {', '.join(reasons)}")
                 if duplicate_with_existing:
                     shown = duplicate_with_existing[:5]
                     for p in shown:
                         self.stdout.write(f"  - {p}")
                     if len(duplicate_with_existing) > 5:
-                        self.stdout.write(f"  ... and {len(duplicate_with_existing) - 5} more")
-                if not _prompt_yes_no(prompt="Regenerate and replace artifacts?", default=False):
+                        self.stdout.write(
+                            f"  ... and {len(duplicate_with_existing) - 5} more"
+                        )
+                if not _prompt_yes_no(
+                    prompt="Regenerate and replace artifacts?", default=False
+                ):
                     raise CommandError("Aborted.")
 
             _safe_wipe_output_dir(output_dir)
 
         # Build everything using an ephemeral local SQLite DB (separate alias) so we
         # never touch any configured persistent DB, even if one exists locally.
-        db_alias = "moss_stats"
+        db_alias = "moss_stats  d"
         original_databases = dict(settings.DATABASES)
         if db_alias in settings.DATABASES:
-            raise CommandError(f"Unexpected DATABASES entry already present: {db_alias}")
+            raise CommandError(
+                f"Unexpected DATABASES entry already present: {db_alias}"
+            )
 
         original_default = dict(settings.DATABASES.get("default", {}))
         tmp = tempfile.TemporaryDirectory()
         try:
             sqlite_path = str(Path(tmp.name) / "moss_stats.sqlite3")
             settings.DATABASES[db_alias] = {
-                    # Keep this in sync with Django's defaults in
-                    # django.db.utils.ConnectionHandler.configure_settings().
-                    "ENGINE": "django.db.backends.sqlite3",
-                    "NAME": sqlite_path,
-                    "ATOMIC_REQUESTS": False,
-                    "AUTOCOMMIT": True,
-                    "CONN_MAX_AGE": 0,
-                    "CONN_HEALTH_CHECKS": False,
-                    "OPTIONS": {},
-                    "TIME_ZONE": None,
-                    "USER": "",
-                    "PASSWORD": "",
-                    "HOST": "",
-                    "PORT": "",
-                    "TEST": {
-                        "CHARSET": None,
-                        "COLLATION": None,
-                        "MIGRATE": True,
-                        "MIRROR": None,
-                        "NAME": None,
-                    },
+                # Keep this in sync with Django's defaults in
+                # django.db.utils.ConnectionHandler.configure_settings().
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": sqlite_path,
+                "ATOMIC_REQUESTS": False,
+                "AUTOCOMMIT": True,
+                "CONN_MAX_AGE": 0,
+                "CONN_HEALTH_CHECKS": False,
+                "OPTIONS": {},
+                "TIME_ZONE": None,
+                "USER": "",
+                "PASSWORD": "",
+                "HOST": "",
+                "PORT": "",
+                "TEST": {
+                    "CHARSET": None,
+                    "COLLATION": None,
+                    "MIGRATE": True,
+                    "MIRROR": None,
+                    "NAME": None,
+                },
             }
             connections.close_all()
 
