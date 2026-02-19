@@ -23,7 +23,7 @@ import type {
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
 
-const END_TOKEN = "NO PENALTY" as const;
+const END_TOKEN = "END" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
 const SCORESHEET_EXPORT_VERSION = 2 as const;
 
