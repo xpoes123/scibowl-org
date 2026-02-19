@@ -235,6 +235,13 @@ type ScoresheetAttemptEditModalState = {
   playerId: string;
 } | null;
 
+type ScoresheetBonusEditScore = "plus" | "zero";
+type ScoresheetBonusEditModalState = {
+  questionId: number;
+  teamId: string;
+  score: ScoresheetBonusEditScore;
+} | null;
+
 function getAnchorRect(el: HTMLElement): AnchorRect {
   const r = el.getBoundingClientRect();
   return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
@@ -335,6 +342,7 @@ export default function App() {
   const [attemptEditor, setAttemptEditor] = useState<AttemptEditor | null>(null);
   const [bonusResultEditor, setBonusResultEditor] = useState<{ questionId: number; left: number; top: number } | null>(null);
   const [scoresheetAttemptEditModal, setScoresheetAttemptEditModal] = useState<ScoresheetAttemptEditModalState>(null);
+  const [scoresheetBonusEditModal, setScoresheetBonusEditModal] = useState<ScoresheetBonusEditModalState>(null);
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
@@ -608,6 +616,17 @@ export default function App() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [scoresheetAttemptEditModal]);
+
+  useEffect(() => {
+    if (!scoresheetBonusEditModal) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setScoresheetBonusEditModal(null);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [scoresheetBonusEditModal]);
 
   const playersById = useMemo(() => {
     const entries: Array<[string, string]> = [];
@@ -1591,6 +1610,7 @@ export default function App() {
 
     setAttemptEditor(null);
     setBonusResultEditor(null);
+    setScoresheetBonusEditModal(null);
 
     setScoresheetAttemptEditModal({
       questionId: question.id,
@@ -1600,6 +1620,24 @@ export default function App() {
       isEnd: attempt.isEnd,
       score: attempt.result === "correct" ? "plus" : attempt.isEnd ? "zero" : "minus",
       playerId: attempt.playerId,
+    });
+  }
+
+  function openScoresheetBonusEditModal(question: Question, teamId: string) {
+    if (!game) return;
+    if (question.question_type !== "BONUS") return;
+
+    const attempt = (attempts[question.id] ?? []).find((a) => a.teamId === teamId);
+    if (!attempt?.result) return;
+
+    setAttemptEditor(null);
+    setBonusResultEditor(null);
+    setScoresheetAttemptEditModal(null);
+
+    setScoresheetBonusEditModal({
+      questionId: question.id,
+      teamId,
+      score: attempt.result === "correct" ? "plus" : "zero",
     });
   }
 
@@ -1670,6 +1708,28 @@ export default function App() {
     appendScoresheetEvents(events);
     setLastActor({ teamId: nextAttempt.teamId, playerId: nextAttempt.playerId });
     setScoresheetAttemptEditModal(null);
+  }
+
+  function saveScoresheetBonusEditModal() {
+    const state = scoresheetBonusEditModal;
+    if (!state) return;
+
+    const question = questionsById.get(state.questionId);
+    if (!question || question.question_type !== "BONUS") return;
+
+    const tossup = tossupQuestionByPairId.get(question.pair_id);
+    const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
+    const winnerTeamId = tossupAttempts.find((a) => a.result === "correct")?.teamId ?? null;
+    if (!winnerTeamId) return;
+    if (winnerTeamId !== state.teamId) return;
+
+    appendScoresheetEvent(buildScoresheetEvent("bonus.result_set", {
+      bonus_question_id: question.id,
+      team_id: winnerTeamId,
+      result: state.score === "plus" ? "correct" : "incorrect",
+    }));
+
+    setScoresheetBonusEditModal(null);
   }
 
   function markedResultForQuestionLocation(questionId: number, location: AttemptLocation): AttemptResult | undefined {
@@ -2497,8 +2557,12 @@ export default function App() {
                                 <button
                                   type="button"
                                   className="scoresheetAttemptCellButton"
-                                  disabled
-                                  aria-label="Bonus (not editable here)"
+                                  disabled={!row.bonus || !teamRow.bonusAttempt?.result}
+                                  onClick={() => {
+                                    if (!row.bonus) return;
+                                    openScoresheetBonusEditModal(row.bonus, teamRow.teamId);
+                                  }}
+                                  aria-label={`Edit bonus for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
                                 >
                                   {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
                                 </button>
@@ -2762,6 +2826,66 @@ export default function App() {
                         Cancel
                       </button>
                       <button type="button" disabled={!canSave} onClick={saveScoresheetAttemptEditModal}>
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {(() => {
+          if (!scoresheetBonusEditModal) return null;
+          const question = questionsById.get(scoresheetBonusEditModal.questionId);
+          if (!question || question.question_type !== "BONUS") return null;
+          const team = teams.find((t) => t.id === scoresheetBonusEditModal.teamId);
+          if (!team) return null;
+
+          const title = `Edit: Bonus ${question.pair_id} (${team.name})`;
+
+          return (
+            <div
+              className="modalOverlay"
+              role="dialog"
+              aria-label={title}
+              onClick={() => setScoresheetBonusEditModal(null)}
+            >
+              <div className={["modal", "smallModal"].join(" ")} onClick={(e) => e.stopPropagation()}>
+                <div className="modalHeader">
+                  <h2 className="modalTitle">{title}</h2>
+                </div>
+
+                <div className="modalBody">
+                  <div className="fieldGroup">
+                    <div className="fieldLabelRow">
+                      <div className="fieldLabel">Score</div>
+                    </div>
+                    <div className="scoreToggle" role="group" aria-label="Bonus score">
+                      <button
+                        type="button"
+                        className={scoresheetBonusEditModal.score === "plus" ? "active" : ""}
+                        onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
+                      >
+                        +10
+                      </button>
+                      <button
+                        type="button"
+                        className={scoresheetBonusEditModal.score === "zero" ? "active" : ""}
+                        onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
+                      >
+                        0
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="modalFooter">
+                    <div className="modalActionsRight">
+                      <button type="button" className="secondary" onClick={() => setScoresheetBonusEditModal(null)}>
+                        Cancel
+                      </button>
+                      <button type="button" onClick={saveScoresheetBonusEditModal}>
                         Save
                       </button>
                     </div>
