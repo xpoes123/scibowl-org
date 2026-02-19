@@ -575,7 +575,7 @@ export default function App() {
     if (isScoresheetExported) return;
 
     const message =
-      "You are now leaving MoSS. Please ensure you have exported any game data. All game data will be lost upon leaving this page.";
+      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
 
     function onBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -2403,46 +2403,51 @@ export default function App() {
       <MossTopNav />
       <div className="page">
         <div className="layout">
-          <div className="card">
-            <div className="header">
-              <div>
-                <h1 className="title">
-                  {data.packet} ({data.year})
-                </h1>
+          <div className="questionPane">
+            <div className="card">
+              <div className="header">
+                <div>
+                  <h1 className="title">
+                    {data.packet} ({data.year})
+                  </h1>
+                </div>
               </div>
-            </div>
 
-            <div className="questionBlock">
-              {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
-              {bonusQ && (
-                <>
-                  <div className="qaDivider" />
-                  {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
-                </>
-              )}
+              <div className="questionBlock">
+                {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
+                {bonusQ && (
+                  <>
+                    <div className="qaDivider" />
+                    {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
+                  </>
+                )}
+              </div>
+
+              <div className="controls">
+                <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
+                  {"\u2190"}
+                </button>
+
+                <button
+                  onClick={next}
+                  disabled={pairIdx === pairRows.length - 1}
+                  aria-label="Next pair"
+                >
+                  {"\u2192"}
+                </button>
+              </div>
             </div>
 
             {pairIdx === pairRows.length - 1 && (
-              <div className="endOfRoundNotice" aria-label="End of round notice">
-                <div className="endOfRoundTitle">END OF ROUND</div>
-                <div>Export the scoresheet and save it to your computer.</div>
-                <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
-              </div>
+              <>
+                <div className="endOfRoundSeparator" aria-hidden="true" />
+                <div className="endOfRoundNotice" aria-label="End of round notice">
+                  <div className="endOfRoundTitle">END OF ROUND</div>
+                  <div>Export the scoresheet and save it to your computer.</div>
+                  <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
+                </div>
+              </>
             )}
-
-            <div className="controls">
-              <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
-                {"\u2190"}
-              </button>
-
-              <button
-                onClick={next}
-                disabled={pairIdx === pairRows.length - 1}
-                aria-label="Next pair"
-              >
-                {"\u2192"}
-              </button>
-            </div>
           </div>
 
           <div className="card scoresheetCard" aria-label="Scoresheet">

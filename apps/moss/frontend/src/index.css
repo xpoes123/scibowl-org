@@ -819,10 +819,25 @@ button.addTeamButton:hover .addIcon {
   border-top: 1px solid #eee;
 }
 
+.questionPane {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.endOfRoundSeparator {
+  height: 1px;
+  background: #e6e7ee;
+}
+
 .endOfRoundNotice {
-  margin-top: 14px;
   text-align: center;
   color: #111;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .endOfRoundTitle {
@@ -832,7 +847,6 @@ button.addTeamButton:hover .addIcon {
 }
 
 .endOfRoundWarning {
-  margin-top: 4px;
   font-weight: 700;
 }
 
