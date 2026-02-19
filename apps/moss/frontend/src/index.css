@@ -819,6 +819,23 @@ button.addTeamButton:hover .addIcon {
   border-top: 1px solid #eee;
 }
 
+.endOfRoundNotice {
+  margin-top: 14px;
+  text-align: center;
+  color: #111;
+}
+
+.endOfRoundTitle {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.endOfRoundWarning {
+  margin-top: 4px;
+  font-weight: 700;
+}
+
 .qaSection {
   padding: 14px 14px;
   border: 1px solid #eee;

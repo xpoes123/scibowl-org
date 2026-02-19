@@ -324,6 +324,7 @@ export default function App() {
   const questions = useMemo(() => data.questions ?? [], [data.questions]);
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
+  const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number } | null>(null);
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
@@ -370,6 +371,12 @@ export default function App() {
 
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
+  const isScoresheetExported = !!lastExport && lastExport.atEnd && lastExport.lastSeq === scoresheetState.lastSeq;
+
+  useEffect(() => {
+    setLastExport(null);
+  }, [game]);
+
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const remoteReady = useMemo(() => {
     if (!remoteScoresheetId || !game) return false;
@@ -565,6 +572,7 @@ export default function App() {
 
   useEffect(() => {
     if (!game) return;
+    if (isScoresheetExported) return;
 
     const message =
       "You are now leaving MoSS. Please ensure you have exported any game data. All game data will be lost upon leaving this page.";
@@ -577,7 +585,7 @@ export default function App() {
 
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
-  }, [game]);
+  }, [game, isScoresheetExported]);
 
   useEffect(() => {
     if (!scoresheetBoundaryPopup) return;
@@ -733,6 +741,8 @@ export default function App() {
 
     setIsExporting(true);
     try {
+      const exportedSeq = scoresheetState.lastSeq;
+      const exportedAtEnd = pairIdx === pairRows.length - 1;
       const canonicalPacketJson = stableJsonStringify({
         packet: data.packet,
         year: data.year,
@@ -858,6 +868,7 @@ export default function App() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+      setLastExport({ atEnd: exportedAtEnd, lastSeq: exportedSeq });
     } catch (e) {
       console.error(e);
       alert("Export failed. See console for details.");
@@ -2410,6 +2421,14 @@ export default function App() {
                 </>
               )}
             </div>
+
+            {pairIdx === pairRows.length - 1 && (
+              <div className="endOfRoundNotice" aria-label="End of round notice">
+                <div className="endOfRoundTitle">END OF ROUND</div>
+                <div>Export the scoresheet and save it to your computer.</div>
+                <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
+              </div>
+            )}
 
             <div className="controls">
               <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
