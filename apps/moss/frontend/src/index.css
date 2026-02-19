@@ -1202,6 +1202,23 @@ button.wordLabel {
   box-shadow: 0 1px 0 #eee;
 }
 
+.scoresheetExportRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoresheetExportMeta {
+  color: #666;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.scoresheetCard .header {
+  align-items: center;
+  margin-top: -2px;
+}
+
 .scoresheetTeamHeaderInner {
   display: flex;
   align-items: center;

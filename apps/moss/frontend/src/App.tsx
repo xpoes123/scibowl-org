@@ -324,7 +324,7 @@ export default function App() {
   const questions = useMemo(() => data.questions ?? [], [data.questions]);
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
-  const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number } | null>(null);
+  const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
@@ -571,23 +571,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (!game) return;
-    if (isScoresheetExported) return;
-
-    const message =
-      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
-
-    function onBeforeUnload(e: BeforeUnloadEvent) {
-      e.preventDefault();
-      e.returnValue = message;
-      return message;
-    }
-
-    window.addEventListener("beforeunload", onBeforeUnload);
-    return () => window.removeEventListener("beforeunload", onBeforeUnload);
-  }, [game, isScoresheetExported]);
-
-  useEffect(() => {
     if (!scoresheetBoundaryPopup) return;
 
     function onKeyDown(e: KeyboardEvent) {
@@ -679,6 +662,23 @@ export default function App() {
     return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
   }, [questions]);
 
+  useEffect(() => {
+    if (!game) return;
+    if (isScoresheetExported) return;
+
+    const message =
+      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
+
+    function onBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = message;
+      return message;
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [game, isScoresheetExported]);
+
   const tossupQuestionByPairId = useMemo(() => {
     const map = new Map<number, Question>();
     for (const row of pairRows) {
@@ -743,6 +743,7 @@ export default function App() {
     try {
       const exportedSeq = scoresheetState.lastSeq;
       const exportedAtEnd = pairIdx === pairRows.length - 1;
+      const exportedAtIso = new Date().toISOString();
       const canonicalPacketJson = stableJsonStringify({
         packet: data.packet,
         year: data.year,
@@ -784,7 +785,7 @@ export default function App() {
         if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
       }
 
-      const exportedAt = new Date().toISOString();
+      const exportedAt = exportedAtIso;
       const sortedEvents = [...scoresheetEvents].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
       const eventLog = sortedEvents.map((event, idx) => ({
         seq: event.seq ?? idx + 1,
@@ -868,7 +869,7 @@ export default function App() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      setLastExport({ atEnd: exportedAtEnd, lastSeq: exportedSeq });
+      setLastExport({ atEnd: exportedAtEnd, lastSeq: exportedSeq, exportedAtIso });
     } catch (e) {
       console.error(e);
       alert("Export failed. See console for details.");
@@ -2467,15 +2468,29 @@ export default function App() {
                 </p>
               </div>
               <div>
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={exportScoresheet}
-                  disabled={!game || isExporting}
-                  aria-label="Export scoresheet"
-                >
-                  {isExporting ? "Exporting..." : "Export"}
-                </button>
+                <div className="scoresheetExportRow" aria-label="Export scoresheet controls">
+                  {lastExport && (
+                    <div className="scoresheetExportMeta" aria-label="Last exported">
+                      Last exported{" "}
+                      {(() => {
+                        try {
+                          return new Date(lastExport.exportedAtIso).toLocaleString();
+                        } catch {
+                          return lastExport.exportedAtIso;
+                        }
+                      })()}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={exportScoresheet}
+                    disabled={!game || isExporting}
+                    aria-label="Export scoresheet"
+                  >
+                    {isExporting ? "Exporting..." : "Export"}
+                  </button>
+                </div>
               </div>
             </div>
 
