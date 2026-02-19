@@ -233,6 +233,8 @@ type ScoresheetAttemptEditModalState = {
   isEnd: boolean;
   score: ScoresheetAttemptEditScore;
   playerId: string;
+  left: number;
+  top: number;
 } | null;
 
 type ScoresheetBonusEditScore = "plus" | "zero";
@@ -240,6 +242,8 @@ type ScoresheetBonusEditModalState = {
   questionId: number;
   teamId: string;
   score: ScoresheetBonusEditScore;
+  left: number;
+  top: number;
 } | null;
 
 function getAnchorRect(el: HTMLElement): AnchorRect {
@@ -348,6 +352,8 @@ export default function App() {
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
+  const scoresheetAttemptEditPopupRef = useRef<HTMLDivElement | null>(null);
+  const scoresheetBonusEditPopupRef = useRef<HTMLDivElement | null>(null);
   const packetFileInputRef = useRef<HTMLInputElement | null>(null);
   const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -627,6 +633,23 @@ export default function App() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [scoresheetBonusEditModal]);
+
+  useEffect(() => {
+    if (!scoresheetAttemptEditModal && !scoresheetBonusEditModal) return;
+
+    function onMouseDown(e: MouseEvent) {
+      const elAttempt = scoresheetAttemptEditPopupRef.current;
+      const elBonus = scoresheetBonusEditPopupRef.current;
+      const target = e.target as Node;
+      if (elAttempt && elAttempt.contains(target)) return;
+      if (elBonus && elBonus.contains(target)) return;
+      setScoresheetAttemptEditModal(null);
+      setScoresheetBonusEditModal(null);
+    }
+
+    window.addEventListener("mousedown", onMouseDown, true);
+    return () => window.removeEventListener("mousedown", onMouseDown, true);
+  }, [scoresheetAttemptEditModal, scoresheetBonusEditModal]);
 
   const playersById = useMemo(() => {
     const entries: Array<[string, string]> = [];
@@ -1598,15 +1621,19 @@ export default function App() {
     if (questionType === "BONUS") return pointsLabel;
     const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
     const who = player ? ` (${player})` : "";
-    return `${pointsLabel} @ ${attemptValue.token}${who}`;
+    const tokenLabel = attemptValue.isEnd ? END_TOKEN : attemptValue.token;
+    return `${pointsLabel} @ ${tokenLabel}${who}`;
   }
 
-  function openScoresheetAttemptEditModal(question: Question, teamId: string) {
+  function openScoresheetAttemptEditModal(question: Question, teamId: string, anchorEl: HTMLElement) {
     if (!game) return;
     if (question.question_type !== "TOSSUP") return;
 
     const attempt = (attempts[question.id] ?? []).find((a) => a.teamId === teamId);
     if (!attempt?.result || !attempt.playerId) return;
+
+    const anchor = getAnchorRect(anchorEl);
+    const position = computePopupPosition(anchor);
 
     setAttemptEditor(null);
     setBonusResultEditor(null);
@@ -1620,15 +1647,20 @@ export default function App() {
       isEnd: attempt.isEnd,
       score: attempt.result === "correct" ? "plus" : attempt.isEnd ? "zero" : "minus",
       playerId: attempt.playerId,
+      left: position.left,
+      top: position.top,
     });
   }
 
-  function openScoresheetBonusEditModal(question: Question, teamId: string) {
+  function openScoresheetBonusEditModal(question: Question, teamId: string, anchorEl: HTMLElement) {
     if (!game) return;
     if (question.question_type !== "BONUS") return;
 
     const attempt = (attempts[question.id] ?? []).find((a) => a.teamId === teamId);
     if (!attempt?.result) return;
+
+    const anchor = getAnchorRect(anchorEl);
+    const position = computePopupPosition(anchor);
 
     setAttemptEditor(null);
     setBonusResultEditor(null);
@@ -1638,6 +1670,8 @@ export default function App() {
       questionId: question.id,
       teamId,
       score: attempt.result === "correct" ? "plus" : "zero",
+      left: position.left,
+      top: position.top,
     });
   }
 
@@ -2544,9 +2578,9 @@ export default function App() {
                                   type="button"
                                   className="scoresheetAttemptCellButton"
                                   disabled={!row.tossup || !teamRow.tossupAttempt?.result}
-                                  onClick={() => {
+                                  onClick={(e) => {
                                     if (!row.tossup) return;
-                                    openScoresheetAttemptEditModal(row.tossup, teamRow.teamId);
+                                    openScoresheetAttemptEditModal(row.tossup, teamRow.teamId, e.currentTarget);
                                   }}
                                   aria-label={`Edit tossup for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
                                 >
@@ -2558,9 +2592,9 @@ export default function App() {
                                   type="button"
                                   className="scoresheetAttemptCellButton"
                                   disabled={!row.bonus || !teamRow.bonusAttempt?.result}
-                                  onClick={() => {
+                                  onClick={(e) => {
                                     if (!row.bonus) return;
-                                    openScoresheetBonusEditModal(row.bonus, teamRow.teamId);
+                                    openScoresheetBonusEditModal(row.bonus, teamRow.teamId, e.currentTarget);
                                   }}
                                   aria-label={`Edit bonus for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
                                 >
@@ -2755,81 +2789,76 @@ export default function App() {
 
           return (
             <div
-              className="modalOverlay"
+              ref={scoresheetAttemptEditPopupRef}
+              className="attemptPopup scoresheetEditPopup"
               role="dialog"
               aria-label={title}
-              onClick={() => setScoresheetAttemptEditModal(null)}
+              style={{ left: scoresheetAttemptEditModal.left, top: scoresheetAttemptEditModal.top }}
             >
-              <div className={["modal", "smallModal"].join(" ")} onClick={(e) => e.stopPropagation()}>
-                <div className="modalHeader">
-                  <h2 className="modalTitle">{title}</h2>
+              <div className="attemptPopupTitle">{title}</div>
+
+              <div className="scoresheetEditPopupBody">
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Score</div>
+                  </div>
+                  <div className="scoreToggle" role="group" aria-label="Score">
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "plus" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
+                    >
+                      +4
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "minus" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "minus" } : prev))}
+                    >
+                      -4
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetAttemptEditModal.score === "zero" ? "active" : ""}
+                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
+                    >
+                      0
+                    </button>
+                  </div>
                 </div>
 
-                <div className="modalBody">
-                  <div className="fieldGroup">
-                    <div className="fieldLabelRow">
-                      <div className="fieldLabel">Score</div>
-                    </div>
-                    <div className="scoreToggle" role="group" aria-label="Score">
-                      <button
-                        type="button"
-                        className={scoresheetAttemptEditModal.score === "plus" ? "active" : ""}
-                        onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
-                      >
-                        +4
-                      </button>
-                      <button
-                        type="button"
-                        className={scoresheetAttemptEditModal.score === "minus" ? "active" : ""}
-                        onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "minus" } : prev))}
-                      >
-                        -4
-                      </button>
-                      <button
-                        type="button"
-                        className={scoresheetAttemptEditModal.score === "zero" ? "active" : ""}
-                        onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
-                      >
-                        0
-                      </button>
-                    </div>
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Player</div>
                   </div>
+                  <select
+                    className="selectInput"
+                    value={scoresheetAttemptEditModal.playerId}
+                    onChange={(e) => {
+                      const playerId = e.target.value;
+                      setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
+                    }}
+                  >
+                    {!selectedPlayerActive && (
+                      <option value={scoresheetAttemptEditModal.playerId} disabled>
+                        {(playersById.get(scoresheetAttemptEditModal.playerId) ?? scoresheetAttemptEditModal.playerId) + " (not in lineup)"}
+                      </option>
+                    )}
+                    {activePlayers.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                  <div className="fieldGroup">
-                    <div className="fieldLabelRow">
-                      <div className="fieldLabel">Player</div>
-                    </div>
-                    <select
-                      className="selectInput"
-                      value={scoresheetAttemptEditModal.playerId}
-                      onChange={(e) => {
-                        const playerId = e.target.value;
-                        setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
-                      }}
-                    >
-                      {!selectedPlayerActive && (
-                        <option value={scoresheetAttemptEditModal.playerId} disabled>
-                          {(playersById.get(scoresheetAttemptEditModal.playerId) ?? scoresheetAttemptEditModal.playerId) + " (not in lineup)"}
-                        </option>
-                      )}
-                      {activePlayers.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="modalFooter">
-                    <div className="modalActionsRight">
-                      <button type="button" className="secondary" onClick={() => setScoresheetAttemptEditModal(null)}>
-                        Cancel
-                      </button>
-                      <button type="button" disabled={!canSave} onClick={saveScoresheetAttemptEditModal}>
-                        Save
-                      </button>
-                    </div>
-                  </div>
+                <div className="scoresheetEditPopupActions">
+                  <button type="button" className="secondary" onClick={() => setScoresheetAttemptEditModal(null)}>
+                    Cancel
+                  </button>
+                  <button type="button" disabled={!canSave} onClick={saveScoresheetAttemptEditModal}>
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
@@ -2847,49 +2876,44 @@ export default function App() {
 
           return (
             <div
-              className="modalOverlay"
+              ref={scoresheetBonusEditPopupRef}
+              className="attemptPopup scoresheetEditPopup"
               role="dialog"
               aria-label={title}
-              onClick={() => setScoresheetBonusEditModal(null)}
+              style={{ left: scoresheetBonusEditModal.left, top: scoresheetBonusEditModal.top }}
             >
-              <div className={["modal", "smallModal"].join(" ")} onClick={(e) => e.stopPropagation()}>
-                <div className="modalHeader">
-                  <h2 className="modalTitle">{title}</h2>
+              <div className="attemptPopupTitle">{title}</div>
+
+              <div className="scoresheetEditPopupBody">
+                <div className="fieldGroup">
+                  <div className="fieldLabelRow">
+                    <div className="fieldLabel">Score</div>
+                  </div>
+                  <div className="scoreToggle" role="group" aria-label="Bonus score">
+                    <button
+                      type="button"
+                      className={scoresheetBonusEditModal.score === "plus" ? "active" : ""}
+                      onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
+                    >
+                      +10
+                    </button>
+                    <button
+                      type="button"
+                      className={scoresheetBonusEditModal.score === "zero" ? "active" : ""}
+                      onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
+                    >
+                      0
+                    </button>
+                  </div>
                 </div>
 
-                <div className="modalBody">
-                  <div className="fieldGroup">
-                    <div className="fieldLabelRow">
-                      <div className="fieldLabel">Score</div>
-                    </div>
-                    <div className="scoreToggle" role="group" aria-label="Bonus score">
-                      <button
-                        type="button"
-                        className={scoresheetBonusEditModal.score === "plus" ? "active" : ""}
-                        onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
-                      >
-                        +10
-                      </button>
-                      <button
-                        type="button"
-                        className={scoresheetBonusEditModal.score === "zero" ? "active" : ""}
-                        onClick={() => setScoresheetBonusEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
-                      >
-                        0
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="modalFooter">
-                    <div className="modalActionsRight">
-                      <button type="button" className="secondary" onClick={() => setScoresheetBonusEditModal(null)}>
-                        Cancel
-                      </button>
-                      <button type="button" onClick={saveScoresheetBonusEditModal}>
-                        Save
-                      </button>
-                    </div>
-                  </div>
+                <div className="scoresheetEditPopupActions">
+                  <button type="button" className="secondary" onClick={() => setScoresheetBonusEditModal(null)}>
+                    Cancel
+                  </button>
+                  <button type="button" onClick={saveScoresheetBonusEditModal}>
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
