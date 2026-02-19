@@ -259,6 +259,21 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
+function formatRelativeTime(iso: string, nowMs: number): string {
+  const thenMs = new Date(iso).getTime();
+  if (!Number.isFinite(thenMs)) return iso;
+  const diffSecRaw = Math.floor((nowMs - thenMs) / 1000);
+  const diffSec = Math.max(0, diffSecRaw);
+  if (diffSec < 3) return "just now";
+  if (diffSec < 60) return "less than a minute ago";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
+}
+
 function computePopupPosition(anchor: AnchorRect): { left: number; top: number } {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -325,6 +340,7 @@ export default function App() {
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
   const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
+  const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
@@ -376,6 +392,12 @@ export default function App() {
   useEffect(() => {
     setLastExport(null);
   }, [game]);
+
+  useEffect(() => {
+    if (!lastExport) return;
+    const id = window.setInterval(() => setNowMs(Date.now()), 15000);
+    return () => window.clearInterval(id);
+  }, [lastExport]);
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const remoteReady = useMemo(() => {
@@ -2471,14 +2493,7 @@ export default function App() {
                 <div className="scoresheetExportRow" aria-label="Export scoresheet controls">
                   {lastExport && (
                     <div className="scoresheetExportMeta" aria-label="Last exported">
-                      Last exported{" "}
-                      {(() => {
-                        try {
-                          return new Date(lastExport.exportedAtIso).toLocaleString();
-                        } catch {
-                          return lastExport.exportedAtIso;
-                        }
-                      })()}
+                      Last exported {formatRelativeTime(lastExport.exportedAtIso, nowMs)}
                     </div>
                   )}
                   <button
