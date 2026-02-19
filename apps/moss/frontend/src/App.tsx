@@ -1571,6 +1571,7 @@ export default function App() {
     const wordSegments = trimLeadingSpaces(tokenizeText(questionText));
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
+    const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
     const hasClearableAttempts = (() => {
       const ownAttempts = attempts[question.id] ?? [];
@@ -1657,6 +1658,7 @@ export default function App() {
                     <span
                       className={[
                         "wordWrap",
+                        wordWrapClickableClass,
                         selected ? "wordWrapSelected" : "",
                         correctnessClass,
                       ]
@@ -1724,6 +1726,7 @@ export default function App() {
                     className={[
                       "wordWrap",
                       "wordWrapLabel",
+                      wordWrapClickableClass,
                       labelSelected ? "wordWrapSelected" : "",
                       labelCorrectnessClass,
                     ]
@@ -1778,6 +1781,7 @@ export default function App() {
                           <span
                             className={[
                               "wordWrap",
+                              wordWrapClickableClass,
                               selected ? "wordWrapSelected" : "",
                               correctnessClass,
                             ]
@@ -1826,6 +1830,7 @@ export default function App() {
                 <span
                   className={[
                     "wordWrap",
+                    wordWrapClickableClass,
                     selected ? "wordWrapSelected" : "",
                     correctnessClass,
                   ]
