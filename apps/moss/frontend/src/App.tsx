@@ -491,6 +491,7 @@ export default function App() {
   const [isRosterChooserOpen, setIsRosterChooserOpen] = useState(false);
   const [isTournamentRosterChooserOpen, setIsTournamentRosterChooserOpen] = useState(false);
   const [showAllTournaments, setShowAllTournaments] = useState(false);
+  const [tournamentSearchQuery, setTournamentSearchQuery] = useState("");
   const [rosterIndexLoading, setRosterIndexLoading] = useState(false);
   const [rosterIndexError, setRosterIndexError] = useState<string | null>(null);
   const [rosterIndexSlugs, setRosterIndexSlugs] = useState<Set<string> | null>(null);
@@ -1125,6 +1126,7 @@ export default function App() {
     setIsRosterChooserOpen(false);
     setIsTournamentRosterChooserOpen(false);
     setShowAllTournaments(false);
+    setTournamentSearchQuery("");
     setFieldRoster(null);
     setSelectedRosterTeamByDraftTeamId({});
     setRosterLoadError(null);
@@ -1241,6 +1243,7 @@ export default function App() {
   function openTournamentRosterChooser() {
     setIsRosterChooserOpen(false);
     setTournamentRosterError(null);
+    setTournamentSearchQuery("");
     setIsTournamentRosterChooserOpen(true);
   }
 
@@ -2859,58 +2862,84 @@ export default function App() {
                       Default shows tournaments happening today (in their timezone).
                     </div>
                     {rosterIndexLoading && <div className="packetSubtext">Loading roster list…</div>}
-                    {tournamentRosterError && <div className="packetError">{tournamentRosterError}</div>}
-                    {rosterIndexError && <div className="packetError">{rosterIndexError}</div>}
+                    <div style={{ minHeight: 18 }}>
+                      {(tournamentRosterError || rosterIndexError) && (
+                        <div className="packetError">{tournamentRosterError ?? rosterIndexError}</div>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="chooserList">
-                    {(() => {
-                      const now = new Date();
-                      const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
-                      const filtered = showAllTournaments
-                        ? tournaments
-                        : tournaments.filter((t) => {
-                          const ymd = getDateYmdInTimeZone(now, t.timezone);
-                          if (!ymd) return false;
-                          return isYmdBetweenInclusive(ymd, t.dates.start, t.dates.end);
+                  <input
+                    className="textInput"
+                    value={tournamentSearchQuery}
+                    onChange={(e) => setTournamentSearchQuery(e.target.value)}
+                    placeholder="Search tournaments…"
+                    aria-label="Search tournaments"
+                    style={{ marginBottom: 12 }}
+                  />
+
+                  <div
+                    aria-label="Tournament search results"
+                    style={{
+                      height: 380,
+                      overflowY: "auto",
+                      paddingRight: 6,
+                    }}
+                  >
+                    <div className="chooserList">
+                      {(() => {
+                        const now = new Date();
+                        const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
+                        const base = showAllTournaments
+                          ? [...tournaments]
+                          : tournaments.filter((t) => {
+                            const ymd = getDateYmdInTimeZone(now, t.timezone);
+                            if (!ymd) return false;
+                            return isYmdBetweenInclusive(ymd, t.dates.start, t.dates.end);
+                          });
+
+                        const q = tournamentSearchQuery.trim().toLowerCase();
+                        const filtered = q
+                          ? base.filter((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
+                          : base;
+
+                        filtered.sort((a, b) => {
+                          const startCmp = a.dates.start.localeCompare(b.dates.start);
+                          if (startCmp !== 0) return startCmp;
+                          return a.name.localeCompare(b.name);
                         });
 
-                      filtered.sort((a, b) => {
-                        const startCmp = a.dates.start.localeCompare(b.dates.start);
-                        if (startCmp !== 0) return startCmp;
-                        return a.name.localeCompare(b.name);
-                      });
+                        if (!filtered.length) {
+                          return <div className="packetSubtext">No results.</div>;
+                        }
 
-                      if (!filtered.length) {
-                        return <div className="packetSubtext">No tournaments found for this filter.</div>;
-                      }
+                        const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
 
-                      const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
-
-                      return filtered.map((tournament) => {
-                        const hasRoster = canCheckRosterAvailability
-                          ? rosterIndexSlugs.has(tournament.slug)
-                          : true;
-                        const disabled = tournamentRosterLoading || (canCheckRosterAvailability && !hasRoster);
-                        const title = canCheckRosterAvailability && !hasRoster
-                          ? `${tournament.name} (No roster file found)`
-                          : tournament.name;
-                        return (
-                          <button
-                            key={tournament.slug}
-                            type="button"
-                            className="chooserOption"
-                            disabled={disabled}
-                            onClick={() => void chooseTournamentRoster(tournament)}
-                          >
-                            <div className="chooserOptionTitle">{title}</div>
-                            <div className="chooserOptionSubtext">
-                              {tournament.dates.start} – {tournament.dates.end} • {tournament.timezone}
-                            </div>
-                          </button>
-                        );
-                      });
-                    })()}
+                        return filtered.map((tournament) => {
+                          const hasRoster = canCheckRosterAvailability
+                            ? rosterIndexSlugs.has(tournament.slug)
+                            : true;
+                          const disabled = tournamentRosterLoading || (canCheckRosterAvailability && !hasRoster);
+                          const title = canCheckRosterAvailability && !hasRoster
+                            ? `${tournament.name} (No roster file found)`
+                            : tournament.name;
+                          return (
+                            <button
+                              key={tournament.slug}
+                              type="button"
+                              className="chooserOption"
+                              disabled={disabled}
+                              onClick={() => void chooseTournamentRoster(tournament)}
+                            >
+                              <div className="chooserOptionTitle">{title}</div>
+                              <div className="chooserOptionSubtext">
+                                {tournament.dates.start} – {tournament.dates.end} • {tournament.timezone}
+                              </div>
+                            </button>
+                          );
+                        });
+                      })()}
+                    </div>
                   </div>
 
                   <div className="chooserFooter">
