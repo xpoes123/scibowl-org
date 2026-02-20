@@ -485,7 +485,7 @@ export default function App() {
   const [draftTeams, setDraftTeams] = useState<DraftTeam[]>([]);
   const [draftRosterChoice, setDraftRosterChoice] = useState<RosterChoice>(() => ({
     kind: "custom",
-    label: "Enter custom roster",
+    label: "Enter Custom Roster",
   }));
   const [isRosterChooserOpen, setIsRosterChooserOpen] = useState(false);
   const [isTournamentRosterChooserOpen, setIsTournamentRosterChooserOpen] = useState(false);
@@ -1232,9 +1232,8 @@ export default function App() {
       setFieldRoster(parsedRoster);
       setSelectedRosterTeamByDraftTeamId({});
       setRosterLoadError(null);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Failed to load roster JSON.";
-      setRosterLoadError(msg);
+    } catch {
+      setRosterLoadError("ERROR: Unable to parse roster JSON");
     }
   }
 
@@ -1440,9 +1439,9 @@ export default function App() {
       const parsedPacket = parsePacketJson(text);
       setDraftPacketChoice({
         kind: "upload",
-        label: file.name,
+        label: "Upload Packet from Computer",
         fileName: file.name,
-        subtext: "Uploaded from computer",
+        subtext: file.name,
         packet: parsedPacket,
       });
       setPacketLoadError(null);
@@ -1455,7 +1454,7 @@ export default function App() {
   function chooseSamplePacket() {
     setDraftPacketChoice({
       kind: "sample",
-      label: "Sample Packet",
+      label: "Use Sample Packet",
       subtext: "Built-in demo packet for testing",
       packet: samplePacket,
     });
@@ -2586,10 +2585,25 @@ export default function App() {
                       <div className="fieldLabel">Rosters</div>
                       <div className="packetBox">
                         <div className="packetName">{draftRosterChoice.label}</div>
-                        {fieldRoster && (
-                          <div className="packetSubtext">{fieldRoster.teams.length} teams available</div>
-                        )}
-                        {rosterLoadError && <div className="packetError">{rosterLoadError}</div>}
+                        {(() => {
+                          const teamsCount = fieldRoster?.teams.length ?? 0;
+                          if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
+
+                          if (draftRosterChoice.kind === "custom") {
+                            return <div className="packetSubtext">Manually enter team and player names</div>;
+                          }
+
+                          if (draftRosterChoice.kind === "previous") {
+                            return <div className="packetSubtext">Previously used roster from browser cache</div>;
+                          }
+
+                          if (draftRosterChoice.kind === "upload") {
+                            return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
+                          }
+
+                          const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
+                          return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
+                        })()}
                         <button
                           type="button"
                           className="secondary packetChangeButton"
@@ -2806,10 +2820,7 @@ export default function App() {
                     <button
                       type="button"
                       className="chooserOption"
-                      onClick={() => {
-                        setDraftRosterChoice({ kind: "custom", label: "Enter Custom Roster" });
-                        chooseCustomRoster();
-                      }}
+                      onClick={chooseCustomRoster}
                     >
                       <div className="chooserOptionTitle">Enter Custom Roster</div>
                       <div className="chooserOptionSubtext">Manually enter team and player names</div>
@@ -2823,7 +2834,7 @@ export default function App() {
                       <div className="chooserOptionTitle">Load Previous Roster</div>
                       <div className="chooserOptionSubtext">
                         {hasCachedRoster()
-                          ? "Load previously used roster from browser cache"
+                          ? "Previously used roster from browser cache"
                           : "No cached roster found yet"}
                       </div>
                     </button>
@@ -2976,17 +2987,17 @@ export default function App() {
             >
               <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">Choose a packet</h2>
+                  <h2 className="modalTitle">Choose Packet</h2>
                 </div>
                 <div className="modalBody">
                   <div className="chooserList">
-                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
-                      <div className="chooserOptionTitle">Use Sample Packet</div>
-                      <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
-                    </button>
                     <button type="button" className="chooserOption" onClick={requestUploadPacket}>
                       <div className="chooserOptionTitle">Upload Packet from Computer</div>
                       <div className="chooserOptionSubtext">Select a local packet file</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
+                      <div className="chooserOptionTitle">Use Sample Packet</div>
+                      <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
                     </button>
                     <button type="button" className="chooserOption" disabled>
                       <div className="chooserOptionTitle">Select Tournament Packet (disabled)</div>
