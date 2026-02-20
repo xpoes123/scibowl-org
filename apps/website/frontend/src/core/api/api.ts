@@ -216,6 +216,19 @@ export const tournamentsAPI = {
     return response.json();
   },
 
+  getTournamentField: async (slug: string) => {
+    const encodedSlug = encodeURIComponent(slug);
+    const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
+    const statsUrl = trimmedStatsBaseUrl
+      ? `${trimmedStatsBaseUrl}/stats/${encodedSlug}/field.json`
+      : `${import.meta.env.BASE_URL}stats/${encodedSlug}/field.json`;
+
+    const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to load field");
+    return response.json();
+  },
+
   getTournamentTeams: async (tournamentId: number) => {
     const response = await fetch(`${API_BASE_URL}/api/tournaments/${tournamentId}/teams/`, {
       headers: getAuthHeaders(),
