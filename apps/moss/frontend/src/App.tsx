@@ -2799,19 +2799,22 @@ export default function App() {
                         <div className="fieldLabel">
                           Packet <span className="required">*</span>
                         </div>
-                        <div className="packetBox">
-                          {draftPacketChoice ? (
-                            <>
-                              <div className="packetName">{draftPacketChoice.label}</div>
-                              <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                            </>
-                          ) : (
-                            <div className="packetSubtext">Select a packet to start the game</div>
-                          )}
-                          {packetLoadError && <div className="packetError">{packetLoadError}</div>}
-                          <button
-                            type="button"
-                            className="secondary packetChangeButton"
+                      <div className="packetBox">
+                        {draftPacketChoice ? (
+                          <>
+                            <div className="packetName">{draftPacketChoice.label}</div>
+                            <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="packetName">Select Packet</div>
+                            <div className="packetSubtext">No packet selected</div>
+                          </>
+                        )}
+                        {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        <button
+                          type="button"
+                          className="secondary packetChangeButton"
                             onClick={() => setIsPacketChooserOpen(true)}
                           >
                             {draftPacketChoice ? "Change…" : "Load…"}
