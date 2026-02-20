@@ -106,10 +106,10 @@ type CachedRoster = {
 };
 
 type RosterChoice =
-  | { kind: "custom"; label: string; subtext: string }
-  | { kind: "previous"; label: string; subtext: string }
-  | { kind: "upload"; label: string; subtext: string; fileName: string }
-  | { kind: "tournament"; label: string; subtext: string; tournamentSlug: string };
+  | { kind: "custom"; label: string }
+  | { kind: "previous"; label: string }
+  | { kind: "upload"; label: string; fileName: string }
+  | { kind: "tournament"; label: string; tournamentSlug: string };
 
 type Question = {
   id: number;
@@ -486,7 +486,6 @@ export default function App() {
   const [draftRosterChoice, setDraftRosterChoice] = useState<RosterChoice>(() => ({
     kind: "custom",
     label: "Enter custom roster",
-    subtext: "Enter custom roster",
   }));
   const [isRosterChooserOpen, setIsRosterChooserOpen] = useState(false);
   const [isTournamentRosterChooserOpen, setIsTournamentRosterChooserOpen] = useState(false);
@@ -1122,7 +1121,7 @@ export default function App() {
   }
 
   function resetRostersToBlankCustom() {
-    setDraftRosterChoice({ kind: "custom", label: "Enter custom roster", subtext: "Enter custom roster" });
+    setDraftRosterChoice({ kind: "custom", label: "Enter Custom Roster" });
     setIsRosterChooserOpen(false);
     setIsTournamentRosterChooserOpen(false);
     setShowAllTournaments(false);
@@ -1208,7 +1207,7 @@ export default function App() {
       return;
     }
     setRosterLoadError(null);
-    setDraftRosterChoice({ kind: "previous", label: "Previous roster", subtext: "Load previously used roster from browser cache" });
+    setDraftRosterChoice({ kind: "previous", label: "Load Previous Roster" });
     setIsRosterChooserOpen(false);
     setIsTournamentRosterChooserOpen(false);
     applyResolvedRosterToDraft(teams);
@@ -1227,9 +1226,8 @@ export default function App() {
       const parsedRoster = parseFieldRosterJson(text);
       setDraftRosterChoice({
         kind: "upload",
-        label: file.name,
         fileName: file.name,
-        subtext: "Uploaded from computer",
+        label: "Upload Roster File",
       });
       setFieldRoster(parsedRoster);
       setSelectedRosterTeamByDraftTeamId({});
@@ -1267,9 +1265,8 @@ export default function App() {
 
       setDraftRosterChoice({
         kind: "tournament",
-        label: tournament.name,
+        label: "Select Tournament Roster",
         tournamentSlug: tournament.slug,
-        subtext: "Select roster for live tournament",
       });
       setFieldRoster(parsed);
       setSelectedRosterTeamByDraftTeamId({});
@@ -2589,7 +2586,6 @@ export default function App() {
                       <div className="fieldLabel">Rosters</div>
                       <div className="packetBox">
                         <div className="packetName">{draftRosterChoice.label}</div>
-                        <div className="packetSubtext">{draftRosterChoice.subtext}</div>
                         {fieldRoster && (
                           <div className="packetSubtext">{fieldRoster.teams.length} teams available</div>
                         )}
@@ -2807,9 +2803,16 @@ export default function App() {
                 </div>
                 <div className="modalBody">
                   <div className="chooserList">
-                    <button type="button" className="chooserOption" onClick={chooseCustomRoster}>
+                    <button
+                      type="button"
+                      className="chooserOption"
+                      onClick={() => {
+                        setDraftRosterChoice({ kind: "custom", label: "Enter Custom Roster" });
+                        chooseCustomRoster();
+                      }}
+                    >
                       <div className="chooserOptionTitle">Enter Custom Roster</div>
-                      <div className="chooserOptionSubtext">Enter custom roster</div>
+                      <div className="chooserOptionSubtext">Manually enter team and player names</div>
                     </button>
                     <button
                       type="button"
@@ -2830,7 +2833,7 @@ export default function App() {
                     </button>
                     <button type="button" className="chooserOption" onClick={openTournamentRosterChooser}>
                       <div className="chooserOptionTitle">Select Tournament Roster</div>
-                      <div className="chooserOptionSubtext">Select roster for live tournament</div>
+                      <div className="chooserOptionSubtext">Scorekeep for a tournament team</div>
                     </button>
                   </div>
                   <div className="chooserFooter">
