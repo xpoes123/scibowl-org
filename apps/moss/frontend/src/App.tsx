@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import packetJson from "./assets/sample_packet.json";
+import tournamentsJson from "./assets/tournaments.json";
 import { renderPacketText } from "./text/renderPacketText";
 import { getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
 import {
@@ -60,6 +61,55 @@ type Packet = {
 type PacketChoice =
   | { kind: "sample"; label: string; subtext: string; packet: Packet }
   | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
+
+type MossTournament = {
+  slug: string;
+  name: string;
+  timezone: string;
+  dates: { start: string; end: string };
+  status?: string;
+};
+
+type MossTournamentIndex = {
+  format: "moss_tournaments";
+  version: 1;
+  tournaments: MossTournament[];
+};
+
+type FieldRosterTeam = {
+  name: string;
+  players: string[];
+};
+
+type FieldRoster = {
+  format: "moss_field_roster";
+  version: 1;
+  tournament?: { slug?: string; name?: string };
+  teams: FieldRosterTeam[];
+};
+
+type RosterIndex = {
+  format: "moss_roster_index";
+  version: 1;
+  slugs: string[];
+};
+
+type ResolvedRosterTeam = {
+  name: string;
+  players: Array<{ name: string; isIn: boolean }>;
+};
+
+type CachedRoster = {
+  format: "moss_cached_roster";
+  version: 1;
+  teams: ResolvedRosterTeam[];
+};
+
+type RosterChoice =
+  | { kind: "custom"; label: string; subtext: string }
+  | { kind: "previous"; label: string; subtext: string }
+  | { kind: "upload"; label: string; subtext: string; fileName: string }
+  | { kind: "tournament"; label: string; subtext: string; tournamentSlug: string };
 
 type Question = {
   id: number;
@@ -315,6 +365,90 @@ function parsePacketJson(jsonText: string): Packet {
   return obj as Packet;
 }
 
+const CACHED_ROSTER_KEY = "moss_cached_roster_v1";
+
+function makeId(prefix: string): string {
+  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+}
+
+function buildStatsUrl(pathname: string): string {
+  const trimmedBase = String(import.meta.env.VITE_STATS_URL ?? "").replace(/\/+$/, "");
+  const normalizedPath = pathname.replace(/^\/+/, "");
+  if (trimmedBase) return `${trimmedBase}/${normalizedPath}`;
+  return `${import.meta.env.BASE_URL}${normalizedPath}`;
+}
+
+function parseRosterIndexJson(jsonText: string): RosterIndex {
+  const parsed = JSON.parse(jsonText) as unknown;
+  if (!parsed || typeof parsed !== "object") throw new Error("Roster index JSON must be an object.");
+  const obj = parsed as Partial<RosterIndex>;
+  if (obj.format !== "moss_roster_index") throw new Error("Roster index JSON has unexpected format.");
+  if (obj.version !== 1) throw new Error("Roster index JSON has unexpected version.");
+  if (!Array.isArray(obj.slugs)) throw new Error("Roster index JSON missing required array field: slugs");
+  const slugs = obj.slugs.filter((s): s is string => typeof s === "string" && s.trim() !== "").map((s) => s.trim());
+  return { format: "moss_roster_index", version: 1, slugs };
+}
+
+function parseFieldRosterJson(jsonText: string): FieldRoster {
+  const parsed = JSON.parse(jsonText) as unknown;
+  if (!parsed || typeof parsed !== "object") throw new Error("Roster JSON must be an object.");
+  const obj = parsed as Partial<FieldRoster>;
+  if (obj.format !== "moss_field_roster") throw new Error("Roster JSON has unexpected format.");
+  if (obj.version !== 1) throw new Error("Roster JSON has unexpected version.");
+  if (!Array.isArray(obj.teams)) throw new Error("Roster JSON missing required array field: teams");
+
+  const seen = new Set<string>();
+  const teams: FieldRosterTeam[] = obj.teams.map((t, idx) => {
+    if (!t || typeof t !== "object") throw new Error(`teams[${idx}] must be an object`);
+    const tr = t as Partial<FieldRosterTeam>;
+    const name = String(tr.name ?? "").trim();
+    if (!name) throw new Error(`teams[${idx}].name must be a non-empty string`);
+    if (seen.has(name)) throw new Error(`Duplicate team name in roster: ${name}`);
+    seen.add(name);
+
+    if (!Array.isArray(tr.players)) throw new Error(`teams[${idx}].players must be an array`);
+    const players = tr.players
+      .filter((p): p is string => typeof p === "string")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    return { name, players };
+  });
+
+  const tournamentRaw = obj.tournament;
+  const tournament = tournamentRaw && typeof tournamentRaw === "object"
+    ? {
+      slug: typeof (tournamentRaw as any).slug === "string" ? (tournamentRaw as any).slug : undefined,
+      name: typeof (tournamentRaw as any).name === "string" ? (tournamentRaw as any).name : undefined,
+    }
+    : undefined;
+
+  return { format: "moss_field_roster", version: 1, tournament, teams };
+}
+
+function getDateYmdInTimeZone(now: Date, timeZone: string): string | null {
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(now);
+
+    const year = parts.find((p) => p.type === "year")?.value;
+    const month = parts.find((p) => p.type === "month")?.value;
+    const day = parts.find((p) => p.type === "day")?.value;
+    if (!year || !month || !day) return null;
+    return `${year}-${month}-${day}`;
+  } catch {
+    return null;
+  }
+}
+
+function isYmdBetweenInclusive(ymd: string, start: string, end: string): boolean {
+  return ymd >= start && ymd <= end;
+}
+
 function MossTopNav() {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
@@ -333,6 +467,7 @@ function MossTopNav() {
 
 export default function App() {
   const samplePacket = packetJson as Packet;
+  const tournamentIndex = tournamentsJson as MossTournamentIndex;
   const [packet, setPacket] = useState<Packet | null>(null);
   const data = packet ?? samplePacket;
 
@@ -347,6 +482,22 @@ export default function App() {
   const [loadGameError, setLoadGameError] = useState<string | null>(null);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
   const [draftTeams, setDraftTeams] = useState<DraftTeam[]>([]);
+  const [draftRosterChoice, setDraftRosterChoice] = useState<RosterChoice>(() => ({
+    kind: "custom",
+    label: "Enter custom roster",
+    subtext: "Enter custom roster",
+  }));
+  const [isRosterChooserOpen, setIsRosterChooserOpen] = useState(false);
+  const [isTournamentRosterChooserOpen, setIsTournamentRosterChooserOpen] = useState(false);
+  const [showAllTournaments, setShowAllTournaments] = useState(false);
+  const [rosterIndexLoading, setRosterIndexLoading] = useState(false);
+  const [rosterIndexError, setRosterIndexError] = useState<string | null>(null);
+  const [rosterIndexSlugs, setRosterIndexSlugs] = useState<Set<string> | null>(null);
+  const [tournamentRosterLoading, setTournamentRosterLoading] = useState(false);
+  const [tournamentRosterError, setTournamentRosterError] = useState<string | null>(null);
+  const [fieldRoster, setFieldRoster] = useState<FieldRoster | null>(null);
+  const [selectedRosterTeamByDraftTeamId, setSelectedRosterTeamByDraftTeamId] = useState<Record<string, string>>({});
+  const [rosterLoadError, setRosterLoadError] = useState<string | null>(null);
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
@@ -372,6 +523,7 @@ export default function App() {
   const scoresheetAttemptEditPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBonusEditPopupRef = useRef<HTMLDivElement | null>(null);
   const packetFileInputRef = useRef<HTMLInputElement | null>(null);
+  const rosterFileInputRef = useRef<HTMLInputElement | null>(null);
   const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const teams = game?.teams ?? [];
@@ -398,6 +550,46 @@ export default function App() {
     const id = window.setInterval(() => setNowMs(Date.now()), 15000);
     return () => window.clearInterval(id);
   }, [lastExport]);
+
+  useEffect(() => {
+    if (!isTournamentRosterChooserOpen) return;
+    let cancelled = false;
+
+    setRosterIndexLoading(true);
+    setRosterIndexError(null);
+    setRosterIndexSlugs(null);
+
+    void (async () => {
+      try {
+        const url = buildStatsUrl("stats/rosters/index.json");
+        const response = await fetch(url, { headers: { Accept: "application/json" } });
+        if (!response.ok) {
+          if (response.status === 404) {
+            if (cancelled) return;
+            setRosterIndexSlugs(new Set());
+            return;
+          }
+          throw new Error(`Failed to load roster index (${response.status})`);
+        }
+        const text = await response.text();
+        const parsed = parseRosterIndexJson(text);
+        if (cancelled) return;
+        setRosterIndexSlugs(new Set(parsed.slugs));
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load roster index";
+        setRosterIndexError(msg);
+        setRosterIndexSlugs(new Set());
+      } finally {
+        if (cancelled) return;
+        setRosterIndexLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isTournamentRosterChooserOpen]);
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const remoteReady = useMemo(() => {
@@ -901,33 +1093,7 @@ export default function App() {
   }
 
   function openNewGame() {
-    function makeId(prefix: string) {
-      return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    }
-
-    const initial: DraftTeam[] = [
-      {
-        id: makeId("team"),
-        name: "Team 1",
-        players: [
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-        ],
-      },
-      {
-        id: makeId("team"),
-        name: "Team 2",
-        players: [
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-        ],
-      },
-    ];
-    setDraftTeams(initial);
+    resetRostersToBlankCustom();
     setDraftPacketChoice(null);
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
@@ -936,7 +1102,220 @@ export default function App() {
 
   function closeNewGame() {
     setIsPacketChooserOpen(false);
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
     setIsNewGameOpen(false);
+  }
+
+  function makeBlankDraftTeams(teamCount = 2): DraftTeam[] {
+    return Array.from({ length: teamCount }, () => ({
+      id: makeId("team"),
+      name: "",
+      players: [
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+      ],
+    }));
+  }
+
+  function resetRostersToBlankCustom() {
+    setDraftRosterChoice({ kind: "custom", label: "Enter custom roster", subtext: "Enter custom roster" });
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
+    setShowAllTournaments(false);
+    setFieldRoster(null);
+    setSelectedRosterTeamByDraftTeamId({});
+    setRosterLoadError(null);
+    setDraftTeams(makeBlankDraftTeams());
+  }
+
+  function saveRosterToCache(teams: ResolvedRosterTeam[]) {
+    try {
+      const payload: CachedRoster = { format: "moss_cached_roster", version: 1, teams };
+      localStorage.setItem(CACHED_ROSTER_KEY, JSON.stringify(payload));
+    } catch (e) {
+      console.warn("Failed to cache roster", e);
+    }
+  }
+
+  function loadCachedRosterTeams(): ResolvedRosterTeam[] | null {
+    try {
+      const raw = localStorage.getItem(CACHED_ROSTER_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as unknown;
+      if (!parsed || typeof parsed !== "object") return null;
+      const obj = parsed as Partial<CachedRoster>;
+      if (obj.format !== "moss_cached_roster" || obj.version !== 1 || !Array.isArray(obj.teams)) return null;
+
+      const teams: ResolvedRosterTeam[] = [];
+      for (const t of obj.teams) {
+        if (!t || typeof t !== "object") continue;
+        const tr = t as Partial<ResolvedRosterTeam>;
+        const name = String(tr.name ?? "").trim();
+        if (!name) continue;
+        if (!Array.isArray(tr.players)) continue;
+        const players = tr.players
+          .filter((p) => p && typeof p === "object")
+          .map((p) => ({
+            name: String((p as any).name ?? "").trim(),
+            isIn: Boolean((p as any).isIn),
+          }))
+          .filter((p) => p.name);
+        if (!players.length) continue;
+        teams.push({ name, players });
+      }
+
+      return teams.length ? teams : null;
+    } catch (e) {
+      console.warn("Failed to load cached roster", e);
+      return null;
+    }
+  }
+
+  function hasCachedRoster(): boolean {
+    try {
+      return !!localStorage.getItem(CACHED_ROSTER_KEY);
+    } catch {
+      return false;
+    }
+  }
+
+  function applyResolvedRosterToDraft(teams: ResolvedRosterTeam[]) {
+    const draft: DraftTeam[] = teams.map((t) => ({
+      id: makeId("team"),
+      name: t.name,
+      players: t.players.map((p) => ({ id: makeId("player"), name: p.name, isIn: p.isIn })),
+    }));
+    setDraftTeams(draft.length ? draft : makeBlankDraftTeams());
+    setSelectedRosterTeamByDraftTeamId({});
+    setFieldRoster(null);
+  }
+
+  function chooseCustomRoster() {
+    resetRostersToBlankCustom();
+  }
+
+  function choosePreviousRoster() {
+    const teams = loadCachedRosterTeams();
+    if (!teams) {
+      setRosterLoadError("No cached roster found.");
+      setIsRosterChooserOpen(false);
+      return;
+    }
+    setRosterLoadError(null);
+    setDraftRosterChoice({ kind: "previous", label: "Previous roster", subtext: "Load previously used roster from browser cache" });
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
+    applyResolvedRosterToDraft(teams);
+  }
+
+  function requestUploadRoster() {
+    setIsRosterChooserOpen(false);
+    setRosterLoadError(null);
+    rosterFileInputRef.current?.click();
+  }
+
+  async function onRosterFilePicked(file: File | null) {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsedRoster = parseFieldRosterJson(text);
+      setDraftRosterChoice({
+        kind: "upload",
+        label: file.name,
+        fileName: file.name,
+        subtext: "Uploaded from computer",
+      });
+      setFieldRoster(parsedRoster);
+      setSelectedRosterTeamByDraftTeamId({});
+      setRosterLoadError(null);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to load roster JSON.";
+      setRosterLoadError(msg);
+    }
+  }
+
+  function openTournamentRosterChooser() {
+    setIsRosterChooserOpen(false);
+    setTournamentRosterError(null);
+    setIsTournamentRosterChooserOpen(true);
+  }
+
+  async function chooseTournamentRoster(tournament: MossTournament) {
+    if (tournamentRosterLoading) return;
+
+    setTournamentRosterLoading(true);
+    setTournamentRosterError(null);
+    try {
+      const encodedSlug = encodeURIComponent(tournament.slug);
+      const url = buildStatsUrl(`stats/${encodedSlug}/field.json`);
+      const response = await fetch(url, { headers: { Accept: "application/json" } });
+      if (response.status === 404) {
+        throw new Error("No roster file found for this tournament.");
+      }
+      if (!response.ok) {
+        throw new Error(`Failed to load roster (${response.status})`);
+      }
+      const text = await response.text();
+      const parsed = parseFieldRosterJson(text);
+
+      setDraftRosterChoice({
+        kind: "tournament",
+        label: tournament.name,
+        tournamentSlug: tournament.slug,
+        subtext: "Select roster for live tournament",
+      });
+      setFieldRoster(parsed);
+      setSelectedRosterTeamByDraftTeamId({});
+      setRosterLoadError(null);
+      setIsTournamentRosterChooserOpen(false);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to load tournament roster.";
+      setTournamentRosterError(msg);
+    } finally {
+      setTournamentRosterLoading(false);
+    }
+  }
+
+  function applyFieldRosterTeamToDraftTeam(draftTeamId: string, rosterTeamName: string) {
+    if (!fieldRoster) return;
+    const normalized = rosterTeamName.trim();
+    if (!normalized) {
+      setSelectedRosterTeamByDraftTeamId((prev) => {
+        if (!(draftTeamId in prev)) return prev;
+        const { [draftTeamId]: _removed, ...rest } = prev;
+        return rest;
+      });
+      return;
+    }
+
+    const rosterTeam = fieldRoster.teams.find((t) => t.name === normalized) ?? null;
+    if (!rosterTeam) return;
+
+    const current = draftTeams.find((t) => t.id === draftTeamId) ?? null;
+    const hasExistingValues = !!current && (
+      current.name.trim() !== "" ||
+      current.players.some((p) => p.name.trim() !== "")
+    );
+
+    if (hasExistingValues) {
+      const ok = window.confirm(`Overwrite this team with ${rosterTeam.name}? This will replace the team and player names.`);
+      if (!ok) return;
+    }
+
+    setDraftTeams((prev) =>
+      prev.map((t) => {
+        if (t.id !== draftTeamId) return t;
+        const players = rosterTeam.players.length
+          ? rosterTeam.players.map((name, idx) => ({ id: makeId("player"), name, isIn: idx < 4 }))
+          : [{ id: makeId("player"), name: "", isIn: true }];
+        return { ...t, name: rosterTeam.name, players };
+      })
+    );
+
+    setSelectedRosterTeamByDraftTeamId((prev) => ({ ...prev, [draftTeamId]: rosterTeam.name }));
   }
 
   function updateTeamName(teamId: string, name: string) {
@@ -962,13 +1341,23 @@ export default function App() {
   }
 
   function addPlayer(teamId: string) {
-    const id = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+    const id = makeId("player");
     setDraftTeams((prev) =>
       prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: false }] } : t))
     );
   }
 
   function removePlayer(teamId: string, playerId: string) {
+    const playerName = draftTeams
+      .find((t) => t.id === teamId)
+      ?.players.find((p) => p.id === playerId)
+      ?.name.trim() ?? "";
+
+    if (playerName) {
+      const ok = window.confirm(`Are you sure you want to remove ${playerName}?`);
+      if (!ok) return;
+    }
+
     setDraftTeams((prev) =>
       prev.map((t) =>
         t.id !== teamId ? t : { ...t, players: t.players.filter((p) => p.id !== playerId) }
@@ -977,13 +1366,18 @@ export default function App() {
   }
 
   function addTeam() {
-    const teamId = `team_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    const playerId = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    setDraftTeams((prev) => [...prev, { id: teamId, name: `Team ${prev.length + 1}`, players: [{ id: playerId, name: "", isIn: true }] }]);
+    const teamId = makeId("team");
+    const playerId = makeId("player");
+    setDraftTeams((prev) => [...prev, { id: teamId, name: "", players: [{ id: playerId, name: "", isIn: true }] }]);
   }
 
   function removeTeam(teamId: string) {
     setDraftTeams((prev) => prev.filter((t) => t.id !== teamId));
+    setSelectedRosterTeamByDraftTeamId((prev) => {
+      if (!(teamId in prev)) return prev;
+      const { [teamId]: _removed, ...rest } = prev;
+      return rest;
+    });
   }
 
   const canStartNewGame = useMemo(() => {
@@ -1000,10 +1394,17 @@ export default function App() {
   function startNewGame() {
     if (!canStartNewGame || !draftPacketChoice) return;
     const initialEvents: ScoresheetEvent[] = [];
+    const resolvedTeamsForCache: ResolvedRosterTeam[] = [];
     const teams: Team[] = draftTeams.map((t) => {
+      const teamName = t.name.trim();
       const roster = t.players
         .map((p) => ({ ...p, name: p.name.trim() }))
         .filter((p) => p.name);
+
+      resolvedTeamsForCache.push({
+        name: teamName,
+        players: roster.map((p) => ({ name: p.name, isIn: p.isIn })),
+      });
       const players: Player[] = roster.map(({ id, name }) => ({ id, name }));
       const activePlayerIds = roster.filter((p) => p.isIn).map((p) => p.id);
       initialEvents.push(buildScoresheetEvent("lineup.set", {
@@ -1011,9 +1412,10 @@ export default function App() {
         boundary_before_question: 1,
         active_player_ids: activePlayerIds,
       }));
-      return { id: t.id, name: t.name.trim(), players };
+      return { id: t.id, name: teamName, players };
     });
 
+    saveRosterToCache(resolvedTeamsForCache);
     setPacket(draftPacketChoice.packet);
     setGame({ teams });
     const baseState = initialScoresheetState();
@@ -2159,10 +2561,36 @@ export default function App() {
             <div className="modalOverlay" role="dialog" aria-label="New Game" onClick={closeNewGame}>
               <div className="modal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">New Game</h2>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <h2 className="modalTitle">New Game</h2>
+                    <button type="button" className="secondary" onClick={resetRostersToBlankCustom}>
+                      Reset rosters
+                    </button>
+                  </div>
                 </div>
 
                 <div className="modalBody">
+                  <div className="packetRow" style={{ marginBottom: 14 }}>
+                    <div className="packetMeta">
+                      <div className="fieldLabel">Rosters</div>
+                      <div className="packetBox">
+                        <div className="packetName">{draftRosterChoice.label}</div>
+                        <div className="packetSubtext">{draftRosterChoice.subtext}</div>
+                        {fieldRoster && (
+                          <div className="packetSubtext">{fieldRoster.teams.length} teams available</div>
+                        )}
+                        {rosterLoadError && <div className="packetError">{rosterLoadError}</div>}
+                        <button
+                          type="button"
+                          className="secondary packetChangeButton"
+                          onClick={() => setIsRosterChooserOpen(true)}
+                        >
+                          Change…
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="teamGridScroll">
                     <div className="teamGrid">
                       {draftTeams.map((team, teamIndex) => (
@@ -2184,9 +2612,30 @@ export default function App() {
                                 </button>
                               )}
                             </div>
+                            {fieldRoster && (
+                              <select
+                                className="selectInput"
+                                style={{ width: "100%", marginBottom: 8 }}
+                                value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
+                                onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
+                                aria-label={`Select roster team for Team ${teamIndex + 1}`}
+                              >
+                                <option value="">Select roster team…</option>
+                                {fieldRoster.teams.map((rt) => (
+                                  <option
+                                    key={rt.name}
+                                    value={rt.name}
+                                    disabled={draftTeams.some((other) => other.id !== team.id && selectedRosterTeamByDraftTeamId[other.id] === rt.name)}
+                                  >
+                                    {rt.name}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
                             <input
                               className="textInput"
                               value={team.name}
+                              placeholder={`Team ${teamIndex + 1}`}
                               onChange={(e) => updateTeamName(team.id, e.target.value)}
                             />
                           </div>
@@ -2195,7 +2644,10 @@ export default function App() {
                             <div className="fieldLabel">Players</div>
                             <div className="playerList">
                               {team.players.map((player, playerIndex) => (
-                                <div key={player.id} className="playerRowWithToggle">
+                                <div
+                                  key={player.id}
+                                  className={["playerRowWithToggle", team.players.length > 1 ? "" : "noRemove"].filter(Boolean).join(" ")}
+                                >
                                   <input
                                     className="textInput"
                                     value={player.name}
@@ -2214,7 +2666,7 @@ export default function App() {
                                   >
                                     {player.isIn ? "Active" : "Bench"}
                                   </button>
-                                  {playerIndex > 0 && (
+                                  {team.players.length > 1 && (
                                     <button
                                       type="button"
                                       className="iconButton danger"
@@ -2308,6 +2760,164 @@ export default function App() {
                 void onPacketFilePicked(file);
               }}
             />
+          )}
+
+          {isNewGameOpen && (
+            <input
+              ref={rosterFileInputRef}
+              type="file"
+              accept="application/json,.json"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null;
+                e.target.value = "";
+                void onRosterFilePicked(file);
+              }}
+            />
+          )}
+
+          {isNewGameOpen && isRosterChooserOpen && (
+            <div
+              className="modalOverlay"
+              role="dialog"
+              aria-label="Choose rosters"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsRosterChooserOpen(false);
+              }}
+            >
+              <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                <div className="modalHeader">
+                  <h2 className="modalTitle">Choose rosters</h2>
+                </div>
+                <div className="modalBody">
+                  <div className="chooserList">
+                    <button type="button" className="chooserOption" onClick={chooseCustomRoster}>
+                      <div className="chooserOptionTitle">Enter Custom Roster</div>
+                      <div className="chooserOptionSubtext">Enter custom roster</div>
+                    </button>
+                    <button
+                      type="button"
+                      className="chooserOption"
+                      onClick={choosePreviousRoster}
+                      disabled={!hasCachedRoster()}
+                    >
+                      <div className="chooserOptionTitle">Load Previous Roster</div>
+                      <div className="chooserOptionSubtext">
+                        {hasCachedRoster()
+                          ? "Load previously used roster from browser cache"
+                          : "No cached roster found yet"}
+                      </div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={requestUploadRoster}>
+                      <div className="chooserOptionTitle">Upload Roster File</div>
+                      <div className="chooserOptionSubtext">Select a local roster file</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={openTournamentRosterChooser}>
+                      <div className="chooserOptionTitle">Select Tournament Roster</div>
+                      <div className="chooserOptionSubtext">Select roster for live tournament</div>
+                    </button>
+                  </div>
+                  <div className="chooserFooter">
+                    <button type="button" className="secondary" onClick={() => setIsRosterChooserOpen(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isNewGameOpen && isTournamentRosterChooserOpen && (
+            <div
+              className="modalOverlay"
+              role="dialog"
+              aria-label="Select tournament roster"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsTournamentRosterChooserOpen(false);
+              }}
+            >
+              <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                <div className="modalHeader">
+                  <h2 className="modalTitle">Select tournament roster</h2>
+                </div>
+                <div className="modalBody">
+                  <div className="packetBox" style={{ marginBottom: 12 }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <input
+                        type="checkbox"
+                        checked={showAllTournaments}
+                        onChange={(e) => setShowAllTournaments(e.target.checked)}
+                      />
+                      Show all tournaments
+                    </label>
+                    <div className="packetSubtext">
+                      Default shows tournaments happening today (in their timezone).
+                    </div>
+                    {rosterIndexLoading && <div className="packetSubtext">Loading roster list…</div>}
+                    {tournamentRosterError && <div className="packetError">{tournamentRosterError}</div>}
+                    {rosterIndexError && <div className="packetError">{rosterIndexError}</div>}
+                  </div>
+
+                  <div className="chooserList">
+                    {(() => {
+                      const now = new Date();
+                      const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
+                      const filtered = showAllTournaments
+                        ? tournaments
+                        : tournaments.filter((t) => {
+                          const ymd = getDateYmdInTimeZone(now, t.timezone);
+                          if (!ymd) return false;
+                          return isYmdBetweenInclusive(ymd, t.dates.start, t.dates.end);
+                        });
+
+                      filtered.sort((a, b) => {
+                        const startCmp = a.dates.start.localeCompare(b.dates.start);
+                        if (startCmp !== 0) return startCmp;
+                        return a.name.localeCompare(b.name);
+                      });
+
+                      if (!filtered.length) {
+                        return <div className="packetSubtext">No tournaments found for this filter.</div>;
+                      }
+
+                      const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
+
+                      return filtered.map((tournament) => {
+                        const hasRoster = canCheckRosterAvailability
+                          ? rosterIndexSlugs.has(tournament.slug)
+                          : true;
+                        const disabled = tournamentRosterLoading || (canCheckRosterAvailability && !hasRoster);
+                        const title = canCheckRosterAvailability && !hasRoster
+                          ? `${tournament.name} (No roster file found)`
+                          : tournament.name;
+                        return (
+                          <button
+                            key={tournament.slug}
+                            type="button"
+                            className="chooserOption"
+                            disabled={disabled}
+                            onClick={() => void chooseTournamentRoster(tournament)}
+                          >
+                            <div className="chooserOptionTitle">{title}</div>
+                            <div className="chooserOptionSubtext">
+                              {tournament.dates.start} – {tournament.dates.end} • {tournament.timezone}
+                            </div>
+                          </button>
+                        );
+                      });
+                    })()}
+                  </div>
+
+                  <div className="chooserFooter">
+                    <button type="button" className="secondary" onClick={() => setIsTournamentRosterChooserOpen(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
 
           {isNewGameOpen && isPacketChooserOpen && (
