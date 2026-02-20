@@ -277,10 +277,6 @@ type AttemptEditor = {
 type ScoresheetAttemptEditModalState = {
   questionId: number;
   teamId: string;
-  token: string;
-  location: AttemptLocation;
-  isEnd: boolean;
-  result: AttemptResult;
   playerId: string;
   left: number;
   top: number;
@@ -2132,10 +2128,6 @@ export default function App() {
     setScoresheetAttemptEditModal({
       questionId: question.id,
       teamId,
-      token: attempt.token,
-      location: attempt.location,
-      isEnd: attempt.isEnd,
-      result: attempt.result,
       playerId: attempt.playerId,
       left: position.left,
       top: position.top,
@@ -2179,16 +2171,10 @@ export default function App() {
     if (!activeIds.has(state.playerId)) return;
 
     const current = attempts[question.id] ?? [];
-    const baseAttempt: Attempt = {
-      token: state.token,
-      isEnd: state.isEnd,
-      location: state.location,
-      teamId: state.teamId,
-      playerId: state.playerId,
-      result: state.result,
-    };
+    const existing = current.find((a) => a.teamId === state.teamId);
+    if (!existing?.result || !existing.playerId) return;
 
-    const nextAttempt: Attempt = baseAttempt;
+    const nextAttempt: Attempt = { ...existing, playerId: state.playerId };
 
     const events: ScoresheetEvent[] = [
       buildScoresheetEvent("attempt.recorded", {
