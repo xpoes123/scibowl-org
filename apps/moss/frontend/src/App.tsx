@@ -274,14 +274,13 @@ type AttemptEditor = {
   selection: Omit<Attempt, "result">;
 };
 
-type ScoresheetAttemptEditScore = "plus" | "minus" | "zero";
 type ScoresheetAttemptEditModalState = {
   questionId: number;
   teamId: string;
   token: string;
   location: AttemptLocation;
   isEnd: boolean;
-  score: ScoresheetAttemptEditScore;
+  result: AttemptResult;
   playerId: string;
   left: number;
   top: number;
@@ -2136,7 +2135,7 @@ export default function App() {
       token: attempt.token,
       location: attempt.location,
       isEnd: attempt.isEnd,
-      score: attempt.result === "correct" ? "plus" : attempt.isEnd ? "zero" : "minus",
+      result: attempt.result,
       playerId: attempt.playerId,
       left: position.left,
       top: position.top,
@@ -2186,22 +2185,10 @@ export default function App() {
       location: state.location,
       teamId: state.teamId,
       playerId: state.playerId,
-      result: state.score === "plus" ? "correct" : "incorrect",
+      result: state.result,
     };
 
-    const nextAttempt: Attempt = (() => {
-      if (state.score !== "zero") {
-        if (state.score === "minus") return { ...baseAttempt, isEnd: false };
-        return baseAttempt;
-      }
-
-      return {
-        ...baseAttempt,
-        token: END_TOKEN,
-        isEnd: true,
-        location: { kind: "end" },
-      };
-    })();
+    const nextAttempt: Attempt = baseAttempt;
 
     const events: ScoresheetEvent[] = [
       buildScoresheetEvent("attempt.recorded", {
@@ -3581,35 +3568,6 @@ export default function App() {
               <div className="attemptPopupTitle">{title}</div>
 
               <div className="scoresheetEditPopupBody">
-                <div className="fieldGroup">
-                  <div className="fieldLabelRow">
-                    <div className="fieldLabel">Score</div>
-                  </div>
-                  <div className="scoreToggle" role="group" aria-label="Score">
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "plus" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
-                    >
-                      +4
-                    </button>
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "minus" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "minus" } : prev))}
-                    >
-                      -4
-                    </button>
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "zero" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
-                    >
-                      0
-                    </button>
-                  </div>
-                </div>
-
                 <div className="fieldGroup">
                   <div className="fieldLabelRow">
                     <div className="fieldLabel">Player</div>
