@@ -450,6 +450,16 @@ function isYmdBetweenInclusive(ymd: string, start: string, end: string): boolean
   return ymd >= start && ymd <= end;
 }
 
+function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
+  if (draftTeams.length < 1) return false;
+  for (const team of draftTeams) {
+    if (!team.name.trim()) return false;
+    const nonEmptyPlayers = team.players.map((p) => p.name.trim()).filter(Boolean);
+    if (nonEmptyPlayers.length < 1) return false;
+  }
+  return true;
+}
+
 function MossTopNav() {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
@@ -1195,6 +1205,11 @@ export default function App() {
     setFieldRoster(null);
   }
 
+  function resetDraftTeamsForRosterMode() {
+    setDraftTeams(makeBlankDraftTeams());
+    setSelectedRosterTeamByDraftTeamId({});
+  }
+
   function chooseCustomRoster() {
     resetRostersToBlankCustom();
   }
@@ -1229,6 +1244,7 @@ export default function App() {
         fileName: file.name,
         label: "Upload Roster File",
       });
+      resetDraftTeamsForRosterMode();
       setFieldRoster(parsedRoster);
       setSelectedRosterTeamByDraftTeamId({});
       setRosterLoadError(null);
@@ -1267,6 +1283,7 @@ export default function App() {
         label: "Select Tournament Roster",
         tournamentSlug: tournament.slug,
       });
+      resetDraftTeamsForRosterMode();
       setFieldRoster(parsed);
       setSelectedRosterTeamByDraftTeamId({});
       setRosterLoadError(null);
@@ -1385,15 +1402,49 @@ export default function App() {
   }
 
   const canStartNewGame = useMemo(() => {
-    if (draftTeams.length < 1) return false;
     if (!draftPacketChoice) return false;
-    for (const team of draftTeams) {
-      if (!team.name.trim()) return false;
-      const nonEmptyPlayers = team.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name);
-      if (nonEmptyPlayers.length < 1) return false;
-    }
-    return true;
+    return isDraftRosterValid(draftTeams);
   }, [draftPacketChoice, draftTeams]);
+
+  const canDownloadRosters = useMemo(() => isDraftRosterValid(draftTeams), [draftTeams]);
+
+  function downloadCurrentRosters() {
+    if (!canDownloadRosters) return;
+
+    const teams: FieldRosterTeam[] = draftTeams.map((t) => ({
+      name: t.name.trim(),
+      players: t.players.map((p) => p.name.trim()).filter(Boolean),
+    }));
+
+    const tournament =
+      draftRosterChoice.kind === "tournament"
+        ? {
+          slug: draftRosterChoice.tournamentSlug,
+          name: fieldRoster?.tournament?.name,
+        }
+        : undefined;
+
+    const payload: FieldRoster = {
+      format: "moss_field_roster",
+      version: 1,
+      ...(tournament ? { tournament } : {}),
+      teams,
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2) + "\n"], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    try {
+      const a = document.createElement("a");
+      a.href = url;
+      const stamp = new Date().toISOString().replaceAll(":", "").replaceAll("-", "").slice(0, 15);
+      a.download = `moss_roster_${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
 
   function startNewGame() {
     if (!canStartNewGame || !draftPacketChoice) return;
@@ -2604,13 +2655,23 @@ export default function App() {
                           const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
                           return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
                         })()}
-                        <button
-                          type="button"
-                          className="secondary packetChangeButton"
-                          onClick={() => setIsRosterChooserOpen(true)}
-                        >
-                          Change…
-                        </button>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={() => setIsRosterChooserOpen(true)}
+                          >
+                            Change…
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={downloadCurrentRosters}
+                            disabled={!canDownloadRosters}
+                          >
+                            Download
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
