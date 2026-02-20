@@ -416,12 +416,13 @@ function parseFieldRosterJson(jsonText: string): FieldRoster {
   });
 
   const tournamentRaw = obj.tournament;
-  const tournament = tournamentRaw && typeof tournamentRaw === "object"
-    ? {
-      slug: typeof (tournamentRaw as any).slug === "string" ? (tournamentRaw as any).slug : undefined,
-      name: typeof (tournamentRaw as any).name === "string" ? (tournamentRaw as any).name : undefined,
-    }
-    : undefined;
+  let tournament: FieldRoster["tournament"] | undefined;
+  if (tournamentRaw && typeof tournamentRaw === "object") {
+    const raw = tournamentRaw as Record<string, unknown>;
+    const slug = typeof raw.slug === "string" ? raw.slug : undefined;
+    const name = typeof raw.name === "string" ? raw.name : undefined;
+    if (slug || name) tournament = { slug, name };
+  }
 
   return { format: "moss_field_roster", version: 1, tournament, teams };
 }
@@ -581,8 +582,7 @@ export default function App() {
         setRosterIndexError(msg);
         setRosterIndexSlugs(new Set());
       } finally {
-        if (cancelled) return;
-        setRosterIndexLoading(false);
+        if (!cancelled) setRosterIndexLoading(false);
       }
     })();
 
@@ -1152,15 +1152,16 @@ export default function App() {
       const teams: ResolvedRosterTeam[] = [];
       for (const t of obj.teams) {
         if (!t || typeof t !== "object") continue;
-        const tr = t as Partial<ResolvedRosterTeam>;
+        const tr = t as { name?: unknown; players?: unknown };
         const name = String(tr.name ?? "").trim();
         if (!name) continue;
-        if (!Array.isArray(tr.players)) continue;
-        const players = tr.players
-          .filter((p) => p && typeof p === "object")
+        const playersRaw = tr.players;
+        if (!Array.isArray(playersRaw)) continue;
+        const players = playersRaw
+          .filter((p): p is Record<string, unknown> => !!p && typeof p === "object")
           .map((p) => ({
-            name: String((p as any).name ?? "").trim(),
-            isIn: Boolean((p as any).isIn),
+            name: String(p.name ?? "").trim(),
+            isIn: Boolean(p.isIn),
           }))
           .filter((p) => p.name);
         if (!players.length) continue;
@@ -1285,8 +1286,9 @@ export default function App() {
     if (!normalized) {
       setSelectedRosterTeamByDraftTeamId((prev) => {
         if (!(draftTeamId in prev)) return prev;
-        const { [draftTeamId]: _removed, ...rest } = prev;
-        return rest;
+        const next = { ...prev };
+        delete next[draftTeamId];
+        return next;
       });
       return;
     }
@@ -1375,8 +1377,9 @@ export default function App() {
     setDraftTeams((prev) => prev.filter((t) => t.id !== teamId));
     setSelectedRosterTeamByDraftTeamId((prev) => {
       if (!(teamId in prev)) return prev;
-      const { [teamId]: _removed, ...rest } = prev;
-      return rest;
+      const next = { ...prev };
+      delete next[teamId];
+      return next;
     });
   }
 
