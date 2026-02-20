@@ -1,5 +1,10 @@
 export type PacketTextFlavor = "plain" | "texlite";
 
+export type RichTextPart =
+  | { kind: "text"; content: string }
+  | { kind: "math"; latex: string }
+  | { kind: "bold"; content: string };
+
 export type RenderPacketTextOptions = {
   flavor?: PacketTextFlavor;
 };
@@ -86,6 +91,61 @@ function toSuperscript(text: string): string {
     out += SUPERSCRIPT_MAP[ch] ?? SUPERSCRIPT_MAP[ch.toLowerCase()] ?? ch;
   }
   return out;
+}
+
+/**
+ * Splits text into rich parts: plain text, inline math ($...$), and bold (\textbf{...}).
+ * Math content is passed as-is to KaTeX. Text content has TeX-lite scripts converted.
+ */
+export function splitRichParts(rawText: string): RichTextPart[] {
+  const parts: RichTextPart[] = [];
+  let i = 0;
+  let pendingText = "";
+
+  function flushText() {
+    if (!pendingText) return;
+    const processed = renderTeXLiteScriptsToUnicode(pendingText);
+    if (processed) parts.push({ kind: "text", content: processed });
+    pendingText = "";
+  }
+
+  while (i < rawText.length) {
+    // $...$ inline math — skip $$ (display math not supported)
+    if (rawText[i] === "$" && rawText[i + 1] !== "$") {
+      const start = i + 1;
+      const end = rawText.indexOf("$", start);
+      if (end !== -1) {
+        flushText();
+        const latex = rawText.slice(start, end);
+        if (latex) parts.push({ kind: "math", latex });
+        i = end + 1;
+        continue;
+      }
+    }
+
+    // \textbf{...}
+    if (rawText.startsWith("\\textbf{", i)) {
+      flushText();
+      const contentStart = i + 8; // length of \textbf{ = 8
+      let depth = 1;
+      let j = contentStart;
+      while (j < rawText.length && depth > 0) {
+        if (rawText[j] === "{") depth++;
+        else if (rawText[j] === "}") depth--;
+        j++;
+      }
+      const content = rawText.slice(contentStart, j - 1);
+      if (content) parts.push({ kind: "bold", content: renderTeXLiteScriptsToUnicode(content) });
+      i = j;
+      continue;
+    }
+
+    pendingText += rawText[i];
+    i++;
+  }
+
+  flushText();
+  return parts;
 }
 
 function renderTeXLiteScriptsToUnicode(text: string): string {

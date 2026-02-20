@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import packetJson from "./assets/sample_packet.json";
-import { renderPacketText } from "./text/renderPacketText";
+import { splitRichParts, type RichTextPart } from "./text/renderPacketText";
 import { getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
 import {
   buildScoresheetEvent,
@@ -42,6 +44,17 @@ const DISPLAY_QUESTION_STYLE: Record<QuestionStyle, string> = {
   IDENTIFY_ALL: "Short Answer",
   RANK: "Short Answer",
 };
+
+function renderRichParts(parts: RichTextPart[]): ReactNode {
+  return parts.map((part, i) => {
+    if (part.kind === "math") {
+      const html = katex.renderToString(part.latex, { throwOnError: false, displayMode: false });
+      return <span key={i} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />;
+    }
+    if (part.kind === "bold") return <strong key={i}>{part.content}</strong>;
+    return <span key={i}>{part.content}</span>;
+  });
+}
 
 function isSameLocation(a: AttemptLocation, b: AttemptLocation): boolean {
   if (a.kind !== b.kind) return false;
@@ -1808,8 +1821,7 @@ export default function App() {
 
   function renderQuestionSection(question: Question, title: string, disabled: boolean) {
     const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
-    const questionText = renderPacketText(question.question_text);
-    const wordSegments = trimLeadingSpaces(tokenizeText(questionText));
+    const richParts = splitRichParts(question.question_text);
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
@@ -1868,61 +1880,69 @@ export default function App() {
             <em>{DISPLAY_QUESTION_STYLE[question.question_style] ?? question.question_style}</em>{" "}
           </span>
           {isBonus ? (
-            <span>{questionText}</span>
+            <span>{renderRichParts(richParts)}</span>
           ) : (
             (() => {
               let wordIndex = 0;
-              return wordSegments.map((seg, segIndex) => {
-                if (seg.kind === "sep") {
+              return richParts.flatMap((part, partIndex) => {
+                if (part.kind === "math") {
+                  const html = katex.renderToString(part.latex, { throwOnError: false, displayMode: false });
+                  return [<span key={`q-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
+                }
+                const isBold = part.kind === "bold";
+                const segments = trimLeadingSpaces(tokenizeText(part.content));
+                return segments.map((seg, segIndex) => {
+                  if (seg.kind === "sep") {
+                    return (
+                      <span key={`q-${partIndex}-sep-${segIndex}`} aria-hidden="true">
+                        {seg.text}
+                      </span>
+                    );
+                  }
+
+                  const location: AttemptLocation = { kind: "question", wordIndex };
+                  const selected =
+                    selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
+                  const marked = markedResultForQuestionLocation(question.id, location);
+                  const correctnessClass =
+                    marked === "correct"
+                      ? "wordWrapCorrect"
+                      : marked === "incorrect"
+                        ? "wordWrapIncorrect"
+                        : "";
+
+                  wordIndex++;
+
                   return (
-                    <span key={`q-sep-${segIndex}`} aria-hidden="true">
-                      {seg.text}
+                    <span key={`q-${partIndex}-word-${segIndex}`}>
+                      <span
+                        className={[
+                          "wordWrap",
+                          wordWrapClickableClass,
+                          selected ? "wordWrapSelected" : "",
+                          correctnessClass,
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        <button
+                          type="button"
+                          className={["word", isBold ? "wordBold" : ""].filter(Boolean).join(" ")}
+                          disabled={disabled}
+                          onClick={(e) =>
+                            setAttemptSelection(
+                              question,
+                              { token: seg.text, isEnd: false, location },
+                              e.currentTarget
+                            )
+                          }
+                        >
+                          {seg.text}
+                        </button>
+                      </span>
                     </span>
                   );
-                }
-
-                const location: AttemptLocation = { kind: "question", wordIndex };
-                const selected =
-                  selection?.location.kind === "question" && selection.location.wordIndex === wordIndex;
-                const marked = markedResultForQuestionLocation(question.id, location);
-                const correctnessClass =
-                  marked === "correct"
-                    ? "wordWrapCorrect"
-                    : marked === "incorrect"
-                      ? "wordWrapIncorrect"
-                      : "";
-
-                wordIndex++;
-
-                return (
-                  <span key={`q-word-${segIndex}`}>
-                    <span
-                      className={[
-                        "wordWrap",
-                        wordWrapClickableClass,
-                        selected ? "wordWrapSelected" : "",
-                        correctnessClass,
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      <button
-                        type="button"
-                        className="word"
-                        disabled={disabled}
-                        onClick={(e) =>
-                          setAttemptSelection(
-                            question,
-                            { token: seg.text, isEnd: false, location },
-                            e.currentTarget
-                          )
-                        }
-                      >
-                        {seg.text}
-                      </button>
-                    </span>
-                  </span>
-                );
+                });
               });
             })()
           )}
@@ -1931,19 +1951,18 @@ export default function App() {
         {question.options?.length > 0 && (
           <ol className="options">
             {question.options.map((opt, optionIndex) => {
-              const optText = renderPacketText(opt);
-              const optionSegments = trimLeadingSpaces(tokenizeText(optText));
+              const optRichParts = splitRichParts(opt);
               const label =
                 question.question_style === "MULTIPLE_CHOICE"
                   ? ["W", "X", "Y", "Z"][optionIndex] ?? String(optionIndex + 1)
                   : String(optionIndex + 1);
 
               if (isBonus) {
-                const optionText = optText.trim();
                 return (
                   <li key={optionIndex} className="readText">
                     <span className="optionLabel">{label})</span>
-                    {optionText ? ` ${optionText}` : ""}
+                    {optRichParts.length > 0 ? " " : null}
+                    {renderRichParts(optRichParts)}
                   </li>
                 );
               }
@@ -1989,63 +2008,71 @@ export default function App() {
                       {label})
                     </button>
                   </span>
-                  {optionSegments.length > 0 ? " " : null}
+                  {optRichParts.length > 0 ? " " : null}
 
                   {(() => {
                     let wordIndex = 0;
-                    return optionSegments.map((seg, segIndex) => {
-                      if (seg.kind === "sep") {
+                    return optRichParts.flatMap((part, partIndex) => {
+                      if (part.kind === "math") {
+                        const html = katex.renderToString(part.latex, { throwOnError: false, displayMode: false });
+                        return [<span key={`o-${optionIndex}-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
+                      }
+                      const isBold = part.kind === "bold";
+                      const segments = trimLeadingSpaces(tokenizeText(part.content));
+                      return segments.map((seg, segIndex) => {
+                        if (seg.kind === "sep") {
+                          return (
+                            <span key={`o-${optionIndex}-${partIndex}-sep-${segIndex}`} aria-hidden="true">
+                              {seg.text}
+                            </span>
+                          );
+                        }
+
+                        const location: AttemptLocation = { kind: "option", optionIndex, wordIndex };
+                        const selected =
+                          selection?.location.kind === "option" &&
+                          selection.location.optionIndex === optionIndex &&
+                          selection.location.wordIndex === wordIndex;
+                        const marked = markedResultForQuestionLocation(question.id, location);
+                        const correctnessClass =
+                          marked === "correct"
+                            ? "wordWrapCorrect"
+                            : marked === "incorrect"
+                              ? "wordWrapIncorrect"
+                              : "";
+
+                        wordIndex++;
+
                         return (
-                          <span key={`o-sep-${optionIndex}-${segIndex}`} aria-hidden="true">
-                            {seg.text}
+                          <span key={`o-${optionIndex}-${partIndex}-word-${segIndex}`}>
+                            <span
+                              className={[
+                                "wordWrap",
+                                wordWrapClickableClass,
+                                selected ? "wordWrapSelected" : "",
+                                correctnessClass,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
+                            >
+                              <button
+                                type="button"
+                                className={["word", isBold ? "wordBold" : ""].filter(Boolean).join(" ")}
+                                disabled={disabled}
+                                onClick={(e) =>
+                                  setAttemptSelection(
+                                    question,
+                                    { token: seg.text, isEnd: false, location },
+                                    e.currentTarget
+                                  )
+                                }
+                              >
+                                {seg.text}
+                              </button>
+                            </span>
                           </span>
                         );
-                      }
-
-                      const location: AttemptLocation = { kind: "option", optionIndex, wordIndex };
-                      const selected =
-                        selection?.location.kind === "option" &&
-                        selection.location.optionIndex === optionIndex &&
-                        selection.location.wordIndex === wordIndex;
-                      const marked = markedResultForQuestionLocation(question.id, location);
-                      const correctnessClass =
-                        marked === "correct"
-                          ? "wordWrapCorrect"
-                          : marked === "incorrect"
-                            ? "wordWrapIncorrect"
-                            : "";
-
-                      wordIndex++;
-
-                      return (
-                        <span key={`o-word-${optionIndex}-${segIndex}`}>
-                          <span
-                            className={[
-                              "wordWrap",
-                              wordWrapClickableClass,
-                              selected ? "wordWrapSelected" : "",
-                              correctnessClass,
-                            ]
-                              .filter(Boolean)
-                              .join(" ")}
-                          >
-                            <button
-                              type="button"
-                              className="word"
-                              disabled={disabled}
-                              onClick={(e) =>
-                                setAttemptSelection(
-                                  question,
-                                  { token: seg.text, isEnd: false, location },
-                                  e.currentTarget
-                                )
-                              }
-                            >
-                              {seg.text}
-                            </button>
-                          </span>
-                        </span>
-                      );
+                      });
                     });
                   })()}
                 </li>
@@ -2100,7 +2127,7 @@ export default function App() {
 
         <div className="answer answerInline">
           <div className="answerTitle">Answer</div>
-          <div className="answerBody">{renderPacketText(formatCorrectAnswer(question))}</div>
+          <div className="answerBody">{renderRichParts(splitRichParts(formatCorrectAnswer(question)))}</div>
         </div>
       </div>
     );
