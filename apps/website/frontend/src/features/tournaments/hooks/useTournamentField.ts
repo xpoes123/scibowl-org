@@ -28,8 +28,7 @@ export function useTournamentField(slug: string): UseTournamentFieldResult {
         setError(err instanceof Error ? err.message : "Failed to load field");
         setData(null);
       } finally {
-        if (cancelled) return;
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -41,4 +40,3 @@ export function useTournamentField(slug: string): UseTournamentFieldResult {
 
   return { data, loading, error };
 }
-
