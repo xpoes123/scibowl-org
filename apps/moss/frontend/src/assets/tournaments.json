@@ -1,5 +1,286 @@
 {
   "format": "moss_tournaments",
   "version": 1,
-  "tournaments": []
+  "tournaments": [
+    {
+      "slug": "clash",
+      "name": "CLASH",
+      "timezone": "America/Chicago",
+      "dates": {
+        "start": "2026-05-16",
+        "end": "2026-05-16"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "dasoni-2",
+      "name": "DASONI 2",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-04-04",
+        "end": "2026-04-04"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "east-brunswick-science-bowl-invitational",
+      "name": "East Brunswick Science Bowl Invitational",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-01-10",
+        "end": "2026-01-10"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "aves-2",
+      "name": "AVES 2",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-01-10",
+        "end": "2026-01-10"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "yale-science-bowl-invitational",
+      "name": "Yale Science Bowl Invitational",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-01-17",
+        "end": "2026-01-17"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "collierville-ultimate-tournament",
+      "name": "Collierville Ultimate Tournament",
+      "timezone": "America/Chicago",
+      "dates": {
+        "start": "2026-01-17",
+        "end": "2026-01-17"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "texas-science-bowl-2026-invitational",
+      "name": "Texas Science Bowl 2026 Invitational",
+      "timezone": "America/Chicago",
+      "dates": {
+        "start": "2026-01-18",
+        "end": "2026-01-18"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "bums-bay-ultimate-ms-scibowl",
+      "name": "BUMS - Bay Ultimate MS Scibowl",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-01-24",
+        "end": "2026-01-24"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "pilot-scrimmage",
+      "name": "Pilot Scrimmage",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-02-12",
+        "end": "2026-02-12"
+      },
+      "status": "DRAFT"
+    },
+    {
+      "slug": "lexington-biology-bowl",
+      "name": "Lexington Biology Bowl",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-02-15",
+        "end": "2026-02-15"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "stanford-college-plus-science-bowl",
+      "name": "Stanford College+ Science Bowl",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-02-22",
+        "end": "2026-02-22"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "johns-hopkins-invitational",
+      "name": "Johns Hopkins Invitational",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-03-01",
+        "end": "2026-03-01"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "stanford-science-bowl",
+      "name": "Stanford Science Bowl",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-03-08",
+        "end": "2026-03-08"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "ward-melville-science-bowl",
+      "name": "Ward Melville Science Bowl",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2026-03-15",
+        "end": "2026-03-15"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "ucla-science-bowl",
+      "name": "UCLA Science Bowl",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2026-04-15",
+        "end": "2026-04-15"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "berkeley-science-bowl",
+      "name": "Berkeley Science Bowl",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-12-06",
+        "end": "2025-12-06"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "rice-science-bowl",
+      "name": "Rice Science Bowl",
+      "timezone": "America/Chicago",
+      "dates": {
+        "start": "2025-12-06",
+        "end": "2025-12-06"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "feim",
+      "name": "FE!M",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-11-23",
+        "end": "2025-11-23"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "mit-invitational",
+      "name": "MIT Invitational",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2025-11-15",
+        "end": "2025-11-15"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "dougherty-valley-ms-invitational",
+      "name": "Dougherty Valley MS Invitational",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-11-15",
+        "end": "2025-11-15"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "brooklyn-tech-invitational",
+      "name": "Brooklyn Tech Invitational",
+      "timezone": "America/New_York",
+      "dates": {
+        "start": "2025-10-26",
+        "end": "2025-10-26"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "south-clemens-bonanza",
+      "name": "South Clemens Bonanza",
+      "timezone": "America/Chicago",
+      "dates": {
+        "start": "2025-10-19",
+        "end": "2025-10-19"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "icsbt-2",
+      "name": "ICSBT 2",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-10-11",
+        "end": "2025-10-11"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "based-invitational",
+      "name": "BASED Invitational",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-09-27",
+        "end": "2025-09-27"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "college-plus-science-bowl-tournament",
+      "name": "College+ Science Bowl Tournament",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-09-27",
+        "end": "2025-09-27"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "thumb",
+      "name": "THUMB",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-09-13",
+        "end": "2025-09-13"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "nsba-3",
+      "name": "NSBA 3",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-06-01",
+        "end": "2025-09-30"
+      },
+      "status": "PUBLISHED"
+    },
+    {
+      "slug": "earth-science-scrimmage-2",
+      "name": "Earth Science Scrimmage 2",
+      "timezone": "America/Los_Angeles",
+      "dates": {
+        "start": "2025-07-21",
+        "end": "2025-08-10"
+      },
+      "status": "PUBLISHED"
+    }
+  ]
 }
