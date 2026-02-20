@@ -2569,8 +2569,14 @@ export default function App() {
                 <div className="modalHeader">
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
                     <h2 className="modalTitle">New Game</h2>
-                    <button type="button" className="secondary" onClick={resetRostersToBlankCustom}>
-                      Reset rosters
+                    <button
+                      type="button"
+                      className="secondary"
+                      onClick={resetRostersToBlankCustom}
+                      aria-label="Reset rosters"
+                      title="Reset rosters"
+                    >
+                      {"\u21BB"}
                     </button>
                   </div>
                 </div>
