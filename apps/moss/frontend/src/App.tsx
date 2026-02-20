@@ -1377,6 +1377,8 @@ export default function App() {
   }
 
   function removeTeam(teamId: string) {
+    const ok = window.confirm("Are you sure you want to remove this team? This will remove the team and all players.");
+    if (!ok) return;
     setDraftTeams((prev) => prev.filter((t) => t.id !== teamId));
     setSelectedRosterTeamByDraftTeamId((prev) => {
       if (!(teamId in prev)) return prev;
