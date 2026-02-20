@@ -2628,13 +2628,12 @@ export default function App() {
                             </div>
                             {fieldRoster && (
                               <select
-                                className="selectInput"
-                                style={{ width: "100%", marginBottom: 8 }}
+                                className="textInput"
                                 value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
                                 onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
-                                aria-label={`Select roster team for Team ${teamIndex + 1}`}
+                                aria-label={`Select team for Team ${teamIndex + 1}`}
                               >
-                                <option value="">Select roster team…</option>
+                                <option value="">Select team…</option>
                                 {fieldRoster.teams.map((rt) => (
                                   <option
                                     key={rt.name}
@@ -2646,12 +2645,14 @@ export default function App() {
                                 ))}
                               </select>
                             )}
-                            <input
-                              className="textInput"
-                              value={team.name}
-                              placeholder={`Team ${teamIndex + 1}`}
-                              onChange={(e) => updateTeamName(team.id, e.target.value)}
-                            />
+                            {!fieldRoster && (
+                              <input
+                                className="textInput"
+                                value={team.name}
+                                placeholder={`Team ${teamIndex + 1}`}
+                                onChange={(e) => updateTeamName(team.id, e.target.value)}
+                              />
+                            )}
                           </div>
 
                           <div className="fieldGroup">
