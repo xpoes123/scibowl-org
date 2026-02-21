@@ -2850,17 +2850,21 @@ export default function App() {
             >
               <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">Choose rosters</h2>
+                  <h2 className="modalTitle">Choose Rosters</h2>
                 </div>
                 <div className="modalBody">
-                  <div className="chooserList">
-                    <button
-                      type="button"
-                      className="chooserOption"
-                      onClick={chooseCustomRoster}
-                    >
+                  <div className="chooserGrid">
+                    <button type="button" className="chooserOption" onClick={chooseCustomRoster}>
                       <div className="chooserOptionTitle">Enter Custom Roster</div>
                       <div className="chooserOptionSubtext">Manually enter team and player names</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={openTournamentRosterChooser}>
+                      <div className="chooserOptionTitle">Select Tournament Roster</div>
+                      <div className="chooserOptionSubtext">Scorekeep for a tournament team</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={requestUploadRoster}>
+                      <div className="chooserOptionTitle">Upload Roster File</div>
+                      <div className="chooserOptionSubtext">Select a local roster file</div>
                     </button>
                     <button
                       type="button"
@@ -2874,14 +2878,6 @@ export default function App() {
                           ? "Previously used roster from browser cache"
                           : "No cached roster found yet"}
                       </div>
-                    </button>
-                    <button type="button" className="chooserOption" onClick={requestUploadRoster}>
-                      <div className="chooserOptionTitle">Upload Roster File</div>
-                      <div className="chooserOptionSubtext">Select a local roster file</div>
-                    </button>
-                    <button type="button" className="chooserOption" onClick={openTournamentRosterChooser}>
-                      <div className="chooserOptionTitle">Select Tournament Roster</div>
-                      <div className="chooserOptionSubtext">Scorekeep for a tournament team</div>
                     </button>
                   </div>
                   <div className="chooserFooter">
@@ -3027,18 +3023,22 @@ export default function App() {
                   <h2 className="modalTitle">Choose Packet</h2>
                 </div>
                 <div className="modalBody">
-                  <div className="chooserList">
+                  <div className="chooserGrid">
                     <button type="button" className="chooserOption" onClick={requestUploadPacket}>
                       <div className="chooserOptionTitle">Upload Packet from Computer</div>
                       <div className="chooserOptionSubtext">Select a local packet file</div>
+                    </button>
+                    <button type="button" className="chooserOption" disabled>
+                      <div className="chooserOptionTitle">Select Tournament Packet</div>
+                      <div className="chooserOptionSubtext">Coming soon!</div>
                     </button>
                     <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
                       <div className="chooserOptionTitle">Use Sample Packet</div>
                       <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
                     </button>
                     <button type="button" className="chooserOption" disabled>
-                      <div className="chooserOptionTitle">Select Tournament Packet (disabled)</div>
-                      <div className="chooserOptionSubtext">Provided by the tournament director</div>
+                      <div className="chooserOptionTitle">Select from Archive</div>
+                      <div className="chooserOptionSubtext">Coming soon!</div>
                     </button>
                   </div>
                   <div className="chooserFooter">

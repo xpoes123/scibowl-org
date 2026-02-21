@@ -746,13 +746,23 @@ button.addTeamButton:hover .addIcon {
 }
 
 .chooserModal {
-  width: min(560px, 100%);
+  width: min(700px, 100%);
 }
 
 .chooserList {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.chooserGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.chooserGrid .chooserOption {
+  min-height: 92px;
 }
 
 .chooserOption {
