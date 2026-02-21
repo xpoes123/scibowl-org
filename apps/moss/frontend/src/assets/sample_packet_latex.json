@@ -1,0 +1,86 @@
+{
+    "packet": "LaTeX Demo",
+    "year": 2025,
+    "questions": [
+        {
+            "id": 1,
+            "pair_id": 1,
+            "question_type": "TOSSUP",
+            "question_style": "SHORT_ANSWER",
+            "category": "MATH",
+            "question_text": "What is $\\lim_{x \\to 2} \\frac{x^6 - 64}{x^2 - 4}$ \\textbf{[the limit as x approaches 2 of the fraction with numerator x to the sixth minus 64 and denominator x squared minus 4]}?",
+            "options": [],
+            "correct_answer": "48",
+            "source": "NSB 2025"
+        },
+        {
+            "id": 2,
+            "pair_id": 1,
+            "question_type": "BONUS",
+            "question_style": "IDENTIFY_ALL",
+            "category": "MATH",
+            "question_text": "Identify all of the following three functions that are convex:",
+            "options": [
+                "$f(x) = 2x^2 + 3x - 1$",
+                "$f(x) = - \\log(x)$",
+                "$f(x)  = \\sqrt{4x+5}$"
+            ],
+            "correct_answer": [1, 2],
+            "source": "NSB 2025"
+        },
+        {
+            "id": 3,
+            "pair_id": 2,
+            "question_type": "TOSSUP",
+            "question_style": "SHORT_ANSWER",
+            "category": "MATH",
+            "question_text": "Evaluate $\\int_0^{\\pi} \\sin(x)\\,dx$ \\textbf{[the integral from 0 to pi of sine of x dx]}.",
+            "options": [],
+            "correct_answer": "2",
+            "source": "NSB 2025"
+        },
+        {
+            "id": 4,
+            "pair_id": 2,
+            "question_type": "BONUS",
+            "question_style": "MULTIPLE_CHOICE",
+            "category": "MATH",
+            "question_text": "Which of the following is equal to $e^{i\\pi}$ \\textbf{[e to the i pi]}?",
+            "options": [
+                "$-1$",
+                "$1$",
+                "$i$",
+                "$0$"
+            ],
+            "correct_answer": "W",
+            "source": "NSB 2025"
+        },
+        {
+            "id": 5,
+            "pair_id": 3,
+            "question_type": "TOSSUP",
+            "question_style": "MULTIPLE_CHOICE",
+            "category": "CHEMISTRY",
+            "question_text": "Which of the following expressions gives the equilibrium constant $K_c$ \\textbf{[K sub c]} for the reaction $\\text{N}_2 + 3\\text{H}_2 \\rightleftharpoons 2\\text{NH}_3$ \\textbf{[N 2 plus 3 H 2 in equilibrium with 2 N H 3]}?",
+            "options": [
+                "$\\frac{[\\text{NH}_3]^2}{[\\text{N}_2][\\text{H}_2]^3}$",
+                "$\\frac{[\\text{N}_2][\\text{H}_2]^3}{[\\text{NH}_3]^2}$",
+                "$\\frac{[\\text{NH}_3]}{[\\text{N}_2][\\text{H}_2]}$",
+                "$[\\text{NH}_3]^2$"
+            ],
+            "correct_answer": "W",
+            "source": "NSB 2025"
+        },
+        {
+            "id": 6,
+            "pair_id": 3,
+            "question_type": "BONUS",
+            "question_style": "SHORT_ANSWER",
+            "category": "CHEMISTRY",
+            "question_text": "The Boltzmann distribution gives the probability of a state with energy $E$ \\textbf{[E]} as proportional to $e^{-E/k_BT}$ \\textbf{[e to the negative E over k sub B T]}. What is the name of the factor $e^{-E/k_BT}$ \\textbf{[e to the negative E over k B T]}?",
+            "options": [],
+            "correct_answer": "BOLTZMANN FACTOR",
+            "source": "NSB 2025"
+        }
+    ]
+}

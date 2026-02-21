@@ -1101,6 +1101,15 @@ button.wordLabel {
   font-weight: 400;
 }
 
+button.word.wordBold {
+  font-weight: 700;
+}
+
+.mathInline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .attemptPopup {
   position: fixed;
   z-index: 1000;
