@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -229,10 +229,11 @@ function tokenizeText(text: string): TextSegment[] {
     .filter((p) => p.text !== "");
 }
 
-function trimLeadingSpaces(segments: TextSegment[]): TextSegment[] {
-  let start = 0;
-  while (segments[start]?.kind === "sep" && segments[start]?.text === " ") start++;
-  return segments.slice(start);
+function needsLeadingSpaceBeforeRichParts(parts: RichTextPart[]): boolean {
+  if (parts.length === 0) return false;
+  const first = parts[0];
+  if (first.kind === "math") return true;
+  return !/^\s/.test(first.content);
 }
 
 function canonicalizeJson(value: unknown): unknown {
@@ -2254,6 +2255,7 @@ export default function App() {
     const richParts = splitRichParts(question.question_text);
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
+    const hasOptions = (question.options?.length ?? 0) > 0;
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
     const hasClearableAttempts = (() => {
@@ -2266,6 +2268,48 @@ export default function App() {
     const clearDisabled = disabled || !hasClearableAttempts;
     const bonusTintClass =
       isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
+
+    function renderEndToken(keyPrefix: string): ReactElement[] {
+      const endLocation: AttemptLocation = { kind: "end" };
+      const endSelected = selection?.location.kind === "end";
+      const endMarked = markedResultForQuestionLocation(question.id, endLocation);
+      const endCorrectnessClass =
+        endMarked === "correct"
+          ? "wordWrapCorrect"
+          : endMarked === "incorrect"
+            ? "wordWrapIncorrect"
+            : "";
+
+      return [
+        <span key={`${keyPrefix}-space`} aria-hidden="true">{" "}</span>,
+        <span
+          key={`${keyPrefix}-wrap`}
+          className={[
+            "wordWrap",
+            wordWrapClickableClass,
+            endSelected ? "wordWrapSelected" : "",
+            endCorrectnessClass,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <button
+            type="button"
+            className={["word", "wordEnd"].join(" ")}
+            disabled={disabled}
+            onClick={(e) =>
+              setAttemptSelection(
+                question,
+                { token: END_TOKEN, isEnd: true, location: endLocation },
+                e.currentTarget
+              )
+            }
+          >
+            {END_TOKEN}
+          </button>
+        </span>,
+      ];
+    }
 
     return (
       <div
@@ -2298,7 +2342,23 @@ export default function App() {
               }}
               aria-label={`Clear ${title} attempts`}
             >
-              Clear
+              <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M20 12a8 8 0 1 1-2.34-5.66"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 4v6h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -2314,13 +2374,13 @@ export default function App() {
           ) : (
             (() => {
               let wordIndex = 0;
-              return richParts.flatMap((part, partIndex) => {
+              const nodes = richParts.flatMap((part, partIndex) => {
                 if (part.kind === "math") {
                   const html = katex.renderToString(part.latex, { throwOnError: false, displayMode: false });
                   return [<span key={`q-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
                 }
                 const isBold = part.kind === "bold";
-                const segments = trimLeadingSpaces(tokenizeText(part.content));
+                const segments = tokenizeText(part.content);
                 return segments.map((seg, segIndex) => {
                   if (seg.kind === "sep") {
                     return (
@@ -2374,11 +2434,15 @@ export default function App() {
                   );
                 });
               });
+
+              if (!hasOptions) nodes.push(...renderEndToken("q-end"));
+
+              return nodes;
             })()
           )}
         </div>
 
-        {question.options?.length > 0 && (
+        {hasOptions && (
           <ol className="options">
             {question.options.map((opt, optionIndex) => {
               const optRichParts = splitRichParts(opt);
@@ -2391,7 +2455,7 @@ export default function App() {
                 return (
                   <li key={optionIndex} className="readText">
                     <span className="optionLabel">{label})</span>
-                    {optRichParts.length > 0 ? " " : null}
+                    {needsLeadingSpaceBeforeRichParts(optRichParts) ? " " : null}
                     {renderRichParts(optRichParts)}
                   </li>
                 );
@@ -2438,7 +2502,7 @@ export default function App() {
                       {label})
                     </button>
                   </span>
-                  {optRichParts.length > 0 ? " " : null}
+                  {needsLeadingSpaceBeforeRichParts(optRichParts) ? " " : null}
 
                   {(() => {
                     let wordIndex = 0;
@@ -2448,7 +2512,7 @@ export default function App() {
                         return [<span key={`o-${optionIndex}-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
                       }
                       const isBold = part.kind === "bold";
-                      const segments = trimLeadingSpaces(tokenizeText(part.content));
+                      const segments = tokenizeText(part.content);
                       return segments.map((seg, segIndex) => {
                         if (seg.kind === "sep") {
                           return (
@@ -2505,59 +2569,18 @@ export default function App() {
                       });
                     });
                   })()}
+                  {optionIndex === question.options.length - 1 ? renderEndToken(`o-end-${optionIndex}`) : null}
                 </li>
               );
             })}
           </ol>
         )}
 
-        {isBonus ? null : (
-          <div className="endRow" aria-label={`${title} end token`}>
-            {(() => {
-              const location: AttemptLocation = { kind: "end" };
-              const selected = selection?.location.kind === "end";
-              const marked = markedResultForQuestionLocation(question.id, location);
-              const correctnessClass =
-                marked === "correct"
-                  ? "wordWrapCorrect"
-                  : marked === "incorrect"
-                    ? "wordWrapIncorrect"
-                    : "";
-
-              return (
-                <span
-                  className={[
-                    "wordWrap",
-                    wordWrapClickableClass,
-                    selected ? "wordWrapSelected" : "",
-                    correctnessClass,
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  <button
-                    type="button"
-                    className={["word", "wordEnd"].join(" ")}
-                    disabled={disabled}
-                    onClick={(e) =>
-                      setAttemptSelection(
-                        question,
-                        { token: END_TOKEN, isEnd: true, location },
-                        e.currentTarget
-                      )
-                    }
-                  >
-                    {END_TOKEN}
-                  </button>
-                </span>
-              );
-            })()}
+        <div className="answerInline">
+          <div className="answerLine">
+            <span className="answerTitle">ANSWER:</span>{" "}
+            <span className="answerBody">{renderRichParts(splitRichParts(formatCorrectAnswer(question)))}</span>
           </div>
-        )}
-
-        <div className="answer answerInline">
-          <div className="answerTitle">Answer</div>
-          <div className="answerBody">{renderRichParts(splitRichParts(formatCorrectAnswer(question)))}</div>
         </div>
       </div>
     );
@@ -2620,12 +2643,28 @@ export default function App() {
                     <h2 className="modalTitle">New Game</h2>
                     <button
                       type="button"
-                      className="secondary"
+                      className="secondary qaClearButton"
                       onClick={resetRostersToBlankCustom}
                       aria-label="Reset rosters"
                       title="Reset rosters"
                     >
-                      {"\u21BB"}
+                      <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path
+                          d="M20 12a8 8 0 1 1-2.34-5.66"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M20 4v6h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -2635,27 +2674,29 @@ export default function App() {
                     <div className="packetMeta">
                       <div className="fieldLabel">Rosters</div>
                       <div className="packetBox">
-                        <div className="packetName">{draftRosterChoice.label}</div>
-                        {(() => {
-                          const teamsCount = fieldRoster?.teams.length ?? 0;
-                          if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
+                        <div className="packetBoxText">
+                          <div className="packetName">{draftRosterChoice.label}</div>
+                          {(() => {
+                            const teamsCount = fieldRoster?.teams.length ?? 0;
+                            if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
 
-                          if (draftRosterChoice.kind === "custom") {
-                            return <div className="packetSubtext">Manually enter team and player names</div>;
-                          }
+                            if (draftRosterChoice.kind === "custom") {
+                              return <div className="packetSubtext">Manually enter team and player names</div>;
+                            }
 
-                          if (draftRosterChoice.kind === "previous") {
-                            return <div className="packetSubtext">Previously used roster from browser cache</div>;
-                          }
+                            if (draftRosterChoice.kind === "previous") {
+                              return <div className="packetSubtext">Previously used roster from browser cache</div>;
+                            }
 
-                          if (draftRosterChoice.kind === "upload") {
-                            return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
-                          }
+                            if (draftRosterChoice.kind === "upload") {
+                              return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
+                            }
 
-                          const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
-                          return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
-                        })()}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                            const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
+                            return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
+                          })()}
+                        </div>
+                        <div className="packetBoxButtons">
                           <button
                             type="button"
                             className="secondary"
@@ -2800,26 +2841,30 @@ export default function App() {
                           Packet <span className="required">*</span>
                         </div>
                       <div className="packetBox">
-                        {draftPacketChoice ? (
-                          <>
-                            <div className="packetName">{draftPacketChoice.label}</div>
-                            <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="packetName">Select Packet</div>
-                            <div className="packetSubtext">No packet selected</div>
-                          </>
-                        )}
-                        {packetLoadError && <div className="packetError">{packetLoadError}</div>}
-                        <button
-                          type="button"
-                          className="secondary packetChangeButton"
+                        <div className="packetBoxText">
+                          {draftPacketChoice ? (
+                            <>
+                              <div className="packetName">{draftPacketChoice.label}</div>
+                              <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="packetName">Select Packet</div>
+                              <div className="packetSubtext">No packet selected</div>
+                            </>
+                          )}
+                          {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        </div>
+                        <div className="packetBoxButtons">
+                          <button
+                            type="button"
+                            className="secondary"
                             onClick={() => setIsPacketChooserOpen(true)}
                           >
                             {draftPacketChoice ? "Change…" : "Load…"}
                           </button>
                         </div>
+                      </div>
                       </div>
                       <div className="spacer" />
                       <div className="packetActions">
@@ -3166,11 +3211,11 @@ export default function App() {
               </div>
 
               <div className="questionBlock">
-                {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
+                {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
                 {bonusQ && (
                   <>
                     <div className="qaDivider" />
-                    {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
+                    {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
                   </>
                 )}
               </div>
