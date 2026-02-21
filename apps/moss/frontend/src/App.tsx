@@ -2269,7 +2269,7 @@ export default function App() {
     const bonusTintClass =
       isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
 
-    function renderEndToken(keyPrefix: string): ReactNode[] {
+    function renderEndToken(keyPrefix: string): JSX.Element[] {
       const endLocation: AttemptLocation = { kind: "end" };
       const endSelected = selection?.location.kind === "end";
       const endMarked = markedResultForQuestionLocation(question.id, endLocation);
