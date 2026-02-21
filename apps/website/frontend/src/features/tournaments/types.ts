@@ -155,3 +155,15 @@ export interface TournamentTeam {
   status?: "CONFIRMED" | "WAITLIST" | "DROPPED";
   roster?: TeamRosterMember[];
 }
+
+export interface TournamentFieldTeam {
+  name: string;
+  players: string[];
+}
+
+export interface TournamentFieldResponse {
+  format: "moss_field_roster";
+  version: 1;
+  tournament?: { slug?: string; name?: string };
+  teams: TournamentFieldTeam[];
+}

@@ -4,8 +4,9 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc -b && vite build",
+        "sync-stats": "node ./scripts/sync-stats.mjs",
+        "dev": "npm run sync-stats && vite",
+        "build": "npm run sync-stats && tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview"
     },

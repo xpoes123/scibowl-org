@@ -4,13 +4,14 @@ import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
+import { FieldTab } from "./FieldTab";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
   variant: "UPCOMING" | "FINISHED";
 };
 
-type TabId = "overview" | "results" | "statistics";
+type TabId = "overview" | "field" | "results" | "statistics";
 
 type Tab = {
   id: TabId;
@@ -94,6 +95,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (variant === "UPCOMING") {
       return [
         { id: "overview", label: "Overview", disabled: false },
+        { id: "field", label: "Field", disabled: false },
         { id: "results", label: "Results", disabled: true },
         { id: "statistics", label: "Statistics", disabled: true },
       ];
@@ -101,6 +103,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
     return [
       { id: "overview", label: "Overview", disabled: false },
+      { id: "field", label: "Field", disabled: false },
       { id: "results", label: "Results", disabled: !resultsLink && !hasStandings },
       { id: "statistics", label: "Statistics", disabled: !statsLink },
     ];
@@ -228,6 +231,19 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                 ) : (
                   <p className="sbMuted">Results are not available.</p>
                 )}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {activeTab === "field" && (
+          <div role="tabpanel" id="tab-panel-field" aria-labelledby="tab-field">
+            <section className="sbTabSection">
+              <header className="sbSectionHeader">
+                <h2 className="sbSectionTitle">Field</h2>
+              </header>
+              <div className="sbTabSectionBody">
+                <FieldTab slug={tournament.slug} />
               </div>
             </section>
           </div>
