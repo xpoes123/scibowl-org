@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -2269,7 +2269,7 @@ export default function App() {
     const bonusTintClass =
       isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
 
-    function renderEndToken(keyPrefix: string): JSX.Element[] {
+    function renderEndToken(keyPrefix: string): ReactElement[] {
       const endLocation: AttemptLocation = { kind: "end" };
       const endSelected = selection?.location.kind === "end";
       const endMarked = markedResultForQuestionLocation(question.id, endLocation);
