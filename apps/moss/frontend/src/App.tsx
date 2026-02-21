@@ -2255,6 +2255,7 @@ export default function App() {
     const richParts = splitRichParts(question.question_text);
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
+    const hasOptions = (question.options?.length ?? 0) > 0;
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
     const hasClearableAttempts = (() => {
@@ -2267,6 +2268,48 @@ export default function App() {
     const clearDisabled = disabled || !hasClearableAttempts;
     const bonusTintClass =
       isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
+
+    function renderEndToken(keyPrefix: string): ReactNode[] {
+      const endLocation: AttemptLocation = { kind: "end" };
+      const endSelected = selection?.location.kind === "end";
+      const endMarked = markedResultForQuestionLocation(question.id, endLocation);
+      const endCorrectnessClass =
+        endMarked === "correct"
+          ? "wordWrapCorrect"
+          : endMarked === "incorrect"
+            ? "wordWrapIncorrect"
+            : "";
+
+      return [
+        <span key={`${keyPrefix}-space`} aria-hidden="true">{" "}</span>,
+        <span
+          key={`${keyPrefix}-wrap`}
+          className={[
+            "wordWrap",
+            wordWrapClickableClass,
+            endSelected ? "wordWrapSelected" : "",
+            endCorrectnessClass,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <button
+            type="button"
+            className={["word", "wordEnd"].join(" ")}
+            disabled={disabled}
+            onClick={(e) =>
+              setAttemptSelection(
+                question,
+                { token: END_TOKEN, isEnd: true, location: endLocation },
+                e.currentTarget
+              )
+            }
+          >
+            {END_TOKEN}
+          </button>
+        </span>,
+      ];
+    }
 
     return (
       <div
@@ -2392,52 +2435,14 @@ export default function App() {
                 });
               });
 
-              const endLocation: AttemptLocation = { kind: "end" };
-              const endSelected = selection?.location.kind === "end";
-              const endMarked = markedResultForQuestionLocation(question.id, endLocation);
-              const endCorrectnessClass =
-                endMarked === "correct"
-                  ? "wordWrapCorrect"
-                  : endMarked === "incorrect"
-                    ? "wordWrapIncorrect"
-                    : "";
-
-              nodes.push(
-                <span key="q-end-space" aria-hidden="true">{" "}</span>,
-                <span
-                  key="q-end"
-                  className={[
-                    "wordWrap",
-                    wordWrapClickableClass,
-                    endSelected ? "wordWrapSelected" : "",
-                    endCorrectnessClass,
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  <button
-                    type="button"
-                    className={["word", "wordEnd"].join(" ")}
-                    disabled={disabled}
-                    onClick={(e) =>
-                      setAttemptSelection(
-                        question,
-                        { token: END_TOKEN, isEnd: true, location: endLocation },
-                        e.currentTarget
-                      )
-                    }
-                  >
-                    {END_TOKEN}
-                  </button>
-                </span>,
-              );
+              if (!hasOptions) nodes.push(...renderEndToken("q-end"));
 
               return nodes;
             })()
           )}
         </div>
 
-        {question.options?.length > 0 && (
+        {hasOptions && (
           <ol className="options">
             {question.options.map((opt, optionIndex) => {
               const optRichParts = splitRichParts(opt);
@@ -2564,6 +2569,7 @@ export default function App() {
                       });
                     });
                   })()}
+                  {optionIndex === question.options.length - 1 ? renderEndToken(`o-end-${optionIndex}`) : null}
                 </li>
               );
             })}
