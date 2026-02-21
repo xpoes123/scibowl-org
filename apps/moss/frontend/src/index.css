@@ -709,6 +709,7 @@ button.addTeamButton:hover .addIcon {
   flex-direction: column;
   gap: 8px;
   min-width: 240px;
+  width: min(860px, 60%);
 }
 
 .packetBox {
@@ -716,6 +717,16 @@ button.addTeamButton:hover .addIcon {
   border-radius: 14px;
   background: #f6f7fb;
   padding: 12px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 78px;
+}
+
+.packetBoxText {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -737,9 +748,12 @@ button.addTeamButton:hover .addIcon {
   font-size: 13px;
 }
 
-.packetChangeButton {
-  margin-top: 8px;
-  align-self: flex-start;
+.packetBoxButtons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
 }
 
 .packetActions {

@@ -2674,27 +2674,29 @@ export default function App() {
                     <div className="packetMeta">
                       <div className="fieldLabel">Rosters</div>
                       <div className="packetBox">
-                        <div className="packetName">{draftRosterChoice.label}</div>
-                        {(() => {
-                          const teamsCount = fieldRoster?.teams.length ?? 0;
-                          if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
+                        <div className="packetBoxText">
+                          <div className="packetName">{draftRosterChoice.label}</div>
+                          {(() => {
+                            const teamsCount = fieldRoster?.teams.length ?? 0;
+                            if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
 
-                          if (draftRosterChoice.kind === "custom") {
-                            return <div className="packetSubtext">Manually enter team and player names</div>;
-                          }
+                            if (draftRosterChoice.kind === "custom") {
+                              return <div className="packetSubtext">Manually enter team and player names</div>;
+                            }
 
-                          if (draftRosterChoice.kind === "previous") {
-                            return <div className="packetSubtext">Previously used roster from browser cache</div>;
-                          }
+                            if (draftRosterChoice.kind === "previous") {
+                              return <div className="packetSubtext">Previously used roster from browser cache</div>;
+                            }
 
-                          if (draftRosterChoice.kind === "upload") {
-                            return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
-                          }
+                            if (draftRosterChoice.kind === "upload") {
+                              return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
+                            }
 
-                          const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
-                          return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
-                        })()}
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
+                            const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
+                            return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
+                          })()}
+                        </div>
+                        <div className="packetBoxButtons">
                           <button
                             type="button"
                             className="secondary"
@@ -2839,26 +2841,30 @@ export default function App() {
                           Packet <span className="required">*</span>
                         </div>
                       <div className="packetBox">
-                        {draftPacketChoice ? (
-                          <>
-                            <div className="packetName">{draftPacketChoice.label}</div>
-                            <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="packetName">Select Packet</div>
-                            <div className="packetSubtext">No packet selected</div>
-                          </>
-                        )}
-                        {packetLoadError && <div className="packetError">{packetLoadError}</div>}
-                        <button
-                          type="button"
-                          className="secondary packetChangeButton"
+                        <div className="packetBoxText">
+                          {draftPacketChoice ? (
+                            <>
+                              <div className="packetName">{draftPacketChoice.label}</div>
+                              <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="packetName">Select Packet</div>
+                              <div className="packetSubtext">No packet selected</div>
+                            </>
+                          )}
+                          {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        </div>
+                        <div className="packetBoxButtons">
+                          <button
+                            type="button"
+                            className="secondary"
                             onClick={() => setIsPacketChooserOpen(true)}
                           >
                             {draftPacketChoice ? "Change…" : "Load…"}
                           </button>
                         </div>
+                      </div>
                       </div>
                       <div className="spacer" />
                       <div className="packetActions">
