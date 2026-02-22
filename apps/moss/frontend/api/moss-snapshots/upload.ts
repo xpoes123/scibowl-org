@@ -1,5 +1,17 @@
 import crypto from "node:crypto";
 
+type VercelRequest = {
+  method?: string;
+  headers?: Record<string, string | string[] | undefined>;
+  body?: unknown;
+};
+
+type VercelResponse = {
+  statusCode: number;
+  setHeader: (name: string, value: string) => void;
+  end: (body?: string) => void;
+};
+
 type SnapshotMeta = {
   tournament_slug?: string | null;
   packet_year: number;
@@ -197,7 +209,7 @@ function buildSigV4Headers(args: {
   };
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method !== "POST") {
       res.statusCode = 405;
@@ -221,7 +233,8 @@ export default async function handler(req: any, res: any) {
 
     const token = (process.env.MOSS_SNAPSHOTS_UPLOAD_TOKEN || "").trim();
     if (token) {
-      const auth = String(req.headers?.authorization || "");
+      const rawHeader = req.headers?.authorization;
+      const auth = Array.isArray(rawHeader) ? rawHeader[0] ?? "" : String(rawHeader ?? "");
       if (auth !== `Bearer ${token}`) {
         res.statusCode = 401;
         res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -289,4 +302,3 @@ export default async function handler(req: any, res: any) {
     res.end(JSON.stringify({ detail: msg }));
   }
 }
-

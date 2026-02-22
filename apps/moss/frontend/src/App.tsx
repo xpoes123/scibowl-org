@@ -547,6 +547,7 @@ export default function App() {
   const snapshotInFlightRef = useRef(false);
   const snapshotPendingRef = useRef(false);
   const lastSnapshotUploadedSeqRef = useRef(0);
+  const snapshotSessionRef = useRef(0);
   const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
@@ -617,6 +618,15 @@ export default function App() {
   useEffect(() => {
     setLastExport(null);
     if (!game) setSnapshotMeta(null);
+  }, [game]);
+
+  useEffect(() => {
+    snapshotSessionRef.current += 1;
+    lastSnapshotUploadedSeqRef.current = 0;
+    snapshotPendingRef.current = false;
+    snapshotInFlightRef.current = false;
+    if (snapshotTimerRef.current) window.clearTimeout(snapshotTimerRef.current);
+    snapshotTimerRef.current = null;
   }, [game]);
 
   useEffect(() => {
@@ -796,6 +806,7 @@ export default function App() {
   }
 
   async function maybeUploadSnapshot() {
+    const session = snapshotSessionRef.current;
     if (!snapshotPendingRef.current) return;
     if (snapshotInFlightRef.current) return;
     if (!game) return;
@@ -824,12 +835,16 @@ export default function App() {
         console.warn("Autosnapshot upload failed", response.status, text.slice(0, 500));
         return;
       }
-      lastSnapshotUploadedSeqRef.current = currentSeq;
+      if (snapshotSessionRef.current === session) {
+        lastSnapshotUploadedSeqRef.current = currentSeq;
+      }
     } catch (e) {
       console.warn("Autosnapshot upload failed", e);
     } finally {
-      snapshotInFlightRef.current = false;
-      if (snapshotPendingRef.current) scheduleAutosnapshot();
+      if (snapshotSessionRef.current === session) {
+        snapshotInFlightRef.current = false;
+        if (snapshotPendingRef.current) scheduleAutosnapshot();
+      }
     }
   }
 
