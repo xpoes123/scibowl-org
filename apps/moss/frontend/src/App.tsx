@@ -10,6 +10,7 @@ import {
   buildScoresheetEvent,
   encodeLocationForEvent,
   type ScoresheetEvent,
+  type ScoresheetEventType,
 } from "./domain/scoresheetEvents";
 import {
   initialScoresheetState,
@@ -541,6 +542,11 @@ export default function App() {
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
   const [snapshotMeta, setSnapshotMeta] = useState<SnapshotMeta | null>(null);
+  const [packetChecksum, setPacketChecksum] = useState<string | null>(null);
+  const snapshotTimerRef = useRef<number | null>(null);
+  const snapshotInFlightRef = useRef(false);
+  const snapshotPendingRef = useRef(false);
+  const lastSnapshotUploadedSeqRef = useRef(0);
   const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
@@ -612,6 +618,220 @@ export default function App() {
     setLastExport(null);
     if (!game) setSnapshotMeta(null);
   }, [game]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const canonicalPacketJson = stableJsonStringify({
+          packet: data.packet,
+          year: data.year,
+          questions: data.questions ?? [],
+        });
+        const checksum = await sha256Hex(canonicalPacketJson);
+        if (!cancelled) setPacketChecksum(checksum);
+      } catch (e) {
+        console.warn("Failed to compute packet checksum", e);
+        if (!cancelled) setPacketChecksum(null);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [data.packet, data.questions, data.year]);
+
+  useEffect(() => {
+    return () => {
+      if (snapshotTimerRef.current) window.clearTimeout(snapshotTimerRef.current);
+    };
+  }, []);
+
+  function ensureSnapshotMeta(): SnapshotMeta | null {
+    if (!game) return null;
+    if (snapshotMeta) return snapshotMeta;
+
+    const names = game.teams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
+    const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
+    const derived: SnapshotMeta = {
+      tournament_slug: null,
+      packet_year: data.year,
+      packet_name: data.packet,
+      team_a: team_a ?? "TeamA",
+      team_b: team_b ?? "TeamB",
+      game_instance_id: makeGameInstanceId(),
+    };
+    setSnapshotMeta(derived);
+    return derived;
+  }
+
+  function shouldTriggerAutosnapshot(eventType: ScoresheetEventType): boolean {
+    return eventType !== "cursor.pair_index_set";
+  }
+
+  function scheduleAutosnapshot() {
+    snapshotPendingRef.current = true;
+    if (snapshotTimerRef.current) window.clearTimeout(snapshotTimerRef.current);
+    snapshotTimerRef.current = window.setTimeout(() => {
+      snapshotTimerRef.current = null;
+      void maybeUploadSnapshot();
+    }, 3000);
+  }
+
+  async function buildExportObject(meta: SnapshotMeta, exportedAtIso: string): Promise<Record<string, unknown>> {
+    const canonicalPacketJson = stableJsonStringify({
+      packet: data.packet,
+      year: data.year,
+      questions: data.questions ?? [],
+    });
+    const checksum = packetChecksum ?? await sha256Hex(canonicalPacketJson);
+
+    function teamNameForId(teamId: string): string {
+      return teams.find((t) => t.id === teamId)?.name ?? teamId;
+    }
+
+    function playerNameForId(playerId: string | undefined): string | null {
+      if (!playerId) return null;
+      return playersById.get(playerId) ?? null;
+    }
+
+    function encodeLocation(location: AttemptLocation): unknown {
+      if (location.kind === "end") return { kind: "end" };
+      if (location.kind === "question") return { kind: "question", word_index: location.wordIndex };
+      return {
+        kind: "option",
+        option_index: location.optionIndex,
+        word_index: location.wordIndex,
+      };
+    }
+
+    const attemptsByQuestionId: Record<string, unknown[]> = {};
+    for (const [questionId, list] of Object.entries(attempts)) {
+      const encoded = (list ?? [])
+        .filter((a) => !!a.result)
+        .map((a) => ({
+          team: teamNameForId(a.teamId),
+          player: playerNameForId(a.playerId),
+          result: a.result,
+          token: a.token,
+          is_end: a.isEnd,
+          location: encodeLocation(a.location),
+        }));
+      if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
+    }
+
+    const sortedEvents = [...scoresheetEvents].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
+    const eventLog = sortedEvents.map((event, idx) => ({
+      seq: event.seq ?? idx + 1,
+      client_event_id: event.id,
+      type: event.type,
+      version: 1,
+      client_ts: event.clientTs ?? null,
+      payload: event.payload ?? {},
+    }));
+    const normalizedEventLog = (() => {
+      if (eventLog.length) return eventLog;
+      if (pairIdx === 0) return eventLog;
+      return [
+        {
+          seq: 1,
+          client_event_id: "export_cursor_seed",
+          type: "cursor.pair_index_set",
+          version: 1,
+          client_ts: exportedAtIso,
+          payload: { pair_index: pairIdx },
+        },
+      ];
+    })();
+
+    return {
+      format: SCORESHEET_EXPORT_FORMAT,
+      version: SCORESHEET_EXPORT_VERSION,
+      exported_at: exportedAtIso,
+      snapshot_meta: meta,
+      packet: {
+        packet: data.packet,
+        year: data.year,
+        questions: data.questions ?? [],
+      },
+      packet_checksum: {
+        algorithm: "sha256",
+        canonicalization: "json_sorted_keys_utf8_no_ws",
+        value: checksum,
+      },
+      game: {
+        teams: teams.map((t) => {
+          const segments = lineupSegmentsForTeam(t);
+          return {
+            name: t.name,
+            players: t.players.map((p) => p.name),
+            ...(segments
+              ? {
+                lineup_segments: segments.map((seg) => ({
+                  start_tossup: seg.startTossup,
+                  end_tossup: seg.endTossup,
+                  active_players: seg.activePlayerIds
+                    .map((id) => playersById.get(id) ?? null)
+                    .filter((name): name is string => !!name),
+                })),
+              }
+              : {}),
+          };
+        }),
+      },
+      rules: {
+        tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
+        bonus: { correct: 10, incorrect: 0 },
+      },
+      event_log: {
+        scoresheet_id: remoteScoresheetId,
+        next_seq: scoresheetState.lastSeq + 1,
+        events: normalizedEventLog,
+      },
+      state: {
+        pair_index: pairIdx,
+        attempts_by_question_id: attemptsByQuestionId,
+      },
+    };
+  }
+
+  async function maybeUploadSnapshot() {
+    if (!snapshotPendingRef.current) return;
+    if (snapshotInFlightRef.current) return;
+    if (!game) return;
+
+    const currentSeq = scoresheetState.lastSeq;
+    if (currentSeq <= lastSnapshotUploadedSeqRef.current) {
+      snapshotPendingRef.current = false;
+      return;
+    }
+
+    const meta = ensureSnapshotMeta();
+    if (!meta) return;
+
+    snapshotInFlightRef.current = true;
+    snapshotPendingRef.current = false;
+    try {
+      const exportedAtIso = new Date().toISOString();
+      const exportObj = await buildExportObject(meta, exportedAtIso);
+      const response = await fetch("/api/moss-snapshots/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ snapshot_meta: meta, export_obj: exportObj }),
+      });
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        console.warn("Autosnapshot upload failed", response.status, text.slice(0, 500));
+        return;
+      }
+      lastSnapshotUploadedSeqRef.current = currentSeq;
+    } catch (e) {
+      console.warn("Autosnapshot upload failed", e);
+    } finally {
+      snapshotInFlightRef.current = false;
+      if (snapshotPendingRef.current) scheduleAutosnapshot();
+    }
+  }
 
   useEffect(() => {
     if (!lastExport) return;
@@ -693,6 +913,11 @@ export default function App() {
         }
       })();
     }
+
+    if (newEvents.some((e) => shouldTriggerAutosnapshot(e.type))) {
+      scheduleAutosnapshot();
+    }
+
     setScoresheetEvents((prev) => {
       const lastSeq = prev.length ? prev[prev.length - 1].seq ?? prev.length : 0;
       const withSeq = newEvents.map((event, idx) => ({ ...event, seq: lastSeq + idx + 1 }));
@@ -1030,138 +1255,15 @@ export default function App() {
     setIsExporting(true);
     try {
       const metaToUse: SnapshotMeta = (() => {
-        if (snapshotMeta) return snapshotMeta;
-        const names = game.teams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
-        const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
-        const derived: SnapshotMeta = {
-          tournament_slug: null,
-          packet_year: data.year,
-          packet_name: data.packet,
-          team_a: team_a ?? "TeamA",
-          team_b: team_b ?? "TeamB",
-          game_instance_id: makeGameInstanceId(),
-        };
-        setSnapshotMeta(derived);
-        return derived;
+        const meta = ensureSnapshotMeta();
+        if (!meta) throw new Error("Unable to derive snapshot metadata");
+        return meta;
       })();
 
       const exportedSeq = scoresheetState.lastSeq;
       const exportedAtEnd = pairIdx === pairRows.length - 1;
       const exportedAtIso = new Date().toISOString();
-      const canonicalPacketJson = stableJsonStringify({
-        packet: data.packet,
-        year: data.year,
-        questions: data.questions ?? [],
-      });
-      const checksum = await sha256Hex(canonicalPacketJson);
-
-      function teamNameForId(teamId: string): string {
-        return teams.find((t) => t.id === teamId)?.name ?? teamId;
-      }
-
-      function playerNameForId(playerId: string | undefined): string | null {
-        if (!playerId) return null;
-        return playersById.get(playerId) ?? null;
-      }
-
-      function encodeLocation(location: AttemptLocation): unknown {
-        if (location.kind === "end") return { kind: "end" };
-        if (location.kind === "question") return { kind: "question", word_index: location.wordIndex };
-        return {
-          kind: "option",
-          option_index: location.optionIndex,
-          word_index: location.wordIndex,
-        };
-      }
-
-      const attemptsByQuestionId: Record<string, unknown[]> = {};
-      for (const [questionId, list] of Object.entries(attempts)) {
-        const encoded = (list ?? [])
-          .filter((a) => !!a.result)
-          .map((a) => ({
-            team: teamNameForId(a.teamId),
-            player: playerNameForId(a.playerId),
-            result: a.result,
-            token: a.token,
-            is_end: a.isEnd,
-            location: encodeLocation(a.location),
-          }));
-        if (encoded.length) attemptsByQuestionId[String(questionId)] = encoded;
-      }
-
-      const exportedAt = exportedAtIso;
-      const sortedEvents = [...scoresheetEvents].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
-      const eventLog = sortedEvents.map((event, idx) => ({
-        seq: event.seq ?? idx + 1,
-        client_event_id: event.id,
-        type: event.type,
-        version: 1,
-        client_ts: event.clientTs ?? null,
-        payload: event.payload ?? {},
-      }));
-      const normalizedEventLog = (() => {
-        if (eventLog.length) return eventLog;
-        if (pairIdx === 0) return eventLog;
-        return [
-          {
-            seq: 1,
-            client_event_id: "export_cursor_seed",
-            type: "cursor.pair_index_set",
-            version: 1,
-            client_ts: exportedAt,
-            payload: { pair_index: pairIdx },
-          },
-        ];
-      })();
-      const exportObj = {
-        format: SCORESHEET_EXPORT_FORMAT,
-        version: SCORESHEET_EXPORT_VERSION,
-        exported_at: exportedAt,
-        snapshot_meta: metaToUse,
-        packet: {
-          packet: data.packet,
-          year: data.year,
-          questions: data.questions ?? [],
-        },
-        packet_checksum: {
-          algorithm: "sha256",
-          canonicalization: "json_sorted_keys_utf8_no_ws",
-          value: checksum,
-        },
-        game: {
-          teams: teams.map((t) => {
-            const segments = lineupSegmentsForTeam(t);
-            return {
-              name: t.name,
-              players: t.players.map((p) => p.name),
-              ...(segments
-                ? {
-                  lineup_segments: segments.map((seg) => ({
-                    start_tossup: seg.startTossup,
-                    end_tossup: seg.endTossup,
-                    active_players: seg.activePlayerIds
-                      .map((id) => playersById.get(id) ?? null)
-                      .filter((name): name is string => !!name),
-                  })),
-                }
-                : {}),
-            };
-          }),
-        },
-        rules: {
-          tossup: { correct: 4, incorrect: -4, no_penalty: 0 },
-          bonus: { correct: 10, incorrect: 0 },
-        },
-        event_log: {
-          scoresheet_id: remoteScoresheetId,
-          next_seq: scoresheetState.lastSeq + 1,
-          events: normalizedEventLog,
-        },
-        state: {
-          pair_index: pairIdx,
-          attempts_by_question_id: attemptsByQuestionId,
-        },
-      };
+      const exportObj = await buildExportObject(metaToUse, exportedAtIso);
 
       const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
