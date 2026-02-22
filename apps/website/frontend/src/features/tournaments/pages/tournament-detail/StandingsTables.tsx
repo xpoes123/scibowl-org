@@ -12,13 +12,6 @@ function formatFixedNumber(value: number, digits = 2): string {
   return value.toFixed(digits);
 }
 
-function toTitleCase(value: string): string {
-  const normalized = value.trim().toLowerCase();
-  if (!normalized) return value;
-
-  return normalized.replace(/(^|[\s\-/'"])([a-z])/g, (_, prefix: string, letter: string) => `${prefix}${letter.toUpperCase()}`);
-}
-
 function DataTable({ headers, rows }: { headers: Array<{ key: string; label: string; numeric?: boolean }>; rows: Array<Record<string, ReactNode>> }) {
   return (
     <div className="sbDataTableWrap">
@@ -65,7 +58,7 @@ export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
 
   const tableRows = rows.map((r) => ({
     rank: r.rank,
-    name: toTitleCase(r.name),
+    name: r.name,
     wins: r.wins,
     losses: r.losses,
     ppg: formatFixedNumber(r.points_per_game, 2),
@@ -107,8 +100,8 @@ export function IndividualStandingsTable({ rows }: { rows: IndividualStandingsRo
 
   const tableRows = sortedRows.map((r, idx) => ({
     rank: idx + 1,
-    name: toTitleCase(r.name),
-    team: toTitleCase(r.team),
+    name: r.name,
+    team: r.team,
     gp: r.games_played,
     "4s": r["4s"],
     "-4s": r["-4s"],
