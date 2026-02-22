@@ -1029,6 +1029,22 @@ export default function App() {
 
     setIsExporting(true);
     try {
+      const metaToUse: SnapshotMeta = (() => {
+        if (snapshotMeta) return snapshotMeta;
+        const names = game.teams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
+        const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
+        const derived: SnapshotMeta = {
+          tournament_slug: null,
+          packet_year: data.year,
+          packet_name: data.packet,
+          team_a: team_a ?? "TeamA",
+          team_b: team_b ?? "TeamB",
+          game_instance_id: makeGameInstanceId(),
+        };
+        setSnapshotMeta(derived);
+        return derived;
+      })();
+
       const exportedSeq = scoresheetState.lastSeq;
       const exportedAtEnd = pairIdx === pairRows.length - 1;
       const exportedAtIso = new Date().toISOString();
@@ -1101,7 +1117,7 @@ export default function App() {
         format: SCORESHEET_EXPORT_FORMAT,
         version: SCORESHEET_EXPORT_VERSION,
         exported_at: exportedAt,
-        ...(snapshotMeta ? { snapshot_meta: snapshotMeta } : {}),
+        snapshot_meta: metaToUse,
         packet: {
           packet: data.packet,
           year: data.year,
@@ -1150,27 +1166,14 @@ export default function App() {
       const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const derivedSnapshotMeta: SnapshotMeta = (() => {
-        if (snapshotMeta) return snapshotMeta;
-        const names = game.teams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
-        const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
-        return {
-          tournament_slug: null,
-          packet_year: data.year,
-          packet_name: data.packet,
-          team_a: team_a ?? "TeamA",
-          team_b: team_b ?? "TeamB",
-          game_instance_id: makeGameInstanceId(),
-        };
-      })();
-      const tournamentPart = safeFilenamePart(derivedSnapshotMeta.tournament_slug ?? "custom");
-      const packetPart = safeFilenamePart(`${derivedSnapshotMeta.packet_year}_${derivedSnapshotMeta.packet_name}`);
-      const teamsPart = [derivedSnapshotMeta.team_a, derivedSnapshotMeta.team_b]
+      const tournamentPart = safeFilenamePart(metaToUse.tournament_slug ?? "custom");
+      const packetPart = safeFilenamePart(`${metaToUse.packet_year}_${metaToUse.packet_name}`);
+      const teamsPart = [metaToUse.team_a, metaToUse.team_b]
         .map(safeFilenamePart)
         .sort((x, y) => x.localeCompare(y))
         .join("__");
       a.href = url;
-      a.download = `${tournamentPart}_${packetPart}_${teamsPart}_${derivedSnapshotMeta.game_instance_id}.json`;
+      a.download = `${tournamentPart}_${packetPart}_${teamsPart}_${metaToUse.game_instance_id}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();
