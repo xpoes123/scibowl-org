@@ -182,3 +182,29 @@ class ExportFactsReducerTestCase(TestCase):
         facts = reduce_scoresheet_export_to_facts(export_obj)
         self.assertEqual(facts.pairs_played, 2)
 
+    def test_incorrect_at_end_counts_as_no_penalty(self):
+        export_obj = self._base_export(version=1)
+        export_obj["state"] = {
+            "pair_index": 0,
+            "attempts_by_question_id": {
+                "1": [
+                    {
+                        "team": "Team A",
+                        "player": "Alice",
+                        "result": "incorrect",
+                        "token": "END",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    }
+                ]
+            },
+        }
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
+        self.assertEqual(team_a.tossups_heard, 1)
+        self.assertEqual(team_a.tossups_4, 0)
+        self.assertEqual(team_a.tossups_neg, 0)
+        self.assertEqual(team_a.tossups_0, 1)
+        self.assertEqual(team_a.points, 0)
+
