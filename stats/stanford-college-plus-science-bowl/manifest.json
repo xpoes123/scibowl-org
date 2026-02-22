@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T21:37:54.137805Z",
+  "generated_at": "2026-02-22T21:55:52.227474Z",
   "schema_version": 1,
   "sources": [
     {
@@ -33,6 +33,39 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_University_of_Alabama_Birmingham__where_is_the_goal_keeper_20260222T202510Z_sy25jed.json",
       "sha256": "b4981194f5d6627315ebaf7ba379ebd759d8c371e86b2765ad5f7cc1f5ab36a2",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:56:41.188Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_CMU__Quizbowlers_20260222T211207Z_8xgb8af.json",
+      "sha256": "0158e4fafa1e21e7383b0c693089774372ba45f68df9c986f62996a7fef9483e",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:46:22.017Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_MIT_Team_1__where_is_the_goal_keeper_20260222T211239Z_vqj6a3t.json",
+      "sha256": "75d7fe9cf9ddb2c96e9e01a1011a0ec644fddb6707ea98a9fad67f874ec57a7f",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:48:28.291Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_MIT_Team_2__University_of_Alabama_Birmingham_20260222T210834Z_nm94h1r.json",
+      "sha256": "04154ac344245ff652ceb3aa7a131a28257fc1f292878f3c33f3504e598a935d",
       "version": 2
     },
     {
