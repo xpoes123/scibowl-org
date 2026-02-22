@@ -57,7 +57,6 @@ export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
     { key: "ppg", label: "PPG", numeric: true },
     { key: "4s", label: "4s", numeric: true },
     { key: "-4s", label: "-4s", numeric: true },
-    { key: "0s", label: "0s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
     { key: "bh", label: "BH", numeric: true },
     { key: "bp", label: "BPTs", numeric: true },
@@ -72,7 +71,6 @@ export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
     ppg: formatFixedNumber(r.points_per_game, 2),
     "4s": r["4s"],
     "-4s": r["-4s"],
-    "0s": r["0s"],
     tuh: r.tossups_heard,
     bh: r.bonuses_heard,
     bp: r.bonus_points,
@@ -90,20 +88,30 @@ export function IndividualStandingsTable({ rows }: { rows: IndividualStandingsRo
     { key: "gp", label: "GP", numeric: true },
     { key: "4s", label: "4s", numeric: true },
     { key: "-4s", label: "-4s", numeric: true },
-    { key: "0s", label: "0s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
     { key: "tp", label: "TU Pts", numeric: true },
     { key: "ppg", label: "PPG", numeric: true },
   ];
 
-  const tableRows = rows.map((r) => ({
-    rank: r.rank,
+  const sortedRows = [...rows].sort((a, b) => {
+    const aPpg = Number.isFinite(a.points_per_game) ? a.points_per_game : -Infinity;
+    const bPpg = Number.isFinite(b.points_per_game) ? b.points_per_game : -Infinity;
+    if (bPpg !== aPpg) return bPpg - aPpg;
+
+    const aTp = Number.isFinite(a.tossup_points) ? a.tossup_points : -Infinity;
+    const bTp = Number.isFinite(b.tossup_points) ? b.tossup_points : -Infinity;
+    if (bTp !== aTp) return bTp - aTp;
+
+    return a.name.localeCompare(b.name);
+  });
+
+  const tableRows = sortedRows.map((r, idx) => ({
+    rank: idx + 1,
     name: toTitleCase(r.name),
     team: toTitleCase(r.team),
     gp: r.games_played,
     "4s": r["4s"],
     "-4s": r["-4s"],
-    "0s": r["0s"],
     tuh: r.tossups_heard,
     tp: r.tossup_points,
     ppg: formatFixedNumber(r.points_per_game, 2),

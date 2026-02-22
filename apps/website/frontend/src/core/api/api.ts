@@ -232,6 +232,7 @@ export const tournamentsAPI = {
     const statsUrl = buildStatsUrl(`${encodedSlug}/standings.json`);
 
     const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
+    if (response.status === 404) return null;
     if (!response.ok) throw new Error("Failed to load standings");
     const parsed = await parseJsonOrNullIfHtml(response, "standings");
     if (!parsed) throw new Error("Failed to load standings");

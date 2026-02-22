@@ -187,7 +187,10 @@ def _classify_tossup_attempt(
     if result == "correct":
         return correct_points
     if result == "incorrect":
-        if _is_no_penalty_marker(attempt):
+        # In exported state, late buzzes can be represented as `is_end: true`; those are treated
+        # as "no penalty" even if `result` is "incorrect". (A legacy/synthetic representation
+        # also exists as an explicit "NO PENALTY" end marker token.)
+        if attempt.get("is_end") is True or _is_no_penalty_marker(attempt):
             return no_penalty_points
         return incorrect_points
     return no_penalty_points

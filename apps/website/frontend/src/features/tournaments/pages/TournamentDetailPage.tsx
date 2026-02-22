@@ -168,11 +168,7 @@ export function TournamentDetailPage() {
       </div>
 
       {/* Render different content based on tournament status */}
-      {isFinished ? (
-        <TournamentTabs tournament={tournament} variant="FINISHED" />
-      ) : (
-        <TournamentTabs tournament={tournament} variant="UPCOMING" />
-      )}
+      <TournamentTabs tournament={tournament} variant={lifecycleStatus} />
     </div>
   );
 }

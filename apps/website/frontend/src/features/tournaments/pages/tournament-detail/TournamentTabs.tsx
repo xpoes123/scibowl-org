@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { TournamentDetail, TournamentLink } from "../../types";
+import type { TournamentDetail, TournamentLink, TournamentStatus } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
@@ -9,7 +9,7 @@ import { FieldTab } from "./FieldTab";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
-  variant: "UPCOMING" | "FINISHED";
+  variant: TournamentStatus;
 };
 
 type TabId = "overview" | "field" | "results" | "statistics";
@@ -89,7 +89,11 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const statsLink = useMemo(() => findLink(tournament, "STATS"), [tournament]);
   const packetsLink = useMemo(() => findLink(tournament, "PACKETS"), [tournament]);
 
-  const { data: standings, loading: standingsLoading } = useTournamentStandings(tournament.slug, variant === "FINISHED");
+  const isUpcoming = variant === "UPCOMING";
+  const isLive = variant === "LIVE";
+  const isFinished = variant === "FINISHED";
+
+  const { data: standings, loading: standingsLoading, error: standingsError } = useTournamentStandings(tournament.slug, !isUpcoming);
   const hasStandings = (standings?.team_standings?.length ?? 0) > 0;
 
   const { slugs: rosterIndexSlugs, loading: rosterIndexLoading } = useRosterIndex();
@@ -97,12 +101,21 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const fieldDisabled = rosterIndexLoading || !hasField;
 
   const tabs: Tab[] = useMemo(() => {
-    if (variant === "UPCOMING") {
+    if (isUpcoming) {
       return [
         { id: "overview", label: "Overview", disabled: false },
         { id: "field", label: "Field", disabled: fieldDisabled },
         { id: "results", label: "Standings", disabled: true },
         { id: "statistics", label: "Buzzpoints", disabled: true },
+      ];
+    }
+
+    if (isLive) {
+      return [
+        { id: "overview", label: "Overview", disabled: false },
+        { id: "field", label: "Field", disabled: fieldDisabled },
+        { id: "results", label: "Standings", disabled: false },
+        { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
       ];
     }
 
@@ -112,7 +125,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       { id: "results", label: "Standings", disabled: !resultsLink && !hasStandings },
       { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
     ];
-  }, [fieldDisabled, hasStandings, resultsLink, statsLink, variant]);
+  }, [fieldDisabled, hasStandings, isLive, isUpcoming, resultsLink, statsLink]);
 
   const [activeTab, setActiveTab] = useState<TabId>("overview");
 
@@ -126,7 +139,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
   const formatSummary = tournament.format.summary;
 
-  const deadlines = variant === "UPCOMING" ? (tournament.registration?.deadlines ?? []) : [];
+  const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
   return (
     <div className="card sbTabsCard" aria-label="Tournament details">
@@ -172,7 +185,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
               </div>
             </OverviewSection>
 
-            {variant === "UPCOMING" && tournament.registration && (
+            {isUpcoming && tournament.registration && (
               <OverviewSection title="Registration">
                 <div className="space-y-3">
                   {tournament.registration.cost && (
@@ -185,7 +198,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
               </OverviewSection>
             )}
 
-            {variant === "UPCOMING" && deadlines.length > 0 && (
+            {isUpcoming && deadlines.length > 0 && (
               <OverviewSection title="Deadlines">
                 <div className="sbInlineRows" aria-label="Registration deadlines">
                   {deadlines.map((deadline) => (
@@ -200,7 +213,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
             {tournament.contacts && tournament.contacts.length > 0 && <ContactTab contacts={tournament.contacts} />}
 
-            {variant === "FINISHED" && packetsLink && (
+            {isFinished && packetsLink && (
               <OverviewSection title="Question Packets">
                 <p className="sbBody m-0">
                   <a href={packetsLink.url} target="_blank" rel="noreferrer" className="sbInlineLink">
@@ -219,8 +232,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                 <h2 className="sbSectionTitle">Standings</h2>
               </header>
               <div className="sbTabSectionBody">
-                {variant === "UPCOMING" ? (
+                {isUpcoming ? (
                   <p className="sbMuted">Standings will be available after the tournament.</p>
+                ) : standingsError ? (
+                  <p className="sbMuted">Failed to load standings: {standingsError}</p>
                 ) : standingsLoading ? (
                   <p className="sbMuted">Loading standings…</p>
                 ) : hasStandings && standings ? (
@@ -240,6 +255,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                   </div>
                 ) : resultsLink ? (
                   <GoogleSheetEmbed url={resultsLink.url} />
+                ) : isLive ? (
+                  <p className="sbMuted">Standings are not available yet.</p>
                 ) : (
                   <p className="sbMuted">Standings are not available.</p>
                 )}
@@ -268,7 +285,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                 <h2 className="sbSectionTitle">Buzzpoints</h2>
               </header>
               <div className="sbTabSectionBody">
-                {variant === "UPCOMING" ? (
+                {isUpcoming ? (
                   <p className="sbMuted">Buzzpoints will be available after the tournament.</p>
                 ) : statsLink ? (
                   <GoogleSheetEmbed url={statsLink.url} />
