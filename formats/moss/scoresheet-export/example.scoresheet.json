@@ -2,6 +2,14 @@
   "format": "moss_scoresheet",
   "version": 1,
   "exported_at": "2026-01-01T00:00:00.000Z",
+  "snapshot_meta": {
+    "tournament_slug": "custom",
+    "packet_year": 2025,
+    "packet_name": "Round 1",
+    "team_a": "Team 1",
+    "team_b": "Team 2",
+    "game_instance_id": "20260101T000000Z_0a1b2c3"
+  },
   "packet": {
     "packet": "Round 1",
     "year": 2025,
