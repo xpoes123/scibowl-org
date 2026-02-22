@@ -1,0 +1,59 @@
+{
+    "format": "moss_field_roster",
+    "version": 1,
+    "tournament": {
+        "slug": "stanford-college-plus-science-bowl",
+        "name": "SCSBT"
+    },
+    "teams": [
+        {
+            "name": "Untitled",
+            "players": [
+                "Daniel Lu"
+            ]
+        },
+        {
+            "name": "CMU",
+            "players": [
+                "Josh Shi",
+                "Yiyoung Liu",
+                "Vidur Kothur",
+                "Peter Ferolito"
+            ]
+        },
+        {
+            "name": "Quizbowlers",
+            "players": [
+                "Rohan Shelke",
+                "Swapnil Garg",
+                "Shahar Schwartz",
+                "Kevin Ye"
+            ]
+        },
+        {
+            "name": "Free Agents",
+            "players": [
+                "Isaac Mammel",
+                "Adeeb Mohammed"
+            ]
+        },
+        {
+            "name": "MIT Team #1",
+            "players": [
+                "MIT Player 1",
+                "MIT Player 2",
+                "MIT Player 3",
+                "MIT Player 4"
+            ]
+        },
+        {
+            "name": "MIT Team #2",
+            "players": [
+                "MIT Player 5",
+                "MIT Player 6",
+                "MIT Player 7",
+                "MIT Player 8"
+            ]
+        }
+    ]
+}

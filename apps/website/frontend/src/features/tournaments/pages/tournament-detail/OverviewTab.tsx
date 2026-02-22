@@ -57,6 +57,10 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
   const statsLink = tournament.links?.find(link => link.type === 'STATS');
   const packetsLink = tournament.links?.find(link => link.type === 'PACKETS');
   const hasPostTournamentLinks = isFinished && (resultsLink || statsLink || packetsLink);
+  const resultsCtaLabel =
+    resultsLink?.label && resultsLink.label !== "Results" ? resultsLink.label : "View Standings";
+  const statsCtaLabel =
+    statsLink?.label && statsLink.label !== "Statistics" ? statsLink.label : "View Buzzpoints";
 
   return (
     <div className="sbTabStack" aria-label="Tournament overview">
@@ -101,7 +105,7 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
                     className="sbCtaButton"
                     style={{ width: "fit-content" }}
                   >
-                    {resultsLink.label || 'View Results'}
+                    {resultsCtaLabel}
                   </a>
                 )}
                 {statsLink && (
@@ -112,7 +116,7 @@ export function OverviewTab({ tournament }: OverviewTabProps) {
                     className="sbCtaButton"
                     style={{ width: "fit-content" }}
                   >
-                    {statsLink.label || 'View Stats'}
+                    {statsCtaLabel}
                   </a>
                 )}
                 {packetsLink && (

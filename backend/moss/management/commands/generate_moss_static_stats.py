@@ -48,7 +48,7 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
 
     Keeps common human-authored placeholder files.
     """
-    keep_names = {"README.md", ".gitkeep"}
+    keep_names = {"README.md", ".gitkeep", "field.json"}
 
     if not output_dir.exists():
         return

@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import packetJson from "./assets/sample_packet.json";
+import tournamentsJson from "./assets/tournaments.json";
 import { splitRichParts, type RichTextPart } from "./text/renderPacketText";
 import { getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
 import {
@@ -73,6 +74,55 @@ type Packet = {
 type PacketChoice =
   | { kind: "sample"; label: string; subtext: string; packet: Packet }
   | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
+
+type MossTournament = {
+  slug: string;
+  name: string;
+  timezone: string;
+  dates: { start: string; end: string };
+  status?: string;
+};
+
+type MossTournamentIndex = {
+  format: "moss_tournaments";
+  version: 1;
+  tournaments: MossTournament[];
+};
+
+type FieldRosterTeam = {
+  name: string;
+  players: string[];
+};
+
+type FieldRoster = {
+  format: "moss_field_roster";
+  version: 1;
+  tournament?: { slug?: string; name?: string };
+  teams: FieldRosterTeam[];
+};
+
+type RosterIndex = {
+  format: "moss_roster_index";
+  version: 1;
+  slugs: string[];
+};
+
+type ResolvedRosterTeam = {
+  name: string;
+  players: Array<{ name: string; isIn: boolean }>;
+};
+
+type CachedRoster = {
+  format: "moss_cached_roster";
+  version: 1;
+  teams: ResolvedRosterTeam[];
+};
+
+type RosterChoice =
+  | { kind: "custom"; label: string }
+  | { kind: "previous"; label: string }
+  | { kind: "upload"; label: string; fileName: string }
+  | { kind: "tournament"; label: string; tournamentSlug: string };
 
 type Question = {
   id: number;
@@ -179,10 +229,11 @@ function tokenizeText(text: string): TextSegment[] {
     .filter((p) => p.text !== "");
 }
 
-function trimLeadingSpaces(segments: TextSegment[]): TextSegment[] {
-  let start = 0;
-  while (segments[start]?.kind === "sep" && segments[start]?.text === " ") start++;
-  return segments.slice(start);
+function needsLeadingSpaceBeforeRichParts(parts: RichTextPart[]): boolean {
+  if (parts.length === 0) return false;
+  const first = parts[0];
+  if (first.kind === "math") return true;
+  return !/^\s/.test(first.content);
 }
 
 function canonicalizeJson(value: unknown): unknown {
@@ -237,14 +288,9 @@ type AttemptEditor = {
   selection: Omit<Attempt, "result">;
 };
 
-type ScoresheetAttemptEditScore = "plus" | "minus" | "zero";
 type ScoresheetAttemptEditModalState = {
   questionId: number;
   teamId: string;
-  token: string;
-  location: AttemptLocation;
-  isEnd: boolean;
-  score: ScoresheetAttemptEditScore;
   playerId: string;
   left: number;
   top: number;
@@ -328,6 +374,97 @@ function parsePacketJson(jsonText: string): Packet {
   return obj as Packet;
 }
 
+const CACHED_ROSTER_KEY = "moss_cached_roster_v1";
+
+function makeId(prefix: string): string {
+  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+}
+
+function buildStatsUrl(pathname: string): string {
+  const trimmedBase = String(import.meta.env.VITE_STATS_URL ?? "").replace(/\/+$/, "");
+  const normalizedPath = pathname.replace(/^\/+/, "");
+  if (trimmedBase) return `${trimmedBase}/${normalizedPath}`;
+  return `${import.meta.env.BASE_URL}${normalizedPath}`;
+}
+
+function parseRosterIndexJson(jsonText: string): RosterIndex {
+  const parsed = JSON.parse(jsonText) as unknown;
+  if (!parsed || typeof parsed !== "object") throw new Error("Roster index JSON must be an object.");
+  const obj = parsed as Partial<RosterIndex>;
+  if (obj.format !== "moss_roster_index") throw new Error("Roster index JSON has unexpected format.");
+  if (obj.version !== 1) throw new Error("Roster index JSON has unexpected version.");
+  if (!Array.isArray(obj.slugs)) throw new Error("Roster index JSON missing required array field: slugs");
+  const slugs = obj.slugs.filter((s): s is string => typeof s === "string" && s.trim() !== "").map((s) => s.trim());
+  return { format: "moss_roster_index", version: 1, slugs };
+}
+
+function parseFieldRosterJson(jsonText: string): FieldRoster {
+  const parsed = JSON.parse(jsonText) as unknown;
+  if (!parsed || typeof parsed !== "object") throw new Error("Roster JSON must be an object.");
+  const obj = parsed as Partial<FieldRoster>;
+  if (obj.format !== "moss_field_roster") throw new Error("Roster JSON has unexpected format.");
+  if (obj.version !== 1) throw new Error("Roster JSON has unexpected version.");
+  if (!Array.isArray(obj.teams)) throw new Error("Roster JSON missing required array field: teams");
+
+  const seen = new Set<string>();
+  const teams: FieldRosterTeam[] = obj.teams.map((t, idx) => {
+    if (!t || typeof t !== "object") throw new Error(`teams[${idx}] must be an object`);
+    const tr = t as Partial<FieldRosterTeam>;
+    const name = String(tr.name ?? "").trim();
+    if (!name) throw new Error(`teams[${idx}].name must be a non-empty string`);
+    if (seen.has(name)) throw new Error(`Duplicate team name in roster: ${name}`);
+    seen.add(name);
+
+    if (!Array.isArray(tr.players)) throw new Error(`teams[${idx}].players must be an array`);
+    const players = tr.players
+      .filter((p): p is string => typeof p === "string")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    return { name, players };
+  });
+
+  const tournamentRaw = obj.tournament;
+  let tournament: FieldRoster["tournament"] | undefined;
+  if (tournamentRaw && typeof tournamentRaw === "object") {
+    const raw = tournamentRaw as Record<string, unknown>;
+    const slug = typeof raw.slug === "string" ? raw.slug : undefined;
+    const name = typeof raw.name === "string" ? raw.name : undefined;
+    if (slug || name) tournament = { slug, name };
+  }
+
+  return { format: "moss_field_roster", version: 1, tournament, teams };
+}
+
+function getDateYmdInTimeZone(now: Date, timeZone: string): string | null {
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(now);
+
+    const year = parts.find((p) => p.type === "year")?.value;
+    const month = parts.find((p) => p.type === "month")?.value;
+    const day = parts.find((p) => p.type === "day")?.value;
+    if (!year || !month || !day) return null;
+    return `${year}-${month}-${day}`;
+  } catch {
+    return null;
+  }
+}
+
+function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
+  if (draftTeams.length < 1) return false;
+  for (const team of draftTeams) {
+    if (!team.name.trim()) return false;
+    const nonEmptyPlayers = team.players.map((p) => p.name.trim()).filter(Boolean);
+    if (nonEmptyPlayers.length < 1) return false;
+  }
+  return true;
+}
+
 function MossTopNav() {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
@@ -346,6 +483,7 @@ function MossTopNav() {
 
 export default function App() {
   const samplePacket = packetJson as Packet;
+  const tournamentIndex = tournamentsJson as MossTournamentIndex;
   const [packet, setPacket] = useState<Packet | null>(null);
   const data = packet ?? samplePacket;
 
@@ -360,6 +498,22 @@ export default function App() {
   const [loadGameError, setLoadGameError] = useState<string | null>(null);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
   const [draftTeams, setDraftTeams] = useState<DraftTeam[]>([]);
+  const [draftRosterChoice, setDraftRosterChoice] = useState<RosterChoice>(() => ({
+    kind: "custom",
+    label: "Enter Custom Roster",
+  }));
+  const [isRosterChooserOpen, setIsRosterChooserOpen] = useState(false);
+  const [isTournamentRosterChooserOpen, setIsTournamentRosterChooserOpen] = useState(false);
+  const [showAllTournaments, setShowAllTournaments] = useState(false);
+  const [tournamentSearchQuery, setTournamentSearchQuery] = useState("");
+  const [rosterIndexLoading, setRosterIndexLoading] = useState(false);
+  const [rosterIndexError, setRosterIndexError] = useState<string | null>(null);
+  const [rosterIndexSlugs, setRosterIndexSlugs] = useState<Set<string> | null>(null);
+  const [tournamentRosterLoading, setTournamentRosterLoading] = useState(false);
+  const [tournamentRosterError, setTournamentRosterError] = useState<string | null>(null);
+  const [fieldRoster, setFieldRoster] = useState<FieldRoster | null>(null);
+  const [selectedRosterTeamByDraftTeamId, setSelectedRosterTeamByDraftTeamId] = useState<Record<string, string>>({});
+  const [rosterLoadError, setRosterLoadError] = useState<string | null>(null);
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
@@ -385,6 +539,7 @@ export default function App() {
   const scoresheetAttemptEditPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBonusEditPopupRef = useRef<HTMLDivElement | null>(null);
   const packetFileInputRef = useRef<HTMLInputElement | null>(null);
+  const rosterFileInputRef = useRef<HTMLInputElement | null>(null);
   const gameFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const teams = game?.teams ?? [];
@@ -411,6 +566,52 @@ export default function App() {
     const id = window.setInterval(() => setNowMs(Date.now()), 15000);
     return () => window.clearInterval(id);
   }, [lastExport]);
+
+  useEffect(() => {
+    if (!isTournamentRosterChooserOpen) return;
+    let cancelled = false;
+
+    setRosterIndexLoading(true);
+    setRosterIndexError(null);
+    setRosterIndexSlugs(null);
+
+    void (async () => {
+      try {
+        const url = buildStatsUrl("stats/rosters/index.json");
+        const response = await fetch(url, { headers: { Accept: "application/json" } });
+        if (!response.ok) {
+          if (response.status === 404) {
+            if (cancelled) return;
+            setRosterIndexSlugs(new Set());
+            return;
+          }
+          throw new Error(`Failed to load roster index (${response.status})`);
+        }
+        const contentType = response.headers.get("content-type") ?? "";
+        if (contentType.includes("text/html")) {
+          if (cancelled) return;
+          setRosterIndexSlugs(new Set());
+          setRosterIndexError("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
+          return;
+        }
+        const text = await response.text();
+        const parsed = parseRosterIndexJson(text);
+        if (cancelled) return;
+        setRosterIndexSlugs(new Set(parsed.slugs));
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load roster index";
+        setRosterIndexError(msg);
+        setRosterIndexSlugs(new Set());
+      } finally {
+        if (!cancelled) setRosterIndexLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isTournamentRosterChooserOpen]);
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const remoteReady = useMemo(() => {
@@ -914,33 +1115,7 @@ export default function App() {
   }
 
   function openNewGame() {
-    function makeId(prefix: string) {
-      return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    }
-
-    const initial: DraftTeam[] = [
-      {
-        id: makeId("team"),
-        name: "Team 1",
-        players: [
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-        ],
-      },
-      {
-        id: makeId("team"),
-        name: "Team 2",
-        players: [
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-          { id: makeId("player"), name: "", isIn: true },
-        ],
-      },
-    ];
-    setDraftTeams(initial);
+    resetRostersToBlankCustom();
     setDraftPacketChoice(null);
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
@@ -949,7 +1124,232 @@ export default function App() {
 
   function closeNewGame() {
     setIsPacketChooserOpen(false);
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
     setIsNewGameOpen(false);
+  }
+
+  function makeBlankDraftTeams(teamCount = 2): DraftTeam[] {
+    return Array.from({ length: teamCount }, () => ({
+      id: makeId("team"),
+      name: "",
+      players: [
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+        { id: makeId("player"), name: "", isIn: true },
+      ],
+    }));
+  }
+
+  function resetRostersToBlankCustom() {
+    setDraftRosterChoice({ kind: "custom", label: "Enter Custom Roster" });
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
+    setShowAllTournaments(false);
+    setTournamentSearchQuery("");
+    setFieldRoster(null);
+    setSelectedRosterTeamByDraftTeamId({});
+    setRosterLoadError(null);
+    setDraftTeams(makeBlankDraftTeams());
+  }
+
+  function saveRosterToCache(teams: ResolvedRosterTeam[]) {
+    try {
+      const payload: CachedRoster = { format: "moss_cached_roster", version: 1, teams };
+      localStorage.setItem(CACHED_ROSTER_KEY, JSON.stringify(payload));
+    } catch (e) {
+      console.warn("Failed to cache roster", e);
+    }
+  }
+
+  function loadCachedRosterTeams(): ResolvedRosterTeam[] | null {
+    try {
+      const raw = localStorage.getItem(CACHED_ROSTER_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as unknown;
+      if (!parsed || typeof parsed !== "object") return null;
+      const obj = parsed as Partial<CachedRoster>;
+      if (obj.format !== "moss_cached_roster" || obj.version !== 1 || !Array.isArray(obj.teams)) return null;
+
+      const teams: ResolvedRosterTeam[] = [];
+      for (const t of obj.teams) {
+        if (!t || typeof t !== "object") continue;
+        const tr = t as { name?: unknown; players?: unknown };
+        const name = String(tr.name ?? "").trim();
+        if (!name) continue;
+        const playersRaw = tr.players;
+        if (!Array.isArray(playersRaw)) continue;
+        const players = playersRaw
+          .filter((p): p is Record<string, unknown> => !!p && typeof p === "object")
+          .map((p) => ({
+            name: String(p.name ?? "").trim(),
+            isIn: Boolean(p.isIn),
+          }))
+          .filter((p) => p.name);
+        if (!players.length) continue;
+        teams.push({ name, players });
+      }
+
+      return teams.length ? teams : null;
+    } catch (e) {
+      console.warn("Failed to load cached roster", e);
+      return null;
+    }
+  }
+
+  function hasCachedRoster(): boolean {
+    try {
+      return !!localStorage.getItem(CACHED_ROSTER_KEY);
+    } catch {
+      return false;
+    }
+  }
+
+  function applyResolvedRosterToDraft(teams: ResolvedRosterTeam[]) {
+    const draft: DraftTeam[] = teams.map((t) => ({
+      id: makeId("team"),
+      name: t.name,
+      players: t.players.map((p) => ({ id: makeId("player"), name: p.name, isIn: p.isIn })),
+    }));
+    setDraftTeams(draft.length ? draft : makeBlankDraftTeams());
+    setSelectedRosterTeamByDraftTeamId({});
+    setFieldRoster(null);
+  }
+
+  function resetDraftTeamsForRosterMode() {
+    setDraftTeams(makeBlankDraftTeams());
+    setSelectedRosterTeamByDraftTeamId({});
+  }
+
+  function chooseCustomRoster() {
+    resetRostersToBlankCustom();
+  }
+
+  function choosePreviousRoster() {
+    const teams = loadCachedRosterTeams();
+    if (!teams) {
+      setRosterLoadError("No cached roster found.");
+      setIsRosterChooserOpen(false);
+      return;
+    }
+    setRosterLoadError(null);
+    setDraftRosterChoice({ kind: "previous", label: "Load Previous Roster" });
+    setIsRosterChooserOpen(false);
+    setIsTournamentRosterChooserOpen(false);
+    applyResolvedRosterToDraft(teams);
+  }
+
+  function requestUploadRoster() {
+    setIsRosterChooserOpen(false);
+    setRosterLoadError(null);
+    rosterFileInputRef.current?.click();
+  }
+
+  async function onRosterFilePicked(file: File | null) {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsedRoster = parseFieldRosterJson(text);
+      setDraftRosterChoice({
+        kind: "upload",
+        fileName: file.name,
+        label: "Upload Roster File",
+      });
+      resetDraftTeamsForRosterMode();
+      setFieldRoster(parsedRoster);
+      setSelectedRosterTeamByDraftTeamId({});
+      setRosterLoadError(null);
+    } catch {
+      setRosterLoadError("ERROR: Unable to parse roster JSON");
+    }
+  }
+
+  function openTournamentRosterChooser() {
+    setIsRosterChooserOpen(false);
+    setTournamentRosterError(null);
+    setTournamentSearchQuery("");
+    setIsTournamentRosterChooserOpen(true);
+  }
+
+  async function chooseTournamentRoster(tournament: MossTournament) {
+    if (tournamentRosterLoading) return;
+
+    setTournamentRosterLoading(true);
+    setTournamentRosterError(null);
+    try {
+      const encodedSlug = encodeURIComponent(tournament.slug);
+      const url = buildStatsUrl(`stats/${encodedSlug}/field.json`);
+      const response = await fetch(url, { headers: { Accept: "application/json" } });
+      if (response.status === 404) {
+        throw new Error("No roster file found for this tournament.");
+      }
+      if (!response.ok) {
+        throw new Error(`Failed to load roster (${response.status})`);
+      }
+      const contentType = response.headers.get("content-type") ?? "";
+      if (contentType.includes("text/html")) {
+        throw new Error("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
+      }
+      const text = await response.text();
+      const parsed = parseFieldRosterJson(text);
+
+      setDraftRosterChoice({
+        kind: "tournament",
+        label: "Select Tournament Roster",
+        tournamentSlug: tournament.slug,
+      });
+      resetDraftTeamsForRosterMode();
+      setFieldRoster(parsed);
+      setSelectedRosterTeamByDraftTeamId({});
+      setRosterLoadError(null);
+      setIsTournamentRosterChooserOpen(false);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to load tournament roster.";
+      setTournamentRosterError(msg);
+    } finally {
+      setTournamentRosterLoading(false);
+    }
+  }
+
+  function applyFieldRosterTeamToDraftTeam(draftTeamId: string, rosterTeamName: string) {
+    if (!fieldRoster) return;
+    const normalized = rosterTeamName.trim();
+    if (!normalized) {
+      setSelectedRosterTeamByDraftTeamId((prev) => {
+        if (!(draftTeamId in prev)) return prev;
+        const next = { ...prev };
+        delete next[draftTeamId];
+        return next;
+      });
+      return;
+    }
+
+    const rosterTeam = fieldRoster.teams.find((t) => t.name === normalized) ?? null;
+    if (!rosterTeam) return;
+
+    const current = draftTeams.find((t) => t.id === draftTeamId) ?? null;
+    const hasExistingValues = !!current && (
+      current.name.trim() !== "" ||
+      current.players.some((p) => p.name.trim() !== "")
+    );
+
+    if (hasExistingValues) {
+      const ok = window.confirm(`Overwrite this team with ${rosterTeam.name}? This will replace the team and player names.`);
+      if (!ok) return;
+    }
+
+    setDraftTeams((prev) =>
+      prev.map((t) => {
+        if (t.id !== draftTeamId) return t;
+        const players = rosterTeam.players.length
+          ? rosterTeam.players.map((name, idx) => ({ id: makeId("player"), name, isIn: idx < 4 }))
+          : [{ id: makeId("player"), name: "", isIn: true }];
+        return { ...t, name: rosterTeam.name, players };
+      })
+    );
+
+    setSelectedRosterTeamByDraftTeamId((prev) => ({ ...prev, [draftTeamId]: rosterTeam.name }));
   }
 
   function updateTeamName(teamId: string, name: string) {
@@ -975,13 +1375,23 @@ export default function App() {
   }
 
   function addPlayer(teamId: string) {
-    const id = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+    const id = makeId("player");
     setDraftTeams((prev) =>
       prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: false }] } : t))
     );
   }
 
   function removePlayer(teamId: string, playerId: string) {
+    const playerName = draftTeams
+      .find((t) => t.id === teamId)
+      ?.players.find((p) => p.id === playerId)
+      ?.name.trim() ?? "";
+
+    if (playerName) {
+      const ok = window.confirm(`Are you sure you want to remove ${playerName}?`);
+      if (!ok) return;
+    }
+
     setDraftTeams((prev) =>
       prev.map((t) =>
         t.id !== teamId ? t : { ...t, players: t.players.filter((p) => p.id !== playerId) }
@@ -990,33 +1400,82 @@ export default function App() {
   }
 
   function addTeam() {
-    const teamId = `team_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    const playerId = `player_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    setDraftTeams((prev) => [...prev, { id: teamId, name: `Team ${prev.length + 1}`, players: [{ id: playerId, name: "", isIn: true }] }]);
+    const teamId = makeId("team");
+    const playerId = makeId("player");
+    setDraftTeams((prev) => [...prev, { id: teamId, name: "", players: [{ id: playerId, name: "", isIn: true }] }]);
   }
 
   function removeTeam(teamId: string) {
+    const ok = window.confirm("Are you sure you want to remove this team? This will remove the team and all players.");
+    if (!ok) return;
     setDraftTeams((prev) => prev.filter((t) => t.id !== teamId));
+    setSelectedRosterTeamByDraftTeamId((prev) => {
+      if (!(teamId in prev)) return prev;
+      const next = { ...prev };
+      delete next[teamId];
+      return next;
+    });
   }
 
   const canStartNewGame = useMemo(() => {
-    if (draftTeams.length < 1) return false;
     if (!draftPacketChoice) return false;
-    for (const team of draftTeams) {
-      if (!team.name.trim()) return false;
-      const nonEmptyPlayers = team.players.map((p) => ({ ...p, name: p.name.trim() })).filter((p) => p.name);
-      if (nonEmptyPlayers.length < 1) return false;
-    }
-    return true;
+    return isDraftRosterValid(draftTeams);
   }, [draftPacketChoice, draftTeams]);
+
+  const canDownloadRosters = useMemo(() => isDraftRosterValid(draftTeams), [draftTeams]);
+
+  function downloadCurrentRosters() {
+    if (!canDownloadRosters) return;
+
+    const teams: FieldRosterTeam[] = draftTeams.map((t) => ({
+      name: t.name.trim(),
+      players: t.players.map((p) => p.name.trim()).filter(Boolean),
+    }));
+
+    const tournament =
+      draftRosterChoice.kind === "tournament"
+        ? {
+          slug: draftRosterChoice.tournamentSlug,
+          name: fieldRoster?.tournament?.name,
+        }
+        : undefined;
+
+    const payload: FieldRoster = {
+      format: "moss_field_roster",
+      version: 1,
+      ...(tournament ? { tournament } : {}),
+      teams,
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2) + "\n"], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    try {
+      const a = document.createElement("a");
+      a.href = url;
+      const stamp = new Date().toISOString().replaceAll(":", "").replaceAll("-", "").slice(0, 15);
+      a.download = `moss_roster_${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
 
   function startNewGame() {
     if (!canStartNewGame || !draftPacketChoice) return;
     const initialEvents: ScoresheetEvent[] = [];
+    const resolvedTeamsForCache: ResolvedRosterTeam[] = [];
     const teams: Team[] = draftTeams.map((t) => {
+      const teamName = t.name.trim();
       const roster = t.players
         .map((p) => ({ ...p, name: p.name.trim() }))
         .filter((p) => p.name);
+
+      resolvedTeamsForCache.push({
+        name: teamName,
+        players: roster.map((p) => ({ name: p.name, isIn: p.isIn })),
+      });
       const players: Player[] = roster.map(({ id, name }) => ({ id, name }));
       const activePlayerIds = roster.filter((p) => p.isIn).map((p) => p.id);
       initialEvents.push(buildScoresheetEvent("lineup.set", {
@@ -1024,9 +1483,10 @@ export default function App() {
         boundary_before_question: 1,
         active_player_ids: activePlayerIds,
       }));
-      return { id: t.id, name: t.name.trim(), players };
+      return { id: t.id, name: teamName, players };
     });
 
+    saveRosterToCache(resolvedTeamsForCache);
     setPacket(draftPacketChoice.packet);
     setGame({ teams });
     const baseState = initialScoresheetState();
@@ -1046,9 +1506,9 @@ export default function App() {
       const parsedPacket = parsePacketJson(text);
       setDraftPacketChoice({
         kind: "upload",
-        label: file.name,
+        label: "Upload Packet from Computer",
         fileName: file.name,
-        subtext: "Uploaded from computer",
+        subtext: file.name,
         packet: parsedPacket,
       });
       setPacketLoadError(null);
@@ -1061,7 +1521,7 @@ export default function App() {
   function chooseSamplePacket() {
     setDraftPacketChoice({
       kind: "sample",
-      label: "Sample Packet",
+      label: "Use Sample Packet",
       subtext: "Built-in demo packet for testing",
       packet: samplePacket,
     });
@@ -1689,10 +2149,6 @@ export default function App() {
     setScoresheetAttemptEditModal({
       questionId: question.id,
       teamId,
-      token: attempt.token,
-      location: attempt.location,
-      isEnd: attempt.isEnd,
-      score: attempt.result === "correct" ? "plus" : attempt.isEnd ? "zero" : "minus",
       playerId: attempt.playerId,
       left: position.left,
       top: position.top,
@@ -1736,28 +2192,10 @@ export default function App() {
     if (!activeIds.has(state.playerId)) return;
 
     const current = attempts[question.id] ?? [];
-    const baseAttempt: Attempt = {
-      token: state.token,
-      isEnd: state.isEnd,
-      location: state.location,
-      teamId: state.teamId,
-      playerId: state.playerId,
-      result: state.score === "plus" ? "correct" : "incorrect",
-    };
+    const existing = current.find((a) => a.teamId === state.teamId);
+    if (!existing?.result || !existing.playerId) return;
 
-    const nextAttempt: Attempt = (() => {
-      if (state.score !== "zero") {
-        if (state.score === "minus") return { ...baseAttempt, isEnd: false };
-        return baseAttempt;
-      }
-
-      return {
-        ...baseAttempt,
-        token: END_TOKEN,
-        isEnd: true,
-        location: { kind: "end" },
-      };
-    })();
+    const nextAttempt: Attempt = { ...existing, playerId: state.playerId };
 
     const events: ScoresheetEvent[] = [
       buildScoresheetEvent("attempt.recorded", {
@@ -1824,6 +2262,7 @@ export default function App() {
     const richParts = splitRichParts(question.question_text);
     const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
+    const hasOptions = (question.options?.length ?? 0) > 0;
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
     const bonusResult = isBonus ? (attempts[question.id] ?? [])[0]?.result : undefined;
     const hasClearableAttempts = (() => {
@@ -1836,6 +2275,48 @@ export default function App() {
     const clearDisabled = disabled || !hasClearableAttempts;
     const bonusTintClass =
       isBonus && bonusResult === "correct" ? "qaSectionCorrect" : isBonus && bonusResult === "incorrect" ? "qaSectionIncorrect" : "";
+
+    function renderEndToken(keyPrefix: string): ReactElement[] {
+      const endLocation: AttemptLocation = { kind: "end" };
+      const endSelected = selection?.location.kind === "end";
+      const endMarked = markedResultForQuestionLocation(question.id, endLocation);
+      const endCorrectnessClass =
+        endMarked === "correct"
+          ? "wordWrapCorrect"
+          : endMarked === "incorrect"
+            ? "wordWrapIncorrect"
+            : "";
+
+      return [
+        <span key={`${keyPrefix}-space`} aria-hidden="true">{" "}</span>,
+        <span
+          key={`${keyPrefix}-wrap`}
+          className={[
+            "wordWrap",
+            wordWrapClickableClass,
+            endSelected ? "wordWrapSelected" : "",
+            endCorrectnessClass,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <button
+            type="button"
+            className={["word", "wordEnd"].join(" ")}
+            disabled={disabled}
+            onClick={(e) =>
+              setAttemptSelection(
+                question,
+                { token: END_TOKEN, isEnd: true, location: endLocation },
+                e.currentTarget
+              )
+            }
+          >
+            {END_TOKEN}
+          </button>
+        </span>,
+      ];
+    }
 
     return (
       <div
@@ -1868,7 +2349,23 @@ export default function App() {
               }}
               aria-label={`Clear ${title} attempts`}
             >
-              Clear
+              <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M20 12a8 8 0 1 1-2.34-5.66"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M20 4v6h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -1884,13 +2381,13 @@ export default function App() {
           ) : (
             (() => {
               let wordIndex = 0;
-              return richParts.flatMap((part, partIndex) => {
+              const nodes = richParts.flatMap((part, partIndex) => {
                 if (part.kind === "math") {
                   const html = katex.renderToString(part.latex, { throwOnError: false, displayMode: false });
                   return [<span key={`q-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
                 }
                 const isBold = part.kind === "bold";
-                const segments = trimLeadingSpaces(tokenizeText(part.content));
+                const segments = tokenizeText(part.content);
                 return segments.map((seg, segIndex) => {
                   if (seg.kind === "sep") {
                     return (
@@ -1944,11 +2441,15 @@ export default function App() {
                   );
                 });
               });
+
+              if (!hasOptions) nodes.push(...renderEndToken("q-end"));
+
+              return nodes;
             })()
           )}
         </div>
 
-        {question.options?.length > 0 && (
+        {hasOptions && (
           <ol className="options">
             {question.options.map((opt, optionIndex) => {
               const optRichParts = splitRichParts(opt);
@@ -1961,7 +2462,7 @@ export default function App() {
                 return (
                   <li key={optionIndex} className="readText">
                     <span className="optionLabel">{label})</span>
-                    {optRichParts.length > 0 ? " " : null}
+                    {needsLeadingSpaceBeforeRichParts(optRichParts) ? " " : null}
                     {renderRichParts(optRichParts)}
                   </li>
                 );
@@ -2008,7 +2509,7 @@ export default function App() {
                       {label})
                     </button>
                   </span>
-                  {optRichParts.length > 0 ? " " : null}
+                  {needsLeadingSpaceBeforeRichParts(optRichParts) ? " " : null}
 
                   {(() => {
                     let wordIndex = 0;
@@ -2018,7 +2519,7 @@ export default function App() {
                         return [<span key={`o-${optionIndex}-math-${partIndex}`} className="mathInline" dangerouslySetInnerHTML={{ __html: html }} />];
                       }
                       const isBold = part.kind === "bold";
-                      const segments = trimLeadingSpaces(tokenizeText(part.content));
+                      const segments = tokenizeText(part.content);
                       return segments.map((seg, segIndex) => {
                         if (seg.kind === "sep") {
                           return (
@@ -2075,59 +2576,18 @@ export default function App() {
                       });
                     });
                   })()}
+                  {optionIndex === question.options.length - 1 ? renderEndToken(`o-end-${optionIndex}`) : null}
                 </li>
               );
             })}
           </ol>
         )}
 
-        {isBonus ? null : (
-          <div className="endRow" aria-label={`${title} end token`}>
-            {(() => {
-              const location: AttemptLocation = { kind: "end" };
-              const selected = selection?.location.kind === "end";
-              const marked = markedResultForQuestionLocation(question.id, location);
-              const correctnessClass =
-                marked === "correct"
-                  ? "wordWrapCorrect"
-                  : marked === "incorrect"
-                    ? "wordWrapIncorrect"
-                    : "";
-
-              return (
-                <span
-                  className={[
-                    "wordWrap",
-                    wordWrapClickableClass,
-                    selected ? "wordWrapSelected" : "",
-                    correctnessClass,
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                >
-                  <button
-                    type="button"
-                    className={["word", "wordEnd"].join(" ")}
-                    disabled={disabled}
-                    onClick={(e) =>
-                      setAttemptSelection(
-                        question,
-                        { token: END_TOKEN, isEnd: true, location },
-                        e.currentTarget
-                      )
-                    }
-                  >
-                    {END_TOKEN}
-                  </button>
-                </span>
-              );
-            })()}
+        <div className="answerInline">
+          <div className="answerLine">
+            <span className="answerTitle">ANSWER:</span>{" "}
+            <span className="answerBody">{renderRichParts(splitRichParts(formatCorrectAnswer(question)))}</span>
           </div>
-        )}
-
-        <div className="answer answerInline">
-          <div className="answerTitle">Answer</div>
-          <div className="answerBody">{renderRichParts(splitRichParts(formatCorrectAnswer(question)))}</div>
         </div>
       </div>
     );
@@ -2186,10 +2646,84 @@ export default function App() {
             <div className="modalOverlay" role="dialog" aria-label="New Game" onClick={closeNewGame}>
               <div className="modal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">New Game</h2>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                    <h2 className="modalTitle">New Game</h2>
+                    <button
+                      type="button"
+                      className="secondary qaClearButton"
+                      onClick={resetRostersToBlankCustom}
+                      aria-label="Reset rosters"
+                      title="Reset rosters"
+                    >
+                      <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path
+                          d="M20 12a8 8 0 1 1-2.34-5.66"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M20 4v6h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="modalBody">
+                  <div className="packetRow" style={{ marginBottom: 14 }}>
+                    <div className="packetMeta">
+                      <div className="fieldLabel">Rosters</div>
+                      <div className="packetBox">
+                        <div className="packetBoxText">
+                          <div className="packetName">{draftRosterChoice.label}</div>
+                          {(() => {
+                            const teamsCount = fieldRoster?.teams.length ?? 0;
+                            if (rosterLoadError) return <div className="packetSubtext">{rosterLoadError}</div>;
+
+                            if (draftRosterChoice.kind === "custom") {
+                              return <div className="packetSubtext">Manually enter team and player names</div>;
+                            }
+
+                            if (draftRosterChoice.kind === "previous") {
+                              return <div className="packetSubtext">Previously used roster from browser cache</div>;
+                            }
+
+                            if (draftRosterChoice.kind === "upload") {
+                              return <div className="packetSubtext">{draftRosterChoice.fileName} ({teamsCount} teams)</div>;
+                            }
+
+                            const tournamentName = fieldRoster?.tournament?.name ?? draftRosterChoice.tournamentSlug;
+                            return <div className="packetSubtext">{tournamentName} ({teamsCount} teams)</div>;
+                          })()}
+                        </div>
+                        <div className="packetBoxButtons">
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={() => setIsRosterChooserOpen(true)}
+                          >
+                            Change…
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={downloadCurrentRosters}
+                            disabled={!canDownloadRosters}
+                          >
+                            Download
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="teamGridScroll">
                     <div className="teamGrid">
                       {draftTeams.map((team, teamIndex) => (
@@ -2211,18 +2745,43 @@ export default function App() {
                                 </button>
                               )}
                             </div>
-                            <input
-                              className="textInput"
-                              value={team.name}
-                              onChange={(e) => updateTeamName(team.id, e.target.value)}
-                            />
+                            {fieldRoster && (
+                              <select
+                                className="textInput"
+                                value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
+                                onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
+                                aria-label={`Select team for Team ${teamIndex + 1}`}
+                              >
+                                <option value="">Select team…</option>
+                                {fieldRoster.teams.map((rt) => (
+                                  <option
+                                    key={rt.name}
+                                    value={rt.name}
+                                    disabled={draftTeams.some((other) => other.id !== team.id && selectedRosterTeamByDraftTeamId[other.id] === rt.name)}
+                                  >
+                                    {rt.name}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+                            {!fieldRoster && (
+                              <input
+                                className="textInput"
+                                value={team.name}
+                                placeholder={`Team ${teamIndex + 1}`}
+                                onChange={(e) => updateTeamName(team.id, e.target.value)}
+                              />
+                            )}
                           </div>
 
                           <div className="fieldGroup">
                             <div className="fieldLabel">Players</div>
                             <div className="playerList">
                               {team.players.map((player, playerIndex) => (
-                                <div key={player.id} className="playerRowWithToggle">
+                                <div
+                                  key={player.id}
+                                  className={["playerRowWithToggle", team.players.length > 1 ? "" : "noRemove"].filter(Boolean).join(" ")}
+                                >
                                   <input
                                     className="textInput"
                                     value={player.name}
@@ -2241,7 +2800,7 @@ export default function App() {
                                   >
                                     {player.isIn ? "Active" : "Bench"}
                                   </button>
-                                  {playerIndex > 0 && (
+                                  {team.players.length > 1 && (
                                     <button
                                       type="button"
                                       className="iconButton danger"
@@ -2288,24 +2847,31 @@ export default function App() {
                         <div className="fieldLabel">
                           Packet <span className="required">*</span>
                         </div>
-                        <div className="packetBox">
+                      <div className="packetBox">
+                        <div className="packetBoxText">
                           {draftPacketChoice ? (
                             <>
                               <div className="packetName">{draftPacketChoice.label}</div>
                               <div className="packetSubtext">{draftPacketChoice.subtext}</div>
                             </>
                           ) : (
-                            <div className="packetSubtext">Select a packet to start the game</div>
+                            <>
+                              <div className="packetName">Select Packet</div>
+                              <div className="packetSubtext">No packet selected</div>
+                            </>
                           )}
                           {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        </div>
+                        <div className="packetBoxButtons">
                           <button
                             type="button"
-                            className="secondary packetChangeButton"
+                            className="secondary"
                             onClick={() => setIsPacketChooserOpen(true)}
                           >
                             {draftPacketChoice ? "Change…" : "Load…"}
                           </button>
                         </div>
+                      </div>
                       </div>
                       <div className="spacer" />
                       <div className="packetActions">
@@ -2337,6 +2903,229 @@ export default function App() {
             />
           )}
 
+          {isNewGameOpen && (
+            <input
+              ref={rosterFileInputRef}
+              type="file"
+              accept="application/json,.json"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null;
+                e.target.value = "";
+                void onRosterFilePicked(file);
+              }}
+            />
+          )}
+
+          {isNewGameOpen && isRosterChooserOpen && (
+            <div
+              className="modalOverlay"
+              role="dialog"
+              aria-label="Choose rosters"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsRosterChooserOpen(false);
+              }}
+            >
+              <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                <div className="modalHeader">
+                  <h2 className="modalTitle">Choose Rosters</h2>
+                </div>
+                <div className="modalBody">
+                  <div className="chooserGrid">
+                    <button type="button" className="chooserOption" onClick={chooseCustomRoster}>
+                      <div className="chooserOptionTitle">Enter Custom Roster</div>
+                      <div className="chooserOptionSubtext">Manually enter team and player names</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={openTournamentRosterChooser}>
+                      <div className="chooserOptionTitle">Select Tournament Roster</div>
+                      <div className="chooserOptionSubtext">Scorekeep for a tournament team</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={requestUploadRoster}>
+                      <div className="chooserOptionTitle">Upload Roster File</div>
+                      <div className="chooserOptionSubtext">Select a local roster file</div>
+                    </button>
+                    <button
+                      type="button"
+                      className="chooserOption"
+                      onClick={choosePreviousRoster}
+                      disabled={!hasCachedRoster()}
+                    >
+                      <div className="chooserOptionTitle">Load Previous Roster</div>
+                      <div className="chooserOptionSubtext">
+                        {hasCachedRoster()
+                          ? "Previously used roster from browser cache"
+                          : "No cached roster found yet"}
+                      </div>
+                    </button>
+                  </div>
+                  <div className="chooserFooter">
+                    <button type="button" className="secondary" onClick={() => setIsRosterChooserOpen(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isNewGameOpen && isTournamentRosterChooserOpen && (
+            <div
+              className="modalOverlay"
+              role="dialog"
+              aria-label="Select Tournament Roster"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsTournamentRosterChooserOpen(false);
+              }}
+            >
+              <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
+                <div className="modalHeader">
+                  <h2 className="modalTitle">Select Tournament Roster</h2>
+                </div>
+                <div className="modalBody">
+                  <div className="packetBox" style={{ marginBottom: 12 }}>
+                    <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <input
+                        type="checkbox"
+                        checked={showAllTournaments}
+                        onChange={(e) => setShowAllTournaments(e.target.checked)}
+                      />
+                      Show all tournaments
+                    </label>
+                    <div className="packetSubtext">
+                      Default shows upcoming tournaments with rosters, sorted from closest to today to furthest.
+                    </div>
+                    {rosterIndexLoading && <div className="packetSubtext">Loading roster list…</div>}
+                    <div style={{ minHeight: 18 }}>
+                      {(tournamentRosterError || rosterIndexError) && (
+                        <div className="packetError">{tournamentRosterError ?? rosterIndexError}</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <input
+                    className="textInput"
+                    value={tournamentSearchQuery}
+                    onChange={(e) => setTournamentSearchQuery(e.target.value)}
+                    placeholder="Search tournaments…"
+                    aria-label="Search tournaments"
+                    style={{ marginBottom: 12 }}
+                  />
+
+                  <div
+                    aria-label="Tournament search results"
+                    style={{
+                      height: 380,
+                      overflowY: "auto",
+                      paddingRight: 6,
+                    }}
+                  >
+                    <div className="chooserList">
+                      {(() => {
+                        const now = new Date();
+                        const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
+
+                        const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
+
+                        const getRosterStatus = (slug: string) => {
+                          if (!canCheckRosterAvailability) return "UNKNOWN";
+                          return rosterIndexSlugs.has(slug) ? "HAS" : "NO";
+                        };
+
+                        const isUpcoming = (t: MossTournament) => {
+                          const ymd = getDateYmdInTimeZone(now, t.timezone);
+                          if (!ymd) return false;
+                          return ymd <= t.dates.end;
+                        };
+
+                        const getSortKey = (t: MossTournament) => {
+                          if (showAllTournaments) return t.dates.start;
+                          const ymd = getDateYmdInTimeZone(now, t.timezone);
+                          if (!ymd) return t.dates.start;
+                          if (ymd < t.dates.start) return t.dates.start;
+                          return ymd;
+                        };
+
+                        const base = showAllTournaments
+                          ? [...tournaments]
+                          : canCheckRosterAvailability
+                            ? tournaments.filter((t) => isUpcoming(t) && getRosterStatus(t.slug) === "HAS")
+                            : [];
+
+                        const q = tournamentSearchQuery.trim().toLowerCase();
+                        const filtered = q
+                          ? base.filter((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
+                          : base;
+
+                        filtered.sort((a, b) => {
+                          if (showAllTournaments && canCheckRosterAvailability) {
+                            const aHasRoster = getRosterStatus(a.slug) === "HAS";
+                            const bHasRoster = getRosterStatus(b.slug) === "HAS";
+                            if (aHasRoster !== bHasRoster) return aHasRoster ? -1 : 1;
+                          }
+
+                          const aKey = getSortKey(a);
+                          const bKey = getSortKey(b);
+                          const keyCmp = aKey.localeCompare(bKey);
+                          if (keyCmp !== 0) return keyCmp;
+
+                          const startCmp = a.dates.start.localeCompare(b.dates.start);
+                          if (startCmp !== 0) return startCmp;
+
+                          return a.name.localeCompare(b.name);
+                        });
+
+                        if (!filtered.length) {
+                          if (!showAllTournaments && !canCheckRosterAvailability) {
+                            return <div className="packetSubtext">Loading roster list…</div>;
+                          }
+                          return <div className="packetSubtext">No results.</div>;
+                        }
+
+                        return filtered.map((tournament) => {
+                          const rosterStatus = getRosterStatus(tournament.slug);
+                          const hasRoster = rosterStatus === "HAS" || rosterStatus === "UNKNOWN";
+                          const disabled =
+                            tournamentRosterLoading ||
+                            rosterIndexLoading ||
+                            (canCheckRosterAvailability && rosterStatus !== "HAS");
+                          const title = canCheckRosterAvailability && !hasRoster
+                            ? `${tournament.name} (No roster file found)`
+                            : tournament.name;
+                          const dateLabel =
+                            tournament.dates.start === tournament.dates.end
+                              ? tournament.dates.start
+                              : `${tournament.dates.start} \u2013 ${tournament.dates.end}`;
+                          return (
+                            <button
+                              key={tournament.slug}
+                              type="button"
+                              className="chooserOption"
+                              disabled={disabled}
+                              onClick={() => void chooseTournamentRoster(tournament)}
+                            >
+                              <div className="chooserOptionRow">
+                                <div className="chooserOptionTitle chooserOptionTitleTruncate">{title}</div>
+                                <div className="chooserOptionDate">{dateLabel}</div>
+                              </div>
+                            </button>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+
+                  <div className="chooserFooter">
+                    <button type="button" className="secondary" onClick={() => setIsTournamentRosterChooserOpen(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {isNewGameOpen && isPacketChooserOpen && (
             <div
               className="modalOverlay"
@@ -2349,21 +3138,25 @@ export default function App() {
             >
               <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">Choose a packet</h2>
+                  <h2 className="modalTitle">Choose Packet</h2>
                 </div>
                 <div className="modalBody">
-                  <div className="chooserList">
-                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
-                      <div className="chooserOptionTitle">Use Sample Packet</div>
-                      <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
-                    </button>
+                  <div className="chooserGrid">
                     <button type="button" className="chooserOption" onClick={requestUploadPacket}>
                       <div className="chooserOptionTitle">Upload Packet from Computer</div>
                       <div className="chooserOptionSubtext">Select a local packet file</div>
                     </button>
                     <button type="button" className="chooserOption" disabled>
-                      <div className="chooserOptionTitle">Select Tournament Packet (disabled)</div>
-                      <div className="chooserOptionSubtext">Provided by the tournament director</div>
+                      <div className="chooserOptionTitle">Select Tournament Packet</div>
+                      <div className="chooserOptionSubtext">Coming soon!</div>
+                    </button>
+                    <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
+                      <div className="chooserOptionTitle">Use Sample Packet</div>
+                      <div className="chooserOptionSubtext">Built-in demo packet for testing</div>
+                    </button>
+                    <button type="button" className="chooserOption" disabled>
+                      <div className="chooserOptionTitle">Select from Archive</div>
+                      <div className="chooserOptionSubtext">Coming soon!</div>
                     </button>
                   </div>
                   <div className="chooserFooter">
@@ -2464,11 +3257,11 @@ export default function App() {
               </div>
 
               <div className="questionBlock">
-                {tossupQ && renderQuestionSection(tossupQ, "Tossup", false)}
+                {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
                 {bonusQ && (
                   <>
                     <div className="qaDivider" />
-                    {renderQuestionSection(bonusQ, "Bonus", !bonusEnabled)}
+                    {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
                   </>
                 )}
               </div>
@@ -2879,35 +3672,6 @@ export default function App() {
               <div className="attemptPopupTitle">{title}</div>
 
               <div className="scoresheetEditPopupBody">
-                <div className="fieldGroup">
-                  <div className="fieldLabelRow">
-                    <div className="fieldLabel">Score</div>
-                  </div>
-                  <div className="scoreToggle" role="group" aria-label="Score">
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "plus" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "plus" } : prev))}
-                    >
-                      +4
-                    </button>
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "minus" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "minus" } : prev))}
-                    >
-                      -4
-                    </button>
-                    <button
-                      type="button"
-                      className={scoresheetAttemptEditModal.score === "zero" ? "active" : ""}
-                      onClick={() => setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, score: "zero" } : prev))}
-                    >
-                      0
-                    </button>
-                  </div>
-                </div>
-
                 <div className="fieldGroup">
                   <div className="fieldLabelRow">
                     <div className="fieldLabel">Player</div>
