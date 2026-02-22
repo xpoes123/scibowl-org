@@ -27,7 +27,7 @@ export function useTournamentStandings(slug: string, enabled: boolean): UseTourn
       setLoading(true);
       setError(null);
       try {
-        const result = (await tournamentsAPI.getTournamentStandings(slug)) as TournamentStandingsResponse;
+        const result = (await tournamentsAPI.getTournamentStandings(slug)) as TournamentStandingsResponse | null;
         if (cancelled) return;
         setData(result);
       } catch (err) {
