@@ -1,0 +1,112 @@
+{
+  "generated_at": "2026-02-22T18:13:07.881349Z",
+  "schema_version": 1,
+  "sources": [
+    {
+      "exported_at": "2026-02-22T16:35:23.098Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_CMU__MIT_Team_1_20260222T160914Z_ayw12rx.json",
+      "sha256": "f74c43c6d8130274fa6fe44e485ed0f978d8deb748b80905de3a19633c69cae7",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T16:49:58.540Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_MIT_Team_2__Quizbowlers_20260222T160556Z_r4ootoj.json",
+      "sha256": "1643d912185a830e1447ba2e033a55c12aba3d927e102ee80af8041c29502fdd",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T16:30:13.005Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_University_of_Alabama_Birmingham__where_is_the_goal_keeper_20260222T160027Z_inqppe4.json",
+      "sha256": "7f23977eaaafc6bb513558672926727efa68d68b62889d48d544bb70fd195533",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:22:24.901Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_CMU__Quizbowlers_20260222T165310Z_5l3sueo.json",
+      "sha256": "99bd381d4007d1528b2a71ea7904cc972e70fd76fcc0f72a3a28bcfea585233b",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:19:23.092Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_MIT_Team_1__where_is_the_goal_keeper_20260222T164006Z_ewpo61j.json",
+      "sha256": "4a7ead2f3e503017b8274876fb876d4e05ba7168f510af2a4466b56923289ce1",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:23:33.709Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_MIT_Team_2__University_of_Alabama_Birmingham_20260222T165435Z_n8320h0.json",
+      "sha256": "4321acf9471c8da83fcdf57287869ad0af4b1f4b7a9b501afb04ed44b26056d3",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:08:15.632Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_CMU__where_is_the_goal_keeper_20260222T172858Z_u73ksbm.json",
+      "sha256": "3020670a4208fa5e2b0bffad50f691c53ea648013cd9a319c6d7ae9ad0fb43e5",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:55:44.851Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_MIT_Team_1__MIT_Team_2_20260222T172825Z_vxum09f.json",
+      "sha256": "34daff08b04e88e248161b981489c3be21b004f4992ce4c01bcf123d0007ef28",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:08:47.451Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T172311Z_ngwd72o.json",
+      "sha256": "8d018be3e78662da5b9110794b8ac212b371f6d0a4bee2f3d1ef452d97ae6817",
+      "version": 2
+    }
+  ],
+  "tournament": {
+    "name": "stanford-college-plus-science-bowl",
+    "slug": "stanford-college-plus-science-bowl"
+  },
+  "views": {
+    "standings": "standings.json"
+  }
+}
