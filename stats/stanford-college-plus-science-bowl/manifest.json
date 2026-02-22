@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T21:55:52.227474Z",
+  "generated_at": "2026-02-22T22:34:56.709776Z",
   "schema_version": 1,
   "sources": [
     {
@@ -66,6 +66,39 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_MIT_Team_2__University_of_Alabama_Birmingham_20260222T210834Z_nm94h1r.json",
       "sha256": "04154ac344245ff652ceb3aa7a131a28257fc1f292878f3c33f3504e598a935d",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:21:03.902Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_CMU__where_is_the_goal_keeper_20260222T215300Z_d1om604.json",
+      "sha256": "c2d037d886978cfbf01fdb83e35eade5c8949783b8b0becd03bef1a3403cc18b",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:24:48.998Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_MIT_Team_1__MIT_Team_2_20260222T215428Z_pck9v1n.json",
+      "sha256": "1b389c01ea4119c9cda7cce489a098facef2eb12ba545d69467c9c99472d5577",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:34:20.954Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T215619Z_w7wowaz.json",
+      "sha256": "e45a2ab52396fce706c5d5fffa21e3b658b82dbeef4738699d43fddc9e680c2e",
       "version": 2
     },
     {
