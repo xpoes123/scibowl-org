@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T22:34:56.709776Z",
+  "generated_at": "2026-02-22T23:24:44.269030Z",
   "schema_version": 1,
   "sources": [
     {
@@ -99,6 +99,39 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T215619Z_w7wowaz.json",
       "sha256": "e45a2ab52396fce706c5d5fffa21e3b658b82dbeef4738699d43fddc9e680c2e",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:18:21.829Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_CMU__University_of_Alabama_Birmingham_20260222T223958Z_4iu94to.json",
+      "sha256": "60226a2e8eace4711a20062e41ab970edf0f05e818e576de0c71591a52234617",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:12:58.224Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_MIT_Team_1__Quizbowlers_20260222T223746Z_2r20oly.json",
+      "sha256": "580f2472e33465ee970357c3e91a9b4ff52b6bfc946743b69dd9c176987b24c9",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:20:05.205Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_MIT_Team_2__where_is_the_goal_keeper_20260222T220141Z_xfr70ws.json",
+      "sha256": "55cda7bc3ae36e327a495c5de53c3e2ac5e46e15c6cf5814866ae3dda955ae14",
       "version": 2
     },
     {
