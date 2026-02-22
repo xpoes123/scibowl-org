@@ -7,10 +7,21 @@ This document specifies the JSON format used to export a MoSS match scoresheet (
 - `format` (string, required): Must be `"moss_scoresheet"`.
 - `version` (number, required): Format version. This document describes `1` and `2`.
 - `exported_at` (string, required): ISO-8601 timestamp (UTC recommended), e.g. `"2026-01-01T00:00:00Z"`.
+- `snapshot_meta` (object, optional): Metadata used for human-friendly filenames and S3 snapshot keying.
 
 These fields allow importers to quickly recognize the file type and to handle future schema changes.
 
 ## Top-level object
+
+### `snapshot_meta` (object, optional)
+Metadata that identifies a game in a way that is easy for humans to search. This does not affect scoring logic.
+
+- `tournament_slug` (string or null, optional): Tournament slug if known, else null for custom games.
+- `packet_year` (number, required if present): Packet year.
+- `packet_name` (string, required if present): Packet name.
+- `team_a` (string, required if present): Team name.
+- `team_b` (string, required if present): Team name.
+- `game_instance_id` (string, required if present): Unique id for the game instance (typically a timestamp plus a short random suffix).
 
 ### `packet` (object, required)
 The packet used for the match.
@@ -104,6 +115,14 @@ Notes:
   "format": "moss_scoresheet",
   "version": 2,
   "exported_at": "2026-01-01T00:00:00Z",
+  "snapshot_meta": {
+    "tournament_slug": "custom",
+    "packet_year": 2025,
+    "packet_name": "Round 1",
+    "team_a": "Team A",
+    "team_b": "Team B",
+    "game_instance_id": "20260101T000000Z_0a1b2c3"
+  },
   "packet": {
     "packet": "Round 1",
     "year": 2025,
