@@ -1,7 +1,40 @@
 {
-  "generated_at": "2026-02-22T19:28:06.636506Z",
+  "generated_at": "2026-02-22T21:37:54.137805Z",
   "schema_version": 1,
   "sources": [
+    {
+      "exported_at": "2026-02-22T21:00:48.726Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_CMU__MIT_Team_1_20260222T203012Z_4ly09hj.json",
+      "sha256": "1bace1dd8781bb60c9df9baea83ad4f9a82e1cc5a8155eef51ae790b560a61f6",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T20:56:31.540Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_MIT_Team_2__Quizbowlers_20260222T202740Z_6xgnw6y.json",
+      "sha256": "1feee0e018331340a736c69cb7b4f0b229e29f4a4932774984f67289bd8f45a5",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:10:01.833Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_University_of_Alabama_Birmingham__where_is_the_goal_keeper_20260222T202510Z_sy25jed.json",
+      "sha256": "b4981194f5d6627315ebaf7ba379ebd759d8c371e86b2765ad5f7cc1f5ab36a2",
+      "version": 2
+    },
     {
       "exported_at": "2026-02-22T16:35:23.098Z",
       "packet_checksum": {
