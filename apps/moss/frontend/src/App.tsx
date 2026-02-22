@@ -455,10 +455,6 @@ function getDateYmdInTimeZone(now: Date, timeZone: string): string | null {
   }
 }
 
-function isYmdBetweenInclusive(ymd: string, start: string, end: string): boolean {
-  return ymd >= start && ymd <= end;
-}
-
 function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
   if (draftTeams.length < 1) return false;
   for (const team of draftTeams) {
@@ -590,6 +586,13 @@ export default function App() {
             return;
           }
           throw new Error(`Failed to load roster index (${response.status})`);
+        }
+        const contentType = response.headers.get("content-type") ?? "";
+        if (contentType.includes("text/html")) {
+          if (cancelled) return;
+          setRosterIndexSlugs(new Set());
+          setRosterIndexError("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
+          return;
         }
         const text = await response.text();
         const parsed = parseRosterIndexJson(text);
@@ -1283,6 +1286,10 @@ export default function App() {
       }
       if (!response.ok) {
         throw new Error(`Failed to load roster (${response.status})`);
+      }
+      const contentType = response.headers.get("content-type") ?? "";
+      if (contentType.includes("text/html")) {
+        throw new Error("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
       }
       const text = await response.text();
       const parsed = parseFieldRosterJson(text);
@@ -2966,7 +2973,7 @@ export default function App() {
             <div
               className="modalOverlay"
               role="dialog"
-              aria-label="Select tournament roster"
+              aria-label="Select Tournament Roster"
               onClick={(e) => {
                 e.stopPropagation();
                 setIsTournamentRosterChooserOpen(false);
@@ -2974,7 +2981,7 @@ export default function App() {
             >
               <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
-                  <h2 className="modalTitle">Select tournament roster</h2>
+                  <h2 className="modalTitle">Select Tournament Roster</h2>
                 </div>
                 <div className="modalBody">
                   <div className="packetBox" style={{ marginBottom: 12 }}>
@@ -2987,7 +2994,7 @@ export default function App() {
                       Show all tournaments
                     </label>
                     <div className="packetSubtext">
-                      Default shows tournaments happening today (in their timezone).
+                      Default shows upcoming tournaments with rosters, sorted from closest to today to furthest.
                     </div>
                     {rosterIndexLoading && <div className="packetSubtext">Loading roster list…</div>}
                     <div style={{ minHeight: 18 }}>
@@ -3018,13 +3025,33 @@ export default function App() {
                       {(() => {
                         const now = new Date();
                         const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
+
+                        const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
+
+                        const getRosterStatus = (slug: string) => {
+                          if (!canCheckRosterAvailability) return "UNKNOWN";
+                          return rosterIndexSlugs.has(slug) ? "HAS" : "NO";
+                        };
+
+                        const isUpcoming = (t: MossTournament) => {
+                          const ymd = getDateYmdInTimeZone(now, t.timezone);
+                          if (!ymd) return false;
+                          return ymd <= t.dates.end;
+                        };
+
+                        const getSortKey = (t: MossTournament) => {
+                          if (showAllTournaments) return t.dates.start;
+                          const ymd = getDateYmdInTimeZone(now, t.timezone);
+                          if (!ymd) return t.dates.start;
+                          if (ymd < t.dates.start) return t.dates.start;
+                          return ymd;
+                        };
+
                         const base = showAllTournaments
                           ? [...tournaments]
-                          : tournaments.filter((t) => {
-                            const ymd = getDateYmdInTimeZone(now, t.timezone);
-                            if (!ymd) return false;
-                            return isYmdBetweenInclusive(ymd, t.dates.start, t.dates.end);
-                          });
+                          : canCheckRosterAvailability
+                            ? tournaments.filter((t) => isUpcoming(t) && getRosterStatus(t.slug) === "HAS")
+                            : [];
 
                         const q = tournamentSearchQuery.trim().toLowerCase();
                         const filtered = q
@@ -3032,25 +3059,44 @@ export default function App() {
                           : base;
 
                         filtered.sort((a, b) => {
+                          if (showAllTournaments && canCheckRosterAvailability) {
+                            const aHasRoster = getRosterStatus(a.slug) === "HAS";
+                            const bHasRoster = getRosterStatus(b.slug) === "HAS";
+                            if (aHasRoster !== bHasRoster) return aHasRoster ? -1 : 1;
+                          }
+
+                          const aKey = getSortKey(a);
+                          const bKey = getSortKey(b);
+                          const keyCmp = aKey.localeCompare(bKey);
+                          if (keyCmp !== 0) return keyCmp;
+
                           const startCmp = a.dates.start.localeCompare(b.dates.start);
                           if (startCmp !== 0) return startCmp;
+
                           return a.name.localeCompare(b.name);
                         });
 
                         if (!filtered.length) {
+                          if (!showAllTournaments && !canCheckRosterAvailability) {
+                            return <div className="packetSubtext">Loading roster list…</div>;
+                          }
                           return <div className="packetSubtext">No results.</div>;
                         }
 
-                        const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
-
                         return filtered.map((tournament) => {
-                          const hasRoster = canCheckRosterAvailability
-                            ? rosterIndexSlugs.has(tournament.slug)
-                            : true;
-                          const disabled = tournamentRosterLoading || (canCheckRosterAvailability && !hasRoster);
+                          const rosterStatus = getRosterStatus(tournament.slug);
+                          const hasRoster = rosterStatus === "HAS" || rosterStatus === "UNKNOWN";
+                          const disabled =
+                            tournamentRosterLoading ||
+                            rosterIndexLoading ||
+                            (canCheckRosterAvailability && rosterStatus !== "HAS");
                           const title = canCheckRosterAvailability && !hasRoster
                             ? `${tournament.name} (No roster file found)`
                             : tournament.name;
+                          const dateLabel =
+                            tournament.dates.start === tournament.dates.end
+                              ? tournament.dates.start
+                              : `${tournament.dates.start} \u2013 ${tournament.dates.end}`;
                           return (
                             <button
                               key={tournament.slug}
@@ -3059,9 +3105,9 @@ export default function App() {
                               disabled={disabled}
                               onClick={() => void chooseTournamentRoster(tournament)}
                             >
-                              <div className="chooserOptionTitle">{title}</div>
-                              <div className="chooserOptionSubtext">
-                                {tournament.dates.start} – {tournament.dates.end} • {tournament.timezone}
+                              <div className="chooserOptionRow">
+                                <div className="chooserOptionTitle chooserOptionTitleTruncate">{title}</div>
+                                <div className="chooserOptionDate">{dateLabel}</div>
                               </div>
                             </button>
                           );

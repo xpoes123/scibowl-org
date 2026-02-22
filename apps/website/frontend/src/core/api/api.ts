@@ -3,6 +3,29 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const STATS_BASE_URL = import.meta.env.VITE_STATS_URL || "";
 
+const buildStatsUrl = (path: string) => {
+  const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
+  const normalizedPath = path.replace(/^\/+/, "");
+  return trimmedStatsBaseUrl
+    ? `${trimmedStatsBaseUrl}/stats/${normalizedPath}`
+    : `${import.meta.env.BASE_URL}stats/${normalizedPath}`;
+};
+
+const parseJsonOrNullIfHtml = async <T,>(response: Response, label: string): Promise<T | null> => {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (contentType.includes("text/html")) return null;
+
+  const bodyText = (await response.text()).trimStart();
+  if (!bodyText) return null;
+  if (bodyText.startsWith("<")) return null;
+
+  try {
+    return JSON.parse(bodyText) as T;
+  } catch {
+    throw new Error(`Failed to parse ${label}`);
+  }
+};
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem('access_token');
   return {
@@ -206,27 +229,31 @@ export const tournamentsAPI = {
 
   getTournamentStandings: async (slug: string) => {
     const encodedSlug = encodeURIComponent(slug);
-    const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
-    const statsUrl = trimmedStatsBaseUrl
-      ? `${trimmedStatsBaseUrl}/stats/${encodedSlug}/standings.json`
-      : `${import.meta.env.BASE_URL}stats/${encodedSlug}/standings.json`;
+    const statsUrl = buildStatsUrl(`${encodedSlug}/standings.json`);
 
     const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("Failed to load standings");
-    return response.json();
+    const parsed = await parseJsonOrNullIfHtml(response, "standings");
+    if (!parsed) throw new Error("Failed to load standings");
+    return parsed;
   },
 
   getTournamentField: async (slug: string) => {
     const encodedSlug = encodeURIComponent(slug);
-    const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
-    const statsUrl = trimmedStatsBaseUrl
-      ? `${trimmedStatsBaseUrl}/stats/${encodedSlug}/field.json`
-      : `${import.meta.env.BASE_URL}stats/${encodedSlug}/field.json`;
+    const statsUrl = buildStatsUrl(`${encodedSlug}/field.json`);
 
     const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
     if (response.status === 404) return null;
     if (!response.ok) throw new Error("Failed to load field");
-    return response.json();
+    return parseJsonOrNullIfHtml(response, "field");
+  },
+
+  getRosterIndex: async () => {
+    const statsUrl = buildStatsUrl("rosters/index.json");
+    const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to load roster index");
+    return parseJsonOrNullIfHtml(response, "roster index");
   },
 
   getTournamentTeams: async (tournamentId: number) => {

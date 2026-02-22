@@ -813,6 +813,26 @@ button.addTeamButton:hover .addIcon {
   font-size: 13px;
 }
 
+.chooserOptionRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chooserOptionTitleTruncate {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chooserOptionDate {
+  color: #666;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .chooserFooter {
   margin-top: 14px;
   display: flex;
