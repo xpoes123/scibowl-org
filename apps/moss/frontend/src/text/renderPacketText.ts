@@ -149,7 +149,7 @@ export function splitRichParts(rawText: string): RichTextPart[] {
 }
 
 function renderTeXLiteScriptsToUnicode(text: string): string {
-  if (!text.includes("_{") && !text.includes("^{")) return text;
+  if (!text.includes("_") && !text.includes("^")) return text;
 
   let out = "";
   let i = 0;
@@ -165,12 +165,20 @@ function renderTeXLiteScriptsToUnicode(text: string): string {
     }
 
     const isScriptMarker = ch === "_" || ch === "^";
-    if (isScriptMarker && next === "{") {
-      const close = text.indexOf("}", i + 2);
-      if (close !== -1) {
-        const inner = text.slice(i + 2, close);
-        out += ch === "_" ? toSubscript(inner) : toSuperscript(inner);
-        i = close + 1;
+    if (isScriptMarker) {
+      if (next === "{") {
+        // Brace-enclosed: _{...} or ^{...}
+        const close = text.indexOf("}", i + 2);
+        if (close !== -1) {
+          const inner = text.slice(i + 2, close);
+          out += ch === "_" ? toSubscript(inner) : toSuperscript(inner);
+          i = close + 1;
+          continue;
+        }
+      } else if (next !== undefined && next !== " " && next !== "\n" && next !== "\t") {
+        // Bare single-char: 2^x or 2_x (outside of $...$ blocks)
+        out += ch === "_" ? toSubscript(next) : toSuperscript(next);
+        i += 2;
         continue;
       }
     }

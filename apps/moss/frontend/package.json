@@ -10,6 +10,7 @@
         "sync-stats": "node ./scripts/sync-stats.mjs",
         "dev": "npm run sync-stats && vite",
         "build": "npm run sync-stats && tsc -b && vite build",
+        "build:moss": "npm run sync-stats && tsc -b && vite build",
         "lint": "npm run sync-stats && eslint .",
         "preview": "vite preview"
     },
