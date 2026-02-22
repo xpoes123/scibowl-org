@@ -11,6 +11,9 @@ These files are generated from MoSS export JSON files by building an ephemeral l
 - `stats/<tournament_slug>/`
   - `manifest.json` - metadata about the generated artifacts (schema version, generation time, and source exports).
   - `standings.json` - team + individual standings used by the website Results tab.
+  - `field.json` - human-authored field + team rosters (used by the website Field tab and MoSS roster picker).
+- `stats/rosters/index.json`
+  - Generated index of tournaments with a `field.json` file (used by MoSS to disable tournaments without roster files).
 
 ## Generating artifacts
 
@@ -30,3 +33,12 @@ Notes:
 
 - The command always uses a temporary local SQLite database; it does not require Postgres.
 - If `stats/<tournament_slug>/` already contains generated artifacts, the command will prompt before replacing them (use `--yes` for CI).
+
+## Frontend consumption
+
+Both frontends serve these artifacts as static files under `/stats/**` by copying repo-root `stats/` into each app's `public/stats/` during build/dev:
+
+- Website: `apps/website/frontend/scripts/sync-stats.mjs`
+- MoSS: `apps/moss/frontend/scripts/sync-stats.mjs`
+
+Those `public/stats/` copies are build artifacts and should not be manually edited or committed.

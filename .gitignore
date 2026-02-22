@@ -95,6 +95,12 @@ ENV/
 # Generated copy of repo-level /stats for the website build
 apps/website/frontend/public/stats/
 
+# Generated copy of repo-level /stats for the MoSS build
+apps/moss/frontend/public/stats/
+
+# Generated tournament index derived from website tournaments.json
+apps/moss/frontend/src/assets/tournaments.json
+
 # Question data caches
 questions.json
 questions_cache/
