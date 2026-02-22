@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T23:24:44.269030Z",
+  "generated_at": "2026-02-22T23:57:54.272522Z",
   "schema_version": 1,
   "sources": [
     {
@@ -132,6 +132,39 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_MIT_Team_2__where_is_the_goal_keeper_20260222T220141Z_xfr70ws.json",
       "sha256": "55cda7bc3ae36e327a495c5de53c3e2ac5e46e15c6cf5814866ae3dda955ae14",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:50:02.676Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_CMU__MIT_Team_2_20260222T232219Z_0x1pmf9.json",
+      "sha256": "3300e538186be7ac937c26063957b1d5f289bf07a8a78b736c628de008f03dfe",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:58:27.327Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_MIT_Team_1__University_of_Alabama_Birmingham_20260222T232252Z_54xbn0f.json",
+      "sha256": "7480047f71e04baf1bc5d2f694fa4b72048d1f1326d4fe571bbdfe1ef94bb0c3",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:50:12.141Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_Quizbowlers__where_is_the_goal_keeper_20260222T232052Z_ivtecc8.json",
+      "sha256": "998f00ae31e29b97549abec78d9bb89aaeca1a4bee7a4a686c823ab9410f9520",
       "version": 2
     },
     {
