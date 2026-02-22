@@ -587,6 +587,13 @@ export default function App() {
           }
           throw new Error(`Failed to load roster index (${response.status})`);
         }
+        const contentType = response.headers.get("content-type") ?? "";
+        if (contentType.includes("text/html")) {
+          if (cancelled) return;
+          setRosterIndexSlugs(new Set());
+          setRosterIndexError("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
+          return;
+        }
         const text = await response.text();
         const parsed = parseRosterIndexJson(text);
         if (cancelled) return;
@@ -1279,6 +1286,10 @@ export default function App() {
       }
       if (!response.ok) {
         throw new Error(`Failed to load roster (${response.status})`);
+      }
+      const contentType = response.headers.get("content-type") ?? "";
+      if (contentType.includes("text/html")) {
+        throw new Error("No local stats found. Run `npm run dev` (or `npm run sync-stats`) in apps/moss/frontend.");
       }
       const text = await response.text();
       const parsed = parseFieldRosterJson(text);

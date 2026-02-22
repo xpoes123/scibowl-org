@@ -4,6 +4,9 @@
     "version": "0.0.0",
     "type": "module",
     "homepage": "https://xpoes123.github.io/scibowl-org/",
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+    },
     "scripts": {
         "sync-stats": "node ./scripts/sync-stats.mjs",
         "dev": "npm run sync-stats && vite",
