@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T18:13:07.881349Z",
+  "generated_at": "2026-02-22T18:59:01.796051Z",
   "schema_version": 1,
   "sources": [
     {
@@ -99,6 +99,39 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T172311Z_ngwd72o.json",
       "sha256": "8d018be3e78662da5b9110794b8ac212b371f6d0a4bee2f3d1ef452d97ae6817",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:50:02.296Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_CMU__University_of_Alabama_Birmingham_20260222T181247Z_kmrzwjt.json",
+      "sha256": "6db4e11c2bea30699236f6b663f4cc27022b21be7c8079dcd104db7c3c793775",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:49:53.495Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_MIT_Team_1__Quizbowlers_20260222T181515Z_gkgo9y3.json",
+      "sha256": "da5e25e0984542ed9faf8aa5cabcf6ebd42adadf5abd6c84ad0dc5c826151a2d",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:37:01.794Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_MIT_Team_2__where_is_the_goal_keeper_20260222T180610Z_9z52ar3.json",
+      "sha256": "d0d1482f9983be77f8712d8a66159e32d7f0aa95c78ddb3c8439098a35d7197a",
       "version": 2
     }
   ],
