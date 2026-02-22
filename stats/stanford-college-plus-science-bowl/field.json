@@ -7,9 +7,11 @@
     },
     "teams": [
         {
-            "name": "Untitled",
+            "name": "where is the goal keeper",
             "players": [
-                "Daniel Lu"
+                "Daniel Lu",
+                "Isaac Mammel",
+                "Adeeb Mohammed"
             ]
         },
         {
@@ -31,28 +33,28 @@
             ]
         },
         {
-            "name": "Free Agents",
+            "name": "University of Alabama Birmingham",
             "players": [
-                "Isaac Mammel",
-                "Adeeb Mohammed"
+                "Akhil Batchu",
+                "Advik Sharma",
+                "Albert Chen",
+                "Alex Prado"
             ]
         },
         {
             "name": "MIT Team #1",
             "players": [
-                "MIT Player 1",
-                "MIT Player 2",
-                "MIT Player 3",
-                "MIT Player 4"
+                "Anurag Sodhi",
+                "Yunyi Ling",
+                "Aryan Bora"
             ]
         },
         {
             "name": "MIT Team #2",
             "players": [
-                "MIT Player 5",
-                "MIT Player 6",
-                "MIT Player 7",
-                "MIT Player 8"
+                "Gideon Tzafriri",
+                "Sean Wei",
+                "Mingwen Duan"
             ]
         }
     ]
