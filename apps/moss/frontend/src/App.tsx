@@ -3082,6 +3082,10 @@ export default function App() {
                           const title = canCheckRosterAvailability && !hasRoster
                             ? `${tournament.name} (No roster file found)`
                             : tournament.name;
+                          const dateLabel =
+                            tournament.dates.start === tournament.dates.end
+                              ? tournament.dates.start
+                              : `${tournament.dates.start} \u2013 ${tournament.dates.end}`;
                           return (
                             <button
                               key={tournament.slug}
@@ -3090,9 +3094,9 @@ export default function App() {
                               disabled={disabled}
                               onClick={() => void chooseTournamentRoster(tournament)}
                             >
-                              <div className="chooserOptionTitle">{title}</div>
-                              <div className="chooserOptionSubtext">
-                                {tournament.dates.start} – {tournament.dates.end} • {tournament.timezone}
+                              <div className="chooserOptionRow">
+                                <div className="chooserOptionTitle chooserOptionTitleTruncate">{title}</div>
+                                <div className="chooserOptionDate">{dateLabel}</div>
                               </div>
                             </button>
                           );
