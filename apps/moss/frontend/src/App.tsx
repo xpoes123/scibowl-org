@@ -1170,7 +1170,7 @@ export default function App() {
         .sort((x, y) => x.localeCompare(y))
         .join("__");
       a.href = url;
-      a.download = `${SCORESHEET_EXPORT_FORMAT}_${tournamentPart}_${packetPart}_${teamsPart}_${derivedSnapshotMeta.game_instance_id}.json`;
+      a.download = `${tournamentPart}_${packetPart}_${teamsPart}_${derivedSnapshotMeta.game_instance_id}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();
