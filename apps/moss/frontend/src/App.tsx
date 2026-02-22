@@ -2055,6 +2055,20 @@ export default function App() {
           }
         }
       }
+      const importedEventsForState: ScoresheetEvent[] = importedEventLog.filter((ev) => {
+        if (ev.type === "marker.set") {
+          const payload = ev.payload as Record<string, unknown>;
+          const boundary = Number(payload.boundary_before_question);
+          const kind = payload.kind;
+          return Number.isFinite(boundary) && (kind === "HALFTIME" || kind === "BREAK");
+        }
+        if (ev.type === "marker.removed") {
+          const payload = ev.payload as Record<string, unknown>;
+          const boundary = Number(payload.boundary_before_question);
+          return Number.isFinite(boundary);
+        }
+        return false;
+      });
 
       setPacket(loadedPacket);
       setGame({ teams: importedTeams });
@@ -2074,11 +2088,9 @@ export default function App() {
       const baseState = initialScoresheetState();
       baseState.pairIndex = clampedPairIdx;
       baseState.lineupsByTeamId = importedLineupsByTeamId;
-      if (!importedEventLog.length) {
-        baseState.attemptsByQuestionId = importedAttempts;
-      }
+      baseState.attemptsByQuestionId = importedAttempts;
       setScoresheetBaseState(baseState);
-      setScoresheetEvents(importedEventLog.length ? importedEventLog : []);
+      setScoresheetEvents(importedEventsForState);
       setAttemptEditor(null);
       setLastActor(null);
       setScoresheetBoundaryPopup(null);
