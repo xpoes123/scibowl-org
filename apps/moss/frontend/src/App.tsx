@@ -217,13 +217,13 @@ function formatCorrectAnswer(q: Question): string {
 type TextSegment = { kind: "word" | "sep"; text: string };
 
 function tokenizeText(text: string): TextSegment[] {
-  const splitRe = /(\s+|[\p{Pd}\u2212\u00AD]+)/gu;
+  const splitRe = /(\s+|[\p{Pd}\u00AD]+)/gu;
   const parts = text.split(splitRe).filter((p) => p !== "");
 
   return parts
     .map((part) => {
       if (/^\s+$/.test(part)) return { kind: "sep" as const, text: " " };
-      if (/^[\p{Pd}\u2212\u00AD]+$/u.test(part)) return { kind: "sep" as const, text: part.replaceAll("\u00AD", "") };
+      if (/^[\p{Pd}\u00AD]+$/u.test(part)) return { kind: "sep" as const, text: part.replaceAll("\u00AD", "") };
       return { kind: "word" as const, text: part };
     })
     .filter((p) => p.text !== "");
