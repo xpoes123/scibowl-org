@@ -272,6 +272,56 @@ function safeFilenamePart(value: string): string {
     .slice(0, 80) || "export";
 }
 
+type SnapshotMeta = {
+  tournament_slug: string | null;
+  packet_year: number;
+  packet_name: string;
+  team_a: string;
+  team_b: string;
+  game_instance_id: string;
+};
+
+function makeGameInstanceId(now: Date = new Date()): string {
+  const iso = now.toISOString(); // e.g. 2026-02-22T19:30:45.123Z
+  const stamp = iso.replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z"); // 20260222T193045Z
+
+  const rand7 = (() => {
+    const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+    if ("crypto" in window && "getRandomValues" in crypto) {
+      const bytes = new Uint8Array(7);
+      crypto.getRandomValues(bytes);
+      return [...bytes].map((b) => alphabet[b % alphabet.length]).join("");
+    }
+    return Math.random().toString(36).slice(2, 9).padEnd(7, "0").slice(0, 7);
+  })();
+
+  return `${stamp}_${rand7}`;
+}
+
+function parseSnapshotMeta(value: unknown): SnapshotMeta | null {
+  if (!value || typeof value !== "object") return null;
+  const rec = value as Record<string, unknown>;
+
+  const tournamentSlugRaw = rec.tournament_slug;
+  const tournament_slug =
+    tournamentSlugRaw === undefined || tournamentSlugRaw === null
+      ? null
+      : typeof tournamentSlugRaw === "string" && tournamentSlugRaw.trim()
+        ? tournamentSlugRaw.trim()
+        : null;
+
+  const packet_year = typeof rec.packet_year === "number" && Number.isFinite(rec.packet_year) ? Math.trunc(rec.packet_year) : NaN;
+  const packet_name = typeof rec.packet_name === "string" ? rec.packet_name.trim() : "";
+  const team_a = typeof rec.team_a === "string" ? rec.team_a.trim() : "";
+  const team_b = typeof rec.team_b === "string" ? rec.team_b.trim() : "";
+  const game_instance_id = typeof rec.game_instance_id === "string" ? rec.game_instance_id.trim() : "";
+
+  if (!Number.isFinite(packet_year)) return null;
+  if (!packet_name || !team_a || !team_b || !game_instance_id) return null;
+
+  return { tournament_slug, packet_year, packet_name, team_a, team_b, game_instance_id };
+}
+
 function pointsForAttempt(attempt: Attempt | undefined, questionType: QuestionType | undefined): number | undefined {
   if (!attempt?.result) return undefined;
   if (questionType === "BONUS") return attempt.result === "correct" ? 10 : 0;
@@ -490,6 +540,7 @@ export default function App() {
   const questions = useMemo(() => data.questions ?? [], [data.questions]);
   const questionsById = useMemo(() => new Map(questions.map((qq) => [qq.id, qq])), [questions]);
   const [game, setGame] = useState<Game | null>(null);
+  const [snapshotMeta, setSnapshotMeta] = useState<SnapshotMeta | null>(null);
   const [lastExport, setLastExport] = useState<{ atEnd: boolean; lastSeq: number; exportedAtIso: string } | null>(null);
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
@@ -559,6 +610,7 @@ export default function App() {
 
   useEffect(() => {
     setLastExport(null);
+    if (!game) setSnapshotMeta(null);
   }, [game]);
 
   useEffect(() => {
@@ -1049,6 +1101,7 @@ export default function App() {
         format: SCORESHEET_EXPORT_FORMAT,
         version: SCORESHEET_EXPORT_VERSION,
         exported_at: exportedAt,
+        ...(snapshotMeta ? { snapshot_meta: snapshotMeta } : {}),
         packet: {
           packet: data.packet,
           year: data.year,
@@ -1097,10 +1150,27 @@ export default function App() {
       const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const packetPart = safeFilenamePart(`${data.year}_${data.packet}`);
-      const timePart = exportedAt.replace(/[:.]/g, "-");
+      const derivedSnapshotMeta: SnapshotMeta = (() => {
+        if (snapshotMeta) return snapshotMeta;
+        const names = game.teams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
+        const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
+        return {
+          tournament_slug: null,
+          packet_year: data.year,
+          packet_name: data.packet,
+          team_a: team_a ?? "TeamA",
+          team_b: team_b ?? "TeamB",
+          game_instance_id: makeGameInstanceId(),
+        };
+      })();
+      const tournamentPart = safeFilenamePart(derivedSnapshotMeta.tournament_slug ?? "custom");
+      const packetPart = safeFilenamePart(`${derivedSnapshotMeta.packet_year}_${derivedSnapshotMeta.packet_name}`);
+      const teamsPart = [derivedSnapshotMeta.team_a, derivedSnapshotMeta.team_b]
+        .map(safeFilenamePart)
+        .sort((x, y) => x.localeCompare(y))
+        .join("__");
       a.href = url;
-      a.download = `${SCORESHEET_EXPORT_FORMAT}_${packetPart}_${checksum.slice(0, 8)}_${timePart}.json`;
+      a.download = `${SCORESHEET_EXPORT_FORMAT}_${tournamentPart}_${packetPart}_${teamsPart}_${derivedSnapshotMeta.game_instance_id}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -1466,6 +1536,18 @@ export default function App() {
     if (!canStartNewGame || !draftPacketChoice) return;
     const initialEvents: ScoresheetEvent[] = [];
     const resolvedTeamsForCache: ResolvedRosterTeam[] = [];
+    const nextSnapshotMeta: SnapshotMeta = (() => {
+      const names = draftTeams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
+      const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
+      return {
+        tournament_slug: draftRosterChoice.kind === "tournament" ? draftRosterChoice.tournamentSlug : null,
+        packet_year: draftPacketChoice.packet.year,
+        packet_name: draftPacketChoice.packet.packet,
+        team_a: team_a ?? "TeamA",
+        team_b: team_b ?? "TeamB",
+        game_instance_id: makeGameInstanceId(),
+      };
+    })();
     const teams: Team[] = draftTeams.map((t) => {
       const teamName = t.name.trim();
       const roster = t.players
@@ -1489,6 +1571,7 @@ export default function App() {
     saveRosterToCache(resolvedTeamsForCache);
     setPacket(draftPacketChoice.packet);
     setGame({ teams });
+    setSnapshotMeta(nextSnapshotMeta);
     const baseState = initialScoresheetState();
     setScoresheetBaseState(baseState);
     setScoresheetEvents(initialEvents.map((event, idx) => ({ ...event, seq: idx + 1 })));
@@ -1566,6 +1649,7 @@ export default function App() {
       if (obj.version !== 1 && obj.version !== SCORESHEET_EXPORT_VERSION) {
         throw new Error(`Unsupported version: ${String(obj.version)}`);
       }
+      const importedSnapshotMeta = parseSnapshotMeta(obj.snapshot_meta);
 
       const packetObj = obj.packet;
       const loadedPacket = parsePacketJson(JSON.stringify(packetObj));
@@ -1854,6 +1938,19 @@ export default function App() {
 
       setPacket(loadedPacket);
       setGame({ teams: importedTeams });
+      setSnapshotMeta((() => {
+        if (importedSnapshotMeta) return importedSnapshotMeta;
+        const names = importedTeams.map((t) => t.name.trim()).filter(Boolean).slice(0, 2);
+        const [team_a, team_b] = [...names].sort((x, y) => x.localeCompare(y));
+        return {
+          tournament_slug: null,
+          packet_year: loadedPacket.year,
+          packet_name: loadedPacket.packet,
+          team_a: team_a ?? "TeamA",
+          team_b: team_b ?? "TeamB",
+          game_instance_id: makeGameInstanceId(),
+        };
+      })());
       const baseState = initialScoresheetState();
       baseState.pairIndex = clampedPairIdx;
       baseState.lineupsByTeamId = importedLineupsByTeamId;
