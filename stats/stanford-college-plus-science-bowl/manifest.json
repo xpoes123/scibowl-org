@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-22T23:57:54.272522Z",
+  "generated_at": "2026-02-23T00:43:44.492922Z",
   "schema_version": 1,
   "sources": [
     {
@@ -165,6 +165,17 @@
       },
       "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_Quizbowlers__where_is_the_goal_keeper_20260222T232052Z_ivtecc8.json",
       "sha256": "998f00ae31e29b97549abec78d9bb89aaeca1a4bee7a4a686c823ab9410f9520",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-23T00:34:36.600Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "4563d95967ec0f8015b1f600faf306772abfe930ae707059e88472870c76ed3b"
+      },
+      "path": "C:\\Users\\pikaa\\Documents\\SCSBT\\Scoresheets\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_8_MIT_Team_1__MIT_Team_2_20260223T000359Z_66okq54.json",
+      "sha256": "e2498008b3de3def2db2623d60e4f75474cf42d8a20d8c088269483ce6a1fe4f",
       "version": 2
     },
     {
