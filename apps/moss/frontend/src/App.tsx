@@ -3937,7 +3937,7 @@ function ModeratorApp() {
                       <div className="questionBlurTitle">Ensure no players can see this screen.</div>
                       <div className="questionBlurSubtitle">Hold to reveal questions when ready to begin.</div>
                       <HoldToConfirmButton holdMs={1000} onConfirm={() => setIsQuestionBlurred(false)}>
-                        Hold 1s to reveal
+                        Open Packet
                       </HoldToConfirmButton>
                     </div>
                   </div>
