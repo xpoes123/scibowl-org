@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-02-24T19:46:40.971962Z",
+  "schema_version": 1,
+  "sources": [
+    {
+      "exported_at": "2026-02-22T13:45:42.309Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "90027ac92c55995b778fd5005cfa17881869e6c4a2b8db622883e3151460b509"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2025_Round_1_Quizbowlers__where_is_the_goal_keeper_20260222T134412Z_cj5lzyn.json",
+      "sha256": "2b667ae2a20c44e3841ada37a4f3ec173a8bd954ae9538aee26b065792f76b64",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:00:48.726Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_CMU__MIT_Team_1_20260222T203012Z_4ly09hj.json",
+      "sha256": "1bace1dd8781bb60c9df9baea83ad4f9a82e1cc5a8155eef51ae790b560a61f6",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T20:56:31.540Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_MIT_Team_2__Quizbowlers_20260222T202740Z_6xgnw6y.json",
+      "sha256": "6f2d2eb886d0409829ee59d89e0af2a206ac09dc907c3f05e65c6d984fb1ae26",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:10:01.833Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_1_University_of_Alabama_Birmingham__where_is_the_goal_keeper_20260222T202510Z_sy25jed.json",
+      "sha256": "b4981194f5d6627315ebaf7ba379ebd759d8c371e86b2765ad5f7cc1f5ab36a2",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:56:41.188Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_CMU__Quizbowlers_20260222T211207Z_8xgb8af.json",
+      "sha256": "0158e4fafa1e21e7383b0c693089774372ba45f68df9c986f62996a7fef9483e",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:46:22.017Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_MIT_Team_1__where_is_the_goal_keeper_20260222T211239Z_vqj6a3t.json",
+      "sha256": "75d7fe9cf9ddb2c96e9e01a1011a0ec644fddb6707ea98a9fad67f874ec57a7f",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T21:48:28.291Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_2_MIT_Team_2__University_of_Alabama_Birmingham_20260222T210834Z_nm94h1r.json",
+      "sha256": "04154ac344245ff652ceb3aa7a131a28257fc1f292878f3c33f3504e598a935d",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:21:03.902Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_CMU__where_is_the_goal_keeper_20260222T215300Z_d1om604.json",
+      "sha256": "c2d037d886978cfbf01fdb83e35eade5c8949783b8b0becd03bef1a3403cc18b",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:24:48.998Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_MIT_Team_1__MIT_Team_2_20260222T215428Z_pck9v1n.json",
+      "sha256": "1b389c01ea4119c9cda7cce489a098facef2eb12ba545d69467c9c99472d5577",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T22:34:20.954Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T215619Z_w7wowaz.json",
+      "sha256": "e45a2ab52396fce706c5d5fffa21e3b658b82dbeef4738699d43fddc9e680c2e",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:18:21.829Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_CMU__University_of_Alabama_Birmingham_20260222T223958Z_4iu94to.json",
+      "sha256": "60226a2e8eace4711a20062e41ab970edf0f05e818e576de0c71591a52234617",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:12:58.224Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_MIT_Team_1__Quizbowlers_20260222T223746Z_2r20oly.json",
+      "sha256": "580f2472e33465ee970357c3e91a9b4ff52b6bfc946743b69dd9c176987b24c9",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:20:05.205Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_4_MIT_Team_2__where_is_the_goal_keeper_20260222T220141Z_xfr70ws.json",
+      "sha256": "55cda7bc3ae36e327a495c5de53c3e2ac5e46e15c6cf5814866ae3dda955ae14",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:50:02.676Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_CMU__MIT_Team_2_20260222T232219Z_0x1pmf9.json",
+      "sha256": "3300e538186be7ac937c26063957b1d5f289bf07a8a78b736c628de008f03dfe",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:58:27.327Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_MIT_Team_1__University_of_Alabama_Birmingham_20260222T232252Z_54xbn0f.json",
+      "sha256": "7480047f71e04baf1bc5d2f694fa4b72048d1f1326d4fe571bbdfe1ef94bb0c3",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T23:50:12.141Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_6_Quizbowlers__where_is_the_goal_keeper_20260222T232052Z_ivtecc8.json",
+      "sha256": "998f00ae31e29b97549abec78d9bb89aaeca1a4bee7a4a686c823ab9410f9520",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-23T00:34:36.600Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "4563d95967ec0f8015b1f600faf306772abfe930ae707059e88472870c76ed3b"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_DOUBLE_ELIM_8_MIT_Team_1__MIT_Team_2_20260223T000359Z_66okq54.json",
+      "sha256": "e2498008b3de3def2db2623d60e4f75474cf42d8a20d8c088269483ce6a1fe4f",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T16:35:23.098Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_CMU__MIT_Team_1_20260222T160914Z_ayw12rx.json",
+      "sha256": "7df8ec1291e977bbed86c3dd94a36ff714798772a4cbb723074c51fbb63cf35f",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T16:49:58.540Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_MIT_Team_2__Quizbowlers_20260222T160556Z_r4ootoj.json",
+      "sha256": "08c7a3cd4b31e768476f122d18d53cf0627feef7d38bf820f203e9c2d119ca00",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T16:30:13.005Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_1_University_of_Alabama_Birmingham__where_is_the_goal_keeper_20260222T160027Z_inqppe4.json",
+      "sha256": "7f23977eaaafc6bb513558672926727efa68d68b62889d48d544bb70fd195533",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:22:24.901Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_CMU__Quizbowlers_20260222T165310Z_5l3sueo.json",
+      "sha256": "99bd381d4007d1528b2a71ea7904cc972e70fd76fcc0f72a3a28bcfea585233b",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:19:23.092Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_MIT_Team_1__where_is_the_goal_keeper_20260222T164006Z_ewpo61j.json",
+      "sha256": "cb9a936717419c64b5ad9a4affc8faa89c91d92300b3977677f6dc0b23478552",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:23:33.709Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_2_MIT_Team_2__University_of_Alabama_Birmingham_20260222T165435Z_n8320h0.json",
+      "sha256": "e3b2f6bf782374cd84263702144883a59a30578529bc3dac4db50b605f58183b",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:08:15.632Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_CMU__where_is_the_goal_keeper_20260222T172858Z_u73ksbm.json",
+      "sha256": "3020670a4208fa5e2b0bffad50f691c53ea648013cd9a319c6d7ae9ad0fb43e5",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T17:55:44.851Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_MIT_Team_1__MIT_Team_2_20260222T172825Z_vxum09f.json",
+      "sha256": "a578c6dda995f78fd460165163322a12bbb28236f6f723fa04ede0aa187db3f9",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:08:47.451Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_3_Quizbowlers__University_of_Alabama_Birmingham_20260222T172311Z_ngwd72o (1).json",
+      "sha256": "8d018be3e78662da5b9110794b8ac212b371f6d0a4bee2f3d1ef452d97ae6817",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:50:02.296Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_CMU__University_of_Alabama_Birmingham_20260222T181247Z_kmrzwjt.json",
+      "sha256": "6db4e11c2bea30699236f6b663f4cc27022b21be7c8079dcd104db7c3c793775",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:49:53.495Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_MIT_Team_1__Quizbowlers_20260222T181515Z_gkgo9y3.json",
+      "sha256": "2548fb74ae06ef8265c17e20791fa8672c43abf662f8d89718e638b509d2caee",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T18:37:01.794Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_4_MIT_Team_2__where_is_the_goal_keeper_20260222T180610Z_9z52ar3.json",
+      "sha256": "6a24f0a2a71fd2b5c54f656d012b480e2fbca0d207d9587b78f55e15be8365d7",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T19:24:49.306Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "4e77344bcbe41764af50f95936b6a977c655d7001328d6239ae8ca62aece73e2"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_5_CMU__MIT_Team_2_20260222T185510Z_qex3p37.json",
+      "sha256": "05d81ed3e765cc60032b55448036b265475796c050757e30d7b73cc19ebfac08",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T19:26:44.553Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "4e77344bcbe41764af50f95936b6a977c655d7001328d6239ae8ca62aece73e2"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_5_MIT_Team_1__University_of_Alabama_Birmingham_20260222T185531Z_3zrwbbz.json",
+      "sha256": "37517b1ab6016ef43cb50dfb31d24b7a27d0d5b356efbabe0814c7d617660b95",
+      "version": 2
+    },
+    {
+      "exported_at": "2026-02-22T19:27:31.157Z",
+      "packet_checksum": {
+        "algorithm": "sha256",
+        "canonicalization": "json_sorted_keys_utf8_no_ws",
+        "value": "4e77344bcbe41764af50f95936b6a977c655d7001328d6239ae8ca62aece73e2"
+      },
+      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2026_ROUND_ROBIN_5_Quizbowlers__where_is_the_goal_keeper_20260222T185531Z_f6gvraf.json",
+      "sha256": "abd5c21f78996b2f0e0f39ee5dd8943d4149595337b86fc511664710cb35dbe6",
+      "version": 2
+    }
+  ],
+  "tournament": {
+    "name": "stanford-college-plus-science-bowl",
+    "slug": "stanford-college-plus-science-bowl"
+  },
+  "views": {
+    "standings": "standings.json"
+  }
+}
