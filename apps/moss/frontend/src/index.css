@@ -220,8 +220,8 @@ code {
 .layout {
   width: min(1800px, 100%);
   display: grid;
-  grid-template-columns: 1fr 480px;
-  gap: 18px;
+  grid-template-columns: minmax(560px, 1fr) 18px minmax(420px, var(--scoresheetColWidth, 480px));
+  gap: 0;
   align-items: start;
   margin: 24px auto;
 }
@@ -229,7 +229,39 @@ code {
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
+    row-gap: 18px;
   }
+
+  .layoutResizer {
+    display: none;
+  }
+}
+
+.layoutResizer {
+  width: 18px;
+  height: 100%;
+  cursor: col-resize;
+  position: relative;
+  touch-action: none;
+}
+
+.layoutResizer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: transparent;
+  border-radius: 999px;
+  transition: background 120ms ease, box-shadow 120ms ease;
+}
+
+.layoutResizer:hover::before,
+.layoutResizing .layoutResizer::before {
+  background: #e6e7ee;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 .card {

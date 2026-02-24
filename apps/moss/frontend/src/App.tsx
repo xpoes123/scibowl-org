@@ -24,6 +24,7 @@ import {
   type ScoreboardDisplayMessage,
 } from "./scoreboard/scoreboardChannel";
 import HoldToConfirmButton from "./ui/HoldToConfirmButton";
+import useResizableRightColumn from "./ui/useResizableRightColumn";
 import type {
   Attempt,
   AttemptLocation,
@@ -1602,6 +1603,19 @@ function ModeratorApp() {
     }
     return new Map(entries);
   }, [teams]);
+
+  const {
+    layoutRef: mainLayoutRef,
+    layoutStyle: mainLayoutStyle,
+    isResizing: isMainLayoutResizing,
+    resizerProps: mainLayoutResizerProps,
+  } = useResizableRightColumn({
+    storageKey: "moss_layout_scoresheet_width_px",
+    defaultRightPx: 480,
+    minLeftPx: 560,
+    minRightPx: 420,
+    gapPx: 18,
+  });
 
   const moderatorHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
   const { wrapRef: moderatorScoresheetWrapRef, wrapStyle: moderatorScoresheetWrapStyle } =
@@ -3892,7 +3906,11 @@ function ModeratorApp() {
     <div className="sbAppFrame">
       <MossTopNav />
       <div className="page">
-        <div className="layout">
+        <div
+          ref={mainLayoutRef}
+          className={["layout", isMainLayoutResizing ? "layoutResizing" : ""].filter(Boolean).join(" ")}
+          style={mainLayoutStyle}
+        >
           <div className="questionPane">
             <div className="card">
               <div className="header">
@@ -3952,6 +3970,8 @@ function ModeratorApp() {
               </>
             )}
           </div>
+
+          <div className="layoutResizer" {...mainLayoutResizerProps} aria-label="Resize panels" />
 
           <div className="card scoresheetCard" aria-label="Scoresheet">
             <div className="header">
