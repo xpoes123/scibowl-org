@@ -1368,6 +1368,21 @@ button.word.wordBold {
   vertical-align: top;
 }
 
+.scoresheetTable thead tr:first-child th:first-child {
+  border-right: 1px solid #eee;
+}
+
+.scoresheetTable thead tr:first-child th:nth-child(2) {
+  border-right: 1px solid #eee;
+}
+
+.scoresheetTable thead tr:nth-child(2) th:nth-child(1),
+.scoresheetTable thead tr:nth-child(2) th:nth-child(4),
+.scoresheetTable tbody td:nth-child(1),
+.scoresheetTable tbody td:nth-child(4) {
+  border-right: 1px solid #eee;
+}
+
 .scoresheetTable th {
   background: white;
   text-align: left;
