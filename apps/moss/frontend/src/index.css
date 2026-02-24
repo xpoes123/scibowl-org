@@ -1437,6 +1437,10 @@ button.word.wordBold {
   font-variant-numeric: tabular-nums;
 }
 
+.scoresheetCard .pill {
+  font-size: 14px;
+}
+
 .scoresheetPairCell {
   font-weight: 600;
   white-space: nowrap;
