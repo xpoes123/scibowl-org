@@ -23,6 +23,7 @@ import {
   safePostScoreboardMessage,
   type ScoreboardDisplayMessage,
 } from "./scoreboard/scoreboardChannel";
+import HoldToConfirmButton from "./ui/HoldToConfirmButton";
 import type {
   Attempt,
   AttemptLocation,
@@ -855,6 +856,7 @@ function ModeratorApp() {
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
+  const [isQuestionBlurred, setIsQuestionBlurred] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
   const [loadGameError, setLoadGameError] = useState<string | null>(null);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
@@ -917,6 +919,14 @@ function ModeratorApp() {
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
   const isScoresheetExported = !!lastExport && lastExport.atEnd && lastExport.lastSeq === scoresheetState.lastSeq;
+
+  useEffect(() => {
+    if (!game) {
+      setIsQuestionBlurred(false);
+      return;
+    }
+    setIsQuestionBlurred(true);
+  }, [game]);
 
   useEffect(() => {
     setLastExport(null);
@@ -3841,13 +3851,26 @@ function ModeratorApp() {
                 </div>
               </div>
 
-              <div className="questionBlock">
-                {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
-                {bonusQ && (
-                  <>
-                    <div className="qaDivider" />
-                    {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
-                  </>
+              <div className="questionBlurWrap">
+                <div className={["questionBlock", isQuestionBlurred ? "questionBlockBlurred" : ""].filter(Boolean).join(" ")}>
+                  {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
+                  {bonusQ && (
+                    <>
+                      <div className="qaDivider" />
+                      {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
+                    </>
+                  )}
+                </div>
+                {isQuestionBlurred && (
+                  <div className="questionBlurOverlay" role="dialog" aria-label="Question text hidden">
+                    <div className="questionBlurOverlayInner">
+                      <div className="questionBlurTitle">Ensure no players can see this screen.</div>
+                      <div className="questionBlurSubtitle">Hold to reveal questions when ready to begin.</div>
+                      <HoldToConfirmButton holdMs={1000} onConfirm={() => setIsQuestionBlurred(false)}>
+                        Hold 1s to reveal
+                      </HoldToConfirmButton>
+                    </div>
+                  </div>
                 )}
               </div>
 

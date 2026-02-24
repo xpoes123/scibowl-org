@@ -878,6 +878,66 @@ button.addTeamButton:hover .addIcon {
   border-top: 1px solid #eee;
 }
 
+.questionBlurWrap {
+  position: relative;
+  display: flow-root;
+}
+
+.questionBlockBlurred {
+  filter: blur(14px);
+}
+
+.questionBlurOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.questionBlurOverlayInner {
+  width: min(520px, 100%);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #e6e7ee;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.questionBlurTitle {
+  font-weight: 700;
+}
+
+.questionBlurSubtitle {
+  margin-top: 6px;
+  color: #444;
+  font-size: 14px;
+}
+
+.holdConfirmButton {
+  margin-top: 12px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.holdConfirmButton::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--hold-progress, 0) * 100%);
+  background: rgba(124, 153, 255, 0.25);
+  pointer-events: none;
+}
+
+.holdConfirmButtonLabel {
+  position: relative;
+}
+
 .questionPane {
   width: 100%;
   display: flex;
