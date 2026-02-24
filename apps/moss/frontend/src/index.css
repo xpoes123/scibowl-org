@@ -1353,6 +1353,27 @@ button.word.wordBold {
   cursor: pointer;
 }
 
+.scoreboardDisplayRoot {
+  min-height: 100vh;
+  width: min(1800px, 100%);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.scoreboardDisplayRoot .scoresheetTableWrap {
+  max-height: calc(100vh - 110px);
+}
+
+.pairLinkDisplay {
+  font: inherit;
+  color: inherit;
+}
+
+.scoresheetAttemptCellDisplay {
+  display: block;
+  padding: 10px 10px;
+}
+
 .pairLink:focus-visible {
   outline: 2px solid #cdd4ff;
   outline-offset: 2px;
