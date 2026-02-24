@@ -248,17 +248,17 @@
       "tossups_heard": 245
     },
     {
-      "-4s": 2,
-      "0s": 132,
-      "4s": 4,
-      "games_played": 6,
+      "-4s": 4,
+      "0s": 151,
+      "4s": 6,
+      "games_played": 7,
       "name": "Saahil Dugar",
       "player_id": 20,
-      "points_per_game": 1.3333333333333333,
+      "points_per_game": 1.1428571428571428,
       "rank": 20,
       "team": "where is the goal keeper",
       "tossup_points": 8,
-      "tossups_heard": 138
+      "tossups_heard": 161
     },
     {
       "-4s": 2,
@@ -287,19 +287,6 @@
       "tossups_heard": 199
     },
     {
-      "-4s": 2,
-      "0s": 19,
-      "4s": 2,
-      "games_played": 1,
-      "name": "Sahil Dugar",
-      "player_id": 25,
-      "points_per_game": 0.0,
-      "rank": 23,
-      "team": "where is the goal keeper",
-      "tossup_points": 0,
-      "tossups_heard": 23
-    },
-    {
       "-4s": 0,
       "0s": 184,
       "4s": 0,
@@ -307,7 +294,7 @@
       "name": "Alex Prado",
       "player_id": 24,
       "points_per_game": 0.0,
-      "rank": 24,
+      "rank": 23,
       "team": "University of Alabama Birmingham",
       "tossup_points": 0,
       "tossups_heard": 184
@@ -320,7 +307,7 @@
       "name": "Mingwen Duan",
       "player_id": 10,
       "points_per_game": -0.4,
-      "rank": 25,
+      "rank": 24,
       "team": "MIT Team #1",
       "tossup_points": -4,
       "tossups_heard": 230
