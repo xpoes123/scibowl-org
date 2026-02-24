@@ -1,18 +1,29 @@
 {
-  "format": "moss_field_roster",
-  "version": 1,
-  "tournament": {
-    "slug": "pilot-scrimmage",
-    "name": "Pilot Scrimmage"
-  },
-  "teams": [
-    {
-      "name": "noho a",
-      "players": ["suzuko", "charles", "minghao", "connor zhao", "connor chang"]
+    "format": "moss_field_roster",
+    "version": 1,
+    "tournament": {
+        "slug": "pilot-scrimmage",
+        "name": "Pilot Scrimmage"
     },
-    {
-      "name": "noho b",
-      "players": ["jake", "ken", "nathaniel", "patrick"]
-    }
-  ]
+    "teams": [
+        {
+            "name": "Noho A",
+            "players": [
+                "Suzuko",
+                "Charles",
+                "Minghao",
+                "Connor Zhao",
+                "Connor Chang"
+            ]
+        },
+        {
+            "name": "Noho B",
+            "players": [
+                "Jake",
+                "Ken",
+                "Nathaniel",
+                "Patrick"
+            ]
+        }
+    ]
 }

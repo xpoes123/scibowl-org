@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -17,6 +17,14 @@ import {
   reduceScoresheetEvents,
   type ScoresheetState,
 } from "./domain/scoresheetReducer";
+import {
+  SCOREBOARD_CHANNEL_NAME,
+  makeScoreboardClientId,
+  safePostScoreboardMessage,
+  type ScoreboardDisplayMessage,
+} from "./scoreboard/scoreboardChannel";
+import HoldToConfirmButton from "./ui/HoldToConfirmButton";
+import useResizableRightColumn from "./ui/useResizableRightColumn";
 import type {
   Attempt,
   AttemptLocation,
@@ -26,6 +34,14 @@ import type {
 
 type QuestionType = "TOSSUP" | "BONUS";
 type QuestionStyle = "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "IDENTIFY_ALL" | "RANK";
+
+type DisplayMode = "scoreboard" | null;
+
+function getDisplayModeFromLocation(): DisplayMode {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("display");
+  return raw === "scoreboard" ? "scoreboard" : null;
+}
 
 const END_TOKEN = "END" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
@@ -65,6 +81,86 @@ function isSameLocation(a: AttemptLocation, b: AttemptLocation): boolean {
   if (a.kind === "option" && b.kind === "option") return a.optionIndex === b.optionIndex && a.wordIndex === b.wordIndex;
   return false;
 }
+
+function formatAttemptCellText(
+  attemptValue: Attempt | undefined,
+  questionType: QuestionType | undefined,
+  playersById: Map<string, string>
+): string {
+  if (!attemptValue?.result) return "";
+  const points = pointsForAttempt(attemptValue, questionType);
+  const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
+  if (questionType === "BONUS") return pointsLabel;
+  const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
+  const who = player ? ` (${player})` : "";
+  const tokenLabel = attemptValue.isEnd ? END_TOKEN : attemptValue.token;
+  return `${pointsLabel} @ ${tokenLabel}${who}`;
+}
+
+function useScoresheetStickyHeaderOffsets(headerKey: string): {
+  wrapRef: React.RefObject<HTMLDivElement | null>;
+  wrapStyle: CSSProperties | undefined;
+} {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [headerHeightsPx, setHeaderHeightsPx] = useState<{ row1: number; row2: number } | null>(null);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const row1 = wrap.querySelector("thead tr:first-child") as HTMLElement | null;
+    const row2 = wrap.querySelector("thead tr:nth-child(2)") as HTMLElement | null;
+    if (!row1 || !row2) return;
+
+    const update = () => {
+      const raw1 = row1.getBoundingClientRect().height;
+      const raw2 = row2.getBoundingClientRect().height;
+      const next1 = Math.max(0, Math.round(raw1 * 10) / 10);
+      const next2 = Math.max(0, Math.round(raw2 * 10) / 10);
+      setHeaderHeightsPx((prev) => {
+        if (!prev) return { row1: next1, row2: next2 };
+        const same1 = Math.abs(prev.row1 - next1) < 0.05;
+        const same2 = Math.abs(prev.row2 - next2) < 0.05;
+        if (same1 && same2) return prev;
+        return { row1: same1 ? prev.row1 : next1, row2: same2 ? prev.row2 : next2 };
+      });
+    };
+
+    update();
+    const ro = new ResizeObserver(() => update());
+    ro.observe(row1);
+    ro.observe(row2);
+    window.addEventListener("resize", update);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [headerKey]);
+
+  const wrapStyle = useMemo(() => {
+    if (!headerHeightsPx) return undefined;
+    return {
+      ["--scoresheetHeaderRow1Height" as string]: `${headerHeightsPx.row1}px`,
+      ["--scoresheetHeaderRow2Height" as string]: `${headerHeightsPx.row2}px`,
+    } as CSSProperties;
+  }, [headerHeightsPx]);
+
+  return { wrapRef, wrapStyle };
+}
+
+type ScoreboardSnapshotV1 = {
+  format: "moss_scoreboard_snapshot";
+  version: 1;
+  session_id: string | null;
+  packet: Packet;
+  game: Game | null;
+  scoresheet_base_state: ScoresheetState;
+  scoresheet_events: ScoresheetEvent[];
+  created_at_ms: number;
+};
+
+type ScoreboardDisplayMessageV1 = ScoreboardDisplayMessage<ScoreboardSnapshotV1>;
 
 type Packet = {
   packet: string;
@@ -532,7 +628,264 @@ function MossTopNav() {
   );
 }
 
-export default function App() {
+function ScoreboardDisplayApp() {
+  const [snapshot, setSnapshot] = useState<ScoreboardSnapshotV1 | null>(null);
+  const [channelError, setChannelError] = useState<string | null>(null);
+  const emptyScoresheetBaseState = useMemo(() => initialScoresheetState(), []);
+
+  useEffect(() => {
+    document.title = "MoSS — Scoreboard";
+  }, []);
+
+  useEffect(() => {
+    if (!("BroadcastChannel" in window)) {
+      setChannelError("This browser does not support BroadcastChannel. Try Chrome/Edge/Firefox.");
+      return;
+    }
+
+    const clientId = makeScoreboardClientId();
+
+    const bc = new BroadcastChannel(SCOREBOARD_CHANNEL_NAME);
+    bc.onmessage = (ev: MessageEvent) => {
+      const data = ev.data as unknown;
+      if (!data || typeof data !== "object") return;
+      const msg = data as Partial<ScoreboardDisplayMessageV1>;
+      if (msg.kind !== "moss.scoreboard.snapshot") return;
+      if (msg.client_id && msg.client_id !== clientId) return;
+      const snap = (msg as { snapshot?: ScoreboardSnapshotV1 }).snapshot;
+      if (!snap || snap.format !== "moss_scoreboard_snapshot" || snap.version !== 1) return;
+      setSnapshot(snap);
+    };
+
+    safePostScoreboardMessage(bc, { kind: "moss.scoreboard.hello", client_id: clientId });
+
+    return () => {
+      bc.close();
+    };
+  }, []);
+
+  const data = snapshot?.packet ?? (packetJson as Packet);
+  const questions = useMemo(() => data.questions ?? [], [data.questions]);
+  const game = snapshot?.game ?? null;
+  const scoresheetBaseState = snapshot?.scoresheet_base_state ?? emptyScoresheetBaseState;
+  const scoresheetEvents = snapshot?.scoresheet_events ?? [];
+
+  const teams = game?.teams ?? [];
+  const playersById = useMemo(() => {
+    const entries: Array<[string, string]> = [];
+    for (const team of teams) {
+      for (const player of team.players) entries.push([player.id, player.name]);
+    }
+    return new Map(entries);
+  }, [teams]);
+  const scoresheetState = useMemo(
+    () => reduceScoresheetEvents(scoresheetEvents, scoresheetBaseState),
+    [scoresheetBaseState, scoresheetEvents]
+  );
+  const pairIdx = scoresheetState.pairIndex;
+  const attempts = scoresheetState.attemptsByQuestionId;
+  const scoresheetMarkers = scoresheetState.markers;
+
+  const pairRows = useMemo<PairRow[]>(() => {
+    const byPair = new Map<number, PairRow>();
+    for (const question of questions) {
+      const current = byPair.get(question.pair_id) ?? { pairId: question.pair_id };
+      if (question.question_type === "TOSSUP") current.tossup = question;
+      if (question.question_type === "BONUS") current.bonus = question;
+      byPair.set(question.pair_id, current);
+    }
+
+    return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
+  }, [questions]);
+
+  const scoredPairs = useMemo(() => {
+    const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
+
+    const rows = pairRows.map((pair) => {
+      const tossupAttemptAll = pair.tossup ? attempts[pair.tossup.id] ?? [] : [];
+      const bonusAttemptAll = pair.bonus ? attempts[pair.bonus.id] ?? [] : [];
+
+      const perTeam = teams.map((team) => {
+        const tossupAttempt = tossupAttemptAll.find((a) => a.teamId === team.id);
+        const bonusAttempt = bonusAttemptAll.find((a) => a.teamId === team.id);
+
+        const tossupPoints = pointsForAttempt(tossupAttempt, pair.tossup?.question_type) ?? 0;
+        const bonusPoints = pointsForAttempt(bonusAttempt, pair.bonus?.question_type) ?? 0;
+        const pairPoints = tossupPoints + bonusPoints;
+        runningByTeam[team.id] += pairPoints;
+
+        return {
+          teamId: team.id,
+          tossupAttempt,
+          bonusAttempt,
+          pairPoints,
+          runningTotal: runningByTeam[team.id],
+        };
+      });
+
+      return { ...pair, perTeam };
+    });
+
+    const totals = teams.map((t) => ({ teamId: t.id, total: runningByTeam[t.id] ?? 0 }));
+    return { rows, totals };
+  }, [attempts, pairRows, teams]);
+
+  const displayHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
+  const { wrapRef: displayScoresheetWrapRef, wrapStyle: displayScoresheetWrapStyle } =
+    useScoresheetStickyHeaderOffsets(displayHeaderKey);
+
+  if (channelError) {
+    return (
+      <div className="scoreboardDisplayRoot">
+        <div className="card">
+          <div className="header">
+            <div>
+              <h2 className="title">Scoreboard Display</h2>
+              <p className="muted">{channelError}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!snapshot || !snapshot.game) {
+    return (
+      <div className="scoreboardDisplayRoot">
+        <div className="card">
+          <div className="header">
+            <div>
+              <h2 className="title">Scoreboard Display</h2>
+              <p className="muted">Waiting for the moderator window…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="scoreboardDisplayRoot" aria-label="Scoreboard display">
+      <div className="card scoresheetCard" aria-label="Scoresheet">
+        <div className="header">
+          <div>
+            <h2 className="title">Scoresheet</h2>
+          </div>
+        </div>
+
+        <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
+          <table className="scoresheetTable">
+            <thead>
+              <tr>
+                <th aria-label="Pair number" />
+                {teams.map((team) => (
+                  <th key={team.id} colSpan={3} className="scoresheetTeamHeader">
+                    <div className="scoresheetTeamHeaderInner">
+                      <span className="scoresheetTeamName">{team.name}</span>
+                      <span className="pill scoresheetScorePill">
+                        {scoredPairs.totals.find((t) => t.teamId === team.id)?.total ?? 0}
+                      </span>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+              <tr>
+                <th aria-hidden="true" />
+                {teams.flatMap((team) => [
+                  <th key={`${team.id}_t`}>T</th>,
+                  <th key={`${team.id}_b`}>B</th>,
+                  <th key={`${team.id}_r`}>Total</th>,
+                ])}
+              </tr>
+            </thead>
+                <tbody>
+                  {(() => {
+                    const colSpan = 1 + teams.length * 3;
+                    const nodes: ReactNode[] = [];
+
+                    for (let i = 0; i < scoredPairs.rows.length; i++) {
+                      const row = scoredPairs.rows[i];
+                      const boundaryBeforeQuestion = row.pairId;
+                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+
+                      if (markerKind !== undefined) {
+                        nodes.push(
+                          <tr
+                            key={`boundary_${boundaryBeforeQuestion}`}
+                            className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                          >
+                            <td colSpan={colSpan}>
+                              <div className="scoresheetBoundaryButton" aria-hidden="true">
+                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      }
+
+                      const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
+                      nodes.push(
+                        <tr key={`row_${row.pairId}`} className={isActivePair ? "scoresheetRowActive" : undefined}>
+                          <td className="scoresheetPairCell">
+                        <span className="pairLinkDisplay">{row.pairId}</span>
+                      </td>
+                      {row.perTeam.flatMap((teamRow) => {
+                        const tossupResult = teamRow.tossupAttempt?.result;
+                        const bonusResult = teamRow.bonusAttempt?.result;
+
+                        const tossupCellClass = [
+                          "scoresheetAttemptCell",
+                          tossupResult === "correct"
+                            ? "scoresheetCellCorrect"
+                            : tossupResult === "incorrect"
+                              ? "scoresheetCellIncorrect"
+                              : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ");
+
+                        const bonusCellClass = [
+                          "scoresheetAttemptCell",
+                          bonusResult === "correct"
+                            ? "scoresheetCellCorrect"
+                            : bonusResult === "incorrect"
+                              ? "scoresheetCellIncorrect"
+                              : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ");
+
+                        return [
+                          <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                            <span className="scoresheetAttemptCellDisplay">
+                              {formatAttemptCellText(teamRow.tossupAttempt, row.tossup?.question_type, playersById)}
+                            </span>
+                          </td>,
+                          <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                            <span className="scoresheetAttemptCellDisplay">
+                              {formatAttemptCellText(teamRow.bonusAttempt, row.bonus?.question_type, playersById)}
+                            </span>
+                          </td>,
+                          <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                            {teamRow.runningTotal}
+                          </td>,
+                        ];
+                      })}
+                    </tr>
+                  );
+                }
+
+                return nodes;
+              })()}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModeratorApp() {
   const samplePacket = packetJson as Packet;
   const tournamentIndex = tournamentsJson as MossTournamentIndex;
   const [packet, setPacket] = useState<Packet | null>(null);
@@ -552,6 +905,7 @@ export default function App() {
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const [isNewGameOpen, setIsNewGameOpen] = useState(false);
   const [isLoadGameOpen, setIsLoadGameOpen] = useState(false);
+  const [isQuestionBlurred, setIsQuestionBlurred] = useState(false);
   const [loadGameFile, setLoadGameFile] = useState<File | null>(null);
   const [loadGameError, setLoadGameError] = useState<string | null>(null);
   const [isLoadingGame, setIsLoadingGame] = useState(false);
@@ -614,6 +968,14 @@ export default function App() {
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
   const [lineupChangeModal, setLineupChangeModal] = useState<LineupChangeModalState>(null);
   const isScoresheetExported = !!lastExport && lastExport.atEnd && lastExport.lastSeq === scoresheetState.lastSeq;
+
+  useEffect(() => {
+    if (!game) {
+      setIsQuestionBlurred(false);
+      return;
+    }
+    setIsQuestionBlurred(true);
+  }, [game]);
 
   useEffect(() => {
     setLastExport(null);
@@ -944,6 +1306,70 @@ export default function App() {
     appendScoresheetEvents([event]);
   }
 
+  const scoreboardSnapshot = useMemo<ScoreboardSnapshotV1>(() => ({
+    format: "moss_scoreboard_snapshot",
+    version: 1,
+    session_id: snapshotMeta?.game_instance_id ?? null,
+    packet: data,
+    game,
+    scoresheet_base_state: scoresheetBaseState,
+    scoresheet_events: scoresheetEvents,
+    created_at_ms: Date.now(),
+  }), [data, game, scoresheetBaseState, scoresheetEvents, snapshotMeta?.game_instance_id]);
+
+  const scoreboardChannelRef = useRef<BroadcastChannel | null>(null);
+  const scoreboardSnapshotRef = useRef<ScoreboardSnapshotV1>(scoreboardSnapshot);
+
+  useEffect(() => {
+    scoreboardSnapshotRef.current = scoreboardSnapshot;
+  }, [scoreboardSnapshot]);
+
+  useEffect(() => {
+    if (!("BroadcastChannel" in window)) return;
+
+    const channel = new BroadcastChannel(SCOREBOARD_CHANNEL_NAME);
+    scoreboardChannelRef.current = channel;
+
+    const onMessage = (ev: MessageEvent) => {
+      const data = ev.data as unknown;
+      if (!data || typeof data !== "object") return;
+      const msg = data as Partial<ScoreboardDisplayMessageV1>;
+      if (msg.kind !== "moss.scoreboard.hello") return;
+      const clientId = (msg as { client_id?: unknown }).client_id;
+      if (typeof clientId !== "string" || !clientId) return;
+      safePostScoreboardMessage(channel, {
+        kind: "moss.scoreboard.snapshot",
+        client_id: clientId,
+        snapshot: scoreboardSnapshotRef.current,
+      });
+    };
+
+    channel.addEventListener("message", onMessage);
+    safePostScoreboardMessage(channel, { kind: "moss.scoreboard.snapshot", snapshot: scoreboardSnapshotRef.current });
+
+    return () => {
+      channel.removeEventListener("message", onMessage);
+      channel.close();
+      if (scoreboardChannelRef.current === channel) scoreboardChannelRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const channel = scoreboardChannelRef.current;
+    if (!channel) return;
+    safePostScoreboardMessage(channel, { kind: "moss.scoreboard.snapshot", snapshot: scoreboardSnapshot });
+  }, [scoreboardSnapshot]);
+
+  function openScoreboardDisplay() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("display", "scoreboard");
+    const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
+    if (!opened) {
+      alert("Popup blocked. Please allow popups for this site to open the scoreboard display.");
+      return;
+    }
+  }
+
   function uniq<T>(items: T[]): T[] {
     return Array.from(new Set(items));
   }
@@ -1177,6 +1603,23 @@ export default function App() {
     }
     return new Map(entries);
   }, [teams]);
+
+  const {
+    layoutRef: mainLayoutRef,
+    layoutStyle: mainLayoutStyle,
+    isResizing: isMainLayoutResizing,
+    resizerProps: mainLayoutResizerProps,
+  } = useResizableRightColumn({
+    storageKey: "moss_layout_scoresheet_width_px",
+    defaultRightPx: 480,
+    minLeftPx: 560,
+    minRightPx: 420,
+    gapPx: 18,
+  });
+
+  const moderatorHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
+  const { wrapRef: moderatorScoresheetWrapRef, wrapStyle: moderatorScoresheetWrapStyle } =
+    useScoresheetStickyHeaderOffsets(moderatorHeaderKey);
 
   const pairRows = useMemo<PairRow[]>(() => {
     const byPair = new Map<number, PairRow>();
@@ -2350,17 +2793,6 @@ export default function App() {
     return () => window.removeEventListener("mousedown", onMouseDown, true);
   }, [bonusResultEditor]);
 
-  function attemptCellText(attemptValue: Attempt | undefined, questionType: QuestionType | undefined): string {
-    if (!attemptValue?.result) return "";
-    const points = pointsForAttempt(attemptValue, questionType);
-    const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
-    if (questionType === "BONUS") return pointsLabel;
-    const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
-    const who = player ? ` (${player})` : "";
-    const tokenLabel = attemptValue.isEnd ? END_TOKEN : attemptValue.token;
-    return `${pointsLabel} @ ${tokenLabel}${who}`;
-  }
-
   function openScoresheetAttemptEditModal(question: Question, teamId: string, anchorEl: HTMLElement) {
     if (!game) return;
     if (question.question_type !== "TOSSUP") return;
@@ -3474,7 +3906,11 @@ export default function App() {
     <div className="sbAppFrame">
       <MossTopNav />
       <div className="page">
-        <div className="layout">
+        <div
+          ref={mainLayoutRef}
+          className={["layout", isMainLayoutResizing ? "layoutResizing" : ""].filter(Boolean).join(" ")}
+          style={mainLayoutStyle}
+        >
           <div className="questionPane">
             <div className="card">
               <div className="header">
@@ -3485,13 +3921,26 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="questionBlock">
-                {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
-                {bonusQ && (
-                  <>
-                    <div className="qaDivider" />
-                    {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
-                  </>
+              <div className="questionBlurWrap">
+                <div className={["questionBlock", isQuestionBlurred ? "questionBlockBlurred" : ""].filter(Boolean).join(" ")}>
+                  {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
+                  {bonusQ && (
+                    <>
+                      <div className="qaDivider" />
+                      {renderQuestionSection(bonusQ, "BONUS", !bonusEnabled)}
+                    </>
+                  )}
+                </div>
+                {isQuestionBlurred && (
+                  <div className="questionBlurOverlay" role="dialog" aria-label="Question text hidden">
+                    <div className="questionBlurOverlayInner">
+                      <div className="questionBlurTitle">Ensure no players can see this screen.</div>
+                      <div className="questionBlurSubtitle">Hold to reveal questions when ready to begin.</div>
+                      <HoldToConfirmButton holdMs={1000} onConfirm={() => setIsQuestionBlurred(false)}>
+                        Open Packet
+                      </HoldToConfirmButton>
+                    </div>
+                  </div>
                 )}
               </div>
 
@@ -3521,6 +3970,8 @@ export default function App() {
               </>
             )}
           </div>
+
+          <div className="layoutResizer" {...mainLayoutResizerProps} aria-label="Resize panels" />
 
           <div className="card scoresheetCard" aria-label="Scoresheet">
             <div className="header">
@@ -3554,11 +4005,20 @@ export default function App() {
                   >
                     {isExporting ? "Exporting..." : "Export"}
                   </button>
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={openScoreboardDisplay}
+                    disabled={!game}
+                    aria-label="Open scoreboard display in a new window"
+                  >
+                    Display
+                  </button>
                 </div>
               </div>
             </div>
 
-            <div className="scoresheetTableWrap">
+            <div ref={moderatorScoresheetWrapRef} className="scoresheetTableWrap" style={moderatorScoresheetWrapStyle}>
               <table className="scoresheetTable">
                 <thead>
                   <tr>
@@ -3600,6 +4060,7 @@ export default function App() {
                           key={`boundary_${boundaryBeforeQuestion}`}
                           className={[
                             "scoresheetBoundaryRow",
+                            isStartBoundary ? "scoresheetBoundaryRowStart" : "",
                             isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
                           ].filter(Boolean).join(" ")}
                         >
@@ -3623,7 +4084,9 @@ export default function App() {
                               }
                             >
                               {isStartBoundary ? (
-                                <span className="scoresheetBoundaryAffordance">Change starting lineup</span>
+                                <span className="scoresheetBoundaryAffordance scoresheetBoundaryAffordanceTab">
+                                  Change starting lineup
+                                </span>
                               ) : markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (
@@ -3687,7 +4150,7 @@ export default function App() {
                                   }}
                                   aria-label={`Edit tossup for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
                                 >
-                                  {attemptCellText(teamRow.tossupAttempt, row.tossup?.question_type)}
+                                  {formatAttemptCellText(teamRow.tossupAttempt, row.tossup?.question_type, playersById)}
                                 </button>
                               </td>,
                               <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
@@ -3701,7 +4164,7 @@ export default function App() {
                                   }}
                                   aria-label={`Edit bonus for ${teams.find((t) => t.id === teamRow.teamId)?.name ?? teamRow.teamId} in question ${row.pairId}`}
                                 >
-                                  {attemptCellText(teamRow.bonusAttempt, row.bonus?.question_type)}
+                                  {formatAttemptCellText(teamRow.bonusAttempt, row.bonus?.question_type, playersById)}
                                 </button>
                               </td>,
                               <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
@@ -4145,4 +4608,10 @@ export default function App() {
         <Analytics />      </div>
     </div>
   );
+}
+
+export default function App() {
+  const displayMode = getDisplayModeFromLocation();
+  if (displayMode === "scoreboard") return <ScoreboardDisplayApp />;
+  return <ModeratorApp />;
 }
