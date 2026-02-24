@@ -784,43 +784,35 @@ function ScoreboardDisplayApp() {
                 ])}
               </tr>
             </thead>
-            <tbody>
-              {(() => {
-                const colSpan = 1 + teams.length * 3;
-                const nodes: ReactNode[] = [];
+                <tbody>
+                  {(() => {
+                    const colSpan = 1 + teams.length * 3;
+                    const nodes: ReactNode[] = [];
 
-                for (let i = 0; i < scoredPairs.rows.length; i++) {
-                  const row = scoredPairs.rows[i];
-                  const boundaryBeforeQuestion = row.pairId;
-                  const isStartBoundary = i === 0;
-                  const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
-                  const isSpacedMarker = markerKind !== undefined;
+                    for (let i = 0; i < scoredPairs.rows.length; i++) {
+                      const row = scoredPairs.rows[i];
+                      const boundaryBeforeQuestion = row.pairId;
+                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
 
-                  nodes.push(
-                    <tr
-                      key={`boundary_${boundaryBeforeQuestion}`}
-                      className={[
-                        "scoresheetBoundaryRow",
-                        isStartBoundary ? "scoresheetBoundaryRowStart" : "",
-                        isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      <td colSpan={colSpan}>
-                        <div className="scoresheetBoundaryButton" aria-hidden="true">
-                          {markerKind ? (
-                            <span className="scoresheetBoundaryLabel">{markerKind}</span>
-                          ) : null}
-                        </div>
-                      </td>
-                    </tr>
-                  );
+                      if (markerKind !== undefined) {
+                        nodes.push(
+                          <tr
+                            key={`boundary_${boundaryBeforeQuestion}`}
+                            className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                          >
+                            <td colSpan={colSpan}>
+                              <div className="scoresheetBoundaryButton" aria-hidden="true">
+                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      }
 
-                  const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
-                  nodes.push(
-                    <tr key={`row_${row.pairId}`} className={isActivePair ? "scoresheetRowActive" : undefined}>
-                      <td className="scoresheetPairCell">
+                      const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
+                      nodes.push(
+                        <tr key={`row_${row.pairId}`} className={isActivePair ? "scoresheetRowActive" : undefined}>
+                          <td className="scoresheetPairCell">
                         <span className="pairLinkDisplay">{row.pairId}</span>
                       </td>
                       {row.perTeam.flatMap((teamRow) => {
