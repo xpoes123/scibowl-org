@@ -1,0 +1,592 @@
+{
+    "packet": "ROUND ROBIN 5",
+    "year": 2026,
+    "questions": [
+        {
+            "id": 1,
+            "pair_id": 1,
+            "question_type": "TOSSUP",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Once threshold is reached in the axon hillock, which of the following ion channels would open to generate an action potential?",
+            "options": [
+                "Ligand-gated sodium channels",
+                "Ligand-gated potassium channels",
+                "Voltage-gated sodium channels",
+                "Voltage-gated potassium channels"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 2,
+            "pair_id": 1,
+            "question_type": "BONUS",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Which of the following processes is least likely to duplicate a gene on a chromosome?",
+            "options": [
+                "Chromosomal segment inversion",
+                "Movement of transposable elements",
+                "Uneven crossing over",
+                "DNA repair of a double strand break"
+            ],
+            "correct_answer": "W"
+        },
+        {
+            "id": 3,
+            "pair_id": 2,
+            "question_type": "TOSSUP",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "A Positron Emission Tomography or PET scan, often used to monitor neurological function and cancer, relies upon the emission of positrons by a radioactive tracer within the body. Which of the following decay processes result in the emission of a positron?",
+            "options": [
+                "Alpha decay",
+                "Beta plus decay",
+                "Beta minus decay",
+                "Gamma decay"
+            ],
+            "correct_answer": "X"
+        },
+        {
+            "id": 4,
+            "pair_id": 2,
+            "question_type": "BONUS",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Which of the following is closest to the critical angle, in degrees, of a ray of light traveling into air from a material with index of refraction 3.0?",
+            "options": [
+                "10",
+                "20",
+                "30",
+                "40"
+            ],
+            "correct_answer": "X"
+        },
+        {
+            "id": 5,
+            "pair_id": 3,
+            "question_type": "TOSSUP",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following three Lagrange points that are located approximately along the path of Earth's orbit: 1) L1; 2) L3; 3) L5.",
+            "options": [],
+            "correct_answer": "2 and 3"
+        },
+        {
+            "id": 6,
+            "pair_id": 3,
+            "question_type": "BONUS",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Order the following three minerals in order of increasing complexity of their silica structure: 1) Quartz; 2) Mica; 3) Olivine.",
+            "options": [],
+            "correct_answer": "3, 2, 1"
+        },
+        {
+            "id": 7,
+            "pair_id": 4,
+            "question_type": "TOSSUP",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Although methanol can be made by partially oxidizing methane, this is not widely used industrially because methane readily undergoes complete oxidation into what two compounds?",
+            "options": [],
+            "correct_answer": "Water and carbon dioxide (H2O and CO2)"
+        },
+        {
+            "id": 8,
+            "pair_id": 4,
+            "question_type": "BONUS",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following three statements that are true about the Daniell cell, an electrochemical cell with a zinc anode and copper cathode: 1) Zinc ions are oxidised at the anode; 2) Copper ions travel from the cathode to the anode; 3) Electrons flow from the anode to the cathode.",
+            "options": [],
+            "correct_answer": "1, 3"
+        },
+        {
+            "id": 9,
+            "pair_id": 5,
+            "question_type": "TOSSUP",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "What platonic solid has the largest interior angles on its faces?",
+            "options": [],
+            "correct_answer": "Dodecahedron"
+        },
+        {
+            "id": 10,
+            "pair_id": 5,
+            "question_type": "BONUS",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Richard has an ice cream cone with a height that is twice its radius. He fills the cone completely with ice cream, and also adds a hemisphere above the cone with radius equal to that of the cone.  What fraction of the total ice cream is contained within the cone?",
+            "options": [],
+            "correct_answer": "$\\frac{1}{2}$"
+        },
+        {
+            "id": 11,
+            "pair_id": 6,
+            "question_type": "TOSSUP",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Researchers at SLAC are analyzing data from the South Pole Observatory to search for evidence in the cosmic microwave background of what epoch \\textbf{[EH-pock]} in cosmological history thought to be responsible for the large-scale uniformity of the universe?",
+            "options": [],
+            "correct_answer": "Inflation"
+        },
+        {
+            "id": 12,
+            "pair_id": 6,
+            "question_type": "BONUS",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Scientists at Stanford are studying methods to reduce electrical grid outages. After a complete blackout, a so-called \"black start\" must be performed in order to restore the power grid. Which of the following statements is true about black starts?",
+            "options": [
+                "Generators across multiple different regions are simultaneously started",
+                "Large coal power plants are often designated as black start sources",
+                "Different islands of generators must be phase-synchronized before connection",
+                "Diesel and gas generators do not have sufficient voltage to start up the grid"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 13,
+            "pair_id": 7,
+            "question_type": "TOSSUP",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "When a few individuals become isolated from a larger population, the smaller group may establish a new population whose gene pool differs from the source population. What term best describes this phenomenon?",
+            "options": [],
+            "correct_answer": "Founder effect"
+        },
+        {
+            "id": 14,
+            "pair_id": 7,
+            "question_type": "BONUS",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Order the following three biomes from least to most likely to contain food chains that include quaternary consumers: 1) Northern coniferous forest; 2) Tropical rainforest; 3) Temperate broadleaf forest.",
+            "options": [],
+            "correct_answer": "1, 3, 2"
+        },
+        {
+            "id": 15,
+            "pair_id": 8,
+            "question_type": "TOSSUP",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "The magnetic field within an ideal solenoid is proportional to distance from its central axis raised to what power?",
+            "options": [],
+            "correct_answer": "0"
+        },
+        {
+            "id": 16,
+            "pair_id": 8,
+            "question_type": "BONUS",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "A ladder with a weight of 50 newtons leans at a 45 degree angle against a frictionless wall. In newtons, how much force does the wall apply to the ladder to keep it stationary?",
+            "options": [],
+            "correct_answer": "25"
+        },
+        {
+            "id": 17,
+            "pair_id": 9,
+            "question_type": "TOSSUP",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Which of the following crystal systems does muscovite belong to at STP?",
+            "options": [
+                "Hexagonal",
+                "Trigonal",
+                "Monoclinic",
+                "Triclinic"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 18,
+            "pair_id": 9,
+            "question_type": "BONUS",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Despite the lunar near side and far side having experienced similar rates of large meteor impacts, extensive basaltic floods are observed almost exclusively on the near side. Which of the following could explain this asymmetry?",
+            "options": [
+                "The near side contains a higher abundance of impact-generated melt",
+                "The far side has thicker crust, suppressing magma ascent to the surface",
+                "The near side has experienced more recent tidal heating",
+                "The far side cooled more rapidly following lunar formation"
+            ],
+            "correct_answer": "X"
+        },
+        {
+            "id": 19,
+            "pair_id": 10,
+            "question_type": "TOSSUP",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Which of the following best explains why electron shielding remains relatively constant across a period?",
+            "options": [
+                "Electrons are added to the same principal energy level across a period",
+                "Protons are added to the nucleus, increasing effective nuclear charge",
+                "Atomic radius decreases from left to right",
+                "The number of valence electrons increases across a period"
+            ],
+            "correct_answer": "W"
+        },
+        {
+            "id": 20,
+            "pair_id": 10,
+            "question_type": "BONUS",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Advai needs 1.1 grams of potassium chloride to prepare 100 milliliters of a 0.15 molar solution. How many grams of potassium chloride does he need to prepare 250 milliliters of a 0.3 molar solution?",
+            "options": [],
+            "correct_answer": "5.5"
+        },
+        {
+            "id": 21,
+            "pair_id": 11,
+            "question_type": "TOSSUP",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Let f(x) be a continuous function on the closed interval from 6 to 7. If $\\int_6^7 f(x) dx = 5$ \\textbf{[the integral from 6 to 7 of f of x dx equals 5]}, then which of the following is equal to $\\int_6^7 f(x + 2) dx$ \\textbf{[the integral from 6 to 7 of f of the quantity x plus 2 dx]}?",
+            "options": [
+                "3",
+                "5",
+                "7",
+                "Impossible to determine"
+            ],
+            "correct_answer": "Z"
+        },
+        {
+            "id": 22,
+            "pair_id": 11,
+            "question_type": "BONUS",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following 3 transformations that are always linear: 1) Translation; 2) Shear; 3) Dilation.",
+            "options": [],
+            "correct_answer": "2 and 3"
+        },
+        {
+            "id": 23,
+            "pair_id": 12,
+            "question_type": "TOSSUP",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Scientists at UCLA's medical school are studying patient outcomes in drug trials. They model whether each patient is cured or not after treatment as a sequence of independent experiments with two possible outcomes. Which of the following probability distributions does this best describe?",
+            "options": [
+                "Binomial",
+                "Bernoulli \\textbf{[bur-NOOL-ee]}",
+                "Geometric",
+                "Poisson"
+            ],
+            "correct_answer": "W"
+        },
+        {
+            "id": 24,
+            "pair_id": 12,
+            "question_type": "BONUS",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Researchers at UCLA are attempting to determine the taxonomy of the extinct genus Prototaxites \\textbf{[proh-toh-TAX-uh-tees]}, which is known to be a heterotroph with cell walls containing no chitin, growing in tall tubular structures. Identify all of the following 3 conclusions that can be correctly drawn from its traits: 1) It cannot be an animal because no animals have cell walls; 2) It cannot be a fungus because all fungi contain chitin; 3) It cannot be a plant because no plants are heterotrophs.",
+            "options": [],
+            "correct_answer": "1 and 2"
+        },
+        {
+            "id": 25,
+            "pair_id": 13,
+            "question_type": "TOSSUP",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "What simplified model of flower development explains how combinatory effects from three classes of genes determine the identities of floral organs in concentric whorls?",
+            "options": [],
+            "correct_answer": "ABC hypothesis"
+        },
+        {
+            "id": 26,
+            "pair_id": 13,
+            "question_type": "BONUS",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "During oxidative phosphorylation \\textbf{[fos-for-uh-LAY-shin]}, molecular oxygen is reduced to form water. Which of the following best describes this process?",
+            "options": [
+                "Oxygen is reduced by Complex III in the mitochondrial matrix",
+                "Oxygen is reduced by Complex III in the intermembrane space",
+                "Oxygen is reduced by Complex IV in the mitochondrial matrix",
+                "Oxygen is reduced by Complex IV in the intermembrane space"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 27,
+            "pair_id": 14,
+            "question_type": "TOSSUP",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "A car accelerates at a constant speed for 10 seconds. What is the ratio of the impulse applied over the first 5 seconds to the impulse applied over the last 5 seconds?",
+            "options": [],
+            "correct_answer": "1"
+        },
+        {
+            "id": 28,
+            "pair_id": 14,
+            "question_type": "BONUS",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "A new Formula 1 car's battery applies a constant force to speed up its wheels. Identify all of the following three statements that are true of the wheel: 1) The torque acting on it is constant; 2) Its angular acceleration is constant; 3) Its kinetic energy increases at a constant rate.",
+            "options": [],
+            "correct_answer": "1 and 2"
+        },
+        {
+            "id": 29,
+            "pair_id": 15,
+            "question_type": "TOSSUP",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following three trends that can be attributed to the Hadley cell circulation: 1) High thunderstorm activity at the equator; 2) Presence of deserts at 30 degrees latitude; 3) Presence of temperate rainforests at 60 degrees latitude.",
+            "options": [],
+            "correct_answer": "1 and 2"
+        },
+        {
+            "id": 30,
+            "pair_id": 15,
+            "question_type": "BONUS",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "Which of the following oceanic basins contains the oldest oceanic crust?",
+            "options": [
+                "Pacific Ocean",
+                "Mediterranean Sea",
+                "Red Sea",
+                "Atlantic Ocean"
+            ],
+            "correct_answer": "X"
+        },
+        {
+            "id": 31,
+            "pair_id": 16,
+            "question_type": "TOSSUP",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "As a fraction, what is the average bond order of the carbon-oxygen bond in the carbonate ion?",
+            "options": [
+                "1/3",
+                "1/2",
+                "4/3",
+                "3/2"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 32,
+            "pair_id": 16,
+            "question_type": "BONUS",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "A system undergoes a reversible process which does 0 work and its internal energy increases. Which of the following types of processes could this be?",
+            "options": [
+                "Isochoric \\textbf{[eye-soh-KOR-ik]} heating",
+                "Isobaric heating",
+                "Adiabatic \\textbf{[ay-dee-uh-BAT-ik]} compression",
+                "Isothermal compression"
+            ],
+            "correct_answer": "W"
+        },
+        {
+            "id": 33,
+            "pair_id": 17,
+            "question_type": "TOSSUP",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "In the Cartesian plane, a parabola opening upwards contains points in n quadrants. How many possible values of n are there?",
+            "options": [],
+            "correct_answer": "3"
+        },
+        {
+            "id": 34,
+            "pair_id": 17,
+            "question_type": "BONUS",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Stelle has a square table of side length 5, and she places a circular plate of diameter 3 onto the table uniformly and randomly. What is the probability that the entirety of the plate lies on the table?",
+            "options": [],
+            "correct_answer": "4/25"
+        },
+        {
+            "id": 35,
+            "pair_id": 18,
+            "question_type": "TOSSUP",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Scientists at the Johns Hopkins Salzberg Lab are using computational tools to discover novel transcripts produced from genes. What process during gene expression allows a single gene to generate multiple different mRNA transcripts?",
+            "options": [],
+            "correct_answer": "Alternative splicing"
+        },
+        {
+            "id": 36,
+            "pair_id": 18,
+            "question_type": "BONUS",
+            "category": "ENERGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Scientists at the Johns Hopkins Lectka Lab are studying how metal ion chelation can control chemical reactivity by selectively stabilizing transition states. Identify all of the following molecules whose central metal ion is a transition metal: 1) Chlorophyll; 2) Heme; 3) Vitamin B12.",
+            "options": [],
+            "correct_answer": "2 and 3"
+        },
+        {
+            "id": 37,
+            "pair_id": 19,
+            "question_type": "TOSSUP",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Order the following three stages of PCR by increasing temperature at which they are typically perfomed: 1) Denaturation; 2) Annealing \\textbf{[uh-NEEL-ing]}; 3) Extension.",
+            "options": [],
+            "correct_answer": "2, 3, 1"
+        },
+        {
+            "id": 38,
+            "pair_id": 19,
+            "question_type": "BONUS",
+            "category": "BIOLOGY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "CRISPR \\textbf{[CRIS-pur]} therapies for sickle cell anemia modifies stem cells from which of the following locations in the body?",
+            "options": [
+                "Thymus",
+                "Bone marrow",
+                "Liver",
+                "Heart"
+            ],
+            "correct_answer": "X"
+        },
+        {
+            "id": 39,
+            "pair_id": 20,
+            "question_type": "TOSSUP",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "A quantum bit or qubit within a quantum computer encodes more information than a classical bit by virtue of having what quantum mechanical property that allows it to have probabilities to exist in multiple states at the same time before measurement?",
+            "options": [],
+            "correct_answer": "Superposition (ACCEPT: Any answer containing superposition)"
+        },
+        {
+            "id": 40,
+            "pair_id": 20,
+            "question_type": "BONUS",
+            "category": "PHYSICS",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Two capacitors of capacitance 3 microfarads \\textbf{[my-kroh-FAIR-ids]} and 6 microfarads are placed in series. In microfarads, what is the effective capacitance of the two capacitors together?",
+            "options": [],
+            "correct_answer": "2"
+        },
+        {
+            "id": 41,
+            "pair_id": 21,
+            "question_type": "TOSSUP",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following three features that can be found in most flood basalt deposits: 1) Folded strata; 2) Pillow lavas; 3) Columnar jointing.",
+            "options": [],
+            "correct_answer": "3 only"
+        },
+        {
+            "id": 42,
+            "pair_id": 21,
+            "question_type": "BONUS",
+            "category": "EARTH_SPACE",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Mature anvil clouds exhibit flat tops due to rising air currents hitting what atmospheric boundary?",
+            "options": [],
+            "correct_answer": "Tropopause"
+        },
+        {
+            "id": 43,
+            "pair_id": 22,
+            "question_type": "TOSSUP",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "MULTIPLE_CHOICE",
+            "question_text": "For a second-order reaction, which of the best represents the units of the rate constant k?",
+            "options": [
+                "One over seconds",
+                "Moles per liter per second",
+                "Liters per mole per second",
+                "Liters squared per mole squared per second"
+            ],
+            "correct_answer": "Y"
+        },
+        {
+            "id": 44,
+            "pair_id": 22,
+            "question_type": "BONUS",
+            "category": "CHEMISTRY",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Identify all of the following 3 compounds whose central atom obeys the octet rule: 1) Boron trihydride; 2) Phosphorus pentachloride; 3) Carbon tetrachloride.",
+            "options": [],
+            "correct_answer": "3 only"
+        },
+        {
+            "id": 45,
+            "pair_id": 23,
+            "question_type": "TOSSUP",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "Jensen wakes up and opens up Instagram Reels. He keeps scrolling until he sees an edit of LeBron James. Assuming each reel has an equal chance of being a LeBron edit, what statistical distribution will the number of scrolls follow?",
+            "options": [],
+            "correct_answer": "Geometric"
+        },
+        {
+            "id": 46,
+            "pair_id": 23,
+            "question_type": "BONUS",
+            "category": "MATH",
+            "source": "SSB_2026",
+            "question_style": "SHORT_ANSWER",
+            "question_text": "How many positive integers from 1 to 100 are divisible by either 3 or 7?",
+            "options": [],
+            "correct_answer": "43"
+        }
+    ]
+}
