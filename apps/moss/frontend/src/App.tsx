@@ -101,24 +101,34 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   wrapStyle: CSSProperties | undefined;
 } {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [headerHeightPx, setHeaderHeightPx] = useState<number | null>(null);
+  const [headerHeightsPx, setHeaderHeightsPx] = useState<{ row1: number; row2: number } | null>(null);
 
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
 
-    const row = wrap.querySelector("thead tr:first-child") as HTMLElement | null;
-    if (!row) return;
+    const row1 = wrap.querySelector("thead tr:first-child") as HTMLElement | null;
+    const row2 = wrap.querySelector("thead tr:nth-child(2)") as HTMLElement | null;
+    if (!row1 || !row2) return;
 
     const update = () => {
-      const raw = row.getBoundingClientRect().height;
-      const next = Math.max(0, Math.round(raw * 10) / 10);
-      setHeaderHeightPx((prev) => (prev !== null && Math.abs(prev - next) < 0.05 ? prev : next));
+      const raw1 = row1.getBoundingClientRect().height;
+      const raw2 = row2.getBoundingClientRect().height;
+      const next1 = Math.max(0, Math.round(raw1 * 10) / 10);
+      const next2 = Math.max(0, Math.round(raw2 * 10) / 10);
+      setHeaderHeightsPx((prev) => {
+        if (!prev) return { row1: next1, row2: next2 };
+        const same1 = Math.abs(prev.row1 - next1) < 0.05;
+        const same2 = Math.abs(prev.row2 - next2) < 0.05;
+        if (same1 && same2) return prev;
+        return { row1: same1 ? prev.row1 : next1, row2: same2 ? prev.row2 : next2 };
+      });
     };
 
     update();
     const ro = new ResizeObserver(() => update());
-    ro.observe(row);
+    ro.observe(row1);
+    ro.observe(row2);
     window.addEventListener("resize", update);
 
     return () => {
@@ -128,9 +138,12 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   }, [headerKey]);
 
   const wrapStyle = useMemo(() => {
-    if (!headerHeightPx) return undefined;
-    return { ["--scoresheetHeaderRow1Height" as string]: `${headerHeightPx}px` } as CSSProperties;
-  }, [headerHeightPx]);
+    if (!headerHeightsPx) return undefined;
+    return {
+      ["--scoresheetHeaderRow1Height" as string]: `${headerHeightsPx.row1}px`,
+      ["--scoresheetHeaderRow2Height" as string]: `${headerHeightsPx.row2}px`,
+    } as CSSProperties;
+  }, [headerHeightsPx]);
 
   return { wrapRef, wrapStyle };
 }
@@ -4027,6 +4040,7 @@ function ModeratorApp() {
                           key={`boundary_${boundaryBeforeQuestion}`}
                           className={[
                             "scoresheetBoundaryRow",
+                            isStartBoundary ? "scoresheetBoundaryRowStart" : "",
                             isSpacedMarker ? "scoresheetBoundaryRowMarked" : "",
                           ].filter(Boolean).join(" ")}
                         >
@@ -4050,7 +4064,9 @@ function ModeratorApp() {
                               }
                             >
                               {isStartBoundary ? (
-                                <span className="scoresheetBoundaryAffordance">Change starting lineup</span>
+                                <span className="scoresheetBoundaryAffordance scoresheetBoundaryAffordanceTab">
+                                  Change starting lineup
+                                </span>
                               ) : markerKind ? (
                                 <span className="scoresheetBoundaryLabel">{markerKind}</span>
                               ) : (

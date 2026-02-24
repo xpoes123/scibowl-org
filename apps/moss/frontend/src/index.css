@@ -1317,6 +1317,7 @@ button.word.wordBold {
 
 .scoresheetTableWrap {
   --scoresheetHeaderRow1Height: 44px;
+  --scoresheetHeaderRow2Height: 42px;
   max-height: calc(100vh - 190px);
   overflow: auto;
   border: 1px solid #eee;
@@ -1508,6 +1509,12 @@ button.word.wordBold {
   border-bottom: 0;
 }
 
+.scoresheetBoundaryRowStart td {
+  position: sticky;
+  top: calc(var(--scoresheetHeaderRow1Height) + var(--scoresheetHeaderRow2Height));
+  z-index: 4;
+}
+
 .scoresheetBoundaryButton {
   width: 100%;
   height: 0;
@@ -1547,12 +1554,16 @@ button.word.wordBold {
 }
 
 .scoresheetBoundaryRowStart .scoresheetBoundaryButton {
-  height: 22px;
+  z-index: 5;
 }
 
 .scoresheetBoundaryRowStart .scoresheetBoundaryButton::before {
-  top: 50%;
-  transform: translateY(-50%);
+  display: none;
+}
+
+.scoresheetBoundaryRowStart .scoresheetBoundaryButton::after {
+  top: 0;
+  height: 18px;
 }
 
 .scoresheetBoundaryRowMarked .scoresheetBoundaryButton {
@@ -1604,4 +1615,14 @@ button.word.wordBold {
   outline: 2px solid #cdd4ff;
   outline-offset: 2px;
   border-radius: 10px;
+}
+
+.scoresheetBoundaryAffordanceTab {
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, 0);
+  border-radius: 0 0 12px 12px;
+  border-top: 0;
+  padding-top: 4px;
+  box-shadow: 0 1px 0 #eee;
 }
