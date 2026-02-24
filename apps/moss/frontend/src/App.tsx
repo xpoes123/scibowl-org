@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -94,6 +94,45 @@ function formatAttemptCellText(
   const who = player ? ` (${player})` : "";
   const tokenLabel = attemptValue.isEnd ? END_TOKEN : attemptValue.token;
   return `${pointsLabel} @ ${tokenLabel}${who}`;
+}
+
+function useScoresheetStickyHeaderOffsets(headerKey: string): {
+  wrapRef: React.RefObject<HTMLDivElement | null>;
+  wrapStyle: CSSProperties | undefined;
+} {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [headerHeightPx, setHeaderHeightPx] = useState<number | null>(null);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    const row = wrap.querySelector("thead tr:first-child") as HTMLElement | null;
+    if (!row) return;
+
+    const update = () => {
+      const raw = row.getBoundingClientRect().height;
+      const next = Math.max(0, Math.round(raw * 10) / 10);
+      setHeaderHeightPx((prev) => (prev !== null && Math.abs(prev - next) < 0.05 ? prev : next));
+    };
+
+    update();
+    const ro = new ResizeObserver(() => update());
+    ro.observe(row);
+    window.addEventListener("resize", update);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [headerKey]);
+
+  const wrapStyle = useMemo(() => {
+    if (!headerHeightPx) return undefined;
+    return { ["--scoresheetHeaderRow1Height" as string]: `${headerHeightPx}px` } as CSSProperties;
+  }, [headerHeightPx]);
+
+  return { wrapRef, wrapStyle };
 }
 
 type ScoreboardSnapshotV1 = {
@@ -677,6 +716,10 @@ function ScoreboardDisplayApp() {
     return { rows, totals };
   }, [attempts, pairRows, teams]);
 
+  const displayHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
+  const { wrapRef: displayScoresheetWrapRef, wrapStyle: displayScoresheetWrapStyle } =
+    useScoresheetStickyHeaderOffsets(displayHeaderKey);
+
   if (channelError) {
     return (
       <div className="scoreboardDisplayRoot">
@@ -716,7 +759,7 @@ function ScoreboardDisplayApp() {
           </div>
         </div>
 
-        <div className="scoresheetTableWrap">
+        <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
           <table className="scoresheetTable">
             <thead>
               <tr>
@@ -1554,6 +1597,10 @@ function ModeratorApp() {
     }
     return new Map(entries);
   }, [teams]);
+
+  const moderatorHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
+  const { wrapRef: moderatorScoresheetWrapRef, wrapStyle: moderatorScoresheetWrapStyle } =
+    useScoresheetStickyHeaderOffsets(moderatorHeaderKey);
 
   const pairRows = useMemo<PairRow[]>(() => {
     const byPair = new Map<number, PairRow>();
@@ -3946,7 +3993,7 @@ function ModeratorApp() {
               </div>
             </div>
 
-            <div className="scoresheetTableWrap">
+            <div ref={moderatorScoresheetWrapRef} className="scoresheetTableWrap" style={moderatorScoresheetWrapStyle}>
               <table className="scoresheetTable">
                 <thead>
                   <tr>

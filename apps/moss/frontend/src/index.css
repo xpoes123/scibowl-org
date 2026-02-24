@@ -1316,6 +1316,7 @@ button.word.wordBold {
 }
 
 .scoresheetTableWrap {
+  --scoresheetHeaderRow1Height: 44px;
   max-height: calc(100vh - 190px);
   overflow: auto;
   border: 1px solid #eee;
@@ -1340,10 +1341,23 @@ button.word.wordBold {
   font-weight: 600;
   white-space: nowrap;
   border-bottom: 1px solid #eee;
+  box-sizing: border-box;
 }
 
-.scoresheetTable thead tr:last-child th {
+.scoresheetTable thead tr:first-child th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: white;
   border-bottom: 0;
+}
+
+.scoresheetTable thead tr:nth-child(2) th {
+  position: sticky;
+  top: var(--scoresheetHeaderRow1Height);
+  z-index: 2;
+  background: white;
+  box-shadow: inset 0 1px 0 #eee, inset 0 -1px 0 #eee;
 }
 
 .scoresheetTable td {
@@ -1352,13 +1366,6 @@ button.word.wordBold {
 
 .scoresheetTable tbody tr:last-child td {
   border-bottom: 1px solid #eee;
-}
-
-.scoresheetTable thead tr:first-child th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  box-shadow: 0 1px 0 #eee;
 }
 
 .scoresheetExportRow {
