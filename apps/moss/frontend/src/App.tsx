@@ -632,6 +632,24 @@ function ScoreboardDisplayApp() {
   const [snapshot, setSnapshot] = useState<ScoreboardSnapshotV1 | null>(null);
   const [channelError, setChannelError] = useState<string | null>(null);
   const emptyScoresheetBaseState = useMemo(() => initialScoresheetState(), []);
+  const [displayView, setDisplayView] = useState<"default" | "large">(() => {
+    try {
+      const raw = localStorage.getItem("moss_scoreboard_display_view");
+      if (raw === "large") return "large";
+    } catch {
+      // ignore
+    }
+
+    return "default";
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("moss_scoreboard_display_view", displayView);
+    } catch {
+      // ignore
+    }
+  }, [displayView]);
 
   useEffect(() => {
     document.title = "MoSS — Scoreboard";
@@ -765,11 +783,25 @@ function ScoreboardDisplayApp() {
   }
 
   return (
-    <div className="scoreboardDisplayRoot" aria-label="Scoreboard display">
+    <div
+      className={["scoreboardDisplayRoot", displayView === "large" ? "scoreboardDisplayRoot--large" : ""]
+        .filter(Boolean)
+        .join(" ")}
+      aria-label="Scoreboard display"
+    >
       <div className="card scoresheetCard" aria-label="Scoresheet">
         <div className="header">
           <div>
             <h2 className="title">Scoresheet</h2>
+          </div>
+          <div className="scoreboardDisplayActions">
+            <button
+              type="button"
+              className="button"
+              onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+            >
+              Toggle View
+            </button>
           </div>
         </div>
 

@@ -1479,6 +1479,20 @@ button.word.wordBold {
   padding: 16px;
 }
 
+.scoreboardDisplayActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable {
+  font-size: 24px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetCard .pill {
+  font-size: 24px;
+}
+
 .scoreboardDisplayRoot .scoresheetTableWrap {
   max-height: calc(100vh - 110px);
 }
