@@ -1299,6 +1299,53 @@ button.word.wordBold {
   font-size: 14px;
 }
 
+.playerPickPanel {
+  border: 1px solid #d6d6de;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.playerPickRow {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #111;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.playerPickRow + .playerPickRow {
+  border-top: 1px solid #e6e7ee;
+}
+
+.playerPickRow:hover {
+  background: #f6f7fb;
+}
+
+.playerPickRow.active {
+  background: #f0f2ff;
+  box-shadow: inset 0 0 0 1px var(--sb-focus);
+}
+
+.playerPickRow:disabled {
+  cursor: default;
+  color: #777;
+  background: #fafafd;
+}
+
+.playerPickRow:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: -2px;
+  position: relative;
+  z-index: 1;
+}
+
 .attemptPopupTitle {
   font-weight: 600;
 }
@@ -1350,6 +1397,7 @@ button.word.wordBold {
 .scoresheetTableWrap {
   --scoresheetHeaderRow1Height: 44px;
   --scoresheetHeaderRow2Height: 42px;
+  --scoresheetHeaderRow3Height: 0px;
   max-height: calc(100vh - 190px);
   overflow: auto;
   border: 1px solid #eee;
@@ -1368,18 +1416,9 @@ button.word.wordBold {
   vertical-align: top;
 }
 
-.scoresheetTable thead tr:first-child th:first-child {
-  border-right: 1px solid #eee;
-}
-
-.scoresheetTable thead tr:first-child th:nth-child(2) {
-  border-right: 1px solid #eee;
-}
-
-.scoresheetTable thead tr:nth-child(2) th:nth-child(1),
-.scoresheetTable thead tr:nth-child(2) th:nth-child(4),
-.scoresheetTable tbody td:nth-child(1),
-.scoresheetTable tbody td:nth-child(4) {
+.scoresheetPairHeader,
+.scoresheetPairCell,
+.scoresheetGroupEnd {
   border-right: 1px solid #eee;
 }
 
@@ -1395,7 +1434,7 @@ button.word.wordBold {
 .scoresheetTable thead tr:first-child th {
   position: sticky;
   top: 0;
-  z-index: 3;
+  z-index: 4;
   background: white;
   border-bottom: 0;
 }
@@ -1403,6 +1442,14 @@ button.word.wordBold {
 .scoresheetTable thead tr:nth-child(2) th {
   position: sticky;
   top: var(--scoresheetHeaderRow1Height);
+  z-index: 3;
+  background: white;
+  box-shadow: inset 0 1px 0 #eee, inset 0 -1px 0 #eee;
+}
+
+.scoresheetTable thead tr:nth-child(3) th {
+  position: sticky;
+  top: calc(var(--scoresheetHeaderRow1Height) + var(--scoresheetHeaderRow2Height));
   z-index: 2;
   background: white;
   box-shadow: inset 0 1px 0 #eee, inset 0 -1px 0 #eee;
@@ -1440,6 +1487,14 @@ button.word.wordBold {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.scoresheetTeamRoleHeader .scoresheetTeamHeaderInner {
+  justify-content: center;
+}
+
+.scoresheetTeamRole {
+  font-weight: 700;
 }
 
 .scoresheetScorePill {
@@ -1746,8 +1801,8 @@ button.word.wordBold {
 
 .scoresheetBoundaryRowStart td {
   position: sticky;
-  top: calc(var(--scoresheetHeaderRow1Height) + var(--scoresheetHeaderRow2Height));
-  z-index: 4;
+  top: calc(var(--scoresheetHeaderRow1Height) + var(--scoresheetHeaderRow2Height) + var(--scoresheetHeaderRow3Height));
+  z-index: 5;
 }
 
 .scoresheetBoundaryButton {
