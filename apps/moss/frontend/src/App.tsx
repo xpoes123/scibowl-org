@@ -125,27 +125,36 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   wrapStyle: CSSProperties | undefined;
 } {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [headerHeightsPx, setHeaderHeightsPx] = useState<{ row1: number; row2: number } | null>(null);
+  const [headerHeightsPx, setHeaderHeightsPx] = useState<{ row1: number; row2: number; row3: number } | null>(null);
 
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
 
-    const row1 = wrap.querySelector("thead tr:first-child") as HTMLElement | null;
-    const row2 = wrap.querySelector("thead tr:nth-child(2)") as HTMLElement | null;
+    const rows = Array.from(wrap.querySelectorAll("thead tr")).slice(0, 3) as HTMLElement[];
+    const row1 = rows[0] ?? null;
+    const row2 = rows[1] ?? null;
+    const row3 = rows[2] ?? null;
     if (!row1 || !row2) return;
 
     const update = () => {
       const raw1 = row1.getBoundingClientRect().height;
       const raw2 = row2.getBoundingClientRect().height;
+      const raw3 = row3 ? row3.getBoundingClientRect().height : 0;
       const next1 = Math.max(0, Math.round(raw1 * 10) / 10);
       const next2 = Math.max(0, Math.round(raw2 * 10) / 10);
+      const next3 = Math.max(0, Math.round(raw3 * 10) / 10);
       setHeaderHeightsPx((prev) => {
-        if (!prev) return { row1: next1, row2: next2 };
+        if (!prev) return { row1: next1, row2: next2, row3: next3 };
         const same1 = Math.abs(prev.row1 - next1) < 0.05;
         const same2 = Math.abs(prev.row2 - next2) < 0.05;
-        if (same1 && same2) return prev;
-        return { row1: same1 ? prev.row1 : next1, row2: same2 ? prev.row2 : next2 };
+        const same3 = Math.abs(prev.row3 - next3) < 0.05;
+        if (same1 && same2 && same3) return prev;
+        return {
+          row1: same1 ? prev.row1 : next1,
+          row2: same2 ? prev.row2 : next2,
+          row3: same3 ? prev.row3 : next3,
+        };
       });
     };
 
@@ -153,6 +162,7 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
     const ro = new ResizeObserver(() => update());
     ro.observe(row1);
     ro.observe(row2);
+    if (row3) ro.observe(row3);
     window.addEventListener("resize", update);
 
     return () => {
@@ -166,6 +176,7 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
     return {
       ["--scoresheetHeaderRow1Height" as string]: `${headerHeightsPx.row1}px`,
       ["--scoresheetHeaderRow2Height" as string]: `${headerHeightsPx.row2}px`,
+      ["--scoresheetHeaderRow3Height" as string]: `${headerHeightsPx.row3}px`,
     } as CSSProperties;
   }, [headerHeightsPx]);
 
@@ -488,6 +499,21 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
+function teamLetterLabelForIndex(index: number): string {
+  // 0 -> A, 1 -> B, ... 25 -> Z, 26 -> AA, etc.
+  let n = index;
+  let label = "";
+  while (n >= 0) {
+    label = String.fromCharCode(65 + (n % 26)) + label;
+    n = Math.floor(n / 26) - 1;
+  }
+  return label;
+}
+
+function teamRoleLabelForIndex(index: number): string {
+  return `Team ${teamLetterLabelForIndex(index)}`;
+}
+
 function formatRelativeTime(iso: string, nowMs: number): string {
   const thenMs = new Date(iso).getTime();
   if (!Number.isFinite(thenMs)) return iso;
@@ -503,13 +529,16 @@ function formatRelativeTime(iso: string, nowMs: number): string {
   return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
 }
 
-function computePopupPosition(anchor: AnchorRect): { left: number; top: number } {
+function computePopupPosition(
+  anchor: AnchorRect,
+  popup?: { width: number; height: number }
+): { left: number; top: number } {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
 
   const margin = 12;
-  const popupWidth = 220;
-  const popupHeight = 128;
+  const popupWidth = popup?.width ?? 220;
+  const popupHeight = popup?.height ?? 128;
 
   const rightLeft = anchor.right + margin;
   if (rightLeft + popupWidth <= vw - 8) {
@@ -532,6 +561,17 @@ function computePopupPosition(anchor: AnchorRect): { left: number; top: number }
   }
 
   return { left: 8, top: 8 };
+}
+
+function estimateAttemptPopupHeightPx(activePlayerCount: number, usePlayerPanel: boolean): number {
+  // Overestimate a bit so we avoid positioning a taller popup off-screen.
+  const paddingY = 24; // 12px top/bottom
+  const selectorsGap = 8;
+  const selectorsMarginBottom = 10;
+  const teamControlHeight = 34;
+  const playerControlHeight = usePlayerPanel ? activePlayerCount * 32 : 34;
+  const buttonsHeight = 34 * 2 + 8;
+  return paddingY + teamControlHeight + selectorsGap + playerControlHeight + selectorsMarginBottom + buttonsHeight + 12;
 }
 
 function parsePacketJson(jsonText: string): Packet {
@@ -921,9 +961,16 @@ function ScoreboardDisplayApp() {
             )}
             <thead>
               <tr>
-                <th aria-label="Pair number" />
-                {teams.map((team) => (
-                  <th key={team.id} colSpan={3} className="scoresheetTeamHeader">
+                <th className="scoresheetPairHeader" aria-label="Pair number" />
+                {teams.map((team, teamIndex) => (
+                  <th
+                    key={team.id}
+                    colSpan={3}
+                    className={[
+                      "scoresheetTeamHeader",
+                      teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : "",
+                    ].filter(Boolean).join(" ")}
+                  >
                     <div className="scoresheetTeamHeaderInner">
                       <span className="scoresheetTeamName">{team.name}</span>
                       <span className="pill scoresheetScorePill">
@@ -934,11 +981,16 @@ function ScoreboardDisplayApp() {
                 ))}
               </tr>
               <tr>
-                <th aria-hidden="true" />
-                {teams.flatMap((team) => [
+                <th className="scoresheetPairHeader" aria-hidden="true" />
+                {teams.flatMap((team, teamIndex) => [
                   <th key={`${team.id}_t`}>T</th>,
                   <th key={`${team.id}_b`}>B</th>,
-                  <th key={`${team.id}_r`}>Total</th>,
+                  <th
+                    key={`${team.id}_r`}
+                    className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
+                  >
+                    Total
+                  </th>,
                 ])}
               </tr>
             </thead>
@@ -977,7 +1029,8 @@ function ScoreboardDisplayApp() {
                           <td className="scoresheetPairCell">
                         <span className="pairLinkDisplay">{row.pairId}</span>
                       </td>
-                      {row.perTeam.flatMap((teamRow) => {
+                      {row.perTeam.flatMap((teamRow, teamIndex) => {
+                        const isGroupEnd = teamIndex < row.perTeam.length - 1;
                         const tossupResult = teamRow.tossupAttempt?.result;
                         const bonusResult = teamRow.bonusAttempt?.result;
 
@@ -1014,7 +1067,10 @@ function ScoreboardDisplayApp() {
                               {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
                             </span>
                           </td>,
-                          <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                          <td
+                            key={`${teamRow.teamId}_r`}
+                            className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
+                          >
                             {teamRow.runningTotal}
                           </td>,
                         ];
@@ -2739,7 +2795,6 @@ function ModeratorApp() {
     if (question.question_type === "BONUS") return;
 
     const anchor = getAnchorRect(anchorEl);
-    const position = computePopupPosition(anchor);
 
     const currentAttempts = attempts[question.id] ?? [];
     const currentCorrect = currentAttempts.find((a) => a.result === "correct");
@@ -2785,6 +2840,18 @@ function ModeratorApp() {
     }
 
     if (!preferred) return;
+
+    const preferredTeam = currentGame.teams.find((t) => t.id === preferred.teamId);
+    const preferredActiveCount = (() => {
+      if (!preferredTeam) return 0;
+      const ids = activePlayerIdsForTeamAtTossup(preferredTeam, question.pair_id);
+      return preferredTeam.players.filter((p) => ids.has(p.id)).length;
+    })();
+    const usePlayerPanel = preferredActiveCount > 0 && preferredActiveCount <= 6;
+    const position = computePopupPosition(anchor, {
+      width: 220,
+      height: estimateAttemptPopupHeightPx(preferredActiveCount, usePlayerPanel),
+    });
 
     setAttemptEditor({
       questionId: question.id,
@@ -2955,7 +3022,7 @@ function ModeratorApp() {
     if (!attempt?.result || !attempt.playerId) return;
 
     const anchor = getAnchorRect(anchorEl);
-    const position = computePopupPosition(anchor);
+    const position = computePopupPosition(anchor, { width: 320, height: 240 });
 
     setAttemptEditor(null);
     setBonusResultEditor(null);
@@ -2978,7 +3045,7 @@ function ModeratorApp() {
     if (!attempt?.result) return;
 
     const anchor = getAnchorRect(anchorEl);
-    const position = computePopupPosition(anchor);
+    const position = computePopupPosition(anchor, { width: 320, height: 220 });
 
     setAttemptEditor(null);
     setBonusResultEditor(null);
@@ -4176,9 +4243,34 @@ function ModeratorApp() {
               <table className="scoresheetTable">
                 <thead>
                   <tr>
-                    <th aria-label="Pair number" />
-                    {teams.map((team) => (
-                      <th key={team.id} colSpan={3} className="scoresheetTeamHeader">
+                    <th className="scoresheetPairHeader" aria-hidden="true" />
+                    {teams.map((team, teamIndex) => (
+                      <th
+                        key={`role_${team.id}`}
+                        colSpan={3}
+                        className={[
+                          "scoresheetTeamHeader",
+                          "scoresheetTeamRoleHeader",
+                          teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : "",
+                        ].filter(Boolean).join(" ")}
+                      >
+                        <div className="scoresheetTeamHeaderInner">
+                          <span className="scoresheetTeamRole">{teamRoleLabelForIndex(teamIndex)}</span>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th className="scoresheetPairHeader" aria-label="Pair number" />
+                    {teams.map((team, teamIndex) => (
+                      <th
+                        key={team.id}
+                        colSpan={3}
+                        className={[
+                          "scoresheetTeamHeader",
+                          teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : "",
+                        ].filter(Boolean).join(" ")}
+                      >
                         <div className="scoresheetTeamHeaderInner">
                           <span className="scoresheetTeamName">{team.name}</span>
                           <span className="pill scoresheetScorePill">
@@ -4189,11 +4281,16 @@ function ModeratorApp() {
                     ))}
                   </tr>
                   <tr>
-                    <th aria-hidden="true" />
-                    {teams.flatMap((team) => [
+                    <th className="scoresheetPairHeader" aria-hidden="true" />
+                    {teams.flatMap((team, teamIndex) => [
                       <th key={`${team.id}_t`}>T</th>,
                       <th key={`${team.id}_b`}>B</th>,
-                      <th key={`${team.id}_r`}>Total</th>,
+                      <th
+                        key={`${team.id}_r`}
+                        className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
+                      >
+                        Total
+                      </th>,
                     ])}
                   </tr>
                 </thead>
@@ -4266,7 +4363,8 @@ function ModeratorApp() {
                               {row.pairId}
                             </button>
                           </td>
-                          {row.perTeam.flatMap((teamRow) => {
+                          {row.perTeam.flatMap((teamRow, teamIndex) => {
+                            const isGroupEnd = teamIndex < row.perTeam.length - 1;
                             const tossupResult = teamRow.tossupAttempt?.result;
                             const bonusResult = teamRow.bonusAttempt?.result;
 
@@ -4321,7 +4419,10 @@ function ModeratorApp() {
                                   {formatAttemptCellText(teamRow.bonusAttempt, row.bonus?.question_type, playersById)}
                                 </button>
                               </td>,
-                              <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">
+                              <td
+                                key={`${teamRow.teamId}_r`}
+                                className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
+                              >
                                 {teamRow.runningTotal}
                               </td>,
                             ];
@@ -4504,6 +4605,7 @@ function ModeratorApp() {
           const activePlayers = team.players.filter((p) => activeIds.has(p.id));
           const selectedPlayerActive = activeIds.has(scoresheetAttemptEditModal.playerId);
           const canSave = selectedPlayerActive && activePlayers.length > 0;
+          const usePlayerPanel = selectedPlayerActive && activePlayers.length > 0 && activePlayers.length <= 6;
 
           const title = `Edit: Tossup ${question.pair_id} (${team.name})`;
 
@@ -4522,25 +4624,49 @@ function ModeratorApp() {
                   <div className="fieldLabelRow">
                     <div className="fieldLabel">Player</div>
                   </div>
-                  <select
-                    className="selectInput"
-                    value={scoresheetAttemptEditModal.playerId}
-                    onChange={(e) => {
-                      const playerId = e.target.value;
-                      setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
-                    }}
-                  >
-                    {!selectedPlayerActive && (
-                      <option value={scoresheetAttemptEditModal.playerId} disabled>
-                        {(playersById.get(scoresheetAttemptEditModal.playerId) ?? scoresheetAttemptEditModal.playerId) + " (not in lineup)"}
-                      </option>
-                    )}
-                    {activePlayers.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
+                  {usePlayerPanel ? (
+                    <div className="playerPickPanel" role="listbox" aria-label="Player">
+                      {activePlayers.map((p, idx) => {
+                        const active = p.id === scoresheetAttemptEditModal.playerId;
+                        return (
+                          <button
+                            key={p.id}
+                            type="button"
+                            className={["playerPickRow", active ? "active" : ""].filter(Boolean).join(" ")}
+                            onClick={() => {
+                              const playerId = p.id;
+                              setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
+                            }}
+                            role="option"
+                            aria-selected={active}
+                          >
+                            {p.name || `Player ${idx + 1}`}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <select
+                      className="selectInput"
+                      value={scoresheetAttemptEditModal.playerId}
+                      onChange={(e) => {
+                        const playerId = e.target.value;
+                        setScoresheetAttemptEditModal((prev) => (prev ? { ...prev, playerId } : prev));
+                      }}
+                      aria-label="Select player"
+                    >
+                      {!selectedPlayerActive && (
+                        <option value={scoresheetAttemptEditModal.playerId} disabled>
+                          {(playersById.get(scoresheetAttemptEditModal.playerId) ?? scoresheetAttemptEditModal.playerId) + " (not in lineup)"}
+                        </option>
+                      )}
+                      {activePlayers.map((p, idx) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name || `Player ${idx + 1}`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div className="scoresheetEditPopupActions">
@@ -4614,6 +4740,7 @@ function ModeratorApp() {
         {(() => {
           const popupQuestion = attemptEditor ? questionsById.get(attemptEditor.questionId) : undefined;
           if (!attemptEditor || !popupQuestion) return null;
+          const currentAttemptEditor = attemptEditor;
 
           const editingAttempts = attempts[popupQuestion.id] ?? [];
 
@@ -4623,7 +4750,7 @@ function ModeratorApp() {
               className="attemptPopup"
               role="dialog"
               aria-label="Mark attempt"
-              style={{ left: attemptEditor.left, top: attemptEditor.top }}
+              style={{ left: currentAttemptEditor.left, top: currentAttemptEditor.top }}
             >
               {popupQuestion.question_type !== "BONUS" && (() => {
                 const attemptedTeamIds = new Set(editingAttempts.map((a) => a.teamId));
@@ -4631,65 +4758,125 @@ function ModeratorApp() {
                   editingAttempts.flatMap((a) => (a.playerId ? [a.playerId] : []))
                 );
                 const tossupNumber = popupQuestion.pair_id;
-                const selectedTeam = teams.find((t) => t.id === attemptEditor.selection.teamId);
+                const selectedTeam = teams.find((t) => t.id === currentAttemptEditor.selection.teamId);
                 const activeSet = selectedTeam ? activePlayerIdsForTeamAtTossup(selectedTeam, tossupNumber) : new Set<string>();
                 const activePlayers = (selectedTeam?.players ?? []).filter((p) => activeSet.has(p.id));
+                const useTeamToggle = teams.length === 2;
+                const usePlayerPanel = activePlayers.length > 0 && activePlayers.length <= 6;
+
+                function pickPlayerIdForTeam(teamId: string): string | undefined {
+                  const team = teams.find((t) => t.id === teamId);
+                  if (!team) return currentAttemptEditor.selection.playerId;
+                  const currentPlayerId = currentAttemptEditor.selection.playerId;
+                  const active = activePlayerIdsForTeamAtTossup(team, tossupNumber);
+                  const available =
+                    team.players.find(
+                      (p) => active.has(p.id) && (!attemptedPlayerIds.has(p.id) || p.id === currentPlayerId)
+                    ) ?? team.players.find((p) => active.has(p.id));
+                  return available?.id ?? currentPlayerId;
+                }
 
                 return (
                   <div className="attemptPopupSelectors">
-                    <select
-                      className="selectInput"
-                      value={attemptEditor.selection.teamId}
-                      onChange={(e) => {
-                        const teamId = e.target.value;
-                        const team = teams.find((t) => t.id === teamId);
-                        const currentPlayerId = attemptEditor.selection.playerId;
-                        const active = team ? activePlayerIdsForTeamAtTossup(team, tossupNumber) : new Set<string>();
-                        const available =
-                          team?.players.find(
-                            (p) => active.has(p.id) && (!attemptedPlayerIds.has(p.id) || p.id === currentPlayerId)
-                          ) ?? team?.players.find((p) => active.has(p.id));
-                        const playerId = available?.id ?? currentPlayerId;
-                        setAttemptEditor((prev) =>
-                          prev
-                            ? { ...prev, selection: { ...prev.selection, teamId, playerId } }
-                            : prev
-                        );
-                      }}
-                    >
-                      {teams.map((t) => (
-                        <option
-                          key={t.id}
-                          value={t.id}
-                          disabled={attemptedTeamIds.has(t.id) && t.id !== attemptEditor.selection.teamId}
-                        >
-                          {t.name}
-                        </option>
-                      ))}
-                    </select>
+                    {useTeamToggle ? (
+                      <div className="scoreToggle" role="group" aria-label="Team">
+                        {teams.slice(0, 2).map((t, idx) => {
+                          const disabled = attemptedTeamIds.has(t.id) && t.id !== currentAttemptEditor.selection.teamId;
+                          const active = t.id === currentAttemptEditor.selection.teamId;
+                          return (
+                            <button
+                              key={t.id}
+                              type="button"
+                              className={active ? "active" : ""}
+                              disabled={disabled}
+                              onClick={() => {
+                                if (t.id === currentAttemptEditor.selection.teamId) return;
+                                const teamId = t.id;
+                                const playerId = pickPlayerIdForTeam(teamId);
+                                setAttemptEditor((prev) =>
+                                  prev ? { ...prev, selection: { ...prev.selection, teamId, playerId } } : prev
+                                );
+                              }}
+                              aria-label={`Select ${teamRoleLabelForIndex(idx)}`}
+                            >
+                              {teamRoleLabelForIndex(idx)}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <select
+                        className="selectInput"
+                        value={currentAttemptEditor.selection.teamId}
+                        onChange={(e) => {
+                          const teamId = e.target.value;
+                          const playerId = pickPlayerIdForTeam(teamId);
+                          setAttemptEditor((prev) =>
+                            prev ? { ...prev, selection: { ...prev.selection, teamId, playerId } } : prev
+                          );
+                        }}
+                        aria-label="Select team"
+                      >
+                        {teams.map((t) => (
+                          <option
+                            key={t.id}
+                            value={t.id}
+                            disabled={attemptedTeamIds.has(t.id) && t.id !== currentAttemptEditor.selection.teamId}
+                          >
+                            {t.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
 
-                    <select
-                      className="selectInput"
-                      value={attemptEditor.selection.playerId ?? ""}
-                      onChange={(e) => {
-                        const playerId = e.target.value;
-                        setAttemptEditor((prev) =>
-                          prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
-                        );
-                      }}
-                    >
-                      {activePlayers.map((p) => (
-                        <option
-                          key={p.id}
-                          value={p.id}
-                          disabled={
-                            attemptedPlayerIds.has(p.id) && p.id !== attemptEditor.selection.playerId
-                          }
-                        >
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
+                    {usePlayerPanel ? (
+                      <div className="playerPickPanel" role="listbox" aria-label="Player">
+                        {activePlayers.map((p, idx) => {
+                          const disabled = attemptedPlayerIds.has(p.id) && p.id !== currentAttemptEditor.selection.playerId;
+                          const active = p.id === currentAttemptEditor.selection.playerId;
+                          return (
+                            <button
+                              key={p.id}
+                              type="button"
+                              className={["playerPickRow", active ? "active" : ""].filter(Boolean).join(" ")}
+                              disabled={disabled}
+                              onClick={() => {
+                                const playerId = p.id;
+                                setAttemptEditor((prev) =>
+                                  prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
+                                );
+                              }}
+                              role="option"
+                              aria-selected={active}
+                            >
+                              {p.name || `Player ${idx + 1}`}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <select
+                        className="selectInput"
+                        value={currentAttemptEditor.selection.playerId ?? ""}
+                        onChange={(e) => {
+                          const playerId = e.target.value;
+                          setAttemptEditor((prev) =>
+                            prev ? { ...prev, selection: { ...prev.selection, playerId } } : prev
+                          );
+                        }}
+                        aria-label="Select player"
+                      >
+                        {activePlayers.map((p, idx) => (
+                          <option
+                            key={p.id}
+                            value={p.id}
+                            disabled={attemptedPlayerIds.has(p.id) && p.id !== currentAttemptEditor.selection.playerId}
+                          >
+                            {p.name || `Player ${idx + 1}`}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </div>
                 );
               })()}
