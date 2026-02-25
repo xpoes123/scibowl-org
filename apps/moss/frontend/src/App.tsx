@@ -23,6 +23,15 @@ import {
   safePostScoreboardMessage,
   type ScoreboardDisplayMessage,
 } from "./scoreboard/scoreboardChannel";
+import ScoreboardDisplaySettingsModal from "./scoreboard/ScoreboardDisplaySettingsModal";
+import {
+  loadScoreboardDisplayView,
+  loadScoreboardRowAdvanceMode,
+  saveScoreboardDisplayView,
+  saveScoreboardRowAdvanceMode,
+  type ScoreboardDisplayView,
+  type ScoreboardRowAdvanceMode,
+} from "./scoreboard/displaySettings";
 import HoldToConfirmButton from "./ui/HoldToConfirmButton";
 import useResizableRightColumn from "./ui/useResizableRightColumn";
 import type {
@@ -632,24 +641,18 @@ function ScoreboardDisplayApp() {
   const [snapshot, setSnapshot] = useState<ScoreboardSnapshotV1 | null>(null);
   const [channelError, setChannelError] = useState<string | null>(null);
   const emptyScoresheetBaseState = useMemo(() => initialScoresheetState(), []);
-  const [displayView, setDisplayView] = useState<"default" | "large">(() => {
-    try {
-      const raw = localStorage.getItem("moss_scoreboard_display_view");
-      if (raw === "large") return "large";
-    } catch {
-      // ignore
-    }
-
-    return "default";
-  });
+  const [displayView, setDisplayView] = useState<ScoreboardDisplayView>(() => loadScoreboardDisplayView());
+  const [rowAdvanceMode, setRowAdvanceMode] = useState<ScoreboardRowAdvanceMode>(() => loadScoreboardRowAdvanceMode());
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const lastAutoScrolledPairIdRef = useRef<number | null>(null);
 
   useEffect(() => {
-    try {
-      localStorage.setItem("moss_scoreboard_display_view", displayView);
-    } catch {
-      // ignore
-    }
+    saveScoreboardDisplayView(displayView);
   }, [displayView]);
+
+  useEffect(() => {
+    saveScoreboardRowAdvanceMode(rowAdvanceMode);
+  }, [rowAdvanceMode]);
 
   useEffect(() => {
     document.title = "MoSS — Scoreboard";
@@ -748,9 +751,72 @@ function ScoreboardDisplayApp() {
     return { rows, totals };
   }, [attempts, pairRows, teams]);
 
+  const mostRecentPairId = useMemo(() => {
+    for (let i = scoredPairs.rows.length - 1; i >= 0; i--) {
+      const row = scoredPairs.rows[i];
+      const hasAnyAttempt = row.perTeam.some((teamRow) => teamRow.tossupAttempt || teamRow.bonusAttempt);
+      if (hasAnyAttempt) return row.pairId;
+    }
+    return scoredPairs.rows[0]?.pairId;
+  }, [scoredPairs.rows]);
+
   const displayHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
   const { wrapRef: displayScoresheetWrapRef, wrapStyle: displayScoresheetWrapStyle } =
     useScoresheetStickyHeaderOffsets(displayHeaderKey);
+
+  useEffect(() => {
+    lastAutoScrolledPairIdRef.current = null;
+  }, [rowAdvanceMode]);
+
+  useEffect(() => {
+    if (rowAdvanceMode === "frozen") return;
+    const wrap = displayScoresheetWrapRef.current;
+    if (!wrap) return;
+
+    const targetPairId =
+      rowAdvanceMode === "follow_moderator"
+        ? pairRows[pairIdx]?.pairId
+        : rowAdvanceMode === "most_recent"
+          ? mostRecentPairId
+          : undefined;
+
+    if (!targetPairId) return;
+    if (lastAutoScrolledPairIdRef.current === targetPairId) return;
+
+    const rowEl = wrap.querySelector(`[data-pair-id="${targetPairId}"]`) as HTMLElement | null;
+    if (!rowEl) return;
+
+    const computed = window.getComputedStyle(wrap);
+    const h1 = Number.parseFloat(computed.getPropertyValue("--scoresheetHeaderRow1Height")) || 0;
+    const h2 = Number.parseFloat(computed.getPropertyValue("--scoresheetHeaderRow2Height")) || 0;
+    const stickyOffset = h1 + h2;
+
+    const wrapRect = wrap.getBoundingClientRect();
+    const rowRect = rowEl.getBoundingClientRect();
+    const rowTopInWrap = wrap.scrollTop + (rowRect.top - wrapRect.top);
+    const rowBottomInWrap = wrap.scrollTop + (rowRect.bottom - wrapRect.top);
+
+    const visibleTop = wrap.scrollTop + stickyOffset;
+    const visibleBottom = wrap.scrollTop + wrap.clientHeight;
+
+    const maxScrollTop = Math.max(0, wrap.scrollHeight - wrap.clientHeight);
+
+    if (rowAdvanceMode === "follow_moderator") {
+      const visibleHeight = wrap.clientHeight - stickyOffset;
+      if (visibleHeight > 0) {
+        const rowCenterInWrap = (rowTopInWrap + rowBottomInWrap) / 2;
+        const desiredScrollTop = rowCenterInWrap - stickyOffset - visibleHeight / 2;
+        const clampedScrollTop = Math.min(maxScrollTop, Math.max(0, desiredScrollTop));
+        if (Math.abs(wrap.scrollTop - clampedScrollTop) > 2) {
+          wrap.scrollTo({ top: clampedScrollTop, behavior: "auto" });
+        }
+      }
+    } else if (rowTopInWrap < visibleTop || rowBottomInWrap > visibleBottom) {
+      wrap.scrollTo({ top: Math.min(maxScrollTop, Math.max(0, rowTopInWrap - stickyOffset)), behavior: "auto" });
+    }
+
+    lastAutoScrolledPairIdRef.current = targetPairId;
+  }, [displayScoresheetWrapRef, mostRecentPairId, pairIdx, pairRows, rowAdvanceMode]);
 
   if (channelError) {
     return (
@@ -797,10 +863,19 @@ function ScoreboardDisplayApp() {
           <div className="scoreboardDisplayActions">
             <button
               type="button"
-              className="button"
+              className="secondary"
               onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
             >
               Toggle View
+            </button>
+            <button
+              type="button"
+              className="secondary scoreboardDisplayGearButton"
+              aria-label="Open display settings"
+              title="Display settings"
+              onClick={() => setIsSettingsOpen(true)}
+            >
+              ⚙
             </button>
           </div>
         </div>
@@ -857,7 +932,11 @@ function ScoreboardDisplayApp() {
 
                       const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
                       nodes.push(
-                        <tr key={`row_${row.pairId}`} className={isActivePair ? "scoresheetRowActive" : undefined}>
+                        <tr
+                          key={`row_${row.pairId}`}
+                          data-pair-id={row.pairId}
+                          className={isActivePair ? "scoresheetRowActive" : undefined}
+                        >
                           <td className="scoresheetPairCell">
                         <span className="pairLinkDisplay">{row.pairId}</span>
                       </td>
@@ -913,6 +992,12 @@ function ScoreboardDisplayApp() {
           </table>
         </div>
       </div>
+      <ScoreboardDisplaySettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        mode={rowAdvanceMode}
+        onModeChange={setRowAdvanceMode}
+      />
     </div>
   );
 }
