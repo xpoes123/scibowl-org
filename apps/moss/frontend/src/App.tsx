@@ -903,7 +903,9 @@ function ScoreboardDisplayApp() {
         </div>
 
         <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
-          <table className="scoresheetTable">
+          <table
+            className={["scoresheetTable", displayView === "large" ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
+          >
             <thead>
               <tr>
                 <th aria-label="Pair number" />
@@ -991,12 +993,12 @@ function ScoreboardDisplayApp() {
                         return [
                           <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
                             <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellText(teamRow.tossupAttempt, row.tossup?.question_type, playersById)}
+                              {formatAttemptCellTextForView(teamRow.tossupAttempt, row.tossup?.question_type)}
                             </span>
                           </td>,
                           <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
                             <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellText(teamRow.bonusAttempt, row.bonus?.question_type, playersById)}
+                              {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
                             </span>
                           </td>,
                           <td key={`${teamRow.teamId}_r`} className="scoresheetNumberCell">

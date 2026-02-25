@@ -1470,9 +1470,26 @@ button.word.wordBold {
 
 .scoreboardDisplayRoot {
   min-height: 100vh;
+  height: 100vh;
   width: min(1800px, 100%);
   margin: 0 auto;
   padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreboardDisplayRoot > .card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreboardDisplayRoot .scoresheetTableWrap {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
 }
 
 .scoreboardDisplayActions {
@@ -1521,8 +1538,87 @@ button.word.wordBold {
   border-radius: 999px;
 }
 
-.scoreboardDisplayRoot .scoresheetTableWrap {
-  max-height: calc(100vh - 110px);
+.scoreboardDisplayRoot--large {
+  padding: 12px;
+}
+
+.scoreboardDisplayRoot--large .card {
+  padding: 16px;
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTableWrap {
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetScorePill {
+  background: white;
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoreboardDisplayActions button.secondary {
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector th,
+.scoreboardDisplayRoot--large .scoresheetTable--projector td {
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th:first-child,
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th:nth-child(2),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(1),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(4),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(1),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(4) {
+  border-right: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tr > :last-child {
+  border-right: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th {
+  border-bottom: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th {
+  box-shadow: none;
+  border-top: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(1),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(1) {
+  width: 72px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(3),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(4),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(6),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(7),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(3),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(4),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(6),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(7) {
+  width: 132px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(2) .scoresheetAttemptCellDisplay,
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(5) .scoresheetAttemptCellDisplay {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .scoreboardDisplaySettingsSectionTitle {
