@@ -824,7 +824,7 @@ function ScoreboardDisplayApp() {
     return scoredPairs.rows[0]?.pairId;
   }, [scoredPairs.rows]);
 
-  const displayHeaderKey = useMemo(() => teams.map((t) => t.name).join("|"), [teams]);
+  const displayHeaderKey = useMemo(() => `${displayView}|${teams.map((t) => t.name).join("|")}`, [displayView, teams]);
   const { wrapRef: displayScoresheetWrapRef, wrapStyle: displayScoresheetWrapStyle } =
     useScoresheetStickyHeaderOffsets(displayHeaderKey);
 
@@ -960,6 +960,28 @@ function ScoreboardDisplayApp() {
               </colgroup>
             )}
             <thead>
+              {displayView === "default" && (
+                <tr>
+                  <th className="scoresheetPairHeader" aria-hidden="true" />
+                  {teams.map((team, teamIndex) => (
+                    <th
+                      key={`role_${team.id}`}
+                      colSpan={3}
+                      className={[
+                        "scoresheetTeamHeader",
+                        "scoresheetTeamRoleHeader",
+                        teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : "",
+                      ].filter(Boolean).join(" ")}
+                    >
+                      <div className="scoresheetTeamHeaderInner">
+                        <span className={["scoresheetTeamName", "scoresheetTeamRole"].join(" ")}>
+                          {teamRoleLabelForIndex(teamIndex)}
+                        </span>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              )}
               <tr>
                 <th className="scoresheetPairHeader" aria-label="Pair number" />
                 {teams.map((team, teamIndex) => (
@@ -4255,7 +4277,9 @@ function ModeratorApp() {
                         ].filter(Boolean).join(" ")}
                       >
                         <div className="scoresheetTeamHeaderInner">
-                          <span className="scoresheetTeamRole">{teamRoleLabelForIndex(teamIndex)}</span>
+                          <span className={["scoresheetTeamName", "scoresheetTeamRole"].join(" ")}>
+                            {teamRoleLabelForIndex(teamIndex)}
+                          </span>
                         </div>
                       </th>
                     ))}

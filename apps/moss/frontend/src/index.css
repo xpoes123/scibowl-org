@@ -1494,10 +1494,7 @@ button.word.wordBold {
 }
 
 .scoresheetTeamRole {
-  font-size: 12px;
-  font-weight: 600;
-  color: #666;
-  white-space: nowrap;
+  font-weight: 700;
 }
 
 .scoresheetScorePill {
