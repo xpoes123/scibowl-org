@@ -714,6 +714,8 @@ function ScoreboardDisplayApp() {
     return new Map(entries);
   }, [teams]);
 
+  const isProjectorLayout = displayView === "large" && teams.length === 2;
+
   const formatAttemptCellTextForView = (
     attemptValue: Attempt | undefined,
     questionType: QuestionType | undefined
@@ -904,8 +906,19 @@ function ScoreboardDisplayApp() {
 
         <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
           <table
-            className={["scoresheetTable", displayView === "large" ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
+            className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
           >
+            {isProjectorLayout && (
+              <colgroup>
+                <col className="scoresheetColPair" />
+                <col className="scoresheetColT1" />
+                <col className="scoresheetColB1" />
+                <col className="scoresheetColR1" />
+                <col className="scoresheetColT2" />
+                <col className="scoresheetColB2" />
+                <col className="scoresheetColR2" />
+              </colgroup>
+            )}
             <thead>
               <tr>
                 <th aria-label="Pair number" />

@@ -1598,20 +1598,20 @@ button.word.wordBold {
   border-bottom: 0;
 }
 
-.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(1),
-.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(1) {
-  width: 72px;
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColPair {
+  width: 5.8823529412%;
 }
 
-.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(3),
-.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(4),
-.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(6),
-.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(7),
-.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(3),
-.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(4),
-.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(6),
-.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(7) {
-  width: 132px;
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColT1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColT2 {
+  width: 23.5294117647%;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColB1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColR1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColB2,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColR2 {
+  width: 11.7647058824%;
 }
 
 .scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(2) .scoresheetAttemptCellDisplay,
