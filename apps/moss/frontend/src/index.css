@@ -1564,6 +1564,7 @@ button.word.wordBold {
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
+  font-size: 48px;
 }
 
 .scoreboardDisplayRoot--large .scoresheetTable--projector th,
