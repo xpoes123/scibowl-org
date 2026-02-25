@@ -106,6 +106,20 @@ function formatAttemptCellText(
   return `${pointsLabel} @ ${tokenLabel}${who}`;
 }
 
+function formatAttemptCellTextBrief(
+  attemptValue: Attempt | undefined,
+  questionType: QuestionType | undefined,
+  playersById: Map<string, string>
+): string {
+  if (!attemptValue?.result) return "";
+  const points = pointsForAttempt(attemptValue, questionType);
+  const pointsLabel = points === undefined ? "" : points > 0 ? `+${points}` : String(points);
+  if (questionType === "BONUS") return pointsLabel;
+  const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
+  const who = player ? ` (${player})` : "";
+  return `${pointsLabel}${who}`;
+}
+
 function useScoresheetStickyHeaderOffsets(headerKey: string): {
   wrapRef: React.RefObject<HTMLDivElement | null>;
   wrapStyle: CSSProperties | undefined;
@@ -699,6 +713,14 @@ function ScoreboardDisplayApp() {
     }
     return new Map(entries);
   }, [teams]);
+
+  const formatAttemptCellTextForView = (
+    attemptValue: Attempt | undefined,
+    questionType: QuestionType | undefined
+  ): string => {
+    if (displayView === "large") return formatAttemptCellTextBrief(attemptValue, questionType, playersById);
+    return formatAttemptCellText(attemptValue, questionType, playersById);
+  };
   const scoresheetState = useMemo(
     () => reduceScoresheetEvents(scoresheetEvents, scoresheetBaseState),
     [scoresheetBaseState, scoresheetEvents]
