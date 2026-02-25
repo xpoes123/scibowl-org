@@ -1408,11 +1408,7 @@ button.word.wordBold {
   box-shadow: inset 0 1px 0 #eee, inset 0 -1px 0 #eee;
 }
 
-.scoresheetTable td {
-  border-bottom: 0;
-}
-
-.scoresheetTable tbody tr:last-child td {
+.scoresheetTable tbody td {
   border-bottom: 1px solid #eee;
 }
 
@@ -1474,13 +1470,201 @@ button.word.wordBold {
 
 .scoreboardDisplayRoot {
   min-height: 100vh;
+  height: 100vh;
   width: min(1800px, 100%);
   margin: 0 auto;
   padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreboardDisplayRoot > .card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .scoreboardDisplayRoot .scoresheetTableWrap {
-  max-height: calc(100vh - 110px);
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+.scoreboardDisplayActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreboardDisplayGearButton {
+  width: 44px;
+  padding-left: 0;
+  padding-right: 0;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable {
+  font-size: 24px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTeamHeader {
+  text-align: center;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTeamHeaderInner {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTeamName {
+  font-size: 72px;
+  line-height: 1.05;
+  overflow: visible;
+  text-overflow: initial;
+  white-space: normal;
+  text-align: center;
+}
+
+.scoreboardDisplayRoot--large .scoresheetScorePill {
+  font-size: 72px;
+  padding: 10px 22px;
+  border-radius: 999px;
+}
+
+.scoreboardDisplayRoot--large {
+  padding: 12px;
+}
+
+.scoreboardDisplayRoot--large .card {
+  padding: 16px;
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTableWrap {
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetScorePill {
+  background: white;
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoreboardDisplayActions button.secondary {
+  border: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 48px;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector th,
+.scoreboardDisplayRoot--large .scoresheetTable--projector td {
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th:first-child,
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th:nth-child(2),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(1),
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th:nth-child(4),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(1),
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(4) {
+  border-right: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tr > :last-child {
+  border-right: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:first-child th {
+  border-bottom: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector thead tr:nth-child(2) th {
+  box-shadow: none;
+  border-top: 2px solid #000;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColPair {
+  width: 7.6923076923%;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColT1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColT2 {
+  width: 30.7692307692%;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColB1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColR1,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColB2,
+.scoreboardDisplayRoot--large .scoresheetTable--projector col.scoresheetColR2 {
+  width: 7.6923076923%;
+}
+
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(2) .scoresheetAttemptCellDisplay,
+.scoreboardDisplayRoot--large .scoresheetTable--projector tbody td:nth-child(5) .scoresheetAttemptCellDisplay {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scoreboardDisplaySettingsSectionTitle {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.scoreboardDisplaySettingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scoreboardDisplaySettingsOption {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fafafe;
+  cursor: pointer;
+}
+
+.scoreboardDisplaySettingsOption:hover {
+  box-shadow: inset 0 0 0 1px var(--sb-focus);
+}
+
+.scoreboardDisplaySettingsOption input {
+  margin-top: 3px;
+}
+
+.scoreboardDisplaySettingsOptionText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scoreboardDisplaySettingsOptionLabel {
+  font-weight: 600;
+}
+
+.scoreboardDisplaySettingsOptionDescription {
+  color: #666;
+  font-size: 13px;
 }
 
 .pairLinkDisplay {
@@ -1555,7 +1739,7 @@ button.word.wordBold {
   background: #fdeaea;
 }
 
-.scoresheetBoundaryRow td {
+.scoresheetTable tbody tr.scoresheetBoundaryRow td {
   padding: 0;
   border-bottom: 0;
 }
