@@ -890,7 +890,7 @@ function ScoreboardDisplayApp() {
               className="secondary"
               onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
             >
-              Toggle View
+              Toggle Projector View
             </button>
             <button
               type="button"
