@@ -78,6 +78,21 @@ class Game(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
+    packet_version = models.ForeignKey(
+        "moss.PacketVersion",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="games",
+    )
+    pairs_played = models.PositiveIntegerField(default=0)
+
+    tossup_points_correct = models.IntegerField(null=True, blank=True)
+    tossup_points_incorrect = models.IntegerField(null=True, blank=True)
+    tossup_points_no_penalty = models.IntegerField(null=True, blank=True)
+    bonus_points_correct = models.IntegerField(null=True, blank=True)
+    bonus_points_incorrect = models.IntegerField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -181,67 +196,156 @@ class ScoresheetSnapshot(models.Model):
         return f"{self.scoresheet_id}@{self.seq}"
 
 
-class GameTeamFact(models.Model):
-    game = models.ForeignKey(
-        Game,
-        on_delete=models.CASCADE,
-        related_name="team_facts",
-    )
-    tournament_team = models.ForeignKey(
-        TournamentTeam,
-        on_delete=models.CASCADE,
-        related_name="game_facts",
-    )
+class PacketVersion(models.Model):
+    checksum_algorithm = models.CharField(max_length=50)
+    checksum_canonicalization = models.CharField(max_length=100)
+    checksum_value = models.CharField(max_length=128)
 
-    points = models.IntegerField(default=0)
-    tossups_heard = models.PositiveIntegerField(default=0)
-    tossups_4 = models.PositiveIntegerField(default=0)
-    tossups_neg = models.PositiveIntegerField(default=0)
-    tossups_0 = models.PositiveIntegerField(default=0)
-
-    bonuses_heard = models.PositiveIntegerField(default=0)
-    bonus_points = models.IntegerField(default=0)
+    year = models.PositiveIntegerField(null=True, blank=True)
+    packet_name = models.CharField(max_length=255, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = [("game", "tournament_team")]
-        ordering = ["game_id", "tournament_team_id"]
+        ordering = ["-created_at"]
+        unique_together = [
+            ("checksum_algorithm", "checksum_canonicalization", "checksum_value"),
+        ]
 
     def __str__(self) -> str:
-        return f"Game {self.game_id}: {self.tournament_team.name}"
+        label = self.packet_name or "Packet"
+        if self.year:
+            label = f"{label} {self.year}"
+        return f"{label} ({self.checksum_value[:12]}…)"
 
 
-class GamePlayerFact(models.Model):
+class PacketQuestion(models.Model):
+    QUESTION_TYPE_CHOICES = [
+        ("TOSSUP", "Tossup"),
+        ("BONUS", "Bonus"),
+    ]
+
+    packet_version = models.ForeignKey(
+        PacketVersion,
+        on_delete=models.CASCADE,
+        related_name="questions",
+    )
+    question_id = models.PositiveIntegerField()
+    pair_id = models.PositiveIntegerField()
+    question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES)
+    category = models.TextField(blank=True)
+
+    question_style = models.CharField(max_length=50, blank=True)
+    source = models.CharField(max_length=100, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["packet_version_id", "pair_id", "question_id"]
+        unique_together = [
+            ("packet_version", "question_id"),
+        ]
+        indexes = [
+            models.Index(fields=["packet_version", "pair_id"]),
+            models.Index(fields=["packet_version", "category"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.packet_version_id}:{self.question_type} q{self.question_id} (pair {self.pair_id})"
+
+
+class GameTeamQuestionOutcome(models.Model):
+    TOSSUP_RESULT_CHOICES = [
+        ("CORRECT", "Correct"),
+        ("INCORRECT", "Incorrect"),
+        ("NO_PENALTY", "No penalty"),
+    ]
+
+    BONUS_RESULT_CHOICES = [
+        ("CORRECT", "Correct"),
+        ("INCORRECT", "Incorrect"),
+        ("UNHEARD", "Unheard"),
+    ]
+
     game = models.ForeignKey(
         Game,
         on_delete=models.CASCADE,
-        related_name="player_facts",
+        related_name="team_question_outcomes",
+    )
+    tournament_team = models.ForeignKey(
+        TournamentTeam,
+        on_delete=models.CASCADE,
+        related_name="question_outcomes",
+    )
+    packet_question = models.ForeignKey(
+        PacketQuestion,
+        on_delete=models.CASCADE,
+        related_name="team_outcomes",
+    )
+
+    heard = models.BooleanField(default=False)
+    points = models.IntegerField(default=0)
+
+    tossup_result = models.CharField(max_length=20, choices=TOSSUP_RESULT_CHOICES, blank=True)
+    bonus_result = models.CharField(max_length=20, choices=BONUS_RESULT_CHOICES, blank=True)
+
+    buzzing_player = models.ForeignKey(
+        TournamentPlayer,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="buzz_outcomes",
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["game_id", "tournament_team_id", "packet_question_id"]
+        unique_together = [
+            ("game", "tournament_team", "packet_question"),
+        ]
+        indexes = [
+            models.Index(fields=["game", "tournament_team"]),
+            models.Index(fields=["packet_question", "tournament_team"]),
+        ]
+
+    def __str__(self) -> str:
+        return f"Game {self.game_id}: {self.tournament_team.name} q{self.packet_question.question_id} ({self.points})"
+
+
+class GamePlayerLineupSegment(models.Model):
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name="player_lineup_segments",
+    )
+    tournament_team = models.ForeignKey(
+        TournamentTeam,
+        on_delete=models.CASCADE,
+        related_name="lineup_segments",
     )
     tournament_player = models.ForeignKey(
         TournamentPlayer,
         on_delete=models.CASCADE,
-        related_name="game_facts",
-    )
-    tournament_team = models.ForeignKey(
-        TournamentTeam,
-        on_delete=models.CASCADE,
-        related_name="player_game_facts",
+        related_name="lineup_segments",
     )
 
-    tossups_heard = models.PositiveIntegerField(default=0)
-    tossups_4 = models.PositiveIntegerField(default=0)
-    tossups_neg = models.PositiveIntegerField(default=0)
-    tossups_0 = models.PositiveIntegerField(default=0)
-    tossup_points = models.IntegerField(default=0)
+    start_pair_id = models.PositiveIntegerField()
+    end_pair_id = models.PositiveIntegerField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = [("game", "tournament_player")]
-        ordering = ["game_id", "tournament_team_id", "tournament_player_id"]
+        ordering = ["game_id", "tournament_team_id", "tournament_player_id", "start_pair_id"]
+        indexes = [
+            models.Index(fields=["game", "tournament_team"]),
+            models.Index(fields=["game", "tournament_player"]),
+        ]
 
     def __str__(self) -> str:
-        return f"Game {self.game_id}: {self.tournament_player.name} ({self.tournament_team.name})"
+        end = self.end_pair_id if self.end_pair_id is not None else "end"
+        return f"Game {self.game_id}: {self.tournament_player.name} ({self.start_pair_id}..{end})"

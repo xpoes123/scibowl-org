@@ -3,6 +3,9 @@ from __future__ import annotations
 import hashlib
 import json
 import tempfile
+import csv
+import subprocess
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -14,7 +17,6 @@ from django.db import connections
 from django.utils.timezone import now
 
 from moss.services.ingest_exports import ingest_scoresheet_exports
-from moss.services.stats_views import build_tournament_standings_view
 from tournaments.models import Tournament
 
 
@@ -78,6 +80,20 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
                 pass
 
 
+def _safe_category_file_stem(category: str) -> str:
+    """
+    Convert an arbitrary category label into a filesystem-friendly, stable stem.
+    """
+    raw = (category or "").strip()
+    if not raw:
+        return "UNCATEGORIZED"
+
+    stem = re.sub(r"[^A-Za-z0-9]+", "_", raw).strip("_").lower()
+    if not stem:
+        return "UNCATEGORIZED"
+    return stem[:80]
+
+
 class Command(BaseCommand):
     help = (
         "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2) "
@@ -124,10 +140,63 @@ class Command(BaseCommand):
             help="Do not deduplicate identical exports by file bytes hash.",
         )
         parser.add_argument(
+            "--no-sync-frontends",
+            action="store_true",
+            help=(
+                "Do not sync repo-root stats/ into the website and MoSS frontends' public/stats/ folders. "
+                "By default, this command runs the sync scripts so the updated artifacts are immediately "
+                "available to the frontends."
+            ),
+        )
+        parser.add_argument(
             "paths",
             nargs="+",
             help="One or more moss_scoresheet export JSON files.",
         )
+
+    def _sync_frontends(self, *, repo_root: Path) -> None:
+        scripts: list[tuple[str, Path]] = [
+            ("website", repo_root / "apps" / "website" / "frontend" / "scripts" / "sync-stats.mjs"),
+            ("moss", repo_root / "apps" / "moss" / "frontend" / "scripts" / "sync-stats.mjs"),
+        ]
+
+        missing = [name for name, p in scripts if not p.exists()]
+        if missing:
+            raise CommandError(
+                "Stats generated, but frontend sync scripts are missing: "
+                + ", ".join(missing)
+                + ". Pass --no-sync-frontends to skip syncing."
+            )
+
+        for name, script_path in scripts:
+            try:
+                result = subprocess.run(
+                    ["node", str(script_path)],
+                    cwd=str(repo_root),
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+            except FileNotFoundError as e:
+                raise CommandError(
+                    "Stats generated, but failed to sync frontends because 'node' was not found on PATH. "
+                    "Either install Node.js, or re-run with --no-sync-frontends."
+                ) from e
+
+            if result.returncode != 0:
+                raise CommandError(
+                    f"Stats generated, but frontend sync failed for {name}.\n"
+                    f"Command: node {script_path}\n"
+                    f"Exit code: {result.returncode}\n"
+                    f"Stdout:\n{result.stdout}\n"
+                    f"Stderr:\n{result.stderr}\n"
+                    "Re-run with --no-sync-frontends to skip syncing."
+                )
+
+            if result.stdout.strip():
+                self.stdout.write(result.stdout.rstrip())
+            if result.stderr.strip():
+                self.stderr.write(result.stderr.rstrip())
 
     def handle(self, *args, **options) -> None:
         tournament_slug: str | None = options.get("tournament_slug")
@@ -135,6 +204,7 @@ class Command(BaseCommand):
         pretty: bool = options["pretty"]
         assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
+        no_sync_frontends: bool = options["no_sync_frontends"]
         paths: list[str] = options["paths"]
 
         repo_root = Path(settings.BASE_DIR).parent
@@ -248,7 +318,7 @@ class Command(BaseCommand):
 
         # Build everything using an ephemeral local SQLite DB (separate alias) so we
         # never touch any configured persistent DB, even if one exists locally.
-        db_alias = "moss_stats  d"
+        db_alias = "moss_stats"
         original_databases = dict(settings.DATABASES)
         if db_alias in settings.DATABASES:
             raise CommandError(
@@ -316,10 +386,97 @@ class Command(BaseCommand):
             except ValueError as e:
                 raise CommandError(str(e)) from e
 
-            standings_payload: dict[str, Any] = build_tournament_standings_view(
-                tournament=tournament,
-                using=db_alias,
+            sql_dir = Path(settings.BASE_DIR) / "moss" / "services" / "stats_sql"
+            team_sql = (sql_dir / "team_standings.sql").read_text(encoding="utf-8")
+            individual_sql = (sql_dir / "individual_standings.sql").read_text(encoding="utf-8")
+            team_category_sql = (sql_dir / "team_category_standings.sql").read_text(encoding="utf-8")
+            individual_category_sql = (sql_dir / "individual_category_standings.sql").read_text(encoding="utf-8")
+
+            def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
+                out_path = output_dir / filename
+                with connections[db_alias].cursor() as cursor:
+                    cursor.execute(sql, params)
+                    cols = [d[0] for d in cursor.description or []]
+                    rows = cursor.fetchall()
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                with out_path.open("w", encoding="utf-8", newline="") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(cols)
+                    writer.writerows(rows)
+
+            write_csv(
+                filename="team_standings.csv",
+                sql=team_sql,
+                params=[tournament.id],
             )
+            write_csv(
+                filename="individual_standings.csv",
+                sql=individual_sql,
+                params=[tournament.id, tournament.id],
+            )
+
+            # Category standings
+            with connections[db_alias].cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT DISTINCT pq.category
+                    FROM moss_gameteamquestionoutcome o
+                    JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                    JOIN moss_game g ON g.id = o.game_id
+                    WHERE g.tournament_id = %s
+                    ORDER BY pq.category ASC
+                    """,
+                    [tournament.id],
+                )
+                categories = [row[0] for row in cursor.fetchall()]
+
+            if any((c or "").strip() == "" for c in categories):
+                if not assume_yes:
+                    proceed = _prompt_yes_no(
+                        prompt=(
+                            "Warning: Some questions are missing a category label. "
+                            "Continue and treat those questions as an uncategorized category?"
+                        ),
+                        default=False,
+                    )
+                    if not proceed:
+                        raise CommandError(
+                            "Aborted due to uncategorized questions. "
+                            "Fix the source exports (or re-run with --yes to proceed)."
+                        )
+
+            category_views: list[dict[str, str]] = []
+            used_stems: dict[str, int] = {}
+            for category in categories:
+                category_value = "" if category is None else str(category)
+                stem = _safe_category_file_stem(category_value)
+                if stem in used_stems:
+                    used_stems[stem] += 1
+                    stem = f"{stem}_{used_stems[stem]}"
+                else:
+                    used_stems[stem] = 1
+
+                team_filename = f"team_standings__{stem}.csv"
+                individual_filename = f"individual_standings__{stem}.csv"
+
+                write_csv(
+                    filename=team_filename,
+                    sql=team_category_sql,
+                    params=[tournament.id, category_value],
+                )
+                write_csv(
+                    filename=individual_filename,
+                    sql=individual_category_sql,
+                    params=[category_value, tournament.id, tournament.id],
+                )
+                category_views.append(
+                    {
+                        "category": category_value,
+                        "key": stem,
+                        "team_standings": team_filename,
+                        "individual_standings": individual_filename,
+                    }
+                )
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
             try:
@@ -339,18 +496,23 @@ class Command(BaseCommand):
             "generated_at": _iso_utc_now(),
             "tournament": {"slug": slug, "name": name},
             "sources": sources,
-            "views": {"standings": "standings.json"},
+            "views": {
+                "team_standings": "team_standings.csv",
+                "individual_standings": "individual_standings.csv",
+                "category_standings": category_views,
+            },
         }
 
         indent = 2 if pretty else None
-        (output_dir / "standings.json").write_text(
-            json.dumps(standings_payload, indent=indent, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
         (output_dir / "manifest.json").write_text(
             json.dumps(manifest_payload, indent=indent, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
-        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'standings.json'}"))
+        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'team_standings.csv'}"))
+        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'individual_standings.csv'}"))
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'manifest.json'}"))
+
+        if not no_sync_frontends:
+            self._sync_frontends(repo_root=repo_root)
+            self.stdout.write(self.style.SUCCESS("Synced stats into website and MoSS frontends."))

@@ -41,12 +41,11 @@ function DataTable({ headers, rows }: { headers: Array<{ key: string; label: str
   );
 }
 
-export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
+export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: TeamStandingsRow[]; showWinsLosses?: boolean }) {
   const headers = [
     { key: "rank", label: "Rank", numeric: true },
     { key: "name", label: "Team" },
-    { key: "wins", label: "W", numeric: true },
-    { key: "losses", label: "L", numeric: true },
+    ...(showWinsLosses ? [{ key: "wins", label: "W", numeric: true }, { key: "losses", label: "L", numeric: true }] : []),
     { key: "ppg", label: "PPG", numeric: true },
     { key: "4s", label: "4s", numeric: true },
     { key: "-4s", label: "-4s", numeric: true },
@@ -59,8 +58,8 @@ export function TeamStandingsTable({ rows }: { rows: TeamStandingsRow[] }) {
   const tableRows = rows.map((r) => ({
     rank: r.rank,
     name: r.name,
-    wins: r.wins,
-    losses: r.losses,
+    wins: r.wins ?? 0,
+    losses: r.losses ?? 0,
     ppg: formatFixedNumber(r.points_per_game, 2),
     "4s": r["4s"],
     "-4s": r["-4s"],

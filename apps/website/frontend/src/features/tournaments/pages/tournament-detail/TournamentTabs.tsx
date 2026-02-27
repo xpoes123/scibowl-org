@@ -3,6 +3,7 @@ import type { TournamentDetail, TournamentLink, TournamentStatus } from "../../t
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
+import { useTournamentStatsManifest } from "../../hooks/useTournamentStatsManifest";
 import { useRosterIndex } from "../../hooks/useRosterIndex";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 import { FieldTab } from "./FieldTab";
@@ -19,6 +20,25 @@ type Tab = {
   label: string;
   disabled: boolean;
 };
+
+function toTitleCase(text: string): string {
+  return text
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function humanizeCategoryLabel(raw: string): string {
+  const trimmed = (raw ?? "").trim();
+  if (!trimmed) return "Uncategorized";
+
+  const upper = trimmed.toUpperCase();
+  if (upper === "EARTH_SPACE" || upper === "EARTH_AND_SPACE") return "Earth/Space";
+
+  const normalized = trimmed.replace(/_/g, " ").replace(/\s+/g, " ").trim();
+  return toTitleCase(normalized);
+}
 
 function splitLogistics(text: string): string[] {
   const trimmed = text.trim();
@@ -93,8 +113,48 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const isLive = variant === "LIVE";
   const isFinished = variant === "FINISHED";
 
-  const { data: standings, loading: standingsLoading, error: standingsError } = useTournamentStandings(tournament.slug, !isUpcoming);
-  const hasStandings = (standings?.team_standings?.length ?? 0) > 0;
+  const standingsEnabled = !isUpcoming;
+
+  const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled);
+  const overallFiles = useMemo(() => {
+    if (!statsManifest) return null;
+    return { team: statsManifest.views.team_standings, individual: statsManifest.views.individual_standings };
+  }, [statsManifest]);
+
+  const { data: overallStandings, loading: overallLoading, error: overallError } = useTournamentStandings(tournament.slug, standingsEnabled, overallFiles);
+  const hasStandings = (overallStandings?.team_standings?.length ?? 0) > 0;
+
+  const categories = useMemo(() => {
+    const entries = statsManifest?.views?.category_standings ?? [];
+    return entries.map((e) => ({
+      key: e.key,
+      label: e.category?.trim() ? e.category : "Uncategorized",
+      files: { team: e.team_standings, individual: e.individual_standings },
+    }));
+  }, [statsManifest]);
+
+  const [standingsCategoryKey, setStandingsCategoryKey] = useState<string>("overall");
+  useEffect(() => {
+    setStandingsCategoryKey("overall");
+  }, [tournament.slug]);
+
+  const activeCategory = useMemo(() => {
+    if (standingsCategoryKey === "overall") return null;
+    return categories.find((c) => c.key === standingsCategoryKey) ?? null;
+  }, [categories, standingsCategoryKey]);
+
+  const categoryEnabled = standingsEnabled && standingsCategoryKey !== "overall" && !!activeCategory;
+  const { data: categoryStandings, loading: categoryLoading, error: categoryError } = useTournamentStandings(
+    tournament.slug,
+    categoryEnabled,
+    activeCategory?.files ?? null,
+  );
+
+  const standings = standingsCategoryKey === "overall" ? overallStandings : categoryStandings;
+  const standingsLoading = standingsCategoryKey === "overall" ? overallLoading : categoryLoading;
+  const standingsError = standingsCategoryKey === "overall" ? overallError : categoryError;
+  const showWinsLosses = standingsCategoryKey === "overall";
+  const standingsLabel = standingsCategoryKey === "overall" ? "Overall" : humanizeCategoryLabel(activeCategory?.label ?? "");
 
   const { slugs: rosterIndexSlugs, loading: rosterIndexLoading } = useRosterIndex();
   const hasField = rosterIndexSlugs?.has(tournament.slug) ?? false;
@@ -141,6 +201,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
+  const showStandingsSubnav = activeTab === "results" && categories.length > 0;
+
   return (
     <div className="card sbTabsCard" aria-label="Tournament details">
       <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
@@ -163,6 +225,30 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
           </button>
         ))}
       </div>
+
+      {showStandingsSubnav && (
+        <div className="sbTabSubNav" role="navigation" aria-label="Standings views">
+          <button
+            type="button"
+            className={standingsCategoryKey === "overall" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+            aria-pressed={standingsCategoryKey === "overall"}
+            onClick={() => setStandingsCategoryKey("overall")}
+          >
+            Overall
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              className={standingsCategoryKey === c.key ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+              aria-pressed={standingsCategoryKey === c.key}
+              onClick={() => setStandingsCategoryKey(c.key)}
+            >
+              {humanizeCategoryLabel(c.label)}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="sbTabsBody sbTabStack">
         {activeTab === "overview" && (
@@ -228,26 +314,23 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         {activeTab === "results" && (
           <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Standings</h2>
-              </header>
               <div className="sbTabSectionBody">
                 {isUpcoming ? (
                   <p className="sbMuted">Standings will be available after the tournament.</p>
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
-                ) : standingsLoading ? (
+                ) : standingsLoading || statsManifestLoading ? (
                   <p className="sbMuted">Loading standings…</p>
                 ) : hasStandings && standings ? (
                   <div className="sbTabStack">
                     <div>
-                      <h3 className="m-0 text-sm font-semibold">Team Standings</h3>
+                      <h3 className="m-0 text-sm font-semibold">Team Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
-                        <TeamStandingsTable rows={standings.team_standings} />
+                        <TeamStandingsTable rows={standings.team_standings} showWinsLosses={showWinsLosses} />
                       </div>
                     </div>
                     <div>
-                      <h3 className="m-0 text-sm font-semibold">Individual Standings</h3>
+                      <h3 className="m-0 text-sm font-semibold">Individual Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
                         <IndividualStandingsTable rows={standings.individual_standings} />
                       </div>

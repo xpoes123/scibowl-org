@@ -26,6 +26,115 @@ const parseJsonOrNullIfHtml = async <T,>(response: Response, label: string): Pro
   }
 };
 
+const readTextOrNullIfHtml = async (response: Response): Promise<string | null> => {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (contentType.includes("text/html")) return null;
+
+  const bodyText = (await response.text()).trimStart();
+  if (!bodyText) return null;
+  if (bodyText.startsWith("<")) return null;
+  return bodyText;
+};
+
+type TournamentStatsManifest = {
+  schema_version: number;
+  generated_at: string;
+  tournament: { slug: string; name: string };
+  views: {
+    team_standings: string;
+    individual_standings: string;
+    category_standings?: Array<{
+      category: string;
+      key: string;
+      team_standings: string;
+      individual_standings: string;
+    }>;
+  };
+};
+
+const parseCsv = (raw: string, label: string): { headers: string[]; rows: string[][] } => {
+  const text = raw.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+  const allRows: string[][] = [];
+  let currentRow: string[] = [];
+  let currentField = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === "\"") {
+        if (text[i + 1] === "\"") {
+          currentField += "\"";
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        currentField += ch;
+      }
+      continue;
+    }
+
+    if (ch === "\"") {
+      inQuotes = true;
+      continue;
+    }
+
+    if (ch === ",") {
+      currentRow.push(currentField);
+      currentField = "";
+      continue;
+    }
+
+    if (ch === "\n") {
+      currentRow.push(currentField);
+      currentField = "";
+      allRows.push(currentRow);
+      currentRow = [];
+      continue;
+    }
+
+    currentField += ch;
+  }
+
+  if (inQuotes) throw new Error(`Failed to parse ${label} (malformed CSV)`);
+  if (currentField.length > 0 || currentRow.length > 0) {
+    currentRow.push(currentField);
+    allRows.push(currentRow);
+  }
+
+  const nonEmptyRows = allRows.filter((r) => r.some((cell) => cell !== ""));
+  if (!nonEmptyRows.length) throw new Error(`Failed to parse ${label} (empty CSV)`);
+
+  const headers = nonEmptyRows[0].map((h) => h.trim());
+  const rows = nonEmptyRows.slice(1);
+  return { headers, rows };
+};
+
+const csvRowsToObjects = (table: { headers: string[]; rows: string[][] }): Array<Record<string, string>> => {
+  const { headers, rows } = table;
+  return rows.map((row) => {
+    const out: Record<string, string> = {};
+    headers.forEach((header, idx) => {
+      out[header] = row[idx] ?? "";
+    });
+    return out;
+  });
+};
+
+const toInt = (raw: string): number => {
+  if (!raw) return 0;
+  const n = Number.parseInt(raw, 10);
+  return Number.isFinite(n) ? n : 0;
+};
+
+const toFloat = (raw: string): number => {
+  if (!raw) return 0;
+  const n = Number.parseFloat(raw);
+  return Number.isFinite(n) ? n : 0;
+};
+
 const getAuthHeaders = () => {
   const token = localStorage.getItem('access_token');
   return {
@@ -227,16 +336,81 @@ export const tournamentsAPI = {
     return handleResponse(response);
   },
 
-  getTournamentStandings: async (slug: string) => {
+  getTournamentStatsManifest: async (slug: string): Promise<TournamentStatsManifest | null> => {
     const encodedSlug = encodeURIComponent(slug);
-    const statsUrl = buildStatsUrl(`${encodedSlug}/standings.json`);
+    const statsUrl = buildStatsUrl(`${encodedSlug}/manifest.json`);
 
     const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
     if (response.status === 404) return null;
-    if (!response.ok) throw new Error("Failed to load standings");
-    const parsed = await parseJsonOrNullIfHtml(response, "standings");
-    if (!parsed) throw new Error("Failed to load standings");
-    return parsed;
+    if (!response.ok) throw new Error("Failed to load stats manifest");
+    return parseJsonOrNullIfHtml(response, "stats manifest");
+  },
+
+  getTournamentStandings: async (slug: string, files?: { team: string; individual: string } | null) => {
+    const encodedSlug = encodeURIComponent(slug);
+    let teamFile = files?.team ?? "";
+    let individualFile = files?.individual ?? "";
+
+    if (!teamFile || !individualFile) {
+      const manifest = await tournamentsAPI.getTournamentStatsManifest(slug);
+      teamFile = teamFile || manifest?.views?.team_standings || "team_standings.csv";
+      individualFile = individualFile || manifest?.views?.individual_standings || "individual_standings.csv";
+    }
+
+    const teamUrl = buildStatsUrl(`${encodedSlug}/${teamFile}`);
+    const individualUrl = buildStatsUrl(`${encodedSlug}/${individualFile}`);
+
+    const [teamResp, individualResp] = await Promise.all([
+      fetch(teamUrl, { headers: { Accept: "text/csv" } }),
+      fetch(individualUrl, { headers: { Accept: "text/csv" } }),
+    ]);
+
+    if (teamResp.status === 404 || individualResp.status === 404) return null;
+    if (!teamResp.ok) throw new Error("Failed to load standings");
+    if (!individualResp.ok) throw new Error("Failed to load standings");
+
+    const teamText = await readTextOrNullIfHtml(teamResp);
+    const individualText = await readTextOrNullIfHtml(individualResp);
+    if (!teamText || !individualText) throw new Error("Failed to load standings");
+
+    const teamRows = csvRowsToObjects(parseCsv(teamText, "team standings"));
+    const individualRows = csvRowsToObjects(parseCsv(individualText, "individual standings"));
+
+    const team_standings = teamRows.map((row) => ({
+      rank: toInt(row.rank),
+      team_id: toInt(row.team_id),
+      name: row.name ?? "",
+      wins: toInt(row.wins),
+      losses: toInt(row.losses),
+      points_per_game: toFloat(row.points_per_game),
+      "4s": toInt(row["4s"]),
+      "-4s": toInt(row["-4s"]),
+      "0s": toInt(row["0s"]),
+      tossups_heard: toInt(row.tossups_heard),
+      bonuses_heard: toInt(row.bonuses_heard),
+      bonus_points: toInt(row.bonus_points),
+      points_per_bonus: toFloat(row.points_per_bonus),
+    }));
+
+    const individual_standings = individualRows.map((row) => ({
+      rank: toInt(row.rank),
+      player_id: toInt(row.player_id),
+      name: row.name ?? "",
+      team: row.team ?? "",
+      games_played: toInt(row.games_played),
+      "4s": toInt(row["4s"]),
+      "-4s": toInt(row["-4s"]),
+      "0s": toInt(row["0s"]),
+      tossups_heard: toInt(row.tossups_heard),
+      tossup_points: toInt(row.tossup_points),
+      points_per_game: toFloat(row.points_per_game),
+    }));
+
+    return {
+      tournament: { id: 0, slug, name: slug },
+      team_standings,
+      individual_standings,
+    };
   },
 
   getTournamentField: async (slug: string) => {

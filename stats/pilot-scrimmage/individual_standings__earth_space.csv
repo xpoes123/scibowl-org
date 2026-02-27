@@ -1,0 +1,11 @@
+rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
+1,6,Ken,Noho B,4,4,1,7,12,12,3.0
+2,1,Suzuko,Noho A,4,1,0,11,12,4,1.0
+3,3,Charles,Noho A,4,0,0,12,12,0,0.0
+4,5,Connor Chang,Noho A,1,0,0,3,3,0,0.0
+5,8,Jake,Noho B,4,0,0,12,12,0,0.0
+6,10,Minghao,Noho A,3,0,0,9,9,0,0.0
+7,2,Mingho,Noho A,1,0,0,3,3,0,0.0
+8,9,Nathaniel,Noho B,4,0,0,12,12,0,0.0
+9,7,Patrick,Noho B,4,0,0,12,12,0,0.0
+10,4,Connor Zhao,Noho A,4,2,3,7,12,-4,-1.0

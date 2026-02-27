@@ -1228,6 +1228,51 @@ img {
   border-radius: 16px 16px 0 0;
 }
 
+.sbTabNavNoBorder {
+  border-bottom: 0;
+}
+
+.sbTabSubNav {
+  display: flex;
+  gap: 4px;
+  padding: 8px 8px 0;
+  background: var(--sb-card-bg);
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sbTabSubButton {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--sb-muted);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  position: relative;
+  bottom: -1px;
+}
+
+.sbTabSubButton:hover {
+  color: var(--sb-text);
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 6px 6px 0 0;
+}
+
+.sbTabSubButton:focus-visible {
+  outline: 2px solid var(--sb-focus);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.sbTabSubButtonActive {
+  color: var(--sb-purple);
+  border-bottom-color: var(--sb-purple);
+  font-weight: 650;
+}
+
 .sbTabButton {
   padding: 10px 16px;
   background: none;

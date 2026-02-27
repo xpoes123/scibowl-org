@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { tournamentsAPI } from "../../../core/api/api";
-import type { TournamentStandingsResponse } from "../types";
+import type { TournamentStatsManifest } from "../types";
 
-export type TournamentStandingsFiles = { team: string; individual: string };
-
-type UseTournamentStandingsResult = {
-  data: TournamentStandingsResponse | null;
+type UseTournamentStatsManifestResult = {
+  data: TournamentStatsManifest | null;
   loading: boolean;
   error: string | null;
 };
 
-export function useTournamentStandings(slug: string, enabled: boolean, files?: TournamentStandingsFiles | null): UseTournamentStandingsResult {
-  const [data, setData] = useState<TournamentStandingsResponse | null>(null);
+export function useTournamentStatsManifest(slug: string, enabled: boolean): UseTournamentStatsManifestResult {
+  const [data, setData] = useState<TournamentStatsManifest | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,12 +27,12 @@ export function useTournamentStandings(slug: string, enabled: boolean, files?: T
       setLoading(true);
       setError(null);
       try {
-        const result = (await tournamentsAPI.getTournamentStandings(slug, files)) as TournamentStandingsResponse | null;
+        const result = (await tournamentsAPI.getTournamentStatsManifest(slug)) as TournamentStatsManifest | null;
         if (cancelled) return;
         setData(result);
       } catch (err) {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : "Failed to load standings");
+        setError(err instanceof Error ? err.message : "Failed to load stats manifest");
         setData(null);
       } finally {
         if (cancelled) return;
@@ -46,7 +44,7 @@ export function useTournamentStandings(slug: string, enabled: boolean, files?: T
     return () => {
       cancelled = true;
     };
-  }, [enabled, files?.individual, files?.team, slug]);
+  }, [enabled, slug]);
 
   return { data, loading, error };
 }

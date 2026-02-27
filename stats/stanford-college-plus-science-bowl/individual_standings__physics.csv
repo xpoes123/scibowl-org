@@ -1,0 +1,25 @@
+rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
+1,1,Daniel Lu,where is the goal keeper,11,19,3,21,43,64,5.818181818181818
+2,12,Josh Shi,CMU,10,12,0,28,40,48,4.8
+3,8,Anurag Sodhi,MIT Team #1,11,12,4,28,44,32,2.909090909090909
+4,21,Akhil Batchu,University of Alabama Birmingham,10,10,3,27,40,28,2.8
+5,19,Jonathan Huang,MIT Team #2,10,9,2,29,40,28,2.8
+6,5,Swapnil Garg,Quizbowlers,11,10,4,29,43,24,2.1818181818181817
+7,16,Gideon Tzafriri,MIT Team #2,7,6,1,21,28,20,2.857142857142857
+8,9,Yunyi Ling,MIT Team #1,10,11,7,22,40,16,1.6
+9,22,Advik Sharma,University of Alabama Birmingham,10,4,0,36,40,16,1.6
+10,7,Kevin Ye,Quizbowlers,11,4,0,39,43,16,1.4545454545454546
+11,23,Albert Chen,University of Alabama Birmingham,10,3,1,36,40,8,0.8
+12,2,Isaac Mammel,where is the goal keeper,11,2,0,41,43,8,0.7272727272727273
+13,4,Rohan Shelke,Quizbowlers,11,2,0,41,43,8,0.7272727272727273
+14,15,Peter Ferolito,CMU,10,2,1,37,40,4,0.4
+15,20,Saahil Dugar,where is the goal keeper,7,1,0,27,28,4,0.5714285714285714
+16,6,Shahar Schwartz,Quizbowlers,11,1,0,42,43,4,0.36363636363636365
+17,13,Yiyoung Liu,CMU,10,1,0,39,40,4,0.4
+18,14,Vidur Kothur,CMU,10,3,3,34,40,0,0.0
+19,18,Aryan Bora,MIT Team #2,10,2,2,36,40,0,0.0
+20,3,Adeeb Mohammed,where is the goal keeper,9,0,0,35,35,0,0.0
+21,24,Alex Prado,University of Alabama Birmingham,8,0,0,32,32,0,0.0
+22,11,Selena Yang,MIT Team #1,6,0,0,24,24,0,0.0
+23,10,Mingwen Duan,MIT Team #1,10,0,2,38,40,-8,-0.8
+24,17,Sean Fei,MIT Team #2,10,1,4,35,40,-12,-1.2
