@@ -1034,6 +1034,76 @@ function ScoreboardDisplayApp() {
   }, [teams]);
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
+  const projectorTeamFitKey = useMemo(() => teams.map((t) => `${t.id}:${t.name}`).join("|"), [teams]);
+
+  useEffect(() => {
+    if (!isProjectorLayout) return;
+
+    let raf = 0;
+
+    const measureCanvas = document.createElement("canvas");
+    const ctx = measureCanvas.getContext("2d");
+    if (!ctx) return;
+
+    const MAX_FONT_PX = 72;
+    const MIN_FONT_PX = 48;
+
+    const recompute = () => {
+      const next: Record<string, { fontPx: number; allowWrap: boolean }> = {};
+
+      for (const team of teams) {
+        const el = projectorTeamNameElsRef.current[team.id];
+        if (!el) continue;
+        const available = el.clientWidth;
+        if (!available) continue;
+
+        const computed = window.getComputedStyle(el);
+        const fontStyle = computed.fontStyle || "normal";
+        const fontVariant = computed.fontVariant || "normal";
+        const fontWeight = computed.fontWeight || "600";
+        const fontFamily = computed.fontFamily || "system-ui";
+
+        ctx.font = `${fontStyle} ${fontVariant} ${fontWeight} ${MAX_FONT_PX}px ${fontFamily}`;
+        const textWidthAtMax = ctx.measureText(team.name).width;
+
+        const targetWidth = Math.max(0, available - 6);
+        if (textWidthAtMax <= targetWidth) {
+          next[team.id] = { fontPx: MAX_FONT_PX, allowWrap: false };
+          continue;
+        }
+
+        const scaled = Math.floor(MAX_FONT_PX * (targetWidth / Math.max(1, textWidthAtMax)));
+        const clamped = Math.max(MIN_FONT_PX, Math.min(MAX_FONT_PX, scaled));
+        const allowWrap = clamped === MIN_FONT_PX && scaled < MIN_FONT_PX;
+        next[team.id] = { fontPx: clamped, allowWrap };
+      }
+
+      setProjectorTeamNameFitByTeamId(next);
+    };
+
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(recompute);
+    };
+
+    schedule();
+    window.addEventListener("resize", schedule);
+
+    let ro: ResizeObserver | null = null;
+    if ("ResizeObserver" in window) {
+      ro = new ResizeObserver(schedule);
+      for (const team of teams) {
+        const el = projectorTeamNameElsRef.current[team.id];
+        if (el) ro.observe(el);
+      }
+    }
+
+    return () => {
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+      if (ro) ro.disconnect();
+    };
+  }, [isProjectorLayout, projectorTeamFitKey]);
 
   const formatAttemptCellTextForView = (
     attemptValue: Attempt | undefined,
