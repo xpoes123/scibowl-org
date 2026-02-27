@@ -1658,6 +1658,23 @@ button.word.wordBold {
   padding: 12px;
 }
 
+.scoreboardDisplayRoot--projector {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.scoreboardDisplayRoot--projector .scoresheetTeamHeaderInner {
+  width: 100%;
+}
+
+.scoreboardDisplayRoot--projector .scoresheetTeamName {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
 .scoreboardDisplayRoot--large .card {
   padding: 16px;
   border: 2px solid #000;
