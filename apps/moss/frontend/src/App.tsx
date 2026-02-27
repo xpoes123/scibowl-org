@@ -1436,6 +1436,7 @@ function ModeratorApp() {
   const [tournamentRosterError, setTournamentRosterError] = useState<string | null>(null);
   const [fieldRoster, setFieldRoster] = useState<FieldRoster | null>(null);
   const [selectedRosterTeamByDraftTeamId, setSelectedRosterTeamByDraftTeamId] = useState<Record<string, string>>({});
+  const [hasConfirmedAlteringPreloadedRosters, setHasConfirmedAlteringPreloadedRosters] = useState(false);
   const [rosterLoadError, setRosterLoadError] = useState<string | null>(null);
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
@@ -2294,6 +2295,7 @@ function ModeratorApp() {
     setTournamentSearchQuery("");
     setFieldRoster(null);
     setSelectedRosterTeamByDraftTeamId({});
+    setHasConfirmedAlteringPreloadedRosters(false);
     setRosterLoadError(null);
     setDraftTeams(makeBlankDraftTeams());
   }
@@ -2496,6 +2498,19 @@ function ModeratorApp() {
     setSelectedRosterTeamByDraftTeamId((prev) => ({ ...prev, [draftTeamId]: rosterTeam.name }));
   }
 
+  function confirmAlteringPreloadedRostersIfNeeded(teamId: string): boolean {
+    if (hasConfirmedAlteringPreloadedRosters) return true;
+    if (draftRosterChoice.kind !== "tournament") return true;
+    if (!selectedRosterTeamByDraftTeamId[teamId]) return true;
+
+    const ok = window.confirm(
+      "Are you sure you wish to alter the preloaded rosters?\n\nModifying rosters may break tournament statistics. It is strongly recommended to notify a tournament organizer before proceeding."
+    );
+    if (!ok) return false;
+    setHasConfirmedAlteringPreloadedRosters(true);
+    return true;
+  }
+
   const draftTeamDndSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   function handleDraftTeamDragEnd(event: DragEndEvent) {
@@ -2546,6 +2561,7 @@ function ModeratorApp() {
   }
 
   function addPlayer(teamId: string) {
+    if (!confirmAlteringPreloadedRostersIfNeeded(teamId)) return;
     const id = makeId("player");
     setDraftTeams((prev) =>
       prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: false }] } : t))
@@ -2553,6 +2569,7 @@ function ModeratorApp() {
   }
 
   function removePlayer(teamId: string, playerId: string) {
+    if (!confirmAlteringPreloadedRostersIfNeeded(teamId)) return;
     const playerName = draftTeams
       .find((t) => t.id === teamId)
       ?.players.find((p) => p.id === playerId)
