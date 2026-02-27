@@ -120,6 +120,16 @@ function formatAttemptCellTextBrief(
   return `${pointsLabel}${who}`;
 }
 
+function teamIndexToDisplayLabel(teamIndex: number): string {
+  let n = teamIndex;
+  let letters = "";
+  while (n >= 0) {
+    letters = String.fromCharCode(65 + (n % 26)) + letters;
+    n = Math.floor(n / 26) - 1;
+  }
+  return `Team ${letters}`;
+}
+
 function useScoresheetStickyHeaderOffsets(headerKey: string): {
   wrapRef: React.RefObject<HTMLDivElement | null>;
   wrapStyle: CSSProperties | undefined;
@@ -3635,7 +3645,7 @@ function ModeratorApp() {
                           <div className="fieldGroup">
                             <div className="fieldLabelRow">
                               <div className="fieldLabel">
-                                {`Team ${teamIndex + 1}`}{" "}
+                                {teamIndexToDisplayLabel(teamIndex)}{" "}
                                 <span className="required">*</span>
                               </div>
                               {draftTeams.length > 1 && (
@@ -3654,7 +3664,7 @@ function ModeratorApp() {
                                 className="textInput"
                                 value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
                                 onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
-                                aria-label={`Select team for Team ${teamIndex + 1}`}
+                                aria-label={`Select team for ${teamIndexToDisplayLabel(teamIndex)}`}
                               >
                                 <option value="">Select team…</option>
                                 {fieldRoster.teams.map((rt) => (
@@ -3672,7 +3682,7 @@ function ModeratorApp() {
                               <input
                                 className="textInput"
                                 value={team.name}
-                                placeholder={`Team ${teamIndex + 1}`}
+                                placeholder={teamIndexToDisplayLabel(teamIndex)}
                                 onChange={(e) => updateTeamName(team.id, e.target.value)}
                               />
                             )}
