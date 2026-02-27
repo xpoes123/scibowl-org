@@ -5,7 +5,7 @@ import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifi
 import {
   SortableContext,
   arrayMove,
-  horizontalListSortingStrategy,
+  rectSortingStrategy,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
@@ -3942,7 +3942,7 @@ function ModeratorApp() {
                       onDragEnd={handleDraftTeamDragEnd}
                     >
                       <div className="teamGrid">
-                        <SortableContext items={draftTeams.map((t) => t.id)} strategy={horizontalListSortingStrategy}>
+                        <SortableContext items={draftTeams.map((t) => t.id)} strategy={rectSortingStrategy}>
                           {draftTeams.map((team, teamIndex) => (
                             <SortableDraftTeamCol
                               key={team.id}
