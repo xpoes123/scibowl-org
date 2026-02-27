@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import tempfile
+import csv
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -14,7 +15,6 @@ from django.db import connections
 from django.utils.timezone import now
 
 from moss.services.ingest_exports import ingest_scoresheet_exports
-from moss.services.stats_views import build_tournament_standings_view
 from tournaments.models import Tournament
 
 
@@ -248,7 +248,7 @@ class Command(BaseCommand):
 
         # Build everything using an ephemeral local SQLite DB (separate alias) so we
         # never touch any configured persistent DB, even if one exists locally.
-        db_alias = "moss_stats  d"
+        db_alias = "moss_stats"
         original_databases = dict(settings.DATABASES)
         if db_alias in settings.DATABASES:
             raise CommandError(
@@ -316,9 +316,31 @@ class Command(BaseCommand):
             except ValueError as e:
                 raise CommandError(str(e)) from e
 
-            standings_payload: dict[str, Any] = build_tournament_standings_view(
-                tournament=tournament,
-                using=db_alias,
+            sql_dir = Path(settings.BASE_DIR) / "moss" / "services" / "stats_sql"
+            team_sql = (sql_dir / "team_standings.sql").read_text(encoding="utf-8")
+            individual_sql = (sql_dir / "individual_standings.sql").read_text(encoding="utf-8")
+
+            def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
+                out_path = output_dir / filename
+                with connections[db_alias].cursor() as cursor:
+                    cursor.execute(sql, params)
+                    cols = [d[0] for d in cursor.description or []]
+                    rows = cursor.fetchall()
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                with out_path.open("w", encoding="utf-8", newline="") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(cols)
+                    writer.writerows(rows)
+
+            write_csv(
+                filename="team_standings.csv",
+                sql=team_sql,
+                params=[tournament.id],
+            )
+            write_csv(
+                filename="individual_standings.csv",
+                sql=individual_sql,
+                params=[tournament.id, tournament.id],
             )
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
@@ -339,18 +361,18 @@ class Command(BaseCommand):
             "generated_at": _iso_utc_now(),
             "tournament": {"slug": slug, "name": name},
             "sources": sources,
-            "views": {"standings": "standings.json"},
+            "views": {
+                "team_standings": "team_standings.csv",
+                "individual_standings": "individual_standings.csv",
+            },
         }
 
         indent = 2 if pretty else None
-        (output_dir / "standings.json").write_text(
-            json.dumps(standings_payload, indent=indent, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
         (output_dir / "manifest.json").write_text(
             json.dumps(manifest_payload, indent=indent, sort_keys=True) + "\n",
             encoding="utf-8",
         )
 
-        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'standings.json'}"))
+        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'team_standings.csv'}"))
+        self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'individual_standings.csv'}"))
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'manifest.json'}"))
