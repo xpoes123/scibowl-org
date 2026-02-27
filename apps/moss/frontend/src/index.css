@@ -580,6 +580,13 @@ code {
   margin-bottom: 8px;
 }
 
+.draftTeamLabelLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .fieldLabel {
   font-weight: 600;
 }
@@ -628,8 +635,61 @@ select.textInput {
   align-items: center;
 }
 
+.playerRowWithToggle.dndPlayerRow {
+  grid-template-columns: 22px 1fr auto 34px;
+}
+
 .playerRowWithToggle.noRemove {
   grid-template-columns: 1fr auto;
+}
+
+.playerRowWithToggle.dndPlayerRow.noRemove {
+  grid-template-columns: 22px 1fr auto;
+}
+
+.dndHandle {
+  width: 22px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0;
+  background: transparent;
+  color: #666;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.dndHandle:hover {
+  background: #f6f7fb;
+  border-color: #e6e7ee;
+  color: #333;
+}
+
+.dndHandle:active {
+  cursor: grabbing;
+}
+
+.dndHandleTeam {
+  width: 26px;
+  height: 34px;
+  color: #444;
+}
+
+.dndHandlePlayer {
+  color: #666;
+}
+
+.dndDragging {
+  opacity: 0.75;
+}
+
+.dndTeamDragging {
+  position: relative;
+  z-index: 2;
 }
 
 button.inOutToggle {

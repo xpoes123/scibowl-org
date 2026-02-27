@@ -418,7 +418,7 @@ function SortableDraftPlayerRow({
           aria-label="Remove player"
           onClick={() => onRemovePlayer(teamId, player.id)}
         >
-          Ã—
+          ×
         </button>
       )}
     </div>
@@ -505,7 +505,7 @@ function SortableDraftTeamCol({
               aria-label="Remove team"
               onClick={() => onRemoveTeam(team.id)}
             >
-              Ã—
+              ×
             </button>
           )}
         </div>
