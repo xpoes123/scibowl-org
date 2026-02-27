@@ -36,6 +36,26 @@ class ExportFacts:
     player_facts: list[PlayerFacts]
 
 
+@dataclass(frozen=True)
+class TeamQuestionOutcome:
+    team_name: str
+    question_id: int
+    pair_id: int
+    question_type: str  # "TOSSUP" | "BONUS"
+    category: str
+    heard: bool
+    points: int
+    tossup_result: str | None  # "CORRECT" | "INCORRECT" | "NO_PENALTY"
+    bonus_result: str | None  # "CORRECT" | "INCORRECT" | "UNHEARD"
+    buzzing_player_name: str | None
+
+
+@dataclass(frozen=True)
+class ExportQuestionOutcomes:
+    pairs_played: int
+    outcomes: list[TeamQuestionOutcome]
+
+
 def _require_dict(value: Any, path: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"{path} must be an object")
@@ -445,3 +465,172 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
         team_facts=team_facts,
         player_facts=player_facts,
     )
+
+
+def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) -> ExportQuestionOutcomes:
+    if export_obj.get("format") != "moss_scoresheet":
+        raise ValueError("Unsupported export format (expected moss_scoresheet)")
+    version = export_obj.get("version")
+    if version not in {1, 2}:
+        raise ValueError("Unsupported export version (expected 1 or 2)")
+
+    packet = _require_dict(export_obj.get("packet"), "packet")
+    packet_questions = _require_list(packet.get("questions"), "packet.questions")
+    tossup_by_pair, bonus_by_pair, pairs_total, pair_id_by_question_id = _packet_pair_maps(packet_questions)
+
+    question_meta_by_id: dict[int, dict[str, Any]] = {}
+    for idx, question_any in enumerate(packet_questions):
+        question = _require_dict(question_any, f"packet.questions[{idx}]")
+        qid = _require_int(question.get("id"), f"packet.questions[{idx}].id")
+        question_meta_by_id[qid] = question
+
+    rules = _require_dict(export_obj.get("rules"), "rules")
+    rules_tossup = _require_dict(rules.get("tossup"), "rules.tossup")
+    rules_bonus = _require_dict(rules.get("bonus"), "rules.bonus")
+    tossup_correct = _require_int(rules_tossup.get("correct"), "rules.tossup.correct")
+    tossup_incorrect = _require_int(rules_tossup.get("incorrect"), "rules.tossup.incorrect")
+    tossup_no_penalty = _require_int(rules_tossup.get("no_penalty"), "rules.tossup.no_penalty")
+    bonus_correct = _require_int(rules_bonus.get("correct"), "rules.bonus.correct")
+    bonus_incorrect = _require_int(rules_bonus.get("incorrect"), "rules.bonus.incorrect")
+
+    state = _load_export_state(export_obj)
+    attempts_by_question_id = _attempts_map_from_state(state)
+    pairs_played = _pairs_played_from_export(state, attempts_by_question_id, pairs_total, pair_id_by_question_id)
+
+    game = _require_dict(export_obj.get("game"), "game")
+    team_objs = _require_list(game.get("teams"), "game.teams")
+    teams: list[dict[str, Any]] = []
+    for idx, team_obj_any in enumerate(team_objs):
+        team_obj = _require_dict(team_obj_any, f"game.teams[{idx}]")
+        teams.append(team_obj)
+
+    team_keys: list[str] = []
+    team_names: list[str] = []
+    for idx, team_obj in enumerate(teams):
+        name = team_obj.get("name")
+        if isinstance(name, str) and name.strip():
+            team_keys.append(name)
+            team_names.append(name)
+            continue
+        raise ValueError(f"game.teams[{idx}].name must be a non-empty string")
+
+    if len(team_keys) != 2:
+        raise ValueError("Expected exactly 2 teams in export")
+
+    def attempts_for_question(qid: int) -> list[dict[str, Any]]:
+        return attempts_by_question_id.get(str(qid), [])
+
+    outcomes: list[TeamQuestionOutcome] = []
+
+    for pair in range(1, pairs_played + 1):
+        tossup_qid = tossup_by_pair.get(pair)
+        bonus_qid = bonus_by_pair.get(pair)
+
+        # Tossup outcomes (always "heard" for both teams).
+        hearing_team_key: str | None = None
+        if tossup_qid:
+            t_attempts = attempts_for_question(tossup_qid)
+            per_team_points: dict[str, int] = {}
+            per_team_correct: dict[str, bool] = {}
+
+            for team_key, team_name in zip(team_keys, team_names, strict=True):
+                picked = _pick_team_attempt(t_attempts, team_key)
+                points = _classify_tossup_attempt(
+                    picked,
+                    correct_points=tossup_correct,
+                    incorrect_points=tossup_incorrect,
+                    no_penalty_points=tossup_no_penalty,
+                )
+                per_team_points[team_key] = points
+                per_team_correct[team_key] = points == tossup_correct
+
+                if points == tossup_correct:
+                    tossup_result = "CORRECT"
+                elif points == tossup_incorrect:
+                    tossup_result = "INCORRECT"
+                else:
+                    tossup_result = "NO_PENALTY"
+
+                buzzing_player: str | None = None
+                if points not in {tossup_no_penalty} and picked and not _is_no_penalty_marker(picked):
+                    player_name = picked.get("player")
+                    if isinstance(player_name, str) and player_name.strip():
+                        buzzing_player = player_name
+
+                meta = question_meta_by_id.get(tossup_qid) or {}
+                cat = meta.get("category")
+                category = cat if isinstance(cat, str) else ""
+
+                outcomes.append(
+                    TeamQuestionOutcome(
+                        team_name=team_name,
+                        question_id=tossup_qid,
+                        pair_id=pair,
+                        question_type="TOSSUP",
+                        category=category,
+                        heard=True,
+                        points=points,
+                        tossup_result=tossup_result,
+                        bonus_result=None,
+                        buzzing_player_name=buzzing_player,
+                    )
+                )
+
+            winners = [k for k, is_correct in per_team_correct.items() if is_correct]
+            if len(winners) == 1:
+                hearing_team_key = winners[0]
+
+        # Bonus outcomes (heard only if that team got the tossup correct).
+        if bonus_qid:
+            b_attempts = attempts_for_question(bonus_qid)
+            meta = question_meta_by_id.get(bonus_qid) or {}
+            cat = meta.get("category")
+            category = cat if isinstance(cat, str) else ""
+
+            for team_key, team_name in zip(team_keys, team_names, strict=True):
+                heard = hearing_team_key is not None and team_key == hearing_team_key
+                if not heard:
+                    outcomes.append(
+                        TeamQuestionOutcome(
+                            team_name=team_name,
+                            question_id=bonus_qid,
+                            pair_id=pair,
+                            question_type="BONUS",
+                            category=category,
+                            heard=False,
+                            points=0,
+                            tossup_result=None,
+                            bonus_result="UNHEARD",
+                            buzzing_player_name=None,
+                        )
+                    )
+                    continue
+
+                picked = _pick_team_attempt(b_attempts, team_key, prefer_correct=False)
+                result = picked.get("result") if isinstance(picked, dict) else None
+                if result == "correct":
+                    bonus_result = "CORRECT"
+                    points = bonus_correct
+                elif result == "incorrect":
+                    bonus_result = "INCORRECT"
+                    points = bonus_incorrect
+                else:
+                    bonus_result = "UNHEARD"
+                    points = 0
+
+                outcomes.append(
+                    TeamQuestionOutcome(
+                        team_name=team_name,
+                        question_id=bonus_qid,
+                        pair_id=pair,
+                        question_type="BONUS",
+                        category=category,
+                        heard=True,
+                        points=points,
+                        tossup_result=None,
+                        bonus_result=bonus_result,
+                        buzzing_player_name=None,
+                    )
+                )
+
+    return ExportQuestionOutcomes(pairs_played=pairs_played, outcomes=outcomes)
