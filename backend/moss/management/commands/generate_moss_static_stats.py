@@ -4,6 +4,7 @@ import hashlib
 import json
 import tempfile
 import csv
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -124,10 +125,63 @@ class Command(BaseCommand):
             help="Do not deduplicate identical exports by file bytes hash.",
         )
         parser.add_argument(
+            "--no-sync-frontends",
+            action="store_true",
+            help=(
+                "Do not sync repo-root stats/ into the website and MoSS frontends' public/stats/ folders. "
+                "By default, this command runs the sync scripts so the updated artifacts are immediately "
+                "available to the frontends."
+            ),
+        )
+        parser.add_argument(
             "paths",
             nargs="+",
             help="One or more moss_scoresheet export JSON files.",
         )
+
+    def _sync_frontends(self, *, repo_root: Path) -> None:
+        scripts: list[tuple[str, Path]] = [
+            ("website", repo_root / "apps" / "website" / "frontend" / "scripts" / "sync-stats.mjs"),
+            ("moss", repo_root / "apps" / "moss" / "frontend" / "scripts" / "sync-stats.mjs"),
+        ]
+
+        missing = [name for name, p in scripts if not p.exists()]
+        if missing:
+            raise CommandError(
+                "Stats generated, but frontend sync scripts are missing: "
+                + ", ".join(missing)
+                + ". Pass --no-sync-frontends to skip syncing."
+            )
+
+        for name, script_path in scripts:
+            try:
+                result = subprocess.run(
+                    ["node", str(script_path)],
+                    cwd=str(repo_root),
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+            except FileNotFoundError as e:
+                raise CommandError(
+                    "Stats generated, but failed to sync frontends because 'node' was not found on PATH. "
+                    "Either install Node.js, or re-run with --no-sync-frontends."
+                ) from e
+
+            if result.returncode != 0:
+                raise CommandError(
+                    f"Stats generated, but frontend sync failed for {name}.\n"
+                    f"Command: node {script_path}\n"
+                    f"Exit code: {result.returncode}\n"
+                    f"Stdout:\n{result.stdout}\n"
+                    f"Stderr:\n{result.stderr}\n"
+                    "Re-run with --no-sync-frontends to skip syncing."
+                )
+
+            if result.stdout.strip():
+                self.stdout.write(result.stdout.rstrip())
+            if result.stderr.strip():
+                self.stderr.write(result.stderr.rstrip())
 
     def handle(self, *args, **options) -> None:
         tournament_slug: str | None = options.get("tournament_slug")
@@ -135,6 +189,7 @@ class Command(BaseCommand):
         pretty: bool = options["pretty"]
         assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
+        no_sync_frontends: bool = options["no_sync_frontends"]
         paths: list[str] = options["paths"]
 
         repo_root = Path(settings.BASE_DIR).parent
@@ -376,3 +431,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'team_standings.csv'}"))
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'individual_standings.csv'}"))
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'manifest.json'}"))
+
+        if not no_sync_frontends:
+            self._sync_frontends(repo_root=repo_root)
+            self.stdout.write(self.style.SUCCESS("Synced stats into website and MoSS frontends."))
