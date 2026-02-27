@@ -21,6 +21,25 @@ type Tab = {
   disabled: boolean;
 };
 
+function toTitleCase(text: string): string {
+  return text
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function humanizeCategoryLabel(raw: string): string {
+  const trimmed = (raw ?? "").trim();
+  if (!trimmed) return "Uncategorized";
+
+  const upper = trimmed.toUpperCase();
+  if (upper === "EARTH_SPACE" || upper === "EARTH_AND_SPACE") return "Earth/Space";
+
+  const normalized = trimmed.replace(/_/g, " ").replace(/\s+/g, " ").trim();
+  return toTitleCase(normalized);
+}
+
 function splitLogistics(text: string): string[] {
   const trimmed = text.trim();
   if (!trimmed) return [];
@@ -135,7 +154,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const standingsLoading = standingsCategoryKey === "overall" ? overallLoading : categoryLoading;
   const standingsError = standingsCategoryKey === "overall" ? overallError : categoryError;
   const showWinsLosses = standingsCategoryKey === "overall";
-  const standingsLabel = standingsCategoryKey === "overall" ? "Overall" : activeCategory?.label ?? "Category";
+  const standingsLabel = standingsCategoryKey === "overall" ? "Overall" : humanizeCategoryLabel(activeCategory?.label ?? "");
 
   const { slugs: rosterIndexSlugs, loading: rosterIndexLoading } = useRosterIndex();
   const hasField = rosterIndexSlugs?.has(tournament.slug) ?? false;
@@ -182,6 +201,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
+  const showStandingsSubnav = activeTab === "results" && categories.length > 0;
+
   return (
     <div className="card sbTabsCard" aria-label="Tournament details">
       <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
@@ -204,6 +225,30 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
           </button>
         ))}
       </div>
+
+      {showStandingsSubnav && (
+        <div className="sbTabSubNav" role="navigation" aria-label="Standings views">
+          <button
+            type="button"
+            className={standingsCategoryKey === "overall" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+            aria-pressed={standingsCategoryKey === "overall"}
+            onClick={() => setStandingsCategoryKey("overall")}
+          >
+            Overall
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              className={standingsCategoryKey === c.key ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+              aria-pressed={standingsCategoryKey === c.key}
+              onClick={() => setStandingsCategoryKey(c.key)}
+            >
+              {humanizeCategoryLabel(c.label)}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="sbTabsBody sbTabStack">
         {activeTab === "overview" && (
@@ -269,9 +314,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         {activeTab === "results" && (
           <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
-              <header className="sbSectionHeader">
-                <h2 className="sbSectionTitle">Standings</h2>
-              </header>
               <div className="sbTabSectionBody">
                 {isUpcoming ? (
                   <p className="sbMuted">Standings will be available after the tournament.</p>
@@ -281,30 +323,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                   <p className="sbMuted">Loading standings…</p>
                 ) : hasStandings && standings ? (
                   <div className="sbTabStack">
-                    {categories.length > 0 && (
-                      <div className="sbInlineRows" aria-label="Standings category">
-                        <div className="sbInlineRow">
-                          <span className="sbInlineRowLabel">View</span>
-                          <span className="sbInlineRowValue">
-                            <select
-                              className="sbSelect"
-                              value={standingsCategoryKey}
-                              onChange={(e) => {
-                                setStandingsCategoryKey(e.target.value);
-                              }}
-                              aria-label="Select standings category"
-                            >
-                              <option value="overall">Overall</option>
-                              {categories.map((c) => (
-                                <option key={c.key} value={c.key}>
-                                  {c.label}
-                                </option>
-                              ))}
-                            </select>
-                          </span>
-                        </div>
-                      </div>
-                    )}
                     <div>
                       <h3 className="m-0 text-sm font-semibold">Team Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
