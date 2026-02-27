@@ -1,5 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { DndContext, PointerSensor, closestCenter, type DragEndEvent, useSensor, useSensors } from "@dnd-kit/core";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import packetJson from "./assets/sample_packet.json";
@@ -118,6 +128,16 @@ function formatAttemptCellTextBrief(
   const player = attemptValue.playerId ? playersById.get(attemptValue.playerId) : undefined;
   const who = player ? ` (${player})` : "";
   return `${pointsLabel}${who}`;
+}
+
+function teamIndexToDisplayLabel(teamIndex: number): string {
+  let n = teamIndex;
+  let letters = "";
+  while (n >= 0) {
+    letters = String.fromCharCode(65 + (n % 26)) + letters;
+    n = Math.floor(n / 26) - 1;
+  }
+  return `Team ${letters}`;
 }
 
 function useScoresheetStickyHeaderOffsets(headerKey: string): {
@@ -302,6 +322,265 @@ type DraftTeam = Omit<Team, "players" | "lineupSegments"> & {
 type Game = {
   teams: Team[];
 };
+
+function GripSixDotsIcon({ size = 14 }: { size?: number }) {
+  const r = Math.max(1, Math.round(size / 10));
+  const gap = Math.max(3, Math.round(size / 3.5));
+  const x1 = Math.round(size / 2 - gap / 2);
+  const x2 = Math.round(size / 2 + gap / 2);
+  const y1 = Math.round(size / 2 - gap);
+  const y2 = Math.round(size / 2);
+  const y3 = Math.round(size / 2 + gap);
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" focusable="false">
+      <circle cx={x1} cy={y1} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y1} r={r} fill="currentColor" />
+      <circle cx={x1} cy={y2} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y2} r={r} fill="currentColor" />
+      <circle cx={x1} cy={y3} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y3} r={r} fill="currentColor" />
+    </svg>
+  );
+}
+
+function SortableDraftPlayerRow({
+  teamId,
+  player,
+  playerIndex,
+  canRemove,
+  onUpdatePlayerName,
+  onTogglePlayerIn,
+  onRemovePlayer,
+}: {
+  teamId: string;
+  player: DraftPlayer;
+  playerIndex: number;
+  canRemove: boolean;
+  onUpdatePlayerName: (teamId: string, playerId: string, name: string) => void;
+  onTogglePlayerIn: (teamId: string, playerId: string) => void;
+  onRemovePlayer: (teamId: string, playerId: string) => void;
+}) {
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: player.id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={[
+        "playerRowWithToggle",
+        "dndPlayerRow",
+        canRemove ? "" : "noRemove",
+        isDragging ? "dndDragging" : "",
+      ].filter(Boolean).join(" ")}
+    >
+      <button
+        type="button"
+        className="dndHandle dndHandlePlayer"
+        ref={setActivatorNodeRef}
+        aria-label="Drag to reorder player"
+        title="Drag to reorder"
+        {...attributes}
+        {...listeners}
+      >
+        <GripSixDotsIcon size={14} />
+      </button>
+
+      <input
+        className="textInput"
+        value={player.name}
+        onChange={(e) => onUpdatePlayerName(teamId, player.id, e.target.value)}
+        placeholder={`Player ${playerIndex + 1}`}
+      />
+
+      <button
+        type="button"
+        role="switch"
+        aria-checked={player.isIn}
+        className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
+        onClick={() => onTogglePlayerIn(teamId, player.id)}
+        aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
+      >
+        {player.isIn ? "Active" : "Bench"}
+      </button>
+
+      {canRemove && (
+        <button
+          type="button"
+          className="iconButton danger"
+          aria-label="Remove player"
+          onClick={() => onRemovePlayer(teamId, player.id)}
+        >
+          ×
+        </button>
+      )}
+    </div>
+  );
+}
+
+function SortableDraftTeamCol({
+  team,
+  teamIndex,
+  canRemoveTeam,
+  fieldRoster,
+  selectedRosterTeamByDraftTeamId,
+  onApplyRosterTeam,
+  onUpdateTeamName,
+  onRemoveTeam,
+  onAddPlayer,
+  onUpdatePlayerName,
+  onTogglePlayerIn,
+  onRemovePlayer,
+  onReorderPlayers,
+}: {
+  team: DraftTeam;
+  teamIndex: number;
+  canRemoveTeam: boolean;
+  fieldRoster: FieldRoster | null;
+  selectedRosterTeamByDraftTeamId: Record<string, string>;
+  onApplyRosterTeam: (draftTeamId: string, rosterTeamName: string) => void;
+  onUpdateTeamName: (teamId: string, name: string) => void;
+  onRemoveTeam: (teamId: string) => void;
+  onAddPlayer: (teamId: string) => void;
+  onUpdatePlayerName: (teamId: string, playerId: string, name: string) => void;
+  onTogglePlayerIn: (teamId: string, playerId: string) => void;
+  onRemovePlayer: (teamId: string, playerId: string) => void;
+  onReorderPlayers: (teamId: string, activePlayerId: string, overPlayerId: string) => void;
+}) {
+  const teamLabel = teamIndexToDisplayLabel(teamIndex);
+  const playerSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: team.id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  function handlePlayerDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
+    onReorderPlayers(team.id, String(active.id), String(over.id));
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={["teamCol", isDragging ? "dndDragging dndTeamDragging" : ""].join(" ")}
+    >
+      <div className="fieldGroup">
+        <div className="fieldLabelRow">
+          <div className="draftTeamLabelLeft">
+            <button
+              type="button"
+              className="dndHandle dndHandleTeam"
+              ref={setActivatorNodeRef}
+              aria-label="Drag to reorder team"
+              title="Drag to reorder"
+              {...attributes}
+              {...listeners}
+            >
+              <GripSixDotsIcon size={16} />
+            </button>
+            <div className="fieldLabel">
+              {teamLabel} <span className="required">*</span>
+            </div>
+          </div>
+
+          {canRemoveTeam && (
+            <button
+              type="button"
+              className="iconButton"
+              aria-label="Remove team"
+              onClick={() => onRemoveTeam(team.id)}
+            >
+              ×
+            </button>
+          )}
+        </div>
+
+        {fieldRoster && (
+          <select
+            className="textInput"
+            value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
+            onChange={(e) => onApplyRosterTeam(team.id, e.target.value)}
+            aria-label={`Select team for ${teamLabel}`}
+          >
+            <option value="">Select team</option>
+            {fieldRoster.teams.map((rt) => {
+              const taken = Object.entries(selectedRosterTeamByDraftTeamId).some(
+                ([otherId, otherName]) => otherId !== team.id && otherName === rt.name
+              );
+              return (
+                <option key={rt.name} value={rt.name} disabled={taken}>
+                  {rt.name}
+                </option>
+              );
+            })}
+          </select>
+        )}
+
+        {!fieldRoster && (
+          <input
+            className="textInput"
+            value={team.name}
+            placeholder={teamLabel}
+            onChange={(e) => onUpdateTeamName(team.id, e.target.value)}
+          />
+        )}
+      </div>
+
+      <div className="fieldGroup">
+        <div className="fieldLabel">Players</div>
+
+        <DndContext
+          sensors={playerSensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+          onDragEnd={handlePlayerDragEnd}
+        >
+          <SortableContext items={team.players.map((p) => p.id)} strategy={verticalListSortingStrategy}>
+            <div className="playerList">
+              {team.players.map((player, playerIndex) => (
+                <SortableDraftPlayerRow
+                  key={player.id}
+                  teamId={team.id}
+                  player={player}
+                  playerIndex={playerIndex}
+                  canRemove={team.players.length > 1}
+                  onUpdatePlayerName={onUpdatePlayerName}
+                  onTogglePlayerIn={onTogglePlayerIn}
+                  onRemovePlayer={onRemovePlayer}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+
+        <button
+          type="button"
+          className="addRowButton"
+          onClick={() => onAddPlayer(team.id)}
+          title="Add player"
+          aria-label="Add player"
+        >
+          <span className="addIcon">+</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function formatMultipleChoiceAnswerLabel(answer: string, options: string[]): string | undefined {
   const raw = answer.trim();
@@ -1016,39 +1295,39 @@ function ScoreboardDisplayApp() {
                 ])}
               </tr>
             </thead>
-                <tbody>
-                  {(() => {
-                    const colSpan = 1 + teams.length * 3;
-                    const nodes: ReactNode[] = [];
+            <tbody>
+              {(() => {
+                const colSpan = 1 + teams.length * 3;
+                const nodes: ReactNode[] = [];
 
-                    for (let i = 0; i < scoredPairs.rows.length; i++) {
-                      const row = scoredPairs.rows[i];
-                      const boundaryBeforeQuestion = row.pairId;
-                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+                for (let i = 0; i < scoredPairs.rows.length; i++) {
+                  const row = scoredPairs.rows[i];
+                  const boundaryBeforeQuestion = row.pairId;
+                  const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
 
-                      if (markerKind !== undefined) {
-                        nodes.push(
-                          <tr
-                            key={`boundary_${boundaryBeforeQuestion}`}
-                            className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
-                          >
-                            <td colSpan={colSpan}>
-                              <div className="scoresheetBoundaryButton" aria-hidden="true">
-                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      }
+                  if (markerKind !== undefined) {
+                    nodes.push(
+                      <tr
+                        key={`boundary_${boundaryBeforeQuestion}`}
+                        className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                      >
+                        <td colSpan={colSpan}>
+                          <div className="scoresheetBoundaryButton" aria-hidden="true">
+                            <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  }
 
-                      const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
-                      nodes.push(
-                        <tr
-                          key={`row_${row.pairId}`}
-                          data-pair-id={row.pairId}
-                          className={isActivePair ? "scoresheetRowActive" : undefined}
-                        >
-                          <td className="scoresheetPairCell">
+                  const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
+                  nodes.push(
+                    <tr
+                      key={`row_${row.pairId}`}
+                      data-pair-id={row.pairId}
+                      className={isActivePair ? "scoresheetRowActive" : undefined}
+                    >
+                      <td className="scoresheetPairCell">
                         <span className="pairLinkDisplay">{row.pairId}</span>
                       </td>
                       {row.perTeam.flatMap((teamRow, teamIndex) => {
@@ -1157,6 +1436,7 @@ function ModeratorApp() {
   const [tournamentRosterError, setTournamentRosterError] = useState<string | null>(null);
   const [fieldRoster, setFieldRoster] = useState<FieldRoster | null>(null);
   const [selectedRosterTeamByDraftTeamId, setSelectedRosterTeamByDraftTeamId] = useState<Record<string, string>>({});
+  const [hasConfirmedAlteringPreloadedRosters, setHasConfirmedAlteringPreloadedRosters] = useState(false);
   const [rosterLoadError, setRosterLoadError] = useState<string | null>(null);
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
@@ -2015,6 +2295,7 @@ function ModeratorApp() {
     setTournamentSearchQuery("");
     setFieldRoster(null);
     setSelectedRosterTeamByDraftTeamId({});
+    setHasConfirmedAlteringPreloadedRosters(false);
     setRosterLoadError(null);
     setDraftTeams(makeBlankDraftTeams());
   }
@@ -2217,6 +2498,46 @@ function ModeratorApp() {
     setSelectedRosterTeamByDraftTeamId((prev) => ({ ...prev, [draftTeamId]: rosterTeam.name }));
   }
 
+  function confirmAlteringPreloadedRostersIfNeeded(teamId: string): boolean {
+    if (hasConfirmedAlteringPreloadedRosters) return true;
+    if (draftRosterChoice.kind !== "tournament") return true;
+    if (!selectedRosterTeamByDraftTeamId[teamId]) return true;
+
+    const ok = window.confirm(
+      "Are you sure you wish to alter the preloaded rosters?\n\nModifying rosters may break tournament statistics. It is strongly recommended to notify a tournament organizer before proceeding."
+    );
+    if (!ok) return false;
+    setHasConfirmedAlteringPreloadedRosters(true);
+    return true;
+  }
+
+  const draftTeamDndSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
+
+  function handleDraftTeamDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
+
+    setDraftTeams((prev) => {
+      const oldIndex = prev.findIndex((t) => t.id === active.id);
+      const newIndex = prev.findIndex((t) => t.id === over.id);
+      if (oldIndex < 0 || newIndex < 0) return prev;
+      return arrayMove(prev, oldIndex, newIndex);
+    });
+  }
+
+  function reorderDraftPlayers(teamId: string, activePlayerId: string, overPlayerId: string) {
+    setDraftTeams((prev) =>
+      prev.map((t) => {
+        if (t.id !== teamId) return t;
+        const oldIndex = t.players.findIndex((p) => p.id === activePlayerId);
+        const newIndex = t.players.findIndex((p) => p.id === overPlayerId);
+        if (oldIndex < 0 || newIndex < 0) return t;
+        return { ...t, players: arrayMove(t.players, oldIndex, newIndex) };
+      })
+    );
+  }
+
   function updateTeamName(teamId: string, name: string) {
     setDraftTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, name } : t)));
   }
@@ -2240,6 +2561,7 @@ function ModeratorApp() {
   }
 
   function addPlayer(teamId: string) {
+    if (!confirmAlteringPreloadedRostersIfNeeded(teamId)) return;
     const id = makeId("player");
     setDraftTeams((prev) =>
       prev.map((t) => (t.id === teamId ? { ...t, players: [...t.players, { id, name: "", isIn: false }] } : t))
@@ -2247,6 +2569,7 @@ function ModeratorApp() {
   }
 
   function removePlayer(teamId: string, playerId: string) {
+    if (!confirmAlteringPreloadedRostersIfNeeded(teamId)) return;
     const playerName = draftTeams
       .find((t) => t.id === teamId)
       ?.players.find((p) => p.id === playerId)
@@ -3629,120 +3952,47 @@ function ModeratorApp() {
                   </div>
 
                   <div className="teamGridScroll">
-                    <div className="teamGrid">
-                      {draftTeams.map((team, teamIndex) => (
-                        <div key={team.id} className="teamCol">
-                          <div className="fieldGroup">
-                            <div className="fieldLabelRow">
-                              <div className="fieldLabel">
-                                {`Team ${teamIndex + 1}`}{" "}
-                                <span className="required">*</span>
-                              </div>
-                              {draftTeams.length > 1 && (
-                                <button
-                                  type="button"
-                                  className="iconButton"
-                                  aria-label="Remove team"
-                                  onClick={() => removeTeam(team.id)}
-                                >
-                                  ×
-                                </button>
-                              )}
-                            </div>
-                            {fieldRoster && (
-                              <select
-                                className="textInput"
-                                value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
-                                onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
-                                aria-label={`Select team for Team ${teamIndex + 1}`}
-                              >
-                                <option value="">Select team…</option>
-                                {fieldRoster.teams.map((rt) => (
-                                  <option
-                                    key={rt.name}
-                                    value={rt.name}
-                                    disabled={draftTeams.some((other) => other.id !== team.id && selectedRosterTeamByDraftTeamId[other.id] === rt.name)}
-                                  >
-                                    {rt.name}
-                                  </option>
-                                ))}
-                              </select>
-                            )}
-                            {!fieldRoster && (
-                              <input
-                                className="textInput"
-                                value={team.name}
-                                placeholder={`Team ${teamIndex + 1}`}
-                                onChange={(e) => updateTeamName(team.id, e.target.value)}
-                              />
-                            )}
-                          </div>
+                    <DndContext
+                      sensors={draftTeamDndSensors}
+                      collisionDetection={closestCenter}
+                      modifiers={[restrictToParentElement]}
+                      onDragEnd={handleDraftTeamDragEnd}
+                    >
+                      <div className="teamGrid">
+                        <SortableContext items={draftTeams.map((t) => t.id)} strategy={rectSortingStrategy}>
+                          {draftTeams.map((team, teamIndex) => (
+                            <SortableDraftTeamCol
+                              key={team.id}
+                              team={team}
+                              teamIndex={teamIndex}
+                              canRemoveTeam={draftTeams.length > 1}
+                              fieldRoster={fieldRoster}
+                              selectedRosterTeamByDraftTeamId={selectedRosterTeamByDraftTeamId}
+                              onApplyRosterTeam={applyFieldRosterTeamToDraftTeam}
+                              onUpdateTeamName={updateTeamName}
+                              onRemoveTeam={removeTeam}
+                              onAddPlayer={addPlayer}
+                              onUpdatePlayerName={updatePlayerName}
+                              onTogglePlayerIn={toggleDraftPlayerIn}
+                              onRemovePlayer={removePlayer}
+                              onReorderPlayers={reorderDraftPlayers}
+                            />
+                          ))}
+                        </SortableContext>
 
-                          <div className="fieldGroup">
-                            <div className="fieldLabel">Players</div>
-                            <div className="playerList">
-                              {team.players.map((player, playerIndex) => (
-                                <div
-                                  key={player.id}
-                                  className={["playerRowWithToggle", team.players.length > 1 ? "" : "noRemove"].filter(Boolean).join(" ")}
-                                >
-                                  <input
-                                    className="textInput"
-                                    value={player.name}
-                                    onChange={(e) =>
-                                      updatePlayerName(team.id, player.id, e.target.value)
-                                    }
-                                    placeholder={`Player ${playerIndex + 1}`}
-                                  />
-                                  <button
-                                    type="button"
-                                    role="switch"
-                                    aria-checked={player.isIn}
-                                    className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
-                                    onClick={() => toggleDraftPlayerIn(team.id, player.id)}
-                                    aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
-                                  >
-                                    {player.isIn ? "Active" : "Bench"}
-                                  </button>
-                                  {team.players.length > 1 && (
-                                    <button
-                                      type="button"
-                                      className="iconButton danger"
-                                      aria-label="Remove player"
-                                      onClick={() => removePlayer(team.id, player.id)}
-                                    >
-                                      ×
-                                    </button>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-
-                            <button
-                              type="button"
-                              className="addRowButton"
-                              onClick={() => addPlayer(team.id)}
-                              title="Add player"
-                              aria-label="Add player"
-                            >
-                              <span className="addIcon">+</span>
-                            </button>
-                          </div>
+                        <div className="addTeamCol">
+                          <button
+                            type="button"
+                            className="addTeamButton"
+                            onClick={addTeam}
+                            title="Add team"
+                            aria-label="Add team"
+                          >
+                            <span className="addIcon">+</span>
+                          </button>
                         </div>
-                      ))}
-
-                      <div className="addTeamCol">
-                        <button
-                          type="button"
-                          className="addTeamButton"
-                          onClick={addTeam}
-                          title="Add team"
-                          aria-label="Add team"
-                        >
-                          <span className="addIcon">+</span>
-                        </button>
                       </div>
-                    </div>
+                    </DndContext>
                   </div>
 
                   <div className="modalFooter">
@@ -3751,31 +4001,31 @@ function ModeratorApp() {
                         <div className="fieldLabel">
                           Packet <span className="required">*</span>
                         </div>
-                      <div className="packetBox">
-                        <div className="packetBoxText">
-                          {draftPacketChoice ? (
-                            <>
-                              <div className="packetName">{draftPacketChoice.label}</div>
-                              <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="packetName">Select Packet</div>
-                              <div className="packetSubtext">No packet selected</div>
-                            </>
-                          )}
-                          {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        <div className="packetBox">
+                          <div className="packetBoxText">
+                            {draftPacketChoice ? (
+                              <>
+                                <div className="packetName">{draftPacketChoice.label}</div>
+                                <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="packetName">Select Packet</div>
+                                <div className="packetSubtext">No packet selected</div>
+                              </>
+                            )}
+                            {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                          </div>
+                          <div className="packetBoxButtons">
+                            <button
+                              type="button"
+                              className="secondary"
+                              onClick={() => setIsPacketChooserOpen(true)}
+                            >
+                              {draftPacketChoice ? "Change…" : "Load…"}
+                            </button>
+                          </div>
                         </div>
-                        <div className="packetBoxButtons">
-                          <button
-                            type="button"
-                            className="secondary"
-                            onClick={() => setIsPacketChooserOpen(true)}
-                          >
-                            {draftPacketChoice ? "Change…" : "Load…"}
-                          </button>
-                        </div>
-                      </div>
                       </div>
                       <div className="spacer" />
                       <div className="packetActions">
