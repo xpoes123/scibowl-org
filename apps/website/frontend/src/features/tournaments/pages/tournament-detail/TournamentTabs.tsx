@@ -3,6 +3,7 @@ import type { TournamentDetail, TournamentLink, TournamentStatus } from "../../t
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
+import { useTournamentStatsManifest } from "../../hooks/useTournamentStatsManifest";
 import { useRosterIndex } from "../../hooks/useRosterIndex";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 import { FieldTab } from "./FieldTab";
@@ -93,8 +94,48 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const isLive = variant === "LIVE";
   const isFinished = variant === "FINISHED";
 
-  const { data: standings, loading: standingsLoading, error: standingsError } = useTournamentStandings(tournament.slug, !isUpcoming);
-  const hasStandings = (standings?.team_standings?.length ?? 0) > 0;
+  const standingsEnabled = !isUpcoming;
+
+  const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled);
+  const overallFiles = useMemo(() => {
+    if (!statsManifest) return null;
+    return { team: statsManifest.views.team_standings, individual: statsManifest.views.individual_standings };
+  }, [statsManifest]);
+
+  const { data: overallStandings, loading: overallLoading, error: overallError } = useTournamentStandings(tournament.slug, standingsEnabled, overallFiles);
+  const hasStandings = (overallStandings?.team_standings?.length ?? 0) > 0;
+
+  const categories = useMemo(() => {
+    const entries = statsManifest?.views?.category_standings ?? [];
+    return entries.map((e) => ({
+      key: e.key,
+      label: e.category?.trim() ? e.category : "Uncategorized",
+      files: { team: e.team_standings, individual: e.individual_standings },
+    }));
+  }, [statsManifest]);
+
+  const [standingsCategoryKey, setStandingsCategoryKey] = useState<string>("overall");
+  useEffect(() => {
+    setStandingsCategoryKey("overall");
+  }, [tournament.slug]);
+
+  const activeCategory = useMemo(() => {
+    if (standingsCategoryKey === "overall") return null;
+    return categories.find((c) => c.key === standingsCategoryKey) ?? null;
+  }, [categories, standingsCategoryKey]);
+
+  const categoryEnabled = standingsEnabled && standingsCategoryKey !== "overall" && !!activeCategory;
+  const { data: categoryStandings, loading: categoryLoading, error: categoryError } = useTournamentStandings(
+    tournament.slug,
+    categoryEnabled,
+    activeCategory?.files ?? null,
+  );
+
+  const standings = standingsCategoryKey === "overall" ? overallStandings : categoryStandings;
+  const standingsLoading = standingsCategoryKey === "overall" ? overallLoading : categoryLoading;
+  const standingsError = standingsCategoryKey === "overall" ? overallError : categoryError;
+  const showWinsLosses = standingsCategoryKey === "overall";
+  const standingsLabel = standingsCategoryKey === "overall" ? "Overall" : activeCategory?.label ?? "Category";
 
   const { slugs: rosterIndexSlugs, loading: rosterIndexLoading } = useRosterIndex();
   const hasField = rosterIndexSlugs?.has(tournament.slug) ?? false;
@@ -236,18 +277,42 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                   <p className="sbMuted">Standings will be available after the tournament.</p>
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
-                ) : standingsLoading ? (
+                ) : standingsLoading || statsManifestLoading ? (
                   <p className="sbMuted">Loading standings…</p>
                 ) : hasStandings && standings ? (
                   <div className="sbTabStack">
+                    {categories.length > 0 && (
+                      <div className="sbInlineRows" aria-label="Standings category">
+                        <div className="sbInlineRow">
+                          <span className="sbInlineRowLabel">View</span>
+                          <span className="sbInlineRowValue">
+                            <select
+                              className="sbSelect"
+                              value={standingsCategoryKey}
+                              onChange={(e) => {
+                                setStandingsCategoryKey(e.target.value);
+                              }}
+                              aria-label="Select standings category"
+                            >
+                              <option value="overall">Overall</option>
+                              {categories.map((c) => (
+                                <option key={c.key} value={c.key}>
+                                  {c.label}
+                                </option>
+                              ))}
+                            </select>
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <div>
-                      <h3 className="m-0 text-sm font-semibold">Team Standings</h3>
+                      <h3 className="m-0 text-sm font-semibold">Team Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
-                        <TeamStandingsTable rows={standings.team_standings} />
+                        <TeamStandingsTable rows={standings.team_standings} showWinsLosses={showWinsLosses} />
                       </div>
                     </div>
                     <div>
-                      <h3 className="m-0 text-sm font-semibold">Individual Standings</h3>
+                      <h3 className="m-0 text-sm font-semibold">Individual Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
                         <IndividualStandingsTable rows={standings.individual_standings} />
                       </div>

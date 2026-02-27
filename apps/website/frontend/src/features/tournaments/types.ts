@@ -101,8 +101,8 @@ export type TeamStandingsRow = {
   rank: number;
   team_id: number;
   name: string;
-  wins: number;
-  losses: number;
+  wins?: number;
+  losses?: number;
   points_per_game: number;
   "4s": number;
   "-4s": number;
@@ -131,6 +131,22 @@ export type TournamentStandingsResponse = {
   tournament: { id: number; slug: string | null; name: string };
   team_standings: TeamStandingsRow[];
   individual_standings: IndividualStandingsRow[];
+};
+
+export type TournamentStatsManifest = {
+  schema_version: number;
+  generated_at: string;
+  tournament: { slug: string; name: string };
+  views: {
+    team_standings: string;
+    individual_standings: string;
+    category_standings?: Array<{
+      category: string;
+      key: string;
+      team_standings: string;
+      individual_standings: string;
+    }>;
+  };
 };
 
 // Alias for backwards compatibility
