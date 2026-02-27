@@ -145,7 +145,13 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   wrapStyle: CSSProperties | undefined;
 } {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [headerHeightsPx, setHeaderHeightsPx] = useState<{ row1: number; row2: number; row3: number } | null>(null);
+  const [headerMetricsPx, setHeaderMetricsPx] = useState<{
+    row1Height: number;
+    row2Height: number;
+    row3Height: number;
+    row2Top: number;
+    row3Top: number;
+  } | null>(null);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -158,22 +164,47 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
     if (!row1 || !row2) return;
 
     const update = () => {
-      const raw1 = row1.getBoundingClientRect().height;
-      const raw2 = row2.getBoundingClientRect().height;
-      const raw3 = row3 ? row3.getBoundingClientRect().height : 0;
-      const next1 = Math.max(0, Math.round(raw1 * 10) / 10);
-      const next2 = Math.max(0, Math.round(raw2 * 10) / 10);
-      const next3 = Math.max(0, Math.round(raw3 * 10) / 10);
-      setHeaderHeightsPx((prev) => {
-        if (!prev) return { row1: next1, row2: next2, row3: next3 };
-        const same1 = Math.abs(prev.row1 - next1) < 0.05;
-        const same2 = Math.abs(prev.row2 - next2) < 0.05;
-        const same3 = Math.abs(prev.row3 - next3) < 0.05;
-        if (same1 && same2 && same3) return prev;
+      const r1 = row1.getBoundingClientRect();
+      const r2 = row2.getBoundingClientRect();
+      const r3 = row3 ? row3.getBoundingClientRect() : null;
+
+      const raw1Height = r1.height;
+      const raw2Height = r2.height;
+      const raw3Height = r3 ? r3.height : 0;
+
+      const raw2Top = r2.top - r1.top;
+      const raw3Top = r3 ? r3.top - r1.top : 0;
+
+      const next1Height = Math.max(0, Math.round(raw1Height * 10) / 10);
+      const next2Height = Math.max(0, Math.round(raw2Height * 10) / 10);
+      const next3Height = Math.max(0, Math.round(raw3Height * 10) / 10);
+
+      const next2Top = Math.max(0, Math.round(raw2Top * 100) / 100);
+      const next3Top = Math.max(0, Math.round(raw3Top * 100) / 100);
+
+      setHeaderMetricsPx((prev) => {
+        if (!prev) {
+          return {
+            row1Height: next1Height,
+            row2Height: next2Height,
+            row3Height: next3Height,
+            row2Top: next2Top,
+            row3Top: next3Top,
+          };
+        }
+
+        const same1 = Math.abs(prev.row1Height - next1Height) < 0.05;
+        const same2 = Math.abs(prev.row2Height - next2Height) < 0.05;
+        const same3 = Math.abs(prev.row3Height - next3Height) < 0.05;
+        const same2Top = Math.abs(prev.row2Top - next2Top) < 0.05;
+        const same3Top = Math.abs(prev.row3Top - next3Top) < 0.05;
+        if (same1 && same2 && same3 && same2Top && same3Top) return prev;
         return {
-          row1: same1 ? prev.row1 : next1,
-          row2: same2 ? prev.row2 : next2,
-          row3: same3 ? prev.row3 : next3,
+          row1Height: same1 ? prev.row1Height : next1Height,
+          row2Height: same2 ? prev.row2Height : next2Height,
+          row3Height: same3 ? prev.row3Height : next3Height,
+          row2Top: same2Top ? prev.row2Top : next2Top,
+          row3Top: same3Top ? prev.row3Top : next3Top,
         };
       });
     };
@@ -192,13 +223,20 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   }, [headerKey]);
 
   const wrapStyle = useMemo(() => {
-    if (!headerHeightsPx) return undefined;
+    if (!headerMetricsPx) return undefined;
+    const headerTotalHeight =
+      headerMetricsPx.row3Height > 0
+        ? headerMetricsPx.row3Top + headerMetricsPx.row3Height
+        : headerMetricsPx.row2Top + headerMetricsPx.row2Height;
     return {
-      ["--scoresheetHeaderRow1Height" as string]: `${headerHeightsPx.row1}px`,
-      ["--scoresheetHeaderRow2Height" as string]: `${headerHeightsPx.row2}px`,
-      ["--scoresheetHeaderRow3Height" as string]: `${headerHeightsPx.row3}px`,
+      ["--scoresheetHeaderRow1Height" as string]: `${headerMetricsPx.row1Height}px`,
+      ["--scoresheetHeaderRow2Height" as string]: `${headerMetricsPx.row2Height}px`,
+      ["--scoresheetHeaderRow3Height" as string]: `${headerMetricsPx.row3Height}px`,
+      ["--scoresheetHeaderRow2Top" as string]: `${headerMetricsPx.row2Top}px`,
+      ["--scoresheetHeaderRow3Top" as string]: `${headerMetricsPx.row3Top}px`,
+      ["--scoresheetHeaderTotalHeight" as string]: `${Math.max(0, Math.round(headerTotalHeight * 100) / 100)}px`,
     } as CSSProperties;
-  }, [headerHeightsPx]);
+  }, [headerMetricsPx]);
 
   return { wrapRef, wrapStyle };
 }
@@ -978,6 +1016,10 @@ function ScoreboardDisplayApp() {
   const [rowAdvanceMode, setRowAdvanceMode] = useState<ScoreboardRowAdvanceMode>(() => loadScoreboardRowAdvanceMode());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const lastAutoScrolledPairIdRef = useRef<number | null>(null);
+  const projectorTeamNameElsRef = useRef<Record<string, HTMLSpanElement | null>>({});
+  const [projectorTeamNameFitByTeamId, setProjectorTeamNameFitByTeamId] = useState<
+    Record<string, { fontPx: number; allowWrap: boolean }>
+  >({});
 
   useEffect(() => {
     saveScoreboardDisplayView(displayView);
@@ -1034,6 +1076,76 @@ function ScoreboardDisplayApp() {
   }, [teams]);
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
+  const projectorTeamFitKey = useMemo(() => teams.map((t) => `${t.id}:${t.name}`).join("|"), [teams]);
+
+  useEffect(() => {
+    if (!isProjectorLayout) return;
+
+    let raf = 0;
+
+    const measureCanvas = document.createElement("canvas");
+    const ctx = measureCanvas.getContext("2d");
+    if (!ctx) return;
+
+    const MAX_FONT_PX = 72;
+    const MIN_FONT_PX = 36;
+
+    const recompute = () => {
+      const next: Record<string, { fontPx: number; allowWrap: boolean }> = {};
+
+      for (const team of teams) {
+        const el = projectorTeamNameElsRef.current[team.id];
+        if (!el) continue;
+        const available = el.clientWidth;
+        if (!available) continue;
+
+        const computed = window.getComputedStyle(el);
+        const fontStyle = computed.fontStyle || "normal";
+        const fontVariant = computed.fontVariant || "normal";
+        const fontWeight = computed.fontWeight || "600";
+        const fontFamily = computed.fontFamily || "system-ui";
+
+        ctx.font = `${fontStyle} ${fontVariant} ${fontWeight} ${MAX_FONT_PX}px ${fontFamily}`;
+        const textWidthAtMax = ctx.measureText(team.name).width;
+
+        const targetWidth = Math.max(0, available - 6);
+        if (textWidthAtMax <= targetWidth) {
+          next[team.id] = { fontPx: MAX_FONT_PX, allowWrap: false };
+          continue;
+        }
+
+        const scaled = Math.floor(MAX_FONT_PX * (targetWidth / Math.max(1, textWidthAtMax)));
+        const clamped = Math.max(MIN_FONT_PX, Math.min(MAX_FONT_PX, scaled));
+        const allowWrap = clamped === MIN_FONT_PX && scaled < MIN_FONT_PX;
+        next[team.id] = { fontPx: clamped, allowWrap };
+      }
+
+      setProjectorTeamNameFitByTeamId(next);
+    };
+
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(recompute);
+    };
+
+    schedule();
+    window.addEventListener("resize", schedule);
+
+    let ro: ResizeObserver | null = null;
+    if ("ResizeObserver" in window) {
+      ro = new ResizeObserver(schedule);
+      for (const team of teams) {
+        const el = projectorTeamNameElsRef.current[team.id];
+        if (el) ro.observe(el);
+      }
+    }
+
+    return () => {
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+      if (ro) ro.disconnect();
+    };
+  }, [isProjectorLayout, projectorTeamFitKey]);
 
   const formatAttemptCellTextForView = (
     attemptValue: Attempt | undefined,
@@ -1193,7 +1305,11 @@ function ScoreboardDisplayApp() {
 
   return (
     <div
-      className={["scoreboardDisplayRoot", displayView === "large" ? "scoreboardDisplayRoot--large" : ""]
+      className={[
+        "scoreboardDisplayRoot",
+        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
+        isProjectorLayout ? "scoreboardDisplayRoot--projector" : "",
+      ]
         .filter(Boolean)
         .join(" ")}
       aria-label="Scoreboard display"
@@ -1224,6 +1340,7 @@ function ScoreboardDisplayApp() {
         </div>
 
         <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
+          <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
           <table
             className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
           >
@@ -1273,7 +1390,22 @@ function ScoreboardDisplayApp() {
                     ].filter(Boolean).join(" ")}
                   >
                     <div className="scoresheetTeamHeaderInner">
-                      <span className="scoresheetTeamName">{team.name}</span>
+                      <span
+                        className="scoresheetTeamName"
+                        ref={(el) => {
+                          projectorTeamNameElsRef.current[team.id] = el;
+                        }}
+                        style={
+                          isProjectorLayout
+                            ? {
+                              fontSize: `${projectorTeamNameFitByTeamId[team.id]?.fontPx ?? 72}px`,
+                              whiteSpace: projectorTeamNameFitByTeamId[team.id]?.allowWrap ? "normal" : "nowrap",
+                            }
+                            : undefined
+                        }
+                      >
+                        {team.name}
+                      </span>
                       <span className="pill scoresheetScorePill">
                         {scoredPairs.totals.find((t) => t.teamId === team.id)?.total ?? 0}
                       </span>
@@ -1290,7 +1422,7 @@ function ScoreboardDisplayApp() {
                     key={`${team.id}_r`}
                     className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
                   >
-                    Total
+                    {isProjectorLayout ? "S" : "Total"}
                   </th>,
                 ])}
               </tr>
@@ -4512,6 +4644,7 @@ function ModeratorApp() {
             </div>
 
             <div ref={moderatorScoresheetWrapRef} className="scoresheetTableWrap" style={moderatorScoresheetWrapStyle}>
+              <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
               <table className="scoresheetTable">
                 <thead>
                   <tr>
