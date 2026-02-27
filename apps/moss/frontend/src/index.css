@@ -464,7 +464,8 @@ code {
 }
 
 .teamCol {
-  flex: 0 0 340px;
+  flex: 1 1 340px;
+  min-width: 340px;
   padding: 0 22px;
 }
 
@@ -477,9 +478,9 @@ code {
 }
 
 .addTeamCol {
-  flex: 0 0 170px;
+  flex: 0 0 110px;
   border-left: 1px solid #eee;
-  padding-left: 22px;
+  padding-left: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
