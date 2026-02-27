@@ -517,7 +517,7 @@ function SortableDraftTeamCol({
             onChange={(e) => onApplyRosterTeam(team.id, e.target.value)}
             aria-label={`Select team for ${teamLabel}`}
           >
-            <option value="">Select teamâ€¦</option>
+            <option value="">Select team</option>
             {fieldRoster.teams.map((rt) => {
               const taken = Object.entries(selectedRosterTeamByDraftTeamId).some(
                 ([otherId, otherName]) => otherId !== team.id && otherName === rt.name
@@ -1295,39 +1295,39 @@ function ScoreboardDisplayApp() {
                 ])}
               </tr>
             </thead>
-                <tbody>
-                  {(() => {
-                    const colSpan = 1 + teams.length * 3;
-                    const nodes: ReactNode[] = [];
+            <tbody>
+              {(() => {
+                const colSpan = 1 + teams.length * 3;
+                const nodes: ReactNode[] = [];
 
-                    for (let i = 0; i < scoredPairs.rows.length; i++) {
-                      const row = scoredPairs.rows[i];
-                      const boundaryBeforeQuestion = row.pairId;
-                      const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+                for (let i = 0; i < scoredPairs.rows.length; i++) {
+                  const row = scoredPairs.rows[i];
+                  const boundaryBeforeQuestion = row.pairId;
+                  const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
 
-                      if (markerKind !== undefined) {
-                        nodes.push(
-                          <tr
-                            key={`boundary_${boundaryBeforeQuestion}`}
-                            className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
-                          >
-                            <td colSpan={colSpan}>
-                              <div className="scoresheetBoundaryButton" aria-hidden="true">
-                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      }
+                  if (markerKind !== undefined) {
+                    nodes.push(
+                      <tr
+                        key={`boundary_${boundaryBeforeQuestion}`}
+                        className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                      >
+                        <td colSpan={colSpan}>
+                          <div className="scoresheetBoundaryButton" aria-hidden="true">
+                            <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  }
 
-                      const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
-                      nodes.push(
-                        <tr
-                          key={`row_${row.pairId}`}
-                          data-pair-id={row.pairId}
-                          className={isActivePair ? "scoresheetRowActive" : undefined}
-                        >
-                          <td className="scoresheetPairCell">
+                  const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
+                  nodes.push(
+                    <tr
+                      key={`row_${row.pairId}`}
+                      data-pair-id={row.pairId}
+                      className={isActivePair ? "scoresheetRowActive" : undefined}
+                    >
+                      <td className="scoresheetPairCell">
                         <span className="pairLinkDisplay">{row.pairId}</span>
                       </td>
                       {row.perTeam.flatMap((teamRow, teamIndex) => {
@@ -3984,31 +3984,31 @@ function ModeratorApp() {
                         <div className="fieldLabel">
                           Packet <span className="required">*</span>
                         </div>
-                      <div className="packetBox">
-                        <div className="packetBoxText">
-                          {draftPacketChoice ? (
-                            <>
-                              <div className="packetName">{draftPacketChoice.label}</div>
-                              <div className="packetSubtext">{draftPacketChoice.subtext}</div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="packetName">Select Packet</div>
-                              <div className="packetSubtext">No packet selected</div>
-                            </>
-                          )}
-                          {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                        <div className="packetBox">
+                          <div className="packetBoxText">
+                            {draftPacketChoice ? (
+                              <>
+                                <div className="packetName">{draftPacketChoice.label}</div>
+                                <div className="packetSubtext">{draftPacketChoice.subtext}</div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="packetName">Select Packet</div>
+                                <div className="packetSubtext">No packet selected</div>
+                              </>
+                            )}
+                            {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                          </div>
+                          <div className="packetBoxButtons">
+                            <button
+                              type="button"
+                              className="secondary"
+                              onClick={() => setIsPacketChooserOpen(true)}
+                            >
+                              {draftPacketChoice ? "Change…" : "Load…"}
+                            </button>
+                          </div>
                         </div>
-                        <div className="packetBoxButtons">
-                          <button
-                            type="button"
-                            className="secondary"
-                            onClick={() => setIsPacketChooserOpen(true)}
-                          >
-                            {draftPacketChoice ? "Change…" : "Load…"}
-                          </button>
-                        </div>
-                      </div>
                       </div>
                       <div className="spacer" />
                       <div className="packetActions">
