@@ -1,5 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import { DndContext, PointerSensor, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+  SortableContext,
+  arrayMove,
+  horizontalListSortingStrategy,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import packetJson from "./assets/sample_packet.json";
@@ -312,6 +322,262 @@ type DraftTeam = Omit<Team, "players" | "lineupSegments"> & {
 type Game = {
   teams: Team[];
 };
+
+function GripSixDotsIcon({ size = 14 }: { size?: number }) {
+  const r = Math.max(1, Math.round(size / 10));
+  const gap = Math.max(3, Math.round(size / 3.5));
+  const x1 = Math.round(size / 2 - gap / 2);
+  const x2 = Math.round(size / 2 + gap / 2);
+  const y1 = Math.round(size / 2 - gap);
+  const y2 = Math.round(size / 2);
+  const y3 = Math.round(size / 2 + gap);
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" focusable="false">
+      <circle cx={x1} cy={y1} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y1} r={r} fill="currentColor" />
+      <circle cx={x1} cy={y2} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y2} r={r} fill="currentColor" />
+      <circle cx={x1} cy={y3} r={r} fill="currentColor" />
+      <circle cx={x2} cy={y3} r={r} fill="currentColor" />
+    </svg>
+  );
+}
+
+function SortableDraftPlayerRow({
+  teamId,
+  player,
+  canRemove,
+  onUpdatePlayerName,
+  onTogglePlayerIn,
+  onRemovePlayer,
+}: {
+  teamId: string;
+  player: DraftPlayer;
+  canRemove: boolean;
+  onUpdatePlayerName: (teamId: string, playerId: string, name: string) => void;
+  onTogglePlayerIn: (teamId: string, playerId: string) => void;
+  onRemovePlayer: (teamId: string, playerId: string) => void;
+}) {
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: player.id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={[
+        "playerRowWithToggle",
+        "dndPlayerRow",
+        canRemove ? "" : "noRemove",
+        isDragging ? "dndDragging" : "",
+      ].filter(Boolean).join(" ")}
+    >
+      <button
+        type="button"
+        className="dndHandle dndHandlePlayer"
+        ref={setActivatorNodeRef}
+        aria-label="Drag to reorder player"
+        title="Drag to reorder"
+        {...attributes}
+        {...listeners}
+      >
+        <GripSixDotsIcon size={14} />
+      </button>
+
+      <input
+        className="textInput"
+        value={player.name}
+        onChange={(e) => onUpdatePlayerName(teamId, player.id, e.target.value)}
+        placeholder="Player"
+      />
+
+      <button
+        type="button"
+        role="switch"
+        aria-checked={player.isIn}
+        className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
+        onClick={() => onTogglePlayerIn(teamId, player.id)}
+        aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || "Player"}`}
+      >
+        {player.isIn ? "Active" : "Bench"}
+      </button>
+
+      {canRemove && (
+        <button
+          type="button"
+          className="iconButton danger"
+          aria-label="Remove player"
+          onClick={() => onRemovePlayer(teamId, player.id)}
+        >
+          Ã—
+        </button>
+      )}
+    </div>
+  );
+}
+
+function SortableDraftTeamCol({
+  team,
+  teamIndex,
+  canRemoveTeam,
+  fieldRoster,
+  selectedRosterTeamByDraftTeamId,
+  onApplyRosterTeam,
+  onUpdateTeamName,
+  onRemoveTeam,
+  onAddPlayer,
+  onUpdatePlayerName,
+  onTogglePlayerIn,
+  onRemovePlayer,
+  onReorderPlayers,
+}: {
+  team: DraftTeam;
+  teamIndex: number;
+  canRemoveTeam: boolean;
+  fieldRoster: FieldRoster | null;
+  selectedRosterTeamByDraftTeamId: Record<string, string>;
+  onApplyRosterTeam: (draftTeamId: string, rosterTeamName: string) => void;
+  onUpdateTeamName: (teamId: string, name: string) => void;
+  onRemoveTeam: (teamId: string) => void;
+  onAddPlayer: (teamId: string) => void;
+  onUpdatePlayerName: (teamId: string, playerId: string, name: string) => void;
+  onTogglePlayerIn: (teamId: string, playerId: string) => void;
+  onRemovePlayer: (teamId: string, playerId: string) => void;
+  onReorderPlayers: (teamId: string, activePlayerId: string, overPlayerId: string) => void;
+}) {
+  const teamLabel = teamIndexToDisplayLabel(teamIndex);
+  const playerSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: team.id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  function handlePlayerDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
+    onReorderPlayers(team.id, String(active.id), String(over.id));
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={["teamCol", isDragging ? "dndDragging dndTeamDragging" : ""].join(" ")}
+    >
+      <div className="fieldGroup">
+        <div className="fieldLabelRow">
+          <div className="draftTeamLabelLeft">
+            <button
+              type="button"
+              className="dndHandle dndHandleTeam"
+              ref={setActivatorNodeRef}
+              aria-label="Drag to reorder team"
+              title="Drag to reorder"
+              {...attributes}
+              {...listeners}
+            >
+              <GripSixDotsIcon size={16} />
+            </button>
+            <div className="fieldLabel">
+              {teamLabel} <span className="required">*</span>
+            </div>
+          </div>
+
+          {canRemoveTeam && (
+            <button
+              type="button"
+              className="iconButton"
+              aria-label="Remove team"
+              onClick={() => onRemoveTeam(team.id)}
+            >
+              Ã—
+            </button>
+          )}
+        </div>
+
+        {fieldRoster && (
+          <select
+            className="textInput"
+            value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
+            onChange={(e) => onApplyRosterTeam(team.id, e.target.value)}
+            aria-label={`Select team for ${teamLabel}`}
+          >
+            <option value="">Select teamâ€¦</option>
+            {fieldRoster.teams.map((rt) => {
+              const taken = Object.entries(selectedRosterTeamByDraftTeamId).some(
+                ([otherId, otherName]) => otherId !== team.id && otherName === rt.name
+              );
+              return (
+                <option key={rt.name} value={rt.name} disabled={taken}>
+                  {rt.name}
+                </option>
+              );
+            })}
+          </select>
+        )}
+
+        {!fieldRoster && (
+          <input
+            className="textInput"
+            value={team.name}
+            placeholder={teamLabel}
+            onChange={(e) => onUpdateTeamName(team.id, e.target.value)}
+          />
+        )}
+      </div>
+
+      <div className="fieldGroup">
+        <div className="fieldLabel">Players</div>
+
+        <DndContext
+          sensors={playerSensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+          onDragEnd={handlePlayerDragEnd}
+        >
+          <SortableContext items={team.players.map((p) => p.id)} strategy={verticalListSortingStrategy}>
+            <div className="playerList">
+              {team.players.map((player) => (
+                <SortableDraftPlayerRow
+                  key={player.id}
+                  teamId={team.id}
+                  player={player}
+                  canRemove={team.players.length > 1}
+                  onUpdatePlayerName={onUpdatePlayerName}
+                  onTogglePlayerIn={onTogglePlayerIn}
+                  onRemovePlayer={onRemovePlayer}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+
+        <button
+          type="button"
+          className="addRowButton"
+          onClick={() => onAddPlayer(team.id)}
+          title="Add player"
+          aria-label="Add player"
+        >
+          <span className="addIcon">+</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function formatMultipleChoiceAnswerLabel(answer: string, options: string[]): string | undefined {
   const raw = answer.trim();
