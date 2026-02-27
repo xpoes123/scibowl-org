@@ -5,6 +5,7 @@ import json
 import tempfile
 import csv
 import subprocess
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -77,6 +78,20 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
             except OSError:
                 # Best-effort: ignore dirs that aren't empty due to kept files.
                 pass
+
+
+def _safe_category_file_stem(category: str) -> str:
+    """
+    Convert an arbitrary category label into a filesystem-friendly, stable stem.
+    """
+    raw = (category or "").strip()
+    if not raw:
+        return "UNCATEGORIZED"
+
+    stem = re.sub(r"[^A-Za-z0-9]+", "_", raw).strip("_").lower()
+    if not stem:
+        return "UNCATEGORIZED"
+    return stem[:80]
 
 
 class Command(BaseCommand):
@@ -374,6 +389,8 @@ class Command(BaseCommand):
             sql_dir = Path(settings.BASE_DIR) / "moss" / "services" / "stats_sql"
             team_sql = (sql_dir / "team_standings.sql").read_text(encoding="utf-8")
             individual_sql = (sql_dir / "individual_standings.sql").read_text(encoding="utf-8")
+            team_category_sql = (sql_dir / "team_category_standings.sql").read_text(encoding="utf-8")
+            individual_category_sql = (sql_dir / "individual_category_standings.sql").read_text(encoding="utf-8")
 
             def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
                 out_path = output_dir / filename
@@ -397,6 +414,69 @@ class Command(BaseCommand):
                 sql=individual_sql,
                 params=[tournament.id, tournament.id],
             )
+
+            # Category standings
+            with connections[db_alias].cursor() as cursor:
+                cursor.execute(
+                    """
+                    SELECT DISTINCT pq.category
+                    FROM moss_gameteamquestionoutcome o
+                    JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                    JOIN moss_game g ON g.id = o.game_id
+                    WHERE g.tournament_id = %s
+                    ORDER BY pq.category ASC
+                    """,
+                    [tournament.id],
+                )
+                categories = [row[0] for row in cursor.fetchall()]
+
+            if any((c or "").strip() == "" for c in categories):
+                if not assume_yes:
+                    proceed = _prompt_yes_no(
+                        prompt=(
+                            "Warning: Some questions are missing a category label. "
+                            "Continue and treat those questions as an uncategorized category?"
+                        ),
+                        default=False,
+                    )
+                    if not proceed:
+                        raise CommandError(
+                            "Aborted due to uncategorized questions. "
+                            "Fix the source exports (or re-run with --yes to proceed)."
+                        )
+
+            category_views: list[dict[str, str]] = []
+            used_stems: dict[str, int] = {}
+            for category in categories:
+                category_value = "" if category is None else str(category)
+                stem = _safe_category_file_stem(category_value)
+                if stem in used_stems:
+                    used_stems[stem] += 1
+                    stem = f"{stem}_{used_stems[stem]}"
+                else:
+                    used_stems[stem] = 1
+
+                team_filename = f"team_standings__{stem}.csv"
+                individual_filename = f"individual_standings__{stem}.csv"
+
+                write_csv(
+                    filename=team_filename,
+                    sql=team_category_sql,
+                    params=[tournament.id, category_value],
+                )
+                write_csv(
+                    filename=individual_filename,
+                    sql=individual_category_sql,
+                    params=[category_value, tournament.id, tournament.id],
+                )
+                category_views.append(
+                    {
+                        "category": category_value,
+                        "key": stem,
+                        "team_standings": team_filename,
+                        "individual_standings": individual_filename,
+                    }
+                )
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
             try:
@@ -419,6 +499,7 @@ class Command(BaseCommand):
             "views": {
                 "team_standings": "team_standings.csv",
                 "individual_standings": "individual_standings.csv",
+                "category_standings": category_views,
             },
         }
 
