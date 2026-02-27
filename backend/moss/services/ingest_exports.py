@@ -10,9 +10,7 @@ from django.utils.dateparse import parse_datetime
 from moss.models import (
     Game,
     GamePlayerLineupSegment,
-    GamePlayerFact,
     GameTeam,
-    GameTeamFact,
     GameTeamQuestionOutcome,
     PacketQuestion,
     PacketVersion,
@@ -23,7 +21,6 @@ from moss.models import (
 )
 from moss.reducer import initial_state
 from moss.services.export_facts import (
-    reduce_scoresheet_export_to_facts,
     reduce_scoresheet_export_to_question_outcomes,
 )
 
@@ -74,7 +71,6 @@ def ingest_scoresheet_exports(
         file_hash = sha256_bytes(raw_bytes)
         import_reason = f"import_export:{file_hash}"
 
-        export_facts = reduce_scoresheet_export_to_facts(export_obj)
         export_outcomes = reduce_scoresheet_export_to_question_outcomes(export_obj)
 
         packet = _require_dict(export_obj.get("packet"), "packet")
@@ -323,40 +319,11 @@ def ingest_scoresheet_exports(
                             end_pair_id=end_clamped,
                         )
 
-            # Persist facts.
-            for team_fact in export_facts.team_facts:
-                tteam = tournament_teams[team_fact.team_name]
-                GameTeamFact.objects.using(using).create(
-                    game=game,
-                    tournament_team=tteam,
-                    points=team_fact.points,
-                    tossups_heard=team_fact.tossups_heard,
-                    tossups_4=team_fact.tossups_4,
-                    tossups_neg=team_fact.tossups_neg,
-                    tossups_0=team_fact.tossups_0,
-                    bonuses_heard=team_fact.bonuses_heard,
-                    bonus_points=team_fact.bonus_points,
-                )
-                GameTeam.objects.using(using).filter(game=game, tournament_team=tteam).update(
-                    score_cached=team_fact.points
-                )
+            # Cache final game score per team (derived from question outcomes).
+            team_points: dict[str, int] = {name: 0 for name in team_names}
+            for out in export_outcomes.outcomes:
+                team_points[out.team_name] = team_points.get(out.team_name, 0) + int(out.points or 0)
 
-            for player_fact in export_facts.player_facts:
-                tteam = tournament_teams[player_fact.team_name]
-                player = tournament_players.get((player_fact.team_name, player_fact.player_name))
-                if player is None:
-                    player, _ = TournamentPlayer.objects.using(using).get_or_create(
-                        tournament_team=tteam,
-                        name=player_fact.player_name,
-                        defaults={"grade_level": ""},
-                    )
-                GamePlayerFact.objects.using(using).create(
-                    game=game,
-                    tournament_player=player,
-                    tournament_team=tteam,
-                    tossups_heard=player_fact.tossups_heard,
-                    tossups_4=player_fact.tossups_4,
-                    tossups_neg=player_fact.tossups_neg,
-                    tossups_0=player_fact.tossups_0,
-                    tossup_points=player_fact.tossup_points,
-                )
+            for team_name, points in team_points.items():
+                tteam = tournament_teams[team_name]
+                GameTeam.objects.using(using).filter(game=game, tournament_team=tteam).update(score_cached=points)
