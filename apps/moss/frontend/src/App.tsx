@@ -978,6 +978,10 @@ function ScoreboardDisplayApp() {
   const [rowAdvanceMode, setRowAdvanceMode] = useState<ScoreboardRowAdvanceMode>(() => loadScoreboardRowAdvanceMode());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const lastAutoScrolledPairIdRef = useRef<number | null>(null);
+  const projectorTeamNameElsRef = useRef<Record<string, HTMLSpanElement | null>>({});
+  const [projectorTeamNameFitByTeamId, setProjectorTeamNameFitByTeamId] = useState<
+    Record<string, { fontPx: number; allowWrap: boolean }>
+  >({});
 
   useEffect(() => {
     saveScoreboardDisplayView(displayView);
@@ -1263,7 +1267,11 @@ function ScoreboardDisplayApp() {
 
   return (
     <div
-      className={["scoreboardDisplayRoot", displayView === "large" ? "scoreboardDisplayRoot--large" : ""]
+      className={[
+        "scoreboardDisplayRoot",
+        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
+        isProjectorLayout ? "scoreboardDisplayRoot--projector" : "",
+      ]
         .filter(Boolean)
         .join(" ")}
       aria-label="Scoreboard display"
@@ -1343,7 +1351,22 @@ function ScoreboardDisplayApp() {
                     ].filter(Boolean).join(" ")}
                   >
                     <div className="scoresheetTeamHeaderInner">
-                      <span className="scoresheetTeamName">{team.name}</span>
+                      <span
+                        className="scoresheetTeamName"
+                        ref={(el) => {
+                          projectorTeamNameElsRef.current[team.id] = el;
+                        }}
+                        style={
+                          isProjectorLayout
+                            ? {
+                              fontSize: `${projectorTeamNameFitByTeamId[team.id]?.fontPx ?? 72}px`,
+                              whiteSpace: projectorTeamNameFitByTeamId[team.id]?.allowWrap ? "normal" : "nowrap",
+                            }
+                            : undefined
+                        }
+                      >
+                        {team.name}
+                      </span>
                       <span className="pill scoresheetScorePill">
                         {scoredPairs.totals.find((t) => t.teamId === team.id)?.total ?? 0}
                       </span>
@@ -1360,7 +1383,7 @@ function ScoreboardDisplayApp() {
                     key={`${team.id}_r`}
                     className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
                   >
-                    Total
+                    {isProjectorLayout ? "S" : "Total"}
                   </th>,
                 ])}
               </tr>
