@@ -100,7 +100,13 @@ def ingest_scoresheet_exports(
             name = team_dict.get("name")
             if not isinstance(name, str) or not name.strip():
                 raise ValueError("game.teams[].name must be a non-empty string")
-            team_names.append(name)
+            team_names.append(name.strip())
+
+        if len(set(team_names)) != 2:
+            shown = ", ".join(repr(n) for n in team_names)
+            raise ValueError(
+                f"Export must contain exactly 2 distinct team names (got: {shown}) in {source_path}"
+            )
 
         exported_at = export_obj.get("exported_at")
         exported_dt = parse_datetime(exported_at) if isinstance(exported_at, str) else None

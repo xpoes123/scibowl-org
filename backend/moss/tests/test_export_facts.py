@@ -318,3 +318,14 @@ class ExportFactsReducerTestCase(TestCase):
         self.assertEqual(team_a.tossups_0, 1)
         self.assertEqual(team_a.points, 0)
 
+    def test_duplicate_team_names_rejected(self):
+        export_obj = self._base_export(version=1)
+        export_obj["game"]["teams"][1]["name"] = "Team A"
+        export_obj["state"] = {"pair_index": 0, "attempts_by_question_id": {}}
+
+        with self.assertRaises(ValueError):
+            reduce_scoresheet_export_to_facts(export_obj)
+
+        with self.assertRaises(ValueError):
+            reduce_scoresheet_export_to_question_outcomes(export_obj)
+

@@ -263,8 +263,9 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
         name = team_obj.get("name")
         team_id = team_obj.get("id")
         if isinstance(name, str) and name.strip():
-            team_keys.append(name)
-            team_names.append(name)
+            canonical = name.strip()
+            team_keys.append(canonical)
+            team_names.append(canonical)
             continue
         if team_id is not None:
             team_keys.append(str(team_id))
@@ -274,6 +275,9 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
 
     if len(team_keys) != 2:
         raise ValueError("Expected exactly 2 teams in export")
+    if len(set(team_keys)) != 2:
+        shown = ", ".join(repr(k) for k in team_keys)
+        raise ValueError(f"Expected 2 distinct teams in export (got: {shown})")
 
     # Player roster per team (names). This is used for individual facts and as a fallback
     # for lineup segment validation.
@@ -509,13 +513,17 @@ def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) ->
     for idx, team_obj in enumerate(teams):
         name = team_obj.get("name")
         if isinstance(name, str) and name.strip():
-            team_keys.append(name)
-            team_names.append(name)
+            canonical = name.strip()
+            team_keys.append(canonical)
+            team_names.append(canonical)
             continue
         raise ValueError(f"game.teams[{idx}].name must be a non-empty string")
 
     if len(team_keys) != 2:
         raise ValueError("Expected exactly 2 teams in export")
+    if len(set(team_keys)) != 2:
+        shown = ", ".join(repr(k) for k in team_keys)
+        raise ValueError(f"Expected 2 distinct teams in export (got: {shown})")
 
     def attempts_for_question(qid: int) -> list[dict[str, Any]]:
         return attempts_by_question_id.get(str(qid), [])
