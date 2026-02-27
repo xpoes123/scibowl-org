@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
-import { DndContext, PointerSensor, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { DndContext, PointerSensor, closestCenter, type DragEndEvent, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   SortableContext,
@@ -347,6 +347,7 @@ function GripSixDotsIcon({ size = 14 }: { size?: number }) {
 function SortableDraftPlayerRow({
   teamId,
   player,
+  playerIndex,
   canRemove,
   onUpdatePlayerName,
   onTogglePlayerIn,
@@ -354,6 +355,7 @@ function SortableDraftPlayerRow({
 }: {
   teamId: string;
   player: DraftPlayer;
+  playerIndex: number;
   canRemove: boolean;
   onUpdatePlayerName: (teamId: string, playerId: string, name: string) => void;
   onTogglePlayerIn: (teamId: string, playerId: string) => void;
@@ -395,7 +397,7 @@ function SortableDraftPlayerRow({
         className="textInput"
         value={player.name}
         onChange={(e) => onUpdatePlayerName(teamId, player.id, e.target.value)}
-        placeholder="Player"
+        placeholder={`Player ${playerIndex + 1}`}
       />
 
       <button
@@ -404,7 +406,7 @@ function SortableDraftPlayerRow({
         aria-checked={player.isIn}
         className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
         onClick={() => onTogglePlayerIn(teamId, player.id)}
-        aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || "Player"}`}
+        aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
       >
         {player.isIn ? "Active" : "Bench"}
       </button>
@@ -550,11 +552,12 @@ function SortableDraftTeamCol({
         >
           <SortableContext items={team.players.map((p) => p.id)} strategy={verticalListSortingStrategy}>
             <div className="playerList">
-              {team.players.map((player) => (
+              {team.players.map((player, playerIndex) => (
                 <SortableDraftPlayerRow
                   key={player.id}
                   teamId={team.id}
                   player={player}
+                  playerIndex={playerIndex}
                   canRemove={team.players.length > 1}
                   onUpdatePlayerName={onUpdatePlayerName}
                   onTogglePlayerIn={onTogglePlayerIn}
@@ -2493,6 +2496,33 @@ function ModeratorApp() {
     setSelectedRosterTeamByDraftTeamId((prev) => ({ ...prev, [draftTeamId]: rosterTeam.name }));
   }
 
+  const draftTeamDndSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
+
+  function handleDraftTeamDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
+
+    setDraftTeams((prev) => {
+      const oldIndex = prev.findIndex((t) => t.id === active.id);
+      const newIndex = prev.findIndex((t) => t.id === over.id);
+      if (oldIndex < 0 || newIndex < 0) return prev;
+      return arrayMove(prev, oldIndex, newIndex);
+    });
+  }
+
+  function reorderDraftPlayers(teamId: string, activePlayerId: string, overPlayerId: string) {
+    setDraftTeams((prev) =>
+      prev.map((t) => {
+        if (t.id !== teamId) return t;
+        const oldIndex = t.players.findIndex((p) => p.id === activePlayerId);
+        const newIndex = t.players.findIndex((p) => p.id === overPlayerId);
+        if (oldIndex < 0 || newIndex < 0) return t;
+        return { ...t, players: arrayMove(t.players, oldIndex, newIndex) };
+      })
+    );
+  }
+
   function updateTeamName(teamId: string, name: string) {
     setDraftTeams((prev) => prev.map((t) => (t.id === teamId ? { ...t, name } : t)));
   }
@@ -3905,120 +3935,47 @@ function ModeratorApp() {
                   </div>
 
                   <div className="teamGridScroll">
-                    <div className="teamGrid">
-                      {draftTeams.map((team, teamIndex) => (
-                        <div key={team.id} className="teamCol">
-                          <div className="fieldGroup">
-                            <div className="fieldLabelRow">
-                              <div className="fieldLabel">
-                                {teamIndexToDisplayLabel(teamIndex)}{" "}
-                                <span className="required">*</span>
-                              </div>
-                              {draftTeams.length > 1 && (
-                                <button
-                                  type="button"
-                                  className="iconButton"
-                                  aria-label="Remove team"
-                                  onClick={() => removeTeam(team.id)}
-                                >
-                                  ×
-                                </button>
-                              )}
-                            </div>
-                            {fieldRoster && (
-                              <select
-                                className="textInput"
-                                value={selectedRosterTeamByDraftTeamId[team.id] ?? ""}
-                                onChange={(e) => applyFieldRosterTeamToDraftTeam(team.id, e.target.value)}
-                                aria-label={`Select team for ${teamIndexToDisplayLabel(teamIndex)}`}
-                              >
-                                <option value="">Select team…</option>
-                                {fieldRoster.teams.map((rt) => (
-                                  <option
-                                    key={rt.name}
-                                    value={rt.name}
-                                    disabled={draftTeams.some((other) => other.id !== team.id && selectedRosterTeamByDraftTeamId[other.id] === rt.name)}
-                                  >
-                                    {rt.name}
-                                  </option>
-                                ))}
-                              </select>
-                            )}
-                            {!fieldRoster && (
-                              <input
-                                className="textInput"
-                                value={team.name}
-                                placeholder={teamIndexToDisplayLabel(teamIndex)}
-                                onChange={(e) => updateTeamName(team.id, e.target.value)}
-                              />
-                            )}
-                          </div>
+                    <DndContext
+                      sensors={draftTeamDndSensors}
+                      collisionDetection={closestCenter}
+                      modifiers={[restrictToParentElement]}
+                      onDragEnd={handleDraftTeamDragEnd}
+                    >
+                      <div className="teamGrid">
+                        <SortableContext items={draftTeams.map((t) => t.id)} strategy={horizontalListSortingStrategy}>
+                          {draftTeams.map((team, teamIndex) => (
+                            <SortableDraftTeamCol
+                              key={team.id}
+                              team={team}
+                              teamIndex={teamIndex}
+                              canRemoveTeam={draftTeams.length > 1}
+                              fieldRoster={fieldRoster}
+                              selectedRosterTeamByDraftTeamId={selectedRosterTeamByDraftTeamId}
+                              onApplyRosterTeam={applyFieldRosterTeamToDraftTeam}
+                              onUpdateTeamName={updateTeamName}
+                              onRemoveTeam={removeTeam}
+                              onAddPlayer={addPlayer}
+                              onUpdatePlayerName={updatePlayerName}
+                              onTogglePlayerIn={toggleDraftPlayerIn}
+                              onRemovePlayer={removePlayer}
+                              onReorderPlayers={reorderDraftPlayers}
+                            />
+                          ))}
+                        </SortableContext>
 
-                          <div className="fieldGroup">
-                            <div className="fieldLabel">Players</div>
-                            <div className="playerList">
-                              {team.players.map((player, playerIndex) => (
-                                <div
-                                  key={player.id}
-                                  className={["playerRowWithToggle", team.players.length > 1 ? "" : "noRemove"].filter(Boolean).join(" ")}
-                                >
-                                  <input
-                                    className="textInput"
-                                    value={player.name}
-                                    onChange={(e) =>
-                                      updatePlayerName(team.id, player.id, e.target.value)
-                                    }
-                                    placeholder={`Player ${playerIndex + 1}`}
-                                  />
-                                  <button
-                                    type="button"
-                                    role="switch"
-                                    aria-checked={player.isIn}
-                                    className={["inOutToggle", player.isIn ? "active" : "bench"].join(" ")}
-                                    onClick={() => toggleDraftPlayerIn(team.id, player.id)}
-                                    aria-label={`${player.isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
-                                  >
-                                    {player.isIn ? "Active" : "Bench"}
-                                  </button>
-                                  {team.players.length > 1 && (
-                                    <button
-                                      type="button"
-                                      className="iconButton danger"
-                                      aria-label="Remove player"
-                                      onClick={() => removePlayer(team.id, player.id)}
-                                    >
-                                      ×
-                                    </button>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-
-                            <button
-                              type="button"
-                              className="addRowButton"
-                              onClick={() => addPlayer(team.id)}
-                              title="Add player"
-                              aria-label="Add player"
-                            >
-                              <span className="addIcon">+</span>
-                            </button>
-                          </div>
+                        <div className="addTeamCol">
+                          <button
+                            type="button"
+                            className="addTeamButton"
+                            onClick={addTeam}
+                            title="Add team"
+                            aria-label="Add team"
+                          >
+                            <span className="addIcon">+</span>
+                          </button>
                         </div>
-                      ))}
-
-                      <div className="addTeamCol">
-                        <button
-                          type="button"
-                          className="addTeamButton"
-                          onClick={addTeam}
-                          title="Add team"
-                          aria-label="Add team"
-                        >
-                          <span className="addIcon">+</span>
-                        </button>
                       </div>
-                    </div>
+                    </DndContext>
                   </div>
 
                   <div className="modalFooter">
