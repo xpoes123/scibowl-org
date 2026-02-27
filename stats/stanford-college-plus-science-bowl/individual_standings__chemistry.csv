@@ -1,0 +1,25 @@
+rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
+1,9,Yunyi Ling,MIT Team #1,10,16,1,23,40,60,6.0
+2,21,Akhil Batchu,University of Alabama Birmingham,10,19,7,14,40,48,4.8
+3,16,Gideon Tzafriri,MIT Team #2,7,14,2,12,28,48,6.857142857142857
+4,8,Anurag Sodhi,MIT Team #1,11,13,5,26,44,32,2.909090909090909
+5,19,Jonathan Huang,MIT Team #2,10,11,3,26,40,32,3.2
+6,1,Daniel Lu,where is the goal keeper,11,9,3,30,42,24,2.1818181818181817
+7,6,Shahar Schwartz,Quizbowlers,11,7,2,33,42,20,1.8181818181818181
+8,12,Josh Shi,CMU,10,8,4,28,40,16,1.6
+9,17,Sean Fei,MIT Team #2,10,4,0,36,40,16,1.6
+10,18,Aryan Bora,MIT Team #2,10,3,0,37,40,12,1.2
+11,14,Vidur Kothur,CMU,10,2,0,38,40,8,0.8
+12,4,Rohan Shelke,Quizbowlers,11,2,1,39,42,4,0.36363636363636365
+13,15,Peter Ferolito,CMU,10,1,0,39,40,4,0.4
+14,5,Swapnil Garg,Quizbowlers,11,1,0,41,42,4,0.36363636363636365
+15,13,Yiyoung Liu,CMU,10,1,0,39,40,4,0.4
+16,3,Adeeb Mohammed,where is the goal keeper,9,0,0,34,34,0,0.0
+17,23,Albert Chen,University of Alabama Birmingham,10,0,0,40,40,0,0.0
+18,24,Alex Prado,University of Alabama Birmingham,8,0,0,32,32,0,0.0
+19,2,Isaac Mammel,where is the goal keeper,11,0,0,42,42,0,0.0
+20,10,Mingwen Duan,MIT Team #1,10,0,0,40,40,0,0.0
+21,20,Saahil Dugar,where is the goal keeper,7,0,0,28,28,0,0.0
+22,11,Selena Yang,MIT Team #1,6,0,0,24,24,0,0.0
+23,22,Advik Sharma,University of Alabama Birmingham,10,0,1,39,40,-4,-0.4
+24,7,Kevin Ye,Quizbowlers,11,0,1,41,42,-4,-0.36363636363636365

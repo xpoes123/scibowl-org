@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-27T03:08:58.497399Z",
+  "generated_at": "2026-02-27T04:03:37.368909Z",
   "schema_version": 1,
   "sources": [
     {
@@ -360,6 +360,44 @@
     "slug": "stanford-college-plus-science-bowl"
   },
   "views": {
+    "category_standings": [
+      {
+        "category": "BIOLOGY",
+        "individual_standings": "individual_standings__biology.csv",
+        "key": "biology",
+        "team_standings": "team_standings__biology.csv"
+      },
+      {
+        "category": "CHEMISTRY",
+        "individual_standings": "individual_standings__chemistry.csv",
+        "key": "chemistry",
+        "team_standings": "team_standings__chemistry.csv"
+      },
+      {
+        "category": "EARTH_SPACE",
+        "individual_standings": "individual_standings__earth_space.csv",
+        "key": "earth_space",
+        "team_standings": "team_standings__earth_space.csv"
+      },
+      {
+        "category": "ENERGY",
+        "individual_standings": "individual_standings__energy.csv",
+        "key": "energy",
+        "team_standings": "team_standings__energy.csv"
+      },
+      {
+        "category": "MATH",
+        "individual_standings": "individual_standings__math.csv",
+        "key": "math",
+        "team_standings": "team_standings__math.csv"
+      },
+      {
+        "category": "PHYSICS",
+        "individual_standings": "individual_standings__physics.csv",
+        "key": "physics",
+        "team_standings": "team_standings__physics.csv"
+      }
+    ],
     "individual_standings": "individual_standings.csv",
     "team_standings": "team_standings.csv"
   }
