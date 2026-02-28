@@ -1,18 +1,7 @@
 {
-  "generated_at": "2026-02-24T20:02:19.424869Z",
+  "generated_at": "2026-02-28T02:11:15.758156Z",
   "schema_version": 1,
   "sources": [
-    {
-      "exported_at": "2026-02-22T13:45:42.309Z",
-      "packet_checksum": {
-        "algorithm": "sha256",
-        "canonicalization": "json_sorted_keys_utf8_no_ws",
-        "value": "90027ac92c55995b778fd5005cfa17881869e6c4a2b8db622883e3151460b509"
-      },
-      "path": "scripts\\question_import\\pdf_processing\\stanford_college_plus_science_bowl_2025_Round_1_Quizbowlers__where_is_the_goal_keeper_20260222T134412Z_cj5lzyn.json",
-      "sha256": "2b667ae2a20c44e3841ada37a4f3ec173a8bd954ae9538aee26b065792f76b64",
-      "version": 2
-    },
     {
       "exported_at": "2026-02-22T21:00:48.726Z",
       "packet_checksum": {
