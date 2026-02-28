@@ -1,0 +1,5 @@
+# MoSS game export JSONs (used as input to generate_moss_static_stats)
+stanford_college_plus_science_bowl_*.json
+stanford_college_plus_science_bowl_*.zip
+*.xlsx
+output/

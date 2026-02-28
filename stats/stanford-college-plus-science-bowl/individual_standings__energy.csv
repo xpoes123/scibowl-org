@@ -1,25 +1,25 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,1,Daniel Lu,where is the goal keeper,11,12,0,21,33,48,4.363636363636363
-2,8,Anurag Sodhi,MIT Team #1,11,14,3,16,33,44,4.0
-3,19,Jonathan Huang,MIT Team #2,10,8,1,21,30,28,2.8
-4,4,Rohan Shelke,Quizbowlers,11,7,2,24,33,20,1.8181818181818181
-5,14,Vidur Kothur,CMU,10,6,2,22,30,16,1.6
-6,6,Shahar Schwartz,Quizbowlers,11,5,1,27,33,16,1.4545454545454546
-7,9,Yunyi Ling,MIT Team #1,10,5,1,24,30,16,1.6
+1,1,Anurag Sodhi,MIT Team #1,11,14,3,16,33,44,4.0
+2,17,Daniel Lu,where is the goal keeper,10,11,0,19,30,44,4.4
+3,16,Jonathan Huang,MIT Team #2,10,8,1,21,30,28,2.8
+4,9,Rohan Shelke,Quizbowlers,10,6,2,22,30,16,1.6
+5,7,Vidur Kothur,CMU,10,6,2,22,30,16,1.6
+6,11,Shahar Schwartz,Quizbowlers,10,5,1,24,30,16,1.6
+7,2,Yunyi Ling,MIT Team #1,10,5,1,24,30,16,1.6
 8,22,Advik Sharma,University of Alabama Birmingham,10,4,1,25,30,12,1.2
-9,11,Selena Yang,MIT Team #1,6,4,1,13,18,12,2.0
-10,5,Swapnil Garg,Quizbowlers,11,4,1,28,33,12,1.0909090909090908
+9,4,Selena Yang,MIT Team #1,6,4,1,13,18,12,2.0
+10,10,Swapnil Garg,Quizbowlers,10,4,1,25,30,12,1.2
 11,21,Akhil Batchu,University of Alabama Birmingham,10,7,5,18,30,8,0.8
-12,12,Josh Shi,CMU,10,3,1,26,30,8,0.8
-13,15,Peter Ferolito,CMU,10,3,1,26,30,8,0.8
-14,18,Aryan Bora,MIT Team #2,10,2,1,27,30,4,0.4
+12,5,Josh Shi,CMU,10,3,1,26,30,8,0.8
+13,8,Peter Ferolito,CMU,10,3,1,26,30,8,0.8
+14,15,Aryan Bora,MIT Team #2,10,2,1,27,30,4,0.4
 15,23,Albert Chen,University of Alabama Birmingham,10,1,0,29,30,4,0.4
-16,16,Gideon Tzafriri,MIT Team #2,7,1,0,20,21,4,0.5714285714285714
-17,3,Adeeb Mohammed,where is the goal keeper,9,0,0,27,27,0,0.0
+16,13,Gideon Tzafriri,MIT Team #2,7,1,0,20,21,4,0.5714285714285714
+17,19,Adeeb Mohammed,where is the goal keeper,8,0,0,24,24,0,0.0
 18,24,Alex Prado,University of Alabama Birmingham,8,0,0,24,24,0,0.0
-19,2,Isaac Mammel,where is the goal keeper,11,0,0,33,33,0,0.0
-20,7,Kevin Ye,Quizbowlers,11,0,0,33,33,0,0.0
-21,10,Mingwen Duan,MIT Team #1,10,0,0,30,30,0,0.0
-22,17,Sean Fei,MIT Team #2,10,3,4,23,30,-4,-0.4
+19,18,Isaac Mammel,where is the goal keeper,10,0,0,30,30,0,0.0
+20,12,Kevin Ye,Quizbowlers,10,0,0,30,30,0,0.0
+21,3,Mingwen Duan,MIT Team #1,10,0,0,30,30,0,0.0
+22,14,Sean Fei,MIT Team #2,10,3,4,23,30,-4,-0.4
 23,20,Saahil Dugar,where is the goal keeper,7,1,2,18,21,-4,-0.5714285714285714
-24,13,Yiyoung Liu,CMU,10,0,1,29,30,-4,-0.4
+24,6,Yiyoung Liu,CMU,10,0,1,29,30,-4,-0.4

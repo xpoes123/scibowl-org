@@ -1,25 +1,25 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
 1,21,Akhil Batchu,University of Alabama Birmingham,10,19,8,13,40,44,4.4
-2,4,Rohan Shelke,Quizbowlers,11,11,2,29,42,36,3.272727272727273
-3,1,Daniel Lu,where is the goal keeper,11,8,1,33,42,28,2.5454545454545454
-4,15,Peter Ferolito,CMU,10,8,1,31,40,28,2.8
-5,19,Jonathan Huang,MIT Team #2,10,9,3,28,40,24,2.4
-6,9,Yunyi Ling,MIT Team #1,10,7,1,32,40,24,2.4
-7,12,Josh Shi,CMU,10,6,1,33,40,20,2.0
+2,9,Rohan Shelke,Quizbowlers,10,11,2,27,40,36,3.6
+3,8,Peter Ferolito,CMU,10,8,1,31,40,28,2.8
+4,16,Jonathan Huang,MIT Team #2,10,9,3,28,40,24,2.4
+5,17,Daniel Lu,where is the goal keeper,10,7,1,32,40,24,2.4
+6,2,Yunyi Ling,MIT Team #1,10,7,1,32,40,24,2.4
+7,5,Josh Shi,CMU,10,6,1,33,40,20,2.0
 8,22,Advik Sharma,University of Alabama Birmingham,10,3,0,37,40,12,1.2
-9,17,Sean Fei,MIT Team #2,10,5,3,32,40,8,0.8
-10,5,Swapnil Garg,Quizbowlers,11,3,1,38,42,8,0.7272727272727273
-11,3,Adeeb Mohammed,where is the goal keeper,9,1,0,33,34,4,0.4444444444444444
-12,18,Aryan Bora,MIT Team #2,10,1,0,39,40,4,0.4
-13,16,Gideon Tzafriri,MIT Team #2,7,1,0,27,28,4,0.5714285714285714
-14,2,Isaac Mammel,where is the goal keeper,11,1,0,41,42,4,0.36363636363636365
-15,8,Anurag Sodhi,MIT Team #1,11,7,7,30,44,0,0.0
-16,6,Shahar Schwartz,Quizbowlers,11,2,2,38,42,0,0.0
-17,14,Vidur Kothur,CMU,10,2,2,36,40,0,0.0
+9,14,Sean Fei,MIT Team #2,10,5,3,32,40,8,0.8
+10,10,Swapnil Garg,Quizbowlers,10,3,1,36,40,8,0.8
+11,19,Adeeb Mohammed,where is the goal keeper,8,1,0,31,32,4,0.5
+12,15,Aryan Bora,MIT Team #2,10,1,0,39,40,4,0.4
+13,13,Gideon Tzafriri,MIT Team #2,7,1,0,27,28,4,0.5714285714285714
+14,18,Isaac Mammel,where is the goal keeper,10,1,0,39,40,4,0.4
+15,1,Anurag Sodhi,MIT Team #1,11,7,7,30,44,0,0.0
+16,11,Shahar Schwartz,Quizbowlers,10,2,2,36,40,0,0.0
+17,7,Vidur Kothur,CMU,10,2,2,36,40,0,0.0
 18,20,Saahil Dugar,where is the goal keeper,7,1,1,26,28,0,0.0
 19,23,Albert Chen,University of Alabama Birmingham,10,0,0,40,40,0,0.0
 20,24,Alex Prado,University of Alabama Birmingham,8,0,0,32,32,0,0.0
-21,7,Kevin Ye,Quizbowlers,11,0,0,42,42,0,0.0
-22,10,Mingwen Duan,MIT Team #1,10,0,0,40,40,0,0.0
-23,11,Selena Yang,MIT Team #1,6,0,0,24,24,0,0.0
-24,13,Yiyoung Liu,CMU,10,0,0,40,40,0,0.0
+21,12,Kevin Ye,Quizbowlers,10,0,0,40,40,0,0.0
+22,3,Mingwen Duan,MIT Team #1,10,0,0,40,40,0,0.0
+23,4,Selena Yang,MIT Team #1,6,0,0,24,24,0,0.0
+24,6,Yiyoung Liu,CMU,10,0,0,40,40,0,0.0
