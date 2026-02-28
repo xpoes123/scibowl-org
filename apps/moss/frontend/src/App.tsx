@@ -1842,7 +1842,7 @@ function ModeratorApp() {
         return;
       }
       if (snapshotSessionRef.current === session) {
-        lastSnapshotUploadedSeqRef.current = currentSeq;
+        lastSnapshotUploadedSeqRef.current = Math.max(lastSnapshotUploadedSeqRef.current, currentSeq);
       }
     } catch (e) {
       console.warn("Autosnapshot upload failed", e);
@@ -2366,6 +2366,28 @@ function ModeratorApp() {
       const exportedAtEnd = pairIdx === pairRows.length - 1;
       const exportedAtIso = new Date().toISOString();
       const exportObj = await buildExportObject(metaToUse, exportedAtIso);
+
+      // Export should always attempt to snapshot immediately (no debounce), since users often export and leave.
+      // This is best-effort and should not block local export on failure.
+      try {
+        if (snapshotTimerRef.current) window.clearTimeout(snapshotTimerRef.current);
+        snapshotTimerRef.current = null;
+        snapshotPendingRef.current = false;
+
+        const response = await fetch("/api/moss-snapshots/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ snapshot_meta: metaToUse, export_obj: exportObj }),
+        });
+        if (!response.ok) {
+          const text = await response.text().catch(() => "");
+          console.warn("Export snapshot upload failed", response.status, text.slice(0, 500));
+        } else {
+          lastSnapshotUploadedSeqRef.current = Math.max(lastSnapshotUploadedSeqRef.current, exportedSeq);
+        }
+      } catch (e) {
+        console.warn("Export snapshot upload failed", e);
+      }
 
       const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
