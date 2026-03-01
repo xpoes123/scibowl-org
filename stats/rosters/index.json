@@ -2,8 +2,8 @@
   "format": "moss_roster_index",
   "version": 1,
   "slugs": [
+    "johns-hopkins-invitational",
     "pilot-scrimmage",
-    "stanford-college-plus-science-bowl",
-    "johns-hopkins-invitational"
+    "stanford-college-plus-science-bowl"
   ]
 }
