@@ -1,12 +1,12 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,6,Kaiwen Yao,Eagles A,9,76,7,121,204,276,30.666666666666668
+1,6,Kaiwen Yao,Eagles A,10,83,7,137,227,304,30.4
 2,43,Ryan Karim,Shallow Walk team A,8,76,8,99,183,272,34.0
 3,36,Aldric Benalan,WWPN A,10,74,9,144,227,260,26.0
 4,63,Kian Dhawan,Montgomery Blair A,8,69,4,111,184,260,32.5
 5,72,Alex Wang,poolesville village idiots,9,64,6,136,206,232,25.77777777777778
 6,12,Andrew Zhao,Richard Montgomery,10,54,2,149,205,208,20.8
-7,62,Evan Zhang,Montgomery Blair A,8,48,2,134,184,184,23.0
-8,52,Hrishi Bhooma,Kiruna Scholars,10,52,7,170,229,180,18.0
+7,52,Hrishi Bhooma,Kiruna Scholars,11,54,7,191,252,188,17.09090909090909
+8,62,Evan Zhang,Montgomery Blair A,8,48,2,134,184,184,23.0
 9,24,Arjun Deshpande,South Jersey,10,45,6,179,230,156,15.6
 10,19,Ian Wang,Basis,8,37,1,144,182,144,18.0
 11,11,Ethan Pei,Richard Montgomery,10,34,1,181,216,132,13.2
@@ -16,11 +16,11 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 15,25,Monish Saravana Kumar,South Jersey,10,40,12,178,230,112,11.2
 16,1,Pritham Singh,Centreville HS Team 1,7,29,2,125,156,108,15.428571428571429
 17,73,Caleb Wen,poolesville village idiots,9,28,2,176,206,104,11.555555555555555
-18,82,Matthew Yang,Centennial A,5,29,5,79,113,96,19.2
-19,58,Arman Ayazi,Montgomery Blair B,8,32,9,139,180,92,11.5
-20,51,Sophia Guo,Kiruna Scholars,9,30,7,157,194,92,10.222222222222221
-21,20,Sumer Chaudhary,Basis,8,24,1,157,182,92,11.5
-22,54,Eric Xie,Kiruna Scholars,9,26,4,176,206,88,9.777777777777779
+18,54,Eric Xie,Kiruna Scholars,10,29,4,196,229,100,10.0
+19,51,Sophia Guo,Kiruna Scholars,10,31,7,179,217,96,9.6
+20,82,Matthew Yang,Centennial A,5,29,5,79,113,96,19.2
+21,58,Arman Ayazi,Montgomery Blair B,8,32,9,139,180,92,11.5
+22,20,Sumer Chaudhary,Basis,8,24,1,157,182,92,11.5
 23,16,Hongyi Wang,North Allegheny,8,29,8,136,173,84,10.5
 24,14,Jason Liu,North Allegheny,8,21,0,129,150,84,10.5
 25,30,Madhuram Sharma,Eagles B,7,25,7,127,159,72,10.285714285714286
@@ -29,17 +29,17 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 28,34,Eli Segal,Eagles C,7,17,0,139,156,68,9.714285714285714
 29,94,Angela Wang,Westtown A,5,19,3,93,115,64,12.8
 30,71,Keshav Ramaswamy,Richard Montgomery,9,19,3,174,196,64,7.111111111111111
-31,8,Oliver Yang,Eagles A,8,19,3,159,181,64,8.0
+31,8,Oliver Yang,Eagles A,9,19,3,182,204,64,7.111111111111111
 32,57,Henry Lu,Montgomery Blair B,8,17,1,162,180,64,8.0
 33,122,Krivi Partani,WWPN B,5,17,1,96,114,64,12.8
 34,59,Abhijay Banerjee,Montgomery Blair B,8,21,6,128,155,60,7.5
 35,26,Dennis Ji,South Jersey,10,18,3,209,230,60,6.0
 36,17,Andrew Feng,North Allegheny,8,17,2,122,141,60,7.5
-37,53,Rohan Bairi,Kiruna Scholars,9,16,1,153,170,60,6.666666666666667
+37,53,Rohan Bairi,Kiruna Scholars,10,16,1,176,193,60,6.0
 38,15,Leonardo Yu,North Allegheny,8,20,6,145,171,56,7.0
-39,105,Matthew Hettena,The Wilberforce School,5,15,1,98,114,56,11.2
-40,118,Peter Foerster,Thomas S Wootton High School team B,5,14,0,100,114,56,11.2
-41,7,Angelina Li,Eagles A,9,14,1,189,204,52,5.777777777777778
+39,7,Angelina Li,Eagles A,10,15,1,211,227,56,5.6
+40,105,Matthew Hettena,The Wilberforce School,5,15,1,98,114,56,11.2
+41,118,Peter Foerster,Thomas S Wootton High School team B,5,14,0,100,114,56,11.2
 42,2,Arjun Ganesan,Centreville HS Team 1,6,14,1,118,133,52,8.666666666666666
 43,76,Vishruth Kadiyala,Eagles A,8,14,2,132,148,48,6.0
 44,38,Ishaan Arya,WWPN A,10,16,5,206,227,44,4.4
@@ -85,7 +85,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 84,124,Andrew Li,WWPN B,5,5,1,108,114,16,3.2
 85,128,Christina Chow,Thomas S Wootton High School team A,5,5,1,74,80,16,3.2
 86,98,Leila Alobeidy,Westtown B,5,5,1,105,111,16,3.2
-87,5,Max Xu,Eagles A,6,5,1,73,79,16,2.6666666666666665
+87,5,Max Xu,Eagles A,7,5,1,96,102,16,2.2857142857142856
 88,21,Neel Jain,Basis,8,5,1,176,182,16,2.0
 89,127,Arun Kompella,Thomas S Wootton High School team A,5,4,0,95,99,16,3.2
 90,9,Ryan Hyon,Centreville HS Team 1,6,4,0,109,113,16,2.6666666666666665
