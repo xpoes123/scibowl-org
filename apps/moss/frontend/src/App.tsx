@@ -64,7 +64,7 @@ function getDisplayModeFromLocation(): DisplayMode {
 
 const END_TOKEN = "END" as const;
 const SCORESHEET_EXPORT_FORMAT = "moss_scoresheet" as const;
-const SCORESHEET_EXPORT_VERSION = 2 as const;
+const SCORESHEET_EXPORT_VERSION = 3 as const;
 
 const DISPLAY_CATEGORY: Record<string, string> = {
   BIOLOGY: "Biology",
@@ -1702,15 +1702,6 @@ function ModeratorApp() {
     });
     const checksum = packetChecksum ?? await sha256Hex(canonicalPacketJson);
 
-    function teamNameForId(teamId: string): string {
-      return teams.find((t) => t.id === teamId)?.name ?? teamId;
-    }
-
-    function playerNameForId(playerId: string | undefined): string | null {
-      if (!playerId) return null;
-      return playersById.get(playerId) ?? null;
-    }
-
     function encodeLocation(location: AttemptLocation): unknown {
       if (location.kind === "end") return { kind: "end" };
       if (location.kind === "question") return { kind: "question", word_index: location.wordIndex };
@@ -1726,8 +1717,8 @@ function ModeratorApp() {
       const encoded = (list ?? [])
         .filter((a) => !!a.result)
         .map((a) => ({
-          team: teamNameForId(a.teamId),
-          player: playerNameForId(a.playerId),
+          team_id: a.teamId,
+          player_id: a.playerId ?? null,
           result: a.result,
           token: a.token,
           is_end: a.isEnd,
@@ -1779,16 +1770,15 @@ function ModeratorApp() {
         teams: teams.map((t) => {
           const segments = lineupSegmentsForTeam(t);
           return {
+            id: t.id,
             name: t.name,
-            players: t.players.map((p) => p.name),
+            players: t.players.map((p) => ({ id: p.id, name: p.name })),
             ...(segments
               ? {
                 lineup_segments: segments.map((seg) => ({
                   start_tossup: seg.startTossup,
                   end_tossup: seg.endTossup,
-                  active_players: seg.activePlayerIds
-                    .map((id) => playersById.get(id) ?? null)
-                    .filter((name): name is string => !!name),
+                  active_player_ids: [...seg.activePlayerIds],
                 })),
               }
               : {}),
