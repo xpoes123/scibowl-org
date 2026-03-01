@@ -1,0 +1,278 @@
+{
+  "format": "moss_field_roster",
+  "version": 1,
+  "tournament": {
+    "slug": "jhu-invitational",
+    "name": "Johns Hopkins Invitational"
+  },
+  "teams": [
+    {
+      "name": "Shallow Walk team A",
+      "players": [
+        "Ryan Karim",
+        "Rishvanth Balasubramanian",
+        "Riyan Nayak",
+        "Prithwish Chatterjee",
+        "Nimit Agarwal"
+      ]
+    },
+    {
+      "name": "Shallow Stroll Team B",
+      "players": [
+        "Dheeran Seelam",
+        "Ruohan Xu",
+        "Sreekar Karra",
+        "Rithik Natarajan",
+        "Yunay Vaddi"
+      ]
+    },
+    {
+      "name": "Montgomery Blair A",
+      "players": [
+        "Kian Dhawan",
+        "Evan Zhang",
+        "Chris Wang",
+        "Kevin Feng",
+        "Sam Easaw"
+      ]
+    },
+    {
+      "name": "Montgomery Blair B",
+      "players": [
+        "Abhijay Banerjee",
+        "William Qian",
+        "Henry Lu",
+        "Kenneth Liu",
+        "Arman Ayazi"
+      ]
+    },
+    {
+      "name": "Thomas S Wootton High School team A",
+      "players": [
+        "Christina Chow",
+        "Cody Gao",
+        "Arun Kompella",
+        "Quinn Lam-Vu",
+        "Louis Wang"
+      ]
+    },
+    {
+      "name": "Thomas S Wootton High School team B",
+      "players": [
+        "Hyunjoon Song",
+        "Vikram Gidwani",
+        "Peter Foerster",
+        "Chaitan Praveen"
+      ]
+    },
+    {
+      "name": "Thomas S Wootton High School team C",
+      "players": [
+        "Aayu Rastogi",
+        "Ricky Bam",
+        "Christina Teng",
+        "Callie Gao"
+      ]
+    },
+    {
+      "name": "Centennial A",
+      "players": [
+        "Matthew Yang",
+        "Aakanksh Govada",
+        "Ray Gao",
+        "Shravan Yoagentharan"
+      ]
+    },
+    {
+      "name": "Centennial B",
+      "players": [
+        "Wafiqah Wafiqah",
+        "Rohan Sengupta",
+        "Litish Deepa"
+      ]
+    },
+    {
+      "name": "Eagles A",
+      "players": [
+        "Kaiwen Yao",
+        "Angelina Li",
+        "Vishruth Kadiyala",
+        "Oliver Yang",
+        "Max Xu"
+      ]
+    },
+    {
+      "name": "Eagles B",
+      "players": [
+        "Lilly Yang",
+        "Allen Liu",
+        "Anvita A",
+        "Madhuram Sharma"
+      ]
+    },
+    {
+      "name": "Eagles C",
+      "players": [
+        "Kingshuk Roy",
+        "Matthew Du",
+        "Eli Segal",
+        "Ryan Yang"
+      ]
+    },
+    {
+      "name": "The Wilberforce School",
+      "players": [
+        "Richmond Darrow",
+        "Matthew Hettena",
+        "Alice Wan",
+        "Julian Lin"
+      ]
+    },
+    {
+      "name": "South Jersey",
+      "players": [
+        "Arjun Deshpande",
+        "Monish Saravana Kumar",
+        "Dennis Ji",
+        "Akhil Mandapati",
+        "Gyan Chande"
+      ]
+    },
+    {
+      "name": "Gargy Bomy",
+      "players": [
+        "Sanjay Oruganti",
+        "Abhinav Anand",
+        "Likhith Malipati",
+        "Jason Mak",
+        "Dhairya Mathur"
+      ]
+    },
+    {
+      "name": "poolesville village idiots",
+      "players": [
+        "Caleb Wen",
+        "Alex Wang",
+        "Alvin Tong",
+        "Denis Motuzenko"
+      ]
+    },
+    {
+      "name": "Poolesville 2",
+      "players": [
+        "Daniel Zhang",
+        "Jasraj Bhatia",
+        "Shivum Arora",
+        "Ankush Karmakar",
+        "Aarav Mohindru"
+      ]
+    },
+    {
+      "name": "Kiruna Scholars",
+      "players": [
+        "Sophia Guo",
+        "Hrishi Bhooma",
+        "Eric Xie",
+        "Rohan Bairi",
+        "Nathan Liang"
+      ]
+    },
+    {
+      "name": "Pilgrimage Homeschool",
+      "players": [
+        "Joshie Cheng",
+        "Leila Indharasophang",
+        "Ellie Leung",
+        "Eliana Hogan"
+      ]
+    },
+    {
+      "name": "Richard Montgomery",
+      "players": [
+        "Andrew Zhao",
+        "Keshav Ramaswamy",
+        "Ethan Pei",
+        "David He",
+        "Sedric Su"
+      ]
+    },
+    {
+      "name": "North Allegheny",
+      "players": [
+        "Jason Liu",
+        "Andrew Feng",
+        "Kaartic Muralidharan",
+        "Leonardo Yu",
+        "Hongyi Wang"
+      ]
+    },
+    {
+      "name": "Centreville HS Team 1",
+      "players": [
+        "Arjun Ganesan",
+        "Pritham Singh",
+        "Ishaan Nandamudi",
+        "Ryan Hyon",
+        "Yeojune Yun"
+      ]
+    },
+    {
+      "name": "WCHS 1",
+      "players": [
+        "Beirui",
+        "Aaron",
+        "Andrew",
+        "Allen",
+        "Steven"
+      ]
+    },
+    {
+      "name": "WCHS 2",
+      "players": [
+        "Sonia",
+        "Evelyn",
+        "Rebecca",
+        "Taehee",
+        "Seojin"
+      ]
+    },
+    {
+      "name": "WCHS 3",
+      "players": [
+        "Amy",
+        "Vivaan",
+        "Ritisha",
+        "Mason"
+      ]
+    },
+    {
+      "name": "Basis",
+      "players": [
+        "Sumer Chaudhary",
+        "Ian Wang",
+        "Neel Jain",
+        "Jueon Kim"
+      ]
+    },
+    {
+      "name": "WWPN A",
+      "players": [
+        "Aldric Benalan",
+        "Aahan Mahakud",
+        "Ishaan Arya",
+        "Easton Wei",
+        "Rithik Gumpu"
+      ]
+    },
+    {
+      "name": "WWPN B",
+      "players": [
+        "Krivi Partani",
+        "Will Luo",
+        "Andrew Li",
+        "Suhayb Shaik",
+        "Ayan Banerjee"
+      ]
+    }
+  ]
+}
