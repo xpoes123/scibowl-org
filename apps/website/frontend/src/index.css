@@ -1226,6 +1226,11 @@ img {
   border-bottom: 1px solid var(--sb-border);
   background: var(--sb-card-bg);
   border-radius: 16px 16px 0 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .sbTabNavNoBorder {
@@ -1238,6 +1243,11 @@ img {
   padding: 8px 8px 0;
   background: var(--sb-card-bg);
   border-bottom: 1px solid var(--sb-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .sbTabSubButton {
@@ -1253,6 +1263,8 @@ img {
   transition: all 0.2s ease;
   position: relative;
   bottom: -1px;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .sbTabSubButton:hover {
@@ -1285,6 +1297,8 @@ img {
   transition: all 0.2s ease;
   position: relative;
   bottom: -1px;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .sbTabButton:hover {
