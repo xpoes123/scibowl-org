@@ -9,3 +9,6 @@
 - Packet archive: The largest invitational packet repository in Science Bowl (formerly known as cloud.mehvix).
 - MoSS: An all-in-on moderating software that reduces staffing needs to one staffer per room, while also recording buzzpoint statistics and allowing for real time game updates to Scibowl.Live's tournament listing. 
 
+## License
+
+Scibowl.Live is licensed under the **GNU General Public License v3.0**. See the [LICENSE](./LICENSE) file for the full text.
