@@ -130,7 +130,7 @@ def parse_question(raw) -> dict | None:
     print(f"  WARNING: Could not parse question text, storing raw", file=sys.stderr)
     return {
         "question_style": "SHORT_ANSWER",
-        "question_text": text,
+        "question_text": smartify_quotes(text),
         "options": [],
         "correct_answer": "",
     }
