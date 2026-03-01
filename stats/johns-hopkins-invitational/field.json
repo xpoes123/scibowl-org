@@ -272,6 +272,23 @@
         "Suhayb Shaik",
         "Ayan Banerjee"
       ]
+    },
+    {
+      "name": "Westtown A",
+      "players": [
+        "Angela Wang",
+        "Ben D'Alessandro",
+        "Tessa Kipnis",
+        "Jamie Lee"
+      ]
+    },
+    {
+      "name": "Westtown B",
+      "players": [
+        "Sarah Lan",
+        "Leila Alobeidy",
+        "Jayden Qin"
+      ]
     }
   ]
 }
