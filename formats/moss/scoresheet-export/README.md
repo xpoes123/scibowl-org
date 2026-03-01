@@ -18,6 +18,8 @@ Optional fields:
 Canonical producer/consumer:
 - `apps/moss/frontend/src/App.tsx` (export + import logic)
 
+Current default export version (MoSS UI): `version: 3`.
+
 ## Exported filename convention (MoSS UI)
 
 When exporting from the MoSS UI, the downloaded filename is intended to be human-searchable while remaining unique:

@@ -11,6 +11,8 @@ This document specifies the JSON format used to export a MoSS match scoresheet (
 
 These fields allow importers to quickly recognize the file type and to handle future schema changes.
 
+MoSS currently exports `version: 3` by default.
+
 ## Top-level object
 
 ### `snapshot_meta` (object, optional)
