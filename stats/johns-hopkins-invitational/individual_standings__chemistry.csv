@@ -1,5 +1,5 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,52,Hrishi Bhooma,Kiruna Scholars,10,25,2,13,40,92,9.2
+1,52,Hrishi Bhooma,Kiruna Scholars,11,27,2,15,44,100,9.090909090909092
 2,72,Alex Wang,poolesville village idiots,9,23,2,11,36,84,9.333333333333334
 3,47,Sanjay Oruganti,Gargy Bomy,8,20,3,8,31,68,8.5
 4,63,Kian Dhawan,Montgomery Blair A,8,18,1,13,32,68,8.5
@@ -8,7 +8,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 7,12,Andrew Zhao,Richard Montgomery,10,11,0,25,36,44,4.4
 8,11,Ethan Pei,Richard Montgomery,10,11,1,26,38,40,4.0
 9,76,Vishruth Kadiyala,Eagles A,8,10,1,16,27,36,4.5
-10,6,Kaiwen Yao,Eagles A,9,10,2,24,36,32,3.5555555555555554
+10,6,Kaiwen Yao,Eagles A,10,10,2,28,40,32,3.2
 11,36,Aldric Benalan,WWPN A,10,8,0,31,39,32,3.2
 12,15,Leonardo Yu,North Allegheny,8,9,2,19,30,28,3.5
 13,59,Abhijay Banerjee,Montgomery Blair B,8,7,0,20,27,28,3.5
@@ -44,8 +44,8 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 43,73,Caleb Wen,poolesville village idiots,9,2,0,34,36,8,0.8888888888888888
 44,34,Eli Segal,Eagles C,7,2,0,24,26,8,1.1428571428571428
 45,71,Keshav Ramaswamy,Richard Montgomery,9,2,0,32,34,8,0.8888888888888888
-46,8,Oliver Yang,Eagles A,8,2,0,30,32,8,1.0
-47,53,Rohan Bairi,Kiruna Scholars,9,2,0,28,30,8,0.8888888888888888
+46,8,Oliver Yang,Eagles A,9,2,0,34,36,8,0.8888888888888888
+47,53,Rohan Bairi,Kiruna Scholars,10,2,0,32,34,8,0.8
 48,115,Ruohan Xu,Shallow Stroll Team B,4,2,0,14,16,8,2.0
 49,68,Andrew Li,WCHS A,7,2,1,25,28,4,0.5714285714285714
 50,94,Angela Wang,Westtown A,5,2,1,17,20,4,0.8
@@ -66,7 +66,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 65,97,Sarah Lan,Westtown B,5,1,0,18,19,4,0.8
 66,13,Sedric Su,Richard Montgomery,7,1,0,21,22,4,0.5714285714285714
 67,81,Shravan Yoagentharan,Centennial A,5,1,0,19,20,4,0.8
-68,51,Sophia Guo,Kiruna Scholars,9,1,0,33,34,4,0.4444444444444444
+68,51,Sophia Guo,Kiruna Scholars,10,1,0,37,38,4,0.4
 69,70,Steven Qi,WCHS A,5,1,0,8,9,4,0.8
 70,25,Monish Saravana Kumar,South Jersey,10,2,2,36,40,0,0.0
 71,66,Beirui Zhang,WCHS A,7,1,1,26,28,0,0.0
@@ -76,7 +76,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 75,101,Aarav Mohindru,Poolesville 2,5,0,0,20,20,0,0.0
 76,69,Allen Chang,WCHS A,7,0,0,19,19,0,0.0
 77,91,Amy Xu,WCHS C,5,0,0,20,20,0,0.0
-78,7,Angelina Li,Eagles A,9,0,0,36,36,0,0.0
+78,7,Angelina Li,Eagles A,10,0,0,40,40,0,0.0
 79,28,Anvita A,Eagles B,7,0,0,27,27,0,0.0
 80,88,Arjun,Centreville HS Team 1,1,0,0,4,4,0,0.0
 81,127,Arun Kompella,Thomas S Wootton High School team A,5,0,0,17,17,0,0.0
@@ -88,7 +88,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 87,75,Denis Motuzenko,poolesville village idiots,9,0,0,36,36,0,0.0
 88,50,Dhairya Mathur,Gargy Bomy,6,0,0,15,15,0,0.0
 89,114,Dheeran Seelam,Shallow Stroll Team B,3,0,0,12,12,0,0.0
-90,54,Eric Xie,Kiruna Scholars,9,0,0,36,36,0,0.0
+90,54,Eric Xie,Kiruna Scholars,10,0,0,40,40,0,0.0
 91,90,Evelyn Wang,WCHS C,5,0,0,20,20,0,0.0
 92,23,Gyan Chande,South Jersey,8,0,0,19,19,0,0.0
 93,4,Ishaan Nandamudi,Centreville HS Team 1,4,0,0,14,14,0,0.0
@@ -105,7 +105,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 104,48,Likhith Malipati,Gargy Bomy,8,0,0,31,31,0,0.0
 105,31,Lilly Yang,Eagles B,7,0,0,27,27,0,0.0
 106,130,Louis Wang,Thomas S Wootton High School team A,5,0,0,16,16,0,0.0
-107,5,Max Xu,Eagles A,5,0,0,13,13,0,0.0
+107,5,Max Xu,Eagles A,6,0,0,17,17,0,0.0
 108,136,Nagadheeran,Shallow Stroll Team B,1,0,0,1,1,0,0.0
 109,55,Nathan Liang,Kiruna Scholars,6,0,0,20,20,0,0.0
 110,45,Nimit Agarwal,Shallow Walk team A,8,0,0,16,16,0,0.0
