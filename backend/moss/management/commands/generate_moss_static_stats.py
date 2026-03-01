@@ -96,7 +96,7 @@ def _safe_category_file_stem(category: str) -> str:
 
 class Command(BaseCommand):
     help = (
-        "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2) "
+        "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2/v3) "
         "using a temporary local SQLite database."
     )
 
