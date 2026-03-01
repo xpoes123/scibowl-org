@@ -48,6 +48,22 @@ def col_to_question_type(col_letter: str) -> str:
     return "TOSSUP" if (col_1idx - d_1idx) % 2 == 0 else "BONUS"
 
 
+def smartify_quotes(text: str) -> str:
+    """Convert straight ASCII quotes to directional Unicode quotes."""
+    result = []
+    in_double = False
+    for i, ch in enumerate(text):
+        if ch == '"':
+            result.append('\u201d' if in_double else '\u201c')
+            in_double = not in_double
+        elif ch == "'":
+            prev = text[i - 1] if i > 0 else ''
+            result.append('\u2019' if prev.isalnum() or prev in ')]}' else '\u2018')
+        else:
+            result.append(ch)
+    return ''.join(result)
+
+
 def parse_question(raw) -> dict | None:
     """
     Parse a raw question cell string into structured MOSS question fields.
@@ -100,8 +116,8 @@ def parse_question(raw) -> dict | None:
                 if letter_match:
                     return {
                         "question_style": "MULTIPLE_CHOICE",
-                        "question_text": stem,
-                        "options": options,
+                        "question_text": smartify_quotes(stem),
+                        "options": [smartify_quotes(o) for o in options],
                         "correct_answer": letter_match.group(1).upper(),
                     }
 
@@ -114,16 +130,16 @@ def parse_question(raw) -> dict | None:
             answer = strip_tags(answer_block[ans_match.end() :])
             return {
                 "question_style": "SHORT_ANSWER",
-                "question_text": stem,
+                "question_text": smartify_quotes(stem),
                 "options": [],
-                "correct_answer": answer,
+                "correct_answer": smartify_quotes(answer),
             }
 
     # Fallback — couldn't parse structure
     print(f"  WARNING: Could not parse question text, storing raw", file=sys.stderr)
     return {
         "question_style": "SHORT_ANSWER",
-        "question_text": text,
+        "question_text": smartify_quotes(text),
         "options": [],
         "correct_answer": "",
     }
