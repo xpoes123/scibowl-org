@@ -2918,9 +2918,11 @@ function ModeratorApp() {
 
       const obj = parsed as Record<string, unknown>;
       if (obj.format !== SCORESHEET_EXPORT_FORMAT) throw new Error(`Unsupported format: ${String(obj.format)}`);
-      if (obj.version !== 1 && obj.version !== SCORESHEET_EXPORT_VERSION) {
+      const exportVersion = obj.version;
+      if (exportVersion !== 1 && exportVersion !== 2 && exportVersion !== 3) {
         throw new Error(`Unsupported version: ${String(obj.version)}`);
       }
+      const isV3 = exportVersion === 3;
       const importedSnapshotMeta = parseSnapshotMeta(obj.snapshot_meta);
 
       const packetObj = obj.packet;
@@ -2961,6 +2963,9 @@ function ModeratorApp() {
 
       const teamIdByName = new Map<string, string>();
       const playerIdByTeamNameThenPlayerName = new Map<string, string>();
+      const seenTeamIds = new Set<string>();
+      const seenPlayerIds = new Set<string>();
+      const playerIdsByTeamId = new Map<string, Set<string>>();
 
       const importedLineupsByTeamId: Record<string, Record<number, string[]>> = {};
       const importedTeams: Team[] = gameTeams.map((t) => {
@@ -2968,21 +2973,57 @@ function ModeratorApp() {
         const tr = t as Record<string, unknown>;
         if (typeof tr.name !== "string" || !tr.name.trim()) throw new Error("Each team must have a non-empty name");
         const teamName = tr.name.trim();
-        if (teamIdByName.has(teamName)) throw new Error(`Duplicate team name: ${teamName}`);
-        const teamId = makeId("team");
-        teamIdByName.set(teamName, teamId);
+
+        const teamId = (() => {
+          if (isV3) {
+            const raw = tr.id;
+            if (typeof raw !== "string" || !raw.trim()) throw new Error(`Team ${teamName}: id must be a non-empty string in v3`);
+            const canonical = raw.trim();
+            if (seenTeamIds.has(canonical)) throw new Error(`Duplicate team id: ${canonical}`);
+            seenTeamIds.add(canonical);
+            return canonical;
+          }
+          if (teamIdByName.has(teamName)) throw new Error(`Duplicate team name: ${teamName}`);
+          const id = makeId("team");
+          teamIdByName.set(teamName, id);
+          return id;
+        })();
 
         const playersRaw = tr.players;
         if (!Array.isArray(playersRaw)) throw new Error(`Team ${teamName}: players must be an array`);
         const players: Player[] = [];
+        const playerIds = new Set<string>();
         for (const p of playersRaw) {
-          if (typeof p !== "string") throw new Error(`Team ${teamName}: players must be strings`);
-          const name = p.trim();
+          if (typeof p === "string") {
+            if (isV3) throw new Error(`Team ${teamName}: players must be objects in v3`);
+            const name = p.trim();
+            if (!name) continue;
+            const id = makeId("player");
+            players.push({ id, name });
+            playerIds.add(id);
+            playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
+            continue;
+          }
+          if (!p || typeof p !== "object") throw new Error(`Team ${teamName}: players must be strings or objects`);
+          const pr = p as Record<string, unknown>;
+          const name = typeof pr.name === "string" ? pr.name.trim() : "";
           if (!name) continue;
-          const id = makeId("player");
+          const id = (() => {
+            const raw = pr.id;
+            if (typeof raw === "string" && raw.trim()) return raw.trim();
+            if (isV3) throw new Error(`Team ${teamName}: player id must be a non-empty string in v3`);
+            return makeId("player");
+          })();
+          if (playerIds.has(id)) throw new Error(`Team ${teamName}: duplicate player id: ${id}`);
+          if (seenPlayerIds.has(id)) throw new Error(`Duplicate player id across teams: ${id}`);
+          seenPlayerIds.add(id);
+          playerIds.add(id);
           players.push({ id, name });
-          playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
+          if (!isV3) {
+            playerIdByTeamNameThenPlayerName.set(`${teamName}\n${name}`, id);
+          }
         }
+        playerIdsByTeamId.set(teamId, playerIds);
 
         const lineupSegmentsRaw = tr.lineup_segments;
         let lineupSegments: LineupSegment[] | undefined = undefined;
@@ -2998,7 +3039,10 @@ function ModeratorApp() {
             const sr = seg as Record<string, unknown>;
             const startRaw = sr.start_tossup;
             const endRaw = sr.end_tossup;
-            const activeRaw = sr.active_players;
+            const activeByNameRaw = sr.active_players;
+            const activeByIdRaw = sr.active_player_ids;
+            const activeKind = Array.isArray(activeByIdRaw) ? "id" : "name";
+            const activeRaw = activeKind === "id" ? activeByIdRaw : activeByNameRaw;
 
             if (typeof startRaw !== "number" || !Number.isFinite(startRaw)) {
               throw new Error(`Team ${teamName}: lineup_segments[].start_tossup must be a number`);
@@ -3041,12 +3085,22 @@ function ModeratorApp() {
             const activePlayerIds: string[] = [];
             for (const ap of activeRaw) {
               if (typeof ap !== "string") throw new Error(`Team ${teamName}: lineup_segments[].active_players must be strings`);
-              const name = ap.trim();
-              if (!name) continue;
-              const key = `${teamName}\n${name}`;
+              const raw = ap.trim();
+              if (!raw) continue;
+
+              if (activeKind === "id") {
+                if (!playerIds.has(raw)) throw new Error(`Team ${teamName}: lineup_segments references unknown player id: ${raw}`);
+                if (activePlayerIds.includes(raw)) continue;
+                activePlayerIds.push(raw);
+                continue;
+              }
+
+              const key = `${teamName}\n${raw}`;
               const id = playerIdByTeamNameThenPlayerName.get(key) ?? (() => {
+                if (isV3) throw new Error(`Team ${teamName}: lineup_segments must use active_player_ids in v3`);
                 const created = makeId("player");
-                players.push({ id: created, name });
+                players.push({ id: created, name: raw });
+                playerIds.add(created);
                 playerIdByTeamNameThenPlayerName.set(key, created);
                 return created;
               })();
@@ -3071,6 +3125,7 @@ function ModeratorApp() {
 
         return { id: teamId, name: teamName, players };
       });
+      const importedTeamsById = new Map(importedTeams.map((t) => [t.id, t]));
 
       function ensurePlayerId(teamName: string, playerName: string): string {
         const key = `${teamName}\n${playerName}`;
@@ -3126,14 +3181,41 @@ function ModeratorApp() {
         for (const item of list) {
           if (!item || typeof item !== "object") throw new Error("Attempt must be an object");
           const ar = item as Record<string, unknown>;
-          if (typeof ar.team !== "string") throw new Error("Attempt.team must be a string");
-          const teamName = ar.team.trim();
-          const teamId = teamIdByName.get(teamName);
-          if (!teamId) throw new Error(`Attempt references unknown team: ${teamName}`);
+          const teamId = (() => {
+            if (isV3) {
+              const raw = ar.team_id;
+              if (typeof raw !== "string" || !raw.trim()) throw new Error("Attempt.team_id must be a non-empty string");
+              const id = raw.trim();
+              if (!importedTeamsById.has(id)) throw new Error(`Attempt references unknown team id: ${id}`);
+              return id;
+            }
+            if (typeof ar.team !== "string") throw new Error("Attempt.team must be a string");
+            const teamName = ar.team.trim();
+            const id = teamIdByName.get(teamName);
+            if (!id) throw new Error(`Attempt references unknown team: ${teamName}`);
+            return id;
+          })();
 
-          const playerField = ar.player;
-          const playerName = typeof playerField === "string" ? playerField.trim() : null;
-          const playerId = playerName ? ensurePlayerId(teamName, playerName) : undefined;
+          const playerId = (() => {
+            if (isV3) {
+              const raw = ar.player_id;
+              if (raw === null || raw === undefined) return undefined;
+              if (typeof raw !== "string" || !raw.trim()) throw new Error("Attempt.player_id must be a string or null");
+              const id = raw.trim();
+              const allowed = playerIdsByTeamId.get(teamId);
+              if (allowed && !allowed.has(id)) throw new Error(`Attempt references unknown player id: ${id}`);
+              return id;
+            }
+
+            const playerField = ar.player;
+            const playerName = typeof playerField === "string" ? playerField.trim() : null;
+            if (!playerName) return undefined;
+            const teamName = (() => {
+              const rawTeam = ar.team;
+              return typeof rawTeam === "string" ? rawTeam.trim() : "";
+            })();
+            return ensurePlayerId(teamName, playerName);
+          })();
 
           if (ar.result !== "correct" && ar.result !== "incorrect") throw new Error("Attempt.result invalid");
           if (typeof ar.token !== "string") throw new Error("Attempt.token must be a string");
@@ -3180,7 +3262,7 @@ function ModeratorApp() {
         : 0;
 
       let importedEventLog: ScoresheetEvent[] = [];
-      if (obj.version === SCORESHEET_EXPORT_VERSION) {
+      if (exportVersion === 2 || exportVersion === 3) {
         const eventLogObj = obj.event_log;
         if (eventLogObj && typeof eventLogObj === "object") {
           const eventLogRec = eventLogObj as Record<string, unknown>;
