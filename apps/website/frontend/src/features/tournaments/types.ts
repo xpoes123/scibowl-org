@@ -103,6 +103,7 @@ export type TeamStandingsRow = {
   name: string;
   wins?: number;
   losses?: number;
+  games_played?: number;
   points_per_game: number;
   "4s": number;
   "-4s": number;
