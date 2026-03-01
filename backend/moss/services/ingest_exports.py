@@ -62,7 +62,7 @@ def ingest_scoresheet_exports(
     using: str = "default",
 ) -> None:
     """
-    Ingest MoSS scoresheet export objects (v1/v2) into the MoSS fact tables.
+    Ingest MoSS scoresheet export objects (v1/v2/v3) into the MoSS fact tables.
 
     `exports` items are `(source_path, raw_bytes, parsed_export_obj)`.
     """
@@ -182,8 +182,12 @@ def ingest_scoresheet_exports(
             for slot, name in enumerate(team_names, start=1):
                 GameTeam.objects.using(using).create(game=game, tournament_team=tournament_teams[name], slot=slot)
 
-            # Players: accept either ["Name", ...] or [{"name": "Name"}, ...] just in case.
+            # Players:
+            # - v1/v2 exports: ["Name", ...]
+            # - v3 exports: [{"id": "...", "name": "Name"}, ...]
+            # Also accept [{"name": "Name"}, ...] as a best-effort legacy/hand-authored shape.
             roster_by_team: dict[str, list[str]] = {}
+            player_name_by_id_by_team: dict[str, dict[str, str]] = {}
             for team_any in teams_any:
                 team_dict = _require_dict(team_any, "game.teams[]")
                 name = team_dict.get("name")
@@ -193,12 +197,17 @@ def ingest_scoresheet_exports(
                 if not isinstance(players_any, list):
                     raise ValueError("game.teams[].players must be a list")
                 roster: list[str] = []
+                player_name_by_id: dict[str, str] = {}
                 for player_any in players_any:
                     if isinstance(player_any, str) and player_any.strip():
                         roster.append(player_any)
                     elif isinstance(player_any, dict) and isinstance(player_any.get("name"), str):
-                        roster.append(player_any["name"])
+                        pname = player_any["name"]
+                        roster.append(pname)
+                        if player_any.get("id") is not None:
+                            player_name_by_id[str(player_any["id"])] = pname
                 roster_by_team[name] = roster
+                player_name_by_id_by_team[name] = player_name_by_id
 
             tournament_players: dict[tuple[str, str], TournamentPlayer] = {}
             for team_name, roster in roster_by_team.items():
@@ -294,14 +303,26 @@ def ingest_scoresheet_exports(
                         else None
                     )
 
-                    active_any = seg.get("active_players") or []
+                    active_any = seg.get("active_players")
+                    active_is_ids = False
+                    if active_any is None:
+                        active_any = seg.get("active_player_ids")
+                        active_is_ids = active_any is not None
+                    if active_any is None:
+                        active_any = []
                     if not isinstance(active_any, list):
                         raise ValueError(f"game.teams[].lineup_segments[{seg_idx}].active_players must be a list")
 
                     for player_any in active_any:
-                        if not isinstance(player_any, str) or not player_any.strip():
-                            continue
-                        player_name = player_any
+                        if active_is_ids:
+                            pid = str(player_any).strip()
+                            if not pid:
+                                continue
+                            player_name = player_name_by_id_by_team.get(team_name, {}).get(pid, pid)
+                        else:
+                            if not isinstance(player_any, str) or not player_any.strip():
+                                continue
+                            player_name = player_any
                         player = tournament_players.get((team_name, player_name))
                         if player is None:
                             player, _ = TournamentPlayer.objects.using(using).get_or_create(

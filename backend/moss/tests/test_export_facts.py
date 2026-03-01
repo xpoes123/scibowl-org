@@ -273,6 +273,115 @@ class ExportFactsReducerTestCase(TestCase):
         team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
         self.assertEqual(team_a.tossups_4, 1)
 
+    def test_v3_id_based_state_resolves_team_and_player_names(self):
+        export_obj = self._base_export(version=3)
+        export_obj["game"] = {
+            "teams": [
+                {
+                    "id": "team_a",
+                    "name": "Team A",
+                    "players": [
+                        {"id": "p_alice", "name": "Alice"},
+                        {"id": "p_bob", "name": "Bob"},
+                    ],
+                    "lineup_segments": [
+                        {"start_tossup": 1, "end_tossup": None, "active_player_ids": ["p_alice", "p_bob"]}
+                    ],
+                },
+                {
+                    "id": "team_b",
+                    "name": "Team B",
+                    "players": [
+                        {"id": "p_carol", "name": "Carol"},
+                        {"id": "p_dan", "name": "Dan"},
+                    ],
+                    "lineup_segments": [
+                        {"start_tossup": 1, "end_tossup": None, "active_player_ids": ["p_carol", "p_dan"]}
+                    ],
+                },
+            ]
+        }
+        export_obj["state"] = {
+            "pair_index": 1,
+            "attempts_by_question_id": {
+                # Pair 1 tossup
+                "1": [
+                    {
+                        "team_id": "team_a",
+                        "player_id": "p_alice",
+                        "result": "correct",
+                        "token": "X",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 0},
+                    },
+                    {
+                        "team_id": "team_b",
+                        "player_id": "p_carol",
+                        "result": "incorrect",
+                        "token": "NO PENALTY",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    },
+                ],
+                # Pair 1 bonus
+                "2": [
+                    {
+                        "team_id": "team_a",
+                        "player_id": None,
+                        "result": "correct",
+                        "token": "BONUS",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    }
+                ],
+                # Pair 2 tossup
+                "3": [
+                    {
+                        "team_id": "team_a",
+                        "player_id": "p_bob",
+                        "result": "incorrect",
+                        "token": "buzz",
+                        "is_end": False,
+                        "location": {"kind": "question", "word_index": 1},
+                    },
+                    {
+                        "team_id": "team_b",
+                        "player_id": "p_dan",
+                        "result": "incorrect",
+                        "token": "NO PENALTY",
+                        "is_end": True,
+                        "location": {"kind": "end"},
+                    },
+                ],
+            },
+        }
+        export_obj["event_log"] = {"scoresheet_id": None, "next_seq": 1, "events": []}
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 2)
+
+        team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
+        team_b = next(t for t in facts.team_facts if t.team_name == "Team B")
+        self.assertEqual(team_a.tossups_heard, 2)
+        self.assertEqual(team_a.tossups_4, 1)
+        self.assertEqual(team_a.tossups_neg, 1)
+        self.assertEqual(team_b.tossups_heard, 2)
+        self.assertEqual(team_b.tossups_4, 0)
+        self.assertEqual(team_b.tossups_neg, 0)
+
+        alice = next(p for p in facts.player_facts if p.player_name == "Alice")
+        bob = next(p for p in facts.player_facts if p.player_name == "Bob")
+        self.assertEqual(alice.team_name, "Team A")
+        self.assertEqual(alice.tossups_heard, 2)
+        self.assertEqual(alice.tossups_4, 1)
+        self.assertEqual(alice.tossups_neg, 0)
+        self.assertEqual(alice.tossup_points, 4)
+        self.assertEqual(bob.team_name, "Team A")
+        self.assertEqual(bob.tossups_heard, 2)
+        self.assertEqual(bob.tossups_4, 0)
+        self.assertEqual(bob.tossups_neg, 1)
+        self.assertEqual(bob.tossup_points, -4)
+
     def test_pairs_played_infers_from_attempts_when_cursor_missing(self):
         export_obj = self._base_export(version=1)
         export_obj["state"] = {

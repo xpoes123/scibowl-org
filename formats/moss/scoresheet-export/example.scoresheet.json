@@ -1,6 +1,6 @@
 {
   "format": "moss_scoresheet",
-  "version": 1,
+  "version": 3,
   "exported_at": "2026-01-01T00:00:00.000Z",
   "snapshot_meta": {
     "tournament_slug": "custom",
@@ -13,28 +13,81 @@
   "packet": {
     "packet": "Round 1",
     "year": 2025,
-    "questions": []
+    "questions": [
+      {
+        "id": 1,
+        "pair_id": 1,
+        "question_type": "TOSSUP",
+        "question_style": "SHORT_ANSWER",
+        "category": "PHYSICS",
+        "question_text": "Example tossup question text.",
+        "options": [],
+        "correct_answer": "Example",
+        "source": "EXAMPLE_2025"
+      },
+      {
+        "id": 2,
+        "pair_id": 1,
+        "question_type": "BONUS",
+        "question_style": "SHORT_ANSWER",
+        "category": "PHYSICS",
+        "question_text": "Example bonus question text.",
+        "options": [],
+        "correct_answer": "Example",
+        "source": "EXAMPLE_2025"
+      }
+    ]
   },
   "packet_checksum": {
     "algorithm": "sha256",
     "canonicalization": "json_sorted_keys_utf8_no_ws",
-    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+    "value": "2c83c291c4daaacbc64e3b4a284aee56e9832cd89b445a357a61204217dbfb0e"
   },
   "game": {
     "teams": [
       {
+        "id": "team_0a1b2c3_17f1b2c3d4",
         "name": "Team 1",
-        "players": ["Player A", "Player B", "Player C", "Player D", "Player E"],
+        "players": [
+          { "id": "player_aa11bb22_17f1b2c3d4", "name": "Player A" },
+          { "id": "player_cc33dd44_17f1b2c3d4", "name": "Player B" },
+          { "id": "player_ee55ff66_17f1b2c3d4", "name": "Player C" },
+          { "id": "player_11223344_17f1b2c3d4", "name": "Player D" },
+          { "id": "player_55667788_17f1b2c3d4", "name": "Player E" }
+        ],
         "lineup_segments": [
           {
             "start_tossup": 1,
-            "end_tossup": 11,
-            "active_players": ["Player A", "Player B", "Player C", "Player D"]
-          },
-          {
-            "start_tossup": 12,
             "end_tossup": null,
-            "active_players": ["Player A", "Player C", "Player D", "Player E"]
+            "active_player_ids": [
+              "player_aa11bb22_17f1b2c3d4",
+              "player_cc33dd44_17f1b2c3d4",
+              "player_ee55ff66_17f1b2c3d4",
+              "player_11223344_17f1b2c3d4"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "team_4d5e6f7_17f1b2c3d4",
+        "name": "Team 2",
+        "players": [
+          { "id": "player_99aabbcc_17f1b2c3d4", "name": "Player X" },
+          { "id": "player_ddeeff00_17f1b2c3d4", "name": "Player Y" },
+          { "id": "player_13579bdf_17f1b2c3d4", "name": "Player Z" },
+          { "id": "player_2468ace0_17f1b2c3d4", "name": "Player W" },
+          { "id": "player_fedcba98_17f1b2c3d4", "name": "Player V" }
+        ],
+        "lineup_segments": [
+          {
+            "start_tossup": 1,
+            "end_tossup": null,
+            "active_player_ids": [
+              "player_99aabbcc_17f1b2c3d4",
+              "player_ddeeff00_17f1b2c3d4",
+              "player_13579bdf_17f1b2c3d4",
+              "player_2468ace0_17f1b2c3d4"
+            ]
           }
         ]
       }
@@ -44,9 +97,88 @@
     "tossup": { "correct": 4, "incorrect": -4, "no_penalty": 0 },
     "bonus": { "correct": 10, "incorrect": 0 }
   },
+  "event_log": {
+    "scoresheet_id": null,
+    "next_seq": 4,
+    "events": [
+      {
+        "seq": 1,
+        "client_event_id": "00000000-0000-0000-0000-000000000001",
+        "type": "attempt.recorded",
+        "version": 1,
+        "client_ts": "2026-01-01T00:00:00Z",
+        "payload": {
+          "question_id": 1,
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": "player_aa11bb22_17f1b2c3d4",
+          "result": "correct",
+          "token": "Example",
+          "is_end": false,
+          "location": { "kind": "question", "word_index": 0 }
+        }
+      },
+      {
+        "seq": 2,
+        "client_event_id": "00000000-0000-0000-0000-000000000002",
+        "type": "attempt.recorded",
+        "version": 1,
+        "client_ts": "2026-01-01T00:00:01Z",
+        "payload": {
+          "question_id": 1,
+          "team_id": "team_4d5e6f7_17f1b2c3d4",
+          "player_id": "player_99aabbcc_17f1b2c3d4",
+          "result": "incorrect",
+          "token": "Example",
+          "is_end": false,
+          "location": { "kind": "question", "word_index": 0 }
+        }
+      },
+      {
+        "seq": 3,
+        "client_event_id": "00000000-0000-0000-0000-000000000003",
+        "type": "bonus.result_set",
+        "version": 1,
+        "client_ts": "2026-01-01T00:00:02Z",
+        "payload": {
+          "bonus_question_id": 2,
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "result": "correct"
+        }
+      }
+    ]
+  },
   "state": {
     "pair_index": 0,
-    "attempts_by_question_id": {}
+    "attempts_by_question_id": {
+      "1": [
+        {
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": "player_aa11bb22_17f1b2c3d4",
+          "result": "correct",
+          "token": "Example",
+          "is_end": false,
+          "location": { "kind": "question", "word_index": 0 }
+        },
+        {
+          "team_id": "team_4d5e6f7_17f1b2c3d4",
+          "player_id": "player_99aabbcc_17f1b2c3d4",
+          "result": "incorrect",
+          "token": "Example",
+          "is_end": false,
+          "location": { "kind": "question", "word_index": 0 }
+        }
+      ],
+      "2": [
+        {
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": null,
+          "result": "correct",
+          "token": "BONUS",
+          "is_end": true,
+          "location": { "kind": "end" }
+        }
+      ]
+    }
   }
 }
 
