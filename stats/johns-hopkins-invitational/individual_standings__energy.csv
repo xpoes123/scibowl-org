@@ -1,140 +1,136 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,66,Kian Dhawan,Montgomery Blair A,6,11,0,7,18,44,7.333333333333333
+1,63,Kian Dhawan,Montgomery Blair A,6,11,0,7,18,44,7.333333333333333
 2,6,Kaiwen Yao,Eagles A,7,10,0,11,21,40,5.714285714285714
-3,75,Alex Wang,poolesville village idiots,7,10,1,10,21,36,5.142857142857143
-4,39,Aldric Benalan,WWPN A,7,10,2,9,21,32,4.571428571428571
-5,46,Ryan Karim,Shallow Walk team A,6,8,1,9,18,28,4.666666666666667
-6,23,Sumer Chaudhary,Basis,7,7,0,14,21,28,4.0
-7,15,Andrew Zhao,Richard Montgomery,7,6,0,12,18,24,3.4285714285714284
-8,65,Evan Zhang,Montgomery Blair A,6,6,0,12,18,24,4.0
-9,50,Sanjay Oruganti,Gargy Bomy,7,6,1,14,21,20,2.857142857142857
-10,33,Madhuram Sharma,Eagles B,7,5,0,16,21,20,2.857142857142857
-11,27,Arjun Deshpande,South Jersey,7,6,2,13,21,16,2.2857142857142856
-12,89,Rohan Sengupta,Centennial B,5,5,1,9,15,16,3.2
-13,62,Abhijay Banerjee,Montgomery Blair B,7,4,0,14,18,16,2.2857142857142856
-14,31,Anvita A,Eagles B,7,4,0,17,21,16,2.2857142857142856
-15,14,Ethan Pei,Richard Montgomery,7,4,0,16,20,16,2.2857142857142856
-16,35,Kingshuk Roy,Eagles C,7,4,0,17,21,16,2.2857142857142856
-17,55,Hrishi Bhooma,Kiruna Scholars,7,5,2,14,21,12,1.7142857142857142
-18,19,Hongyi Wang,North Allegheny,7,4,1,15,20,12,1.7142857142857142
+3,72,Alex Wang,poolesville village idiots,7,10,1,10,21,36,5.142857142857143
+4,36,Aldric Benalan,WWPN A,7,10,2,9,21,32,4.571428571428571
+5,43,Ryan Karim,Shallow Walk team A,6,8,1,9,18,28,4.666666666666667
+6,20,Sumer Chaudhary,Basis,7,7,0,14,21,28,4.0
+7,12,Andrew Zhao,Richard Montgomery,7,6,0,12,18,24,3.4285714285714284
+8,62,Evan Zhang,Montgomery Blair A,6,6,0,12,18,24,4.0
+9,47,Sanjay Oruganti,Gargy Bomy,7,6,1,14,21,20,2.857142857142857
+10,30,Madhuram Sharma,Eagles B,7,5,0,16,21,20,2.857142857142857
+11,24,Arjun Deshpande,South Jersey,7,6,2,13,21,16,2.2857142857142856
+12,86,Rohan Sengupta,Centennial B,5,5,1,9,15,16,3.2
+13,59,Abhijay Banerjee,Montgomery Blair B,7,4,0,14,18,16,2.2857142857142856
+14,28,Anvita A,Eagles B,7,4,0,17,21,16,2.2857142857142856
+15,11,Ethan Pei,Richard Montgomery,7,4,0,16,20,16,2.2857142857142856
+16,32,Kingshuk Roy,Eagles C,7,4,0,17,21,16,2.2857142857142856
+17,52,Hrishi Bhooma,Kiruna Scholars,7,5,2,14,21,12,1.7142857142857142
+18,16,Hongyi Wang,North Allegheny,7,4,1,15,20,12,1.7142857142857142
 19,8,Oliver Yang,Eagles A,7,4,1,16,21,12,1.7142857142857142
-20,128,Andrew Li,WWPN B,5,3,0,12,15,12,2.4
-21,98,Angela Wang,Westtown A,5,3,0,12,15,12,2.4
-22,22,Ian Wang,Basis,7,3,0,18,21,12,1.7142857142857142
-23,41,Ishaan Arya,WWPN A,7,3,0,18,21,12,1.7142857142857142
-24,9,Pritham Singh,Centreville HS Team 1,6,3,0,15,18,12,2.0
-25,61,Arman Ayazi,Montgomery Blair B,7,4,2,15,21,8,1.1428571428571428
-26,49,Abhinav Anand,Gargy Bomy,7,3,1,17,21,8,1.1428571428571428
-27,74,Keshav Ramaswamy,Richard Montgomery,6,3,1,13,17,8,1.3333333333333333
-28,71,Andrew Li,WCHS A,7,2,0,19,21,8,1.1428571428571428
-29,106,Daniel Zhang,Poolesville 2,5,2,0,13,15,8,1.6
-30,53,Dhairya Mathur,Gargy Bomy,5,2,0,6,8,8,1.6
-31,42,Easton Wei,WWPN A,7,2,0,19,21,8,1.1428571428571428
-32,37,Eli Segal,Eagles C,7,2,0,19,21,8,1.1428571428571428
-33,60,Henry Lu,Montgomery Blair B,7,2,0,19,21,8,1.1428571428571428
-34,17,Jason Liu,North Allegheny,7,2,0,15,17,8,1.1428571428571428
-35,126,Krivi Partani,WWPN B,5,2,0,13,15,8,1.6
-36,18,Leonardo Yu,North Allegheny,7,2,0,17,19,8,1.1428571428571428
-37,109,Matthew Hettena,The Wilberforce School,5,2,0,13,15,8,1.6
-38,133,Quinn Lam-Vu,Thomas S Wootton High School team A,5,2,0,11,13,8,1.6
-39,44,Rishvanth Balasubramanian,Shallow Walk team A,6,2,0,16,18,8,1.3333333333333333
-40,38,Ryan Yang,Eagles C,7,2,0,19,21,8,1.1428571428571428
-41,54,Sophia Guo,Kiruna Scholars,6,2,0,15,17,8,1.3333333333333333
-42,79,Vishruth Kadiyala,Eagles A,6,2,0,11,13,8,1.3333333333333333
-43,85,Matthew Yang,Centennial A,5,3,2,10,15,4,0.8
-44,28,Monish Saravana Kumar,South Jersey,7,3,2,16,21,4,0.5714285714285714
-45,69,Beirui Zhang,WCHS A,7,2,1,18,21,4,0.5714285714285714
-46,7,Angelina Li,Eagles A,7,1,0,20,21,4,0.5714285714285714
-47,107,Ankush Karmakar,Poolesville 2,5,1,0,14,15,4,0.8
-48,2,Arjun Ganesan,Centre,1,1,0,2,3,4,4.0
-49,10,Arjun Ganesan,Centreville HS Team 1,5,1,0,14,15,4,0.8
-50,99,Ben D'Alessandro,Westtown A,5,1,0,14,15,4,0.8
-51,76,Caleb Wen,poolesville village idiots,7,1,0,20,21,4,0.5714285714285714
-52,124,Chaitan Praveen,Thomas S Wootton High School team B,5,1,0,14,15,4,0.8
-53,132,Christina Chow,Thomas S Wootton High School team A,5,1,0,11,12,4,0.8
-54,13,David He,Richard Montgomery,6,1,0,14,15,4,0.6666666666666666
-55,82,Ellie Leung,Pilgrimage Homeschool,5,1,0,14,15,4,0.8
-56,94,Evelyn Wang,WCHS C,5,1,0,14,15,4,0.8
-57,52,Jason Mak,Gargy Bomy,6,1,0,12,13,4,0.6666666666666666
-58,104,Jasraj Bhatia,Poolesville 2,5,1,0,14,15,4,0.8
-59,21,Kaartic Muralidharan,North Allegheny,4,1,0,9,10,4,1.0
-60,34,Lilly Yang,Eagles B,7,1,0,20,21,4,0.5714285714285714
-61,36,Matthew Du,Eagles C,7,1,0,20,21,4,0.5714285714285714
-62,58,Nathan Liang,Kiruna Scholars,5,1,0,13,14,4,0.8
-63,24,Neel Jain,Basis,7,1,0,20,21,4,0.5714285714285714
-64,47,Prithwish Chatterjee,Shallow Walk team A,6,1,0,11,12,4,0.6666666666666666
-65,86,Ray Gao,Centennial A,5,1,0,14,15,4,0.8
-66,116,Rebecca Loving,WCHS B,5,1,0,14,15,4,0.8
-67,110,Richmond Darrow,The Wilberforce School,5,1,0,14,15,4,0.8
-68,115,Ritisha Das,WCHS B,5,1,0,14,15,4,0.8
-69,45,Riyan Nayak,Shallow Walk team A,6,1,0,17,18,4,0.6666666666666666
-70,16,Sedric Su,Richard Montgomery,6,1,0,13,14,4,0.6666666666666666
-71,84,Shravan Yoagentharan,Centennial A,5,1,0,14,15,4,0.8
-72,100,Tessa Kipnis,Westtown A,5,1,0,14,15,4,0.8
-73,93,Vivian Samara,WCHS C,4,1,0,11,12,4,1.0
-74,59,William Qian,Montgomery Blair B,7,1,0,16,17,4,0.5714285714285714
-75,120,Yunay Vaddi,Shallow Stroll Team B,4,1,0,8,9,4,1.0
-76,70,Aaron Zhou,WCHS A,7,3,3,15,21,0,0.0
-77,135,Cody Gao,Thomas S Wootton High School team A,4,2,2,6,10,0,0.0
-78,30,Akhil Mandapati,South Jersey,7,1,1,11,13,0,0.0
-79,63,Kenneth Liu,Montgomery Blair B,4,1,1,5,7,0,0.0
-80,51,Likhith Malipati,Gargy Bomy,7,1,1,19,21,0,0.0
-81,40,Aahan Mahakud,WWPN A,7,0,0,21,21,0,0.0
-82,87,Aakanksh Govada,Centennial A,5,0,0,15,15,0,0.0
-83,105,Aarav Mohindru,Poolesville 2,5,0,0,15,15,0,0.0
-84,139,Aayu Rastogi,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
-85,72,Allen Chang,WCHS A,7,0,0,17,17,0,0.0
-86,32,Allen Liu,Eagles B,7,0,0,21,21,0,0.0
-87,77,Alvin Tong,poolesville village idiots,7,0,0,21,21,0,0.0
-88,95,Amy Xu,WCHS C,5,0,0,15,15,0,0.0
-89,91,Arjun,Centreville HS Team 1,1,0,0,3,3,0,0.0
-90,131,Arun Kompella,Thomas S Wootton High School team A,5,0,0,13,13,0,0.0
-91,138,Callie Gao,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
-92,67,Chris Wang,Montgomery Blair A,6,0,0,16,16,0,0.0
-93,136,Christina Teng,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
-94,78,Denis Motuzenko,poolesville village idiots,7,0,0,21,21,0,0.0
-95,29,Dennis Ji,South Jersey,7,0,0,21,21,0,0.0
-96,118,Dheeran Seelam,Shallow Stroll Team B,3,0,0,9,9,0,0.0
-97,80,Eliana Hogan,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
-98,57,Eric Xie,Kiruna Scholars,6,0,0,18,18,0,0.0
-99,26,Gyan Chande,South Jersey,5,0,0,8,8,0,0.0
-100,123,Hyunjoon Song,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
-101,4,Ishaan Nandamudi,Centre,1,0,0,3,3,0,0.0
-102,92,Ishaan Nandamudi,Centreville HS Team 1,3,0,0,7,7,0,0.0
-103,97,Jamie Lee,Westtown A,5,0,0,15,15,0,0.0
-104,142,Jeddy,WWPN B,3,0,0,9,9,0,0.0
-105,129,Jeddy Yu,WWPN B,2,0,0,6,6,0,0.0
-106,83,Joshie Cheng,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
-107,25,Jueon Kim,Basis,7,0,0,21,21,0,0.0
-108,112,Julian Lin,The Wilberforce School,5,0,0,15,15,0,0.0
-109,64,Kevin Feng,Montgomery Blair A,5,0,0,13,13,0,0.0
-110,102,Leila Alobeidy,Westtown B,5,0,0,15,15,0,0.0
-111,81,Leila Indharasophang,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
-112,90,Litish Deepa,Centennial B,5,0,0,15,15,0,0.0
-113,134,Louis Wang,Thomas S Wootton High School team A,5,0,0,12,12,0,0.0
-114,5,Max Xu,Eagles A,4,0,0,8,8,0,0.0
-115,140,Nagadheeran,Shallow Stroll Team B,1,0,0,2,2,0,0.0
-116,48,Nimit Agarwal,Shallow Walk team A,6,0,0,6,6,0,0.0
-117,122,Peter Foerster,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
-118,1,Pritham Singh,Centre,1,0,0,3,3,0,0.0
-119,137,Ricky Bam,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
-120,56,Rohan Bairi,Kiruna Scholars,6,0,0,14,14,0,0.0
-121,119,Ruohan Xu,Shallow Stroll Team B,4,0,0,12,12,0,0.0
-122,12,Ryan Hyon,Centreville HS Team 1,6,0,0,15,15,0,0.0
-123,68,Sam Easaw,Montgomery Blair A,5,0,0,7,7,0,0.0
-124,101,Sarah Lan,Westtown B,5,0,0,15,15,0,0.0
-125,113,Seojin Kim,WCHS B,5,0,0,15,15,0,0.0
-126,108,Shivum Arora,Poolesville 2,1,0,0,3,3,0,0.0
-127,96,Sonia Lin,WCHS C,5,0,0,15,15,0,0.0
-128,73,Steven Qi,WCHS A,3,0,0,4,4,0,0.0
-129,114,TaeHee Kim,WCHS B,5,0,0,15,15,0,0.0
-130,125,Vikram Gidwani,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
-131,143,Vivaan Samara,WCHS C,1,0,0,3,3,0,0.0
-132,127,Will Luo,WWPN B,5,0,0,15,15,0,0.0
-133,3,Yeojune Yun,Centre,1,0,0,3,3,0,0.0
-134,11,Yeojune Yun,Centreville HS Team 1,6,0,0,14,14,0,0.0
-135,117,Sreekar Karra,Shallow Stroll Team B,5,1,2,12,15,-4,-0.8
-136,111,Alice Wan,The Wilberforce School,5,0,1,14,15,-4,-0.8
-137,20,Andrew Feng,North Allegheny,7,0,1,17,18,-4,-0.5714285714285714
-138,103,Jayden Qin,Westtown B,5,0,1,14,15,-4,-0.8
-139,121,Rithik Natarajan,Shallow Stroll Team B,5,0,1,12,13,-4,-0.8
+20,124,Andrew Li,WWPN B,5,3,0,12,15,12,2.4
+21,94,Angela Wang,Westtown A,5,3,0,12,15,12,2.4
+22,19,Ian Wang,Basis,7,3,0,18,21,12,1.7142857142857142
+23,38,Ishaan Arya,WWPN A,7,3,0,18,21,12,1.7142857142857142
+24,1,Pritham Singh,Centreville HS Team 1,7,3,0,18,21,12,1.7142857142857142
+25,58,Arman Ayazi,Montgomery Blair B,7,4,2,15,21,8,1.1428571428571428
+26,46,Abhinav Anand,Gargy Bomy,7,3,1,17,21,8,1.1428571428571428
+27,71,Keshav Ramaswamy,Richard Montgomery,6,3,1,13,17,8,1.3333333333333333
+28,68,Andrew Li,WCHS A,7,2,0,19,21,8,1.1428571428571428
+29,2,Arjun Ganesan,Centreville HS Team 1,6,2,0,16,18,8,1.3333333333333333
+30,102,Daniel Zhang,Poolesville 2,5,2,0,13,15,8,1.6
+31,50,Dhairya Mathur,Gargy Bomy,5,2,0,6,8,8,1.6
+32,39,Easton Wei,WWPN A,7,2,0,19,21,8,1.1428571428571428
+33,34,Eli Segal,Eagles C,7,2,0,19,21,8,1.1428571428571428
+34,57,Henry Lu,Montgomery Blair B,7,2,0,19,21,8,1.1428571428571428
+35,14,Jason Liu,North Allegheny,7,2,0,15,17,8,1.1428571428571428
+36,122,Krivi Partani,WWPN B,5,2,0,13,15,8,1.6
+37,15,Leonardo Yu,North Allegheny,7,2,0,17,19,8,1.1428571428571428
+38,105,Matthew Hettena,The Wilberforce School,5,2,0,13,15,8,1.6
+39,129,Quinn Lam-Vu,Thomas S Wootton High School team A,5,2,0,11,13,8,1.6
+40,41,Rishvanth Balasubramanian,Shallow Walk team A,6,2,0,16,18,8,1.3333333333333333
+41,35,Ryan Yang,Eagles C,7,2,0,19,21,8,1.1428571428571428
+42,51,Sophia Guo,Kiruna Scholars,6,2,0,15,17,8,1.3333333333333333
+43,76,Vishruth Kadiyala,Eagles A,6,2,0,11,13,8,1.3333333333333333
+44,82,Matthew Yang,Centennial A,5,3,2,10,15,4,0.8
+45,25,Monish Saravana Kumar,South Jersey,7,3,2,16,21,4,0.5714285714285714
+46,66,Beirui Zhang,WCHS A,7,2,1,18,21,4,0.5714285714285714
+47,7,Angelina Li,Eagles A,7,1,0,20,21,4,0.5714285714285714
+48,103,Ankush Karmakar,Poolesville 2,5,1,0,14,15,4,0.8
+49,95,Ben D'Alessandro,Westtown A,5,1,0,14,15,4,0.8
+50,73,Caleb Wen,poolesville village idiots,7,1,0,20,21,4,0.5714285714285714
+51,120,Chaitan Praveen,Thomas S Wootton High School team B,5,1,0,14,15,4,0.8
+52,128,Christina Chow,Thomas S Wootton High School team A,5,1,0,11,12,4,0.8
+53,10,David He,Richard Montgomery,6,1,0,14,15,4,0.6666666666666666
+54,79,Ellie Leung,Pilgrimage Homeschool,5,1,0,14,15,4,0.8
+55,90,Evelyn Wang,WCHS C,5,1,0,14,15,4,0.8
+56,49,Jason Mak,Gargy Bomy,6,1,0,12,13,4,0.6666666666666666
+57,100,Jasraj Bhatia,Poolesville 2,5,1,0,14,15,4,0.8
+58,18,Kaartic Muralidharan,North Allegheny,4,1,0,9,10,4,1.0
+59,31,Lilly Yang,Eagles B,7,1,0,20,21,4,0.5714285714285714
+60,33,Matthew Du,Eagles C,7,1,0,20,21,4,0.5714285714285714
+61,55,Nathan Liang,Kiruna Scholars,5,1,0,13,14,4,0.8
+62,21,Neel Jain,Basis,7,1,0,20,21,4,0.5714285714285714
+63,44,Prithwish Chatterjee,Shallow Walk team A,6,1,0,11,12,4,0.6666666666666666
+64,83,Ray Gao,Centennial A,5,1,0,14,15,4,0.8
+65,112,Rebecca Loving,WCHS B,5,1,0,14,15,4,0.8
+66,106,Richmond Darrow,The Wilberforce School,5,1,0,14,15,4,0.8
+67,111,Ritisha Das,WCHS B,5,1,0,14,15,4,0.8
+68,42,Riyan Nayak,Shallow Walk team A,6,1,0,17,18,4,0.6666666666666666
+69,13,Sedric Su,Richard Montgomery,6,1,0,13,14,4,0.6666666666666666
+70,81,Shravan Yoagentharan,Centennial A,5,1,0,14,15,4,0.8
+71,96,Tessa Kipnis,Westtown A,5,1,0,14,15,4,0.8
+72,89,Vivian Samara,WCHS C,4,1,0,11,12,4,1.0
+73,56,William Qian,Montgomery Blair B,7,1,0,16,17,4,0.5714285714285714
+74,116,Yunay Vaddi,Shallow Stroll Team B,4,1,0,8,9,4,1.0
+75,67,Aaron Zhou,WCHS A,7,3,3,15,21,0,0.0
+76,131,Cody Gao,Thomas S Wootton High School team A,4,2,2,6,10,0,0.0
+77,27,Akhil Mandapati,South Jersey,7,1,1,11,13,0,0.0
+78,60,Kenneth Liu,Montgomery Blair B,4,1,1,5,7,0,0.0
+79,48,Likhith Malipati,Gargy Bomy,7,1,1,19,21,0,0.0
+80,37,Aahan Mahakud,WWPN A,7,0,0,21,21,0,0.0
+81,84,Aakanksh Govada,Centennial A,5,0,0,15,15,0,0.0
+82,101,Aarav Mohindru,Poolesville 2,5,0,0,15,15,0,0.0
+83,135,Aayu Rastogi,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
+84,69,Allen Chang,WCHS A,7,0,0,17,17,0,0.0
+85,29,Allen Liu,Eagles B,7,0,0,21,21,0,0.0
+86,74,Alvin Tong,poolesville village idiots,7,0,0,21,21,0,0.0
+87,91,Amy Xu,WCHS C,5,0,0,15,15,0,0.0
+88,88,Arjun,Centreville HS Team 1,1,0,0,3,3,0,0.0
+89,127,Arun Kompella,Thomas S Wootton High School team A,5,0,0,13,13,0,0.0
+90,134,Callie Gao,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
+91,64,Chris Wang,Montgomery Blair A,6,0,0,16,16,0,0.0
+92,132,Christina Teng,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
+93,75,Denis Motuzenko,poolesville village idiots,7,0,0,21,21,0,0.0
+94,26,Dennis Ji,South Jersey,7,0,0,21,21,0,0.0
+95,114,Dheeran Seelam,Shallow Stroll Team B,3,0,0,9,9,0,0.0
+96,77,Eliana Hogan,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
+97,54,Eric Xie,Kiruna Scholars,6,0,0,18,18,0,0.0
+98,23,Gyan Chande,South Jersey,5,0,0,8,8,0,0.0
+99,119,Hyunjoon Song,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
+100,4,Ishaan Nandamudi,Centreville HS Team 1,4,0,0,10,10,0,0.0
+101,93,Jamie Lee,Westtown A,5,0,0,15,15,0,0.0
+102,138,Jeddy,WWPN B,3,0,0,9,9,0,0.0
+103,125,Jeddy Yu,WWPN B,2,0,0,6,6,0,0.0
+104,80,Joshie Cheng,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
+105,22,Jueon Kim,Basis,7,0,0,21,21,0,0.0
+106,108,Julian Lin,The Wilberforce School,5,0,0,15,15,0,0.0
+107,61,Kevin Feng,Montgomery Blair A,5,0,0,13,13,0,0.0
+108,98,Leila Alobeidy,Westtown B,5,0,0,15,15,0,0.0
+109,78,Leila Indharasophang,Pilgrimage Homeschool,5,0,0,15,15,0,0.0
+110,87,Litish Deepa,Centennial B,5,0,0,15,15,0,0.0
+111,130,Louis Wang,Thomas S Wootton High School team A,5,0,0,12,12,0,0.0
+112,5,Max Xu,Eagles A,4,0,0,8,8,0,0.0
+113,136,Nagadheeran,Shallow Stroll Team B,1,0,0,2,2,0,0.0
+114,45,Nimit Agarwal,Shallow Walk team A,6,0,0,6,6,0,0.0
+115,118,Peter Foerster,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
+116,133,Ricky Bam,Thomas S Wootton High School team C,5,0,0,15,15,0,0.0
+117,53,Rohan Bairi,Kiruna Scholars,6,0,0,14,14,0,0.0
+118,115,Ruohan Xu,Shallow Stroll Team B,4,0,0,12,12,0,0.0
+119,9,Ryan Hyon,Centreville HS Team 1,6,0,0,15,15,0,0.0
+120,65,Sam Easaw,Montgomery Blair A,5,0,0,7,7,0,0.0
+121,97,Sarah Lan,Westtown B,5,0,0,15,15,0,0.0
+122,109,Seojin Kim,WCHS B,5,0,0,15,15,0,0.0
+123,104,Shivum Arora,Poolesville 2,1,0,0,3,3,0,0.0
+124,92,Sonia Lin,WCHS C,5,0,0,15,15,0,0.0
+125,70,Steven Qi,WCHS A,3,0,0,4,4,0,0.0
+126,110,TaeHee Kim,WCHS B,5,0,0,15,15,0,0.0
+127,121,Vikram Gidwani,Thomas S Wootton High School team B,5,0,0,15,15,0,0.0
+128,139,Vivaan Samara,WCHS C,1,0,0,3,3,0,0.0
+129,123,Will Luo,WWPN B,5,0,0,15,15,0,0.0
+130,3,Yeojune Yun,Centreville HS Team 1,7,0,0,17,17,0,0.0
+131,113,Sreekar Karra,Shallow Stroll Team B,5,1,2,12,15,-4,-0.8
+132,107,Alice Wan,The Wilberforce School,5,0,1,14,15,-4,-0.8
+133,17,Andrew Feng,North Allegheny,7,0,1,17,18,-4,-0.5714285714285714
+134,99,Jayden Qin,Westtown B,5,0,1,14,15,-4,-0.8
+135,117,Rithik Natarajan,Shallow Stroll Team B,5,0,1,12,13,-4,-0.8
