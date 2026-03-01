@@ -229,8 +229,8 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
     if export_obj.get("format") != "moss_scoresheet":
         raise ValueError("Unsupported export format (expected moss_scoresheet)")
     version = export_obj.get("version")
-    if version not in {1, 2}:
-        raise ValueError("Unsupported export version (expected 1 or 2)")
+    if version not in {1, 2, 3}:
+        raise ValueError("Unsupported export version (expected 1, 2, or 3)")
 
     packet = _require_dict(export_obj.get("packet"), "packet")
     packet_questions = _require_list(packet.get("questions"), "packet.questions")
@@ -256,12 +256,21 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
         team_obj = _require_dict(team_obj_any, f"game.teams[{idx}]")
         teams.append(team_obj)
 
-    # Establish team identity for matching attempts: prefer "name"; fall back to "id".
+    # Establish team identity for matching attempts.
+    # - v1/v2 exports use names in `state` attempts, so prefer the team name as the key.
+    # - v3 exports use `team_id` in `state` attempts, so prefer the team id as the key.
     team_keys: list[str] = []
     team_names: list[str] = []
     for idx, team_obj in enumerate(teams):
         name = team_obj.get("name")
         team_id = team_obj.get("id")
+        if version == 3 and team_id is not None:
+            team_keys.append(str(team_id))
+            if isinstance(name, str) and name.strip():
+                team_names.append(name.strip())
+            else:
+                team_names.append(str(team_id))
+            continue
         if isinstance(name, str) and name.strip():
             canonical = name.strip()
             team_keys.append(canonical)
@@ -282,18 +291,24 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
     # Player roster per team (names). This is used for individual facts and as a fallback
     # for lineup segment validation.
     roster_by_team: dict[str, list[str]] = {}
+    player_name_by_team_and_id: dict[str, dict[str, str]] = {}
     lineup_segments_by_team: dict[str, list[dict[str, Any]]] = {}
     for team_key, team_obj in zip(team_keys, teams, strict=True):
         players_any = team_obj.get("players") or []
         players_out: list[str] = []
+        player_name_by_id: dict[str, str] = {}
         if isinstance(players_any, list):
             for item in players_any:
                 if isinstance(item, str):
                     if item.strip():
                         players_out.append(item)
                 elif isinstance(item, dict) and isinstance(item.get("name"), str):
-                    players_out.append(item["name"])
+                    name = item["name"]
+                    players_out.append(name)
+                    if "id" in item and item["id"] is not None:
+                        player_name_by_id[str(item["id"])] = str(name)
         roster_by_team[team_key] = players_out
+        player_name_by_team_and_id[team_key] = player_name_by_id
         lineup_segments_by_team[team_key] = _iter_lineup_segments(team_obj)
 
     # Compute per-player tossups heard using lineup_segments (preferred).
@@ -318,12 +333,22 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
             end_clamped = max(1, min(pairs_played, end))
             length = max(0, end_clamped - start_clamped + 1)
 
-            active_any = seg.get("active_players") or seg.get("active_player_ids") or []
+            active_any = seg.get("active_players")
+            active_is_ids = False
+            if active_any is None:
+                active_any = seg.get("active_player_ids")
+                active_is_ids = active_any is not None
+            if active_any is None:
+                active_any = []
             if not isinstance(active_any, list):
                 raise ValueError(f"game.teams[].lineup_segments[{seg_idx}].active_players must be a list")
 
             for player_any in active_any:
-                if isinstance(player_any, dict) and isinstance(player_any.get("name"), str):
+                if active_is_ids:
+                    pid = str(player_any)
+                    resolved = player_name_by_team_and_id.get(team_key, {}).get(pid)
+                    player_name = resolved if isinstance(resolved, str) and resolved.strip() else pid
+                elif isinstance(player_any, dict) and isinstance(player_any.get("name"), str):
                     player_name = player_any["name"]
                 else:
                     player_name = str(player_any)
@@ -383,8 +408,20 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
                 pass
 
             if outcome not in {tossup_no_penalty} and picked and not _is_no_penalty_marker(picked):
-                player_name = picked.get("player")
-                if isinstance(player_name, str) and player_name.strip():
+                player_name_any = picked.get("player")
+                if isinstance(player_name_any, str) and player_name_any.strip():
+                    player_name = player_name_any.strip()
+                else:
+                    pid_any = picked.get("player_id")
+                    pid = None if pid_any is None else str(pid_any)
+                    resolved = player_name_by_team_and_id.get(team_key, {}).get(pid or "")
+                    player_name = (
+                        resolved.strip()
+                        if isinstance(resolved, str) and resolved.strip()
+                        else (pid.strip() if isinstance(pid, str) and pid.strip() else "")
+                    )
+
+                if player_name:
                     ps = player_stats.get((team_key, player_name))
                     if ps is None:
                         player_stats[(team_key, player_name)] = {
@@ -475,8 +512,8 @@ def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) ->
     if export_obj.get("format") != "moss_scoresheet":
         raise ValueError("Unsupported export format (expected moss_scoresheet)")
     version = export_obj.get("version")
-    if version not in {1, 2}:
-        raise ValueError("Unsupported export version (expected 1 or 2)")
+    if version not in {1, 2, 3}:
+        raise ValueError("Unsupported export version (expected 1, 2, or 3)")
 
     packet = _require_dict(export_obj.get("packet"), "packet")
     packet_questions = _require_list(packet.get("questions"), "packet.questions")
@@ -510,14 +547,32 @@ def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) ->
 
     team_keys: list[str] = []
     team_names: list[str] = []
+    player_name_by_team_and_id: dict[str, dict[str, str]] = {}
     for idx, team_obj in enumerate(teams):
         name = team_obj.get("name")
-        if isinstance(name, str) and name.strip():
+        team_id = team_obj.get("id")
+
+        if version == 3 and team_id is not None:
+            team_key = str(team_id)
+            team_keys.append(team_key)
+            if isinstance(name, str) and name.strip():
+                team_names.append(name.strip())
+            else:
+                team_names.append(team_key)
+        else:
+            if not isinstance(name, str) or not name.strip():
+                raise ValueError(f"game.teams[{idx}].name must be a non-empty string")
             canonical = name.strip()
             team_keys.append(canonical)
             team_names.append(canonical)
-            continue
-        raise ValueError(f"game.teams[{idx}].name must be a non-empty string")
+
+        players_any = team_obj.get("players") or []
+        player_name_by_id: dict[str, str] = {}
+        if isinstance(players_any, list):
+            for item in players_any:
+                if isinstance(item, dict) and item.get("id") is not None and isinstance(item.get("name"), str):
+                    player_name_by_id[str(item["id"])] = item["name"].strip()
+        player_name_by_team_and_id[team_keys[-1]] = player_name_by_id
 
     if len(team_keys) != 2:
         raise ValueError("Expected exactly 2 teams in export")
@@ -561,9 +616,15 @@ def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) ->
 
                 buzzing_player: str | None = None
                 if points not in {tossup_no_penalty} and picked and not _is_no_penalty_marker(picked):
-                    player_name = picked.get("player")
-                    if isinstance(player_name, str) and player_name.strip():
-                        buzzing_player = player_name
+                    player_name_any = picked.get("player")
+                    if isinstance(player_name_any, str) and player_name_any.strip():
+                        buzzing_player = player_name_any.strip()
+                    else:
+                        pid_any = picked.get("player_id")
+                        pid = None if pid_any is None else str(pid_any)
+                        resolved = player_name_by_team_and_id.get(team_key, {}).get(pid or "")
+                        if isinstance(resolved, str) and resolved.strip():
+                            buzzing_player = resolved.strip()
 
                 meta = question_meta_by_id.get(tossup_qid) or {}
                 cat = meta.get("category")
