@@ -1,11 +1,11 @@
-﻿# MoSS Scoresheet Export JSON (v1/v2)
+# MoSS Scoresheet Export JSON (v1/v2/v3)
 
 This document specifies the JSON format used to export a MoSS match scoresheet (i.e., the marking state that drives the live scoresheet UI).
 
 ## File identification
 
 - `format` (string, required): Must be `"moss_scoresheet"`.
-- `version` (number, required): Format version. This document describes `1` and `2`.
+- `version` (number, required): Format version. This document describes `1`, `2`, and `3`.
 - `exported_at` (string, required): ISO-8601 timestamp (UTC recommended), e.g. `"2026-01-01T00:00:00Z"`.
 - `snapshot_meta` (object, optional): Metadata used for human-friendly filenames and S3 snapshot keying.
 
@@ -55,7 +55,17 @@ Teams and players used for display and for attributing attempts.
 - `teams` (array, required)
   - Each team:
     - `name` (string, required): Team name. Assumed unique within the export.
-    - `players` (array of strings, required): Player display names.
+    - `id` (string, required in v3): Team id (opaque).
+    - `players` (required)
+      - v1/v2: array of strings (player display names).
+      - v3: array of objects:
+        - `id` (string, required): Player id (opaque).
+        - `name` (string, required): Player display name.
+    - `lineup_segments` (array, optional): Encodes lineup segments for substitutions.
+      - `start_tossup` (number, required)
+      - `end_tossup` (number or null, required): Inclusive. `null` means "to end of game".
+      - v1/v2: `active_players` (array of strings): Player display names.
+      - v3: `active_player_ids` (array of strings): Player ids.
 
 ### `rules` (object, required)
 Scoring rules used to interpret attempts.
@@ -83,13 +93,17 @@ The authoritative event stream for the scoresheet. Exported in v2 and later.
 - `client_ts` (string or null, optional): Client timestamp.
 - `payload` (object, required): Event payload.
 
-### `state` (object, required in v1, optional in v2)
+Notes:
+- In v3 exports, event payload fields like `team_id` / `player_id` refer to `game.teams[].id` and `game.teams[].players[].id`.
+- Treat ids as opaque strings (do not parse/assume structure).
+
+### `state` (object, required in v1, optional in v2+)
 The canonical marking state. A scoresheet table is not exported because it is derivable.
 
 - `pair_index` (number, required): Zero-based index of the current pair (UI position).
 - `attempts_by_question_id` (object, required): Map from question id (as a JSON string key) to a list of attempts.
 
-#### Attempt object
+#### Attempt object (v1/v2)
 - `team` (string, required): Team name.
 - `player` (string or null, required): Player name if applicable, otherwise null.
 - `result` (string, required): `"correct"` or `"incorrect"`.
@@ -104,16 +118,25 @@ The canonical marking state. A scoresheet table is not exported because it is de
     - `word_index` (number, required)
   - If `kind == "end"`: no additional fields.
 
+#### Attempt object (v3)
+- `team_id` (string, required): Team id.
+- `player_id` (string or null, required): Player id if applicable, otherwise null.
+- `result` (string, required): `"correct"` or `"incorrect"`.
+- `token` (string, required): The UI token string shown for the attempt (e.g. a word or option text).
+- `is_end` (boolean, required): Whether this attempt corresponds to an end-of-question marker.
+- `location` (object, required): Where the attempt occurred (same shape as v1/v2).
+
 Notes:
 - Absence of an attempt means nothing happened for that team/question (there is no separate "no attempt" record).
-- This format assumes team names are unique within the export.
+- v1/v2 assumes team names are unique within the export.
+- v3 assumes team ids are unique within the export.
 
-## Example (v2)
+## Example (v3)
 
 ```json
 {
   "format": "moss_scoresheet",
-  "version": 2,
+  "version": 3,
   "exported_at": "2026-01-01T00:00:00Z",
   "snapshot_meta": {
     "tournament_slug": "custom",
@@ -126,17 +149,54 @@ Notes:
   "packet": {
     "packet": "Round 1",
     "year": 2025,
-    "questions": []
+    "questions": [
+      {
+        "id": 1,
+        "pair_id": 1,
+        "question_type": "TOSSUP",
+        "question_style": "SHORT_ANSWER",
+        "category": "PHYSICS",
+        "question_text": "Example tossup question text.",
+        "options": [],
+        "correct_answer": "Example",
+        "source": "EXAMPLE_2025"
+      },
+      {
+        "id": 2,
+        "pair_id": 1,
+        "question_type": "BONUS",
+        "question_style": "SHORT_ANSWER",
+        "category": "PHYSICS",
+        "question_text": "Example bonus question text.",
+        "options": [],
+        "correct_answer": "Example",
+        "source": "EXAMPLE_2025"
+      }
+    ]
   },
   "packet_checksum": {
     "algorithm": "sha256",
     "canonicalization": "json_sorted_keys_utf8_no_ws",
-    "value": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    "value": "2c83c291c4daaacbc64e3b4a284aee56e9832cd89b445a357a61204217dbfb0e"
   },
   "game": {
     "teams": [
-      { "name": "Team A", "players": ["Alice", "Bob"] },
-      { "name": "Team B", "players": ["Carol", "Dan"] }
+      {
+        "id": "team_0a1b2c3_17f1b2c3d4",
+        "name": "Team A",
+        "players": [
+          { "id": "player_aa11bb22_17f1b2c3d4", "name": "Alice" },
+          { "id": "player_cc33dd44_17f1b2c3d4", "name": "Bob" }
+        ]
+      },
+      {
+        "id": "team_4d5e6f7_17f1b2c3d4",
+        "name": "Team B",
+        "players": [
+          { "id": "player_ee55ff66_17f1b2c3d4", "name": "Carol" },
+          { "id": "player_11223344_17f1b2c3d4", "name": "Dan" }
+        ]
+      }
     ]
   },
   "rules": {
@@ -144,7 +204,7 @@ Notes:
     "bonus": { "correct": 10, "incorrect": 0 }
   },
   "event_log": {
-    "scoresheet_id": 123,
+    "scoresheet_id": null,
     "next_seq": 2,
     "events": [
       {
@@ -155,8 +215,8 @@ Notes:
         "client_ts": "2026-01-01T00:00:00Z",
         "payload": {
           "question_id": 1,
-          "team_id": 1,
-          "player_id": 10,
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": "player_aa11bb22_17f1b2c3d4",
           "result": "correct",
           "token": "Alps",
           "is_end": false,
@@ -170,12 +230,22 @@ Notes:
     "attempts_by_question_id": {
       "1": [
         {
-          "team": "Team A",
-          "player": "Alice",
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": "player_aa11bb22_17f1b2c3d4",
           "result": "correct",
           "token": "Alps",
           "is_end": false,
           "location": { "kind": "question", "word_index": 2 }
+        }
+      ],
+      "2": [
+        {
+          "team_id": "team_0a1b2c3_17f1b2c3d4",
+          "player_id": null,
+          "result": "correct",
+          "token": "BONUS",
+          "is_end": true,
+          "location": { "kind": "end" }
         }
       ]
     }

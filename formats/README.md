@@ -21,7 +21,7 @@ Non-breaking rule:
 - Example + consumer: `apps/moss/frontend/src/assets/sample_packet.json`, `apps/moss/frontend/src/App.tsx`
 - Index entry: `formats/moss/packet/`
 
-### MoSS scoresheet export JSON (`moss_scoresheet`, v1/v2)
+### MoSS scoresheet export JSON (`moss_scoresheet`, v1/v2/v3)
 - Producer/consumer: `apps/moss/frontend/src/App.tsx`
 - Index entry: `formats/moss/scoresheet-export/`
 
