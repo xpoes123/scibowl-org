@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { TournamentDetail, TournamentLink, TournamentStatus } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
@@ -95,6 +95,21 @@ function findLink(tournament: TournamentDetail, type: TournamentLink["type"]) {
   return tournament.links?.find((link) => link.type === type);
 }
 
+function scrollChildIntoViewX(container: HTMLElement, child: HTMLElement, behavior: ScrollBehavior) {
+  const containerRect = container.getBoundingClientRect();
+  const childRect = child.getBoundingClientRect();
+
+  const childLeft = childRect.left - containerRect.left + container.scrollLeft;
+  const childRight = childLeft + childRect.width;
+  const visibleLeft = container.scrollLeft;
+  const visibleRight = visibleLeft + container.clientWidth;
+
+  if (childLeft >= visibleLeft && childRight <= visibleRight) return;
+
+  const targetLeft = childLeft - (container.clientWidth - childRect.width) / 2;
+  container.scrollTo({ left: Math.max(0, targetLeft), behavior });
+}
+
 function OverviewSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="py-6 first:pt-0 border-t border-[var(--sb-border)] first:border-t-0">
@@ -188,12 +203,25 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   }, [fieldDisabled, hasStandings, isLive, isUpcoming, resultsLink, statsLink]);
 
   const [activeTab, setActiveTab] = useState<TabId>("overview");
+  const tabNavRef = useRef<HTMLDivElement | null>(null);
+  const standingsSubNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const active = tabs.find((tab) => tab.id === activeTab);
     if (active && !active.disabled) return;
     const firstEnabled = tabs.find((tab) => !tab.disabled);
     if (firstEnabled) setActiveTab(firstEnabled.id);
+  }, [activeTab, tabs]);
+
+  useEffect(() => {
+    const nav = tabNavRef.current;
+    if (!nav) return;
+
+    const activeButton = nav.querySelector<HTMLElement>(`#tab-${activeTab}`);
+    if (!activeButton) return;
+
+    const reducedMotion = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    scrollChildIntoViewX(nav, activeButton, reducedMotion ? "auto" : "smooth");
   }, [activeTab, tabs]);
 
   const logisticsBullets = tournament.notes?.logistics ? splitLogistics(tournament.notes.logistics) : [];
@@ -203,9 +231,21 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const showStandingsSubnav = activeTab === "results" && categories.length > 0;
 
+  useEffect(() => {
+    if (!showStandingsSubnav) return;
+    const nav = standingsSubNavRef.current;
+    if (!nav) return;
+
+    const activeButton = nav.querySelector<HTMLElement>('button[aria-pressed="true"]');
+    if (!activeButton) return;
+
+    const reducedMotion = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    scrollChildIntoViewX(nav, activeButton, reducedMotion ? "auto" : "smooth");
+  }, [showStandingsSubnav, standingsCategoryKey]);
+
   return (
     <div className="card sbTabsCard" aria-label="Tournament details">
-      <div className="sbTabNav" role="tablist" aria-label="Tournament sections">
+      <div ref={tabNavRef} className="sbTabNav" role="tablist" aria-label="Tournament sections">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -227,7 +267,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       </div>
 
       {showStandingsSubnav && (
-        <div className="sbTabSubNav" role="navigation" aria-label="Standings views">
+        <div ref={standingsSubNavRef} className="sbTabSubNav" role="navigation" aria-label="Standings views">
           <button
             type="button"
             className={standingsCategoryKey === "overall" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
