@@ -38,6 +38,7 @@ SHEET_TO_CATEGORY = {
     "Energy": "ENERGY",
 }
 
+
 # Subject sheet column structure: D=Tossup1, E=Bonus1, F=Tossup2, G=Bonus2, ...
 # Column D has openpyxl 1-indexed value 4.
 # Even offset from D (0, 2, 4...) = Tossup; odd (1, 3, 5...) = Bonus
@@ -45,6 +46,22 @@ def col_to_question_type(col_letter: str) -> str:
     col_1idx = column_index_from_string(col_letter)
     d_1idx = column_index_from_string("D")  # = 4
     return "TOSSUP" if (col_1idx - d_1idx) % 2 == 0 else "BONUS"
+
+
+def smartify_quotes(text: str) -> str:
+    """Convert straight ASCII quotes to directional Unicode quotes."""
+    result = []
+    in_double = False
+    for i, ch in enumerate(text):
+        if ch == '"':
+            result.append('\u201d' if in_double else '\u201c')
+            in_double = not in_double
+        elif ch == "'":
+            prev = text[i - 1] if i > 0 else ''
+            result.append('\u2019' if prev.isalnum() or prev in ')]}' else '\u2018')
+        else:
+            result.append(ch)
+    return ''.join(result)
 
 
 def parse_question(raw) -> dict | None:
@@ -95,12 +112,12 @@ def parse_question(raw) -> dict | None:
             options = [m[1].strip() for m in option_matches]
             ans_match = ANSWER_RE.match(answer_block)
             if ans_match:
-                letter_match = re.match(r"([WXYZ])\)", answer_block[ans_match.end():])
+                letter_match = re.match(r"([WXYZ])\)", answer_block[ans_match.end() :])
                 if letter_match:
                     return {
                         "question_style": "MULTIPLE_CHOICE",
-                        "question_text": stem,
-                        "options": options,
+                        "question_text": smartify_quotes(stem),
+                        "options": [smartify_quotes(o) for o in options],
                         "correct_answer": letter_match.group(1).upper(),
                     }
 
@@ -110,19 +127,19 @@ def parse_question(raw) -> dict | None:
         answer_block = blocks[-1].strip()
         ans_match = ANSWER_RE.match(answer_block)
         if ans_match:
-            answer = strip_tags(answer_block[ans_match.end():])
+            answer = strip_tags(answer_block[ans_match.end() :])
             return {
                 "question_style": "SHORT_ANSWER",
-                "question_text": stem,
+                "question_text": smartify_quotes(stem),
                 "options": [],
-                "correct_answer": answer,
+                "correct_answer": smartify_quotes(answer),
             }
 
     # Fallback — couldn't parse structure
     print(f"  WARNING: Could not parse question text, storing raw", file=sys.stderr)
     return {
         "question_style": "SHORT_ANSWER",
-        "question_text": text,
+        "question_text": smartify_quotes(text),
         "options": [],
         "correct_answer": "",
     }
@@ -130,7 +147,15 @@ def parse_question(raw) -> dict | None:
 
 def get_fill_rgb(cell) -> str | None:
     try:
-        return cell.fill.fgColor.rgb
+        fg = cell.fill.fgColor
+        # If the color is stored as an RGB value, return it directly
+        if fg.type == "rgb" and fg.rgb not in ("00000000", "FF000000"):
+            return fg.rgb
+        # For solid fills, Excel sometimes stores the color in bgColor
+        bg = cell.fill.bgColor
+        if bg.type == "rgb" and bg.rgb not in ("00000000", "FF000000"):
+            return bg.rgb
+        return None
     except Exception:
         return None
 
@@ -142,11 +167,14 @@ def read_compiling_sheet(wb) -> list[tuple[str, list[dict]]]:
     The sheet is structured in 5-row blocks:
         i+0  Round label row  (col A = "ROUND ROBIN 1", blue fill = wanted)
         i+1  Question number row  ("1)", "1)", "2)", "2)", ...)
-        i+2  (unused by us)
+        i+2  Sheet name row  (B=Bio, C=Physics, ...)  ← INDIRECT first arg
         i+3  Question-type detection formulas (IFERROR/MC/SA)
-        i+4  Question text formula row  (=Bio!D2, =Physics!D2, ...)
+        i+4  Question text formula row  =INDIRECT(B3&"!"&B$86&$CR5)
 
-    Category and TOSSUP/BONUS are derived from the formula references.
+    The INDIRECT formula resolves as:
+        sheet name  = row i+2, same column as formula cell
+        col letter  = row 86 (fixed), same column as formula cell
+        subject row = column CR of the formula row (same for all slots in a round)
 
     Returns list of (round_label, columns) where columns is a list of:
         {
@@ -161,31 +189,42 @@ def read_compiling_sheet(wb) -> list[tuple[str, list[dict]]]:
     rows = list(sheet.iter_rows(values_only=False))
     wanted = []
 
+    # Row 86 (0-indexed: 85) holds the subject-sheet column letter per question slot
+    col_letter_row = rows[85] if len(rows) > 85 else []
     i = 0
     while i < len(rows):
         col_a = rows[i][0]
-
         if col_a.value and get_fill_rgb(col_a) == BLUE_FILL:
             if i + 4 < len(rows):
                 round_label = str(col_a.value).strip()
                 formula_row = rows[i + 4]
+                sheet_name_row = rows[i + 2]  # INDIRECT first arg: subject sheet name per column
                 columns = []
 
-                for form_cell in formula_row[1:]:  # skip col A
-                    if not form_cell.value:
-                        continue
-                    formula = str(form_cell.value).strip()
-                    fm = re.match(r"=(\w+)!([A-Z]+)(\d+)", formula)
-                    if not fm:
-                        continue
+                # CR column contains =CEILING((row()+5)/5,1) — a formula we can't
+                # read without data_only. Replicate it: formula row is at Excel row
+                # i+5 (1-indexed), so subject row = (i + 10) // 5.
+                excel_row = (i + 10) // 5
 
-                    sheet_name = fm.group(1)
-                    col_letter = fm.group(2)
-                    excel_row = int(fm.group(3))  # 1-indexed in subject sheet
+                for j in range(1, len(formula_row)):  # skip col A
+                    form_cell = formula_row[j]
+                    if form_cell.value is None:
+                        break  # end of question slots for this round
+
+                    sn_cell = sheet_name_row[j] if j < len(sheet_name_row) else None
+                    cl_cell = col_letter_row[j] if j < len(col_letter_row) else None
+                    sheet_name = str(sn_cell.value).strip() if (sn_cell and sn_cell.value) else None
+                    col_letter = str(cl_cell.value).strip() if (cl_cell and cl_cell.value) else None
+
+                    if not sheet_name or not col_letter:
+                        continue
 
                     category = SHEET_TO_CATEGORY.get(sheet_name)
                     if not category:
-                        print(f"  WARNING: Unknown sheet {sheet_name!r} in formula {formula!r}", file=sys.stderr)
+                        print(
+                            f"  WARNING: Unknown sheet {sheet_name!r}",
+                            file=sys.stderr,
+                        )
                         continue
 
                     q_type = col_to_question_type(col_letter)
@@ -248,6 +287,11 @@ def convert(excel_path: str, output_dir: str):
         for col in columns:
             raw = get_cell_value(col["sheet_name"], col["excel_row"], col["col_0idx"])
             parsed = parse_question(raw)
+
+            if parsed and col["category"] == "MATH":
+                parsed["question_text"] = parsed["question_text"].replace("-", "\u2212")
+                parsed["correct_answer"] = parsed["correct_answer"].replace("-", "\u2212")
+                parsed["options"] = [o.replace("-", "\u2212") for o in parsed["options"]]
 
             if parsed:
                 questions.append(
