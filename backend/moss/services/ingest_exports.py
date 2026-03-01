@@ -182,7 +182,10 @@ def ingest_scoresheet_exports(
             for slot, name in enumerate(team_names, start=1):
                 GameTeam.objects.using(using).create(game=game, tournament_team=tournament_teams[name], slot=slot)
 
-            # Players: accept either ["Name", ...] or [{"name": "Name"}, ...] just in case.
+            # Players:
+            # - v1/v2 exports: ["Name", ...]
+            # - v3 exports: [{"id": "...", "name": "Name"}, ...]
+            # Also accept [{"name": "Name"}, ...] as a best-effort legacy/hand-authored shape.
             roster_by_team: dict[str, list[str]] = {}
             player_name_by_id_by_team: dict[str, dict[str, str]] = {}
             for team_any in teams_any:
