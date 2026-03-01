@@ -1,10 +1,10 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,62,Evan Zhang,Montgomery Blair A,8,17,0,15,32,68,8.5
+1,62,Evan Zhang,Montgomery Blair A,9,20,0,16,36,80,8.88888888888889
 2,25,Monish Saravana Kumar,South Jersey,10,18,3,19,40,60,6.0
 3,43,Ryan Karim,Shallow Walk team A,8,17,2,12,31,60,7.5
 4,54,Eric Xie,Kiruna Scholars,10,15,1,24,40,56,5.6
 5,56,William Qian,Montgomery Blair B,8,14,2,11,27,48,6.0
-6,6,Kaiwen Yao,Eagles A,10,13,1,25,39,48,4.8
+6,6,Kaiwen Yao,Eagles A,11,13,1,29,43,48,4.363636363636363
 7,14,Jason Liu,North Allegheny,8,11,0,15,26,44,5.5
 8,39,Easton Wei,WWPN A,10,11,1,27,39,40,4.0
 9,72,Alex Wang,poolesville village idiots,9,9,0,27,36,36,4.0
@@ -24,8 +24,8 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 23,73,Caleb Wen,poolesville village idiots,9,4,0,32,36,16,1.7777777777777777
 24,26,Dennis Ji,South Jersey,10,4,0,36,40,16,1.6
 25,118,Peter Foerster,Thomas S Wootton High School team B,5,4,0,15,19,16,3.2
-26,63,Kian Dhawan,Montgomery Blair A,8,4,1,27,32,12,1.5
-27,5,Max Xu,Eagles A,7,4,1,13,18,12,1.7142857142857142
+26,63,Kian Dhawan,Montgomery Blair A,9,4,1,31,36,12,1.3333333333333333
+27,5,Max Xu,Eagles A,8,4,1,17,22,12,1.5
 28,86,Rohan Sengupta,Centennial B,5,4,1,15,20,12,2.4
 29,71,Keshav Ramaswamy,Richard Montgomery,9,3,0,31,34,12,1.3333333333333333
 30,82,Matthew Yang,Centennial A,5,3,0,16,19,12,2.4
@@ -37,9 +37,9 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 36,36,Aldric Benalan,WWPN A,10,2,0,37,39,8,0.8
 37,69,Allen Chang,WCHS A,7,2,0,18,20,8,1.1428571428571428
 38,91,Amy Xu,WCHS C,5,2,0,18,20,8,1.6
-39,7,Angelina Li,Eagles A,10,2,0,37,39,8,0.8
+39,7,Angelina Li,Eagles A,11,2,0,41,43,8,0.7272727272727273
 40,120,Chaitan Praveen,Thomas S Wootton High School team B,5,2,0,17,19,8,1.6
-41,64,Chris Wang,Montgomery Blair A,8,2,0,24,26,8,1.0
+41,64,Chris Wang,Montgomery Blair A,9,2,0,28,30,8,0.8888888888888888
 42,18,Kaartic Muralidharan,North Allegheny,7,2,0,16,18,8,1.1428571428571428
 43,33,Matthew Du,Eagles C,7,2,0,24,26,8,1.1428571428571428
 44,55,Nathan Liang,Kiruna Scholars,6,2,0,19,21,8,1.3333333333333333
@@ -57,7 +57,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 56,95,Ben D'Alessandro,Westtown A,5,1,0,19,20,4,0.8
 57,79,Ellie Leung,Pilgrimage Homeschool,5,1,0,19,20,4,0.8
 58,49,Jason Mak,Gargy Bomy,6,1,0,14,15,4,0.6666666666666666
-59,61,Kevin Feng,Montgomery Blair A,7,1,0,19,20,4,0.5714285714285714
+59,61,Kevin Feng,Montgomery Blair A,8,1,0,23,24,4,0.5
 60,8,Oliver Yang,Eagles A,9,1,0,34,35,4,0.4444444444444444
 61,111,Ritisha Das,WCHS B,5,1,0,19,20,4,0.8
 62,65,Sam Easaw,Montgomery Blair A,7,1,0,17,18,4,0.5714285714285714
@@ -125,7 +125,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 124,110,TaeHee Kim,WCHS B,5,0,0,20,20,0,0.0
 125,96,Tessa Kipnis,Westtown A,5,0,0,20,20,0,0.0
 126,121,Vikram Gidwani,Thomas S Wootton High School team B,5,0,0,19,19,0,0.0
-127,76,Vishruth Kadiyala,Eagles A,8,0,0,25,25,0,0.0
+127,76,Vishruth Kadiyala,Eagles A,9,0,0,29,29,0,0.0
 128,139,Vivaan Samara,WCHS C,1,0,0,4,4,0,0.0
 129,89,Vivian Samara,WCHS C,4,0,0,16,16,0,0.0
 130,3,Yeojune Yun,Centreville HS Team 1,7,0,0,20,20,0,0.0

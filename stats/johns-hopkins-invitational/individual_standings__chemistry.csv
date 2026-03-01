@@ -1,14 +1,14 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
 1,52,Hrishi Bhooma,Kiruna Scholars,11,27,2,15,44,100,9.090909090909092
 2,72,Alex Wang,poolesville village idiots,9,23,2,11,36,84,9.333333333333334
-3,47,Sanjay Oruganti,Gargy Bomy,8,20,3,8,31,68,8.5
-4,63,Kian Dhawan,Montgomery Blair A,8,18,1,13,32,68,8.5
+3,63,Kian Dhawan,Montgomery Blair A,9,20,1,15,36,76,8.444444444444445
+4,47,Sanjay Oruganti,Gargy Bomy,8,20,3,8,31,68,8.5
 5,43,Ryan Karim,Shallow Walk team A,8,18,2,12,32,64,8.0
 6,39,Easton Wei,WWPN A,10,16,1,22,39,60,6.0
 7,12,Andrew Zhao,Richard Montgomery,10,11,0,25,36,44,4.4
 8,11,Ethan Pei,Richard Montgomery,10,11,1,26,38,40,4.0
-9,76,Vishruth Kadiyala,Eagles A,8,10,1,16,27,36,4.5
-10,6,Kaiwen Yao,Eagles A,10,10,2,28,40,32,3.2
+9,6,Kaiwen Yao,Eagles A,11,11,2,31,44,36,3.272727272727273
+10,76,Vishruth Kadiyala,Eagles A,9,10,1,20,31,36,4.0
 11,36,Aldric Benalan,WWPN A,10,8,0,31,39,32,3.2
 12,15,Leonardo Yu,North Allegheny,8,9,2,19,30,28,3.5
 13,59,Abhijay Banerjee,Montgomery Blair B,8,7,0,20,27,28,3.5
@@ -37,7 +37,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 36,103,Ankush Karmakar,Poolesville 2,5,3,1,16,20,8,1.6
 37,58,Arman Ayazi,Montgomery Blair B,8,3,1,27,31,8,1.0
 38,131,Cody Gao,Thomas S Wootton High School team A,4,3,1,9,13,8,2.0
-39,62,Evan Zhang,Montgomery Blair A,8,3,1,28,32,8,1.0
+39,62,Evan Zhang,Montgomery Blair A,9,3,1,32,36,8,0.8888888888888888
 40,74,Alvin Tong,poolesville village idiots,9,2,0,34,36,8,0.8888888888888888
 41,17,Andrew Feng,North Allegheny,8,2,0,23,25,8,1.0
 42,124,Andrew Li,WWPN B,5,2,0,18,20,8,1.6
@@ -76,13 +76,13 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 75,101,Aarav Mohindru,Poolesville 2,5,0,0,20,20,0,0.0
 76,69,Allen Chang,WCHS A,7,0,0,19,19,0,0.0
 77,91,Amy Xu,WCHS C,5,0,0,20,20,0,0.0
-78,7,Angelina Li,Eagles A,10,0,0,40,40,0,0.0
+78,7,Angelina Li,Eagles A,11,0,0,44,44,0,0.0
 79,28,Anvita A,Eagles B,7,0,0,27,27,0,0.0
 80,88,Arjun,Centreville HS Team 1,1,0,0,4,4,0,0.0
 81,127,Arun Kompella,Thomas S Wootton High School team A,5,0,0,17,17,0,0.0
 82,134,Callie Gao,Thomas S Wootton High School team C,5,0,0,20,20,0,0.0
 83,120,Chaitan Praveen,Thomas S Wootton High School team B,5,0,0,20,20,0,0.0
-84,64,Chris Wang,Montgomery Blair A,8,0,0,28,28,0,0.0
+84,64,Chris Wang,Montgomery Blair A,9,0,0,32,32,0,0.0
 85,132,Christina Teng,Thomas S Wootton High School team C,5,0,0,20,20,0,0.0
 86,10,David He,Richard Montgomery,9,0,0,30,30,0,0.0
 87,75,Denis Motuzenko,poolesville village idiots,9,0,0,36,36,0,0.0
@@ -99,13 +99,13 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 98,80,Joshie Cheng,Pilgrimage Homeschool,5,0,0,20,20,0,0.0
 99,108,Julian Lin,The Wilberforce School,5,0,0,20,20,0,0.0
 100,18,Kaartic Muralidharan,North Allegheny,7,0,0,17,17,0,0.0
-101,61,Kevin Feng,Montgomery Blair A,7,0,0,19,19,0,0.0
+101,61,Kevin Feng,Montgomery Blair A,8,0,0,23,23,0,0.0
 102,122,Krivi Partani,WWPN B,5,0,0,20,20,0,0.0
 103,78,Leila Indharasophang,Pilgrimage Homeschool,5,0,0,20,20,0,0.0
 104,48,Likhith Malipati,Gargy Bomy,8,0,0,31,31,0,0.0
 105,31,Lilly Yang,Eagles B,7,0,0,27,27,0,0.0
 106,130,Louis Wang,Thomas S Wootton High School team A,5,0,0,16,16,0,0.0
-107,5,Max Xu,Eagles A,6,0,0,17,17,0,0.0
+107,5,Max Xu,Eagles A,7,0,0,21,21,0,0.0
 108,136,Nagadheeran,Shallow Stroll Team B,1,0,0,1,1,0,0.0
 109,55,Nathan Liang,Kiruna Scholars,6,0,0,20,20,0,0.0
 110,45,Nimit Agarwal,Shallow Walk team A,8,0,0,16,16,0,0.0
