@@ -32,8 +32,20 @@ agg AS (
   SELECT
     tournament_team_id,
     COUNT(DISTINCT game_id) AS games_played,
-    SUM(CASE WHEN points > opp_points THEN 1 ELSE 0 END) AS wins,
-    SUM(CASE WHEN points < opp_points THEN 1 ELSE 0 END) AS losses,
+    SUM(
+      CASE
+        WHEN points > opp_points THEN 1
+        WHEN points = opp_points THEN 0.5
+        ELSE 0
+      END
+    ) AS wins,
+    SUM(
+      CASE
+        WHEN points < opp_points THEN 1
+        WHEN points = opp_points THEN 0.5
+        ELSE 0
+      END
+    ) AS losses,
     SUM(points) AS points,
     SUM(tossups_heard) AS tossups_heard,
     SUM(tossups_4) AS tossups_4,
