@@ -12,7 +12,7 @@ These files are generated from MoSS export JSON files by building a temporary lo
   - `manifest.json` - metadata about the generated artifacts (schema version, generation time, and source exports).
   - `team_standings.csv` - overall team standings used by the website Standings tab.
   - `individual_standings.csv` - overall individual standings used by the website Standings tab.
-  - `team_standings__<category>.csv` - per-category team standings (wins/losses omitted).
+  - `team_standings__<category>.csv` - per-category team standings (includes GP; wins/losses omitted).
   - `individual_standings__<category>.csv` - per-category individual standings.
   - `field.json` - human-authored field + team rosters (used by the website Field tab and MoSS roster picker).
 - `stats/rosters/index.json`

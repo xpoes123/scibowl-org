@@ -44,6 +44,7 @@ SELECT
   ) AS rank,
   tt.id AS team_id,
   tt.name AS name,
+  agg.games_played AS games_played,
   CAST(agg.points AS REAL) / NULLIF(agg.games_played, 0) AS points_per_game,
   agg.tossups_4 AS "4s",
   agg.tossups_neg AS "-4s",

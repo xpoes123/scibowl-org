@@ -45,7 +45,9 @@ export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: Team
   const headers = [
     { key: "rank", label: "Rank", numeric: true },
     { key: "name", label: "Team" },
-    ...(showWinsLosses ? [{ key: "wins", label: "W", numeric: true }, { key: "losses", label: "L", numeric: true }] : []),
+    ...(showWinsLosses
+      ? [{ key: "wins", label: "W", numeric: true }, { key: "losses", label: "L", numeric: true }]
+      : [{ key: "gp", label: "GP", numeric: true }]),
     { key: "ppg", label: "PPG", numeric: true },
     { key: "4s", label: "4s", numeric: true },
     { key: "-4s", label: "-4s", numeric: true },
@@ -60,6 +62,7 @@ export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: Team
     name: r.name,
     wins: r.wins ?? 0,
     losses: r.losses ?? 0,
+    gp: r.games_played ?? 0,
     ppg: formatFixedNumber(r.points_per_game, 2),
     "4s": r["4s"],
     "-4s": r["-4s"],
