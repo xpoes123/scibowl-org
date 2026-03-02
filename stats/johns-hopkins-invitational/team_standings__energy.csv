@@ -1,6 +1,6 @@
 rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
-1,2,Eagles A,9,26.0,22,1,4,27,22,150,6.818181818181818
-2,14,Montgomery Blair A,8,25.25,19,1,4,24,19,130,6.842105263157895
+1,14,Montgomery Blair A,9,23.333333333333332,21,1,5,27,21,130,6.190476190476191
+2,2,Eagles A,11,21.636363636363637,24,2,7,33,24,150,6.25
 3,9,WWPN A,10,20.8,20,3,7,30,20,140,7.0
 4,3,Richard Montgomery,10,20.0,22,2,6,30,22,120,5.454545454545454
 5,10,Shallow Walk team A,8,19.5,15,1,8,24,15,100,6.666666666666667
@@ -14,7 +14,7 @@ rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_h
 13,4,North Allegheny,8,13.5,9,2,13,24,9,80,8.88888888888889
 14,18,Centennial A,5,12.4,5,2,8,15,5,50,10.0
 15,28,WWPN B,5,10.0,5,0,10,15,5,30,6.0
-16,12,Kiruna Scholars,10,9.8,9,2,19,30,9,70,7.777777777777778
+16,12,Kiruna Scholars,11,8.909090909090908,9,2,22,33,9,70,7.777777777777778
 17,1,Centreville HS Team 1,7,8.571428571428571,5,0,16,21,5,40,8.0
 18,29,Thomas S Wootton High School team A,5,8.4,5,2,8,15,5,30,6.0
 19,21,Westtown A,5,8.0,5,0,10,15,5,20,4.0
