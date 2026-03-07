@@ -4,6 +4,7 @@ import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
 import { useTournamentStatsManifest } from "../../hooks/useTournamentStatsManifest";
+import { useTournamentStatsReportsIndex } from "../../hooks/useTournamentStatsReportsIndex";
 import { useRosterIndex } from "../../hooks/useRosterIndex";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 import { FieldTab } from "./FieldTab";
@@ -38,6 +39,20 @@ function humanizeCategoryLabel(raw: string): string {
 
   const normalized = trimmed.replace(/_/g, " ").replace(/\s+/g, " ").trim();
   return toTitleCase(normalized);
+}
+
+function statsBaseDirFromManifestPath(manifestPath: string): string {
+  const normalized = (manifestPath || "").replace(/\\/g, "/").replace(/^\/+/, "");
+  const parts = normalized.split("/").filter(Boolean);
+  if (parts.length <= 1) return "";
+  return parts.slice(0, -1).join("/");
+}
+
+function joinStatsPath(baseDir: string, file: string): string {
+  const normalizedFile = (file || "").replace(/\\/g, "/").replace(/^\/+/, "");
+  if (!baseDir) return normalizedFile;
+  if (!normalizedFile) return baseDir;
+  return `${baseDir}/${normalizedFile}`;
 }
 
 function splitLogistics(text: string): string[] {
@@ -130,13 +145,51 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const standingsEnabled = !isUpcoming;
 
-  const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled);
+  const { data: statsReportsIndex, loading: statsReportsLoading } = useTournamentStatsReportsIndex(tournament.slug, standingsEnabled);
+  const reports = statsReportsIndex?.reports ?? null;
+  const defaultReportKey = statsReportsIndex?.default_report_key ?? "combined";
+
+  const [reportKey, setReportKey] = useState<string>("combined");
+  const [reportKeyTouched, setReportKeyTouched] = useState<boolean>(false);
+
+  useEffect(() => {
+    setReportKey("combined");
+    setReportKeyTouched(false);
+  }, [tournament.slug]);
+
+  useEffect(() => {
+    if (!standingsEnabled) return;
+    if (!reports || reports.length === 0) return;
+
+    const available = new Set(reports.map((r) => r.key));
+    const preferredDefault = available.has(defaultReportKey) ? defaultReportKey : reports[0].key;
+
+    let next = reportKey;
+    if (!reportKeyTouched) next = preferredDefault;
+    if (!available.has(next)) next = preferredDefault;
+
+    if (next !== reportKey) setReportKey(next);
+  }, [defaultReportKey, reportKey, reportKeyTouched, reports, standingsEnabled]);
+
+  const selectedReport = useMemo(() => {
+    if (!reports) return null;
+    return reports.find((r) => r.key === reportKey) ?? null;
+  }, [reportKey, reports]);
+
+  const manifestPath = selectedReport?.manifest_path ?? "manifest.json";
+  const reportBaseDir = useMemo(() => statsBaseDirFromManifestPath(manifestPath), [manifestPath]);
+
+  const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled, manifestPath);
   const overallFiles = useMemo(() => {
     if (!statsManifest) return null;
-    return { team: statsManifest.views.team_standings, individual: statsManifest.views.individual_standings };
-  }, [statsManifest]);
+    return {
+      team: joinStatsPath(reportBaseDir, statsManifest.views.team_standings),
+      individual: joinStatsPath(reportBaseDir, statsManifest.views.individual_standings),
+    };
+  }, [reportBaseDir, statsManifest]);
 
-  const { data: overallStandings, loading: overallLoading, error: overallError } = useTournamentStandings(tournament.slug, standingsEnabled, overallFiles);
+  const overallEnabled = standingsEnabled && !!overallFiles;
+  const { data: overallStandings, loading: overallLoading, error: overallError } = useTournamentStandings(tournament.slug, overallEnabled, overallFiles);
   const hasStandings = (overallStandings?.team_standings?.length ?? 0) > 0;
 
   const categories = useMemo(() => {
@@ -144,19 +197,28 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     return entries.map((e) => ({
       key: e.key,
       label: e.category?.trim() ? e.category : "Uncategorized",
-      files: { team: e.team_standings, individual: e.individual_standings },
+      files: {
+        team: joinStatsPath(reportBaseDir, e.team_standings),
+        individual: joinStatsPath(reportBaseDir, e.individual_standings),
+      },
     }));
-  }, [statsManifest]);
+  }, [reportBaseDir, statsManifest]);
 
   const [standingsCategoryKey, setStandingsCategoryKey] = useState<string>("overall");
   useEffect(() => {
     setStandingsCategoryKey("overall");
-  }, [tournament.slug]);
+  }, [reportKey, tournament.slug]);
 
   const activeCategory = useMemo(() => {
     if (standingsCategoryKey === "overall") return null;
     return categories.find((c) => c.key === standingsCategoryKey) ?? null;
   }, [categories, standingsCategoryKey]);
+
+  useEffect(() => {
+    if (standingsCategoryKey === "overall") return;
+    if (activeCategory) return;
+    setStandingsCategoryKey("overall");
+  }, [activeCategory, standingsCategoryKey]);
 
   const categoryEnabled = standingsEnabled && standingsCategoryKey !== "overall" && !!activeCategory;
   const { data: categoryStandings, loading: categoryLoading, error: categoryError } = useTournamentStandings(
@@ -197,10 +259,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     return [
       { id: "overview", label: "Overview", disabled: false },
       { id: "field", label: "Field", disabled: fieldDisabled },
-      { id: "results", label: "Standings", disabled: !resultsLink && !hasStandings },
+      { id: "results", label: "Standings", disabled: !resultsLink && !hasStandings && !statsManifestLoading && !statsReportsLoading },
       { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
     ];
-  }, [fieldDisabled, hasStandings, isLive, isUpcoming, resultsLink, statsLink]);
+  }, [fieldDisabled, hasStandings, isLive, isUpcoming, resultsLink, statsLink, statsManifestLoading, statsReportsLoading]);
 
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const tabNavRef = useRef<HTMLDivElement | null>(null);
@@ -355,11 +417,35 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
           <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
               <div className="sbTabSectionBody">
+                {!isUpcoming && reports && reports.length > 1 && (
+                  <div className="sbListingControls" style={{ marginBottom: "12px" }}>
+                    <div className="sbField" style={{ flex: "0 1 260px", minWidth: "200px" }}>
+                      <label className="sbFieldLabel" htmlFor="standings-report">
+                        Report
+                      </label>
+                      <select
+                        id="standings-report"
+                        className="sbSelect"
+                        value={reportKey}
+                        onChange={(e) => {
+                          setReportKey(e.target.value);
+                          setReportKeyTouched(true);
+                        }}
+                      >
+                        {reports.map((r) => (
+                          <option key={r.key} value={r.key}>
+                            {r.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
                 {isUpcoming ? (
                   <p className="sbMuted">Standings will be available after the tournament.</p>
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
-                ) : standingsLoading || statsManifestLoading ? (
+                ) : standingsLoading || statsManifestLoading || statsReportsLoading ? (
                   <p className="sbMuted">Loading standings…</p>
                 ) : hasStandings && standings ? (
                   <div className="sbTabStack">
