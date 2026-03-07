@@ -44,13 +44,18 @@ def _prompt_yes_no(*, prompt: str, default: bool = False) -> bool:
     return raw in {"y", "yes"}
 
 
-def _safe_wipe_output_dir(output_dir: Path) -> None:
+def _safe_wipe_output_dir(
+    output_dir: Path,
+    *,
+    protected_top_level_names: set[str] | None = None,
+) -> None:
     """
     Remove previously generated artifacts so stale files don't linger.
 
     Keeps common human-authored placeholder files.
     """
     keep_names = {"README.md", ".gitkeep", "field.json"}
+    protected = protected_top_level_names or set()
 
     if not output_dir.exists():
         return
@@ -58,6 +63,9 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
     # Delete files first.
     for path in sorted(output_dir.rglob("*"), key=lambda p: len(p.parts), reverse=True):
         if path.is_dir():
+            continue
+        rel_parts = path.relative_to(output_dir).parts
+        if rel_parts and rel_parts[0] in protected:
             continue
         if path.name in keep_names:
             continue
@@ -69,6 +77,9 @@ def _safe_wipe_output_dir(output_dir: Path) -> None:
     # Then delete empty directories (but keep the root).
     for path in sorted(output_dir.rglob("*"), key=lambda p: len(p.parts), reverse=True):
         if not path.is_dir():
+            continue
+        rel_parts = path.relative_to(output_dir).parts
+        if rel_parts and rel_parts[0] in protected:
             continue
         try:
             next(path.iterdir())
@@ -94,6 +105,140 @@ def _safe_category_file_stem(category: str) -> str:
     return stem[:80]
 
 
+def _normalize_report_key(raw: str | None) -> str:
+    key = (raw or "").strip()
+    if not key:
+        return "combined"
+
+    if "/" in key or "\\" in key or ".." in key:
+        raise CommandError("--report-key must be a single path segment.")
+
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", key):
+        raise CommandError(
+            "--report-key must match [A-Za-z0-9][A-Za-z0-9_-]{0,63} (example: prelims)."
+        )
+
+    return key.lower()
+
+
+def _default_report_label(report_key: str) -> str:
+    if report_key == "combined":
+        return "Combined"
+    words = re.split(r"[^A-Za-z0-9]+", report_key)
+    words = [w for w in words if w]
+    if not words:
+        return report_key
+    return " ".join(w[:1].upper() + w[1:] for w in words)
+
+
+def _infer_slug_from_output_dir(*, repo_root: Path, output_dir: Path) -> str:
+    """
+    Infer tournament slug from output_dir.
+
+    Handles both:
+      - <repo>/stats/<slug>
+      - <repo>/stats/<slug>/reports/<report_key>
+    """
+    stats_root = repo_root / "stats"
+    try:
+        rel = output_dir.resolve().relative_to(stats_root.resolve())
+    except Exception:
+        return output_dir.name
+
+    if not rel.parts:
+        return output_dir.name
+    return rel.parts[0]
+
+
+def _update_reports_index(
+    *,
+    repo_root: Path,
+    slug: str,
+    report_key: str,
+    report_label: str,
+    output_dir: Path,
+    pretty: bool,
+) -> None:
+    stats_root = repo_root / "stats"
+    tournament_root = stats_root / slug
+
+    try:
+        manifest_rel = (output_dir / "manifest.json").resolve().relative_to(
+            tournament_root.resolve()
+        )
+    except Exception:
+        # If output_dir is not under stats/<slug>/..., we can't produce stable relative paths.
+        return
+
+    index_path = tournament_root / "reports.json"
+    existing: dict[str, Any] | None = None
+    if index_path.exists():
+        try:
+            obj_any = json.loads(index_path.read_text(encoding="utf-8"))
+            if isinstance(obj_any, dict):
+                existing = obj_any
+        except json.JSONDecodeError:
+            existing = None
+
+    reports_by_key: dict[str, dict[str, str]] = {}
+    if existing:
+        reports_any = existing.get("reports")
+        if isinstance(reports_any, list):
+            for item in reports_any:
+                if not isinstance(item, dict):
+                    continue
+                key_any = item.get("key")
+                label_any = item.get("label")
+                manifest_any = item.get("manifest_path")
+                if not (
+                    isinstance(key_any, str)
+                    and isinstance(label_any, str)
+                    and isinstance(manifest_any, str)
+                ):
+                    continue
+                reports_by_key[key_any] = {
+                    "key": key_any,
+                    "label": label_any,
+                    "manifest_path": manifest_any,
+                }
+
+    # Upsert the current report entry.
+    reports_by_key[report_key] = {
+        "key": report_key,
+        "label": report_label,
+        "manifest_path": manifest_rel.as_posix(),
+    }
+
+    # Ensure we include Combined if its manifest exists (or we just generated it).
+    combined_manifest = tournament_root / "manifest.json"
+    if report_key == "combined" or combined_manifest.exists():
+        combined_label = reports_by_key.get("combined", {}).get("label") or "Combined"
+        reports_by_key.setdefault(
+            "combined",
+            {"key": "combined", "label": combined_label, "manifest_path": "manifest.json"},
+        )
+
+    # Choose a default that exists.
+    default_key = "combined" if "combined" in reports_by_key else report_key
+
+    reports_sorted = sorted(
+        reports_by_key.values(),
+        key=lambda r: (0 if r["key"] == "combined" else 1, r["key"]),
+    )
+
+    payload = {
+        "schema_version": 1,
+        "default_report_key": default_key,
+        "reports": reports_sorted,
+    }
+
+    indent = 2 if pretty else None
+    index_path.write_text(
+        json.dumps(payload, indent=indent, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
 class Command(BaseCommand):
     help = (
         "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2/v3) "
@@ -102,6 +247,26 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser) -> None:
         parser.add_argument(
+            "--report-key",
+            type=str,
+            required=False,
+            default="combined",
+            help=(
+                "Key for the stats report being generated (default: combined). "
+                "Used for organizing multi-report outputs under stats/<slug>/reports/<key>/."
+            ),
+        )
+        parser.add_argument(
+            "--report-label",
+            type=str,
+            required=False,
+            default=None,
+            help=(
+                "Display label for this report (default: derived from --report-key). "
+                "Used in stats/<slug>/reports.json."
+            ),
+        )
+        parser.add_argument(
             "--output-dir",
             type=str,
             required=False,
@@ -109,7 +274,8 @@ class Command(BaseCommand):
             help=(
                 "Directory to write generated artifacts into. "
                 "Relative paths are resolved from the repo root. "
-                "Defaults to <repo>/stats/<tournament-slug>."
+                "Defaults to <repo>/stats/<tournament-slug> for --report-key=combined, "
+                "or <repo>/stats/<tournament-slug>/reports/<report-key> otherwise."
             ),
         )
         parser.add_argument(
@@ -199,6 +365,12 @@ class Command(BaseCommand):
                 self.stderr.write(result.stderr.rstrip())
 
     def handle(self, *args, **options) -> None:
+        report_key = _normalize_report_key(options.get("report_key"))
+        report_label_raw: str | None = options.get("report_label")
+        report_label = (report_label_raw or _default_report_label(report_key)).strip()
+        if not report_label:
+            report_label = _default_report_label(report_key)
+
         tournament_slug: str | None = options.get("tournament_slug")
         tournament_name: str | None = options.get("tournament_name")
         pretty: bool = options["pretty"]
@@ -222,9 +394,12 @@ class Command(BaseCommand):
                 raise CommandError(
                     "Pass --tournament-slug (or --output-dir) to choose an output folder."
                 )
-            output_dir = repo_root / "stats" / slug_for_default
+            if report_key == "combined":
+                output_dir = repo_root / "stats" / slug_for_default
+            else:
+                output_dir = repo_root / "stats" / slug_for_default / "reports" / report_key
 
-        slug = (tournament_slug or output_dir.name).strip()
+        slug = (tournament_slug or _infer_slug_from_output_dir(repo_root=repo_root, output_dir=output_dir)).strip()
         if not slug:
             raise CommandError(
                 "Could not infer tournament slug; pass --tournament-slug."
@@ -314,7 +489,19 @@ class Command(BaseCommand):
                 ):
                     raise CommandError("Aborted.")
 
-            _safe_wipe_output_dir(output_dir)
+            protected_top_level_names: set[str] = set()
+            tournament_root = (repo_root / "stats" / slug).resolve()
+            try:
+                is_tournament_root = output_dir.resolve() == tournament_root
+            except Exception:
+                is_tournament_root = False
+            if report_key == "combined" and is_tournament_root:
+                # Don't delete other reports when regenerating the combined report.
+                protected_top_level_names = {"reports", "reports.json"}
+
+            _safe_wipe_output_dir(
+                output_dir, protected_top_level_names=protected_top_level_names
+            )
 
         # Build everything using an ephemeral local SQLite DB (separate alias) so we
         # never touch any configured persistent DB, even if one exists locally.
@@ -495,6 +682,7 @@ class Command(BaseCommand):
             "schema_version": 1,
             "generated_at": _iso_utc_now(),
             "tournament": {"slug": slug, "name": name},
+            "report": {"key": report_key, "label": report_label},
             "sources": sources,
             "views": {
                 "team_standings": "team_standings.csv",
@@ -507,6 +695,15 @@ class Command(BaseCommand):
         (output_dir / "manifest.json").write_text(
             json.dumps(manifest_payload, indent=indent, sort_keys=True) + "\n",
             encoding="utf-8",
+        )
+
+        _update_reports_index(
+            repo_root=repo_root,
+            slug=slug,
+            report_key=report_key,
+            report_label=report_label,
+            output_dir=output_dir,
+            pretty=pretty,
         )
 
         self.stdout.write(self.style.SUCCESS(f"Wrote {output_dir / 'team_standings.csv'}"))
