@@ -18,6 +18,7 @@ from django.utils.timezone import now
 
 from moss.services.ingest_exports import ingest_scoresheet_exports
 from tournaments.models import Tournament
+from tournaments.models import Round as TournamentRound
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -239,6 +240,169 @@ def _update_reports_index(
     )
 
 
+def _packet_label_from_export_obj(export_obj: dict[str, Any]) -> str:
+    snapshot_meta_any = export_obj.get("snapshot_meta")
+    if isinstance(snapshot_meta_any, dict):
+        packet_name_any = snapshot_meta_any.get("packet_name")
+        if isinstance(packet_name_any, str) and packet_name_any.strip():
+            return packet_name_any.strip()
+    packet_any = export_obj.get("packet")
+    if isinstance(packet_any, dict):
+        packet_name_any = packet_any.get("packet")
+        if isinstance(packet_name_any, str) and packet_name_any.strip():
+            return packet_name_any.strip()
+    return ""
+
+
+def _packet_checksum_from_export_obj(export_obj: dict[str, Any]) -> str:
+    packet_checksum_any = export_obj.get("packet_checksum")
+    if isinstance(packet_checksum_any, dict):
+        value_any = packet_checksum_any.get("value")
+        if isinstance(value_any, str) and value_any.strip():
+            return value_any.strip()
+    return ""
+
+
+def _parse_round_number_from_path(source_path: Path) -> int | None:
+    """
+    Best-effort folder-based round inference.
+
+    Scans upwards from the file's parent dir, returning the first round-like numeric token
+    it finds (e.g., "Round 3", "R3", "3").
+    """
+    max_search_levels = 8
+    for depth, parent in enumerate(source_path.parents):
+        if depth == 0:
+            # parents[0] is the file's parent dir.
+            pass
+        if depth >= max_search_levels:
+            break
+
+        name = parent.name or ""
+        if not name.strip():
+            continue
+
+        tokens = [t for t in re.split(r"[^A-Za-z0-9]+", name) if t]
+        for tok in tokens:
+            m = re.fullmatch(r"(?i)(?:r|round)(\d{1,3})", tok)
+            if m:
+                value = int(m.group(1))
+                if 1 <= value <= 200:
+                    return value
+            if tok.isdigit():
+                value = int(tok)
+                if 1 <= value <= 200:
+                    return value
+
+    return None
+
+
+def _infer_round_assignments(
+    export_inputs: list[tuple[Path, bytes, dict[str, Any]]],
+) -> tuple[dict[str, dict[str, Any]], str, list[str]]:
+    """
+    Returns (round_assignments, mode, warnings).
+
+    round_assignments is keyed by source_path string, mapping to:
+      {round_number: int, name: str, packet_name: str, packet_checksum: str}
+    """
+    parsed_numbers: dict[str, int] = {}
+    packet_label_by_path: dict[str, str] = {}
+    checksum_by_path: dict[str, str] = {}
+
+    for source_path, _raw, export_obj in export_inputs:
+        sp = str(source_path)
+        packet_label_by_path[sp] = _packet_label_from_export_obj(export_obj)
+        checksum_by_path[sp] = _packet_checksum_from_export_obj(export_obj)
+        parsed = _parse_round_number_from_path(source_path)
+        if parsed is not None:
+            parsed_numbers[sp] = parsed
+
+    warnings: list[str] = []
+    round_assignments: dict[str, dict[str, Any]] = {}
+
+    has_any_folder_round = bool(parsed_numbers)
+    if not has_any_folder_round:
+        # No round folders detected: group by packet checksum.
+        warnings.append(
+            "No round-like folder names detected; grouping rounds by packet checksum."
+        )
+        groups: dict[str, list[str]] = {}
+        for sp in packet_label_by_path.keys():
+            checksum = checksum_by_path.get(sp) or ""
+            groups.setdefault(checksum, []).append(sp)
+
+        group_items = sorted(
+            groups.items(),
+            key=lambda kv: (
+                (packet_label_by_path.get(kv[1][0]) or "").casefold(),
+                kv[0],
+            ),
+        )
+        for idx, (checksum, paths) in enumerate(group_items, start=1):
+            for sp in paths:
+                packet_name = packet_label_by_path.get(sp) or ""
+                round_assignments[sp] = {
+                    "round_number": idx,
+                    "name": packet_name,
+                    "packet_name": packet_name,
+                    "packet_checksum": checksum,
+                }
+        return round_assignments, "packet_checksum", warnings
+
+    # Folder-based for any exports that have a parsed numeric round; packet-checksum fallback for the rest.
+    max_round_number = max(parsed_numbers.values()) if parsed_numbers else 0
+    missing_paths = [sp for sp in packet_label_by_path.keys() if sp not in parsed_numbers]
+    if missing_paths:
+        warnings.append(
+            f"{len(missing_paths)} export(s) had no round-like folder name; assigning those to additional rounds by packet checksum."
+        )
+
+    # Assign folder-based rounds first.
+    for sp, round_number in parsed_numbers.items():
+        packet_name = packet_label_by_path.get(sp) or ""
+        # Avoid redundant "Round N: Round N" when the packet name is just "Round N".
+        normalized_packet = re.sub(r"\\s+", " ", packet_name).strip()
+        if re.fullmatch(rf"(?i)round\\s*0*{round_number}", normalized_packet):
+            round_name = ""
+        else:
+            round_name = packet_name
+
+        round_assignments[sp] = {
+            "round_number": round_number,
+            "name": round_name,
+            "packet_name": packet_name,
+            "packet_checksum": checksum_by_path.get(sp) or "",
+        }
+
+    # Assign missing paths to new round numbers grouped by checksum.
+    groups_missing: dict[str, list[str]] = {}
+    for sp in missing_paths:
+        checksum = checksum_by_path.get(sp) or ""
+        groups_missing.setdefault(checksum, []).append(sp)
+
+    group_items_missing = sorted(
+        groups_missing.items(),
+        key=lambda kv: (
+            (packet_label_by_path.get(kv[1][0]) or "").casefold(),
+            kv[0],
+        ),
+    )
+    next_round_number = max_round_number + 1
+    for checksum, paths in group_items_missing:
+        for sp in paths:
+            packet_name = packet_label_by_path.get(sp) or ""
+            round_assignments[sp] = {
+                "round_number": next_round_number,
+                "name": packet_name,
+                "packet_name": packet_name,
+                "packet_checksum": checksum,
+            }
+        next_round_number += 1
+
+    return round_assignments, "folder", warnings
+
+
 class Command(BaseCommand):
     help = (
         "Generate static stats artifacts (JSON) from MoSS scoresheet export files (v1/v2/v3) "
@@ -457,6 +621,12 @@ class Command(BaseCommand):
                 }
             )
 
+        round_assignments, round_mode, round_warnings = _infer_round_assignments(
+            export_inputs
+        )
+        for w in round_warnings:
+            self.stderr.write(self.style.WARNING(f"WARNING: {w}"))
+
         output_dir.mkdir(parents=True, exist_ok=True)
 
         existing_artifacts = any(
@@ -568,6 +738,7 @@ class Command(BaseCommand):
                 ingest_scoresheet_exports(
                     tournament_id=tournament.id,
                     exports=export_inputs,
+                    round_assignments=round_assignments,
                     using=db_alias,
                 )
             except ValueError as e:
@@ -578,6 +749,7 @@ class Command(BaseCommand):
             individual_sql = (sql_dir / "individual_standings.sql").read_text(encoding="utf-8")
             team_category_sql = (sql_dir / "team_category_standings.sql").read_text(encoding="utf-8")
             individual_category_sql = (sql_dir / "individual_category_standings.sql").read_text(encoding="utf-8")
+            rounds_summary: list[dict[str, Any]] = []
 
             def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
                 out_path = output_dir / filename
@@ -664,6 +836,19 @@ class Command(BaseCommand):
                         "individual_standings": individual_filename,
                     }
                 )
+
+            # Round summary (for verification + future views).
+            for rnd in TournamentRound.objects.using(db_alias).filter(
+                tournament_id=tournament.id
+            ).order_by("round_number"):
+                rounds_summary.append(
+                    {
+                        "round_number": rnd.round_number,
+                        "name": rnd.name,
+                        "packet_name": rnd.packet_name,
+                        "game_count": rnd.moss_games.count(),
+                    }
+                )
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
             try:
@@ -684,6 +869,10 @@ class Command(BaseCommand):
             "tournament": {"slug": slug, "name": name},
             "report": {"key": report_key, "label": report_label},
             "sources": sources,
+            "rounds": {
+                "mode": round_mode,
+                "rounds": rounds_summary,
+            },
             "views": {
                 "team_standings": "team_standings.csv",
                 "individual_standings": "individual_standings.csv",
