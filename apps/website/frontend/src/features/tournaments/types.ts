@@ -150,6 +150,16 @@ export type TournamentStatsManifest = {
   };
 };
 
+export type TournamentStatsReportsIndex = {
+  schema_version: number;
+  default_report_key: string;
+  reports: Array<{
+    key: string;
+    label: string;
+    manifest_path: string;
+  }>;
+};
+
 // Alias for backwards compatibility
 export type TournamentDetail = Tournament;
 
