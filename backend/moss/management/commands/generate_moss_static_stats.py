@@ -1025,6 +1025,66 @@ class Command(BaseCommand):
                 params=[tournament.id, tournament.id, tournament.id],
             )
             datasets["game_players"] = "facts/game_players.csv"
+
+            write_csv(
+                filename="facts/game_teams_by_category.csv",
+                sql="""
+                SELECT
+                  gt.game_id AS game_id,
+                  gt.slot AS slot,
+                  t.id AS team_id,
+                  t.name AS team_name,
+                  COALESCE(pq.category, '') AS category,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
+                FROM moss_gameteam gt
+                JOIN moss_game g ON g.id = gt.game_id
+                JOIN moss_tournamentteam t ON t.id = gt.tournament_team_id
+                JOIN moss_gameteamquestionoutcome o
+                  ON o.game_id = gt.game_id AND o.tournament_team_id = gt.tournament_team_id
+                JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                WHERE g.tournament_id = %s
+                GROUP BY gt.game_id, gt.slot, t.id, t.name, COALESCE(pq.category, '')
+                ORDER BY gt.game_id ASC, gt.slot ASC, category ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["game_teams_by_category"] = "facts/game_teams_by_category.csv"
+
+            write_csv(
+                filename="facts/game_players_by_category.csv",
+                sql="""
+                SELECT
+                  o.game_id AS game_id,
+                  t.id AS team_id,
+                  t.name AS team_name,
+                  p.id AS player_id,
+                  p.name AS player_name,
+                  COALESCE(pq.category, '') AS category,
+                  COALESCE(SUM(CASE WHEN o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
+                  COALESCE(SUM(CASE WHEN o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
+                  COALESCE(SUM(CASE WHEN o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
+                  COALESCE(SUM(o.points), 0) AS tossup_points
+                FROM moss_gameteamquestionoutcome o
+                JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                JOIN moss_game g ON g.id = o.game_id
+                JOIN moss_tournamentteam t ON t.id = o.tournament_team_id
+                JOIN moss_tournamentplayer p ON p.id = o.buzzing_player_id
+                WHERE g.tournament_id = %s
+                  AND pq.question_type = 'TOSSUP'
+                  AND o.buzzing_player_id IS NOT NULL
+                GROUP BY o.game_id, t.id, t.name, p.id, p.name, COALESCE(pq.category, '')
+                ORDER BY o.game_id ASC, t.name ASC, p.name ASC, category ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["game_players_by_category"] = "facts/game_players_by_category.csv"
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
             try:
