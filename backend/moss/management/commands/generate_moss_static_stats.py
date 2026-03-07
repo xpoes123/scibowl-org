@@ -263,6 +263,51 @@ def _packet_checksum_from_export_obj(export_obj: dict[str, Any]) -> str:
     return ""
 
 
+def _expand_export_input_paths(raw_paths: list[str]) -> tuple[list[Path], list[str]]:
+    """
+    Expand user-provided path arguments into a list of JSON file paths.
+
+    Supports passing:
+      - individual export files
+      - directories (recursively searches for *.json under them)
+
+    Returns (paths, warnings).
+    """
+    warnings: list[str] = []
+    expanded: list[Path] = []
+
+    for raw in raw_paths:
+        path = Path(raw).expanduser()
+        if not path.exists():
+            raise CommandError(f"File not found: {path}")
+
+        if path.is_dir():
+            json_files = sorted(p for p in path.rglob("*.json") if p.is_file())
+            if not json_files:
+                warnings.append(f"Directory contains no .json files: {path}")
+                continue
+            expanded.extend(json_files)
+            continue
+
+        if path.is_file():
+            expanded.append(path)
+            continue
+
+        warnings.append(f"Skipping non-file, non-directory path: {path}")
+
+    # Deterministic order even across mixed inputs.
+    expanded_unique: list[Path] = []
+    seen: set[str] = set()
+    for p in sorted(expanded, key=lambda x: str(x)):
+        key = str(p)
+        if key in seen:
+            continue
+        seen.add(key)
+        expanded_unique.append(p)
+
+    return expanded_unique, warnings
+
+
 def _parse_round_number_from_path(source_path: Path) -> int | None:
     """
     Best-effort folder-based round inference.
@@ -481,7 +526,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "paths",
             nargs="+",
-            help="One or more moss_scoresheet export JSON files.",
+            help="One or more moss_scoresheet export JSON files, or directories containing them (searched recursively).",
         )
 
     def _sync_frontends(self, *, repo_root: Path) -> None:
@@ -541,7 +586,7 @@ class Command(BaseCommand):
         assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
         no_sync_frontends: bool = options["no_sync_frontends"]
-        paths: list[str] = options["paths"]
+        raw_paths: list[str] = options["paths"]
 
         repo_root = Path(settings.BASE_DIR).parent
         raw_output_dir: str | None = options.get("output_dir")
@@ -591,10 +636,14 @@ class Command(BaseCommand):
         seen: set[str] = set()
         duplicate_with_existing: list[str] = []
 
-        for raw_path in paths:
-            path = Path(raw_path)
-            if not path.exists():
-                raise CommandError(f"File not found: {path}")
+        paths, path_warnings = _expand_export_input_paths(raw_paths)
+        for w in path_warnings:
+            self.stderr.write(self.style.WARNING(f"WARNING: {w}"))
+
+        if not paths:
+            raise CommandError("No export JSON files found in the provided path arguments.")
+
+        for path in paths:
             data = path.read_bytes()
             file_hash = _sha256_bytes(data)
             if file_hash in existing_sources_sha256:
