@@ -763,6 +763,8 @@ class Command(BaseCommand):
                     writer.writerow(cols)
                     writer.writerows(rows)
 
+            datasets: dict[str, str] = {}
+
             write_csv(
                 filename="team_standings.csv",
                 sql=team_sql,
@@ -849,6 +851,180 @@ class Command(BaseCommand):
                         "game_count": rnd.moss_games.count(),
                     }
                 )
+
+            # Base fact datasets (power all future views without generating a file per view).
+            write_csv(
+                filename="facts/teams.csv",
+                sql="""
+                SELECT
+                  t.id AS team_id,
+                  t.name AS team_name,
+                  t.school AS school,
+                  t.pool AS pool
+                FROM moss_tournamentteam t
+                WHERE t.tournament_id = %s
+                ORDER BY t.name ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["teams"] = "facts/teams.csv"
+
+            write_csv(
+                filename="facts/players.csv",
+                sql="""
+                SELECT
+                  p.id AS player_id,
+                  p.name AS player_name,
+                  p.grade_level AS grade_level,
+                  t.id AS team_id,
+                  t.name AS team_name
+                FROM moss_tournamentplayer p
+                JOIN moss_tournamentteam t ON t.id = p.tournament_team_id
+                WHERE t.tournament_id = %s
+                ORDER BY t.name ASC, p.name ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["players"] = "facts/players.csv"
+
+            write_csv(
+                filename="facts/rounds.csv",
+                sql="""
+                SELECT
+                  r.round_number AS round_number,
+                  r.name AS round_name,
+                  r.packet_name AS packet_name
+                FROM tournaments_round r
+                WHERE r.tournament_id = %s
+                ORDER BY r.round_number ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["rounds"] = "facts/rounds.csv"
+
+            write_csv(
+                filename="facts/games.csv",
+                sql="""
+                SELECT
+                  g.id AS game_id,
+                  r.round_number AS round_number,
+                  r.name AS round_name,
+                  r.packet_name AS round_packet_name,
+                  g.status AS status,
+                  g.completed_at AS completed_at,
+                  pv.checksum_value AS packet_checksum,
+                  pv.packet_name AS packet_name,
+                  pv.year AS packet_year,
+                  g.pairs_played AS pairs_played
+                FROM moss_game g
+                LEFT JOIN tournaments_round r ON r.id = g.round_id
+                LEFT JOIN moss_packetversion pv ON pv.id = g.packet_version_id
+                WHERE g.tournament_id = %s
+                ORDER BY COALESCE(r.round_number, 999999) ASC, g.id ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["games"] = "facts/games.csv"
+
+            write_csv(
+                filename="facts/game_teams.csv",
+                sql="""
+                SELECT
+                  gt.game_id AS game_id,
+                  gt.slot AS slot,
+                  t.id AS team_id,
+                  t.name AS team_name,
+                  gt.score_cached AS score,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
+                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
+                FROM moss_gameteam gt
+                JOIN moss_game g ON g.id = gt.game_id
+                JOIN moss_tournamentteam t ON t.id = gt.tournament_team_id
+                LEFT JOIN moss_gameteamquestionoutcome o
+                  ON o.game_id = gt.game_id AND o.tournament_team_id = gt.tournament_team_id
+                LEFT JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                WHERE g.tournament_id = %s
+                GROUP BY gt.game_id, gt.slot, t.id, t.name, gt.score_cached
+                ORDER BY gt.game_id ASC, gt.slot ASC
+                """,
+                params=[tournament.id],
+            )
+            datasets["game_teams"] = "facts/game_teams.csv"
+
+            write_csv(
+                filename="facts/game_players.csv",
+                sql="""
+                WITH active AS (
+                  SELECT DISTINCT
+                    s.game_id AS game_id,
+                    s.tournament_team_id AS team_id,
+                    s.tournament_player_id AS player_id
+                  FROM moss_gameplayerlineupsegment s
+                  JOIN moss_game g ON g.id = s.game_id
+                  WHERE g.tournament_id = %s
+                ),
+                pairs_heard AS (
+                  SELECT
+                    s.game_id AS game_id,
+                    s.tournament_team_id AS team_id,
+                    s.tournament_player_id AS player_id,
+                    SUM(
+                      CASE
+                        WHEN COALESCE(s.end_pair_id, g.pairs_played) < s.start_pair_id THEN 0
+                        ELSE (COALESCE(s.end_pair_id, g.pairs_played) - s.start_pair_id + 1)
+                      END
+                    ) AS pairs_heard
+                  FROM moss_gameplayerlineupsegment s
+                  JOIN moss_game g ON g.id = s.game_id
+                  WHERE g.tournament_id = %s
+                  GROUP BY s.game_id, s.tournament_team_id, s.tournament_player_id
+                ),
+                tossup_stats AS (
+                  SELECT
+                    o.game_id AS game_id,
+                    o.tournament_team_id AS team_id,
+                    o.buzzing_player_id AS player_id,
+                    SUM(CASE WHEN o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END) AS tossups_correct,
+                    SUM(CASE WHEN o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END) AS tossups_incorrect,
+                    SUM(CASE WHEN o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END) AS tossups_no_penalty,
+                    SUM(o.points) AS tossup_points
+                  FROM moss_gameteamquestionoutcome o
+                  JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                  JOIN moss_game g ON g.id = o.game_id
+                  WHERE g.tournament_id = %s
+                    AND pq.question_type = 'TOSSUP'
+                    AND o.buzzing_player_id IS NOT NULL
+                  GROUP BY o.game_id, o.tournament_team_id, o.buzzing_player_id
+                )
+                SELECT
+                  a.game_id AS game_id,
+                  t.id AS team_id,
+                  t.name AS team_name,
+                  p.id AS player_id,
+                  p.name AS player_name,
+                  COALESCE(ph.pairs_heard, 0) AS pairs_heard,
+                  COALESCE(ts.tossups_correct, 0) AS tossups_correct,
+                  COALESCE(ts.tossups_incorrect, 0) AS tossups_incorrect,
+                  COALESCE(ts.tossups_no_penalty, 0) AS tossups_no_penalty,
+                  COALESCE(ts.tossup_points, 0) AS tossup_points
+                FROM active a
+                JOIN moss_tournamentteam t ON t.id = a.team_id
+                JOIN moss_tournamentplayer p ON p.id = a.player_id
+                LEFT JOIN pairs_heard ph
+                  ON ph.game_id = a.game_id AND ph.team_id = a.team_id AND ph.player_id = a.player_id
+                LEFT JOIN tossup_stats ts
+                  ON ts.game_id = a.game_id AND ts.team_id = a.team_id AND ts.player_id = a.player_id
+                ORDER BY a.game_id ASC, t.name ASC, p.name ASC
+                """,
+                params=[tournament.id, tournament.id, tournament.id],
+            )
+            datasets["game_players"] = "facts/game_players.csv"
         finally:
             # On Windows, the SQLite file can't be deleted while any connection remains open.
             try:
@@ -873,6 +1049,7 @@ class Command(BaseCommand):
                 "mode": round_mode,
                 "rounds": rounds_summary,
             },
+            "datasets": datasets,
             "views": {
                 "team_standings": "team_standings.csv",
                 "individual_standings": "individual_standings.csv",
