@@ -691,13 +691,34 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                     <div>
                       <h3 className="m-0 text-sm font-semibold">Team Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
-                        <TeamStandingsTable rows={standings.team_standings} showWinsLosses={showWinsLosses} />
+                        <TeamStandingsTable
+                          rows={standings.team_standings}
+                          showWinsLosses={showWinsLosses}
+                          onTeamSelect={
+                            scoreboardAvailable
+                              ? (teamId) => {
+                                  setTeamValue(String(teamId));
+                                  setResultsView("team");
+                                }
+                              : undefined
+                          }
+                        />
                       </div>
                     </div>
                     <div>
                       <h3 className="m-0 text-sm font-semibold">Individual Standings ({standingsLabel})</h3>
                       <div className="sbTopSpace">
-                        <IndividualStandingsTable rows={standings.individual_standings} />
+                        <IndividualStandingsTable
+                          rows={standings.individual_standings}
+                          onPlayerSelect={
+                            scoreboardAvailable
+                              ? (playerId) => {
+                                  setPlayerValue(String(playerId));
+                                  setResultsView("player");
+                                }
+                              : undefined
+                          }
+                        />
                       </div>
                     </div>
                   </div>
