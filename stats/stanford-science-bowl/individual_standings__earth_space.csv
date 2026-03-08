@@ -1,228 +1,228 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,94,Keshav Verma,Dougherty Valley A,3,10,0,2,12,40,13.333333333333334
-2,116,Everett Tung,Homestead,3,9,0,3,12,36,12.0
-3,205,Kevin Pei,Palo Alto,3,9,0,3,12,36,12.0
-4,185,Roshan Annamalai,Mission San Jose A,3,9,1,2,12,32,10.666666666666666
-5,58,Advait Reddy Duvvuru,Archbishop Mitty B,3,8,1,3,12,28,9.333333333333334
-6,39,Sudhanva Belur,Archbishop Mitty A,3,8,1,3,12,28,9.333333333333334
-7,118,Alexander Weaver,Davidson A,3,7,0,5,12,28,9.333333333333334
-8,1,Joshua Wu,Folsom City,3,7,1,4,12,24,8.0
-9,192,Pranik Biswas,Miller,3,6,0,6,12,24,8.0
-10,151,Abhinav Krishna Senthil Kumar,Mira Loma A,3,6,1,5,12,20,6.666666666666667
-11,25,Rohan Garg,Amador Valley A,3,6,1,5,12,20,6.666666666666667
-12,155,Shashank Vedula,Foothill A,3,6,1,5,12,20,6.666666666666667
-13,36,Aaron Cohen,BASIS Silicon Valley A,3,5,0,7,12,20,6.666666666666667
-14,210,Alex Ge,Saratoga,3,5,0,7,12,20,6.666666666666667
-15,33,Lucas Quan,BASIS Silicon Valley A,3,5,0,7,12,20,6.666666666666667
-16,124,Shayan Sattarvand,Davidson B,3,5,0,7,12,20,6.666666666666667
-17,71,Kaiyuan Ding,GSB B,3,4,0,8,12,16,5.333333333333333
-18,99,Renard Wu,Clovis North,2,4,0,2,6,16,8.0
-19,143,Swaraj Adhikari,El Camino A,3,4,1,7,12,12,4.0
-20,229,Aarnav Rudraraju,BASIS Fremont,2,3,0,5,8,12,6.0
-21,83,Chun Tu Matthew Yu,Mountain House B,3,3,0,9,12,12,4.0
-22,51,Liam Tran,BASIS Silicon Valley B,3,3,0,9,12,12,4.0
-23,101,Meera Malkar,Clovis North,2,3,0,3,6,12,6.0
-24,11,Namita Gaidhani,Cupertino A,3,3,0,5,8,12,4.0
-25,199,Vincent Qin,Lynbrook B,2,3,0,5,8,12,6.0
-26,214,Ishaan Kabra,Mission San Jose B,3,5,3,4,12,8,2.6666666666666665
-27,65,Abhiram Kuchi,Irvington B,3,2,0,10,12,8,2.6666666666666665
-28,136,Adhrit Viswanth Balaji,Dougherty Valley B,3,2,0,8,10,8,2.6666666666666665
-29,140,Andrew Liu,Lynbrook A,3,2,0,10,12,8,2.6666666666666665
-30,110,Anya Sarode,Cupertino B,3,2,0,10,12,8,2.6666666666666665
-31,224,Dhruv Subramanian,Quarry Lane B,3,2,0,8,10,8,2.6666666666666665
-32,129,Ibrahim Nadeem,Mountain House A,3,2,0,10,12,8,2.6666666666666665
-33,202,Jeeva Karthy,Mira Loma B,3,2,0,10,12,8,2.6666666666666665
-34,162,Joshua Huang,Evergreen Valley,3,2,0,10,12,8,2.6666666666666665
-35,120,Lucas Wu,Davidson A,3,2,0,10,12,8,2.6666666666666665
-36,209,Max Rombakh,Saratoga,2,2,0,6,8,8,4.0
-37,225,Neel Gupta,Quarry Lane B,3,2,0,8,10,8,2.6666666666666665
-38,29,Olive Leuten,Amador Valley B,3,2,0,10,12,8,2.6666666666666665
-39,156,Parv Surjan,Foothill A,2,2,0,4,6,8,4.0
-40,26,Samarth Jain,Amador Valley A,3,2,0,8,10,8,2.6666666666666665
-41,85,Shreyas Mandayam,Mountain House B,3,2,0,8,10,8,2.6666666666666665
-42,142,Sohil Rathi,Lynbrook A,3,2,0,6,8,8,2.6666666666666665
-43,6,Tate Nomura,Albany A,3,2,0,10,12,8,2.6666666666666665
-44,75,Vihaan Tigadikar,California,3,2,0,10,12,8,2.6666666666666665
-45,141,Philip Kohr,Lynbrook A,3,3,2,3,8,4,1.3333333333333333
-46,171,Ali Sherazi,GSB A,3,2,1,9,12,4,1.3333333333333333
-47,79,Greta Nikolai,Chico A,3,2,1,7,10,4,1.3333333333333333
-48,57,Aarav Gupta,American B,3,1,0,11,12,4,1.3333333333333333
-49,134,Andrew Sun,Dougherty Valley B,3,1,0,11,12,4,1.3333333333333333
-50,216,Andy Liu,Mission San Jose B,3,1,0,11,12,4,1.3333333333333333
-51,215,Aravind Muralidharan,Mission San Jose B,3,1,0,11,12,4,1.3333333333333333
-52,194,Asad Rahman,Miller,2,1,0,5,6,4,2.0
-53,175,Austin Lin,Foothill B,3,1,0,11,12,4,1.3333333333333333
-54,148,Bryan Nasr,Mira Loma A,3,1,0,11,12,4,1.3333333333333333
-55,211,Ethan Pan,Saratoga,3,1,0,11,12,4,1.3333333333333333
-56,181,Ishaan Agrawal,Irvington A,3,1,0,11,12,4,1.3333333333333333
-57,112,Iurii Kirpichev,Cupertino B,3,1,0,11,12,4,1.3333333333333333
-58,154,Jake Nguyen,Foothill A,3,1,0,11,12,4,1.3333333333333333
-59,167,Kabir Mahajan,GSB A,3,1,0,11,12,4,1.3333333333333333
-60,201,Kapilan Karunakaran,Mira Loma B,3,1,0,11,12,4,1.3333333333333333
-61,2,Kavin Anreddy,Folsom City,3,1,0,11,12,4,1.3333333333333333
-62,100,Majed Almasri,Clovis North,3,1,0,11,12,4,1.3333333333333333
-63,180,Matthew Wang,Irvington A,3,1,0,11,12,4,1.3333333333333333
-64,195,Matthew Yuan,Lynbrook B,3,1,0,11,12,4,1.3333333333333333
-65,84,Neel Raina,Mountain House B,3,1,0,11,12,4,1.3333333333333333
-66,7,Nick Linzer,Albany A,3,1,0,9,10,4,1.3333333333333333
-67,103,Rayirth Lakharia,Quarry Lane A,3,1,0,11,12,4,1.3333333333333333
-68,27,Ritwik Aeka,Amador Valley A,3,1,0,11,12,4,1.3333333333333333
-69,182,Roland Pratt,Irvington A,3,1,0,9,10,4,1.3333333333333333
-70,139,Ryan Bansal,Lynbrook A,3,1,0,9,10,4,1.3333333333333333
-71,172,Sahana Venkat,Foothill B,3,1,0,11,12,4,1.3333333333333333
-72,59,Samiha Das,Archbishop Mitty B,3,1,0,11,12,4,1.3333333333333333
-73,55,Sanjay Seshadri,American B,3,1,0,11,12,4,1.3333333333333333
-74,191,Shien Fang,Miller,3,1,0,11,12,4,1.3333333333333333
-75,30,Srijon Mandal,Amador Valley B,3,1,0,11,12,4,1.3333333333333333
-76,133,Tannishtha Chakraborthy,Dougherty Valley B,3,1,0,11,12,4,1.3333333333333333
-77,193,Tim Xia,Miller,2,1,0,5,6,4,2.0
-78,107,Vikrant Chintanaboina,Stanford Online,3,1,0,11,12,4,1.3333333333333333
-79,163,Zichao Zhou,Evergreen Valley,3,1,0,11,12,4,1.3333333333333333
-80,23,Kevin Chen,BASIS Fremont,3,2,2,8,12,0,0.0
-81,105,Angad Hayer,Quarry Lane A,3,1,1,10,12,0,0.0
-82,157,Grant Kitchen,El Camino B,3,1,1,10,12,0,0.0
-83,169,Neil Dixit,GSB A,3,1,1,10,12,0,0.0
-84,66,Aariv Aggarwal,Irvington B,3,0,0,10,10,0,0.0
-85,20,Aarnav Rudiaiaju,BASIS Fremont,1,0,0,4,4,0,0.0
-86,44,Abhinav Shivalli,American A,2,0,0,6,6,0,0.0
-87,217,Abhiraam Girish,Mission San Jose B,1,0,0,2,2,0,0.0
-88,98,Achuth Vinay,Clovis North,3,0,0,12,12,0,0.0
-89,67,Aditya Arun,Irvington B,2,0,0,8,8,0,0.0
-90,187,Advaith Mopuri,Mission San Jose A,3,0,0,12,12,0,0.0
-91,146,Agrima Rai,El Camino A,2,0,0,8,8,0,0.0
-92,179,Aiden Gao,Los Gatos,3,0,0,12,12,0,0.0
-93,93,Alan Chen,Dougherty Valley A,3,0,0,12,12,0,0.0
-94,9,Alex Bowen,Albany A,2,0,0,6,6,0,0.0
-95,227,Alex Luo,Quarry Lane B,3,0,0,6,6,0,0.0
-96,196,Alex Ma,Lynbrook B,2,0,0,8,8,0,0.0
-97,204,Andrew Wen,Palo Alto,3,0,0,12,12,0,0.0
-98,137,Aneeka Rao,Dougherty Valley B,2,0,0,4,4,0,0.0
-99,189,Anish Agarwal,Mission San Jose A,2,0,0,6,6,0,0.0
-100,38,Anish Roy,Archbishop Mitty A,3,0,0,12,12,0,0.0
-101,176,Anya Agarwal,Los Gatos,3,0,0,12,12,0,0.0
-102,183,Arjun Murugappan,Irvington A,3,0,0,12,12,0,0.0
-103,135,Armaan Syed,Dougherty Valley B,3,0,0,10,10,0,0.0
-104,190,Arthur Chang,Miller,3,0,0,12,12,0,0.0
-105,174,Ashwin Ganapathi,Foothill B,3,0,0,12,12,0,0.0
-106,92,Ashwin Shekhar,Dougherty Valley A,3,0,0,10,10,0,0.0
-107,178,Atharava Pandey,Los Gatos,3,0,0,12,12,0,0.0
-108,153,Athithan Elamaran,Foothill A,3,0,0,10,10,0,0.0
-109,165,Autumn Le,Evergreen Valley,3,0,0,12,12,0,0.0
-110,159,Avery Fung,El Camino B,2,0,0,4,4,0,0.0
-111,230,Avery Fung,El Camino A,1,0,0,4,4,0,0.0
-112,184,Avyukt Bhardwaj,Irvington A,1,0,0,2,2,0,0.0
-113,42,Ben Zheng,Archbishop Mitty A,2,0,0,8,8,0,0.0
-114,8,Benton Vargo,Albany A,3,0,0,12,12,0,0.0
-115,152,Bhagirath Bandigari,Foothill A,3,0,0,12,12,0,0.0
-116,160,Billy Battogtokh,El Camino B,3,0,0,12,12,0,0.0
-117,127,Bourne Zhou,Davidson B,3,0,0,6,6,0,0.0
-118,13,Brandon Seo,Cupertino A,3,0,0,12,12,0,0.0
-119,123,Casey Fong,Davidson B,3,0,0,6,6,0,0.0
-120,72,Chiara Montanari,GSB B,1,0,0,2,2,0,0.0
-121,28,Dalbert Wu,Amador Valley A,1,0,0,2,2,0,0.0
-122,69,Daphne Chen,GSB B,3,0,0,10,10,0,0.0
-123,18,David Ha,Albany B,3,0,0,12,12,0,0.0
-124,111,Elaine Chen,Cupertino B,3,0,0,12,12,0,0.0
-125,226,Elaine Gu,Quarry Lane B,3,0,0,12,12,0,0.0
-126,89,Eli Hu,Chico B,3,0,0,12,12,0,0.0
-127,170,Elliot Boyce,GSB A,1,0,0,4,4,0,0.0
-128,232,Eric Blones,El Camino A,1,0,0,4,4,0,0.0
-129,49,Eric Guo,BASIS Silicon Valley B,3,0,0,10,10,0,0.0
-130,126,Ethan Chan,Davidson B,3,0,0,12,12,0,0.0
-131,50,Ethan Guo,BASIS Silicon Valley B,3,0,0,12,12,0,0.0
-132,166,Ethan Li,Evergreen Valley,3,0,0,12,12,0,0.0
-133,5,Eugene Rubino,Albany A,2,0,0,8,8,0,0.0
-134,138,Evan Liu,Lynbrook A,3,0,0,10,10,0,0.0
-135,121,Filip Ramazan,Davidson A,1,0,0,4,4,0,0.0
-136,64,Gabriella Liu,Irvington B,3,0,0,12,12,0,0.0
-137,223,Gautham Doddapaneni,Quarry Lane B,3,0,0,10,10,0,0.0
-138,131,Hasita Venkat Raman,Mountain House A,3,0,0,12,12,0,0.0
-139,113,Ishaan Sinha,Homestead,3,0,0,12,12,0,0.0
-140,17,Isiang,Albany B,3,0,0,12,12,0,0.0
-141,10,Jaanya Annapureddy,Cupertino A,2,0,0,6,6,0,0.0
-142,208,Jacob Guhr,Palo Alto,1,0,0,4,4,0,0.0
-143,177,James Smith,Los Gatos,3,0,0,12,12,0,0.0
-144,52,Jason Zhao,BASIS Silicon Valley B,1,0,0,2,2,0,0.0
-145,158,Jaylyn Sanchez,El Camino B,3,0,0,12,12,0,0.0
-146,231,Jiayu Song,American A,1,0,0,2,2,0,0.0
-147,144,John Blones,El Camino A,1,0,0,4,4,0,0.0
-148,48,Jonathan Gao,BASIS Silicon Valley B,3,0,0,12,12,0,0.0
-149,106,Josh Tittiranonda,Stanford Online,3,0,0,12,12,0,0.0
-150,161,Kaelen Mendoza,El Camino B,3,0,0,8,8,0,0.0
-151,125,Kaison Fong,Davidson B,3,0,0,12,12,0,0.0
-152,74,Kavin Jain,California,3,0,0,12,12,0,0.0
-153,43,Keshav Venkatesh,American A,3,0,0,12,12,0,0.0
-154,41,Kiyan Raisinghani,Archbishop Mitty A,1,0,0,4,4,0,0.0
-155,150,Krish Singh,Mira Loma A,3,0,0,12,12,0,0.0
-156,222,Krisha Gupta,San Mateo,3,0,0,12,12,0,0.0
-157,34,Larry Zhao,BASIS Silicon Valley A,3,0,0,12,12,0,0.0
-158,114,Leo Sitaraman,Homestead,3,0,0,8,8,0,0.0
-159,82,Lily Tao,Chico A,3,0,0,10,10,0,0.0
-160,15,Lina Kim,Albany B,3,0,0,12,12,0,0.0
-161,73,Lucas Chi,California,3,0,0,12,12,0,0.0
-162,81,Lucas Lazarski,Chico A,3,0,0,12,12,0,0.0
-163,31,Lusen Yao,Amador Valley B,3,0,0,12,12,0,0.0
-164,115,Madeline Brown,Homestead,3,0,0,12,12,0,0.0
-165,63,Mahi Kumar,Irvington B,2,0,0,6,6,0,0.0
-166,70,Margaret Beery,GSB B,3,0,0,12,12,0,0.0
-167,68,Max Li,GSB B,3,0,0,12,12,0,0.0
-168,221,Mia Hasanain,San Mateo,3,0,0,12,12,0,0.0
-169,16,Michael Hou,Albany B,3,0,0,12,12,0,0.0
-170,147,Milan Pecson,El Camino A,2,0,0,8,8,0,0.0
-171,220,Navya Kayath,San Mateo,3,0,0,12,12,0,0.0
-172,102,Nyasa Gupta,Quarry Lane A,3,0,0,12,12,0,0.0
-173,104,Nyles Han,Quarry Lane A,3,0,0,12,12,0,0.0
-174,168,Olivia Kim,GSB A,2,0,0,8,8,0,0.0
-175,88,Phineas Wehrheim,Chico B,3,0,0,12,12,0,0.0
-176,78,Phuong Lu,Chico A,2,0,0,6,6,0,0.0
-177,87,Pradyun Jupalli,Mountain House B,1,0,0,4,4,0,0.0
-178,12,Pranav Burra,Cupertino A,3,0,0,12,12,0,0.0
-179,32,Pratham Mehta,Amador Valley B,3,0,0,12,12,0,0.0
-180,3,Pushkal Mishra,Folsom City,3,0,0,12,12,0,0.0
-181,213,Quinn Gifford,Saratoga,3,0,0,10,10,0,0.0
-182,206,Rasia Yu,Palo Alto,3,0,0,12,12,0,0.0
-183,77,Ray Zhang,California,2,0,0,8,8,0,0.0
-184,40,Richard Peng,Archbishop Mitty A,3,0,0,12,12,0,0.0
-185,198,Rishab Medepalli,Lynbrook B,2,0,0,8,8,0,0.0
-186,203,Rohith Gonuguntla,Mira Loma B,3,0,0,12,12,0,0.0
-187,109,Rosa Lee,Cupertino B,3,0,0,12,12,0,0.0
-188,60,Ruoyu Zhou,Archbishop Mitty B,3,0,0,8,8,0,0.0
-189,145,Ryan Chen,El Camino A,2,0,0,8,8,0,0.0
-190,45,Ryan Liu,American A,3,0,0,10,10,0,0.0
-191,22,Ryan Yan,BASIS Fremont,3,0,0,12,12,0,0.0
-192,61,Saatvik Chauhan,Archbishop Mitty B,3,0,0,12,12,0,0.0
-193,200,Sai-Sanaathan Vemireddy,Mira Loma B,3,0,0,12,12,0,0.0
-194,132,Saicharan Avuthu,Mountain House A,3,0,0,6,6,0,0.0
-195,130,Sampriti Brahma,Mountain House A,3,0,0,12,12,0,0.0
-196,4,Satvik Chakkapalli,Folsom City,3,0,0,12,12,0,0.0
-197,207,Sayan Singh,Palo Alto,2,0,0,8,8,0,0.0
-198,128,Shrikoustubh Veldanda,Mountain House A,3,0,0,6,6,0,0.0
-199,14,Shubhi Jain,Cupertino A,3,0,0,10,10,0,0.0
-200,173,Shulin Lu,Foothill B,3,0,0,12,12,0,0.0
-201,96,Sohail Abidnia,Dougherty Valley A,1,0,0,2,2,0,0.0
-202,95,Soham Chatterjee,Dougherty Valley A,3,0,0,12,12,0,0.0
-203,197,Sophia Fan,Lynbrook B,3,0,0,12,12,0,0.0
-204,117,Spencer Diep,Homestead,2,0,0,4,4,0,0.0
-205,47,Srithan Devarashetty,American A,3,0,0,8,8,0,0.0
-206,86,Steven Tang,Mountain House B,3,0,0,10,10,0,0.0
-207,149,Sudeep Suresh,Mira Loma A,3,0,0,12,12,0,0.0
-208,54,Sudesh Srivatsan,American B,3,0,0,12,12,0,0.0
-209,219,Surbhi Sakshi,San Mateo,3,0,0,12,12,0,0.0
-210,76,Sushrut Pola,California,1,0,0,4,4,0,0.0
-211,188,Theenash Sengupta,Mission San Jose A,3,0,0,12,12,0,0.0
-212,53,Thomas Nguyen,American B,3,0,0,12,12,0,0.0
-213,212,Warren Chee,Saratoga,2,0,0,6,6,0,0.0
-214,119,Yajur Chandar,Davidson A,2,0,0,8,8,0,0.0
-215,80,YiLun Liu,Chico A,3,0,0,10,10,0,0.0
-216,62,Yixin Xu,Archbishop Mitty B,2,0,0,4,4,0,0.0
-217,37,Zanda Zhu,BASIS Silicon Valley A,3,0,0,12,12,0,0.0
-218,108,Vinayak Vikram,Stanford Online,3,2,3,7,12,-4,-1.3333333333333333
-219,218,Aarush Iyer,Mission San Jose B,3,0,1,9,10,-4,-1.3333333333333333
-220,46,Abdul Muhaimin,American A,3,0,1,11,12,-4,-1.3333333333333333
-221,91,Devi Schumann,Chico B,3,0,1,11,12,-4,-1.3333333333333333
-222,24,Gaurav Gupta,Amador Valley A,3,0,1,11,12,-4,-1.3333333333333333
-223,122,Julian Kuang,Davidson A,3,0,1,11,12,-4,-1.3333333333333333
-224,97,Justin Do,Clovis North,3,0,1,11,12,-4,-1.3333333333333333
-225,21,Lexing Liu,BASIS Fremont,3,0,1,11,12,-4,-1.3333333333333333
-226,90,Maddy Dietz,Chico B,3,0,1,11,12,-4,-1.3333333333333333
-227,186,Rutvik Arora,Mission San Jose A,2,0,1,5,6,-4,-2.0
+1,205,Kevin Pei,Palo Alto,4,13,0,3,16,52,13.0
+2,185,Roshan Annamalai,Mission San Jose A,4,13,1,2,16,48,12.0
+3,94,Keshav Verma,Dougherty Valley A,4,12,0,4,16,48,12.0
+4,151,Abhinav Krishna Senthil Kumar,Mira Loma A,4,10,1,5,16,36,9.0
+5,39,Sudhanva Belur,Archbishop Mitty A,4,10,1,5,16,36,9.0
+6,118,Alexander Weaver,Davidson A,4,9,0,7,16,36,9.0
+7,116,Everett Tung,Homestead,4,9,0,7,16,36,9.0
+8,58,Advait Reddy Duvvuru,Archbishop Mitty B,4,9,2,5,16,28,7.0
+9,1,Joshua Wu,Folsom City,4,9,2,5,16,28,7.0
+10,155,Shashank Vedula,Foothill A,4,8,2,6,16,24,6.0
+11,192,Pranik Biswas,Miller,4,7,1,8,16,24,6.0
+12,210,Alex Ge,Saratoga,4,6,0,10,16,24,6.0
+13,214,Ishaan Kabra,Mission San Jose B,4,8,3,5,16,20,5.0
+14,141,Philip Kohr,Lynbrook A,4,7,2,3,12,20,5.0
+15,25,Rohan Garg,Amador Valley A,4,7,2,7,16,20,5.0
+16,36,Aaron Cohen,BASIS Silicon Valley A,4,5,0,11,16,20,5.0
+17,33,Lucas Quan,BASIS Silicon Valley A,4,5,0,11,16,20,5.0
+18,124,Shayan Sattarvand,Davidson B,4,5,1,10,16,16,4.0
+19,229,Aarnav Rudraraju,BASIS Fremont,3,4,0,8,12,16,5.333333333333333
+20,71,Kaiyuan Ding,GSB B,4,4,0,12,16,16,4.0
+21,101,Meera Malkar,Clovis North,3,4,0,6,10,16,5.333333333333333
+22,11,Namita Gaidhani,Cupertino A,4,4,0,8,12,16,4.0
+23,99,Renard Wu,Clovis North,2,4,0,2,6,16,8.0
+24,199,Vincent Qin,Lynbrook B,3,4,0,8,12,16,5.333333333333333
+25,143,Swaraj Adhikari,El Camino A,4,4,1,11,16,12,3.0
+26,110,Anya Sarode,Cupertino B,4,3,0,13,16,12,3.0
+27,83,Chun Tu Matthew Yu,Mountain House B,4,3,0,13,16,12,3.0
+28,202,Jeeva Karthy,Mira Loma B,4,3,0,13,16,12,3.0
+29,51,Liam Tran,BASIS Silicon Valley B,4,3,0,13,16,12,3.0
+30,225,Neel Gupta,Quarry Lane B,4,3,0,11,14,12,3.0
+31,26,Samarth Jain,Amador Valley A,4,3,0,11,14,12,3.0
+32,157,Grant Kitchen,El Camino B,4,3,1,12,16,8,2.0
+33,75,Vihaan Tigadikar,California,4,3,1,12,16,8,2.0
+34,65,Abhiram Kuchi,Irvington B,4,2,0,14,16,8,2.0
+35,140,Andrew Liu,Lynbrook A,4,2,0,14,16,8,2.0
+36,175,Austin Lin,Foothill B,4,2,0,14,16,8,2.0
+37,224,Dhruv Subramanian,Quarry Lane B,4,2,0,12,14,8,2.0
+38,211,Ethan Pan,Saratoga,4,2,0,14,16,8,2.0
+39,129,Ibrahim Nadeem,Mountain House A,4,2,0,14,16,8,2.0
+40,181,Ishaan Agrawal,Irvington A,4,2,0,14,16,8,2.0
+41,162,Joshua Huang,Evergreen Valley,4,2,0,14,16,8,2.0
+42,120,Lucas Wu,Davidson A,4,2,0,14,16,8,2.0
+43,100,Majed Almasri,Clovis North,4,2,0,14,16,8,2.0
+44,209,Max Rombakh,Saratoga,3,2,0,10,12,8,2.6666666666666665
+45,84,Neel Raina,Mountain House B,4,2,0,14,16,8,2.0
+46,29,Olive Leuten,Amador Valley B,4,2,0,14,16,8,2.0
+47,156,Parv Surjan,Foothill A,2,2,0,4,6,8,4.0
+48,27,Ritwik Aeka,Amador Valley A,4,2,0,14,16,8,2.0
+49,172,Sahana Venkat,Foothill B,4,2,0,14,16,8,2.0
+50,55,Sanjay Seshadri,American B,4,2,0,14,16,8,2.0
+51,85,Shreyas Mandayam,Mountain House B,4,2,0,12,14,8,2.0
+52,142,Sohil Rathi,Lynbrook A,4,2,0,8,10,8,2.0
+53,133,Tannishtha Chakraborthy,Dougherty Valley B,4,2,0,14,16,8,2.0
+54,6,Tate Nomura,Albany A,4,2,0,14,16,8,2.0
+55,171,Ali Sherazi,GSB A,4,3,2,11,16,4,1.0
+56,136,Adhrit Viswanth Balaji,Dougherty Valley B,4,2,1,11,14,4,1.0
+57,79,Greta Nikolai,Chico A,4,2,1,11,14,4,1.0
+58,103,Rayirth Lakharia,Quarry Lane A,4,2,1,13,16,4,1.0
+59,57,Aarav Gupta,American B,4,1,0,15,16,4,1.0
+60,196,Alex Ma,Lynbrook B,3,1,0,11,12,4,1.3333333333333333
+61,134,Andrew Sun,Dougherty Valley B,4,1,0,15,16,4,1.0
+62,216,Andy Liu,Mission San Jose B,4,1,0,15,16,4,1.0
+63,176,Anya Agarwal,Los Gatos,4,1,0,15,16,4,1.0
+64,215,Aravind Muralidharan,Mission San Jose B,4,1,0,15,16,4,1.0
+65,194,Asad Rahman,Miller,3,1,0,9,10,4,1.3333333333333333
+66,148,Bryan Nasr,Mira Loma A,4,1,0,15,16,4,1.0
+67,232,Eric Blones,El Camino A,2,1,0,7,8,4,2.0
+68,166,Ethan Li,Evergreen Valley,4,1,0,15,16,4,1.0
+69,112,Iurii Kirpichev,Cupertino B,4,1,0,15,16,4,1.0
+70,154,Jake Nguyen,Foothill A,4,1,0,15,16,4,1.0
+71,167,Kabir Mahajan,GSB A,4,1,0,15,16,4,1.0
+72,201,Kapilan Karunakaran,Mira Loma B,4,1,0,15,16,4,1.0
+73,2,Kavin Anreddy,Folsom City,4,1,0,15,16,4,1.0
+74,222,Krisha Gupta,San Mateo,4,1,0,15,16,4,1.0
+75,180,Matthew Wang,Irvington A,4,1,0,15,16,4,1.0
+76,195,Matthew Yuan,Lynbrook B,4,1,0,15,16,4,1.0
+77,7,Nick Linzer,Albany A,4,1,0,11,12,4,1.0
+78,182,Roland Pratt,Irvington A,4,1,0,11,12,4,1.0
+79,139,Ryan Bansal,Lynbrook A,4,1,0,11,12,4,1.0
+80,59,Samiha Das,Archbishop Mitty B,4,1,0,15,16,4,1.0
+81,191,Shien Fang,Miller,4,1,0,15,16,4,1.0
+82,128,Shrikoustubh Veldanda,Mountain House A,4,1,0,7,8,4,1.0
+83,30,Srijon Mandal,Amador Valley B,4,1,0,15,16,4,1.0
+84,47,Srithan Devarashetty,American A,4,1,0,11,12,4,1.0
+85,193,Tim Xia,Miller,2,1,0,5,6,4,2.0
+86,107,Vikrant Chintanaboina,Stanford Online,4,1,0,15,16,4,1.0
+87,163,Zichao Zhou,Evergreen Valley,4,1,0,15,16,4,1.0
+88,108,Vinayak Vikram,Stanford Online,4,3,3,10,16,0,0.0
+89,23,Kevin Chen,BASIS Fremont,4,2,2,12,16,0,0.0
+90,105,Angad Hayer,Quarry Lane A,4,1,1,14,16,0,0.0
+91,169,Neil Dixit,GSB A,4,1,1,14,16,0,0.0
+92,66,Aariv Aggarwal,Irvington B,4,0,0,14,14,0,0.0
+93,20,Aarnav Rudiaiaju,BASIS Fremont,1,0,0,4,4,0,0.0
+94,44,Abhinav Shivalli,American A,2,0,0,6,6,0,0.0
+95,217,Abhiraam Girish,Mission San Jose B,1,0,0,2,2,0,0.0
+96,98,Achuth Vinay,Clovis North,4,0,0,16,16,0,0.0
+97,67,Aditya Arun,Irvington B,3,0,0,12,12,0,0.0
+98,187,Advaith Mopuri,Mission San Jose A,4,0,0,16,16,0,0.0
+99,146,Agrima Rai,El Camino A,2,0,0,8,8,0,0.0
+100,179,Aiden Gao,Los Gatos,4,0,0,16,16,0,0.0
+101,93,Alan Chen,Dougherty Valley A,4,0,0,16,16,0,0.0
+102,9,Alex Bowen,Albany A,3,0,0,10,10,0,0.0
+103,227,Alex Luo,Quarry Lane B,4,0,0,10,10,0,0.0
+104,204,Andrew Wen,Palo Alto,4,0,0,16,16,0,0.0
+105,137,Aneeka Rao,Dougherty Valley B,2,0,0,4,4,0,0.0
+106,189,Anish Agarwal,Mission San Jose A,2,0,0,6,6,0,0.0
+107,38,Anish Roy,Archbishop Mitty A,4,0,0,16,16,0,0.0
+108,183,Arjun Murugappan,Irvington A,4,0,0,16,16,0,0.0
+109,135,Armaan Syed,Dougherty Valley B,4,0,0,14,14,0,0.0
+110,190,Arthur Chang,Miller,4,0,0,16,16,0,0.0
+111,174,Ashwin Ganapathi,Foothill B,4,0,0,16,16,0,0.0
+112,92,Ashwin Shekhar,Dougherty Valley A,4,0,0,14,14,0,0.0
+113,178,Atharava Pandey,Los Gatos,4,0,0,16,16,0,0.0
+114,153,Athithan Elamaran,Foothill A,4,0,0,14,14,0,0.0
+115,165,Autumn Le,Evergreen Valley,4,0,0,16,16,0,0.0
+116,159,Avery Fung,El Camino B,3,0,0,6,6,0,0.0
+117,230,Avery Fung,El Camino A,1,0,0,4,4,0,0.0
+118,184,Avyukt Bhardwaj,Irvington A,2,0,0,4,4,0,0.0
+119,42,Ben Zheng,Archbishop Mitty A,3,0,0,12,12,0,0.0
+120,8,Benton Vargo,Albany A,4,0,0,16,16,0,0.0
+121,152,Bhagirath Bandigari,Foothill A,4,0,0,16,16,0,0.0
+122,160,Billy Battogtokh,El Camino B,4,0,0,16,16,0,0.0
+123,127,Bourne Zhou,Davidson B,4,0,0,8,8,0,0.0
+124,13,Brandon Seo,Cupertino A,4,0,0,16,16,0,0.0
+125,123,Casey Fong,Davidson B,4,0,0,8,8,0,0.0
+126,72,Chiara Montanari,GSB B,2,0,0,4,4,0,0.0
+127,28,Dalbert Wu,Amador Valley A,1,0,0,2,2,0,0.0
+128,69,Daphne Chen,GSB B,4,0,0,12,12,0,0.0
+129,18,David Ha,Albany B,4,0,0,16,16,0,0.0
+130,111,Elaine Chen,Cupertino B,4,0,0,16,16,0,0.0
+131,226,Elaine Gu,Quarry Lane B,4,0,0,14,14,0,0.0
+132,89,Eli Hu,Chico B,4,0,0,16,16,0,0.0
+133,170,Elliot Boyce,GSB A,2,0,0,8,8,0,0.0
+134,49,Eric Guo,BASIS Silicon Valley B,4,0,0,14,14,0,0.0
+135,126,Ethan Chan,Davidson B,4,0,0,16,16,0,0.0
+136,50,Ethan Guo,BASIS Silicon Valley B,4,0,0,16,16,0,0.0
+137,5,Eugene Rubino,Albany A,3,0,0,10,10,0,0.0
+138,138,Evan Liu,Lynbrook A,4,0,0,14,14,0,0.0
+139,121,Filip Ramazan,Davidson A,2,0,0,8,8,0,0.0
+140,64,Gabriella Liu,Irvington B,4,0,0,16,16,0,0.0
+141,223,Gautham Doddapaneni,Quarry Lane B,4,0,0,12,12,0,0.0
+142,131,Hasita Venkat Raman,Mountain House A,4,0,0,16,16,0,0.0
+143,113,Ishaan Sinha,Homestead,4,0,0,16,16,0,0.0
+144,17,Isiang,Albany B,4,0,0,16,16,0,0.0
+145,10,Jaanya Annapureddy,Cupertino A,2,0,0,6,6,0,0.0
+146,208,Jacob Guhr,Palo Alto,2,0,0,6,6,0,0.0
+147,177,James Smith,Los Gatos,4,0,0,16,16,0,0.0
+148,52,Jason Zhao,BASIS Silicon Valley B,1,0,0,2,2,0,0.0
+149,158,Jaylyn Sanchez,El Camino B,4,0,0,16,16,0,0.0
+150,231,Jiayu Song,American A,2,0,0,4,4,0,0.0
+151,144,John Blones,El Camino A,1,0,0,4,4,0,0.0
+152,48,Jonathan Gao,BASIS Silicon Valley B,4,0,0,16,16,0,0.0
+153,106,Josh Tittiranonda,Stanford Online,4,0,0,16,16,0,0.0
+154,161,Kaelen Mendoza,El Camino B,4,0,0,10,10,0,0.0
+155,125,Kaison Fong,Davidson B,4,0,0,16,16,0,0.0
+156,74,Kavin Jain,California,4,0,0,16,16,0,0.0
+157,43,Keshav Venkatesh,American A,4,0,0,14,14,0,0.0
+158,41,Kiyan Raisinghani,Archbishop Mitty A,1,0,0,4,4,0,0.0
+159,150,Krish Singh,Mira Loma A,4,0,0,16,16,0,0.0
+160,34,Larry Zhao,BASIS Silicon Valley A,4,0,0,16,16,0,0.0
+161,114,Leo Sitaraman,Homestead,4,0,0,12,12,0,0.0
+162,82,Lily Tao,Chico A,4,0,0,14,14,0,0.0
+163,15,Lina Kim,Albany B,4,0,0,16,16,0,0.0
+164,73,Lucas Chi,California,4,0,0,16,16,0,0.0
+165,81,Lucas Lazarski,Chico A,3,0,0,12,12,0,0.0
+166,31,Lusen Yao,Amador Valley B,4,0,0,16,16,0,0.0
+167,115,Madeline Brown,Homestead,4,0,0,16,16,0,0.0
+168,63,Mahi Kumar,Irvington B,2,0,0,6,6,0,0.0
+169,70,Margaret Beery,GSB B,4,0,0,16,16,0,0.0
+170,68,Max Li,GSB B,4,0,0,16,16,0,0.0
+171,221,Mia Hasanain,San Mateo,4,0,0,16,16,0,0.0
+172,16,Michael Hou,Albany B,4,0,0,16,16,0,0.0
+173,147,Milan Pecson,El Camino A,3,0,0,12,12,0,0.0
+174,220,Navya Kayath,San Mateo,4,0,0,16,16,0,0.0
+175,102,Nyasa Gupta,Quarry Lane A,4,0,0,16,16,0,0.0
+176,104,Nyles Han,Quarry Lane A,4,0,0,16,16,0,0.0
+177,168,Olivia Kim,GSB A,2,0,0,8,8,0,0.0
+178,88,Phineas Wehrheim,Chico B,4,0,0,16,16,0,0.0
+179,78,Phuong Lu,Chico A,3,0,0,10,10,0,0.0
+180,87,Pradyun Jupalli,Mountain House B,2,0,0,8,8,0,0.0
+181,12,Pranav Burra,Cupertino A,4,0,0,16,16,0,0.0
+182,32,Pratham Mehta,Amador Valley B,4,0,0,16,16,0,0.0
+183,3,Pushkal Mishra,Folsom City,4,0,0,16,16,0,0.0
+184,213,Quinn Gifford,Saratoga,4,0,0,14,14,0,0.0
+185,206,Rasia Yu,Palo Alto,4,0,0,16,16,0,0.0
+186,77,Ray Zhang,California,2,0,0,8,8,0,0.0
+187,40,Richard Peng,Archbishop Mitty A,4,0,0,16,16,0,0.0
+188,198,Rishab Medepalli,Lynbrook B,2,0,0,8,8,0,0.0
+189,203,Rohith Gonuguntla,Mira Loma B,4,0,0,16,16,0,0.0
+190,109,Rosa Lee,Cupertino B,4,0,0,16,16,0,0.0
+191,60,Ruoyu Zhou,Archbishop Mitty B,4,0,0,10,10,0,0.0
+192,145,Ryan Chen,El Camino A,3,0,0,12,12,0,0.0
+193,45,Ryan Liu,American A,4,0,0,14,14,0,0.0
+194,22,Ryan Yan,BASIS Fremont,4,0,0,16,16,0,0.0
+195,61,Saatvik Chauhan,Archbishop Mitty B,4,0,0,14,14,0,0.0
+196,200,Sai-Sanaathan Vemireddy,Mira Loma B,4,0,0,16,16,0,0.0
+197,132,Saicharan Avuthu,Mountain House A,4,0,0,8,8,0,0.0
+198,130,Sampriti Brahma,Mountain House A,4,0,0,16,16,0,0.0
+199,4,Satvik Chakkapalli,Folsom City,4,0,0,16,16,0,0.0
+200,207,Sayan Singh,Palo Alto,3,0,0,10,10,0,0.0
+201,14,Shubhi Jain,Cupertino A,4,0,0,14,14,0,0.0
+202,173,Shulin Lu,Foothill B,4,0,0,16,16,0,0.0
+203,96,Sohail Abidnia,Dougherty Valley A,1,0,0,2,2,0,0.0
+204,95,Soham Chatterjee,Dougherty Valley A,4,0,0,16,16,0,0.0
+205,197,Sophia Fan,Lynbrook B,4,0,0,16,16,0,0.0
+206,117,Spencer Diep,Homestead,2,0,0,4,4,0,0.0
+207,86,Steven Tang,Mountain House B,3,0,0,10,10,0,0.0
+208,149,Sudeep Suresh,Mira Loma A,4,0,0,16,16,0,0.0
+209,54,Sudesh Srivatsan,American B,4,0,0,16,16,0,0.0
+210,219,Surbhi Sakshi,San Mateo,4,0,0,16,16,0,0.0
+211,76,Sushrut Pola,California,2,0,0,8,8,0,0.0
+212,188,Theenash Sengupta,Mission San Jose A,4,0,0,16,16,0,0.0
+213,53,Thomas Nguyen,American B,4,0,0,16,16,0,0.0
+214,212,Warren Chee,Saratoga,2,0,0,6,6,0,0.0
+215,119,Yajur Chandar,Davidson A,2,0,0,8,8,0,0.0
+216,80,YiLun Liu,Chico A,4,0,0,14,14,0,0.0
+217,62,Yixin Xu,Archbishop Mitty B,3,0,0,8,8,0,0.0
+218,37,Zanda Zhu,BASIS Silicon Valley A,4,0,0,16,16,0,0.0
+219,91,Devi Schumann,Chico B,4,1,2,13,16,-4,-1.0
+220,218,Aarush Iyer,Mission San Jose B,4,0,1,13,14,-4,-1.0
+221,46,Abdul Muhaimin,American A,4,0,1,15,16,-4,-1.0
+222,24,Gaurav Gupta,Amador Valley A,4,0,1,15,16,-4,-1.0
+223,122,Julian Kuang,Davidson A,4,0,1,15,16,-4,-1.0
+224,97,Justin Do,Clovis North,4,0,1,15,16,-4,-1.0
+225,21,Lexing Liu,BASIS Fremont,4,0,1,15,16,-4,-1.0
+226,90,Maddy Dietz,Chico B,4,0,1,15,16,-4,-1.0
+227,186,Rutvik Arora,Mission San Jose A,3,0,1,9,10,-4,-1.3333333333333333
