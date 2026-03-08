@@ -29,12 +29,6 @@ function formatRoundLabel(roundNumber: number | null, roundName: string, packetN
   return formatPacketOrRoundLabel(roundNumber, roundName, packetName);
 }
 
-function formatNumber(value: number, digits = 2): string {
-  if (!Number.isFinite(value)) return "0";
-  if (Number.isInteger(value)) return String(value);
-  return value.toFixed(digits);
-}
-
 function DataTable({
   headers,
   rows,
