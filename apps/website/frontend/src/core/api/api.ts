@@ -11,6 +11,15 @@ const buildStatsUrl = (path: string) => {
     : `${import.meta.env.BASE_URL}stats/${normalizedPath}`;
 };
 
+const encodeStatsPath = (rawPath: string) => {
+  const normalized = (rawPath || "").replace(/\\/g, "/").replace(/^\/+/, "");
+  return normalized
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+};
+
 const parseJsonOrNullIfHtml = async <T,>(response: Response, label: string): Promise<T | null> => {
   const contentType = response.headers.get("content-type") ?? "";
   if (contentType.includes("text/html")) return null;
@@ -40,6 +49,16 @@ type TournamentStatsManifest = {
   schema_version: number;
   generated_at: string;
   tournament: { slug: string; name: string };
+  datasets?: Partial<{
+    teams: string;
+    players: string;
+    rounds: string;
+    games: string;
+    game_teams: string;
+    game_players: string;
+    game_teams_by_category: string;
+    game_players_by_category: string;
+  }>;
   views: {
     team_standings: string;
     individual_standings: string;
@@ -50,6 +69,16 @@ type TournamentStatsManifest = {
       individual_standings: string;
     }>;
   };
+};
+
+type TournamentStatsReportsIndex = {
+  schema_version: number;
+  default_report_key: string;
+  reports: Array<{
+    key: string;
+    label: string;
+    manifest_path: string;
+  }>;
 };
 
 const parseCsv = (raw: string, label: string): { headers: string[]; rows: string[][] } => {
@@ -336,14 +365,39 @@ export const tournamentsAPI = {
     return handleResponse(response);
   },
 
-  getTournamentStatsManifest: async (slug: string): Promise<TournamentStatsManifest | null> => {
+  getTournamentStatsReportsIndex: async (slug: string): Promise<TournamentStatsReportsIndex | null> => {
     const encodedSlug = encodeURIComponent(slug);
-    const statsUrl = buildStatsUrl(`${encodedSlug}/manifest.json`);
+    const statsUrl = buildStatsUrl(`${encodedSlug}/reports.json`);
+
+    const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to load stats reports index");
+    return parseJsonOrNullIfHtml(response, "stats reports index");
+  },
+
+  getTournamentStatsManifest: async (slug: string, manifestPath?: string | null): Promise<TournamentStatsManifest | null> => {
+    const encodedSlug = encodeURIComponent(slug);
+    const relManifest = encodeStatsPath(manifestPath || "manifest.json");
+    const statsUrl = buildStatsUrl(`${encodedSlug}/${relManifest}`);
 
     const response = await fetch(statsUrl, { headers: { Accept: "application/json" } });
     if (response.status === 404) return null;
     if (!response.ok) throw new Error("Failed to load stats manifest");
     return parseJsonOrNullIfHtml(response, "stats manifest");
+  },
+
+  getTournamentStatsCsvObjects: async (slug: string, statsPath: string): Promise<Array<Record<string, string>> | null> => {
+    const encodedSlug = encodeURIComponent(slug);
+    const relPath = encodeStatsPath(statsPath);
+    const statsUrl = buildStatsUrl(`${encodedSlug}/${relPath}`);
+
+    const response = await fetch(statsUrl, { headers: { Accept: "text/csv" } });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to load stats CSV");
+
+    const text = await readTextOrNullIfHtml(response);
+    if (!text) throw new Error("Failed to load stats CSV");
+    return csvRowsToObjects(parseCsv(text, `stats csv (${statsPath})`));
   },
 
   getTournamentStandings: async (slug: string, files?: { team: string; individual: string } | null) => {
@@ -357,8 +411,8 @@ export const tournamentsAPI = {
       individualFile = individualFile || manifest?.views?.individual_standings || "individual_standings.csv";
     }
 
-    const teamUrl = buildStatsUrl(`${encodedSlug}/${teamFile}`);
-    const individualUrl = buildStatsUrl(`${encodedSlug}/${individualFile}`);
+    const teamUrl = buildStatsUrl(`${encodedSlug}/${encodeStatsPath(teamFile)}`);
+    const individualUrl = buildStatsUrl(`${encodedSlug}/${encodeStatsPath(individualFile)}`);
 
     const [teamResp, individualResp] = await Promise.all([
       fetch(teamUrl, { headers: { Accept: "text/csv" } }),

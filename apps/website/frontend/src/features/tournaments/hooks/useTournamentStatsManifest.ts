@@ -8,7 +8,11 @@ type UseTournamentStatsManifestResult = {
   error: string | null;
 };
 
-export function useTournamentStatsManifest(slug: string, enabled: boolean): UseTournamentStatsManifestResult {
+export function useTournamentStatsManifest(
+  slug: string,
+  enabled: boolean,
+  manifestPath?: string | null,
+): UseTournamentStatsManifestResult {
   const [data, setData] = useState<TournamentStatsManifest | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +31,7 @@ export function useTournamentStatsManifest(slug: string, enabled: boolean): UseT
       setLoading(true);
       setError(null);
       try {
-        const result = (await tournamentsAPI.getTournamentStatsManifest(slug)) as TournamentStatsManifest | null;
+        const result = (await tournamentsAPI.getTournamentStatsManifest(slug, manifestPath)) as TournamentStatsManifest | null;
         if (cancelled) return;
         setData(result);
       } catch (err) {
@@ -44,7 +48,7 @@ export function useTournamentStatsManifest(slug: string, enabled: boolean): UseT
     return () => {
       cancelled = true;
     };
-  }, [enabled, slug]);
+  }, [enabled, manifestPath, slug]);
 
   return { data, loading, error };
 }
