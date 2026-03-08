@@ -221,7 +221,6 @@ export function PlayerDetailView({
           tu_pts: agg.tu_pts,
           "4s": agg.c,
           "-4s": agg.i,
-          "0s": agg.n,
         };
       });
 
@@ -258,7 +257,6 @@ export function PlayerDetailView({
         tu_pts: toInt(p.tossup_points),
         "4s": toInt(p.tossups_correct),
         "-4s": toInt(p.tossups_incorrect),
-        "0s": toInt(p.tossups_no_penalty),
       };
     });
 
@@ -339,7 +337,6 @@ export function PlayerDetailView({
                     { key: "tu_pts", label: "TU Pts", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
                   ]
                 : [
                     { key: "round", label: "Round" },
@@ -348,7 +345,6 @@ export function PlayerDetailView({
                     { key: "tu_pts", label: "TU Pts", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
                   ]
             }
             rows={gamesTableRows}
