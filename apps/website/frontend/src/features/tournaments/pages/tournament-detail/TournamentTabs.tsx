@@ -12,6 +12,7 @@ import { FieldTab } from "./FieldTab";
 import { ScoreboardView } from "./ScoreboardView";
 import { RoundReportView } from "./RoundReportView";
 import { TeamDetailView } from "./TeamDetailView";
+import { PlayerDetailView } from "./PlayerDetailView";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -185,7 +186,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled, manifestPath);
 
-  type ResultsViewId = "standings" | "scoreboard" | "round_report" | "team";
+  type ResultsViewId = "standings" | "scoreboard" | "round_report" | "team" | "player";
   const [resultsView, setResultsView] = useState<ResultsViewId>("standings");
   useEffect(() => {
     setResultsView("standings");
@@ -198,7 +199,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     !!scoreboardDatasets?.game_teams &&
     !!scoreboardDatasets?.game_players &&
     !!scoreboardDatasets?.rounds;
-  const gameDataEnabled = scoreboardAvailable && (resultsView === "scoreboard" || resultsView === "round_report" || resultsView === "team");
+  const gameDataEnabled =
+    scoreboardAvailable && (resultsView === "scoreboard" || resultsView === "round_report" || resultsView === "team" || resultsView === "player");
 
   useEffect(() => {
     if (resultsView === "standings") return;
@@ -229,6 +231,11 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     setTeamValue("");
   }, [reportKey, tournament.slug]);
 
+  const [playerValue, setPlayerValue] = useState<string>("");
+  useEffect(() => {
+    setPlayerValue("");
+  }, [reportKey, tournament.slug]);
+
   const availableTeamValues = useMemo(() => {
     const map = new Map<number, string>();
     for (const row of gameTeamRows ?? []) {
@@ -248,6 +255,32 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (availableTeamValues.some((t) => t.value === teamValue)) return;
     setTeamValue(availableTeamValues[0].value);
   }, [availableTeamValues, resultsView, teamValue]);
+
+  const availablePlayerValues = useMemo(() => {
+    const map = new Map<number, { player_name: string; team_name: string }>();
+    for (const row of gamePlayerRows ?? []) {
+      const raw = row.player_id;
+      const playerId = raw ? Number.parseInt(raw, 10) : NaN;
+      if (!Number.isFinite(playerId)) continue;
+      if (map.has(playerId)) continue;
+      map.set(playerId, { player_name: row.player_name ?? `Player ${playerId}`, team_name: row.team_name ?? "" });
+    }
+    const out = Array.from(map.entries()).map(([id, meta]) => ({
+      value: String(id),
+      label: meta.team_name ? `${meta.player_name} (${meta.team_name})` : meta.player_name,
+      player_name: meta.player_name,
+      team_name: meta.team_name,
+    }));
+    out.sort((a, b) => a.player_name.localeCompare(b.player_name) || a.team_name.localeCompare(b.team_name));
+    return out;
+  }, [gamePlayerRows]);
+
+  useEffect(() => {
+    if (resultsView !== "player") return;
+    if (availablePlayerValues.length === 0) return;
+    if (availablePlayerValues.some((p) => p.value === playerValue)) return;
+    setPlayerValue(availablePlayerValues[0].value);
+  }, [availablePlayerValues, playerValue, resultsView]);
   const overallFiles = useMemo(() => {
     if (!statsManifest) return null;
     return {
@@ -302,7 +335,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const standingsLabel = standingsCategoryKey === "overall" ? "Overall" : humanizeCategoryLabel(activeCategory?.label ?? "");
 
   const categoryFactsAvailable = standingsEnabled && !!scoreboardDatasets?.game_teams_by_category && !!scoreboardDatasets?.game_players_by_category;
-  const categoryFactsEnabled = categoryFactsAvailable && (resultsView === "team") && standingsCategoryKey !== "overall" && !!activeCategory;
+  const categoryFactsEnabled =
+    categoryFactsAvailable && (resultsView === "team" || resultsView === "player") && standingsCategoryKey !== "overall" && !!activeCategory;
   const gameTeamsByCategoryPath = scoreboardDatasets?.game_teams_by_category ? joinStatsPath(reportBaseDir, scoreboardDatasets.game_teams_by_category) : null;
   const gamePlayersByCategoryPath = scoreboardDatasets?.game_players_by_category ? joinStatsPath(reportBaseDir, scoreboardDatasets.game_players_by_category) : null;
   const { rows: gameTeamByCategoryRows, loading: gameTeamsByCategoryLoading, error: gameTeamsByCategoryError } = useTournamentStatsCsv(
@@ -374,7 +408,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
-  const showStandingsSubnav = activeTab === "results" && (resultsView === "standings" || resultsView === "team") && categories.length > 0;
+  const showStandingsSubnav =
+    activeTab === "results" && (resultsView === "standings" || resultsView === "team" || resultsView === "player") && categories.length > 0;
 
   useEffect(() => {
     if (!showStandingsSubnav) return;
@@ -540,6 +575,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                           <option value="scoreboard">Scoreboard</option>
                           <option value="round_report">Round report</option>
                           <option value="team">Team</option>
+                          <option value="player">Player</option>
                         </select>
                       </div>
                     )}
@@ -615,6 +651,36 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                     )
                   ) : (
                     <p className="sbMuted">Team view data files were not found.</p>
+                  )
+                ) : resultsView === "player" ? (
+                  !scoreboardAvailable ? (
+                    <p className="sbMuted">Player view is not available for this tournament.</p>
+                  ) : gameDataError ? (
+                    <p className="sbMuted">Failed to load player view: {gameDataError}</p>
+                  ) : standingsCategoryKey !== "overall" && (gameTeamsByCategoryError || gamePlayersByCategoryError) ? (
+                    <p className="sbMuted">Failed to load category facts: {gameTeamsByCategoryError || gamePlayersByCategoryError}</p>
+                  ) : gameDataLoading ||
+                    statsManifestLoading ||
+                    statsReportsLoading ||
+                    (standingsCategoryKey !== "overall" && (gameTeamsByCategoryLoading || gamePlayersByCategoryLoading)) ? (
+                    <p className="sbMuted">Loading player view…</p>
+                  ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
+                    standingsCategoryKey !== "overall" && !gamePlayerByCategoryRows ? (
+                      <p className="sbMuted">Category facts were not found for this report.</p>
+                    ) : (
+                      <PlayerDetailView
+                        games={gameRows}
+                        gameTeams={gameTeamRows}
+                        gamePlayers={gamePlayerRows}
+                        rounds={roundRows}
+                        playerValue={playerValue}
+                        onPlayerChange={setPlayerValue}
+                        categoryLabel={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? null}
+                        gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
+                      />
+                    )
+                  ) : (
+                    <p className="sbMuted">Player view data files were not found.</p>
                   )
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
