@@ -5,8 +5,13 @@ export type ScoresheetState = {
   pairIndex: number;
   attemptsByQuestionId: Record<number, Attempt[]>;
   markers: Record<number, ScoresheetMarkerKind>;
-  lineupsByTeamId: Record<string, Record<number, string[]>>;
+  lineupsByTeamId: Record<string, Record<number, LineupState>>;
   lastSeq: number;
+};
+
+export type LineupState = {
+  activePlayerIds: string[];
+  orderedPlayerIds: string[];
 };
 
 export function initialScoresheetState(): ScoresheetState {
@@ -30,11 +35,21 @@ function cloneScoresheetState(base: ScoresheetState): ScoresheetState {
     markers[Number(key)] = value;
   }
 
-  const lineupsByTeamId: Record<string, Record<number, string[]>> = {};
+  const lineupsByTeamId: Record<string, Record<number, LineupState>> = {};
   for (const [teamId, map] of Object.entries(base.lineupsByTeamId)) {
-    const nextMap: Record<number, string[]> = {};
-    for (const [boundary, ids] of Object.entries(map)) {
-      nextMap[Number(boundary)] = [...ids];
+    const nextMap: Record<number, LineupState> = {};
+    for (const [boundary, lineup] of Object.entries(map)) {
+      if (Array.isArray(lineup)) {
+        nextMap[Number(boundary)] = {
+          activePlayerIds: [...lineup],
+          orderedPlayerIds: [...lineup],
+        };
+        continue;
+      }
+      nextMap[Number(boundary)] = {
+        activePlayerIds: [...lineup.activePlayerIds],
+        orderedPlayerIds: [...lineup.orderedPlayerIds],
+      };
     }
     lineupsByTeamId[teamId] = nextMap;
   }
@@ -141,9 +156,21 @@ export function reduceScoresheetEvents(events: ScoresheetEvent[], baseState: Sco
         break;
       }
       case "lineup.set": {
-        const rec = payload as { team_id: string; boundary_before_question: number; active_player_ids: string[] };
+        const rec = payload as {
+          team_id: string;
+          boundary_before_question: number;
+          active_player_ids: string[];
+          ordered_player_ids?: string[];
+        };
         const teamLineups = state.lineupsByTeamId[rec.team_id] ?? {};
-        teamLineups[Number(rec.boundary_before_question)] = [...rec.active_player_ids];
+        const activePlayerIds = [...rec.active_player_ids];
+        const orderedSource = Array.isArray(rec.ordered_player_ids) && rec.ordered_player_ids.length
+          ? rec.ordered_player_ids
+          : rec.active_player_ids;
+        teamLineups[Number(rec.boundary_before_question)] = {
+          activePlayerIds,
+          orderedPlayerIds: [...orderedSource],
+        };
         state.lineupsByTeamId[rec.team_id] = teamLineups;
         break;
       }

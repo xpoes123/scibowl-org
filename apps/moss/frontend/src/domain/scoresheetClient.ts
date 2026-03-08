@@ -70,6 +70,9 @@ function normalizePayload(payload: ScoresheetEvent["payload"]): ScoresheetEvent[
   if ("active_player_ids" in clone && Array.isArray(clone.active_player_ids)) {
     clone.active_player_ids = clone.active_player_ids.map(toNumber);
   }
+  if ("ordered_player_ids" in clone && Array.isArray(clone.ordered_player_ids)) {
+    clone.ordered_player_ids = clone.ordered_player_ids.map(toNumber);
+  }
 
   return clone as ScoresheetEvent["payload"];
 }
