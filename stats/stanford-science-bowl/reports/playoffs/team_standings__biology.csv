@@ -1,0 +1,17 @@
+rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
+1,15,Mission San Jose A,2,35.0,6,1,1,8,6,50,8.333333333333334
+2,5,BASIS Silicon Valley A,2,33.0,5,1,2,8,5,50,10.0
+3,7,Clovis North,2,32.0,6,0,2,8,6,40,6.666666666666667
+4,12,Saratoga,2,29.0,7,0,1,8,7,30,4.285714285714286
+5,1,Amador Valley A,2,24.0,4,2,2,8,4,40,10.0
+6,2,Mission San Jose B,3,20.0,5,0,4,9,5,40,8.0
+7,8,Dougherty Valley A,2,18.0,5,1,2,8,5,20,4.0
+8,3,Lynbrook A,2,18.0,4,0,4,8,4,20,5.0
+9,4,Archbishop Mitty A,2,11.0,3,0,5,8,3,10,3.3333333333333335
+10,16,Mira Loma A,2,9.0,2,0,6,8,2,10,5.0
+11,14,Palo Alto,3,7.333333333333333,3,0,6,9,3,10,3.3333333333333335
+12,11,GSB A,2,7.0,2,1,5,8,2,10,5.0
+13,10,Davidson B,2,6.0,3,0,5,8,3,0,0.0
+14,13,Irvington A,2,5.0,1,1,6,8,1,10,10.0
+15,6,Foothill A,2,3.0,2,3,3,8,2,10,5.0
+16,9,Davidson A,2,-2.0,1,2,5,8,1,0,0.0
