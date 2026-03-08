@@ -1,4 +1,5 @@
 import { useMemo, type ReactNode } from "react";
+import { formatPacketOrRoundLabel } from "./statsText";
 
 type TeamDetailViewProps = {
   games: Array<Record<string, string>> | null;
@@ -26,10 +27,7 @@ function toInt(raw: string | undefined): number {
 
 function formatRoundLabel(roundNumber: number | null, roundName: string, packetName: string): string {
   if (roundNumber === null) return "Unassigned";
-  const name = (roundName || "").trim();
-  const packet = (packetName || "").trim();
-  const suffix = name || packet ? `: ${name || packet}` : "";
-  return `Round ${roundNumber}${suffix}`;
+  return formatPacketOrRoundLabel(roundNumber, roundName, packetName);
 }
 
 function formatNumber(value: number, digits = 2): string {
@@ -204,14 +202,13 @@ export function TeamDetailView({
           __sortGame: gameId,
           round: roundLabel,
           opponent: opp?.team_name ?? "",
-          tu_pts: agg.tu_pts,
+          pts: agg.tu_pts + agg.b_pts,
           b_pts: agg.b_pts,
           tuh,
           bh,
           ppb: formatNumber(ppb, 2),
           "4s": agg.c,
           "-4s": agg.i,
-          "0s": agg.n,
         };
       });
 
@@ -255,14 +252,12 @@ export function TeamDetailView({
         result,
         score: myScore,
         opp: oppScore,
-        tu_pts: toInt(t.tossup_points),
         b_pts: toInt(t.bonus_points),
         tuh,
         bh,
         ppb: formatNumber(ppb, 2),
         "4s": toInt(t.tossups_correct),
         "-4s": toInt(t.tossups_incorrect),
-        "0s": toInt(t.tossups_no_penalty),
       };
     });
 
@@ -310,8 +305,13 @@ export function TeamDetailView({
 
       const out = Array.from(playedByPlayer.values()).map((p) => {
         const gp = p.gameIds.size;
+        let tuh = 0;
+        for (const row of (gamePlayers ?? []).filter(
+          (r) => toIntOrNull(r.team_id) === selectedTeamId && toIntOrNull(r.player_id) === p.player_id,
+        )) {
+          tuh += toInt(row.pairs_heard);
+        }
         const agg = categoryByPlayer.get(p.player_id) ?? { tu_pts: 0, c: 0, i: 0, n: 0 };
-        const ans = agg.c + agg.i + agg.n;
         const ppg = gp > 0 ? agg.tu_pts / gp : 0;
         return {
           __key: String(p.player_id),
@@ -328,18 +328,17 @@ export function TeamDetailView({
             p.player_name
           ),
           gp,
-          ans,
-          tu_pts: agg.tu_pts,
-          ppg: formatNumber(ppg, 2),
+          tuh,
           "4s": agg.c,
           "-4s": agg.i,
-          "0s": agg.n,
+          pts: agg.tu_pts,
+          ppg: formatNumber(ppg, 2),
         };
       });
 
       out.sort((a, b) => {
-        const aPts = Number(a.tu_pts) || 0;
-        const bPts = Number(b.tu_pts) || 0;
+        const aPts = Number(a.pts) || 0;
+        const bPts = Number(b.pts) || 0;
         if (bPts !== aPts) return bPts - aPts;
         return String(a.player).localeCompare(String(b.player));
       });
@@ -396,17 +395,16 @@ export function TeamDetailView({
         ),
         gp,
         tuh: p.tuh,
-        tu_pts: p.tu_pts,
-        ppg: formatNumber(ppg, 2),
         "4s": p.c,
         "-4s": p.i,
-        "0s": p.n,
+        pts: p.tu_pts,
+        ppg: formatNumber(ppg, 2),
       };
     });
 
     out.sort((a, b) => {
-      const aPts = Number(a.tu_pts) || 0;
-      const bPts = Number(b.tu_pts) || 0;
+      const aPts = Number(a.pts) || 0;
+      const bPts = Number(b.pts) || 0;
       if (bPts !== aPts) return bPts - aPts;
       return String(a.player).localeCompare(String(b.player));
     });
@@ -443,14 +441,13 @@ export function TeamDetailView({
                 ? [
                     { key: "round", label: "Round" },
                     { key: "opponent", label: "Opponent" },
-                    { key: "tu_pts", label: "TU Pts", numeric: true },
-                    { key: "b_pts", label: "B Pts", numeric: true },
-                    { key: "tuh", label: "TUH", numeric: true },
-                    { key: "bh", label: "BH", numeric: true },
-                    { key: "ppb", label: "PPB", numeric: true },
+                    { key: "pts", label: "Pts", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
+                    { key: "tuh", label: "TUH", numeric: true },
+                    { key: "bh", label: "BH", numeric: true },
+                    { key: "b_pts", label: "BPts", numeric: true },
+                    { key: "ppb", label: "PPB", numeric: true },
                   ]
                 : [
                     { key: "round", label: "Round" },
@@ -458,14 +455,12 @@ export function TeamDetailView({
                     { key: "result", label: "R" },
                     { key: "score", label: "Pts", numeric: true },
                     { key: "opp", label: "Opp", numeric: true },
-                    { key: "tu_pts", label: "TU Pts", numeric: true },
-                    { key: "b_pts", label: "B Pts", numeric: true },
-                    { key: "tuh", label: "TUH", numeric: true },
-                    { key: "bh", label: "BH", numeric: true },
-                    { key: "ppb", label: "PPB", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
+                    { key: "tuh", label: "TUH", numeric: true },
+                    { key: "bh", label: "BH", numeric: true },
+                    { key: "b_pts", label: "BPts", numeric: true },
+                    { key: "ppb", label: "PPB", numeric: true },
                   ]
             }
             rows={gamesTableRows}
@@ -484,22 +479,20 @@ export function TeamDetailView({
                 ? [
                     { key: "player", label: "Player" },
                     { key: "gp", label: "GP", numeric: true },
-                    { key: "ans", label: "Ans", numeric: true },
-                    { key: "tu_pts", label: "TU Pts", numeric: true },
-                    { key: "ppg", label: "PPG", numeric: true },
+                    { key: "tuh", label: "TUH", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
+                    { key: "pts", label: "Pts", numeric: true },
+                    { key: "ppg", label: "PPG", numeric: true },
                   ]
                 : [
                     { key: "player", label: "Player" },
                     { key: "gp", label: "GP", numeric: true },
                     { key: "tuh", label: "TUH", numeric: true },
-                    { key: "tu_pts", label: "TU Pts", numeric: true },
-                    { key: "ppg", label: "PPG", numeric: true },
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
-                    { key: "0s", label: "0s", numeric: true },
+                    { key: "pts", label: "Pts", numeric: true },
+                    { key: "ppg", label: "PPG", numeric: true },
                   ]
             }
             rows={playerRows}

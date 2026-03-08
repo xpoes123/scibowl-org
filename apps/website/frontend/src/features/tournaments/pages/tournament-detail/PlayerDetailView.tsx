@@ -1,4 +1,5 @@
 import { useMemo, type ReactNode } from "react";
+import { formatPacketOrRoundLabel } from "./statsText";
 
 type PlayerDetailViewProps = {
   games: Array<Record<string, string>> | null;
@@ -25,10 +26,7 @@ function toInt(raw: string | undefined): number {
 
 function formatRoundLabel(roundNumber: number | null, roundName: string, packetName: string): string {
   if (roundNumber === null) return "Unassigned";
-  const name = (roundName || "").trim();
-  const packet = (packetName || "").trim();
-  const suffix = name || packet ? `: ${name || packet}` : "";
-  return `Round ${roundNumber}${suffix}`;
+  return formatPacketOrRoundLabel(roundNumber, roundName, packetName);
 }
 
 function formatNumber(value: number, digits = 2): string {
@@ -282,10 +280,10 @@ export function PlayerDetailView({
     return out;
   }, [categoryKey, gamePlayersByCategory, gamesById, gameTeamsByGameId, isCategoryMode, roundsByNumber, selectedPlayerId, selectedPlayerRows, teamId]);
 
-  const selectedLabel = useMemo(() => {
-    if (selectedPlayerId === null) return "";
-    return playerOptions.find((p) => p.value === String(selectedPlayerId))?.label ?? "";
-  }, [playerOptions, selectedPlayerId]);
+  const playerName = useMemo(() => {
+    if (selectedPlayerRows.length === 0) return "";
+    return (selectedPlayerRows[0].player_name ?? "").trim();
+  }, [selectedPlayerRows]);
 
   return (
     <div className="sbTabStack">
@@ -306,27 +304,35 @@ export function PlayerDetailView({
           </select>
         </div>
 
-        {onTeamSelect && teamId !== null && teamName ? (
-          <div className="sbField" style={{ flex: "0 1 260px", minWidth: "220px" }}>
-            <span className="sbFieldLabel">Team</span>
-            <div className="sbBody" style={{ minHeight: "var(--sb-control-height)", display: "flex", alignItems: "center" }}>
-              <button
-                type="button"
-                className="sbInlineLink"
-                style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                onClick={() => onTeamSelect(teamId)}
-              >
-                {teamName}
-              </button>
-            </div>
-          </div>
-        ) : null}
-
       </div>
 
       <div>
         <h3 className="m-0 text-sm font-semibold">
-          {isCategoryMode ? `Games (${categoryLabel ?? categoryKey})` : "Games"} {selectedLabel ? `— ${selectedLabel}` : ""}
+          {isCategoryMode ? `Games (${categoryLabel ?? categoryKey})` : "Games"}
+          {playerName ? (
+            <>
+              {" — "}
+              {playerName}
+              {teamName ? (
+                <>
+                  {" ("}
+                  {onTeamSelect && teamId !== null ? (
+                    <button
+                      type="button"
+                      className="sbInlineLink"
+                      style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                      onClick={() => onTeamSelect(teamId)}
+                    >
+                      {teamName}
+                    </button>
+                  ) : (
+                    teamName
+                  )}
+                  {")"}
+                </>
+              ) : null}
+            </>
+          ) : null}
         </h3>
         <div className="sbTopSpace">
           <DataTable
