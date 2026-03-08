@@ -307,3 +307,57 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 20,3,Lynbrook A,12,Sohil Rathi,ENERGY,1,0,0,4
 20,3,Lynbrook A,12,Sohil Rathi,MATH,2,0,0,8
 20,3,Lynbrook A,12,Sohil Rathi,PHYSICS,2,1,0,4
+21,1,Amador Valley A,1,Gaurav Gupta,CHEMISTRY,2,0,0,8
+21,1,Amador Valley A,3,Ritwik Aeka,BIOLOGY,2,1,0,4
+21,1,Amador Valley A,2,Rohan Garg,EARTH_SPACE,2,1,0,4
+21,1,Amador Valley A,2,Rohan Garg,MATH,3,1,0,8
+21,1,Amador Valley A,2,Rohan Garg,PHYSICS,3,1,0,8
+21,6,Foothill A,30,Athithan Elamaran,ENERGY,2,0,0,8
+21,6,Foothill A,30,Athithan Elamaran,MATH,1,2,0,-4
+21,6,Foothill A,27,Bhagirath Bandigari,BIOLOGY,0,1,0,-4
+21,6,Foothill A,27,Bhagirath Bandigari,ENERGY,1,0,0,4
+21,6,Foothill A,28,Jake Nguyen,CHEMISTRY,0,1,0,-4
+21,6,Foothill A,29,Shashank Vedula,EARTH_SPACE,0,3,0,-12
+22,5,BASIS Silicon Valley A,23,Larry Zhao,ENERGY,1,0,0,4
+22,5,BASIS Silicon Valley A,21,Lucas Quan,CHEMISTRY,1,0,0,4
+22,5,BASIS Silicon Valley A,21,Lucas Quan,MATH,1,1,0,0
+22,5,BASIS Silicon Valley A,21,Lucas Quan,PHYSICS,2,0,0,8
+22,5,BASIS Silicon Valley A,22,Zanda Zhu,ENERGY,1,0,0,4
+22,14,Palo Alto,67,Andrew Wen,CHEMISTRY,1,0,0,4
+22,14,Palo Alto,67,Andrew Wen,EARTH_SPACE,1,1,0,0
+22,14,Palo Alto,67,Andrew Wen,ENERGY,0,1,0,-4
+22,14,Palo Alto,68,Kevin Pei,CHEMISTRY,1,0,0,4
+22,14,Palo Alto,68,Kevin Pei,MATH,2,0,0,8
+22,14,Palo Alto,68,Kevin Pei,PHYSICS,2,0,0,8
+22,14,Palo Alto,69,Sayan Singh,BIOLOGY,0,1,0,-4
+23,9,Davidson A,41,Alexander Weaver,EARTH_SPACE,3,0,0,12
+23,9,Davidson A,41,Alexander Weaver,PHYSICS,1,0,0,4
+23,9,Davidson A,45,Julian Kuang,BIOLOGY,1,0,0,4
+23,9,Davidson A,45,Julian Kuang,MATH,1,1,0,0
+23,9,Davidson A,45,Julian Kuang,PHYSICS,1,0,0,4
+23,9,Davidson A,43,Lucas Wu,ENERGY,1,0,0,4
+23,9,Davidson A,43,Lucas Wu,MATH,1,0,0,4
+23,9,Davidson A,43,Lucas Wu,PHYSICS,1,0,0,4
+23,9,Davidson A,42,Yajur Chandar,BIOLOGY,2,0,0,8
+23,9,Davidson A,42,Yajur Chandar,CHEMISTRY,0,1,0,-4
+23,15,Mission San Jose A,72,Advaith Mopuri,MATH,1,0,0,4
+23,15,Mission San Jose A,73,Anish Agarwal,CHEMISTRY,1,0,0,4
+23,15,Mission San Jose A,74,Roshan Annamalai,EARTH_SPACE,1,3,0,-8
+23,15,Mission San Jose A,75,Rutvik Arora,PHYSICS,1,0,0,4
+23,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,1,2,0,-4
+23,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,3,0,0,12
+23,15,Mission San Jose A,71,Theenash Sengupta,ENERGY,1,0,0,4
+24,3,Lynbrook A,14,Andrew Liu,BIOLOGY,0,1,0,-4
+24,3,Lynbrook A,14,Andrew Liu,ENERGY,2,1,0,4
+24,3,Lynbrook A,11,Evan Liu,CHEMISTRY,2,1,0,4
+24,3,Lynbrook A,15,Philip Kohr,EARTH_SPACE,1,1,0,0
+24,3,Lynbrook A,12,Sohil Rathi,MATH,2,0,0,8
+24,3,Lynbrook A,12,Sohil Rathi,PHYSICS,2,0,0,8
+24,2,Mission San Jose B,10,Aarush Iyer,CHEMISTRY,1,0,0,4
+24,2,Mission San Jose B,8,Andy Liu,ENERGY,1,0,0,4
+24,2,Mission San Jose B,8,Andy Liu,MATH,1,0,0,4
+24,2,Mission San Jose B,8,Andy Liu,PHYSICS,1,0,0,4
+24,2,Mission San Jose B,7,Aravind Muralidharan,BIOLOGY,1,0,0,4
+24,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,1,0,0,4
+24,2,Mission San Jose B,6,Ishaan Kabra,MATH,0,1,0,-4
+24,2,Mission San Jose B,6,Ishaan Kabra,PHYSICS,1,0,0,4
