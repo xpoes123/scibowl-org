@@ -780,7 +780,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                               setPlayerValue(String(playerId));
                               setStandingsView("player");
                             }}
-                            categoryKey={standingsCategoryKey === "overall" ? null : standingsCategoryKey}
+                            categoryKey={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? standingsCategoryKey.toUpperCase()}
                             categoryLabel={
                               standingsCategoryKey === "overall"
                                 ? null
@@ -820,7 +820,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                               setTeamValue(String(teamId));
                               setStandingsView("team");
                             }}
-                            categoryKey={standingsCategoryKey === "overall" ? null : standingsCategoryKey}
+                            categoryKey={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? standingsCategoryKey.toUpperCase()}
                             categoryLabel={
                               standingsCategoryKey === "overall"
                                 ? null
