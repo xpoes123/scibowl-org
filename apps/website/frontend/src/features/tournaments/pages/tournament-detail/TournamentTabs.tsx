@@ -156,6 +156,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const { data: statsReportsIndex, loading: statsReportsLoading } = useTournamentStatsReportsIndex(tournament.slug, standingsEnabled);
   const reports = statsReportsIndex?.reports ?? null;
   const defaultReportKey = statsReportsIndex?.default_report_key ?? "combined";
+  const hasCombinedReport = useMemo(() => (reports ?? []).some((r) => r.key === "combined"), [reports]);
 
   const [reportKey, setReportKey] = useState<string>("combined");
   const [reportKeyTouched, setReportKeyTouched] = useState<boolean>(false);
@@ -169,6 +170,12 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (!standingsEnabled) return;
     if (!reports || reports.length === 0) return;
 
+    if (hasCombinedReport) {
+      if (reportKey !== "combined") setReportKey("combined");
+      if (reportKeyTouched) setReportKeyTouched(false);
+      return;
+    }
+
     const available = new Set(reports.map((r) => r.key));
     const preferredDefault = available.has(defaultReportKey) ? defaultReportKey : reports[0].key;
 
@@ -177,7 +184,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (!available.has(next)) next = preferredDefault;
 
     if (next !== reportKey) setReportKey(next);
-  }, [defaultReportKey, reportKey, reportKeyTouched, reports, standingsEnabled]);
+  }, [defaultReportKey, hasCombinedReport, reportKey, reportKeyTouched, reports, standingsEnabled]);
 
   const selectedReport = useMemo(() => {
     if (!reports) return null;
@@ -443,8 +450,13 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
     const next = new URLSearchParams(searchParams);
 
-    if (reportKey && reportKey !== "combined") next.set("statsReport", reportKey);
-    else next.delete("statsReport");
+    if (hasCombinedReport) {
+      next.delete("statsReport");
+    } else {
+      const defaultForUrl = statsReportsIndex?.default_report_key ?? reports?.[0]?.key ?? "combined";
+      if (reportKey && reportKey !== defaultForUrl) next.set("statsReport", reportKey);
+      else next.delete("statsReport");
+    }
 
     if (activeTab === "games") {
       if (gamesView !== "scoreboard") next.set("statsView", gamesView);
@@ -496,11 +508,14 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   }, [
     activeTab,
     gamesView,
+    hasCombinedReport,
     playerValue,
     reportKey,
     roundValue,
+    reports,
     searchParams,
     setSearchParams,
+    statsReportsIndex,
     standingsCategoryKey,
     standingsView,
     teamValue,
@@ -530,7 +545,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
-  const showStatsReportsSubnav = standingsEnabled && (activeTab === "results" || activeTab === "games") && (reports?.length ?? 0) > 1;
+  const showStatsReportsSubnav =
+    standingsEnabled && !hasCombinedReport && (activeTab === "results" || activeTab === "games") && (reports?.length ?? 0) > 1;
   const showStandingsSubnav = activeTab === "results" && categories.length > 0;
 
   useEffect(() => {
