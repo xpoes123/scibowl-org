@@ -88,6 +88,19 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
 
   const hasUnassigned = useMemo(() => parsedGames.some((g) => g.round_number === null), [parsedGames]);
 
+  const gameCounts = useMemo(() => {
+    const byRound = new Map<number, number>();
+    let unassigned = 0;
+    for (const g of parsedGames) {
+      if (g.round_number === null) {
+        unassigned += 1;
+        continue;
+      }
+      byRound.set(g.round_number, (byRound.get(g.round_number) ?? 0) + 1);
+    }
+    return { total: parsedGames.length, byRound, unassigned };
+  }, [parsedGames]);
+
   const roundsByNumber = useMemo(() => {
     const map = new Map<number, { round_name: string; packet_name: string }>();
     for (const r of parsedRounds) {
@@ -157,17 +170,22 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
   }, [filteredGames]);
 
   const roundSelectOptions = useMemo(() => {
-    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: "All Rounds" }];
-    for (const r of parsedRounds) {
-      if (r.round_number === null) continue;
+    const gameWord = (n: number) => (n === 1 ? "game" : "games");
+    const roundNumbers = Array.from(gameCounts.byRound.keys()).sort((a, b) => a - b);
+
+    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: `All Rounds (${gameCounts.total} ${gameWord(gameCounts.total)})` }];
+    for (const roundNumber of roundNumbers) {
+      const count = gameCounts.byRound.get(roundNumber) ?? 0;
+      if (count === 0) continue;
+      const meta = roundsByNumber.get(roundNumber);
       opts.push({
-        value: String(r.round_number),
-        label: formatPacketOrRoundLabel(r.round_number, r.round_name, r.packet_name),
+        value: String(roundNumber),
+        label: `${formatPacketOrRoundLabel(roundNumber, meta?.round_name ?? "", meta?.packet_name ?? "")} (${count} ${gameWord(count)})`,
       });
     }
-    if (hasUnassigned) opts.push({ value: "_unassigned", label: "Unassigned" });
+    if (hasUnassigned) opts.push({ value: "_unassigned", label: `Unassigned (${gameCounts.unassigned} ${gameWord(gameCounts.unassigned)})` });
     return opts;
-  }, [hasUnassigned, parsedRounds]);
+  }, [gameCounts, hasUnassigned, roundsByNumber]);
 
   return (
     <div className="sbTabStack">
@@ -192,20 +210,7 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
             const t1 = teams[0] ?? null;
             const t2 = teams[1] ?? null;
 
-            const roundInfo = g.round_number ? roundsByNumber.get(g.round_number) : null;
-            const roundLabel =
-              g.round_number !== null
-                ? formatPacketOrRoundLabel(
-                    g.round_number,
-                    (roundInfo?.round_name ?? g.round_name) || "",
-                    (roundInfo?.packet_name ?? g.round_packet_name) || "",
-                  )
-                : "Unassigned";
-
-            const gameTitleParts = [
-              roundLabel,
-              t1 && t2 ? `${t1.team_name} ${toInt(t1.score)} – ${toInt(t2.score)} ${t2.team_name}` : `Game ${g.game_id}`,
-            ].filter(Boolean);
+            const gameTitle = t1 && t2 ? `${t1.team_name} ${toInt(t1.score)} – ${toInt(t2.score)} ${t2.team_name}` : `Game ${g.game_id}`;
 
             const teamSummaryRows = teams.map((t) => {
               const bonusesHeard = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect) + toInt(t.bonuses_unheard);
@@ -240,7 +245,7 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
 
             return (
               <div key={g.game_id} className="sbTabStack">
-                <h3 className="m-0 text-sm font-semibold">{gameTitleParts.join(" • ")}</h3>
+                <h3 className="m-0 text-sm font-semibold">{gameTitle}</h3>
 
                 <div>
                   <div className="sbTopSpace">

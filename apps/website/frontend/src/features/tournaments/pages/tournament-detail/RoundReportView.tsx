@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatPacketOrRoundLabel } from "./statsText";
 
 type RoundReportViewProps = {
@@ -98,7 +98,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
 
   const roundSelectOptions = useMemo(() => {
     const gameWord = (n: number) => (n === 1 ? "game" : "games");
-    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: `All Rounds (${gameCounts.total} ${gameWord(gameCounts.total)})` }];
+    const opts: Array<{ value: string; label: string }> = [];
     for (const r of parsedRounds) {
       if (r.round_number === null) continue;
       const count = gameCounts.byRound.get(r.round_number) ?? 0;
@@ -112,16 +112,29 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
     return opts;
   }, [gameCounts, hasUnassigned, parsedRounds]);
 
-  const selectedGameIds = useMemo(() => {
-    if (roundValue === "all") return new Set(parsedGames.map((g) => g.game_id));
-    if (roundValue === "_unassigned") return new Set(parsedGames.filter((g) => g.round_number === null).map((g) => g.game_id));
+  useEffect(() => {
+    if (roundSelectOptions.length === 0) return;
+    const available = new Set(roundSelectOptions.map((o) => o.value));
+    if (available.has(roundValue)) return;
+    onRoundChange(roundSelectOptions[0].value);
+  }, [onRoundChange, roundSelectOptions, roundValue]);
 
-    const selected = Number.parseInt(roundValue, 10);
+  const effectiveRoundValue = useMemo(() => {
+    if (roundSelectOptions.length === 0) return roundValue;
+    const available = new Set(roundSelectOptions.map((o) => o.value));
+    if (available.has(roundValue)) return roundValue;
+    return roundSelectOptions[0].value;
+  }, [roundSelectOptions, roundValue]);
+
+  const selectedGameIds = useMemo(() => {
+    if (effectiveRoundValue === "_unassigned") return new Set(parsedGames.filter((g) => g.round_number === null).map((g) => g.game_id));
+
+    const selected = Number.parseInt(effectiveRoundValue, 10);
     if (!Number.isFinite(selected)) return new Set(parsedGames.map((g) => g.game_id));
     return new Set(parsedGames.filter((g) => g.round_number === selected).map((g) => g.game_id));
-  }, [parsedGames, roundValue]);
+  }, [effectiveRoundValue, parsedGames]);
 
-  const showGp = roundValue === "all";
+  const showGp = false;
 
   const teamRows = useMemo(() => {
     type TeamAgg = {
@@ -281,7 +294,14 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
     <div className="sbTabStack">
       <div className="sbListingControls">
         <div className="sbField" style={{ flex: "0 1 340px", minWidth: "240px" }}>
-          <select id="round-report-round" aria-label="Round" className="sbSelect" value={roundValue} onChange={(e) => onRoundChange(e.target.value)}>
+          <select
+            id="round-report-round"
+            aria-label="Round"
+            className="sbSelect"
+            value={effectiveRoundValue}
+            onChange={(e) => onRoundChange(e.target.value)}
+            disabled={roundSelectOptions.length === 0}
+          >
             {roundSelectOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
