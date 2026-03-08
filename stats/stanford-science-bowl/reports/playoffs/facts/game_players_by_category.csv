@@ -230,3 +230,65 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 15,16,Mira Loma A,77,Abhinav Krishna Senthil Kumar,MATH,1,0,0,4
 15,16,Mira Loma A,78,Bryan Nasr,PHYSICS,1,0,0,4
 15,16,Mira Loma A,79,Sudeep Suresh,PHYSICS,1,1,0,0
+17,1,Amador Valley A,1,Gaurav Gupta,EARTH_SPACE,0,1,0,-4
+17,1,Amador Valley A,1,Gaurav Gupta,ENERGY,1,0,0,4
+17,1,Amador Valley A,1,Gaurav Gupta,PHYSICS,2,0,0,8
+17,1,Amador Valley A,3,Ritwik Aeka,BIOLOGY,1,1,0,0
+17,1,Amador Valley A,2,Rohan Garg,BIOLOGY,0,1,0,-4
+17,1,Amador Valley A,2,Rohan Garg,CHEMISTRY,2,0,0,8
+17,1,Amador Valley A,2,Rohan Garg,EARTH_SPACE,1,0,0,4
+17,1,Amador Valley A,2,Rohan Garg,ENERGY,1,1,0,0
+17,1,Amador Valley A,2,Rohan Garg,MATH,4,0,0,16
+17,1,Amador Valley A,2,Rohan Garg,PHYSICS,2,0,0,8
+17,1,Amador Valley A,4,Samarth Jain,EARTH_SPACE,1,0,0,4
+17,8,Dougherty Valley A,39,Alan Chen,CHEMISTRY,2,0,0,8
+17,8,Dougherty Valley A,39,Alan Chen,ENERGY,0,1,0,-4
+17,8,Dougherty Valley A,38,Ashwin Shekhar,PHYSICS,0,1,0,-4
+17,8,Dougherty Valley A,37,Keshav Verma,EARTH_SPACE,1,1,0,0
+17,8,Dougherty Valley A,37,Keshav Verma,ENERGY,0,1,0,-4
+17,8,Dougherty Valley A,36,Soham Chatterjee,BIOLOGY,3,0,0,12
+18,4,Archbishop Mitty A,16,Anish Roy,MATH,2,0,0,8
+18,4,Archbishop Mitty A,20,Ben Zheng,PHYSICS,1,0,0,4
+18,4,Archbishop Mitty A,18,Richard Peng,BIOLOGY,1,2,0,-4
+18,4,Archbishop Mitty A,18,Richard Peng,CHEMISTRY,3,0,0,12
+18,4,Archbishop Mitty A,18,Richard Peng,ENERGY,2,1,0,4
+18,4,Archbishop Mitty A,18,Richard Peng,PHYSICS,0,2,0,-8
+18,4,Archbishop Mitty A,17,Sudhanva Belur,EARTH_SPACE,0,1,0,-4
+18,6,Foothill A,30,Athithan Elamaran,MATH,1,0,0,4
+18,6,Foothill A,30,Athithan Elamaran,PHYSICS,1,0,0,4
+18,6,Foothill A,28,Jake Nguyen,CHEMISTRY,1,0,0,4
+18,6,Foothill A,28,Jake Nguyen,ENERGY,1,0,0,4
+18,6,Foothill A,28,Jake Nguyen,PHYSICS,1,0,0,4
+18,6,Foothill A,29,Shashank Vedula,EARTH_SPACE,2,0,0,8
+19,7,Clovis North,32,Achuth Vinay,BIOLOGY,3,0,0,12
+19,7,Clovis North,32,Achuth Vinay,MATH,1,0,0,4
+19,7,Clovis North,31,Justin Do,CHEMISTRY,2,0,0,8
+19,7,Clovis North,31,Justin Do,ENERGY,1,0,0,4
+19,7,Clovis North,31,Justin Do,PHYSICS,1,0,0,4
+19,7,Clovis North,34,Majed Almasri,PHYSICS,1,0,0,4
+19,7,Clovis North,35,Meera Malkar,PHYSICS,1,0,0,4
+19,2,Mission San Jose B,10,Aarush Iyer,ENERGY,1,0,0,4
+19,2,Mission San Jose B,8,Andy Liu,BIOLOGY,1,0,0,4
+19,2,Mission San Jose B,8,Andy Liu,ENERGY,0,1,0,-4
+19,2,Mission San Jose B,8,Andy Liu,MATH,1,0,0,4
+19,2,Mission San Jose B,8,Andy Liu,PHYSICS,1,1,0,0
+19,2,Mission San Jose B,7,Aravind Muralidharan,BIOLOGY,0,1,0,-4
+19,2,Mission San Jose B,6,Ishaan Kabra,CHEMISTRY,1,0,0,4
+19,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,2,2,0,0
+19,2,Mission San Jose B,6,Ishaan Kabra,MATH,1,0,0,4
+19,2,Mission San Jose B,6,Ishaan Kabra,PHYSICS,0,1,0,-4
+20,11,GSB A,51,Elliot Boyce,ENERGY,1,0,0,4
+20,11,GSB A,52,Kabir Mahajan,BIOLOGY,0,1,0,-4
+20,11,GSB A,52,Kabir Mahajan,PHYSICS,1,1,0,0
+20,11,GSB A,53,Neil Dixit,MATH,1,0,0,4
+20,3,Lynbrook A,14,Andrew Liu,BIOLOGY,2,1,0,4
+20,3,Lynbrook A,14,Andrew Liu,EARTH_SPACE,1,0,0,4
+20,3,Lynbrook A,11,Evan Liu,CHEMISTRY,1,0,0,4
+20,3,Lynbrook A,11,Evan Liu,ENERGY,1,0,0,4
+20,3,Lynbrook A,11,Evan Liu,MATH,1,0,0,4
+20,3,Lynbrook A,15,Philip Kohr,EARTH_SPACE,2,0,0,8
+20,3,Lynbrook A,15,Philip Kohr,PHYSICS,1,0,0,4
+20,3,Lynbrook A,12,Sohil Rathi,CHEMISTRY,2,1,0,4
+20,3,Lynbrook A,12,Sohil Rathi,ENERGY,1,0,0,4
+20,3,Lynbrook A,12,Sohil Rathi,MATH,2,0,0,8
+20,3,Lynbrook A,12,Sohil Rathi,PHYSICS,2,1,0,4

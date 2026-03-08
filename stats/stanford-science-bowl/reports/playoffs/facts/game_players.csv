@@ -134,3 +134,35 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 16,14,Palo Alto,68,Kevin Pei,1,0,0,0,0
 16,14,Palo Alto,66,Rasia Yu,1,0,0,0,0
 16,14,Palo Alto,69,Sayan Singh,1,0,0,0,0
+17,1,Amador Valley A,1,Gaurav Gupta,23,3,1,0,8
+17,1,Amador Valley A,3,Ritwik Aeka,23,1,1,0,0
+17,1,Amador Valley A,2,Rohan Garg,23,10,2,0,32
+17,1,Amador Valley A,4,Samarth Jain,23,1,0,0,4
+17,8,Dougherty Valley A,39,Alan Chen,23,2,1,0,4
+17,8,Dougherty Valley A,38,Ashwin Shekhar,23,0,1,0,-4
+17,8,Dougherty Valley A,37,Keshav Verma,23,1,2,0,-4
+17,8,Dougherty Valley A,36,Soham Chatterjee,23,3,0,0,12
+18,4,Archbishop Mitty A,16,Anish Roy,23,2,0,0,8
+18,4,Archbishop Mitty A,20,Ben Zheng,23,1,0,0,4
+18,4,Archbishop Mitty A,18,Richard Peng,23,6,5,0,4
+18,4,Archbishop Mitty A,17,Sudhanva Belur,23,0,1,0,-4
+18,6,Foothill A,30,Athithan Elamaran,23,2,0,0,8
+18,6,Foothill A,27,Bhagirath Bandigari,23,0,0,0,0
+18,6,Foothill A,28,Jake Nguyen,23,3,0,0,12
+18,6,Foothill A,29,Shashank Vedula,23,2,0,0,8
+19,7,Clovis North,32,Achuth Vinay,23,4,0,0,16
+19,7,Clovis North,31,Justin Do,23,4,0,0,16
+19,7,Clovis North,34,Majed Almasri,23,1,0,0,4
+19,7,Clovis North,35,Meera Malkar,23,1,0,0,4
+19,2,Mission San Jose B,10,Aarush Iyer,23,1,0,0,4
+19,2,Mission San Jose B,8,Andy Liu,23,3,2,0,4
+19,2,Mission San Jose B,7,Aravind Muralidharan,23,0,1,0,-4
+19,2,Mission San Jose B,6,Ishaan Kabra,23,4,3,0,4
+20,11,GSB A,54,Ali Sherazi,23,0,0,0,0
+20,11,GSB A,51,Elliot Boyce,23,1,0,0,4
+20,11,GSB A,52,Kabir Mahajan,23,1,2,0,-4
+20,11,GSB A,53,Neil Dixit,23,1,0,0,4
+20,3,Lynbrook A,14,Andrew Liu,23,3,1,0,8
+20,3,Lynbrook A,11,Evan Liu,23,3,0,0,12
+20,3,Lynbrook A,15,Philip Kohr,23,3,0,0,12
+20,3,Lynbrook A,12,Sohil Rathi,23,7,2,0,20
