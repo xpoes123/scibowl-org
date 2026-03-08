@@ -295,13 +295,17 @@ export function PlayerDetailView({
       let i = 0;
       let n = 0;
       for (const row of relevant) {
-        const gameId = toIntOrNull(row.game_id);
-        if (gameId !== null) gameIds.add(gameId);
         tuPts += toInt(row.tossup_points);
         c += toInt(row.tossups_correct);
         i += toInt(row.tossups_incorrect);
         n += toInt(row.tossups_no_penalty);
       }
+
+      for (const row of selectedPlayerRows) {
+        const gameId = toIntOrNull(row.game_id);
+        if (gameId !== null) gameIds.add(gameId);
+      }
+
       const gp = gameIds.size;
       const ans = c + i + n;
       const ppg = gp > 0 ? tuPts / gp : 0;

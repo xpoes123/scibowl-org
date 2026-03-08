@@ -157,14 +157,32 @@ export function TeamDetailView({
     if (selectedTeamId === null) return [];
 
     if (isCategoryMode) {
-      const byGameId = new Map<number, Record<string, string>>();
+      const categoryAggByGameId = new Map<number, { tu_pts: number; b_pts: number; c: number; i: number; n: number; bc: number; bi: number; bu: number }>();
       for (const row of categoryTeamRows) {
         const gameId = toIntOrNull(row.game_id);
         if (gameId === null) continue;
-        byGameId.set(gameId, row);
+        const existing = categoryAggByGameId.get(gameId) ?? { tu_pts: 0, b_pts: 0, c: 0, i: 0, n: 0, bc: 0, bi: 0, bu: 0 };
+        existing.tu_pts += toInt(row.tossup_points);
+        existing.b_pts += toInt(row.bonus_points);
+        existing.c += toInt(row.tossups_correct);
+        existing.i += toInt(row.tossups_incorrect);
+        existing.n += toInt(row.tossups_no_penalty);
+        existing.bc += toInt(row.bonuses_correct);
+        existing.bi += toInt(row.bonuses_incorrect);
+        existing.bu += toInt(row.bonuses_unheard);
+        categoryAggByGameId.set(gameId, existing);
       }
 
-      const out = Array.from(byGameId.entries()).map(([gameId, t]) => {
+      const playedGameIds = new Set<number>();
+      for (const row of gameTeams ?? []) {
+        const teamId = toIntOrNull(row.team_id);
+        const gameId = toIntOrNull(row.game_id);
+        if (teamId === null || gameId === null) continue;
+        if (teamId !== selectedTeamId) continue;
+        playedGameIds.add(gameId);
+      }
+
+      const out = Array.from(playedGameIds.values()).map((gameId) => {
         const oppRows = gameTeamsByGameId.get(gameId) ?? [];
         const opp = oppRows.find((r) => toIntOrNull(r.team_id) !== selectedTeamId) ?? null;
 
@@ -173,9 +191,10 @@ export function TeamDetailView({
         const roundInfo = g?.round_number !== null && g?.round_number !== undefined ? roundsByNumber.get(g.round_number) : null;
         const roundLabel = formatRoundLabel(g?.round_number ?? null, (roundInfo?.round_name ?? g?.round_name) || "", (roundInfo?.packet_name ?? g?.packet_name) || "");
 
-        const tuh = toInt(t.tossups_correct) + toInt(t.tossups_incorrect) + toInt(t.tossups_no_penalty);
-        const bh = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect) + toInt(t.bonuses_unheard);
-        const ppb = bh > 0 ? toInt(t.bonus_points) / bh : 0;
+        const agg = categoryAggByGameId.get(gameId) ?? { tu_pts: 0, b_pts: 0, c: 0, i: 0, n: 0, bc: 0, bi: 0, bu: 0 };
+        const tuh = agg.c + agg.i + agg.n;
+        const bh = agg.bc + agg.bi + agg.bu;
+        const ppb = bh > 0 ? agg.b_pts / bh : 0;
 
         return {
           __key: String(gameId),
@@ -183,14 +202,14 @@ export function TeamDetailView({
           __sortGame: gameId,
           round: roundLabel,
           opponent: opp?.team_name ?? "",
-          tu_pts: toInt(t.tossup_points),
-          b_pts: toInt(t.bonus_points),
+          tu_pts: agg.tu_pts,
+          b_pts: agg.b_pts,
           tuh,
           bh,
           ppb: formatNumber(ppb, 2),
-          "4s": toInt(t.tossups_correct),
-          "-4s": toInt(t.tossups_incorrect),
-          "0s": toInt(t.tossups_no_penalty),
+          "4s": agg.c,
+          "-4s": agg.i,
+          "0s": agg.n,
         };
       });
 
@@ -255,7 +274,7 @@ export function TeamDetailView({
       return String(a.opponent).localeCompare(String(b.opponent));
     });
     return out;
-  }, [categoryTeamRows, categoryLabel, gameTeams, gameTeamsByGameId, gamesById, isCategoryMode, roundsByNumber, selectedTeamId]);
+  }, [categoryTeamRows, gameTeams, gameTeamsByGameId, gamesById, isCategoryMode, roundsByNumber, selectedTeamId]);
 
   const summary = useMemo(() => {
     if (selectedTeamId === null) return null;
@@ -270,10 +289,7 @@ export function TeamDetailView({
       let bi = 0;
       let bu = 0;
 
-      const gameIds = new Set<number>();
       for (const row of categoryTeamRows) {
-        const gameId = toIntOrNull(row.game_id);
-        if (gameId !== null) gameIds.add(gameId);
         tuPts += toInt(row.tossup_points);
         bPts += toInt(row.bonus_points);
         tc += toInt(row.tossups_correct);
@@ -284,13 +300,14 @@ export function TeamDetailView({
         bu += toInt(row.bonuses_unheard);
       }
 
+      const gamesPlayed = (gameTeams ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId).length;
       const tuh = tc + ti + tn;
       const bh = bc + bi + bu;
       const ppb = bh > 0 ? bPts / bh : 0;
-      const ppg = gameIds.size > 0 ? (tuPts + bPts) / gameIds.size : 0;
+      const ppg = gamesPlayed > 0 ? (tuPts + bPts) / gamesPlayed : 0;
 
       return {
-        games: gameIds.size,
+        games: gamesPlayed,
         record: null as string | null,
         points: tuPts + bPts,
         ppg: formatNumber(ppg, 2),
@@ -359,40 +376,36 @@ export function TeamDetailView({
 
     if (isCategoryMode) {
       const cat = categoryLabel ?? "";
-      type Agg = { player_id: number; player_name: string; tu_pts: number; c: number; i: number; n: number; gameIds: Set<number> };
-      const byPlayer = new Map<number, Agg>();
+      type PlayerMeta = { player_id: number; player_name: string; gameIds: Set<number> };
+      const playedByPlayer = new Map<number, PlayerMeta>();
+      for (const row of (gamePlayers ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId)) {
+        const playerId = toIntOrNull(row.player_id);
+        if (playerId === null) continue;
+        const gameId = toIntOrNull(row.game_id);
+        const existing = playedByPlayer.get(playerId) ?? { player_id: playerId, player_name: row.player_name ?? "", gameIds: new Set<number>() };
+        if (gameId !== null) existing.gameIds.add(gameId);
+        playedByPlayer.set(playerId, existing);
+      }
 
+      const categoryByPlayer = new Map<number, { tu_pts: number; c: number; i: number; n: number }>();
       for (const row of (gamePlayersByCategory ?? []).filter(
         (r) => toIntOrNull(r.team_id) === selectedTeamId && (r.category ?? "") === cat,
       )) {
         const playerId = toIntOrNull(row.player_id);
         if (playerId === null) continue;
-        const gameId = toIntOrNull(row.game_id);
-
-        const existing =
-          byPlayer.get(playerId) ??
-          ({
-            player_id: playerId,
-            player_name: row.player_name ?? "",
-            tu_pts: 0,
-            c: 0,
-            i: 0,
-            n: 0,
-            gameIds: new Set<number>(),
-          } satisfies Agg);
-
-        if (gameId !== null) existing.gameIds.add(gameId);
+        const existing = categoryByPlayer.get(playerId) ?? { tu_pts: 0, c: 0, i: 0, n: 0 };
         existing.tu_pts += toInt(row.tossup_points);
         existing.c += toInt(row.tossups_correct);
         existing.i += toInt(row.tossups_incorrect);
         existing.n += toInt(row.tossups_no_penalty);
-        byPlayer.set(playerId, existing);
+        categoryByPlayer.set(playerId, existing);
       }
 
-      const out = Array.from(byPlayer.values()).map((p) => {
+      const out = Array.from(playedByPlayer.values()).map((p) => {
         const gp = p.gameIds.size;
-        const ans = p.c + p.i + p.n;
-        const ppg = gp > 0 ? p.tu_pts / gp : 0;
+        const agg = categoryByPlayer.get(p.player_id) ?? { tu_pts: 0, c: 0, i: 0, n: 0 };
+        const ans = agg.c + agg.i + agg.n;
+        const ppg = gp > 0 ? agg.tu_pts / gp : 0;
         return {
           __key: String(p.player_id),
           player: onPlayerSelect ? (
@@ -409,11 +422,11 @@ export function TeamDetailView({
           ),
           gp,
           ans,
-          tu_pts: p.tu_pts,
+          tu_pts: agg.tu_pts,
           ppg: formatNumber(ppg, 2),
-          "4s": p.c,
-          "-4s": p.i,
-          "0s": p.n,
+          "4s": agg.c,
+          "-4s": agg.i,
+          "0s": agg.n,
         };
       });
 
