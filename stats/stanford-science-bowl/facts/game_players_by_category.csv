@@ -230,6 +230,21 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 15,16,Mira Loma A,77,Abhinav Krishna Senthil Kumar,MATH,1,0,0,4
 15,16,Mira Loma A,78,Bryan Nasr,PHYSICS,1,0,0,4
 15,16,Mira Loma A,79,Sudeep Suresh,PHYSICS,1,1,0,0
+16,2,Mission San Jose B,10,Aarush Iyer,BIOLOGY,1,0,0,4
+16,2,Mission San Jose B,8,Andy Liu,PHYSICS,1,1,0,0
+16,2,Mission San Jose B,7,Aravind Muralidharan,BIOLOGY,1,0,0,4
+16,2,Mission San Jose B,7,Aravind Muralidharan,ENERGY,1,0,0,4
+16,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,3,1,0,8
+16,2,Mission San Jose B,6,Ishaan Kabra,MATH,1,0,0,4
+16,2,Mission San Jose B,6,Ishaan Kabra,PHYSICS,1,0,0,4
+16,14,Palo Alto,67,Andrew Wen,BIOLOGY,1,0,0,4
+16,14,Palo Alto,67,Andrew Wen,ENERGY,1,0,0,4
+16,14,Palo Alto,67,Andrew Wen,MATH,3,0,0,12
+16,14,Palo Alto,67,Andrew Wen,PHYSICS,0,1,0,-4
+16,14,Palo Alto,68,Kevin Pei,CHEMISTRY,2,0,0,8
+16,14,Palo Alto,68,Kevin Pei,EARTH_SPACE,1,1,0,0
+16,14,Palo Alto,66,Rasia Yu,BIOLOGY,1,0,0,4
+16,14,Palo Alto,66,Rasia Yu,ENERGY,1,0,0,4
 17,1,Amador Valley A,1,Gaurav Gupta,EARTH_SPACE,0,1,0,-4
 17,1,Amador Valley A,1,Gaurav Gupta,ENERGY,1,0,0,4
 17,1,Amador Valley A,1,Gaurav Gupta,PHYSICS,2,0,0,8
