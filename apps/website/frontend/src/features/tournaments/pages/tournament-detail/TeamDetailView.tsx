@@ -8,6 +8,7 @@ type TeamDetailViewProps = {
   teamValue: string;
   onTeamChange: (value: string) => void;
   onPlayerSelect?: (playerId: number) => void;
+  categoryKey: string | null;
   categoryLabel: string | null;
   gameTeamsByCategory: Array<Record<string, string>> | null;
   gamePlayersByCategory: Array<Record<string, string>> | null;
@@ -80,6 +81,7 @@ export function TeamDetailView({
   teamValue,
   onTeamChange,
   onPlayerSelect,
+  categoryKey,
   categoryLabel,
   gameTeamsByCategory,
   gamePlayersByCategory,
@@ -145,13 +147,13 @@ export function TeamDetailView({
     return map;
   }, [gameTeams]);
 
-  const isCategoryMode = !!categoryLabel;
+  const isCategoryMode = categoryKey !== null;
 
   const categoryTeamRows = useMemo(() => {
     if (!isCategoryMode || selectedTeamId === null) return [];
-    const cat = categoryLabel ?? "";
+    const cat = categoryKey ?? "";
     return (gameTeamsByCategory ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId && (r.category ?? "") === cat);
-  }, [categoryLabel, gameTeamsByCategory, isCategoryMode, selectedTeamId]);
+  }, [categoryKey, gameTeamsByCategory, isCategoryMode, selectedTeamId]);
 
   const gamesTableRows = useMemo(() => {
     if (selectedTeamId === null) return [];
@@ -276,106 +278,11 @@ export function TeamDetailView({
     return out;
   }, [categoryTeamRows, gameTeams, gameTeamsByGameId, gamesById, isCategoryMode, roundsByNumber, selectedTeamId]);
 
-  const summary = useMemo(() => {
-    if (selectedTeamId === null) return null;
-
-    if (isCategoryMode) {
-      let tuPts = 0;
-      let bPts = 0;
-      let tc = 0;
-      let ti = 0;
-      let tn = 0;
-      let bc = 0;
-      let bi = 0;
-      let bu = 0;
-
-      for (const row of categoryTeamRows) {
-        tuPts += toInt(row.tossup_points);
-        bPts += toInt(row.bonus_points);
-        tc += toInt(row.tossups_correct);
-        ti += toInt(row.tossups_incorrect);
-        tn += toInt(row.tossups_no_penalty);
-        bc += toInt(row.bonuses_correct);
-        bi += toInt(row.bonuses_incorrect);
-        bu += toInt(row.bonuses_unheard);
-      }
-
-      const gamesPlayed = (gameTeams ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId).length;
-      const tuh = tc + ti + tn;
-      const bh = bc + bi + bu;
-      const ppb = bh > 0 ? bPts / bh : 0;
-      const ppg = gamesPlayed > 0 ? (tuPts + bPts) / gamesPlayed : 0;
-
-      return {
-        games: gamesPlayed,
-        record: null as string | null,
-        points: tuPts + bPts,
-        ppg: formatNumber(ppg, 2),
-        tuh,
-        bh,
-        ppb: formatNumber(ppb, 2),
-      };
-    }
-
-    const myRows = (gameTeams ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId);
-    let wins = 0;
-    let losses = 0;
-    let ties = 0;
-    let points = 0;
-    let tuPts = 0;
-    let bPts = 0;
-    let tc = 0;
-    let ti = 0;
-    let tn = 0;
-    let bc = 0;
-    let bi = 0;
-    let bu = 0;
-
-    for (const t of myRows) {
-      const gameId = toIntOrNull(t.game_id) ?? 0;
-      const oppRows = gameTeamsByGameId.get(gameId) ?? [];
-      const opp = oppRows.find((r) => toIntOrNull(r.team_id) !== selectedTeamId) ?? null;
-
-      const myScore = toInt(t.score);
-      const oppScore = toInt(opp?.score);
-      if (myScore > oppScore) wins += 1;
-      else if (myScore < oppScore) losses += 1;
-      else ties += 1;
-
-      points += myScore;
-      tuPts += toInt(t.tossup_points);
-      bPts += toInt(t.bonus_points);
-      tc += toInt(t.tossups_correct);
-      ti += toInt(t.tossups_incorrect);
-      tn += toInt(t.tossups_no_penalty);
-      bc += toInt(t.bonuses_correct);
-      bi += toInt(t.bonuses_incorrect);
-      bu += toInt(t.bonuses_unheard);
-    }
-
-    const gamesPlayed = myRows.length;
-    const tuh = tc + ti + tn;
-    const bh = bc + bi + bu;
-    const ppb = bh > 0 ? bPts / bh : 0;
-    const ppg = gamesPlayed > 0 ? points / gamesPlayed : 0;
-    const record = ties > 0 ? `${wins}-${losses}-${ties}` : `${wins}-${losses}`;
-
-    return {
-      games: gamesPlayed,
-      record,
-      points,
-      ppg: formatNumber(ppg, 2),
-      tuh,
-      bh,
-      ppb: formatNumber(ppb, 2),
-    };
-  }, [categoryTeamRows, categoryLabel, gameTeams, gameTeamsByGameId, isCategoryMode, selectedTeamId]);
-
   const playerRows = useMemo(() => {
     if (selectedTeamId === null) return [];
 
     if (isCategoryMode) {
-      const cat = categoryLabel ?? "";
+      const cat = categoryKey ?? "";
       type PlayerMeta = { player_id: number; player_name: string; gameIds: Set<number> };
       const playedByPlayer = new Map<number, PlayerMeta>();
       for (const row of (gamePlayers ?? []).filter((r) => toIntOrNull(r.team_id) === selectedTeamId)) {
@@ -505,16 +412,19 @@ export function TeamDetailView({
     });
 
     return out;
-  }, [categoryLabel, gamePlayers, gamePlayersByCategory, isCategoryMode, onPlayerSelect, selectedTeamId]);
+  }, [categoryKey, gamePlayers, gamePlayersByCategory, isCategoryMode, onPlayerSelect, selectedTeamId]);
 
   return (
     <div className="sbTabStack">
       <div className="sbListingControls">
         <div className="sbField" style={{ flex: "0 1 340px", minWidth: "240px" }}>
-          <label className="sbFieldLabel" htmlFor="team-detail-team">
-            Team
-          </label>
-          <select id="team-detail-team" className="sbSelect" value={teamValue} onChange={(e) => onTeamChange(e.target.value)}>
+          <select
+            id="team-detail-team"
+            aria-label="Team"
+            className="sbSelect"
+            value={teamValue}
+            onChange={(e) => onTeamChange(e.target.value)}
+          >
             {teamOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
@@ -522,22 +432,10 @@ export function TeamDetailView({
             ))}
           </select>
         </div>
-
-        {summary && (
-          <div className="sbField" style={{ flex: "1 1 auto", minWidth: "240px" }}>
-            <span className="sbFieldLabel">Summary</span>
-            <div className="sbBody" style={{ minHeight: "var(--sb-control-height)", display: "flex", alignItems: "center", gap: "10px" }}>
-              {summary.record ? <span>Record {summary.record}</span> : null}
-              <span>GP {summary.games}</span>
-              <span>PPG {summary.ppg}</span>
-              <span>PPB {summary.ppb}</span>
-            </div>
-          </div>
-        )}
       </div>
 
       <div>
-        <h3 className="m-0 text-sm font-semibold">{isCategoryMode ? `Games (${categoryLabel})` : "Games"}</h3>
+        <h3 className="m-0 text-sm font-semibold">{isCategoryMode ? `Games (${categoryLabel ?? categoryKey})` : "Games"}</h3>
         <div className="sbTopSpace">
           <DataTable
             headers={
@@ -576,7 +474,9 @@ export function TeamDetailView({
       </div>
 
       <div>
-        <h3 className="m-0 text-sm font-semibold">{isCategoryMode ? `Player Statistics (${categoryLabel})` : "Player Statistics"}</h3>
+        <h3 className="m-0 text-sm font-semibold">
+          {isCategoryMode ? `Player Statistics (${categoryLabel ?? categoryKey})` : "Player Statistics"}
+        </h3>
         <div className="sbTopSpace">
           <DataTable
             headers={

@@ -8,6 +8,7 @@ type PlayerDetailViewProps = {
   playerValue: string;
   onPlayerChange: (value: string) => void;
   onTeamSelect?: (teamId: number) => void;
+  categoryKey: string | null;
   categoryLabel: string | null;
   gamePlayersByCategory: Array<Record<string, string>> | null;
 };
@@ -79,6 +80,7 @@ export function PlayerDetailView({
   playerValue,
   onPlayerChange,
   onTeamSelect,
+  categoryKey,
   categoryLabel,
   gamePlayersByCategory,
 }: PlayerDetailViewProps) {
@@ -119,7 +121,7 @@ export function PlayerDetailView({
     return parsed;
   }, [playerValue]);
 
-  const isCategoryMode = !!categoryLabel;
+  const isCategoryMode = categoryKey !== null;
 
   const roundsByNumber = useMemo(() => {
     const map = new Map<number, { round_name: string; packet_name: string }>();
@@ -181,7 +183,7 @@ export function PlayerDetailView({
     if (selectedPlayerId === null) return [];
 
     if (isCategoryMode) {
-      const cat = categoryLabel ?? "";
+      const cat = categoryKey ?? "";
       const relevant = (gamePlayersByCategory ?? []).filter(
         (r) => toIntOrNull(r.player_id) === selectedPlayerId && (r.category ?? "") === cat,
       );
@@ -278,61 +280,7 @@ export function PlayerDetailView({
     });
 
     return out;
-  }, [categoryLabel, gamePlayersByCategory, gamesById, gameTeamsByGameId, isCategoryMode, roundsByNumber, selectedPlayerId, selectedPlayerRows, teamId]);
-
-  const summary = useMemo(() => {
-    if (selectedPlayerId === null) return null;
-
-    if (isCategoryMode) {
-      const cat = categoryLabel ?? "";
-      const relevant = (gamePlayersByCategory ?? []).filter(
-        (r) => toIntOrNull(r.player_id) === selectedPlayerId && (r.category ?? "") === cat,
-      );
-
-      const gameIds = new Set<number>();
-      let tuPts = 0;
-      let c = 0;
-      let i = 0;
-      let n = 0;
-      for (const row of relevant) {
-        tuPts += toInt(row.tossup_points);
-        c += toInt(row.tossups_correct);
-        i += toInt(row.tossups_incorrect);
-        n += toInt(row.tossups_no_penalty);
-      }
-
-      for (const row of selectedPlayerRows) {
-        const gameId = toIntOrNull(row.game_id);
-        if (gameId !== null) gameIds.add(gameId);
-      }
-
-      const gp = gameIds.size;
-      const ans = c + i + n;
-      const ppg = gp > 0 ? tuPts / gp : 0;
-
-      return { gp, ans, tuh: null as number | null, tuPts, ppg: formatNumber(ppg, 2), c, i, n };
-    }
-
-    const gameIds = new Set<number>();
-    let tuPts = 0;
-    let tuh = 0;
-    let c = 0;
-    let i = 0;
-    let n = 0;
-    for (const row of selectedPlayerRows) {
-      const gameId = toIntOrNull(row.game_id);
-      if (gameId !== null) gameIds.add(gameId);
-      tuPts += toInt(row.tossup_points);
-      tuh += toInt(row.pairs_heard);
-      c += toInt(row.tossups_correct);
-      i += toInt(row.tossups_incorrect);
-      n += toInt(row.tossups_no_penalty);
-    }
-
-    const gp = gameIds.size;
-    const ppg = gp > 0 ? tuPts / gp : 0;
-    return { gp, ans: null as number | null, tuh, tuPts, ppg: formatNumber(ppg, 2), c, i, n };
-  }, [categoryLabel, gamePlayersByCategory, isCategoryMode, selectedPlayerId, selectedPlayerRows]);
+  }, [categoryKey, gamePlayersByCategory, gamesById, gameTeamsByGameId, isCategoryMode, roundsByNumber, selectedPlayerId, selectedPlayerRows, teamId]);
 
   const selectedLabel = useMemo(() => {
     if (selectedPlayerId === null) return "";
@@ -343,10 +291,13 @@ export function PlayerDetailView({
     <div className="sbTabStack">
       <div className="sbListingControls">
         <div className="sbField" style={{ flex: "0 1 340px", minWidth: "240px" }}>
-          <label className="sbFieldLabel" htmlFor="player-detail-player">
-            Player
-          </label>
-          <select id="player-detail-player" className="sbSelect" value={playerValue} onChange={(e) => onPlayerChange(e.target.value)}>
+          <select
+            id="player-detail-player"
+            aria-label="Player"
+            className="sbSelect"
+            value={playerValue}
+            onChange={(e) => onPlayerChange(e.target.value)}
+          >
             {playerOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
@@ -371,23 +322,11 @@ export function PlayerDetailView({
           </div>
         ) : null}
 
-        {summary && (
-          <div className="sbField" style={{ flex: "1 1 auto", minWidth: "240px" }}>
-            <span className="sbFieldLabel">Summary</span>
-            <div className="sbBody" style={{ minHeight: "var(--sb-control-height)", display: "flex", alignItems: "center", gap: "10px" }}>
-              <span>GP {summary.gp}</span>
-              {summary.tuh !== null ? <span>TUH {summary.tuh}</span> : null}
-              {summary.ans !== null ? <span>Ans {summary.ans}</span> : null}
-              <span>TU Pts {summary.tuPts}</span>
-              <span>PPG {summary.ppg}</span>
-            </div>
-          </div>
-        )}
       </div>
 
       <div>
         <h3 className="m-0 text-sm font-semibold">
-          {isCategoryMode ? `Games (${categoryLabel})` : "Games"} {selectedLabel ? `— ${selectedLabel}` : ""}
+          {isCategoryMode ? `Games (${categoryLabel ?? categoryKey})` : "Games"} {selectedLabel ? `— ${selectedLabel}` : ""}
         </h3>
         <div className="sbTopSpace">
           <DataTable

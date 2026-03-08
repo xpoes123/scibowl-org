@@ -362,7 +362,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       return [
         { id: "overview", label: "Overview", disabled: false },
         { id: "field", label: "Field", disabled: fieldDisabled },
-        { id: "results", label: "Standings", disabled: true },
+        { id: "results", label: "Results", disabled: true },
         { id: "games", label: "Games", disabled: true },
         { id: "rounds", label: "Rounds", disabled: true },
         { id: "statistics", label: "Buzzpoints", disabled: true },
@@ -373,7 +373,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       return [
         { id: "overview", label: "Overview", disabled: false },
         { id: "field", label: "Field", disabled: fieldDisabled },
-        { id: "results", label: "Standings", disabled: false },
+        { id: "results", label: "Results", disabled: false },
         { id: "games", label: "Games", disabled: false },
         { id: "rounds", label: "Rounds", disabled: false },
         { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
@@ -383,7 +383,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     return [
       { id: "overview", label: "Overview", disabled: false },
       { id: "field", label: "Field", disabled: fieldDisabled },
-      { id: "results", label: "Standings", disabled: false },
+      { id: "results", label: "Results", disabled: false },
       { id: "games", label: "Games", disabled: false },
       { id: "rounds", label: "Rounds", disabled: false },
       { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
@@ -645,7 +645,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
             aria-disabled={!scoreboardAvailable && !statsManifestLoading}
             onClick={() => setStandingsView("team")}
           >
-            Team
+            Team Detail
           </button>
           <button
             type="button"
@@ -655,7 +655,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
             aria-disabled={!scoreboardAvailable && !statsManifestLoading}
             onClick={() => setStandingsView("player")}
           >
-            Player
+            Player Detail
           </button>
         </div>
       )}
@@ -780,7 +780,12 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                               setPlayerValue(String(playerId));
                               setStandingsView("player");
                             }}
-                            categoryLabel={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? null}
+                            categoryKey={standingsCategoryKey === "overall" ? null : standingsCategoryKey}
+                            categoryLabel={
+                              standingsCategoryKey === "overall"
+                                ? null
+                                : humanizeCategoryLabel((activeCategory?.label ?? standingsCategoryKey).trim())
+                            }
                             gameTeamsByCategory={standingsCategoryKey === "overall" ? null : gameTeamByCategoryRows}
                             gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
                           />
@@ -815,7 +820,12 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                               setTeamValue(String(teamId));
                               setStandingsView("team");
                             }}
-                            categoryLabel={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? null}
+                            categoryKey={standingsCategoryKey === "overall" ? null : standingsCategoryKey}
+                            categoryLabel={
+                              standingsCategoryKey === "overall"
+                                ? null
+                                : humanizeCategoryLabel((activeCategory?.label ?? standingsCategoryKey).trim())
+                            }
                             gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
                           />
                         )
