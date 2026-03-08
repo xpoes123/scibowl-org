@@ -1,0 +1,477 @@
+{
+  "format": "moss_field_roster",
+  "version": 1,
+  "tournament": {
+    "slug": "stanford-science-bowl",
+    "name": "Stanford Science Bowl"
+  },
+  "teams": [
+    {
+      "name": "Albany A",
+      "players": [
+        "Tate Nomura",
+        "Nick Linzer",
+        "Benton Vargo",
+        "Alex Bowen",
+        "Eugene Rubino"
+      ]
+    },
+    {
+      "name": "Albany B",
+      "players": [
+        "Orin Davidson",
+        "Michael Hou",
+        "Isiang",
+        "Lina Kim",
+        "David Ha"
+      ]
+    },
+    {
+      "name": "Amador Valley A",
+      "players": [
+        "Gaurav Gupta",
+        "Rohan Garg",
+        "Ritwik Aeka",
+        "Samarth Jain",
+        "Dalbert Wu"
+      ]
+    },
+    {
+      "name": "Amador Valley B",
+      "players": [
+        "Olive Leuten",
+        "Srijon Mandal",
+        "Lusen Yao",
+        "Pratham Mehta"
+      ]
+    },
+    {
+      "name": "American A",
+      "players": [
+        "Keshav Venkatesh",
+        "Abhinav Shivalli",
+        "Ryan Liu",
+        "Abdul Muhaimin",
+        "Srithan Devarashetty"
+      ]
+    },
+    {
+      "name": "American B",
+      "players": [
+        "Thomas Nguyen",
+        "Sudesh Srivatsan",
+        "Sanjay Seshadri",
+        "Jiayu Song",
+        "Aarav Gupta"
+      ]
+    },
+    {
+      "name": "Archbishop Mitty A",
+      "players": [
+        "Anish Roy",
+        "Sudhanva Belur",
+        "Richard Peng",
+        "Kiyan Raisinghani",
+        "Ben Zheng"
+      ]
+    },
+    {
+      "name": "Archbishop Mitty B",
+      "players": [
+        "Advait Reddy Duvvuru",
+        "Samiha Das",
+        "Ruoyu Zhou",
+        "Saatvik Chauhan",
+        "Yixin Xu"
+      ]
+    },
+    {
+      "name": "BASIS Fremont",
+      "players": [
+        "Lexing Liu",
+        "Kevin Chen",
+        "Ryan Yan"
+      ]
+    },
+    {
+      "name": "BASIS Silicon Valley A",
+      "players": [
+        "Lucas Quan",
+        "Larry Zhao",
+        "Michelle Liu",
+        "Aaron Cohen",
+        "Zanda Zhu"
+      ]
+    },
+    {
+      "name": "BASIS Silicon Valley B",
+      "players": [
+        "Jonathan Gao",
+        "Eric Guo",
+        "Ethan Guo",
+        "Liam Tran",
+        "Jason Zhao"
+      ]
+    },
+    {
+      "name": "California",
+      "players": [
+        "Lucas Chi",
+        "Kavin Jain",
+        "Vihaan Tigadikar",
+        "Sushrut Pola",
+        "Ray Zhang"
+      ]
+    },
+    {
+      "name": "Chico A",
+      "players": [
+        "Greta Nikolai",
+        "Lucas Lazarski",
+        "Lily Tao",
+        "YiLun Liu",
+        "Phuong Lu"
+      ]
+    },
+    {
+      "name": "Chico B",
+      "players": [
+        "Devi Schumann",
+        "Phineas Wehrheim",
+        "Maddy Dietz",
+        "Eli Hu"
+      ]
+    },
+    {
+      "name": "Clovis North",
+      "players": [
+        "Justin Do",
+        "Achuth Vinay",
+        "Renard Wu",
+        "Majed Almasri",
+        "Meera Malkar"
+      ]
+    },
+    {
+      "name": "Cupertino A",
+      "players": [
+        "Namita Gaidhani",
+        "Shubhi Jain",
+        "Brandon Seo",
+        "Jaanya Annapureddy",
+        "Pranav Burra"
+      ]
+    },
+    {
+      "name": "Cupertino B",
+      "players": [
+        "Rosa Lee",
+        "Anya Sarode",
+        "Elaine Chen",
+        "Iurii Kirpichev"
+      ]
+    },
+    {
+      "name": "Davidson A",
+      "players": [
+        "Alexander Weaver",
+        "Yajur Chandar",
+        "Lucas Wu",
+        "Filip Ramazan",
+        "Julian Kuang"
+      ]
+    },
+    {
+      "name": "Davidson B",
+      "players": [
+        "Kaison Fong",
+        "Casey Fong",
+        "Ethan Chan",
+        "Bourne Zhou",
+        "Shayan Sattarvand"
+      ]
+    },
+    {
+      "name": "Dougherty Valley A",
+      "players": [
+        "Soham Chatterjee",
+        "Keshav Verma",
+        "Ashwin Shekhar",
+        "Alan Chen",
+        "Sohail Abidnia"
+      ]
+    },
+    {
+      "name": "Dougherty Valley B",
+      "players": [
+        "Tannishtha Chakraborthy",
+        "Andrew Sun",
+        "Aneeka Rao",
+        "Adhrit Viswanth Balaji",
+        "Armaan Syed"
+      ]
+    },
+    {
+      "name": "El Camino A",
+      "players": [
+        "Swaraj Adhikari",
+        "Avery Fung",
+        "Ryan Chen",
+        "Agrima Rai",
+        "Milan Pecson"
+      ]
+    },
+    {
+      "name": "El Camino B",
+      "players": [
+        "Grant Kitchen",
+        "Jaylyn Sanchez",
+        "Eric Blones",
+        "Billy Battogtokh",
+        "Kaelen Mendoza"
+      ]
+    },
+    {
+      "name": "Evergreen Valley",
+      "players": [
+        "Joshua Huang",
+        "Zichao Zhou",
+        "Pranav Thota",
+        "Autumn Le",
+        "Ethan Li"
+      ]
+    },
+    {
+      "name": "Folsom City",
+      "players": [
+        "Kavin Anreddy",
+        "Joshua Wu",
+        "Pushkal Mishra",
+        "Satvik Chakkapalli"
+      ]
+    },
+    {
+      "name": "Foothill A",
+      "players": [
+        "Athithan Elamaran",
+        "Bhagirath Bandigari",
+        "Jake Nguyen",
+        "Shashank Vedula",
+        "Parv Surjan"
+      ]
+    },
+    {
+      "name": "Foothill B",
+      "players": [
+        "Sahana Venkat",
+        "Shulin Lu",
+        "Ashwin Ganapathi",
+        "Austin Lin"
+      ]
+    },
+    {
+      "name": "GSB A",
+      "players": [
+        "Kabir Mahajan",
+        "Olivia Kim",
+        "Neil Dixit",
+        "Elliot Boyce",
+        "Ali Sherazi"
+      ]
+    },
+    {
+      "name": "GSB B",
+      "players": [
+        "Max Li",
+        "Daphne Chen",
+        "Margaret Beery",
+        "Kaiyuan Ding",
+        "Chiara Montanari"
+      ]
+    },
+    {
+      "name": "Homestead",
+      "players": [
+        "Ishaan Sinha",
+        "Leo Sitaraman",
+        "Madeline Brown",
+        "Everett Tung",
+        "Spencer Diep"
+      ]
+    },
+    {
+      "name": "Irvington A",
+      "players": [
+        "Roland Pratt",
+        "Ishaan Agrawal",
+        "Avyukt Bhardwaj",
+        "Matthew Wang",
+        "Arjun Murugappan"
+      ]
+    },
+    {
+      "name": "Irvington B",
+      "players": [
+        "Mahi Kumar",
+        "Gabriella Liu",
+        "Abhiram Kuchi",
+        "Aariv Aggarwal",
+        "Aditya Arun"
+      ]
+    },
+    {
+      "name": "Los Gatos",
+      "players": [
+        "Anya Agarwal",
+        "James Smith",
+        "Atharava Pandey",
+        "Aiden Gao"
+      ]
+    },
+    {
+      "name": "Lynbrook A",
+      "players": [
+        "Evan Liu",
+        "Sohil Rathi",
+        "Ryan Bansal",
+        "Andrew Liu",
+        "Philip Kohr"
+      ]
+    },
+    {
+      "name": "Lynbrook B",
+      "players": [
+        "Matthew Yuan",
+        "Alex Ma",
+        "Sophia Fan",
+        "Rishab Medepalli",
+        "Vincent Qin"
+      ]
+    },
+    {
+      "name": "Miller",
+      "players": [
+        "Arthur Chang",
+        "Shien Fang",
+        "Pranik Biswas",
+        "Tim Xia",
+        "Asad Rahman"
+      ]
+    },
+    {
+      "name": "Mira Loma A",
+      "players": [
+        "Bryan Nasr",
+        "Sudeep Suresh",
+        "Krish Singh",
+        "Abhinav Krishna Senthil Kumar"
+      ]
+    },
+    {
+      "name": "Mira Loma B",
+      "players": [
+        "Sai-Sanaathan Vemireddy",
+        "Kapilan Karunakaran",
+        "Jeeva Karthy",
+        "Rohith Gonuguntla"
+      ]
+    },
+    {
+      "name": "Mission San Jose A",
+      "players": [
+        "Advaith Mopuri",
+        "Theenash Sengupta",
+        "Roshan Annamalai",
+        "Anish Agarwal",
+        "Rutvik Arora"
+      ]
+    },
+    {
+      "name": "Mission San Jose B",
+      "players": [
+        "Ishaan Kabra",
+        "Aravind Muralidharan",
+        "Andy Liu",
+        "Abhiraam Girish",
+        "Aarush Iyer"
+      ]
+    },
+    {
+      "name": "Mountain House A",
+      "players": [
+        "Ibrahim Nadeem",
+        "Sampriti Brahma",
+        "Hasita Venkat Raman",
+        "Shrikoustubh Veldanda",
+        "Saicharan Avuthu"
+      ]
+    },
+    {
+      "name": "Mountain House B",
+      "players": [
+        "Neel Raina",
+        "Shreyas Mandayam",
+        "Chun Tu Matthew Yu",
+        "Steven Tang",
+        "Pradyun Jupalli"
+      ]
+    },
+    {
+      "name": "Palo Alto",
+      "players": [
+        "Andrew Wen",
+        "Kevin Pei",
+        "Rasia Yu",
+        "Sayan Singh",
+        "Jacob Guhr"
+      ]
+    },
+    {
+      "name": "Quarry Lane A",
+      "players": [
+        "Nyasa Gupta",
+        "Rayirth Lakharia",
+        "Nyles Han",
+        "Angad Hayer"
+      ]
+    },
+    {
+      "name": "Quarry Lane B",
+      "players": [
+        "Gautham Doddapaneni",
+        "Dhruv Subramanian",
+        "Neel Gupta",
+        "Elaine Gu",
+        "Alex Luo"
+      ]
+    },
+    {
+      "name": "San Mateo",
+      "players": [
+        "Surbhi Sakshi",
+        "Navya Kayath",
+        "Mia Hasanain",
+        "Krisha Gupta"
+      ]
+    },
+    {
+      "name": "Saratoga",
+      "players": [
+        "Max Rombakh",
+        "Alex Ge",
+        "Ethan Pan",
+        "Warren Chee",
+        "Quinn Gifford"
+      ]
+    },
+    {
+      "name": "Stanford Online",
+      "players": [
+        "Josh Tittiranonda",
+        "Vikrant Chintanaboina",
+        "Praad Indaana",
+        "Vinayak Vikram"
+      ]
+    }
+  ]
+}
