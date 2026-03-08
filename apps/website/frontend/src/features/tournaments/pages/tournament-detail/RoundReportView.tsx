@@ -20,9 +20,8 @@ function toInt(raw: string | undefined): number {
   return toIntOrNull(raw) ?? 0;
 }
 
-function formatNumber(value: number, digits = 2): string {
-  if (!Number.isFinite(value)) return "0";
-  if (Number.isInteger(value)) return String(value);
+function formatFixedNumber(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return (0).toFixed(digits);
   return value.toFixed(digits);
 }
 
@@ -200,11 +199,11 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
         team: t.team_name,
         gp: t.games_played,
         score: t.score,
-        ppg: formatNumber(ppg, 2),
+        ppg: formatFixedNumber(ppg, 2),
         tuh,
         bh,
         bpts: t.bonus_points,
-        ppb: formatNumber(ppb, 2),
+        ppb: formatFixedNumber(ppb, 2),
         "4s": t.tossups_correct,
         "-4s": t.tossups_incorrect,
       };
@@ -273,7 +272,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
         gp: p.games_played,
         tuh: p.pairs_heard,
         tu_pts: p.tossup_points,
-        ppg: formatNumber(ppg, 2),
+        ppg: formatFixedNumber(ppg, 2),
         "4s": p.tossups_correct,
         "-4s": p.tossups_incorrect,
       };

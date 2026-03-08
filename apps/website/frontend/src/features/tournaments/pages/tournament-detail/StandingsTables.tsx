@@ -1,12 +1,6 @@
 import type { ReactNode } from "react";
 import type { IndividualStandingsRow, TeamStandingsRow } from "../../types";
 
-function formatNumber(value: number, digits = 2): string {
-  if (!Number.isFinite(value)) return "0";
-  if (Number.isInteger(value)) return String(value);
-  return value.toFixed(digits);
-}
-
 function formatFixedNumber(value: number, digits = 2): string {
   if (!Number.isFinite(value)) return (0).toFixed(digits);
   return value.toFixed(digits);
@@ -88,7 +82,7 @@ export function TeamStandingsTable({
     tuh: r.tossups_heard,
     bh: r.bonuses_heard,
     bp: r.bonus_points,
-    ppb: formatNumber(r.points_per_bonus),
+    ppb: formatFixedNumber(r.points_per_bonus, 2),
   }));
 
   return <DataTable headers={headers} rows={tableRows} />;
