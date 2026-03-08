@@ -20,9 +20,8 @@ function toInt(raw: string | undefined): number {
   return toIntOrNull(raw) ?? 0;
 }
 
-function formatNumber(value: number, digits = 2): string {
-  if (!Number.isFinite(value)) return "0";
-  if (Number.isInteger(value)) return String(value);
+function formatFixedNumber(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return (0).toFixed(digits);
   return value.toFixed(digits);
 }
 
@@ -223,7 +222,7 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
                 "-4s": toInt(t.tossups_incorrect),
                 bh: bonusesHeard,
                 bpts: bonusPoints,
-                ppb: formatNumber(ppb, 2),
+                ppb: formatFixedNumber(ppb, 2),
               };
             });
 

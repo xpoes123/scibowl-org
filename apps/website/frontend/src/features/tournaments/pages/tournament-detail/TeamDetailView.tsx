@@ -30,9 +30,8 @@ function formatRoundLabel(roundNumber: number | null, roundName: string, packetN
   return formatPacketOrRoundLabel(roundNumber, roundName, packetName);
 }
 
-function formatNumber(value: number, digits = 2): string {
-  if (!Number.isFinite(value)) return "0";
-  if (Number.isInteger(value)) return String(value);
+function formatFixedNumber(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return (0).toFixed(digits);
   return value.toFixed(digits);
 }
 
@@ -206,7 +205,7 @@ export function TeamDetailView({
           b_pts: agg.b_pts,
           tuh,
           bh,
-          ppb: formatNumber(ppb, 2),
+          ppb: formatFixedNumber(ppb, 2),
           "4s": agg.c,
           "-4s": agg.i,
         };
@@ -255,7 +254,7 @@ export function TeamDetailView({
         b_pts: toInt(t.bonus_points),
         tuh,
         bh,
-        ppb: formatNumber(ppb, 2),
+        ppb: formatFixedNumber(ppb, 2),
         "4s": toInt(t.tossups_correct),
         "-4s": toInt(t.tossups_incorrect),
       };
@@ -332,7 +331,7 @@ export function TeamDetailView({
           "4s": agg.c,
           "-4s": agg.i,
           pts: agg.tu_pts,
-          ppg: formatNumber(ppg, 2),
+          ppg: formatFixedNumber(ppg, 2),
         };
       });
 
@@ -398,7 +397,7 @@ export function TeamDetailView({
         "4s": p.c,
         "-4s": p.i,
         pts: p.tu_pts,
-        ppg: formatNumber(ppg, 2),
+        ppg: formatFixedNumber(ppg, 2),
       };
     });
 
