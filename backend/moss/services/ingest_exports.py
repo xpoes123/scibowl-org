@@ -23,6 +23,7 @@ from moss.reducer import initial_state
 from moss.services.export_facts import (
     reduce_scoresheet_export_to_question_outcomes,
 )
+from tournaments.models import Round as TournamentRound
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -59,6 +60,7 @@ def ingest_scoresheet_exports(
     *,
     tournament_id: int,
     exports: Iterable[tuple[Path, bytes, dict[str, Any]]],
+    round_assignments: dict[str, dict[str, Any]] | None = None,
     using: str = "default",
 ) -> None:
     """
@@ -117,6 +119,42 @@ def ingest_scoresheet_exports(
         bonus_incorrect = _require_int(rules_bonus.get("incorrect"), "rules.bonus.incorrect")
 
         with transaction.atomic(using=using):
+            round_obj = None
+            if round_assignments is not None:
+                round_info = round_assignments.get(str(source_path))
+                if isinstance(round_info, dict):
+                    round_number_any = round_info.get("round_number")
+                    round_number = (
+                        int(round_number_any)
+                        if isinstance(round_number_any, int) and not isinstance(round_number_any, bool)
+                        else None
+                    )
+                    if round_number is not None:
+                        round_name_any = round_info.get("name")
+                        round_packet_any = round_info.get("packet_name")
+                        round_name = round_name_any if isinstance(round_name_any, str) else ""
+                        round_packet_name = (
+                            round_packet_any if isinstance(round_packet_any, str) else ""
+                        )
+                        round_obj, created = TournamentRound.objects.using(using).get_or_create(
+                            tournament_id=tournament_id,
+                            round_number=round_number,
+                            defaults={
+                                "name": round_name,
+                                "packet_name": round_packet_name,
+                            },
+                        )
+                        if not created:
+                            updates: dict[str, str] = {}
+                            if round_name and not round_obj.name:
+                                updates["name"] = round_name
+                            if round_packet_name and not round_obj.packet_name:
+                                updates["packet_name"] = round_packet_name
+                            if updates:
+                                TournamentRound.objects.using(using).filter(id=round_obj.id).update(
+                                    **updates
+                                )
+
             packet_version, _ = PacketVersion.objects.using(using).get_or_create(
                 checksum_algorithm=checksum_algorithm,
                 checksum_canonicalization=checksum_canonicalization,
@@ -156,6 +194,7 @@ def ingest_scoresheet_exports(
 
             game = Game.objects.using(using).create(
                 tournament_id=tournament_id,
+                round=round_obj,
                 status="COMPLETED",
                 started_at=None,
                 completed_at=exported_dt,

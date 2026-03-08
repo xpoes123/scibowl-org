@@ -138,6 +138,26 @@ export type TournamentStatsManifest = {
   schema_version: number;
   generated_at: string;
   tournament: { slug: string; name: string };
+  report?: { key: string; label: string };
+  rounds?: {
+    mode: string;
+    rounds: Array<{
+      round_number: number;
+      name: string;
+      packet_name: string;
+      game_count: number;
+    }>;
+  };
+  datasets?: Partial<{
+    teams: string;
+    players: string;
+    rounds: string;
+    games: string;
+    game_teams: string;
+    game_players: string;
+    game_teams_by_category: string;
+    game_players_by_category: string;
+  }>;
   views: {
     team_standings: string;
     individual_standings: string;
@@ -148,6 +168,16 @@ export type TournamentStatsManifest = {
       individual_standings: string;
     }>;
   };
+};
+
+export type TournamentStatsReportsIndex = {
+  schema_version: number;
+  default_report_key: string;
+  reports: Array<{
+    key: string;
+    label: string;
+    manifest_path: string;
+  }>;
 };
 
 // Alias for backwards compatibility

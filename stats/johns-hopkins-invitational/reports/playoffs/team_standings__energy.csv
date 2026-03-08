@@ -1,0 +1,17 @@
+rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
+1,5,Basis,3,23.333333333333332,5,0,4,9,5,50,10.0
+2,7,Eagles B,2,21.0,3,0,3,6,3,30,10.0
+3,3,Richard Montgomery,5,20.8,12,1,2,15,12,60,5.0
+4,6,South Jersey,5,20.4,8,0,7,15,8,70,8.75
+5,10,Shallow Walk team A,4,19.5,7,0,5,12,7,50,7.142857142857143
+6,2,Eagles A,6,15.0,11,1,6,18,11,50,4.545454545454546
+7,4,North Allegheny,3,14.0,3,0,6,9,3,30,10.0
+8,9,WWPN A,5,13.6,9,2,4,15,9,40,4.444444444444445
+9,13,Montgomery Blair B,3,12.666666666666666,4,2,3,9,4,30,7.5
+10,14,Montgomery Blair A,5,10.8,8,2,5,15,8,30,3.75
+11,11,Gargy Bomy,3,9.333333333333334,4,2,3,9,4,20,5.0
+12,1,Centreville HS Team 1,2,7.0,1,0,5,6,1,10,10.0
+13,16,poolesville village idiots,4,3.5,3,2,7,12,3,10,3.3333333333333335
+14,12,Kiruna Scholars,6,3.0,2,0,16,18,2,10,5.0
+15,8,Eagles C,2,2.0,1,0,5,6,1,0,0.0
+16,15,WCHS A,2,-4.0,0,2,4,6,0,0,

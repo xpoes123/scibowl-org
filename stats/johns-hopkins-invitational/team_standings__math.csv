@@ -5,7 +5,7 @@ rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_h
 4,10,Shallow Walk team A,9,24.22222222222222,19,2,14,35,19,150,7.894736842105263
 5,13,Montgomery Blair B,8,22.5,17,2,12,31,17,120,7.0588235294117645
 6,9,WWPN A,10,20.4,20,4,15,39,20,140,7.0
-7,28,WWPN B,5,19.2,9,0,10,19,9,60,6.666666666666667
+7,27,WWPN B,5,19.2,9,0,10,19,9,60,6.666666666666667
 8,2,Eagles A,11,17.454545454545453,20,2,21,43,20,120,6.0
 9,12,Kiruna Scholars,11,16.90909090909091,22,3,19,44,22,110,5.0
 10,11,Gargy Bomy,8,16.75,13,7,10,30,13,110,8.461538461538462
@@ -18,14 +18,14 @@ rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_h
 17,5,Basis,8,11.25,11,1,19,31,11,50,4.545454545454546
 18,1,Centreville HS Team 1,7,8.857142857142858,9,1,16,26,9,30,3.3333333333333335
 19,23,Poolesville 2,5,8.0,5,0,15,20,5,20,4.0
-20,27,Thomas S Wootton High School team B,5,6.8,6,0,13,19,6,10,1.6666666666666667
+20,26,Thomas S Wootton High School team B,5,6.8,6,0,13,19,6,10,1.6666666666666667
 21,15,WCHS A,7,6.285714285714286,9,3,15,27,9,20,2.2222222222222223
 22,18,Centennial A,5,5.2,5,1,13,19,5,10,2.0
-23,26,Shallow Stroll Team B,5,3.2,3,4,12,19,3,20,6.666666666666667
-24,29,Thomas S Wootton High School team A,5,3.2,4,0,13,17,4,0,0.0
+23,25,Shallow Stroll Team B,5,3.2,3,4,12,19,3,20,6.666666666666667
+24,28,Thomas S Wootton High School team A,5,3.2,4,0,13,17,4,0,0.0
 25,19,Centennial B,5,2.4,4,1,15,20,4,0,0.0
 26,20,WCHS C,5,1.6,2,0,18,20,2,0,0.0
 27,17,Pilgrimage Homeschool,5,0.8,1,0,19,20,1,0,0.0
-28,30,Thomas S Wootton High School team C,5,0.8,1,0,19,20,1,0,0.0
-29,25,WCHS B,5,0.8,1,0,19,20,1,0,0.0
+28,29,Thomas S Wootton High School team C,5,0.8,1,0,19,20,1,0,0.0
+29,30,WCHS B,5,0.8,1,0,19,20,1,0,0.0
 30,22,Westtown B,5,0.8,3,2,14,19,3,0,0.0
