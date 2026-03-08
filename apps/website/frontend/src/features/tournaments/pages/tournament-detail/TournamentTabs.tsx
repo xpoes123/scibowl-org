@@ -5,9 +5,11 @@ import { formatTournamentDate } from "../../utils/date";
 import { useTournamentStandings } from "../../hooks/useTournamentStandings";
 import { useTournamentStatsManifest } from "../../hooks/useTournamentStatsManifest";
 import { useTournamentStatsReportsIndex } from "../../hooks/useTournamentStatsReportsIndex";
+import { useTournamentStatsCsv } from "../../hooks/useTournamentStatsCsv";
 import { useRosterIndex } from "../../hooks/useRosterIndex";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 import { FieldTab } from "./FieldTab";
+import { ScoreboardView } from "./ScoreboardView";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -180,6 +182,45 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const reportBaseDir = useMemo(() => statsBaseDirFromManifestPath(manifestPath), [manifestPath]);
 
   const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled, manifestPath);
+
+  type ResultsViewId = "standings" | "scoreboard";
+  const [resultsView, setResultsView] = useState<ResultsViewId>("standings");
+  useEffect(() => {
+    setResultsView("standings");
+  }, [reportKey, tournament.slug]);
+
+  const scoreboardDatasets = statsManifest?.datasets ?? null;
+  const scoreboardAvailable =
+    standingsEnabled &&
+    !!scoreboardDatasets?.games &&
+    !!scoreboardDatasets?.game_teams &&
+    !!scoreboardDatasets?.game_players &&
+    !!scoreboardDatasets?.rounds;
+  const scoreboardEnabled = scoreboardAvailable && resultsView === "scoreboard";
+
+  useEffect(() => {
+    if (resultsView !== "scoreboard") return;
+    if (scoreboardAvailable) return;
+    setResultsView("standings");
+  }, [resultsView, scoreboardAvailable]);
+
+  const gamesPath = scoreboardDatasets?.games ? joinStatsPath(reportBaseDir, scoreboardDatasets.games) : null;
+  const gameTeamsPath = scoreboardDatasets?.game_teams ? joinStatsPath(reportBaseDir, scoreboardDatasets.game_teams) : null;
+  const gamePlayersPath = scoreboardDatasets?.game_players ? joinStatsPath(reportBaseDir, scoreboardDatasets.game_players) : null;
+  const roundsPath = scoreboardDatasets?.rounds ? joinStatsPath(reportBaseDir, scoreboardDatasets.rounds) : null;
+
+  const { rows: gameRows, loading: gamesLoading, error: gamesError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gamesPath);
+  const { rows: gameTeamRows, loading: gameTeamsLoading, error: gameTeamsError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gameTeamsPath);
+  const { rows: gamePlayerRows, loading: gamePlayersLoading, error: gamePlayersError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gamePlayersPath);
+  const { rows: roundRows, loading: roundsLoading, error: roundsError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, roundsPath);
+
+  const scoreboardLoading = gamesLoading || gameTeamsLoading || gamePlayersLoading || roundsLoading;
+  const scoreboardError = gamesError || gameTeamsError || gamePlayersError || roundsError;
+
+  const [scoreboardRound, setScoreboardRound] = useState<string>("all");
+  useEffect(() => {
+    setScoreboardRound("all");
+  }, [reportKey, resultsView, tournament.slug]);
   const overallFiles = useMemo(() => {
     if (!statsManifest) return null;
     return {
@@ -291,7 +332,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
-  const showStandingsSubnav = activeTab === "results" && categories.length > 0;
+  const showStandingsSubnav = activeTab === "results" && resultsView === "standings" && categories.length > 0;
 
   useEffect(() => {
     if (!showStandingsSubnav) return;
@@ -417,32 +458,70 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
           <div role="tabpanel" id="tab-panel-results" aria-labelledby="tab-results">
             <section className="sbTabSection">
               <div className="sbTabSectionBody">
-                {!isUpcoming && reports && reports.length > 1 && (
+                {!isUpcoming && (scoreboardAvailable || (reports && reports.length > 1)) && (
                   <div className="sbListingControls" style={{ marginBottom: "12px" }}>
-                    <div className="sbField" style={{ flex: "0 1 260px", minWidth: "200px" }}>
-                      <label className="sbFieldLabel" htmlFor="standings-report">
-                        Report
-                      </label>
-                      <select
-                        id="standings-report"
-                        className="sbSelect"
-                        value={reportKey}
-                        onChange={(e) => {
-                          setReportKey(e.target.value);
-                          setReportKeyTouched(true);
-                        }}
-                      >
-                        {reports.map((r) => (
-                          <option key={r.key} value={r.key}>
-                            {r.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    {reports && reports.length > 1 && (
+                      <div className="sbField" style={{ flex: "0 1 260px", minWidth: "200px" }}>
+                        <label className="sbFieldLabel" htmlFor="standings-report">
+                          Report
+                        </label>
+                        <select
+                          id="standings-report"
+                          className="sbSelect"
+                          value={reportKey}
+                          onChange={(e) => {
+                            setReportKey(e.target.value);
+                            setReportKeyTouched(true);
+                          }}
+                        >
+                          {reports.map((r) => (
+                            <option key={r.key} value={r.key}>
+                              {r.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {scoreboardAvailable && (
+                      <div className="sbField" style={{ flex: "0 1 220px", minWidth: "200px" }}>
+                        <label className="sbFieldLabel" htmlFor="standings-view">
+                          View
+                        </label>
+                        <select
+                          id="standings-view"
+                          className="sbSelect"
+                          value={resultsView}
+                          onChange={(e) => setResultsView(e.target.value as ResultsViewId)}
+                        >
+                          <option value="standings">Standings</option>
+                          <option value="scoreboard">Scoreboard</option>
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
                 {isUpcoming ? (
                   <p className="sbMuted">Standings will be available after the tournament.</p>
+                ) : resultsView === "scoreboard" ? (
+                  !scoreboardAvailable ? (
+                    <p className="sbMuted">Scoreboard is not available for this tournament.</p>
+                  ) : scoreboardError ? (
+                    <p className="sbMuted">Failed to load scoreboard: {scoreboardError}</p>
+                  ) : scoreboardLoading || statsManifestLoading || statsReportsLoading ? (
+                    <p className="sbMuted">Loading scoreboard…</p>
+                  ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
+                    <ScoreboardView
+                      games={gameRows}
+                      gameTeams={gameTeamRows}
+                      gamePlayers={gamePlayerRows}
+                      rounds={roundRows}
+                      roundValue={scoreboardRound}
+                      onRoundChange={setScoreboardRound}
+                    />
+                  ) : (
+                    <p className="sbMuted">Scoreboard data files were not found.</p>
+                  )
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
                 ) : standingsLoading || statsManifestLoading || statsReportsLoading ? (
