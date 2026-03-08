@@ -66,79 +66,71 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 8,15,Mission San Jose A,73,Anish Agarwal,23,0,0,0,0
 8,15,Mission San Jose A,74,Roshan Annamalai,23,6,3,0,12
 8,15,Mission San Jose A,71,Theenash Sengupta,23,7,2,0,20
-9,2,Mission San Jose B,10,Aarush Iyer,23,1,0,0,4
-9,2,Mission San Jose B,8,Andy Liu,23,1,1,0,0
-9,2,Mission San Jose B,7,Aravind Muralidharan,23,2,0,0,8
-9,2,Mission San Jose B,6,Ishaan Kabra,23,5,1,0,16
-9,14,Palo Alto,67,Andrew Wen,23,5,1,0,16
-9,14,Palo Alto,68,Kevin Pei,23,3,1,0,8
-9,14,Palo Alto,66,Rasia Yu,23,2,0,0,8
-9,14,Palo Alto,69,Sayan Singh,23,0,0,0,0
-10,1,Amador Valley A,5,Dalbert Wu,11,1,0,0,4
-10,1,Amador Valley A,1,Gaurav Gupta,23,3,0,0,12
-10,1,Amador Valley A,3,Ritwik Aeka,23,3,1,0,8
-10,1,Amador Valley A,2,Rohan Garg,23,7,3,0,16
-10,1,Amador Valley A,4,Samarth Jain,12,0,0,0,0
-10,13,Irvington A,64,Arjun Murugappan,12,0,1,0,-4
-10,13,Irvington A,65,Avyukt Bhardwaj,11,0,0,0,0
-10,13,Irvington A,63,Ishaan Agrawal,23,5,1,0,16
-10,13,Irvington A,61,Matthew Wang,23,0,1,0,-4
-10,13,Irvington A,62,Roland Pratt,23,0,0,0,0
-11,4,Archbishop Mitty A,16,Anish Roy,23,1,1,0,0
-11,4,Archbishop Mitty A,20,Ben Zheng,23,0,1,0,-4
-11,4,Archbishop Mitty A,18,Richard Peng,23,1,2,0,-4
-11,4,Archbishop Mitty A,17,Sudhanva Belur,23,2,1,0,4
-11,15,Mission San Jose A,72,Advaith Mopuri,23,3,0,0,12
-11,15,Mission San Jose A,74,Roshan Annamalai,23,3,2,0,4
-11,15,Mission San Jose A,75,Rutvik Arora,23,0,1,0,-4
-11,15,Mission San Jose A,71,Theenash Sengupta,23,8,0,0,32
-12,5,BASIS Silicon Valley A,24,Aaron Cohen,23,1,1,0,0
-12,5,BASIS Silicon Valley A,23,Larry Zhao,23,3,0,0,12
-12,5,BASIS Silicon Valley A,21,Lucas Quan,23,6,0,0,24
-12,5,BASIS Silicon Valley A,22,Zanda Zhu,23,2,0,0,8
-12,11,GSB A,54,Ali Sherazi,23,1,0,0,4
-12,11,GSB A,52,Kabir Mahajan,23,3,0,0,12
-12,11,GSB A,53,Neil Dixit,23,1,3,0,-8
-12,11,GSB A,55,Olivia Kim,23,1,0,0,4
-13,7,Clovis North,32,Achuth Vinay,23,6,0,0,24
-13,7,Clovis North,31,Justin Do,23,3,0,0,12
-13,7,Clovis North,34,Majed Almasri,23,2,0,0,8
-13,7,Clovis North,35,Meera Malkar,23,0,0,0,0
-13,10,Davidson B,49,Bourne Zhou,11,0,0,0,0
-13,10,Davidson B,47,Casey Fong,12,0,0,0,0
-13,10,Davidson B,48,Ethan Chan,23,0,0,0,0
-13,10,Davidson B,46,Kaison Fong,23,4,0,0,16
-13,10,Davidson B,50,Shayan Sattarvand,23,3,0,0,12
-14,9,Davidson A,41,Alexander Weaver,23,2,1,0,4
-14,9,Davidson A,44,Filip Ramazan,12,0,2,0,-8
-14,9,Davidson A,45,Julian Kuang,23,4,0,0,16
-14,9,Davidson A,43,Lucas Wu,23,4,0,0,16
-14,9,Davidson A,42,Yajur Chandar,11,2,0,0,8
-14,8,Dougherty Valley A,39,Alan Chen,23,2,0,0,8
-14,8,Dougherty Valley A,38,Ashwin Shekhar,23,1,1,0,0
-14,8,Dougherty Valley A,37,Keshav Verma,23,2,1,0,4
-14,8,Dougherty Valley A,36,Soham Chatterjee,23,5,0,0,20
-15,6,Foothill A,30,Athithan Elamaran,23,4,0,0,16
-15,6,Foothill A,27,Bhagirath Bandigari,23,3,1,0,8
-15,6,Foothill A,28,Jake Nguyen,23,0,0,0,0
-15,6,Foothill A,29,Shashank Vedula,23,2,1,0,4
-15,12,Saratoga,58,Alex Ge,23,4,0,0,16
-15,12,Saratoga,59,Ethan Pan,23,3,0,0,12
-15,12,Saratoga,57,Max Rombakh,23,2,1,0,4
-15,12,Saratoga,56,Quinn Gifford,23,3,0,0,12
-16,3,Lynbrook A,14,Andrew Liu,23,2,0,0,8
-16,3,Lynbrook A,11,Evan Liu,23,4,0,0,16
-16,3,Lynbrook A,15,Philip Kohr,23,1,1,0,0
-16,3,Lynbrook A,12,Sohil Rathi,23,5,2,0,12
-16,16,Mira Loma A,77,Abhinav Krishna Senthil Kumar,23,4,0,0,16
-16,16,Mira Loma A,78,Bryan Nasr,23,1,0,0,4
-16,16,Mira Loma A,76,Krish Singh,23,0,0,0,0
-16,16,Mira Loma A,79,Sudeep Suresh,23,1,1,0,0
-17,2,Mission San Jose B,10,Aarush Iyer,1,0,0,0,0
-17,2,Mission San Jose B,8,Andy Liu,1,0,0,0,0
-17,2,Mission San Jose B,7,Aravind Muralidharan,1,0,0,0,0
-17,2,Mission San Jose B,6,Ishaan Kabra,1,0,0,0,0
-17,14,Palo Alto,67,Andrew Wen,1,0,0,0,0
-17,14,Palo Alto,68,Kevin Pei,1,0,0,0,0
-17,14,Palo Alto,66,Rasia Yu,1,0,0,0,0
-17,14,Palo Alto,69,Sayan Singh,1,0,0,0,0
+9,1,Amador Valley A,5,Dalbert Wu,11,1,0,0,4
+9,1,Amador Valley A,1,Gaurav Gupta,23,3,0,0,12
+9,1,Amador Valley A,3,Ritwik Aeka,23,3,1,0,8
+9,1,Amador Valley A,2,Rohan Garg,23,7,3,0,16
+9,1,Amador Valley A,4,Samarth Jain,12,0,0,0,0
+9,13,Irvington A,64,Arjun Murugappan,12,0,1,0,-4
+9,13,Irvington A,65,Avyukt Bhardwaj,11,0,0,0,0
+9,13,Irvington A,63,Ishaan Agrawal,23,5,1,0,16
+9,13,Irvington A,61,Matthew Wang,23,0,1,0,-4
+9,13,Irvington A,62,Roland Pratt,23,0,0,0,0
+10,4,Archbishop Mitty A,16,Anish Roy,23,1,1,0,0
+10,4,Archbishop Mitty A,20,Ben Zheng,23,0,1,0,-4
+10,4,Archbishop Mitty A,18,Richard Peng,23,1,2,0,-4
+10,4,Archbishop Mitty A,17,Sudhanva Belur,23,2,1,0,4
+10,15,Mission San Jose A,72,Advaith Mopuri,23,3,0,0,12
+10,15,Mission San Jose A,74,Roshan Annamalai,23,3,2,0,4
+10,15,Mission San Jose A,75,Rutvik Arora,23,0,1,0,-4
+10,15,Mission San Jose A,71,Theenash Sengupta,23,8,0,0,32
+11,5,BASIS Silicon Valley A,24,Aaron Cohen,23,1,1,0,0
+11,5,BASIS Silicon Valley A,23,Larry Zhao,23,3,0,0,12
+11,5,BASIS Silicon Valley A,21,Lucas Quan,23,6,0,0,24
+11,5,BASIS Silicon Valley A,22,Zanda Zhu,23,2,0,0,8
+11,11,GSB A,54,Ali Sherazi,23,1,0,0,4
+11,11,GSB A,52,Kabir Mahajan,23,3,0,0,12
+11,11,GSB A,53,Neil Dixit,23,1,3,0,-8
+11,11,GSB A,55,Olivia Kim,23,1,0,0,4
+12,7,Clovis North,32,Achuth Vinay,23,6,0,0,24
+12,7,Clovis North,31,Justin Do,23,3,0,0,12
+12,7,Clovis North,34,Majed Almasri,23,2,0,0,8
+12,7,Clovis North,35,Meera Malkar,23,0,0,0,0
+12,10,Davidson B,49,Bourne Zhou,11,0,0,0,0
+12,10,Davidson B,47,Casey Fong,12,0,0,0,0
+12,10,Davidson B,48,Ethan Chan,23,0,0,0,0
+12,10,Davidson B,46,Kaison Fong,23,4,0,0,16
+12,10,Davidson B,50,Shayan Sattarvand,23,3,0,0,12
+13,9,Davidson A,41,Alexander Weaver,23,2,1,0,4
+13,9,Davidson A,44,Filip Ramazan,12,0,2,0,-8
+13,9,Davidson A,45,Julian Kuang,23,4,0,0,16
+13,9,Davidson A,43,Lucas Wu,23,4,0,0,16
+13,9,Davidson A,42,Yajur Chandar,11,2,0,0,8
+13,8,Dougherty Valley A,39,Alan Chen,23,2,0,0,8
+13,8,Dougherty Valley A,38,Ashwin Shekhar,23,1,1,0,0
+13,8,Dougherty Valley A,37,Keshav Verma,23,2,1,0,4
+13,8,Dougherty Valley A,36,Soham Chatterjee,23,5,0,0,20
+14,6,Foothill A,30,Athithan Elamaran,23,4,0,0,16
+14,6,Foothill A,27,Bhagirath Bandigari,23,3,1,0,8
+14,6,Foothill A,28,Jake Nguyen,23,0,0,0,0
+14,6,Foothill A,29,Shashank Vedula,23,2,1,0,4
+14,12,Saratoga,58,Alex Ge,23,4,0,0,16
+14,12,Saratoga,59,Ethan Pan,23,3,0,0,12
+14,12,Saratoga,57,Max Rombakh,23,2,1,0,4
+14,12,Saratoga,56,Quinn Gifford,23,3,0,0,12
+15,3,Lynbrook A,14,Andrew Liu,23,2,0,0,8
+15,3,Lynbrook A,11,Evan Liu,23,4,0,0,16
+15,3,Lynbrook A,15,Philip Kohr,23,1,1,0,0
+15,3,Lynbrook A,12,Sohil Rathi,23,5,2,0,12
+15,16,Mira Loma A,77,Abhinav Krishna Senthil Kumar,23,4,0,0,16
+15,16,Mira Loma A,78,Bryan Nasr,23,1,0,0,4
+15,16,Mira Loma A,76,Krish Singh,23,0,0,0,0
+15,16,Mira Loma A,79,Sudeep Suresh,23,1,1,0,0
+16,2,Mission San Jose B,10,Aarush Iyer,1,0,0,0,0
+16,2,Mission San Jose B,8,Andy Liu,1,0,0,0,0
+16,2,Mission San Jose B,7,Aravind Muralidharan,1,0,0,0,0
+16,2,Mission San Jose B,6,Ishaan Kabra,1,0,0,0,0
+16,14,Palo Alto,67,Andrew Wen,1,0,0,0,0
+16,14,Palo Alto,68,Kevin Pei,1,0,0,0,0
+16,14,Palo Alto,66,Rasia Yu,1,0,0,0,0
+16,14,Palo Alto,69,Sayan Singh,1,0,0,0,0

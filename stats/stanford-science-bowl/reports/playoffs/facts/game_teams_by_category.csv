@@ -95,101 +95,89 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 8,2,16,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
 8,2,16,Mira Loma A,MATH,0,0,0,0,4,0,0,4
 8,2,16,Mira Loma A,PHYSICS,4,10,1,0,3,1,0,3
-9,1,14,Palo Alto,BIOLOGY,8,0,2,0,2,0,2,2
-9,1,14,Palo Alto,CHEMISTRY,8,20,2,0,2,2,0,2
-9,1,14,Palo Alto,EARTH_SPACE,0,10,1,1,2,1,0,3
-9,1,14,Palo Alto,ENERGY,8,20,2,0,1,2,0,1
-9,1,14,Palo Alto,MATH,12,20,3,0,1,2,1,1
-9,1,14,Palo Alto,PHYSICS,-4,0,0,1,3,0,0,4
-9,2,2,Mission San Jose B,BIOLOGY,8,20,2,0,2,2,0,2
-9,2,2,Mission San Jose B,CHEMISTRY,0,0,0,0,4,0,0,4
-9,2,2,Mission San Jose B,EARTH_SPACE,8,30,3,1,0,3,0,1
-9,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
-9,2,2,Mission San Jose B,MATH,4,10,1,0,3,1,0,3
-9,2,2,Mission San Jose B,PHYSICS,4,0,2,1,1,0,1,3
-10,1,13,Irvington A,BIOLOGY,0,0,0,0,4,0,0,4
-10,1,13,Irvington A,CHEMISTRY,0,0,1,1,2,0,1,3
-10,1,13,Irvington A,EARTH_SPACE,0,0,0,0,4,0,0,4
-10,1,13,Irvington A,ENERGY,-4,0,0,1,2,0,0,3
-10,1,13,Irvington A,MATH,4,10,1,0,3,1,0,3
-10,1,13,Irvington A,PHYSICS,8,0,3,1,0,0,3,1
-10,2,1,Amador Valley A,BIOLOGY,8,30,3,1,0,3,0,1
-10,2,1,Amador Valley A,CHEMISTRY,8,20,2,0,2,2,0,2
-10,2,1,Amador Valley A,EARTH_SPACE,8,10,3,1,0,1,2,1
-10,2,1,Amador Valley A,ENERGY,12,30,3,0,0,3,0,0
-10,2,1,Amador Valley A,MATH,4,10,2,1,1,1,1,2
-10,2,1,Amador Valley A,PHYSICS,0,10,1,1,2,1,0,3
-11,1,4,Archbishop Mitty A,BIOLOGY,4,10,1,0,3,1,0,3
-11,1,4,Archbishop Mitty A,CHEMISTRY,-8,0,0,2,2,0,0,4
-11,1,4,Archbishop Mitty A,EARTH_SPACE,4,10,2,1,1,1,1,2
-11,1,4,Archbishop Mitty A,ENERGY,0,0,0,0,3,0,0,3
-11,1,4,Archbishop Mitty A,MATH,0,10,1,1,2,1,0,3
-11,1,4,Archbishop Mitty A,PHYSICS,-4,0,0,1,3,0,0,4
-11,2,15,Mission San Jose A,BIOLOGY,12,20,3,0,1,2,1,1
-11,2,15,Mission San Jose A,CHEMISTRY,16,20,4,0,0,2,2,0
-11,2,15,Mission San Jose A,EARTH_SPACE,4,20,2,1,1,2,0,2
-11,2,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
-11,2,15,Mission San Jose A,MATH,8,10,2,0,2,1,1,2
-11,2,15,Mission San Jose A,PHYSICS,-8,0,0,2,2,0,0,4
-12,1,5,BASIS Silicon Valley A,BIOLOGY,8,20,2,0,2,2,0,2
-12,1,5,BASIS Silicon Valley A,CHEMISTRY,16,30,4,0,0,3,1,0
-12,1,5,BASIS Silicon Valley A,EARTH_SPACE,0,0,1,1,2,0,1,3
-12,1,5,BASIS Silicon Valley A,ENERGY,4,10,1,0,2,1,0,2
-12,1,5,BASIS Silicon Valley A,MATH,8,20,2,0,2,2,0,2
-12,1,5,BASIS Silicon Valley A,PHYSICS,8,20,2,0,2,2,0,2
-12,2,11,GSB A,BIOLOGY,8,10,2,0,2,1,1,2
-12,2,11,GSB A,CHEMISTRY,0,0,0,0,4,0,0,4
-12,2,11,GSB A,EARTH_SPACE,4,0,1,0,3,0,1,3
-12,2,11,GSB A,ENERGY,8,20,2,0,1,2,0,1
-12,2,11,GSB A,MATH,4,0,1,0,3,0,1,3
-12,2,11,GSB A,PHYSICS,-12,0,0,3,1,0,0,4
-13,1,7,Clovis North,BIOLOGY,16,30,4,0,0,3,1,0
-13,1,7,Clovis North,CHEMISTRY,8,10,2,0,2,1,1,2
-13,1,7,Clovis North,EARTH_SPACE,0,0,0,0,4,0,0,4
-13,1,7,Clovis North,ENERGY,12,20,3,0,0,2,1,0
-13,1,7,Clovis North,MATH,4,10,1,0,3,1,0,3
-13,1,7,Clovis North,PHYSICS,4,0,1,0,3,0,1,3
-13,2,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
-13,2,10,Davidson B,CHEMISTRY,4,10,1,0,3,1,0,3
-13,2,10,Davidson B,EARTH_SPACE,8,0,2,0,2,0,2,2
-13,2,10,Davidson B,ENERGY,0,0,0,0,3,0,0,3
-13,2,10,Davidson B,MATH,8,20,2,0,2,2,0,2
-13,2,10,Davidson B,PHYSICS,8,20,2,0,2,2,0,2
-14,1,9,Davidson A,BIOLOGY,-4,0,0,1,3,0,0,4
-14,1,9,Davidson A,CHEMISTRY,8,10,2,0,2,1,1,2
-14,1,9,Davidson A,EARTH_SPACE,4,20,2,1,1,2,0,2
-14,1,9,Davidson A,ENERGY,4,20,2,1,0,2,0,1
-14,1,9,Davidson A,MATH,12,20,3,0,1,2,1,1
-14,1,9,Davidson A,PHYSICS,12,20,3,0,1,2,1,1
-14,2,8,Dougherty Valley A,BIOLOGY,16,10,4,0,0,1,3,0
-14,2,8,Dougherty Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
-14,2,8,Dougherty Valley A,EARTH_SPACE,8,20,2,0,2,2,0,2
-14,2,8,Dougherty Valley A,ENERGY,4,10,1,0,2,1,0,2
-14,2,8,Dougherty Valley A,MATH,4,10,1,0,3,1,0,3
-14,2,8,Dougherty Valley A,PHYSICS,-8,0,0,2,2,0,0,4
-15,1,6,Foothill A,BIOLOGY,0,0,1,1,2,0,1,3
-15,1,6,Foothill A,CHEMISTRY,0,0,0,0,4,0,0,4
-15,1,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
-15,1,6,Foothill A,ENERGY,8,20,2,0,1,2,0,1
-15,1,6,Foothill A,MATH,8,20,2,0,2,2,0,2
-15,1,6,Foothill A,PHYSICS,8,20,2,0,2,2,0,2
-15,2,12,Saratoga,BIOLOGY,12,10,3,0,1,1,2,1
-15,2,12,Saratoga,CHEMISTRY,16,20,4,0,0,2,2,0
-15,2,12,Saratoga,EARTH_SPACE,4,0,1,0,3,0,1,3
-15,2,12,Saratoga,ENERGY,4,0,1,0,2,0,1,2
-15,2,12,Saratoga,MATH,4,0,1,0,3,0,1,3
-15,2,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
-16,1,3,Lynbrook A,BIOLOGY,8,10,2,0,2,1,1,2
-16,1,3,Lynbrook A,CHEMISTRY,16,20,4,0,0,2,2,0
-16,1,3,Lynbrook A,EARTH_SPACE,8,20,3,1,0,2,1,1
-16,1,3,Lynbrook A,ENERGY,0,10,1,1,1,1,0,2
-16,1,3,Lynbrook A,MATH,8,20,2,0,2,2,0,2
-16,1,3,Lynbrook A,PHYSICS,-4,0,0,1,3,0,0,4
-16,2,16,Mira Loma A,BIOLOGY,4,10,1,0,3,1,0,3
-16,2,16,Mira Loma A,CHEMISTRY,0,0,0,0,4,0,0,4
-16,2,16,Mira Loma A,EARTH_SPACE,0,0,0,0,4,0,0,4
-16,2,16,Mira Loma A,ENERGY,8,10,2,0,1,1,1,1
-16,2,16,Mira Loma A,MATH,4,0,1,0,3,0,1,3
-16,2,16,Mira Loma A,PHYSICS,4,10,2,1,1,1,1,2
-17,1,14,Palo Alto,BIOLOGY,0,0,0,0,1,0,0,1
-17,2,2,Mission San Jose B,BIOLOGY,0,0,0,0,1,0,0,1
+9,1,13,Irvington A,BIOLOGY,0,0,0,0,4,0,0,4
+9,1,13,Irvington A,CHEMISTRY,0,0,1,1,2,0,1,3
+9,1,13,Irvington A,EARTH_SPACE,0,0,0,0,4,0,0,4
+9,1,13,Irvington A,ENERGY,-4,0,0,1,2,0,0,3
+9,1,13,Irvington A,MATH,4,10,1,0,3,1,0,3
+9,1,13,Irvington A,PHYSICS,8,0,3,1,0,0,3,1
+9,2,1,Amador Valley A,BIOLOGY,8,30,3,1,0,3,0,1
+9,2,1,Amador Valley A,CHEMISTRY,8,20,2,0,2,2,0,2
+9,2,1,Amador Valley A,EARTH_SPACE,8,10,3,1,0,1,2,1
+9,2,1,Amador Valley A,ENERGY,12,30,3,0,0,3,0,0
+9,2,1,Amador Valley A,MATH,4,10,2,1,1,1,1,2
+9,2,1,Amador Valley A,PHYSICS,0,10,1,1,2,1,0,3
+10,1,4,Archbishop Mitty A,BIOLOGY,4,10,1,0,3,1,0,3
+10,1,4,Archbishop Mitty A,CHEMISTRY,-8,0,0,2,2,0,0,4
+10,1,4,Archbishop Mitty A,EARTH_SPACE,4,10,2,1,1,1,1,2
+10,1,4,Archbishop Mitty A,ENERGY,0,0,0,0,3,0,0,3
+10,1,4,Archbishop Mitty A,MATH,0,10,1,1,2,1,0,3
+10,1,4,Archbishop Mitty A,PHYSICS,-4,0,0,1,3,0,0,4
+10,2,15,Mission San Jose A,BIOLOGY,12,20,3,0,1,2,1,1
+10,2,15,Mission San Jose A,CHEMISTRY,16,20,4,0,0,2,2,0
+10,2,15,Mission San Jose A,EARTH_SPACE,4,20,2,1,1,2,0,2
+10,2,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
+10,2,15,Mission San Jose A,MATH,8,10,2,0,2,1,1,2
+10,2,15,Mission San Jose A,PHYSICS,-8,0,0,2,2,0,0,4
+11,1,5,BASIS Silicon Valley A,BIOLOGY,8,20,2,0,2,2,0,2
+11,1,5,BASIS Silicon Valley A,CHEMISTRY,16,30,4,0,0,3,1,0
+11,1,5,BASIS Silicon Valley A,EARTH_SPACE,0,0,1,1,2,0,1,3
+11,1,5,BASIS Silicon Valley A,ENERGY,4,10,1,0,2,1,0,2
+11,1,5,BASIS Silicon Valley A,MATH,8,20,2,0,2,2,0,2
+11,1,5,BASIS Silicon Valley A,PHYSICS,8,20,2,0,2,2,0,2
+11,2,11,GSB A,BIOLOGY,8,10,2,0,2,1,1,2
+11,2,11,GSB A,CHEMISTRY,0,0,0,0,4,0,0,4
+11,2,11,GSB A,EARTH_SPACE,4,0,1,0,3,0,1,3
+11,2,11,GSB A,ENERGY,8,20,2,0,1,2,0,1
+11,2,11,GSB A,MATH,4,0,1,0,3,0,1,3
+11,2,11,GSB A,PHYSICS,-12,0,0,3,1,0,0,4
+12,1,7,Clovis North,BIOLOGY,16,30,4,0,0,3,1,0
+12,1,7,Clovis North,CHEMISTRY,8,10,2,0,2,1,1,2
+12,1,7,Clovis North,EARTH_SPACE,0,0,0,0,4,0,0,4
+12,1,7,Clovis North,ENERGY,12,20,3,0,0,2,1,0
+12,1,7,Clovis North,MATH,4,10,1,0,3,1,0,3
+12,1,7,Clovis North,PHYSICS,4,0,1,0,3,0,1,3
+12,2,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
+12,2,10,Davidson B,CHEMISTRY,4,10,1,0,3,1,0,3
+12,2,10,Davidson B,EARTH_SPACE,8,0,2,0,2,0,2,2
+12,2,10,Davidson B,ENERGY,0,0,0,0,3,0,0,3
+12,2,10,Davidson B,MATH,8,20,2,0,2,2,0,2
+12,2,10,Davidson B,PHYSICS,8,20,2,0,2,2,0,2
+13,1,9,Davidson A,BIOLOGY,-4,0,0,1,3,0,0,4
+13,1,9,Davidson A,CHEMISTRY,8,10,2,0,2,1,1,2
+13,1,9,Davidson A,EARTH_SPACE,4,20,2,1,1,2,0,2
+13,1,9,Davidson A,ENERGY,4,20,2,1,0,2,0,1
+13,1,9,Davidson A,MATH,12,20,3,0,1,2,1,1
+13,1,9,Davidson A,PHYSICS,12,20,3,0,1,2,1,1
+13,2,8,Dougherty Valley A,BIOLOGY,16,10,4,0,0,1,3,0
+13,2,8,Dougherty Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
+13,2,8,Dougherty Valley A,EARTH_SPACE,8,20,2,0,2,2,0,2
+13,2,8,Dougherty Valley A,ENERGY,4,10,1,0,2,1,0,2
+13,2,8,Dougherty Valley A,MATH,4,10,1,0,3,1,0,3
+13,2,8,Dougherty Valley A,PHYSICS,-8,0,0,2,2,0,0,4
+14,1,6,Foothill A,BIOLOGY,0,0,1,1,2,0,1,3
+14,1,6,Foothill A,CHEMISTRY,0,0,0,0,4,0,0,4
+14,1,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
+14,1,6,Foothill A,ENERGY,8,20,2,0,1,2,0,1
+14,1,6,Foothill A,MATH,8,20,2,0,2,2,0,2
+14,1,6,Foothill A,PHYSICS,8,20,2,0,2,2,0,2
+14,2,12,Saratoga,BIOLOGY,12,10,3,0,1,1,2,1
+14,2,12,Saratoga,CHEMISTRY,16,20,4,0,0,2,2,0
+14,2,12,Saratoga,EARTH_SPACE,4,0,1,0,3,0,1,3
+14,2,12,Saratoga,ENERGY,4,0,1,0,2,0,1,2
+14,2,12,Saratoga,MATH,4,0,1,0,3,0,1,3
+14,2,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
+15,1,3,Lynbrook A,BIOLOGY,8,10,2,0,2,1,1,2
+15,1,3,Lynbrook A,CHEMISTRY,16,20,4,0,0,2,2,0
+15,1,3,Lynbrook A,EARTH_SPACE,8,20,3,1,0,2,1,1
+15,1,3,Lynbrook A,ENERGY,0,10,1,1,1,1,0,2
+15,1,3,Lynbrook A,MATH,8,20,2,0,2,2,0,2
+15,1,3,Lynbrook A,PHYSICS,-4,0,0,1,3,0,0,4
+15,2,16,Mira Loma A,BIOLOGY,4,10,1,0,3,1,0,3
+15,2,16,Mira Loma A,CHEMISTRY,0,0,0,0,4,0,0,4
+15,2,16,Mira Loma A,EARTH_SPACE,0,0,0,0,4,0,0,4
+15,2,16,Mira Loma A,ENERGY,8,10,2,0,1,1,1,1
+15,2,16,Mira Loma A,MATH,4,0,1,0,3,0,1,3
+15,2,16,Mira Loma A,PHYSICS,4,10,2,1,1,1,1,2
+16,1,14,Palo Alto,BIOLOGY,0,0,0,0,1,0,0,1
+16,2,2,Mission San Jose B,BIOLOGY,0,0,0,0,1,0,0,1
