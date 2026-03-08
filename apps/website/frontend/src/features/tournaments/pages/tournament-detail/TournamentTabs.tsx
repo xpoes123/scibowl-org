@@ -20,7 +20,7 @@ type TournamentTabsProps = {
   variant: TournamentStatus;
 };
 
-type TabId = "overview" | "field" | "results" | "games" | "statistics";
+type TabId = "overview" | "field" | "results" | "games" | "rounds" | "statistics";
 
 type Tab = {
   id: TabId;
@@ -164,6 +164,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const tabNavRef = useRef<HTMLDivElement | null>(null);
   const statsReportsSubNavRef = useRef<HTMLDivElement | null>(null);
+  const standingsModeSubNavRef = useRef<HTMLDivElement | null>(null);
   const standingsSubNavRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -199,9 +200,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   type StandingsViewId = "standings" | "team" | "player";
   const [standingsView, setStandingsView] = useState<StandingsViewId>("standings");
 
-  type GamesViewId = "scoreboard" | "round_report";
-  const [gamesView, setGamesView] = useState<GamesViewId>("scoreboard");
-
   const scoreboardDatasets = statsManifest?.datasets ?? null;
   const scoreboardAvailable =
     standingsEnabled &&
@@ -210,7 +208,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     !!scoreboardDatasets?.game_players &&
     !!scoreboardDatasets?.rounds;
   const gameDataEnabled =
-    scoreboardAvailable && (activeTab === "games" || (activeTab === "results" && (standingsView === "team" || standingsView === "player")));
+    scoreboardAvailable &&
+    (activeTab === "games" || activeTab === "rounds" || (activeTab === "results" && (standingsView === "team" || standingsView === "player")));
 
   useEffect(() => {
     if (statsManifestLoading) return;
@@ -364,7 +363,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         { id: "overview", label: "Overview", disabled: false },
         { id: "field", label: "Field", disabled: fieldDisabled },
         { id: "results", label: "Standings", disabled: true },
-        { id: "games", label: "Results", disabled: true },
+        { id: "games", label: "Games", disabled: true },
+        { id: "rounds", label: "Rounds", disabled: true },
         { id: "statistics", label: "Buzzpoints", disabled: true },
       ];
     }
@@ -374,7 +374,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         { id: "overview", label: "Overview", disabled: false },
         { id: "field", label: "Field", disabled: fieldDisabled },
         { id: "results", label: "Standings", disabled: false },
-        { id: "games", label: "Results", disabled: false },
+        { id: "games", label: "Games", disabled: false },
+        { id: "rounds", label: "Rounds", disabled: false },
         { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
       ];
     }
@@ -383,7 +384,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       { id: "overview", label: "Overview", disabled: false },
       { id: "field", label: "Field", disabled: fieldDisabled },
       { id: "results", label: "Standings", disabled: false },
-      { id: "games", label: "Results", disabled: false },
+      { id: "games", label: "Games", disabled: false },
+      { id: "rounds", label: "Rounds", disabled: false },
       { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
     ];
   }, [fieldDisabled, isLive, isUpcoming, statsLink]);
@@ -406,15 +408,17 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     const hasAnyStatsParams = !!(reportParam || viewParam || catParam || roundParam || teamParam || playerParam);
 
     const inferredTabFromStats: TabId | null =
-      viewParam === "scoreboard" || viewParam === "round_report" || roundParam
-        ? "games"
-        : viewParam === "team" || viewParam === "player" || teamParam || playerParam || catParam
-          ? "results"
-          : null;
+      viewParam === "round_report"
+        ? "rounds"
+        : viewParam === "scoreboard" || roundParam
+          ? "games"
+          : viewParam === "team" || viewParam === "player" || teamParam || playerParam || catParam
+            ? "results"
+            : null;
 
     if (tabParam === "overview" || tabParam === "field" || tabParam === "statistics") {
       setActiveTab(tabParam);
-    } else if (tabParam === "results" || tabParam === "games") {
+    } else if (tabParam === "results" || tabParam === "games" || tabParam === "rounds") {
       setActiveTab(inferredTabFromStats ?? tabParam);
     } else if (hasAnyStatsParams) {
       setActiveTab(inferredTabFromStats ?? "results");
@@ -429,9 +433,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       setReportKey("combined");
       setReportKeyTouched(false);
     }
-
-    if (viewParam === "scoreboard" || viewParam === "round_report") setGamesView(viewParam);
-    else setGamesView("scoreboard");
 
     if (viewParam === "team" || teamParam) setStandingsView("team");
     else if (viewParam === "player" || playerParam) setStandingsView("player");
@@ -458,18 +459,17 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       else next.delete("statsReport");
     }
 
-    if (activeTab === "games") {
-      if (gamesView !== "scoreboard") next.set("statsView", gamesView);
-      else next.delete("statsView");
-    } else {
+    if (activeTab === "results") {
       if (standingsView !== "standings") next.set("statsView", standingsView);
       else next.delete("statsView");
+    } else {
+      next.delete("statsView");
     }
 
     if (standingsCategoryKey !== "overall") next.set("statsCat", standingsCategoryKey);
     else next.delete("statsCat");
 
-    if (activeTab === "games") {
+    if (activeTab === "games" || activeTab === "rounds") {
       if (roundValue && roundValue !== "all") next.set("statsRound", roundValue);
       else next.delete("statsRound");
     } else {
@@ -507,7 +507,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     setSearchParams(next, { replace: true });
   }, [
     activeTab,
-    gamesView,
     hasCombinedReport,
     playerValue,
     reportKey,
@@ -546,7 +545,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
   const showStatsReportsSubnav =
-    standingsEnabled && !hasCombinedReport && (activeTab === "results" || activeTab === "games") && (reports?.length ?? 0) > 1;
+    standingsEnabled && !hasCombinedReport && (activeTab === "results" || activeTab === "games" || activeTab === "rounds") && (reports?.length ?? 0) > 1;
+  const showStandingsModeSubnav = activeTab === "results" && standingsEnabled;
   const showStandingsSubnav = activeTab === "results" && categories.length > 0;
 
   useEffect(() => {
@@ -560,6 +560,18 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     const reducedMotion = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     scrollChildIntoViewX(nav, activeButton, reducedMotion ? "auto" : "smooth");
   }, [reportKey, showStatsReportsSubnav]);
+
+  useEffect(() => {
+    if (!showStandingsModeSubnav) return;
+    const nav = standingsModeSubNavRef.current;
+    if (!nav) return;
+
+    const activeButton = nav.querySelector<HTMLElement>('button[aria-pressed="true"]');
+    if (!activeButton) return;
+
+    const reducedMotion = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    scrollChildIntoViewX(nav, activeButton, reducedMotion ? "auto" : "smooth");
+  }, [showStandingsModeSubnav, standingsView]);
 
   useEffect(() => {
     if (!showStandingsSubnav) return;
@@ -612,6 +624,39 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
               {r.label}
             </button>
           ))}
+        </div>
+      )}
+
+      {showStandingsModeSubnav && (
+        <div ref={standingsModeSubNavRef} className="sbTabSubNav" role="navigation" aria-label="Standings views">
+          <button
+            type="button"
+            className={standingsView === "standings" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+            aria-pressed={standingsView === "standings"}
+            onClick={() => setStandingsView("standings")}
+          >
+            Standings
+          </button>
+          <button
+            type="button"
+            className={standingsView === "team" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+            aria-pressed={standingsView === "team"}
+            disabled={!scoreboardAvailable && !statsManifestLoading}
+            aria-disabled={!scoreboardAvailable && !statsManifestLoading}
+            onClick={() => setStandingsView("team")}
+          >
+            Team
+          </button>
+          <button
+            type="button"
+            className={standingsView === "player" ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+            aria-pressed={standingsView === "player"}
+            disabled={!scoreboardAvailable && !statsManifestLoading}
+            aria-disabled={!scoreboardAvailable && !statsManifestLoading}
+            onClick={() => setStandingsView("player")}
+          >
+            Player
+          </button>
         </div>
       )}
 
@@ -708,28 +753,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                   <p className="sbMuted">Standings will be available after the tournament.</p>
                 ) : (
                   <div className="sbTabStack">
-                    <div className="sbListingControls" style={{ marginBottom: "12px" }}>
-                      <div className="sbField" style={{ flex: "0 1 220px", minWidth: "200px" }}>
-                        <label className="sbFieldLabel" htmlFor="standings-view">
-                          View
-                        </label>
-                        <select
-                          id="standings-view"
-                          className="sbSelect"
-                          value={standingsView}
-                          onChange={(e) => setStandingsView(e.target.value as StandingsViewId)}
-                        >
-                          <option value="standings">Standings</option>
-                          <option value="team" disabled={!scoreboardAvailable && !statsManifestLoading}>
-                            Team
-                          </option>
-                          <option value="player" disabled={!scoreboardAvailable && !statsManifestLoading}>
-                            Player
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
                     {standingsView === "team" ? (
                       !scoreboardAvailable && !statsManifestLoading ? (
                         <p className="sbMuted">Team view is not available for this tournament.</p>
@@ -858,49 +881,59 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
             <section className="sbTabSection">
               <div className="sbTabSectionBody">
                 {isUpcoming ? (
-                  <p className="sbMuted">Results will be available after the tournament.</p>
+                  <p className="sbMuted">Games will be available after the tournament.</p>
                 ) : (
                   <div className="sbTabStack">
-                    <div className="sbListingControls" style={{ marginBottom: "12px" }}>
-                      <div className="sbField" style={{ flex: "0 1 220px", minWidth: "200px" }}>
-                        <label className="sbFieldLabel" htmlFor="games-view">
-                          View
-                        </label>
-                        <select id="games-view" className="sbSelect" value={gamesView} onChange={(e) => setGamesView(e.target.value as GamesViewId)}>
-                          <option value="scoreboard">Scoreboard</option>
-                          <option value="round_report">Round report</option>
-                        </select>
-                      </div>
-                    </div>
-
                     {!scoreboardAvailable && !statsManifestLoading ? (
-                      <p className="sbMuted">Results are not available for this tournament.</p>
+                      <p className="sbMuted">Games are not available for this tournament.</p>
                     ) : gameDataError ? (
-                      <p className="sbMuted">Failed to load results: {gameDataError}</p>
+                      <p className="sbMuted">Failed to load games: {gameDataError}</p>
                     ) : gameDataLoading || statsManifestLoading || statsReportsLoading ? (
-                      <p className="sbMuted">Loading results…</p>
+                      <p className="sbMuted">Loading games…</p>
                     ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
-                      gamesView === "round_report" ? (
-                        <RoundReportView
-                          games={gameRows}
-                          gameTeams={gameTeamRows}
-                          gamePlayers={gamePlayerRows}
-                          rounds={roundRows}
-                          roundValue={roundValue}
-                          onRoundChange={setRoundValue}
-                        />
-                      ) : (
-                        <ScoreboardView
-                          games={gameRows}
-                          gameTeams={gameTeamRows}
-                          gamePlayers={gamePlayerRows}
-                          rounds={roundRows}
-                          roundValue={roundValue}
-                          onRoundChange={setRoundValue}
-                        />
-                      )
+                      <ScoreboardView
+                        games={gameRows}
+                        gameTeams={gameTeamRows}
+                        gamePlayers={gamePlayerRows}
+                        rounds={roundRows}
+                        roundValue={roundValue}
+                        onRoundChange={setRoundValue}
+                      />
                     ) : (
-                      <p className="sbMuted">Results data files were not found.</p>
+                      <p className="sbMuted">Games data files were not found.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        )}
+
+        {activeTab === "rounds" && (
+          <div role="tabpanel" id="tab-panel-rounds" aria-labelledby="tab-rounds">
+            <section className="sbTabSection">
+              <div className="sbTabSectionBody">
+                {isUpcoming ? (
+                  <p className="sbMuted">Rounds will be available after the tournament.</p>
+                ) : (
+                  <div className="sbTabStack">
+                    {!scoreboardAvailable && !statsManifestLoading ? (
+                      <p className="sbMuted">Rounds are not available for this tournament.</p>
+                    ) : gameDataError ? (
+                      <p className="sbMuted">Failed to load rounds: {gameDataError}</p>
+                    ) : gameDataLoading || statsManifestLoading || statsReportsLoading ? (
+                      <p className="sbMuted">Loading rounds…</p>
+                    ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
+                      <RoundReportView
+                        games={gameRows}
+                        gameTeams={gameTeamRows}
+                        gamePlayers={gamePlayerRows}
+                        rounds={roundRows}
+                        roundValue={roundValue}
+                        onRoundChange={setRoundValue}
+                      />
+                    ) : (
+                      <p className="sbMuted">Rounds data files were not found.</p>
                     )}
                   </div>
                 )}
