@@ -308,38 +308,69 @@ def _expand_export_input_paths(raw_paths: list[str]) -> tuple[list[Path], list[s
     return expanded_unique, warnings
 
 
-def _parse_round_number_from_path(source_path: Path) -> int | None:
+def _normalize_space(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip()
+
+
+def _parse_round_number_from_name(name: str) -> int | None:
+    tokens = [t for t in re.split(r"[^A-Za-z0-9]+", name) if t]
+    for tok in tokens:
+        m = re.fullmatch(r"(?i)(?:r|round)(\d{1,3})", tok)
+        if m:
+            value = int(m.group(1))
+            if 1 <= value <= 200:
+                return value
+        if tok.isdigit():
+            value = int(tok)
+            if 1 <= value <= 200:
+                return value
+    return None
+
+
+def _parse_round_descriptor_from_path(source_path: Path) -> dict[str, Any] | None:
     """
     Best-effort folder-based round inference.
 
-    Scans upwards from the file's parent dir, returning the first round-like numeric token
-    it finds (e.g., "Round 3", "R3", "3").
+    Scans upwards from the file's parent dir, returning the nearest round-like folder and
+    its immediate parent phase label when available.
     """
     max_search_levels = 8
-    for depth, parent in enumerate(source_path.parents):
-        if depth == 0:
-            # parents[0] is the file's parent dir.
-            pass
-        if depth >= max_search_levels:
-            break
-
-        name = parent.name or ""
-        if not name.strip():
+    parents = list(source_path.parents)
+    for depth, parent in enumerate(parents[:max_search_levels]):
+        name = _normalize_space(parent.name)
+        if not name:
             continue
 
-        tokens = [t for t in re.split(r"[^A-Za-z0-9]+", name) if t]
-        for tok in tokens:
-            m = re.fullmatch(r"(?i)(?:r|round)(\d{1,3})", tok)
-            if m:
-                value = int(m.group(1))
-                if 1 <= value <= 200:
-                    return value
-            if tok.isdigit():
-                value = int(tok)
-                if 1 <= value <= 200:
-                    return value
+        round_number = _parse_round_number_from_name(name)
+        if round_number is None:
+            continue
+
+        phase_name = ""
+        if depth + 1 < len(parents):
+            phase_name = _normalize_space(parents[depth + 1].name)
+
+        return {
+            "round_number": round_number,
+            "round_folder_name": name,
+            "phase_name": phase_name,
+        }
 
     return None
+
+
+def _round_phase_rank(*labels: str) -> int:
+    text = " ".join(part for part in (_normalize_space(label) for label in labels) if part)
+    if not text:
+        return 0
+
+    if re.search(r"(?i)\b(prelim|prelims|round robin|pool|swiss|seeding)\b", text):
+        return 0
+    if re.search(
+        r"(?i)\b(playoff|playoffs|bracket|double elimination|single elimination|quarterfinal|semifinal|final|championship|consolation|tiebreak)\b",
+        text,
+    ):
+        return 1
+    return 0
 
 
 def _infer_round_assignments(
@@ -351,7 +382,7 @@ def _infer_round_assignments(
     round_assignments is keyed by source_path string, mapping to:
       {round_number: int, name: str, packet_name: str, packet_checksum: str}
     """
-    parsed_numbers: dict[str, int] = {}
+    parsed_rounds: dict[str, dict[str, Any]] = {}
     packet_label_by_path: dict[str, str] = {}
     checksum_by_path: dict[str, str] = {}
 
@@ -359,14 +390,14 @@ def _infer_round_assignments(
         sp = str(source_path)
         packet_label_by_path[sp] = _packet_label_from_export_obj(export_obj)
         checksum_by_path[sp] = _packet_checksum_from_export_obj(export_obj)
-        parsed = _parse_round_number_from_path(source_path)
+        parsed = _parse_round_descriptor_from_path(source_path)
         if parsed is not None:
-            parsed_numbers[sp] = parsed
+            parsed_rounds[sp] = parsed
 
     warnings: list[str] = []
     round_assignments: dict[str, dict[str, Any]] = {}
 
-    has_any_folder_round = bool(parsed_numbers)
+    has_any_folder_round = bool(parsed_rounds)
     if not has_any_folder_round:
         # No round folders detected: group by packet checksum.
         warnings.append(
@@ -396,27 +427,89 @@ def _infer_round_assignments(
         return round_assignments, "packet_checksum", warnings
 
     # Folder-based for any exports that have a parsed numeric round; packet-checksum fallback for the rest.
-    max_round_number = max(parsed_numbers.values()) if parsed_numbers else 0
-    missing_paths = [sp for sp in packet_label_by_path.keys() if sp not in parsed_numbers]
+    missing_paths = [sp for sp in packet_label_by_path.keys() if sp not in parsed_rounds]
     if missing_paths:
         warnings.append(
             f"{len(missing_paths)} export(s) had no round-like folder name; assigning those to additional rounds by packet checksum."
         )
 
+    round_groups: dict[tuple[int, str, str], dict[str, Any]] = {}
+    group_key_by_path: dict[str, tuple[int, str, str]] = {}
+    for sp, descriptor in parsed_rounds.items():
+        packet_name = _normalize_space(packet_label_by_path.get(sp) or "")
+        round_folder_name = _normalize_space(descriptor.get("round_folder_name", ""))
+        phase_name = _normalize_space(descriptor.get("phase_name", ""))
+        checksum = checksum_by_path.get(sp) or ""
+        identity_label = packet_name or round_folder_name or checksum
+        group_key = (
+            int(descriptor["round_number"]),
+            phase_name.casefold(),
+            identity_label.casefold(),
+        )
+        group_key_by_path[sp] = group_key
+        round_groups.setdefault(
+            group_key,
+            {
+                "round_number": int(descriptor["round_number"]),
+                "phase_name": phase_name,
+                "packet_name": packet_name,
+                "round_folder_name": round_folder_name,
+                "checksum": checksum,
+            },
+        )
+
+    groups_by_local_round: dict[int, set[tuple[str, str]]] = {}
+    for round_number, phase_key, identity_key in round_groups.keys():
+        groups_by_local_round.setdefault(round_number, set()).add((phase_key, identity_key))
+
+    has_round_number_collisions = any(
+        len(group_keys) > 1 for group_keys in groups_by_local_round.values()
+    )
+
+    assigned_round_number_by_group: dict[tuple[int, str, str], int] = {}
+    if has_round_number_collisions:
+        warnings.append(
+            "Detected reused folder round numbers across multiple phase/packet groups; assigning unique round numbers by phase order."
+        )
+        sorted_group_items = sorted(
+            round_groups.items(),
+            key=lambda item: (
+                _round_phase_rank(
+                    item[1]["phase_name"],
+                    item[1]["packet_name"],
+                    item[1]["round_folder_name"],
+                ),
+                item[1]["round_number"],
+                item[1]["phase_name"].casefold(),
+                item[1]["packet_name"].casefold(),
+                item[1]["round_folder_name"].casefold(),
+                item[1]["checksum"],
+            ),
+        )
+        for idx, (group_key, _group_info) in enumerate(sorted_group_items, start=1):
+            assigned_round_number_by_group[group_key] = idx
+    else:
+        for group_key, group_info in round_groups.items():
+            assigned_round_number_by_group[group_key] = int(group_info["round_number"])
+
+    max_round_number = max(assigned_round_number_by_group.values(), default=0)
+
     # Assign folder-based rounds first.
-    for sp, round_number in parsed_numbers.items():
-        packet_name = packet_label_by_path.get(sp) or ""
+    for sp, descriptor in parsed_rounds.items():
+        round_number = assigned_round_number_by_group[group_key_by_path[sp]]
+        packet_name = _normalize_space(packet_label_by_path.get(sp) or "")
+        round_folder_name = _normalize_space(descriptor.get("round_folder_name", ""))
+        display_packet_name = packet_name or round_folder_name
         # Avoid redundant "Round N: Round N" when the packet name is just "Round N".
-        normalized_packet = re.sub(r"\\s+", " ", packet_name).strip()
-        if re.fullmatch(rf"(?i)round\\s*0*{round_number}", normalized_packet):
+        if re.fullmatch(rf"(?i)round\s*0*{round_number}", display_packet_name):
             round_name = ""
         else:
-            round_name = packet_name
+            round_name = display_packet_name
 
         round_assignments[sp] = {
             "round_number": round_number,
             "name": round_name,
-            "packet_name": packet_name,
+            "packet_name": display_packet_name,
             "packet_checksum": checksum_by_path.get(sp) or "",
         }
 
