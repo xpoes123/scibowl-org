@@ -10,6 +10,7 @@ import { useRosterIndex } from "../../hooks/useRosterIndex";
 import { IndividualStandingsTable, TeamStandingsTable } from "./StandingsTables";
 import { FieldTab } from "./FieldTab";
 import { ScoreboardView } from "./ScoreboardView";
+import { RoundReportView } from "./RoundReportView";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -183,7 +184,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled, manifestPath);
 
-  type ResultsViewId = "standings" | "scoreboard";
+  type ResultsViewId = "standings" | "scoreboard" | "round_report";
   const [resultsView, setResultsView] = useState<ResultsViewId>("standings");
   useEffect(() => {
     setResultsView("standings");
@@ -196,10 +197,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     !!scoreboardDatasets?.game_teams &&
     !!scoreboardDatasets?.game_players &&
     !!scoreboardDatasets?.rounds;
-  const scoreboardEnabled = scoreboardAvailable && resultsView === "scoreboard";
+  const gameDataEnabled = scoreboardAvailable && (resultsView === "scoreboard" || resultsView === "round_report");
 
   useEffect(() => {
-    if (resultsView !== "scoreboard") return;
+    if (resultsView === "standings") return;
     if (scoreboardAvailable) return;
     setResultsView("standings");
   }, [resultsView, scoreboardAvailable]);
@@ -209,18 +210,18 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const gamePlayersPath = scoreboardDatasets?.game_players ? joinStatsPath(reportBaseDir, scoreboardDatasets.game_players) : null;
   const roundsPath = scoreboardDatasets?.rounds ? joinStatsPath(reportBaseDir, scoreboardDatasets.rounds) : null;
 
-  const { rows: gameRows, loading: gamesLoading, error: gamesError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gamesPath);
-  const { rows: gameTeamRows, loading: gameTeamsLoading, error: gameTeamsError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gameTeamsPath);
-  const { rows: gamePlayerRows, loading: gamePlayersLoading, error: gamePlayersError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, gamePlayersPath);
-  const { rows: roundRows, loading: roundsLoading, error: roundsError } = useTournamentStatsCsv(tournament.slug, scoreboardEnabled, roundsPath);
+  const { rows: gameRows, loading: gamesLoading, error: gamesError } = useTournamentStatsCsv(tournament.slug, gameDataEnabled, gamesPath);
+  const { rows: gameTeamRows, loading: gameTeamsLoading, error: gameTeamsError } = useTournamentStatsCsv(tournament.slug, gameDataEnabled, gameTeamsPath);
+  const { rows: gamePlayerRows, loading: gamePlayersLoading, error: gamePlayersError } = useTournamentStatsCsv(tournament.slug, gameDataEnabled, gamePlayersPath);
+  const { rows: roundRows, loading: roundsLoading, error: roundsError } = useTournamentStatsCsv(tournament.slug, gameDataEnabled, roundsPath);
 
-  const scoreboardLoading = gamesLoading || gameTeamsLoading || gamePlayersLoading || roundsLoading;
-  const scoreboardError = gamesError || gameTeamsError || gamePlayersError || roundsError;
+  const gameDataLoading = gamesLoading || gameTeamsLoading || gamePlayersLoading || roundsLoading;
+  const gameDataError = gamesError || gameTeamsError || gamePlayersError || roundsError;
 
-  const [scoreboardRound, setScoreboardRound] = useState<string>("all");
+  const [roundValue, setRoundValue] = useState<string>("all");
   useEffect(() => {
-    setScoreboardRound("all");
-  }, [reportKey, resultsView, tournament.slug]);
+    setRoundValue("all");
+  }, [reportKey, tournament.slug]);
   const overallFiles = useMemo(() => {
     if (!statsManifest) return null;
     return {
@@ -496,6 +497,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                         >
                           <option value="standings">Standings</option>
                           <option value="scoreboard">Scoreboard</option>
+                          <option value="round_report">Round report</option>
                         </select>
                       </div>
                     )}
@@ -506,9 +508,9 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                 ) : resultsView === "scoreboard" ? (
                   !scoreboardAvailable ? (
                     <p className="sbMuted">Scoreboard is not available for this tournament.</p>
-                  ) : scoreboardError ? (
-                    <p className="sbMuted">Failed to load scoreboard: {scoreboardError}</p>
-                  ) : scoreboardLoading || statsManifestLoading || statsReportsLoading ? (
+                  ) : gameDataError ? (
+                    <p className="sbMuted">Failed to load scoreboard: {gameDataError}</p>
+                  ) : gameDataLoading || statsManifestLoading || statsReportsLoading ? (
                     <p className="sbMuted">Loading scoreboard…</p>
                   ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
                     <ScoreboardView
@@ -516,11 +518,30 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                       gameTeams={gameTeamRows}
                       gamePlayers={gamePlayerRows}
                       rounds={roundRows}
-                      roundValue={scoreboardRound}
-                      onRoundChange={setScoreboardRound}
+                      roundValue={roundValue}
+                      onRoundChange={setRoundValue}
                     />
                   ) : (
                     <p className="sbMuted">Scoreboard data files were not found.</p>
+                  )
+                ) : resultsView === "round_report" ? (
+                  !scoreboardAvailable ? (
+                    <p className="sbMuted">Round report is not available for this tournament.</p>
+                  ) : gameDataError ? (
+                    <p className="sbMuted">Failed to load round report: {gameDataError}</p>
+                  ) : gameDataLoading || statsManifestLoading || statsReportsLoading ? (
+                    <p className="sbMuted">Loading round report…</p>
+                  ) : gameRows && gameTeamRows && gamePlayerRows && roundRows ? (
+                    <RoundReportView
+                      games={gameRows}
+                      gameTeams={gameTeamRows}
+                      gamePlayers={gamePlayerRows}
+                      rounds={roundRows}
+                      roundValue={roundValue}
+                      onRoundChange={setRoundValue}
+                    />
+                  ) : (
+                    <p className="sbMuted">Round report data files were not found.</p>
                   )
                 ) : standingsError ? (
                   <p className="sbMuted">Failed to load standings: {standingsError}</p>
