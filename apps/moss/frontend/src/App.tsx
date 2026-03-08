@@ -25,6 +25,7 @@ import {
 import {
   initialScoresheetState,
   reduceScoresheetEvents,
+  type LineupState,
   type ScoresheetState,
 } from "./domain/scoresheetReducer";
 import {
@@ -344,6 +345,7 @@ type LineupSegment = {
   startTossup: number;
   endTossup: number | null;
   activePlayerIds: string[];
+  orderedPlayerIds: string[];
 };
 
 type Team = {
@@ -615,6 +617,130 @@ function SortableDraftTeamCol({
         >
           <span className="addIcon">+</span>
         </button>
+      </div>
+    </div>
+  );
+}
+
+function SortableLineupPlayerRow({
+  player,
+  playerIndex,
+  isIn,
+  onTogglePlayerIn,
+}: {
+  player: Player;
+  playerIndex: number;
+  isIn: boolean;
+  onTogglePlayerIn: (playerId: string) => void;
+}) {
+  const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: player.id,
+  });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={[
+        "playerRowWithToggle",
+        "dndPlayerRow",
+        "noRemove",
+        isDragging ? "dndDragging" : "",
+      ].filter(Boolean).join(" ")}
+    >
+      <button
+        type="button"
+        className="dndHandle dndHandlePlayer"
+        ref={setActivatorNodeRef}
+        aria-label="Drag to reorder player"
+        title="Drag to reorder"
+        {...attributes}
+        {...listeners}
+      >
+        <GripSixDotsIcon size={14} />
+      </button>
+
+      <input
+        className="textInput"
+        value={player.name}
+        readOnly
+        placeholder={`Player ${playerIndex + 1}`}
+      />
+
+      <button
+        type="button"
+        role="switch"
+        aria-checked={isIn}
+        className={["inOutToggle", isIn ? "active" : "bench"].join(" ")}
+        onClick={() => onTogglePlayerIn(player.id)}
+        aria-label={`${isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
+      >
+        {isIn ? "Active" : "Bench"}
+      </button>
+    </div>
+  );
+}
+
+function SortableLineupTeamCol({
+  team,
+  orderedPlayerIds,
+  draftInByPlayerId,
+  onTogglePlayerIn,
+  onReorderPlayers,
+}: {
+  team: Team;
+  orderedPlayerIds: string[];
+  draftInByPlayerId: Record<string, boolean>;
+  onTogglePlayerIn: (playerId: string) => void;
+  onReorderPlayers: (activePlayerId: string, overPlayerId: string) => void;
+}) {
+  const playerSensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+  const playersById = new Map(team.players.map((player) => [player.id, player]));
+  const orderedPlayers = orderedPlayerIds
+    .map((playerId) => playersById.get(playerId))
+    .filter((player): player is Player => !!player);
+
+  function handlePlayerDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id === over.id) return;
+    onReorderPlayers(String(active.id), String(over.id));
+  }
+
+  return (
+    <div className="lineupTeamCol">
+      <div className="fieldGroup">
+        <div className="fieldLabel">Team</div>
+        <input className="textInput" value={team.name} readOnly />
+      </div>
+
+      <div className="fieldGroup">
+        <div className="fieldLabel">Players</div>
+        <DndContext
+          sensors={playerSensors}
+          collisionDetection={closestCenter}
+          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+          onDragEnd={handlePlayerDragEnd}
+        >
+          <SortableContext items={orderedPlayers.map((player) => player.id)} strategy={verticalListSortingStrategy}>
+            <div className="playerList">
+              {orderedPlayers.map((player, playerIndex) => (
+                <SortableLineupPlayerRow
+                  key={player.id}
+                  player={player}
+                  playerIndex={playerIndex}
+                  isIn={!!draftInByPlayerId[player.id]}
+                  onTogglePlayerIn={onTogglePlayerIn}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   );
@@ -1647,6 +1773,7 @@ function ModeratorApp() {
     boundaryBeforeQuestion: number;
     isCreatingMarker: boolean;
     draftInByTeamId: Record<string, Record<string, boolean>>;
+    draftPlayerIdsByTeamId: Record<string, string[]>;
   } | null;
 
   const [scoresheetBoundaryPopup, setScoresheetBoundaryPopup] = useState<ScoresheetBoundaryPopupState>(null);
@@ -1819,6 +1946,7 @@ function ModeratorApp() {
                   start_tossup: seg.startTossup,
                   end_tossup: seg.endTossup,
                   active_player_ids: [...seg.activePlayerIds],
+                  ordered_player_ids: [...seg.orderedPlayerIds],
                 })),
               }
               : {}),
@@ -2053,7 +2181,11 @@ function ModeratorApp() {
     const dedupedStarts: LineupSegment[] = [];
     for (const seg of sorted) {
       const prev = dedupedStarts[dedupedStarts.length - 1];
-      const next = { ...seg, activePlayerIds: uniq(seg.activePlayerIds) };
+      const next = {
+        ...seg,
+        activePlayerIds: uniq(seg.activePlayerIds),
+        orderedPlayerIds: uniq(seg.orderedPlayerIds),
+      };
       if (prev && prev.startTossup === next.startTossup) {
         dedupedStarts[dedupedStarts.length - 1] = next;
         continue;
@@ -2072,36 +2204,87 @@ function ModeratorApp() {
     }));
   }
 
-  function activePlayerIdsForTeamAtTossup(team: Team, tossupNumber: number): Set<string> {
+  function normalizeOrderedPlayerIdsForTeam(team: Team, orderedPlayerIds: string[] | null | undefined): string[] {
+    const validPlayerIds = new Set(team.players.map((p) => p.id));
+    const seen = new Set<string>();
+    const normalized: string[] = [];
+
+    for (const rawId of orderedPlayerIds ?? []) {
+      if (!validPlayerIds.has(rawId) || seen.has(rawId)) continue;
+      seen.add(rawId);
+      normalized.push(rawId);
+    }
+
+    for (const player of team.players) {
+      if (seen.has(player.id)) continue;
+      seen.add(player.id);
+      normalized.push(player.id);
+    }
+
+    return normalized;
+  }
+
+  function lineupStateForTeamAtTossup(team: Team, tossupNumber: number): LineupState {
     const teamLineups = lineupsByTeamId[team.id];
-    if (!teamLineups) return new Set(team.players.map((p) => p.id));
+    const defaultOrderedPlayerIds = team.players.map((p) => p.id);
+    if (!teamLineups) {
+      return {
+        activePlayerIds: defaultOrderedPlayerIds,
+        orderedPlayerIds: defaultOrderedPlayerIds,
+      };
+    }
 
     const boundaries = Object.keys(teamLineups)
       .map((n) => Number(n))
       .filter((n) => Number.isFinite(n))
       .sort((a, b) => a - b);
 
-    let activeIds: string[] | null = null;
+    let lineup: LineupState | null = null;
     for (const boundary of boundaries) {
       if (boundary > tossupNumber) break;
-      activeIds = teamLineups[boundary] ?? null;
+      lineup = teamLineups[boundary] ?? null;
     }
 
-    if (!activeIds?.length) return new Set(team.players.map((p) => p.id));
-    return new Set(activeIds);
+    const orderedPlayerIds = normalizeOrderedPlayerIdsForTeam(team, lineup?.orderedPlayerIds);
+    const validOrderedIds = new Set(orderedPlayerIds);
+    const activePlayerIds = (() => {
+      const active = lineup?.activePlayerIds ?? defaultOrderedPlayerIds;
+      const deduped = uniq(active.filter((playerId) => validOrderedIds.has(playerId)));
+      return deduped.length ? deduped : defaultOrderedPlayerIds;
+    })();
+
+    return { activePlayerIds, orderedPlayerIds };
+  }
+
+  function orderedPlayersForTeamAtTossup(team: Team, tossupNumber: number): Player[] {
+    const playerById = new Map(team.players.map((player) => [player.id, player]));
+    return lineupStateForTeamAtTossup(team, tossupNumber).orderedPlayerIds
+      .map((playerId) => playerById.get(playerId))
+      .filter((player): player is Player => !!player);
+  }
+
+  function activePlayersForTeamAtTossup(team: Team, tossupNumber: number): Player[] {
+    const lineup = lineupStateForTeamAtTossup(team, tossupNumber);
+    const activeSet = new Set(lineup.activePlayerIds);
+    return orderedPlayersForTeamAtTossup(team, tossupNumber).filter((player) => activeSet.has(player.id));
+  }
+
+  function activePlayerIdsForTeamAtTossup(team: Team, tossupNumber: number): Set<string> {
+    return new Set(lineupStateForTeamAtTossup(team, tossupNumber).activePlayerIds);
   }
 
   function lineupSegmentsForTeam(team: Team): LineupSegment[] | null {
     const teamLineups = lineupsByTeamId[team.id];
     if (!teamLineups || !Object.keys(teamLineups).length) return null;
     const segments: LineupSegment[] = [];
-    for (const [boundary, activeIds] of Object.entries(teamLineups)) {
+    for (const [boundary, lineup] of Object.entries(teamLineups)) {
       const startTossup = Number(boundary);
       if (!Number.isFinite(startTossup)) continue;
       segments.push({
         startTossup,
         endTossup: null,
-        activePlayerIds: uniq(activeIds),
+        activePlayerIds: uniq(lineup.activePlayerIds),
+        orderedPlayerIds: normalizeOrderedPlayerIdsForTeam(team, lineup.orderedPlayerIds),
       });
     }
     return normalizeLineupSegments(segments);
@@ -2138,14 +2321,23 @@ function ModeratorApp() {
     if (!game) return;
 
     const draft: Record<string, Record<string, boolean>> = {};
+    const orderedDraftPlayerIdsByTeamId: Record<string, string[]> = {};
     for (const team of game.teams) {
-      const active = activePlayerIdsForTeamAtTossup(team, boundaryBeforeQuestion);
+      const lineup = lineupStateForTeamAtTossup(team, boundaryBeforeQuestion);
+      const active = new Set(lineup.activePlayerIds);
       const map: Record<string, boolean> = {};
       for (const p of team.players) map[p.id] = active.has(p.id);
       draft[team.id] = map;
+      orderedDraftPlayerIdsByTeamId[team.id] = [...lineup.orderedPlayerIds];
     }
 
-    setLineupChangeModal({ phase, boundaryBeforeQuestion, isCreatingMarker, draftInByTeamId: draft });
+    setLineupChangeModal({
+      phase,
+      boundaryBeforeQuestion,
+      isCreatingMarker,
+      draftInByTeamId: draft,
+      draftPlayerIdsByTeamId: orderedDraftPlayerIdsByTeamId,
+    });
   }
 
   function toggleLineupDraft(teamId: string, playerId: string) {
@@ -2163,10 +2355,27 @@ function ModeratorApp() {
     });
   }
 
+  function reorderLineupDraftPlayers(teamId: string, activePlayerId: string, overPlayerId: string) {
+    setLineupChangeModal((prev) => {
+      if (!prev) return prev;
+      const playerIds = prev.draftPlayerIdsByTeamId[teamId] ?? [];
+      const oldIndex = playerIds.indexOf(activePlayerId);
+      const newIndex = playerIds.indexOf(overPlayerId);
+      if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex) return prev;
+      return {
+        ...prev,
+        draftPlayerIdsByTeamId: {
+          ...prev.draftPlayerIdsByTeamId,
+          [teamId]: arrayMove(playerIds, oldIndex, newIndex),
+        },
+      };
+    });
+  }
+
   function saveLineupChangeModal() {
     if (!lineupChangeModal) return;
     if (!game) return;
-    const { boundaryBeforeQuestion, phase, isCreatingMarker, draftInByTeamId } = lineupChangeModal;
+    const { boundaryBeforeQuestion, phase, isCreatingMarker, draftInByTeamId, draftPlayerIdsByTeamId } = lineupChangeModal;
 
     for (const t of game.teams) {
       const teamDraft = draftInByTeamId[t.id];
@@ -2178,11 +2387,13 @@ function ModeratorApp() {
     for (const t of game.teams) {
       const teamDraft = draftInByTeamId[t.id];
       if (!teamDraft) continue;
-      const activeIds = t.players.filter((p) => !!teamDraft[p.id]).map((p) => p.id);
+      const orderedPlayerIds = normalizeOrderedPlayerIdsForTeam(t, draftPlayerIdsByTeamId[t.id]);
+      const activeIds = orderedPlayerIds.filter((playerId) => !!teamDraft[playerId]);
       events.push(buildScoresheetEvent("lineup.set", {
         team_id: t.id,
         boundary_before_question: boundaryBeforeQuestion,
         active_player_ids: activeIds,
+        ordered_player_ids: orderedPlayerIds,
       }));
     }
 
@@ -2866,6 +3077,7 @@ function ModeratorApp() {
         team_id: t.id,
         boundary_before_question: 1,
         active_player_ids: activePlayerIds,
+        ordered_player_ids: players.map((p) => p.id),
       }));
       return { id: t.id, name: teamName, players };
     });
@@ -2997,7 +3209,7 @@ function ModeratorApp() {
       const seenPlayerIds = new Set<string>();
       const playerIdsByTeamId = new Map<string, Set<string>>();
 
-      const importedLineupsByTeamId: Record<string, Record<number, string[]>> = {};
+      const importedLineupsByTeamId: Record<string, Record<number, LineupState>> = {};
       const importedTeams: Team[] = gameTeams.map((t) => {
         if (!t || typeof t !== "object") throw new Error("Each game.teams[] item must be an object");
         const tr = t as Record<string, unknown>;
@@ -3071,6 +3283,7 @@ function ModeratorApp() {
             const endRaw = sr.end_tossup;
             const activeByNameRaw = sr.active_players;
             const activeByIdRaw = sr.active_player_ids;
+            const orderedByIdRaw = sr.ordered_player_ids;
             const activeKind = Array.isArray(activeByIdRaw) ? "id" : "name";
             const activeRaw = activeKind === "id" ? activeByIdRaw : activeByNameRaw;
 
@@ -3138,7 +3351,25 @@ function ModeratorApp() {
               activePlayerIds.push(id);
             }
 
-            segs.push({ startTossup, endTossup, activePlayerIds });
+            const orderedPlayerIds = (() => {
+              if (orderedByIdRaw === undefined) return [...players.map((player) => player.id)];
+              if (!Array.isArray(orderedByIdRaw)) {
+                throw new Error(`Team ${teamName}: lineup_segments[].ordered_player_ids must be an array`);
+              }
+
+              const orderedIds: string[] = [];
+              for (const orderedPlayerIdAny of orderedByIdRaw) {
+                if (typeof orderedPlayerIdAny !== "string") {
+                  throw new Error(`Team ${teamName}: lineup_segments[].ordered_player_ids must be strings`);
+                }
+                const orderedPlayerId = orderedPlayerIdAny.trim();
+                if (!orderedPlayerId || !playerIds.has(orderedPlayerId) || orderedIds.includes(orderedPlayerId)) continue;
+                orderedIds.push(orderedPlayerId);
+              }
+              return normalizeOrderedPlayerIdsForTeam({ id: teamId, name: teamName, players }, orderedIds);
+            })();
+
+            segs.push({ startTossup, endTossup, activePlayerIds, orderedPlayerIds });
             lastCoveredEnd = effectiveEnd;
           }
 
@@ -3146,9 +3377,12 @@ function ModeratorApp() {
         }
 
         if (lineupSegments?.length) {
-          const map: Record<number, string[]> = {};
+          const map: Record<number, LineupState> = {};
           for (const seg of lineupSegments) {
-            map[seg.startTossup] = [...seg.activePlayerIds];
+            map[seg.startTossup] = {
+              activePlayerIds: [...seg.activePlayerIds],
+              orderedPlayerIds: [...seg.orderedPlayerIds],
+            };
           }
           importedLineupsByTeamId[teamId] = map;
         }
@@ -3442,8 +3676,7 @@ function ModeratorApp() {
     } else {
       for (const team of currentGame.teams) {
         if (currentAttempts.some((a) => a.teamId === team.id)) continue;
-        const active = activePlayerIdsForTeamAtTossup(team, question.pair_id);
-        const candidate = team.players.find((p) => active.has(p.id) && isPlayerAvailable(team.id, p.id));
+        const candidate = activePlayersForTeamAtTossup(team, question.pair_id).find((p) => isPlayerAvailable(team.id, p.id));
         if (!candidate) continue;
         preferred = { teamId: team.id, playerId: candidate.id };
         break;
@@ -3455,8 +3688,7 @@ function ModeratorApp() {
     const preferredTeam = currentGame.teams.find((t) => t.id === preferred.teamId);
     const preferredActiveCount = (() => {
       if (!preferredTeam) return 0;
-      const ids = activePlayerIdsForTeamAtTossup(preferredTeam, question.pair_id);
-      return preferredTeam.players.filter((p) => ids.has(p.id)).length;
+      return activePlayersForTeamAtTossup(preferredTeam, question.pair_id).length;
     })();
     const usePlayerPanel = preferredActiveCount > 0 && preferredActiveCount <= 6;
     const position = computePopupPosition(anchor, {
@@ -5104,41 +5336,16 @@ function ModeratorApp() {
                 <div className="modalBody">
                   <div className="lineupTeamGrid">
                     {teams.map((team) => (
-                      <div key={team.id} className="lineupTeamCol">
-                        <div className="fieldGroup">
-                          <div className="fieldLabel">Team</div>
-                          <input className="textInput" value={team.name} readOnly />
-                        </div>
-
-                        <div className="fieldGroup">
-                          <div className="fieldLabel">Players</div>
-                          <div className="playerList">
-                            {team.players.map((player, playerIndex) => {
-                              const isIn = !!lineupChangeModal.draftInByTeamId[team.id]?.[player.id];
-                              return (
-                                <div key={player.id} className="playerRowWithToggle noRemove">
-                                  <input
-                                    className="textInput"
-                                    value={player.name}
-                                    readOnly
-                                    placeholder={`Player ${playerIndex + 1}`}
-                                  />
-                                  <button
-                                    type="button"
-                                    role="switch"
-                                    aria-checked={isIn}
-                                    className={["inOutToggle", isIn ? "active" : "bench"].join(" ")}
-                                    onClick={() => toggleLineupDraft(team.id, player.id)}
-                                    aria-label={`${isIn ? "Set Bench" : "Set Active"}: ${player.name || `Player ${playerIndex + 1}`}`}
-                                  >
-                                    {isIn ? "Active" : "Bench"}
-                                  </button>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
+                      <SortableLineupTeamCol
+                        key={team.id}
+                        team={team}
+                        orderedPlayerIds={lineupChangeModal.draftPlayerIdsByTeamId[team.id] ?? team.players.map((player) => player.id)}
+                        draftInByPlayerId={lineupChangeModal.draftInByTeamId[team.id] ?? {}}
+                        onTogglePlayerIn={(playerId) => toggleLineupDraft(team.id, playerId)}
+                        onReorderPlayers={(activePlayerId, overPlayerId) =>
+                          reorderLineupDraftPlayers(team.id, activePlayerId, overPlayerId)
+                        }
+                      />
                     ))}
                   </div>
 
@@ -5166,7 +5373,7 @@ function ModeratorApp() {
           if (!team) return null;
 
           const activeIds = activePlayerIdsForTeamAtTossup(team, question.pair_id);
-          const activePlayers = team.players.filter((p) => activeIds.has(p.id));
+          const activePlayers = activePlayersForTeamAtTossup(team, question.pair_id);
           const selectedPlayerActive = activeIds.has(scoresheetAttemptEditModal.playerId);
           const canSave = selectedPlayerActive && activePlayers.length > 0;
           const usePlayerPanel = selectedPlayerActive && activePlayers.length > 0 && activePlayers.length <= 6;
@@ -5323,8 +5530,7 @@ function ModeratorApp() {
                 );
                 const tossupNumber = popupQuestion.pair_id;
                 const selectedTeam = teams.find((t) => t.id === currentAttemptEditor.selection.teamId);
-                const activeSet = selectedTeam ? activePlayerIdsForTeamAtTossup(selectedTeam, tossupNumber) : new Set<string>();
-                const activePlayers = (selectedTeam?.players ?? []).filter((p) => activeSet.has(p.id));
+                const activePlayers = selectedTeam ? activePlayersForTeamAtTossup(selectedTeam, tossupNumber) : [];
                 const useTeamToggle = teams.length === 2;
                 const usePlayerPanel = activePlayers.length > 0 && activePlayers.length <= 6;
 
@@ -5334,9 +5540,9 @@ function ModeratorApp() {
                   const currentPlayerId = currentAttemptEditor.selection.playerId;
                   const active = activePlayerIdsForTeamAtTossup(team, tossupNumber);
                   const available =
-                    team.players.find(
+                    orderedPlayersForTeamAtTossup(team, tossupNumber).find(
                       (p) => active.has(p.id) && (!attemptedPlayerIds.has(p.id) || p.id === currentPlayerId)
-                    ) ?? team.players.find((p) => active.has(p.id));
+                    ) ?? orderedPlayersForTeamAtTossup(team, tossupNumber).find((p) => active.has(p.id));
                   return available?.id ?? currentPlayerId;
                 }
 
