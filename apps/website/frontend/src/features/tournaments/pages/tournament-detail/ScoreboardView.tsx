@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { formatPacketOrRoundLabel } from "./statsText";
 
 type ScoreboardViewProps = {
   games: Array<Record<string, string>> | null;
@@ -19,11 +20,10 @@ function toInt(raw: string | undefined): number {
   return toIntOrNull(raw) ?? 0;
 }
 
-function formatRoundLabel(roundNumber: number, roundName: string, packetName: string): string {
-  const name = (roundName || "").trim();
-  const packet = (packetName || "").trim();
-  const suffix = name || packet ? `: ${name || packet}` : "";
-  return `Round ${roundNumber}${suffix}`;
+function formatNumber(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return "0";
+  if (Number.isInteger(value)) return String(value);
+  return value.toFixed(digits);
 }
 
 function DataTable({
@@ -157,12 +157,12 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
   }, [filteredGames]);
 
   const roundSelectOptions = useMemo(() => {
-    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: "All rounds" }];
+    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: "All Rounds" }];
     for (const r of parsedRounds) {
       if (r.round_number === null) continue;
       opts.push({
         value: String(r.round_number),
-        label: formatRoundLabel(r.round_number, r.round_name, r.packet_name),
+        label: formatPacketOrRoundLabel(r.round_number, r.round_name, r.packet_name),
       });
     }
     if (hasUnassigned) opts.push({ value: "_unassigned", label: "Unassigned" });
@@ -173,10 +173,7 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
     <div className="sbTabStack">
       <div className="sbListingControls">
         <div className="sbField" style={{ flex: "0 1 340px", minWidth: "240px" }}>
-          <label className="sbFieldLabel" htmlFor="scoreboard-round">
-            Round
-          </label>
-          <select id="scoreboard-round" className="sbSelect" value={roundValue} onChange={(e) => onRoundChange(e.target.value)}>
+          <select id="scoreboard-round" aria-label="Round" className="sbSelect" value={roundValue} onChange={(e) => onRoundChange(e.target.value)}>
             {roundSelectOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
@@ -198,7 +195,11 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
             const roundInfo = g.round_number ? roundsByNumber.get(g.round_number) : null;
             const roundLabel =
               g.round_number !== null
-                ? formatRoundLabel(g.round_number, (roundInfo?.round_name ?? g.round_name) || "", (roundInfo?.packet_name ?? g.round_packet_name) || "")
+                ? formatPacketOrRoundLabel(
+                    g.round_number,
+                    (roundInfo?.round_name ?? g.round_name) || "",
+                    (roundInfo?.packet_name ?? g.round_packet_name) || "",
+                  )
                 : "Unassigned";
 
             const gameTitleParts = [
@@ -208,15 +209,16 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
 
             const teamSummaryRows = teams.map((t) => {
               const bonusesHeard = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect) + toInt(t.bonuses_unheard);
+              const bonusPoints = toInt(t.bonus_points);
+              const ppb = bonusesHeard > 0 ? bonusPoints / bonusesHeard : 0;
               return {
                 team: t.team_name ?? "",
                 score: toInt(t.score),
-                tu_pts: toInt(t.tossup_points),
-                b_pts: toInt(t.bonus_points),
                 "4s": toInt(t.tossups_correct),
                 "-4s": toInt(t.tossups_incorrect),
-                "0s": toInt(t.tossups_no_penalty),
                 bh: bonusesHeard,
+                bpts: bonusPoints,
+                ppb: formatNumber(ppb, 2),
               };
             });
 
@@ -230,7 +232,6 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
                 tuh: toInt(p.pairs_heard),
                 "4s": toInt(p.tossups_correct),
                 "-4s": toInt(p.tossups_incorrect),
-                "0s": toInt(p.tossups_no_penalty),
                 tu_pts: toInt(p.tossup_points),
               }));
 
@@ -247,12 +248,11 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
                       headers={[
                         { key: "team", label: "Team" },
                         { key: "score", label: "Score", numeric: true },
-                        { key: "tu_pts", label: "TU Pts", numeric: true },
-                        { key: "b_pts", label: "B Pts", numeric: true },
-                        { key: "4s", label: "4s", numeric: true },
-                        { key: "-4s", label: "-4s", numeric: true },
-                        { key: "0s", label: "0s", numeric: true },
+                        { key: "4s", label: "4S", numeric: true },
+                        { key: "-4s", label: "-4S", numeric: true },
                         { key: "bh", label: "BH", numeric: true },
+                        { key: "bpts", label: "BPTS", numeric: true },
+                        { key: "ppb", label: "PPB", numeric: true },
                       ]}
                       rows={teamSummaryRows}
                     />
@@ -269,7 +269,6 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
                           { key: "tuh", label: "TUH", numeric: true },
                           { key: "4s", label: "4s", numeric: true },
                           { key: "-4s", label: "-4s", numeric: true },
-                          { key: "0s", label: "0s", numeric: true },
                           { key: "tu_pts", label: "TU Pts", numeric: true },
                         ]}
                         rows={pt.rows}
@@ -285,4 +284,3 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
     </div>
   );
 }
-

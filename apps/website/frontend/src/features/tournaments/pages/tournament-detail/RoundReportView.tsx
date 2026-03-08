@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { formatPacketOrRoundLabel } from "./statsText";
 
 type RoundReportViewProps = {
   games: Array<Record<string, string>> | null;
@@ -17,13 +18,6 @@ function toIntOrNull(raw: string | undefined): number | null {
 
 function toInt(raw: string | undefined): number {
   return toIntOrNull(raw) ?? 0;
-}
-
-function formatRoundLabel(roundNumber: number, roundName: string, packetName: string): string {
-  const name = (roundName || "").trim();
-  const packet = (packetName || "").trim();
-  const suffix = name || packet ? `: ${name || packet}` : "";
-  return `Round ${roundNumber}${suffix}`;
 }
 
 function formatNumber(value: number, digits = 2): string {
@@ -89,18 +83,34 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
 
   const hasUnassigned = useMemo(() => parsedGames.some((g) => g.round_number === null), [parsedGames]);
 
+  const gameCounts = useMemo(() => {
+    const byRound = new Map<number, number>();
+    let unassigned = 0;
+    for (const g of parsedGames) {
+      if (g.round_number === null) {
+        unassigned += 1;
+        continue;
+      }
+      byRound.set(g.round_number, (byRound.get(g.round_number) ?? 0) + 1);
+    }
+    return { total: parsedGames.length, byRound, unassigned };
+  }, [parsedGames]);
+
   const roundSelectOptions = useMemo(() => {
-    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: "All rounds" }];
+    const gameWord = (n: number) => (n === 1 ? "game" : "games");
+    const opts: Array<{ value: string; label: string }> = [{ value: "all", label: `All Rounds (${gameCounts.total} ${gameWord(gameCounts.total)})` }];
     for (const r of parsedRounds) {
       if (r.round_number === null) continue;
+      const count = gameCounts.byRound.get(r.round_number) ?? 0;
+      if (count === 0) continue;
       opts.push({
         value: String(r.round_number),
-        label: formatRoundLabel(r.round_number, r.round_name, r.packet_name),
+        label: `${formatPacketOrRoundLabel(r.round_number, r.round_name, r.packet_name)} (${count} ${gameWord(count)})`,
       });
     }
-    if (hasUnassigned) opts.push({ value: "_unassigned", label: "Unassigned" });
+    if (hasUnassigned) opts.push({ value: "_unassigned", label: `Unassigned (${gameCounts.unassigned} ${gameWord(gameCounts.unassigned)})` });
     return opts;
-  }, [hasUnassigned, parsedRounds]);
+  }, [gameCounts, hasUnassigned, parsedRounds]);
 
   const selectedGameIds = useMemo(() => {
     if (roundValue === "all") return new Set(parsedGames.map((g) => g.game_id));
@@ -111,7 +121,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
     return new Set(parsedGames.filter((g) => g.round_number === selected).map((g) => g.game_id));
   }, [parsedGames, roundValue]);
 
-  const gameCount = selectedGameIds.size;
+  const showGp = roundValue === "all";
 
   const teamRows = useMemo(() => {
     type TeamAgg = {
@@ -178,14 +188,12 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
         gp: t.games_played,
         score: t.score,
         ppg: formatNumber(ppg, 2),
-        tu_pts: t.tossup_points,
-        b_pts: t.bonus_points,
         tuh,
         bh,
+        bpts: t.bonus_points,
         ppb: formatNumber(ppb, 2),
         "4s": t.tossups_correct,
         "-4s": t.tossups_incorrect,
-        "0s": t.tossups_no_penalty,
       };
     });
 
@@ -255,7 +263,6 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
         ppg: formatNumber(ppg, 2),
         "4s": p.tossups_correct,
         "-4s": p.tossups_incorrect,
-        "0s": p.tossups_no_penalty,
       };
     });
 
@@ -274,22 +281,13 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
     <div className="sbTabStack">
       <div className="sbListingControls">
         <div className="sbField" style={{ flex: "0 1 340px", minWidth: "240px" }}>
-          <label className="sbFieldLabel" htmlFor="round-report-round">
-            Round
-          </label>
-          <select id="round-report-round" className="sbSelect" value={roundValue} onChange={(e) => onRoundChange(e.target.value)}>
+          <select id="round-report-round" aria-label="Round" className="sbSelect" value={roundValue} onChange={(e) => onRoundChange(e.target.value)}>
             {roundSelectOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
             ))}
           </select>
-        </div>
-        <div className="sbField" style={{ flex: "0 1 200px", minWidth: "200px" }}>
-          <span className="sbFieldLabel">Games</span>
-          <div className="sbBody" style={{ minHeight: "var(--sb-control-height)", display: "flex", alignItems: "center" }}>
-            {gameCount}
-          </div>
         </div>
       </div>
 
@@ -299,17 +297,14 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
           <DataTable
             headers={[
               { key: "team", label: "Team" },
-              { key: "gp", label: "GP", numeric: true },
-              { key: "score", label: "Pts", numeric: true },
+              ...(showGp ? [{ key: "gp", label: "GP", numeric: true }] : []),
               { key: "ppg", label: "PPG", numeric: true },
-              { key: "tu_pts", label: "TU Pts", numeric: true },
-              { key: "b_pts", label: "B Pts", numeric: true },
-              { key: "tuh", label: "TUH", numeric: true },
-              { key: "bh", label: "BH", numeric: true },
-              { key: "ppb", label: "PPB", numeric: true },
               { key: "4s", label: "4s", numeric: true },
               { key: "-4s", label: "-4s", numeric: true },
-              { key: "0s", label: "0s", numeric: true },
+              { key: "tuh", label: "TUH", numeric: true },
+              { key: "bh", label: "BH", numeric: true },
+              { key: "bpts", label: "BPTS", numeric: true },
+              { key: "ppb", label: "PPB", numeric: true },
             ]}
             rows={teamRows}
           />
@@ -323,13 +318,12 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
             headers={[
               { key: "player", label: "Player" },
               { key: "team", label: "Team" },
-              { key: "gp", label: "GP", numeric: true },
-              { key: "tuh", label: "TUH", numeric: true },
-              { key: "tu_pts", label: "TU Pts", numeric: true },
+              ...(showGp ? [{ key: "gp", label: "GP", numeric: true }] : []),
               { key: "ppg", label: "PPG", numeric: true },
               { key: "4s", label: "4s", numeric: true },
               { key: "-4s", label: "-4s", numeric: true },
-              { key: "0s", label: "0s", numeric: true },
+              { key: "tuh", label: "TUH", numeric: true },
+              { key: "tu_pts", label: "TU Pts", numeric: true },
             ]}
             rows={playerRows}
           />

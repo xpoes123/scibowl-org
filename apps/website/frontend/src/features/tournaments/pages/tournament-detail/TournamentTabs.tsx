@@ -879,7 +879,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         {activeTab === "games" && (
           <div role="tabpanel" id="tab-panel-games" aria-labelledby="tab-games">
             <section className="sbTabSection">
-              <div className="sbTabSectionBody">
+              <div className="sbTabSectionBody" style={{ marginTop: 0 }}>
                 {isUpcoming ? (
                   <p className="sbMuted">Games will be available after the tournament.</p>
                 ) : (
@@ -912,7 +912,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         {activeTab === "rounds" && (
           <div role="tabpanel" id="tab-panel-rounds" aria-labelledby="tab-rounds">
             <section className="sbTabSection">
-              <div className="sbTabSectionBody">
+              <div className="sbTabSectionBody" style={{ marginTop: 0 }}>
                 {isUpcoming ? (
                   <p className="sbMuted">Rounds will be available after the tournament.</p>
                 ) : (
