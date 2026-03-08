@@ -20,6 +20,7 @@ player_id,player_name,grade_level,team_id,team_name
 30,Srijon Mandal,,7,Amador Valley B
 46,Abdul Muhaimin,,10,American A
 44,Abhinav Shivalli,,10,American A
+231,Jiayu Song,,10,American A
 43,Keshav Venkatesh,,10,American A
 45,Ryan Liu,,10,American A
 47,Srithan Devarashetty,,10,American A
@@ -39,6 +40,7 @@ player_id,player_name,grade_level,team_id,team_name
 59,Samiha Das,,13,Archbishop Mitty B
 62,Yixin Xu,,13,Archbishop Mitty B
 20,Aarnav Rudiaiaju,,5,BASIS Fremont
+229,Aarnav Rudraraju,,5,BASIS Fremont
 23,Kevin Chen,,5,BASIS Fremont
 21,Lexing Liu,,5,BASIS Fremont
 22,Ryan Yan,,5,BASIS Fremont
@@ -101,6 +103,8 @@ player_id,player_name,grade_level,team_id,team_name
 135,Armaan Syed,,29,Dougherty Valley B
 133,Tannishtha Chakraborthy,,29,Dougherty Valley B
 146,Agrima Rai,,31,El Camino A
+230,Avery Fung,,31,El Camino A
+232,Eric Blones,,31,El Camino A
 144,John Blones,,31,El Camino A
 147,Milan Pecson,,31,El Camino A
 145,Ryan Chen,,31,El Camino A
@@ -224,5 +228,6 @@ player_id,player_name,grade_level,team_id,team_name
 213,Quinn Gifford,,45,Saratoga
 212,Warren Chee,,45,Saratoga
 106,Josh Tittiranonda,,23,Stanford Online
+228,Praad Indaana,,23,Stanford Online
 107,Vikrant Chintanaboina,,23,Stanford Online
 108,Vinayak Vikram,,23,Stanford Online

@@ -322,3 +322,694 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 24,48,Quarry Lane B,225,Neel Gupta,ENERGY,3,0,0,12
 24,48,Quarry Lane B,225,Neel Gupta,PHYSICS,1,0,0,4
 24,47,San Mateo,220,Navya Kayath,BIOLOGY,1,0,0,4
+25,8,BASIS Silicon Valley A,36,Aaron Cohen,EARTH_SPACE,1,0,0,4
+25,8,BASIS Silicon Valley A,36,Aaron Cohen,PHYSICS,0,1,0,-4
+25,8,BASIS Silicon Valley A,34,Larry Zhao,BIOLOGY,4,0,0,16
+25,8,BASIS Silicon Valley A,33,Lucas Quan,CHEMISTRY,4,0,0,16
+25,8,BASIS Silicon Valley A,33,Lucas Quan,EARTH_SPACE,2,0,0,8
+25,8,BASIS Silicon Valley A,33,Lucas Quan,ENERGY,2,0,0,8
+25,8,BASIS Silicon Valley A,33,Lucas Quan,MATH,3,0,0,12
+25,8,BASIS Silicon Valley A,33,Lucas Quan,PHYSICS,2,0,0,8
+25,38,Los Gatos,179,Aiden Gao,PHYSICS,1,0,0,4
+25,38,Los Gatos,176,Anya Agarwal,CHEMISTRY,0,1,0,-4
+25,38,Los Gatos,178,Atharava Pandey,CHEMISTRY,0,1,0,-4
+25,38,Los Gatos,177,James Smith,PHYSICS,1,0,0,4
+26,2,Albany A,6,Tate Nomura,EARTH_SPACE,1,0,0,4
+26,2,Albany A,6,Tate Nomura,MATH,1,0,0,4
+26,2,Albany A,6,Tate Nomura,PHYSICS,1,0,0,4
+26,45,Saratoga,210,Alex Ge,CHEMISTRY,2,0,0,8
+26,45,Saratoga,210,Alex Ge,EARTH_SPACE,1,0,0,4
+26,45,Saratoga,210,Alex Ge,ENERGY,3,0,0,12
+26,45,Saratoga,211,Ethan Pan,BIOLOGY,2,1,0,4
+26,45,Saratoga,209,Max Rombakh,CHEMISTRY,1,1,0,0
+26,45,Saratoga,209,Max Rombakh,EARTH_SPACE,2,0,0,8
+26,45,Saratoga,209,Max Rombakh,MATH,1,0,0,4
+26,45,Saratoga,209,Max Rombakh,PHYSICS,2,0,0,8
+26,45,Saratoga,213,Quinn Gifford,BIOLOGY,1,0,0,4
+26,45,Saratoga,213,Quinn Gifford,MATH,1,0,0,4
+26,45,Saratoga,212,Warren Chee,MATH,1,0,0,4
+26,45,Saratoga,212,Warren Chee,PHYSICS,0,1,0,-4
+27,4,Albany B,15,Lina Kim,CHEMISTRY,1,0,0,4
+27,25,Homestead,116,Everett Tung,BIOLOGY,1,0,0,4
+27,25,Homestead,116,Everett Tung,CHEMISTRY,1,0,0,4
+27,25,Homestead,116,Everett Tung,EARTH_SPACE,4,0,0,16
+27,25,Homestead,113,Ishaan Sinha,CHEMISTRY,0,1,0,-4
+27,25,Homestead,113,Ishaan Sinha,ENERGY,1,0,0,4
+27,25,Homestead,113,Ishaan Sinha,MATH,0,1,0,-4
+27,25,Homestead,113,Ishaan Sinha,PHYSICS,2,0,0,8
+27,25,Homestead,114,Leo Sitaraman,MATH,1,0,0,4
+27,25,Homestead,114,Leo Sitaraman,PHYSICS,2,0,0,8
+27,25,Homestead,115,Madeline Brown,BIOLOGY,1,0,0,4
+27,25,Homestead,115,Madeline Brown,ENERGY,1,0,0,4
+28,6,Amador Valley A,24,Gaurav Gupta,CHEMISTRY,0,1,0,-4
+28,6,Amador Valley A,24,Gaurav Gupta,EARTH_SPACE,0,1,0,-4
+28,6,Amador Valley A,24,Gaurav Gupta,ENERGY,1,0,0,4
+28,6,Amador Valley A,24,Gaurav Gupta,PHYSICS,1,0,0,4
+28,6,Amador Valley A,27,Ritwik Aeka,BIOLOGY,2,1,0,4
+28,6,Amador Valley A,27,Ritwik Aeka,EARTH_SPACE,1,0,0,4
+28,6,Amador Valley A,25,Rohan Garg,BIOLOGY,0,1,0,-4
+28,6,Amador Valley A,25,Rohan Garg,CHEMISTRY,2,1,0,4
+28,6,Amador Valley A,25,Rohan Garg,EARTH_SPACE,1,0,0,4
+28,6,Amador Valley A,25,Rohan Garg,ENERGY,0,1,0,-4
+28,6,Amador Valley A,25,Rohan Garg,MATH,3,1,0,8
+28,6,Amador Valley A,25,Rohan Garg,PHYSICS,1,1,0,0
+28,6,Amador Valley A,26,Samarth Jain,ENERGY,1,0,0,4
+28,23,Stanford Online,106,Josh Tittiranonda,BIOLOGY,1,1,0,0
+28,23,Stanford Online,106,Josh Tittiranonda,PHYSICS,1,0,0,4
+28,23,Stanford Online,107,Vikrant Chintanaboina,CHEMISTRY,1,0,0,4
+28,23,Stanford Online,107,Vikrant Chintanaboina,EARTH_SPACE,1,0,0,4
+28,23,Stanford Online,107,Vikrant Chintanaboina,ENERGY,1,0,0,4
+28,23,Stanford Online,108,Vinayak Vikram,BIOLOGY,0,1,0,-4
+28,23,Stanford Online,108,Vinayak Vikram,CHEMISTRY,1,0,0,4
+28,23,Stanford Online,108,Vinayak Vikram,EARTH_SPACE,1,0,0,4
+28,23,Stanford Online,108,Vinayak Vikram,ENERGY,0,2,0,-8
+29,7,Amador Valley B,31,Lusen Yao,MATH,1,0,0,4
+29,7,Amador Valley B,29,Olive Leuten,EARTH_SPACE,2,0,0,8
+29,7,Amador Valley B,32,Pratham Mehta,CHEMISTRY,1,0,0,4
+29,7,Amador Valley B,30,Srijon Mandal,BIOLOGY,1,0,0,4
+29,7,Amador Valley B,30,Srijon Mandal,PHYSICS,2,0,0,8
+29,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,CHEMISTRY,3,0,0,12
+29,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,EARTH_SPACE,1,0,0,4
+29,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,ENERGY,2,0,0,8
+29,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,MATH,2,0,0,8
+29,32,Mira Loma A,148,Bryan Nasr,BIOLOGY,1,0,0,4
+29,32,Mira Loma A,148,Bryan Nasr,EARTH_SPACE,1,0,0,4
+29,32,Mira Loma A,148,Bryan Nasr,PHYSICS,2,0,0,8
+29,32,Mira Loma A,150,Krish Singh,BIOLOGY,1,1,0,0
+29,32,Mira Loma A,149,Sudeep Suresh,PHYSICS,0,1,0,-4
+30,10,American A,46,Abdul Muhaimin,ENERGY,1,0,0,4
+30,10,American A,44,Abhinav Shivalli,BIOLOGY,1,0,0,4
+30,10,American A,44,Abhinav Shivalli,ENERGY,1,1,0,0
+30,10,American A,43,Keshav Venkatesh,CHEMISTRY,0,1,0,-4
+30,10,American A,43,Keshav Venkatesh,MATH,3,0,0,12
+30,10,American A,43,Keshav Venkatesh,PHYSICS,3,0,0,12
+30,10,American A,45,Ryan Liu,BIOLOGY,0,1,0,-4
+30,10,American A,47,Srithan Devarashetty,BIOLOGY,0,1,0,-4
+30,18,Mountain House B,83,Chun Tu Matthew Yu,EARTH_SPACE,1,0,0,4
+30,18,Mountain House B,84,Neel Raina,BIOLOGY,1,0,0,4
+30,18,Mountain House B,84,Neel Raina,CHEMISTRY,2,0,0,8
+30,18,Mountain House B,84,Neel Raina,EARTH_SPACE,1,0,0,4
+30,18,Mountain House B,84,Neel Raina,ENERGY,1,0,0,4
+30,18,Mountain House B,84,Neel Raina,PHYSICS,1,0,0,4
+30,18,Mountain House B,85,Shreyas Mandayam,CHEMISTRY,0,1,0,-4
+30,18,Mountain House B,85,Shreyas Mandayam,EARTH_SPACE,1,0,0,4
+30,18,Mountain House B,86,Steven Tang,BIOLOGY,1,0,0,4
+31,12,American B,57,Aarav Gupta,CHEMISTRY,0,1,0,-4
+31,12,American B,55,Sanjay Seshadri,EARTH_SPACE,1,0,0,4
+31,12,American B,54,Sudesh Srivatsan,MATH,1,0,0,4
+31,12,American B,53,Thomas Nguyen,CHEMISTRY,0,1,0,-4
+31,12,American B,53,Thomas Nguyen,ENERGY,1,0,0,4
+31,22,Quarry Lane A,105,Angad Hayer,BIOLOGY,3,0,0,12
+31,22,Quarry Lane A,105,Angad Hayer,CHEMISTRY,3,0,0,12
+31,22,Quarry Lane A,105,Angad Hayer,EARTH_SPACE,1,0,0,4
+31,22,Quarry Lane A,105,Angad Hayer,MATH,1,0,0,4
+31,22,Quarry Lane A,102,Nyasa Gupta,PHYSICS,3,0,0,12
+31,22,Quarry Lane A,103,Rayirth Lakharia,CHEMISTRY,0,1,0,-4
+31,22,Quarry Lane A,103,Rayirth Lakharia,EARTH_SPACE,1,0,0,4
+32,9,Archbishop Mitty A,38,Anish Roy,MATH,2,0,0,8
+32,9,Archbishop Mitty A,42,Ben Zheng,PHYSICS,1,0,0,4
+32,9,Archbishop Mitty A,40,Richard Peng,BIOLOGY,2,1,0,4
+32,9,Archbishop Mitty A,40,Richard Peng,CHEMISTRY,1,1,0,0
+32,9,Archbishop Mitty A,40,Richard Peng,ENERGY,2,0,0,8
+32,9,Archbishop Mitty A,39,Sudhanva Belur,EARTH_SPACE,2,0,0,8
+32,9,Archbishop Mitty A,39,Sudhanva Belur,ENERGY,0,1,0,-4
+32,30,Lynbrook A,140,Andrew Liu,BIOLOGY,2,0,0,8
+32,30,Lynbrook A,140,Andrew Liu,EARTH_SPACE,1,0,0,4
+32,30,Lynbrook A,140,Andrew Liu,ENERGY,1,0,0,4
+32,30,Lynbrook A,138,Evan Liu,CHEMISTRY,2,0,0,8
+32,30,Lynbrook A,138,Evan Liu,ENERGY,0,1,0,-4
+32,30,Lynbrook A,141,Philip Kohr,EARTH_SPACE,0,1,0,-4
+32,30,Lynbrook A,139,Ryan Bansal,MATH,1,0,0,4
+32,30,Lynbrook A,142,Sohil Rathi,CHEMISTRY,1,0,0,4
+32,30,Lynbrook A,142,Sohil Rathi,EARTH_SPACE,1,0,0,4
+32,30,Lynbrook A,142,Sohil Rathi,MATH,1,0,0,4
+32,30,Lynbrook A,142,Sohil Rathi,PHYSICS,3,1,0,8
+33,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,BIOLOGY,1,0,0,4
+33,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,CHEMISTRY,1,0,0,4
+33,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,EARTH_SPACE,2,1,0,4
+33,13,Archbishop Mitty B,60,Ruoyu Zhou,MATH,1,0,0,4
+33,13,Archbishop Mitty B,60,Ruoyu Zhou,PHYSICS,1,0,0,4
+33,13,Archbishop Mitty B,61,Saatvik Chauhan,BIOLOGY,1,0,0,4
+33,13,Archbishop Mitty B,61,Saatvik Chauhan,MATH,2,0,0,8
+33,13,Archbishop Mitty B,61,Saatvik Chauhan,PHYSICS,2,0,0,8
+33,13,Archbishop Mitty B,59,Samiha Das,CHEMISTRY,1,0,0,4
+33,13,Archbishop Mitty B,62,Yixin Xu,BIOLOGY,1,0,0,4
+33,19,Chico B,91,Devi Schumann,CHEMISTRY,0,1,0,-4
+33,19,Chico B,91,Devi Schumann,PHYSICS,1,0,0,4
+33,19,Chico B,89,Eli Hu,ENERGY,1,0,0,4
+33,19,Chico B,90,Maddy Dietz,ENERGY,1,1,0,0
+34,5,BASIS Fremont,229,Aarnav Rudraraju,BIOLOGY,1,0,0,4
+34,5,BASIS Fremont,229,Aarnav Rudraraju,CHEMISTRY,1,0,0,4
+34,5,BASIS Fremont,229,Aarnav Rudraraju,ENERGY,2,1,0,4
+34,5,BASIS Fremont,229,Aarnav Rudraraju,PHYSICS,0,1,0,-4
+34,5,BASIS Fremont,23,Kevin Chen,BIOLOGY,1,0,0,4
+34,5,BASIS Fremont,23,Kevin Chen,CHEMISTRY,1,0,0,4
+34,5,BASIS Fremont,23,Kevin Chen,EARTH_SPACE,2,0,0,8
+34,5,BASIS Fremont,21,Lexing Liu,PHYSICS,1,0,0,4
+34,28,Mountain House A,129,Ibrahim Nadeem,CHEMISTRY,0,2,0,-8
+34,28,Mountain House A,129,Ibrahim Nadeem,EARTH_SPACE,1,0,0,4
+34,28,Mountain House A,129,Ibrahim Nadeem,MATH,1,0,0,4
+34,28,Mountain House A,129,Ibrahim Nadeem,PHYSICS,3,0,0,12
+34,28,Mountain House A,130,Sampriti Brahma,BIOLOGY,1,0,0,4
+34,28,Mountain House A,130,Sampriti Brahma,CHEMISTRY,1,0,0,4
+35,11,BASIS Silicon Valley B,49,Eric Guo,CHEMISTRY,1,0,0,4
+35,11,BASIS Silicon Valley B,50,Ethan Guo,MATH,1,0,0,4
+35,11,BASIS Silicon Valley B,48,Jonathan Gao,BIOLOGY,0,1,0,-4
+35,11,BASIS Silicon Valley B,48,Jonathan Gao,PHYSICS,1,0,0,4
+35,11,BASIS Silicon Valley B,51,Liam Tran,CHEMISTRY,0,2,0,-8
+35,11,BASIS Silicon Valley B,51,Liam Tran,EARTH_SPACE,1,0,0,4
+35,11,BASIS Silicon Valley B,51,Liam Tran,ENERGY,1,0,0,4
+35,11,BASIS Silicon Valley B,51,Liam Tran,PHYSICS,1,0,0,4
+35,36,GSB A,171,Ali Sherazi,EARTH_SPACE,1,0,0,4
+35,36,GSB A,171,Ali Sherazi,ENERGY,1,0,0,4
+35,36,GSB A,170,Elliot Boyce,BIOLOGY,2,0,0,8
+35,36,GSB A,170,Elliot Boyce,CHEMISTRY,1,0,0,4
+35,36,GSB A,167,Kabir Mahajan,BIOLOGY,2,0,0,8
+35,36,GSB A,167,Kabir Mahajan,CHEMISTRY,1,0,0,4
+35,36,GSB A,167,Kabir Mahajan,EARTH_SPACE,1,0,0,4
+35,36,GSB A,167,Kabir Mahajan,PHYSICS,1,0,0,4
+35,36,GSB A,169,Neil Dixit,CHEMISTRY,1,0,0,4
+35,36,GSB A,169,Neil Dixit,EARTH_SPACE,1,1,0,0
+35,36,GSB A,169,Neil Dixit,ENERGY,1,0,0,4
+35,36,GSB A,169,Neil Dixit,MATH,3,0,0,12
+36,16,California,74,Kavin Jain,CHEMISTRY,0,1,0,-4
+36,16,California,74,Kavin Jain,PHYSICS,2,0,0,8
+36,16,California,75,Vihaan Tigadikar,CHEMISTRY,0,1,0,-4
+36,16,California,75,Vihaan Tigadikar,EARTH_SPACE,1,0,0,4
+36,40,Mission San Jose A,187,Advaith Mopuri,CHEMISTRY,1,1,0,0
+36,40,Mission San Jose A,187,Advaith Mopuri,MATH,2,0,0,8
+36,40,Mission San Jose A,185,Roshan Annamalai,EARTH_SPACE,2,0,0,8
+36,40,Mission San Jose A,185,Roshan Annamalai,ENERGY,1,0,0,4
+36,40,Mission San Jose A,185,Roshan Annamalai,PHYSICS,2,0,0,8
+36,40,Mission San Jose A,186,Rutvik Arora,EARTH_SPACE,0,1,0,-4
+36,40,Mission San Jose A,186,Rutvik Arora,MATH,1,0,0,4
+36,40,Mission San Jose A,188,Theenash Sengupta,BIOLOGY,2,1,0,4
+36,40,Mission San Jose A,188,Theenash Sengupta,CHEMISTRY,2,0,0,8
+36,40,Mission San Jose A,188,Theenash Sengupta,ENERGY,2,0,0,8
+37,17,Chico A,79,Greta Nikolai,EARTH_SPACE,1,0,0,4
+37,17,Chico A,81,Lucas Lazarski,MATH,1,0,0,4
+37,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,CHEMISTRY,1,0,0,4
+37,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,ENERGY,1,0,0,4
+37,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,MATH,1,0,0,4
+37,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,PHYSICS,1,0,0,4
+37,29,Dougherty Valley B,134,Andrew Sun,EARTH_SPACE,1,0,0,4
+37,29,Dougherty Valley B,134,Andrew Sun,MATH,2,0,0,8
+37,29,Dougherty Valley B,137,Aneeka Rao,CHEMISTRY,1,0,0,4
+37,29,Dougherty Valley B,135,Armaan Syed,BIOLOGY,1,0,0,4
+37,29,Dougherty Valley B,135,Armaan Syed,ENERGY,1,0,0,4
+37,29,Dougherty Valley B,133,Tannishtha Chakraborthy,BIOLOGY,3,0,0,12
+37,29,Dougherty Valley B,133,Tannishtha Chakraborthy,CHEMISTRY,1,0,0,4
+37,29,Dougherty Valley B,133,Tannishtha Chakraborthy,PHYSICS,1,0,0,4
+38,21,Clovis North,98,Achuth Vinay,BIOLOGY,3,0,0,12
+38,21,Clovis North,98,Achuth Vinay,MATH,2,0,0,8
+38,21,Clovis North,97,Justin Do,CHEMISTRY,4,0,0,16
+38,21,Clovis North,97,Justin Do,ENERGY,2,0,0,8
+38,21,Clovis North,97,Justin Do,PHYSICS,1,0,0,4
+38,21,Clovis North,100,Majed Almasri,EARTH_SPACE,1,0,0,4
+38,21,Clovis North,100,Majed Almasri,PHYSICS,2,0,0,8
+38,21,Clovis North,101,Meera Malkar,EARTH_SPACE,1,0,0,4
+38,21,Clovis North,99,Renard Wu,EARTH_SPACE,1,0,0,4
+38,35,Evergreen Valley,163,Zichao Zhou,EARTH_SPACE,1,0,0,4
+38,35,Evergreen Valley,163,Zichao Zhou,PHYSICS,1,1,0,0
+39,3,Cupertino A,13,Brandon Seo,CHEMISTRY,1,0,0,4
+39,3,Cupertino A,13,Brandon Seo,ENERGY,1,0,0,4
+39,3,Cupertino A,11,Namita Gaidhani,EARTH_SPACE,1,0,0,4
+39,3,Cupertino A,12,Pranav Burra,BIOLOGY,0,1,0,-4
+39,3,Cupertino A,12,Pranav Burra,CHEMISTRY,1,0,0,4
+39,3,Cupertino A,12,Pranav Burra,MATH,2,0,0,8
+39,3,Cupertino A,12,Pranav Burra,PHYSICS,3,0,0,12
+39,33,Foothill A,153,Athithan Elamaran,MATH,2,0,0,8
+39,33,Foothill A,153,Athithan Elamaran,PHYSICS,1,1,0,0
+39,33,Foothill A,152,Bhagirath Bandigari,BIOLOGY,1,0,0,4
+39,33,Foothill A,152,Bhagirath Bandigari,CHEMISTRY,0,1,0,-4
+39,33,Foothill A,154,Jake Nguyen,BIOLOGY,1,0,0,4
+39,33,Foothill A,154,Jake Nguyen,CHEMISTRY,2,1,0,4
+39,33,Foothill A,154,Jake Nguyen,EARTH_SPACE,1,0,0,4
+39,33,Foothill A,154,Jake Nguyen,ENERGY,1,0,0,4
+39,33,Foothill A,155,Shashank Vedula,BIOLOGY,2,0,0,8
+39,33,Foothill A,155,Shashank Vedula,EARTH_SPACE,1,1,0,0
+39,33,Foothill A,155,Shashank Vedula,ENERGY,1,0,0,4
+40,24,Cupertino B,111,Elaine Chen,PHYSICS,1,0,0,4
+40,24,Cupertino B,109,Rosa Lee,BIOLOGY,3,0,0,12
+40,27,Davidson B,127,Bourne Zhou,CHEMISTRY,1,0,0,4
+40,27,Davidson B,127,Bourne Zhou,MATH,1,0,0,4
+40,27,Davidson B,126,Ethan Chan,PHYSICS,1,0,0,4
+40,27,Davidson B,125,Kaison Fong,MATH,3,0,0,12
+40,27,Davidson B,125,Kaison Fong,PHYSICS,2,0,0,8
+40,27,Davidson B,124,Shayan Sattarvand,BIOLOGY,1,0,0,4
+40,27,Davidson B,124,Shayan Sattarvand,CHEMISTRY,3,0,0,12
+40,27,Davidson B,124,Shayan Sattarvand,EARTH_SPACE,3,0,0,12
+40,27,Davidson B,124,Shayan Sattarvand,ENERGY,2,0,0,8
+41,26,Davidson A,118,Alexander Weaver,EARTH_SPACE,3,0,0,12
+41,26,Davidson A,118,Alexander Weaver,ENERGY,1,0,0,4
+41,26,Davidson A,121,Filip Ramazan,BIOLOGY,3,0,0,12
+41,26,Davidson A,121,Filip Ramazan,CHEMISTRY,0,1,0,-4
+41,26,Davidson A,121,Filip Ramazan,MATH,0,1,0,-4
+41,26,Davidson A,122,Julian Kuang,CHEMISTRY,1,0,0,4
+41,26,Davidson A,122,Julian Kuang,ENERGY,1,0,0,4
+41,26,Davidson A,122,Julian Kuang,MATH,3,0,0,12
+41,26,Davidson A,122,Julian Kuang,PHYSICS,2,0,0,8
+41,26,Davidson A,120,Lucas Wu,BIOLOGY,1,0,0,4
+41,26,Davidson A,120,Lucas Wu,CHEMISTRY,2,0,0,8
+41,26,Davidson A,120,Lucas Wu,EARTH_SPACE,1,0,0,4
+41,26,Davidson A,120,Lucas Wu,ENERGY,1,0,0,4
+41,26,Davidson A,120,Lucas Wu,PHYSICS,1,0,0,4
+41,34,El Camino B,157,Grant Kitchen,PHYSICS,1,0,0,4
+42,20,Dougherty Valley A,92,Ashwin Shekhar,MATH,2,0,0,8
+42,20,Dougherty Valley A,92,Ashwin Shekhar,PHYSICS,2,0,0,8
+42,20,Dougherty Valley A,94,Keshav Verma,EARTH_SPACE,3,0,0,12
+42,20,Dougherty Valley A,95,Soham Chatterjee,BIOLOGY,3,0,0,12
+42,44,Palo Alto,204,Andrew Wen,BIOLOGY,1,0,0,4
+42,44,Palo Alto,204,Andrew Wen,CHEMISTRY,3,0,0,12
+42,44,Palo Alto,204,Andrew Wen,MATH,2,0,0,8
+42,44,Palo Alto,204,Andrew Wen,PHYSICS,2,0,0,8
+42,44,Palo Alto,205,Kevin Pei,CHEMISTRY,1,0,0,4
+42,44,Palo Alto,205,Kevin Pei,EARTH_SPACE,1,0,0,4
+42,44,Palo Alto,205,Kevin Pei,ENERGY,3,0,0,12
+43,31,El Camino A,145,Ryan Chen,CHEMISTRY,1,0,0,4
+43,31,El Camino A,143,Swaraj Adhikari,CHEMISTRY,1,0,0,4
+43,31,El Camino A,143,Swaraj Adhikari,EARTH_SPACE,3,0,0,12
+43,31,El Camino A,143,Swaraj Adhikari,MATH,1,0,0,4
+43,31,El Camino A,143,Swaraj Adhikari,PHYSICS,3,0,0,12
+43,37,Foothill B,174,Ashwin Ganapathi,MATH,0,1,0,-4
+43,37,Foothill B,175,Austin Lin,BIOLOGY,1,0,0,4
+43,37,Foothill B,175,Austin Lin,ENERGY,2,0,0,8
+43,37,Foothill B,172,Sahana Venkat,BIOLOGY,1,0,0,4
+43,37,Foothill B,173,Shulin Lu,CHEMISTRY,1,1,0,0
+43,37,Foothill B,173,Shulin Lu,PHYSICS,1,0,0,4
+44,1,Folsom City,1,Joshua Wu,CHEMISTRY,2,0,0,8
+44,1,Folsom City,1,Joshua Wu,EARTH_SPACE,3,0,0,12
+44,1,Folsom City,1,Joshua Wu,ENERGY,3,0,0,12
+44,1,Folsom City,1,Joshua Wu,MATH,1,0,0,4
+44,1,Folsom City,1,Joshua Wu,PHYSICS,1,0,0,4
+44,1,Folsom City,2,Kavin Anreddy,BIOLOGY,2,0,0,8
+44,1,Folsom City,2,Kavin Anreddy,CHEMISTRY,1,0,0,4
+44,1,Folsom City,2,Kavin Anreddy,EARTH_SPACE,1,0,0,4
+44,1,Folsom City,2,Kavin Anreddy,MATH,1,0,0,4
+44,1,Folsom City,2,Kavin Anreddy,PHYSICS,2,0,0,8
+44,1,Folsom City,3,Pushkal Mishra,BIOLOGY,1,0,0,4
+44,1,Folsom City,4,Satvik Chakkapalli,BIOLOGY,1,0,0,4
+44,47,San Mateo,222,Krisha Gupta,CHEMISTRY,1,0,0,4
+44,47,San Mateo,219,Surbhi Sakshi,PHYSICS,0,1,0,-4
+45,15,GSB B,71,Kaiyuan Ding,EARTH_SPACE,1,0,0,4
+45,15,GSB B,71,Kaiyuan Ding,ENERGY,2,0,0,8
+45,15,GSB B,71,Kaiyuan Ding,PHYSICS,1,0,0,4
+45,15,GSB B,70,Margaret Beery,CHEMISTRY,2,0,0,8
+45,15,GSB B,68,Max Li,MATH,1,0,0,4
+45,41,Miller,190,Arthur Chang,CHEMISTRY,2,0,0,8
+45,41,Miller,190,Arthur Chang,MATH,3,0,0,12
+45,41,Miller,190,Arthur Chang,PHYSICS,1,0,0,4
+45,41,Miller,192,Pranik Biswas,BIOLOGY,2,0,0,8
+45,41,Miller,192,Pranik Biswas,EARTH_SPACE,1,0,0,4
+45,41,Miller,192,Pranik Biswas,PHYSICS,1,0,0,4
+45,41,Miller,191,Shien Fang,BIOLOGY,2,0,0,8
+45,41,Miller,191,Shien Fang,EARTH_SPACE,1,0,0,4
+45,41,Miller,191,Shien Fang,ENERGY,1,0,0,4
+46,39,Irvington A,183,Arjun Murugappan,BIOLOGY,1,1,0,0
+46,39,Irvington A,183,Arjun Murugappan,CHEMISTRY,1,0,0,4
+46,39,Irvington A,183,Arjun Murugappan,ENERGY,1,0,0,4
+46,39,Irvington A,181,Ishaan Agrawal,BIOLOGY,1,0,0,4
+46,39,Irvington A,181,Ishaan Agrawal,MATH,2,0,0,8
+46,39,Irvington A,181,Ishaan Agrawal,PHYSICS,3,0,0,12
+46,39,Irvington A,180,Matthew Wang,CHEMISTRY,0,1,0,-4
+46,39,Irvington A,180,Matthew Wang,EARTH_SPACE,1,0,0,4
+46,39,Irvington A,180,Matthew Wang,MATH,0,1,0,-4
+46,39,Irvington A,182,Roland Pratt,PHYSICS,1,0,0,4
+46,42,Lynbrook B,195,Matthew Yuan,BIOLOGY,1,2,0,-4
+46,42,Lynbrook B,195,Matthew Yuan,CHEMISTRY,1,0,0,4
+46,42,Lynbrook B,195,Matthew Yuan,EARTH_SPACE,1,0,0,4
+46,42,Lynbrook B,195,Matthew Yuan,MATH,1,0,0,4
+46,42,Lynbrook B,195,Matthew Yuan,PHYSICS,0,1,0,-4
+46,42,Lynbrook B,197,Sophia Fan,CHEMISTRY,2,0,0,8
+46,42,Lynbrook B,197,Sophia Fan,ENERGY,1,1,0,0
+46,42,Lynbrook B,199,Vincent Qin,EARTH_SPACE,2,0,0,8
+47,14,Irvington B,66,Aariv Aggarwal,ENERGY,0,1,0,-4
+47,14,Irvington B,66,Aariv Aggarwal,MATH,1,0,0,4
+47,14,Irvington B,65,Abhiram Kuchi,CHEMISTRY,1,0,0,4
+47,14,Irvington B,65,Abhiram Kuchi,EARTH_SPACE,1,0,0,4
+47,14,Irvington B,65,Abhiram Kuchi,ENERGY,1,0,0,4
+47,14,Irvington B,64,Gabriella Liu,BIOLOGY,1,0,0,4
+47,14,Irvington B,63,Mahi Kumar,MATH,1,0,0,4
+47,43,Mira Loma B,202,Jeeva Karthy,BIOLOGY,1,0,0,4
+47,43,Mira Loma B,202,Jeeva Karthy,CHEMISTRY,1,0,0,4
+47,43,Mira Loma B,202,Jeeva Karthy,EARTH_SPACE,1,0,0,4
+47,43,Mira Loma B,202,Jeeva Karthy,ENERGY,1,0,0,4
+47,43,Mira Loma B,202,Jeeva Karthy,PHYSICS,1,0,0,4
+47,43,Mira Loma B,201,Kapilan Karunakaran,BIOLOGY,1,0,0,4
+47,43,Mira Loma B,201,Kapilan Karunakaran,CHEMISTRY,2,0,0,8
+47,43,Mira Loma B,201,Kapilan Karunakaran,EARTH_SPACE,1,0,0,4
+47,43,Mira Loma B,201,Kapilan Karunakaran,ENERGY,1,0,0,4
+47,43,Mira Loma B,201,Kapilan Karunakaran,PHYSICS,1,0,0,4
+47,43,Mira Loma B,203,Rohith Gonuguntla,BIOLOGY,1,0,0,4
+47,43,Mira Loma B,200,Sai-Sanaathan Vemireddy,MATH,1,0,0,4
+48,46,Mission San Jose B,218,Aarush Iyer,ENERGY,2,0,0,8
+48,46,Mission San Jose B,216,Andy Liu,BIOLOGY,2,0,0,8
+48,46,Mission San Jose B,216,Andy Liu,CHEMISTRY,1,0,0,4
+48,46,Mission San Jose B,216,Andy Liu,EARTH_SPACE,1,0,0,4
+48,46,Mission San Jose B,216,Andy Liu,MATH,1,0,0,4
+48,46,Mission San Jose B,216,Andy Liu,PHYSICS,2,0,0,8
+48,46,Mission San Jose B,215,Aravind Muralidharan,BIOLOGY,0,1,0,-4
+48,46,Mission San Jose B,215,Aravind Muralidharan,CHEMISTRY,1,1,0,0
+48,46,Mission San Jose B,214,Ishaan Kabra,BIOLOGY,1,0,0,4
+48,46,Mission San Jose B,214,Ishaan Kabra,CHEMISTRY,0,1,0,-4
+48,46,Mission San Jose B,214,Ishaan Kabra,EARTH_SPACE,1,2,0,-4
+48,46,Mission San Jose B,214,Ishaan Kabra,ENERGY,1,0,0,4
+48,46,Mission San Jose B,214,Ishaan Kabra,MATH,3,0,0,12
+48,46,Mission San Jose B,214,Ishaan Kabra,PHYSICS,2,0,0,8
+48,48,Quarry Lane B,227,Alex Luo,CHEMISTRY,1,0,0,4
+48,48,Quarry Lane B,227,Alex Luo,PHYSICS,0,1,0,-4
+48,48,Quarry Lane B,224,Dhruv Subramanian,BIOLOGY,1,0,0,4
+48,48,Quarry Lane B,224,Dhruv Subramanian,EARTH_SPACE,1,0,0,4
+48,48,Quarry Lane B,226,Elaine Gu,CHEMISTRY,1,0,0,4
+48,48,Quarry Lane B,226,Elaine Gu,MATH,0,1,0,-4
+48,48,Quarry Lane B,225,Neel Gupta,ENERGY,0,1,0,-4
+49,2,Albany A,9,Alex Bowen,CHEMISTRY,1,0,0,4
+49,2,Albany A,6,Tate Nomura,BIOLOGY,1,0,0,4
+49,2,Albany A,6,Tate Nomura,EARTH_SPACE,1,0,0,4
+49,2,Albany A,6,Tate Nomura,MATH,4,0,0,16
+49,47,San Mateo,220,Navya Kayath,BIOLOGY,2,0,0,8
+49,47,San Mateo,219,Surbhi Sakshi,ENERGY,1,0,0,4
+50,4,Albany B,15,Lina Kim,ENERGY,1,0,0,4
+50,4,Albany B,15,Lina Kim,PHYSICS,1,0,0,4
+50,33,Foothill A,153,Athithan Elamaran,CHEMISTRY,1,0,0,4
+50,33,Foothill A,153,Athithan Elamaran,MATH,3,0,0,12
+50,33,Foothill A,153,Athithan Elamaran,PHYSICS,1,1,0,0
+50,33,Foothill A,152,Bhagirath Bandigari,BIOLOGY,2,1,0,4
+50,33,Foothill A,152,Bhagirath Bandigari,ENERGY,1,1,0,0
+50,33,Foothill A,152,Bhagirath Bandigari,MATH,1,0,0,4
+50,33,Foothill A,154,Jake Nguyen,BIOLOGY,1,0,0,4
+50,33,Foothill A,154,Jake Nguyen,CHEMISTRY,2,0,0,8
+50,33,Foothill A,154,Jake Nguyen,ENERGY,1,0,0,4
+50,33,Foothill A,156,Parv Surjan,EARTH_SPACE,2,0,0,8
+50,33,Foothill A,156,Parv Surjan,PHYSICS,1,0,0,4
+50,33,Foothill A,155,Shashank Vedula,EARTH_SPACE,2,0,0,8
+51,6,Amador Valley A,24,Gaurav Gupta,BIOLOGY,0,1,0,-4
+51,6,Amador Valley A,24,Gaurav Gupta,CHEMISTRY,2,0,0,8
+51,6,Amador Valley A,24,Gaurav Gupta,PHYSICS,0,2,0,-8
+51,6,Amador Valley A,27,Ritwik Aeka,BIOLOGY,1,2,0,-4
+51,6,Amador Valley A,27,Ritwik Aeka,ENERGY,1,0,0,4
+51,6,Amador Valley A,25,Rohan Garg,CHEMISTRY,2,0,0,8
+51,6,Amador Valley A,25,Rohan Garg,EARTH_SPACE,3,0,0,12
+51,6,Amador Valley A,25,Rohan Garg,ENERGY,2,0,0,8
+51,6,Amador Valley A,25,Rohan Garg,MATH,4,0,0,16
+51,6,Amador Valley A,25,Rohan Garg,PHYSICS,1,0,0,4
+51,6,Amador Valley A,26,Samarth Jain,EARTH_SPACE,1,0,0,4
+51,28,Mountain House A,129,Ibrahim Nadeem,PHYSICS,3,0,0,12
+52,7,Amador Valley B,31,Lusen Yao,MATH,0,2,0,-8
+52,7,Amador Valley B,29,Olive Leuten,BIOLOGY,0,1,0,-4
+52,7,Amador Valley B,32,Pratham Mehta,BIOLOGY,1,0,0,4
+52,7,Amador Valley B,32,Pratham Mehta,CHEMISTRY,1,1,0,0
+52,7,Amador Valley B,30,Srijon Mandal,EARTH_SPACE,1,0,0,4
+52,7,Amador Valley B,30,Srijon Mandal,ENERGY,1,0,0,4
+52,7,Amador Valley B,30,Srijon Mandal,MATH,1,0,0,4
+52,7,Amador Valley B,30,Srijon Mandal,PHYSICS,1,0,0,4
+52,38,Los Gatos,179,Aiden Gao,CHEMISTRY,2,0,0,8
+52,38,Los Gatos,178,Atharava Pandey,CHEMISTRY,1,0,0,4
+52,38,Los Gatos,178,Atharava Pandey,ENERGY,1,0,0,4
+52,38,Los Gatos,178,Atharava Pandey,MATH,3,0,0,12
+53,10,American A,46,Abdul Muhaimin,EARTH_SPACE,0,1,0,-4
+53,10,American A,46,Abdul Muhaimin,PHYSICS,0,1,0,-4
+53,30,Lynbrook A,140,Andrew Liu,BIOLOGY,4,0,0,16
+53,30,Lynbrook A,140,Andrew Liu,CHEMISTRY,1,0,0,4
+53,30,Lynbrook A,140,Andrew Liu,ENERGY,2,0,0,8
+53,30,Lynbrook A,138,Evan Liu,CHEMISTRY,2,0,0,8
+53,30,Lynbrook A,138,Evan Liu,ENERGY,1,0,0,4
+53,30,Lynbrook A,141,Philip Kohr,EARTH_SPACE,2,0,0,8
+53,30,Lynbrook A,141,Philip Kohr,PHYSICS,1,0,0,4
+53,30,Lynbrook A,139,Ryan Bansal,EARTH_SPACE,1,0,0,4
+53,30,Lynbrook A,139,Ryan Bansal,MATH,4,0,0,16
+53,30,Lynbrook A,139,Ryan Bansal,PHYSICS,1,0,0,4
+53,30,Lynbrook A,142,Sohil Rathi,CHEMISTRY,1,0,0,4
+53,30,Lynbrook A,142,Sohil Rathi,EARTH_SPACE,1,0,0,4
+53,30,Lynbrook A,142,Sohil Rathi,PHYSICS,1,0,0,4
+54,12,American B,57,Aarav Gupta,EARTH_SPACE,1,0,0,4
+54,12,American B,55,Sanjay Seshadri,MATH,1,0,0,4
+54,12,American B,53,Thomas Nguyen,BIOLOGY,1,0,0,4
+54,36,GSB A,167,Kabir Mahajan,BIOLOGY,3,1,0,8
+54,36,GSB A,167,Kabir Mahajan,CHEMISTRY,1,0,0,4
+54,36,GSB A,167,Kabir Mahajan,ENERGY,0,1,0,-4
+54,36,GSB A,169,Neil Dixit,CHEMISTRY,2,0,0,8
+54,36,GSB A,169,Neil Dixit,ENERGY,1,1,0,0
+54,36,GSB A,169,Neil Dixit,MATH,3,1,0,8
+54,36,GSB A,169,Neil Dixit,PHYSICS,1,2,0,-4
+55,9,Archbishop Mitty A,38,Anish Roy,MATH,2,0,0,8
+55,9,Archbishop Mitty A,41,Kiyan Raisinghani,BIOLOGY,1,0,0,4
+55,9,Archbishop Mitty A,41,Kiyan Raisinghani,PHYSICS,0,2,0,-8
+55,9,Archbishop Mitty A,40,Richard Peng,BIOLOGY,2,0,0,8
+55,9,Archbishop Mitty A,40,Richard Peng,CHEMISTRY,4,0,0,16
+55,9,Archbishop Mitty A,40,Richard Peng,ENERGY,1,0,0,4
+55,9,Archbishop Mitty A,40,Richard Peng,MATH,1,0,0,4
+55,9,Archbishop Mitty A,39,Sudhanva Belur,BIOLOGY,1,0,0,4
+55,9,Archbishop Mitty A,39,Sudhanva Belur,EARTH_SPACE,4,0,0,16
+55,9,Archbishop Mitty A,39,Sudhanva Belur,ENERGY,1,1,0,0
+55,17,Chico A,79,Greta Nikolai,MATH,1,0,0,4
+55,17,Chico A,80,YiLun Liu,PHYSICS,1,0,0,4
+56,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,BIOLOGY,1,0,0,4
+56,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,EARTH_SPACE,2,0,0,8
+56,13,Archbishop Mitty B,58,Advait Reddy Duvvuru,ENERGY,0,1,0,-4
+56,13,Archbishop Mitty B,61,Saatvik Chauhan,MATH,3,0,0,12
+56,13,Archbishop Mitty B,59,Samiha Das,EARTH_SPACE,1,0,0,4
+56,43,Mira Loma B,202,Jeeva Karthy,BIOLOGY,1,0,0,4
+56,43,Mira Loma B,202,Jeeva Karthy,EARTH_SPACE,1,0,0,4
+56,43,Mira Loma B,202,Jeeva Karthy,PHYSICS,1,0,0,4
+56,43,Mira Loma B,201,Kapilan Karunakaran,BIOLOGY,2,0,0,8
+56,43,Mira Loma B,201,Kapilan Karunakaran,CHEMISTRY,1,0,0,4
+56,43,Mira Loma B,201,Kapilan Karunakaran,MATH,1,0,0,4
+56,43,Mira Loma B,201,Kapilan Karunakaran,PHYSICS,1,0,0,4
+56,43,Mira Loma B,203,Rohith Gonuguntla,ENERGY,1,0,0,4
+56,43,Mira Loma B,203,Rohith Gonuguntla,PHYSICS,1,0,0,4
+56,43,Mira Loma B,200,Sai-Sanaathan Vemireddy,CHEMISTRY,1,0,0,4
+56,43,Mira Loma B,200,Sai-Sanaathan Vemireddy,ENERGY,1,0,0,4
+57,5,BASIS Fremont,229,Aarnav Rudraraju,EARTH_SPACE,3,0,0,12
+57,5,BASIS Fremont,229,Aarnav Rudraraju,ENERGY,1,0,0,4
+57,5,BASIS Fremont,229,Aarnav Rudraraju,MATH,1,0,0,4
+57,5,BASIS Fremont,229,Aarnav Rudraraju,PHYSICS,1,0,0,4
+57,5,BASIS Fremont,23,Kevin Chen,CHEMISTRY,1,0,0,4
+57,5,BASIS Fremont,23,Kevin Chen,EARTH_SPACE,0,1,0,-4
+57,5,BASIS Fremont,23,Kevin Chen,MATH,1,0,0,4
+57,24,Cupertino B,111,Elaine Chen,CHEMISTRY,1,0,0,4
+57,24,Cupertino B,112,Iurii Kirpichev,CHEMISTRY,1,0,0,4
+57,24,Cupertino B,112,Iurii Kirpichev,MATH,2,1,0,4
+57,24,Cupertino B,109,Rosa Lee,BIOLOGY,3,0,0,12
+57,24,Cupertino B,109,Rosa Lee,ENERGY,1,0,0,4
+58,8,BASIS Silicon Valley A,36,Aaron Cohen,EARTH_SPACE,2,0,0,8
+58,8,BASIS Silicon Valley A,34,Larry Zhao,BIOLOGY,2,1,0,4
+58,8,BASIS Silicon Valley A,34,Larry Zhao,ENERGY,2,0,0,8
+58,8,BASIS Silicon Valley A,33,Lucas Quan,BIOLOGY,0,1,0,-4
+58,8,BASIS Silicon Valley A,33,Lucas Quan,CHEMISTRY,4,0,0,16
+58,8,BASIS Silicon Valley A,33,Lucas Quan,EARTH_SPACE,1,0,0,4
+58,8,BASIS Silicon Valley A,33,Lucas Quan,ENERGY,1,0,0,4
+58,8,BASIS Silicon Valley A,33,Lucas Quan,MATH,2,0,0,8
+58,8,BASIS Silicon Valley A,33,Lucas Quan,PHYSICS,2,1,0,4
+58,8,BASIS Silicon Valley A,37,Zanda Zhu,MATH,1,0,0,4
+58,31,El Camino A,143,Swaraj Adhikari,BIOLOGY,1,0,0,4
+58,31,El Camino A,143,Swaraj Adhikari,EARTH_SPACE,1,0,0,4
+58,31,El Camino A,143,Swaraj Adhikari,MATH,1,0,0,4
+58,31,El Camino A,143,Swaraj Adhikari,PHYSICS,1,0,0,4
+59,11,BASIS Silicon Valley B,49,Eric Guo,MATH,1,1,0,0
+59,11,BASIS Silicon Valley B,48,Jonathan Gao,BIOLOGY,1,0,0,4
+59,11,BASIS Silicon Valley B,48,Jonathan Gao,ENERGY,1,0,0,4
+59,11,BASIS Silicon Valley B,51,Liam Tran,CHEMISTRY,1,0,0,4
+59,11,BASIS Silicon Valley B,51,Liam Tran,PHYSICS,3,1,0,8
+59,21,Clovis North,98,Achuth Vinay,BIOLOGY,3,0,0,12
+59,21,Clovis North,98,Achuth Vinay,MATH,2,0,0,8
+59,21,Clovis North,97,Justin Do,CHEMISTRY,3,0,0,12
+59,21,Clovis North,97,Justin Do,EARTH_SPACE,0,1,0,-4
+59,21,Clovis North,97,Justin Do,ENERGY,1,0,0,4
+59,21,Clovis North,97,Justin Do,MATH,1,0,0,4
+59,21,Clovis North,100,Majed Almasri,ENERGY,1,1,0,0
+59,21,Clovis North,100,Majed Almasri,MATH,0,1,0,-4
+59,21,Clovis North,101,Meera Malkar,EARTH_SPACE,2,0,0,8
+60,16,California,73,Lucas Chi,ENERGY,0,1,0,-4
+60,16,California,75,Vihaan Tigadikar,CHEMISTRY,1,0,0,4
+60,16,California,75,Vihaan Tigadikar,MATH,1,1,0,0
+60,16,California,75,Vihaan Tigadikar,PHYSICS,1,0,0,4
+60,41,Miller,190,Arthur Chang,MATH,2,0,0,8
+60,41,Miller,190,Arthur Chang,PHYSICS,1,0,0,4
+60,41,Miller,194,Asad Rahman,MATH,1,0,0,4
+60,41,Miller,194,Asad Rahman,PHYSICS,1,0,0,4
+60,41,Miller,192,Pranik Biswas,BIOLOGY,2,0,0,8
+60,41,Miller,192,Pranik Biswas,EARTH_SPACE,3,0,0,12
+60,41,Miller,192,Pranik Biswas,ENERGY,1,0,0,4
+60,41,Miller,191,Shien Fang,BIOLOGY,1,1,0,0
+60,41,Miller,191,Shien Fang,CHEMISTRY,2,0,0,8
+60,41,Miller,191,Shien Fang,ENERGY,1,0,0,4
+60,41,Miller,193,Tim Xia,EARTH_SPACE,1,0,0,4
+61,19,Chico B,90,Maddy Dietz,EARTH_SPACE,0,1,0,-4
+61,19,Chico B,90,Maddy Dietz,ENERGY,1,0,0,4
+61,19,Chico B,90,Maddy Dietz,PHYSICS,1,1,0,0
+61,44,Palo Alto,204,Andrew Wen,CHEMISTRY,3,0,0,12
+61,44,Palo Alto,204,Andrew Wen,ENERGY,0,1,0,-4
+61,44,Palo Alto,204,Andrew Wen,MATH,4,0,0,16
+61,44,Palo Alto,204,Andrew Wen,PHYSICS,2,0,0,8
+61,44,Palo Alto,205,Kevin Pei,CHEMISTRY,1,0,0,4
+61,44,Palo Alto,205,Kevin Pei,EARTH_SPACE,4,0,0,16
+61,44,Palo Alto,205,Kevin Pei,ENERGY,1,0,0,4
+61,44,Palo Alto,205,Kevin Pei,PHYSICS,1,0,0,4
+61,44,Palo Alto,206,Rasia Yu,BIOLOGY,3,1,0,8
+61,44,Palo Alto,206,Rasia Yu,ENERGY,1,0,0,4
+62,3,Cupertino A,12,Pranav Burra,ENERGY,0,1,0,-4
+62,3,Cupertino A,12,Pranav Burra,PHYSICS,0,1,0,-4
+62,26,Davidson A,118,Alexander Weaver,BIOLOGY,1,0,0,4
+62,26,Davidson A,118,Alexander Weaver,EARTH_SPACE,4,0,0,16
+62,26,Davidson A,118,Alexander Weaver,ENERGY,1,0,0,4
+62,26,Davidson A,122,Julian Kuang,CHEMISTRY,1,0,0,4
+62,26,Davidson A,122,Julian Kuang,MATH,3,0,0,12
+62,26,Davidson A,122,Julian Kuang,PHYSICS,1,0,0,4
+62,26,Davidson A,120,Lucas Wu,CHEMISTRY,3,0,0,12
+62,26,Davidson A,120,Lucas Wu,ENERGY,1,0,0,4
+62,26,Davidson A,120,Lucas Wu,MATH,1,0,0,4
+62,26,Davidson A,120,Lucas Wu,PHYSICS,3,0,0,12
+62,26,Davidson A,119,Yajur Chandar,BIOLOGY,1,1,0,0
+62,26,Davidson A,119,Yajur Chandar,ENERGY,1,0,0,4
+63,27,Davidson B,127,Bourne Zhou,BIOLOGY,0,1,0,-4
+63,27,Davidson B,126,Ethan Chan,MATH,2,0,0,8
+63,27,Davidson B,126,Ethan Chan,PHYSICS,1,0,0,4
+63,27,Davidson B,125,Kaison Fong,MATH,1,0,0,4
+63,27,Davidson B,124,Shayan Sattarvand,BIOLOGY,0,1,0,-4
+63,27,Davidson B,124,Shayan Sattarvand,CHEMISTRY,3,0,0,12
+63,27,Davidson B,124,Shayan Sattarvand,EARTH_SPACE,1,0,0,4
+63,27,Davidson B,124,Shayan Sattarvand,ENERGY,1,0,0,4
+63,27,Davidson B,124,Shayan Sattarvand,PHYSICS,1,0,0,4
+63,23,Stanford Online,106,Josh Tittiranonda,BIOLOGY,1,0,0,4
+63,23,Stanford Online,106,Josh Tittiranonda,PHYSICS,0,1,0,-4
+63,23,Stanford Online,107,Vikrant Chintanaboina,BIOLOGY,1,0,0,4
+63,23,Stanford Online,107,Vikrant Chintanaboina,CHEMISTRY,1,0,0,4
+63,23,Stanford Online,107,Vikrant Chintanaboina,ENERGY,2,0,0,8
+63,23,Stanford Online,108,Vinayak Vikram,EARTH_SPACE,1,1,0,0
+63,23,Stanford Online,108,Vinayak Vikram,MATH,1,1,0,0
+63,23,Stanford Online,108,Vinayak Vikram,PHYSICS,1,0,0,4
+64,20,Dougherty Valley A,93,Alan Chen,CHEMISTRY,1,0,0,4
+64,20,Dougherty Valley A,92,Ashwin Shekhar,MATH,2,0,0,8
+64,20,Dougherty Valley A,92,Ashwin Shekhar,PHYSICS,1,0,0,4
+64,20,Dougherty Valley A,94,Keshav Verma,BIOLOGY,1,0,0,4
+64,20,Dougherty Valley A,94,Keshav Verma,EARTH_SPACE,3,0,0,12
+64,20,Dougherty Valley A,94,Keshav Verma,ENERGY,1,0,0,4
+64,20,Dougherty Valley A,96,Sohail Abidnia,MATH,1,0,0,4
+64,20,Dougherty Valley A,95,Soham Chatterjee,BIOLOGY,2,0,0,8
+64,20,Dougherty Valley A,95,Soham Chatterjee,CHEMISTRY,2,0,0,8
+64,20,Dougherty Valley A,95,Soham Chatterjee,ENERGY,1,0,0,4
+64,20,Dougherty Valley A,95,Soham Chatterjee,PHYSICS,0,1,0,-4
+64,14,Irvington B,66,Aariv Aggarwal,MATH,1,0,0,4
+64,14,Irvington B,65,Abhiram Kuchi,EARTH_SPACE,1,0,0,4
+64,14,Irvington B,65,Abhiram Kuchi,PHYSICS,2,0,0,8
+64,14,Irvington B,64,Gabriella Liu,BIOLOGY,1,0,0,4
+65,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,CHEMISTRY,1,0,0,4
+65,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,ENERGY,1,1,0,0
+65,29,Dougherty Valley B,136,Adhrit Viswanth Balaji,PHYSICS,1,0,0,4
+65,29,Dougherty Valley B,134,Andrew Sun,MATH,2,0,0,8
+65,29,Dougherty Valley B,134,Andrew Sun,PHYSICS,1,0,0,4
+65,29,Dougherty Valley B,135,Armaan Syed,CHEMISTRY,1,0,0,4
+65,29,Dougherty Valley B,135,Armaan Syed,MATH,1,0,0,4
+65,29,Dougherty Valley B,135,Armaan Syed,PHYSICS,0,1,0,-4
+65,29,Dougherty Valley B,133,Tannishtha Chakraborthy,BIOLOGY,3,0,0,12
+65,29,Dougherty Valley B,133,Tannishtha Chakraborthy,EARTH_SPACE,1,0,0,4
+65,29,Dougherty Valley B,133,Tannishtha Chakraborthy,ENERGY,1,0,0,4
+65,18,Mountain House B,83,Chun Tu Matthew Yu,EARTH_SPACE,1,0,0,4
+65,18,Mountain House B,84,Neel Raina,MATH,1,0,0,4
+65,18,Mountain House B,84,Neel Raina,PHYSICS,1,0,0,4
+65,18,Mountain House B,87,Pradyun Jupalli,CHEMISTRY,1,0,0,4
+65,18,Mountain House B,87,Pradyun Jupalli,PHYSICS,0,1,0,-4
+65,18,Mountain House B,85,Shreyas Mandayam,EARTH_SPACE,1,0,0,4
+65,18,Mountain House B,85,Shreyas Mandayam,ENERGY,1,0,0,4
+66,34,El Camino B,157,Grant Kitchen,BIOLOGY,1,0,0,4
+66,34,El Camino B,157,Grant Kitchen,CHEMISTRY,1,0,0,4
+66,34,El Camino B,157,Grant Kitchen,EARTH_SPACE,0,1,0,-4
+66,34,El Camino B,157,Grant Kitchen,ENERGY,3,0,0,12
+66,34,El Camino B,157,Grant Kitchen,MATH,2,1,0,4
+66,34,El Camino B,157,Grant Kitchen,PHYSICS,1,0,0,4
+66,34,El Camino B,158,Jaylyn Sanchez,BIOLOGY,1,1,0,0
+66,25,Homestead,116,Everett Tung,CHEMISTRY,1,0,0,4
+66,25,Homestead,116,Everett Tung,EARTH_SPACE,2,0,0,8
+66,25,Homestead,113,Ishaan Sinha,BIOLOGY,1,0,0,4
+66,25,Homestead,114,Leo Sitaraman,MATH,1,1,0,0
+66,25,Homestead,114,Leo Sitaraman,PHYSICS,1,0,0,4
+66,25,Homestead,115,Madeline Brown,BIOLOGY,0,1,0,-4
+66,25,Homestead,115,Madeline Brown,ENERGY,0,1,0,-4
+67,35,Evergreen Valley,162,Joshua Huang,BIOLOGY,2,1,0,4
+67,35,Evergreen Valley,162,Joshua Huang,EARTH_SPACE,1,0,0,4
+67,35,Evergreen Valley,162,Joshua Huang,ENERGY,1,0,0,4
+67,35,Evergreen Valley,162,Joshua Huang,MATH,2,0,0,8
+67,35,Evergreen Valley,163,Zichao Zhou,CHEMISTRY,1,0,0,4
+67,35,Evergreen Valley,163,Zichao Zhou,PHYSICS,1,0,0,4
+67,22,Quarry Lane A,105,Angad Hayer,BIOLOGY,0,1,0,-4
+67,22,Quarry Lane A,104,Nyles Han,BIOLOGY,1,0,0,4
+67,22,Quarry Lane A,104,Nyles Han,ENERGY,1,0,0,4
+67,22,Quarry Lane A,103,Rayirth Lakharia,BIOLOGY,1,0,0,4
+67,22,Quarry Lane A,103,Rayirth Lakharia,PHYSICS,0,1,0,-4
+68,1,Folsom City,1,Joshua Wu,EARTH_SPACE,1,0,0,4
+68,1,Folsom City,2,Kavin Anreddy,BIOLOGY,1,0,0,4
+68,1,Folsom City,2,Kavin Anreddy,ENERGY,1,0,0,4
+68,1,Folsom City,2,Kavin Anreddy,MATH,1,0,0,4
+68,1,Folsom City,2,Kavin Anreddy,PHYSICS,1,0,0,4
+68,1,Folsom City,3,Pushkal Mishra,ENERGY,1,0,0,4
+68,46,Mission San Jose B,218,Aarush Iyer,CHEMISTRY,1,0,0,4
+68,46,Mission San Jose B,216,Andy Liu,CHEMISTRY,1,0,0,4
+68,46,Mission San Jose B,216,Andy Liu,ENERGY,1,0,0,4
+68,46,Mission San Jose B,216,Andy Liu,MATH,2,0,0,8
+68,46,Mission San Jose B,216,Andy Liu,PHYSICS,2,1,0,4
+68,46,Mission San Jose B,215,Aravind Muralidharan,BIOLOGY,2,1,0,4
+68,46,Mission San Jose B,215,Aravind Muralidharan,CHEMISTRY,1,0,0,4
+68,46,Mission San Jose B,214,Ishaan Kabra,EARTH_SPACE,3,0,0,12
+68,46,Mission San Jose B,214,Ishaan Kabra,MATH,1,1,0,0
+68,46,Mission San Jose B,214,Ishaan Kabra,PHYSICS,1,0,0,4
+69,37,Foothill B,175,Austin Lin,CHEMISTRY,2,0,0,8
+69,37,Foothill B,173,Shulin Lu,CHEMISTRY,0,1,0,-4
+69,37,Foothill B,173,Shulin Lu,MATH,2,0,0,8
+69,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,BIOLOGY,1,0,0,4
+69,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,CHEMISTRY,1,2,0,-4
+69,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,EARTH_SPACE,3,0,0,12
+69,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,ENERGY,1,1,0,0
+69,32,Mira Loma A,151,Abhinav Krishna Senthil Kumar,MATH,2,0,0,8
+69,32,Mira Loma A,148,Bryan Nasr,ENERGY,1,0,0,4
+69,32,Mira Loma A,148,Bryan Nasr,PHYSICS,1,0,0,4
+69,32,Mira Loma A,150,Krish Singh,BIOLOGY,2,1,0,4
+69,32,Mira Loma A,149,Sudeep Suresh,PHYSICS,1,0,0,4
+70,15,GSB B,69,Daphne Chen,BIOLOGY,1,0,0,4
+70,15,GSB B,71,Kaiyuan Ding,EARTH_SPACE,1,0,0,4
+70,15,GSB B,68,Max Li,CHEMISTRY,1,0,0,4
+70,15,GSB B,68,Max Li,MATH,1,0,0,4
+70,39,Irvington A,183,Arjun Murugappan,BIOLOGY,2,1,0,4
+70,39,Irvington A,183,Arjun Murugappan,ENERGY,3,0,0,12
+70,39,Irvington A,181,Ishaan Agrawal,MATH,2,0,0,8
+70,39,Irvington A,181,Ishaan Agrawal,PHYSICS,1,0,0,4
+70,39,Irvington A,180,Matthew Wang,CHEMISTRY,2,1,0,4
+70,39,Irvington A,180,Matthew Wang,MATH,1,0,0,4
+70,39,Irvington A,180,Matthew Wang,PHYSICS,1,0,0,4
+70,39,Irvington A,182,Roland Pratt,EARTH_SPACE,1,0,0,4
+70,39,Irvington A,182,Roland Pratt,MATH,0,1,0,-4
+70,39,Irvington A,182,Roland Pratt,PHYSICS,1,0,0,4
+71,42,Lynbrook B,195,Matthew Yuan,BIOLOGY,1,1,0,0
+71,42,Lynbrook B,195,Matthew Yuan,CHEMISTRY,0,1,0,-4
+71,42,Lynbrook B,195,Matthew Yuan,MATH,0,1,0,-4
+71,42,Lynbrook B,197,Sophia Fan,CHEMISTRY,1,0,0,4
+71,42,Lynbrook B,197,Sophia Fan,MATH,1,0,0,4
+71,40,Mission San Jose A,187,Advaith Mopuri,MATH,3,0,0,12
+71,40,Mission San Jose A,187,Advaith Mopuri,PHYSICS,1,0,0,4
+71,40,Mission San Jose A,189,Anish Agarwal,BIOLOGY,1,0,0,4
+71,40,Mission San Jose A,189,Anish Agarwal,CHEMISTRY,1,0,0,4
+71,40,Mission San Jose A,189,Anish Agarwal,ENERGY,1,0,0,4
+71,40,Mission San Jose A,185,Roshan Annamalai,CHEMISTRY,1,0,0,4
+71,40,Mission San Jose A,185,Roshan Annamalai,EARTH_SPACE,4,0,0,16
+71,40,Mission San Jose A,185,Roshan Annamalai,ENERGY,1,0,0,4
+71,40,Mission San Jose A,185,Roshan Annamalai,MATH,0,1,0,-4
+71,40,Mission San Jose A,185,Roshan Annamalai,PHYSICS,2,0,0,8
+71,40,Mission San Jose A,188,Theenash Sengupta,BIOLOGY,2,0,0,8
+71,40,Mission San Jose A,188,Theenash Sengupta,CHEMISTRY,1,1,0,0
+71,40,Mission San Jose A,188,Theenash Sengupta,ENERGY,1,0,0,4
+72,48,Quarry Lane B,224,Dhruv Subramanian,EARTH_SPACE,1,0,0,4
+72,48,Quarry Lane B,224,Dhruv Subramanian,ENERGY,0,1,0,-4
+72,48,Quarry Lane B,226,Elaine Gu,MATH,0,1,0,-4
+72,48,Quarry Lane B,223,Gautham Doddapaneni,BIOLOGY,1,0,0,4
+72,48,Quarry Lane B,223,Gautham Doddapaneni,CHEMISTRY,1,0,0,4
+72,45,Saratoga,210,Alex Ge,BIOLOGY,2,0,0,8
+72,45,Saratoga,210,Alex Ge,CHEMISTRY,2,0,0,8
+72,45,Saratoga,210,Alex Ge,EARTH_SPACE,3,0,0,12
+72,45,Saratoga,210,Alex Ge,ENERGY,1,0,0,4
+72,45,Saratoga,211,Ethan Pan,BIOLOGY,1,0,0,4
+72,45,Saratoga,211,Ethan Pan,ENERGY,1,0,0,4
+72,45,Saratoga,213,Quinn Gifford,CHEMISTRY,1,1,0,0
+72,45,Saratoga,213,Quinn Gifford,ENERGY,1,0,0,4
+72,45,Saratoga,213,Quinn Gifford,MATH,3,0,0,12
+72,45,Saratoga,213,Quinn Gifford,PHYSICS,4,0,0,16
+72,45,Saratoga,212,Warren Chee,MATH,1,0,0,4
