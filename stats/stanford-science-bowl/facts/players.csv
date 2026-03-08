@@ -1,0 +1,228 @@
+player_id,player_name,grade_level,team_id,team_name
+9,Alex Bowen,,2,Albany A
+8,Benton Vargo,,2,Albany A
+5,Eugene Rubino,,2,Albany A
+7,Nick Linzer,,2,Albany A
+6,Tate Nomura,,2,Albany A
+18,David Ha,,4,Albany B
+17,Isiang,,4,Albany B
+15,Lina Kim,,4,Albany B
+16,Michael Hou,,4,Albany B
+19,Orin Davidson,,4,Albany B
+28,Dalbert Wu,,6,Amador Valley A
+24,Gaurav Gupta,,6,Amador Valley A
+27,Ritwik Aeka,,6,Amador Valley A
+25,Rohan Garg,,6,Amador Valley A
+26,Samarth Jain,,6,Amador Valley A
+31,Lusen Yao,,7,Amador Valley B
+29,Olive Leuten,,7,Amador Valley B
+32,Pratham Mehta,,7,Amador Valley B
+30,Srijon Mandal,,7,Amador Valley B
+46,Abdul Muhaimin,,10,American A
+44,Abhinav Shivalli,,10,American A
+43,Keshav Venkatesh,,10,American A
+45,Ryan Liu,,10,American A
+47,Srithan Devarashetty,,10,American A
+57,Aarav Gupta,,12,American B
+56,Jiayu Song,,12,American B
+55,Sanjay Seshadri,,12,American B
+54,Sudesh Srivatsan,,12,American B
+53,Thomas Nguyen,,12,American B
+38,Anish Roy,,9,Archbishop Mitty A
+42,Ben Zheng,,9,Archbishop Mitty A
+41,Kiyan Raisinghani,,9,Archbishop Mitty A
+40,Richard Peng,,9,Archbishop Mitty A
+39,Sudhanva Belur,,9,Archbishop Mitty A
+58,Advait Reddy Duvvuru,,13,Archbishop Mitty B
+60,Ruoyu Zhou,,13,Archbishop Mitty B
+61,Saatvik Chauhan,,13,Archbishop Mitty B
+59,Samiha Das,,13,Archbishop Mitty B
+62,Yixin Xu,,13,Archbishop Mitty B
+20,Aarnav Rudiaiaju,,5,BASIS Fremont
+23,Kevin Chen,,5,BASIS Fremont
+21,Lexing Liu,,5,BASIS Fremont
+22,Ryan Yan,,5,BASIS Fremont
+36,Aaron Cohen,,8,BASIS Silicon Valley A
+34,Larry Zhao,,8,BASIS Silicon Valley A
+33,Lucas Quan,,8,BASIS Silicon Valley A
+35,Michelle Liu,,8,BASIS Silicon Valley A
+37,Zanda Zhu,,8,BASIS Silicon Valley A
+49,Eric Guo,,11,BASIS Silicon Valley B
+50,Ethan Guo,,11,BASIS Silicon Valley B
+52,Jason Zhao,,11,BASIS Silicon Valley B
+48,Jonathan Gao,,11,BASIS Silicon Valley B
+51,Liam Tran,,11,BASIS Silicon Valley B
+74,Kavin Jain,,16,California
+73,Lucas Chi,,16,California
+77,Ray Zhang,,16,California
+76,Sushrut Pola,,16,California
+75,Vihaan Tigadikar,,16,California
+79,Greta Nikolai,,17,Chico A
+82,Lily Tao,,17,Chico A
+81,Lucas Lazarski,,17,Chico A
+78,Phuong Lu,,17,Chico A
+80,YiLun Liu,,17,Chico A
+91,Devi Schumann,,19,Chico B
+89,Eli Hu,,19,Chico B
+90,Maddy Dietz,,19,Chico B
+88,Phineas Wehrheim,,19,Chico B
+98,Achuth Vinay,,21,Clovis North
+97,Justin Do,,21,Clovis North
+100,Majed Almasri,,21,Clovis North
+101,Meera Malkar,,21,Clovis North
+99,Renard Wu,,21,Clovis North
+13,Brandon Seo,,3,Cupertino A
+10,Jaanya Annapureddy,,3,Cupertino A
+11,Namita Gaidhani,,3,Cupertino A
+12,Pranav Burra,,3,Cupertino A
+14,Shubhi Jain,,3,Cupertino A
+110,Anya Sarode,,24,Cupertino B
+111,Elaine Chen,,24,Cupertino B
+112,Iurii Kirpichev,,24,Cupertino B
+109,Rosa Lee,,24,Cupertino B
+118,Alexander Weaver,,26,Davidson A
+121,Filip Ramazan,,26,Davidson A
+122,Julian Kuang,,26,Davidson A
+120,Lucas Wu,,26,Davidson A
+119,Yajur Chandar,,26,Davidson A
+127,Bourne Zhou,,27,Davidson B
+123,Casey Fong,,27,Davidson B
+126,Ethan Chan,,27,Davidson B
+125,Kaison Fong,,27,Davidson B
+124,Shayan Sattarvand,,27,Davidson B
+93,Alan Chen,,20,Dougherty Valley A
+92,Ashwin Shekhar,,20,Dougherty Valley A
+94,Keshav Verma,,20,Dougherty Valley A
+96,Sohail Abidnia,,20,Dougherty Valley A
+95,Soham Chatterjee,,20,Dougherty Valley A
+136,Adhrit Viswanth Balaji,,29,Dougherty Valley B
+134,Andrew Sun,,29,Dougherty Valley B
+137,Aneeka Rao,,29,Dougherty Valley B
+135,Armaan Syed,,29,Dougherty Valley B
+133,Tannishtha Chakraborthy,,29,Dougherty Valley B
+146,Agrima Rai,,31,El Camino A
+144,John Blones,,31,El Camino A
+147,Milan Pecson,,31,El Camino A
+145,Ryan Chen,,31,El Camino A
+143,Swaraj Adhikari,,31,El Camino A
+159,Avery Fung,,34,El Camino B
+160,Billy Battogtokh,,34,El Camino B
+157,Grant Kitchen,,34,El Camino B
+158,Jaylyn Sanchez,,34,El Camino B
+161,Kaelen Mendoza,,34,El Camino B
+165,Autumn Le,,35,Evergreen Valley
+166,Ethan Li,,35,Evergreen Valley
+162,Joshua Huang,,35,Evergreen Valley
+164,Pranav Thota,,35,Evergreen Valley
+163,Zichao Zhou,,35,Evergreen Valley
+1,Joshua Wu,,1,Folsom City
+2,Kavin Anreddy,,1,Folsom City
+3,Pushkal Mishra,,1,Folsom City
+4,Satvik Chakkapalli,,1,Folsom City
+153,Athithan Elamaran,,33,Foothill A
+152,Bhagirath Bandigari,,33,Foothill A
+154,Jake Nguyen,,33,Foothill A
+156,Parv Surjan,,33,Foothill A
+155,Shashank Vedula,,33,Foothill A
+174,Ashwin Ganapathi,,37,Foothill B
+175,Austin Lin,,37,Foothill B
+172,Sahana Venkat,,37,Foothill B
+173,Shulin Lu,,37,Foothill B
+171,Ali Sherazi,,36,GSB A
+170,Elliot Boyce,,36,GSB A
+167,Kabir Mahajan,,36,GSB A
+169,Neil Dixit,,36,GSB A
+168,Olivia Kim,,36,GSB A
+72,Chiara Montanari,,15,GSB B
+69,Daphne Chen,,15,GSB B
+71,Kaiyuan Ding,,15,GSB B
+70,Margaret Beery,,15,GSB B
+68,Max Li,,15,GSB B
+116,Everett Tung,,25,Homestead
+113,Ishaan Sinha,,25,Homestead
+114,Leo Sitaraman,,25,Homestead
+115,Madeline Brown,,25,Homestead
+117,Spencer Diep,,25,Homestead
+183,Arjun Murugappan,,39,Irvington A
+184,Avyukt Bhardwaj,,39,Irvington A
+181,Ishaan Agrawal,,39,Irvington A
+180,Matthew Wang,,39,Irvington A
+182,Roland Pratt,,39,Irvington A
+66,Aariv Aggarwal,,14,Irvington B
+65,Abhiram Kuchi,,14,Irvington B
+67,Aditya Arun,,14,Irvington B
+64,Gabriella Liu,,14,Irvington B
+63,Mahi Kumar,,14,Irvington B
+179,Aiden Gao,,38,Los Gatos
+176,Anya Agarwal,,38,Los Gatos
+178,Atharava Pandey,,38,Los Gatos
+177,James Smith,,38,Los Gatos
+140,Andrew Liu,,30,Lynbrook A
+138,Evan Liu,,30,Lynbrook A
+141,Philip Kohr,,30,Lynbrook A
+139,Ryan Bansal,,30,Lynbrook A
+142,Sohil Rathi,,30,Lynbrook A
+196,Alex Ma,,42,Lynbrook B
+195,Matthew Yuan,,42,Lynbrook B
+198,Rishab Medepalli,,42,Lynbrook B
+197,Sophia Fan,,42,Lynbrook B
+199,Vincent Qin,,42,Lynbrook B
+190,Arthur Chang,,41,Miller
+194,Asad Rahman,,41,Miller
+192,Pranik Biswas,,41,Miller
+191,Shien Fang,,41,Miller
+193,Tim Xia,,41,Miller
+151,Abhinav Krishna Senthil Kumar,,32,Mira Loma A
+148,Bryan Nasr,,32,Mira Loma A
+150,Krish Singh,,32,Mira Loma A
+149,Sudeep Suresh,,32,Mira Loma A
+202,Jeeva Karthy,,43,Mira Loma B
+201,Kapilan Karunakaran,,43,Mira Loma B
+203,Rohith Gonuguntla,,43,Mira Loma B
+200,Sai-Sanaathan Vemireddy,,43,Mira Loma B
+187,Advaith Mopuri,,40,Mission San Jose A
+189,Anish Agarwal,,40,Mission San Jose A
+185,Roshan Annamalai,,40,Mission San Jose A
+186,Rutvik Arora,,40,Mission San Jose A
+188,Theenash Sengupta,,40,Mission San Jose A
+218,Aarush Iyer,,46,Mission San Jose B
+217,Abhiraam Girish,,46,Mission San Jose B
+216,Andy Liu,,46,Mission San Jose B
+215,Aravind Muralidharan,,46,Mission San Jose B
+214,Ishaan Kabra,,46,Mission San Jose B
+131,Hasita Venkat Raman,,28,Mountain House A
+129,Ibrahim Nadeem,,28,Mountain House A
+132,Saicharan Avuthu,,28,Mountain House A
+130,Sampriti Brahma,,28,Mountain House A
+128,Shrikoustubh Veldanda,,28,Mountain House A
+83,Chun Tu Matthew Yu,,18,Mountain House B
+84,Neel Raina,,18,Mountain House B
+87,Pradyun Jupalli,,18,Mountain House B
+85,Shreyas Mandayam,,18,Mountain House B
+86,Steven Tang,,18,Mountain House B
+204,Andrew Wen,,44,Palo Alto
+208,Jacob Guhr,,44,Palo Alto
+205,Kevin Pei,,44,Palo Alto
+206,Rasia Yu,,44,Palo Alto
+207,Sayan Singh,,44,Palo Alto
+105,Angad Hayer,,22,Quarry Lane A
+102,Nyasa Gupta,,22,Quarry Lane A
+104,Nyles Han,,22,Quarry Lane A
+103,Rayirth Lakharia,,22,Quarry Lane A
+227,Alex Luo,,48,Quarry Lane B
+224,Dhruv Subramanian,,48,Quarry Lane B
+226,Elaine Gu,,48,Quarry Lane B
+223,Gautham Doddapaneni,,48,Quarry Lane B
+225,Neel Gupta,,48,Quarry Lane B
+222,Krisha Gupta,,47,San Mateo
+221,Mia Hasanain,,47,San Mateo
+220,Navya Kayath,,47,San Mateo
+219,Surbhi Sakshi,,47,San Mateo
+210,Alex Ge,,45,Saratoga
+211,Ethan Pan,,45,Saratoga
+209,Max Rombakh,,45,Saratoga
+213,Quinn Gifford,,45,Saratoga
+212,Warren Chee,,45,Saratoga
+106,Josh Tittiranonda,,23,Stanford Online
+107,Vikrant Chintanaboina,,23,Stanford Online
+108,Vinayak Vikram,,23,Stanford Online
