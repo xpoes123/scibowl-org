@@ -157,7 +157,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const reports = statsReportsIndex?.reports ?? null;
   const defaultReportKey = statsReportsIndex?.default_report_key ?? "combined";
   const hasCombinedReport = useMemo(() => (reports ?? []).some((r) => r.key === "combined"), [reports]);
-
   const [reportKey, setReportKey] = useState<string>("combined");
   const [reportKeyTouched, setReportKeyTouched] = useState<boolean>(false);
 
@@ -171,12 +170,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (!standingsEnabled) return;
     if (!reports || reports.length === 0) return;
 
-    if (hasCombinedReport) {
-      if (reportKey !== "combined") setReportKey("combined");
-      if (reportKeyTouched) setReportKeyTouched(false);
-      return;
-    }
-
     const available = new Set(reports.map((r) => r.key));
     const preferredDefault = available.has(defaultReportKey) ? defaultReportKey : reports[0].key;
 
@@ -185,12 +178,18 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     if (!available.has(next)) next = preferredDefault;
 
     if (next !== reportKey) setReportKey(next);
-  }, [defaultReportKey, hasCombinedReport, reportKey, reportKeyTouched, reports, standingsEnabled]);
+  }, [defaultReportKey, reportKey, reportKeyTouched, reports, standingsEnabled]);
+
+  const effectiveReportKey = useMemo(() => {
+    if (!hasCombinedReport) return reportKey;
+    if (activeTab === "results") return reportKey;
+    return "combined";
+  }, [activeTab, hasCombinedReport, reportKey]);
 
   const selectedReport = useMemo(() => {
     if (!reports) return null;
-    return reports.find((r) => r.key === reportKey) ?? null;
-  }, [reportKey, reports]);
+    return reports.find((r) => r.key === effectiveReportKey) ?? null;
+  }, [effectiveReportKey, reports]);
 
   const manifestPath = selectedReport?.manifest_path ?? "manifest.json";
   const reportBaseDir = useMemo(() => statsBaseDirFromManifestPath(manifestPath), [manifestPath]);
@@ -451,12 +450,12 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
     const next = new URLSearchParams(searchParams);
 
-    if (hasCombinedReport) {
-      next.delete("statsReport");
-    } else {
+    if (activeTab === "results" || !hasCombinedReport) {
       const defaultForUrl = statsReportsIndex?.default_report_key ?? reports?.[0]?.key ?? "combined";
       if (reportKey && reportKey !== defaultForUrl) next.set("statsReport", reportKey);
       else next.delete("statsReport");
+    } else {
+      next.delete("statsReport");
     }
 
     if (activeTab === "results") {
@@ -507,7 +506,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     setSearchParams(next, { replace: true });
   }, [
     activeTab,
-    hasCombinedReport,
     playerValue,
     reportKey,
     roundValue,
@@ -519,6 +517,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     standingsView,
     teamValue,
     tournament.slug,
+    activeTab,
+    hasCombinedReport,
   ]);
 
   useEffect(() => {
@@ -545,7 +545,12 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const deadlines = isUpcoming ? (tournament.registration?.deadlines ?? []) : [];
 
   const showStatsReportsSubnav =
-    standingsEnabled && !hasCombinedReport && (activeTab === "results" || activeTab === "games" || activeTab === "rounds") && (reports?.length ?? 0) > 1;
+    standingsEnabled &&
+    (reports?.length ?? 0) > 1 &&
+    (
+      activeTab === "results" ||
+      (!hasCombinedReport && (activeTab === "games" || activeTab === "rounds"))
+    );
   const showStandingsModeSubnav = activeTab === "results" && standingsEnabled;
   const showStandingsSubnav = activeTab === "results" && categories.length > 0;
 
@@ -559,7 +564,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
     const reducedMotion = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     scrollChildIntoViewX(nav, activeButton, reducedMotion ? "auto" : "smooth");
-  }, [reportKey, showStatsReportsSubnav]);
+  }, [effectiveReportKey, showStatsReportsSubnav]);
 
   useEffect(() => {
     if (!showStandingsModeSubnav) return;
@@ -614,8 +619,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
             <button
               key={r.key}
               type="button"
-              className={reportKey === r.key ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
-              aria-pressed={reportKey === r.key}
+              className={effectiveReportKey === r.key ? "sbTabSubButton sbTabSubButtonActive" : "sbTabSubButton"}
+              aria-pressed={effectiveReportKey === r.key}
               onClick={() => {
                 setReportKey(r.key);
                 setReportKeyTouched(true);
