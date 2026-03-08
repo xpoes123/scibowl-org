@@ -737,6 +737,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                         rounds={roundRows}
                         teamValue={teamValue}
                         onTeamChange={setTeamValue}
+                        onPlayerSelect={(playerId) => {
+                          setPlayerValue(String(playerId));
+                          setResultsView("player");
+                        }}
                         categoryLabel={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? null}
                         gameTeamsByCategory={standingsCategoryKey === "overall" ? null : gameTeamByCategoryRows}
                         gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
@@ -768,6 +772,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                         rounds={roundRows}
                         playerValue={playerValue}
                         onPlayerChange={setPlayerValue}
+                        onTeamSelect={(teamId) => {
+                          setTeamValue(String(teamId));
+                          setResultsView("team");
+                        }}
                         categoryLabel={standingsCategoryKey === "overall" ? null : activeCategory?.label ?? null}
                         gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
                       />

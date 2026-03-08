@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 
 type PlayerDetailViewProps = {
   games: Array<Record<string, string>> | null;
@@ -7,6 +7,7 @@ type PlayerDetailViewProps = {
   rounds: Array<Record<string, string>> | null;
   playerValue: string;
   onPlayerChange: (value: string) => void;
+  onTeamSelect?: (teamId: number) => void;
   categoryLabel: string | null;
   gamePlayersByCategory: Array<Record<string, string>> | null;
 };
@@ -40,7 +41,7 @@ function DataTable({
   rows,
 }: {
   headers: Array<{ key: string; label: string; numeric?: boolean }>;
-  rows: Array<Record<string, string | number> & { __key?: string }>;
+  rows: Array<Record<string, ReactNode> & { __key?: string }>;
 }) {
   return (
     <div className="sbDataTableWrap">
@@ -77,6 +78,7 @@ export function PlayerDetailView({
   rounds,
   playerValue,
   onPlayerChange,
+  onTeamSelect,
   categoryLabel,
   gamePlayersByCategory,
 }: PlayerDetailViewProps) {
@@ -168,6 +170,11 @@ export function PlayerDetailView({
     if (selectedPlayerRows.length === 0) return null;
     const parsed = toIntOrNull(selectedPlayerRows[0].team_id);
     return parsed;
+  }, [selectedPlayerRows]);
+
+  const teamName = useMemo(() => {
+    if (selectedPlayerRows.length === 0) return "";
+    return (selectedPlayerRows[0].team_name ?? "").trim();
   }, [selectedPlayerRows]);
 
   const gamesTableRows = useMemo(() => {
@@ -343,6 +350,22 @@ export function PlayerDetailView({
             ))}
           </select>
         </div>
+
+        {onTeamSelect && teamId !== null && teamName ? (
+          <div className="sbField" style={{ flex: "0 1 260px", minWidth: "220px" }}>
+            <span className="sbFieldLabel">Team</span>
+            <div className="sbBody" style={{ minHeight: "var(--sb-control-height)", display: "flex", alignItems: "center" }}>
+              <button
+                type="button"
+                className="sbInlineLink"
+                style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                onClick={() => onTeamSelect(teamId)}
+              >
+                {teamName}
+              </button>
+            </div>
+          </div>
+        ) : null}
 
         {summary && (
           <div className="sbField" style={{ flex: "1 1 auto", minWidth: "240px" }}>

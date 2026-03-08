@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 
 type TeamDetailViewProps = {
   games: Array<Record<string, string>> | null;
@@ -7,6 +7,7 @@ type TeamDetailViewProps = {
   rounds: Array<Record<string, string>> | null;
   teamValue: string;
   onTeamChange: (value: string) => void;
+  onPlayerSelect?: (playerId: number) => void;
   categoryLabel: string | null;
   gameTeamsByCategory: Array<Record<string, string>> | null;
   gamePlayersByCategory: Array<Record<string, string>> | null;
@@ -41,7 +42,7 @@ function DataTable({
   rows,
 }: {
   headers: Array<{ key: string; label: string; numeric?: boolean }>;
-  rows: Array<Record<string, string | number> & { __key?: string }>;
+  rows: Array<Record<string, ReactNode> & { __key?: string }>;
 }) {
   return (
     <div className="sbDataTableWrap">
@@ -78,6 +79,7 @@ export function TeamDetailView({
   rounds,
   teamValue,
   onTeamChange,
+  onPlayerSelect,
   categoryLabel,
   gameTeamsByCategory,
   gamePlayersByCategory,
@@ -393,7 +395,18 @@ export function TeamDetailView({
         const ppg = gp > 0 ? p.tu_pts / gp : 0;
         return {
           __key: String(p.player_id),
-          player: p.player_name,
+          player: onPlayerSelect ? (
+            <button
+              type="button"
+              className="sbInlineLink"
+              style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+              onClick={() => onPlayerSelect(p.player_id)}
+            >
+              {p.player_name}
+            </button>
+          ) : (
+            p.player_name
+          ),
           gp,
           ans,
           tu_pts: p.tu_pts,
@@ -449,7 +462,18 @@ export function TeamDetailView({
       const ppg = gp > 0 ? p.tu_pts / gp : 0;
       return {
         __key: String(p.player_id),
-        player: p.player_name,
+        player: onPlayerSelect ? (
+          <button
+            type="button"
+            className="sbInlineLink"
+            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+            onClick={() => onPlayerSelect(p.player_id)}
+          >
+            {p.player_name}
+          </button>
+        ) : (
+          p.player_name
+        ),
         gp,
         tuh: p.tuh,
         tu_pts: p.tu_pts,
@@ -468,7 +492,7 @@ export function TeamDetailView({
     });
 
     return out;
-  }, [categoryLabel, gamePlayers, gamePlayersByCategory, isCategoryMode, selectedTeamId]);
+  }, [categoryLabel, gamePlayers, gamePlayersByCategory, isCategoryMode, onPlayerSelect, selectedTeamId]);
 
   return (
     <div className="sbTabStack">
