@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { TournamentDetail, TournamentLink, TournamentStatus } from "../../types";
 import { ContactTab } from "../../components/ContactTab";
 import { formatTournamentDate } from "../../utils/date";
@@ -140,6 +141,8 @@ function OverviewSection({ title, children }: { title: string; children: ReactNo
 }
 
 export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlInitSlugRef = useRef<string | null>(null);
   const resultsLink = useMemo(() => findLink(tournament, "RESULTS"), [tournament]);
   const statsLink = useMemo(() => findLink(tournament, "STATS"), [tournament]);
   const packetsLink = useMemo(() => findLink(tournament, "PACKETS"), [tournament]);
@@ -156,11 +159,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   const [reportKey, setReportKey] = useState<string>("combined");
   const [reportKeyTouched, setReportKeyTouched] = useState<boolean>(false);
-
-  useEffect(() => {
-    setReportKey("combined");
-    setReportKeyTouched(false);
-  }, [tournament.slug]);
 
   useEffect(() => {
     if (!standingsEnabled) return;
@@ -188,9 +186,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
 
   type ResultsViewId = "standings" | "scoreboard" | "round_report" | "team" | "player";
   const [resultsView, setResultsView] = useState<ResultsViewId>("standings");
-  useEffect(() => {
-    setResultsView("standings");
-  }, [reportKey, tournament.slug]);
 
   const scoreboardDatasets = statsManifest?.datasets ?? null;
   const scoreboardAvailable =
@@ -222,19 +217,10 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const gameDataError = gamesError || gameTeamsError || gamePlayersError || roundsError;
 
   const [roundValue, setRoundValue] = useState<string>("all");
-  useEffect(() => {
-    setRoundValue("all");
-  }, [reportKey, tournament.slug]);
 
   const [teamValue, setTeamValue] = useState<string>("");
-  useEffect(() => {
-    setTeamValue("");
-  }, [reportKey, tournament.slug]);
 
   const [playerValue, setPlayerValue] = useState<string>("");
-  useEffect(() => {
-    setPlayerValue("");
-  }, [reportKey, tournament.slug]);
 
   const availableTeamValues = useMemo(() => {
     const map = new Map<number, string>();
@@ -306,9 +292,6 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   }, [reportBaseDir, statsManifest]);
 
   const [standingsCategoryKey, setStandingsCategoryKey] = useState<string>("overall");
-  useEffect(() => {
-    setStandingsCategoryKey("overall");
-  }, [reportKey, tournament.slug]);
 
   const activeCategory = useMemo(() => {
     if (standingsCategoryKey === "overall") return null;
@@ -376,14 +359,124 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
     return [
       { id: "overview", label: "Overview", disabled: false },
       { id: "field", label: "Field", disabled: fieldDisabled },
-      { id: "results", label: "Standings", disabled: !resultsLink && !hasStandings && !statsManifestLoading && !statsReportsLoading },
+      { id: "results", label: "Standings", disabled: false },
       { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
     ];
-  }, [fieldDisabled, hasStandings, isLive, isUpcoming, resultsLink, statsLink, statsManifestLoading, statsReportsLoading]);
+  }, [fieldDisabled, isLive, isUpcoming, statsLink]);
 
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   const tabNavRef = useRef<HTMLDivElement | null>(null);
   const standingsSubNavRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    urlInitSlugRef.current = null;
+  }, [tournament.slug]);
+
+  useLayoutEffect(() => {
+    if (urlInitSlugRef.current === tournament.slug) return;
+
+    const tabParam = searchParams.get("tab");
+    const reportParam = searchParams.get("statsReport");
+    const viewParam = searchParams.get("statsView");
+    const catParam = searchParams.get("statsCat");
+    const roundParam = searchParams.get("statsRound");
+    const teamParam = searchParams.get("statsTeam");
+    const playerParam = searchParams.get("statsPlayer");
+
+    const hasAnyStatsParams = !!(reportParam || viewParam || catParam || roundParam || teamParam || playerParam);
+
+    if (tabParam === "overview" || tabParam === "field" || tabParam === "results" || tabParam === "statistics") {
+      setActiveTab(tabParam);
+    } else if (hasAnyStatsParams) {
+      setActiveTab("results");
+    } else {
+      setActiveTab("overview");
+    }
+
+    if (reportParam) {
+      setReportKey(reportParam);
+      setReportKeyTouched(true);
+    } else {
+      setReportKey("combined");
+      setReportKeyTouched(false);
+    }
+
+    if (viewParam && (viewParam === "standings" || viewParam === "scoreboard" || viewParam === "round_report" || viewParam === "team" || viewParam === "player")) {
+      setResultsView(viewParam);
+    } else {
+      setResultsView("standings");
+    }
+
+    setStandingsCategoryKey(catParam ?? "overall");
+    setRoundValue(roundParam ?? "all");
+    setTeamValue(teamParam ?? "");
+    setPlayerValue(playerParam ?? "");
+
+    urlInitSlugRef.current = tournament.slug;
+  }, [searchParams, tournament.slug]);
+
+  useEffect(() => {
+    if (urlInitSlugRef.current !== tournament.slug) return;
+
+    const next = new URLSearchParams(searchParams);
+
+    if (reportKey && reportKey !== "combined") next.set("statsReport", reportKey);
+    else next.delete("statsReport");
+
+    if (resultsView !== "standings") next.set("statsView", resultsView);
+    else next.delete("statsView");
+
+    if (standingsCategoryKey !== "overall") next.set("statsCat", standingsCategoryKey);
+    else next.delete("statsCat");
+
+    if (resultsView === "scoreboard" || resultsView === "round_report") {
+      if (roundValue && roundValue !== "all") next.set("statsRound", roundValue);
+      else next.delete("statsRound");
+    } else {
+      next.delete("statsRound");
+    }
+
+    if (resultsView === "team") {
+      if (teamValue) next.set("statsTeam", teamValue);
+      else next.delete("statsTeam");
+    } else {
+      next.delete("statsTeam");
+    }
+
+    if (resultsView === "player") {
+      if (playerValue) next.set("statsPlayer", playerValue);
+      else next.delete("statsPlayer");
+    } else {
+      next.delete("statsPlayer");
+    }
+
+    const hasAnyStatsParams = !!(
+      next.get("statsReport") ||
+      next.get("statsView") ||
+      next.get("statsCat") ||
+      next.get("statsRound") ||
+      next.get("statsTeam") ||
+      next.get("statsPlayer")
+    );
+
+    if (activeTab !== "overview") next.set("tab", activeTab);
+    else if (hasAnyStatsParams) next.delete("tab");
+    else next.delete("tab");
+
+    if (next.toString() === searchParams.toString()) return;
+    setSearchParams(next, { replace: true });
+  }, [
+    activeTab,
+    playerValue,
+    reportKey,
+    resultsView,
+    roundValue,
+    searchParams,
+    setSearchParams,
+    standingsCategoryKey,
+    teamValue,
+    tournament.slug,
+  ]);
 
   useEffect(() => {
     const active = tabs.find((tab) => tab.id === activeTab);
