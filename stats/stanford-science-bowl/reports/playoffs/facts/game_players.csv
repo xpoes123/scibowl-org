@@ -166,3 +166,36 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 20,3,Lynbrook A,11,Evan Liu,23,3,0,0,12
 20,3,Lynbrook A,15,Philip Kohr,23,3,0,0,12
 20,3,Lynbrook A,12,Sohil Rathi,23,7,2,0,20
+21,1,Amador Valley A,1,Gaurav Gupta,23,2,0,0,8
+21,1,Amador Valley A,3,Ritwik Aeka,23,2,1,0,4
+21,1,Amador Valley A,2,Rohan Garg,23,8,3,0,20
+21,1,Amador Valley A,4,Samarth Jain,23,0,0,0,0
+21,6,Foothill A,30,Athithan Elamaran,23,3,2,0,4
+21,6,Foothill A,27,Bhagirath Bandigari,23,1,1,0,0
+21,6,Foothill A,28,Jake Nguyen,23,0,1,0,-4
+21,6,Foothill A,29,Shashank Vedula,23,0,3,0,-12
+22,5,BASIS Silicon Valley A,24,Aaron Cohen,23,0,0,0,0
+22,5,BASIS Silicon Valley A,23,Larry Zhao,23,1,0,0,4
+22,5,BASIS Silicon Valley A,21,Lucas Quan,23,4,1,0,12
+22,5,BASIS Silicon Valley A,22,Zanda Zhu,23,1,0,0,4
+22,14,Palo Alto,67,Andrew Wen,23,2,2,0,0
+22,14,Palo Alto,68,Kevin Pei,23,5,0,0,20
+22,14,Palo Alto,66,Rasia Yu,23,0,0,0,0
+22,14,Palo Alto,69,Sayan Singh,23,0,1,0,-4
+23,9,Davidson A,41,Alexander Weaver,23,4,0,0,16
+23,9,Davidson A,45,Julian Kuang,23,3,1,0,8
+23,9,Davidson A,43,Lucas Wu,23,3,0,0,12
+23,9,Davidson A,42,Yajur Chandar,23,2,1,0,4
+23,15,Mission San Jose A,72,Advaith Mopuri,23,1,0,0,4
+23,15,Mission San Jose A,73,Anish Agarwal,12,1,0,0,4
+23,15,Mission San Jose A,74,Roshan Annamalai,23,1,3,0,-8
+23,15,Mission San Jose A,75,Rutvik Arora,11,1,0,0,4
+23,15,Mission San Jose A,71,Theenash Sengupta,23,5,2,0,12
+24,3,Lynbrook A,14,Andrew Liu,23,2,2,0,0
+24,3,Lynbrook A,11,Evan Liu,23,2,1,0,4
+24,3,Lynbrook A,15,Philip Kohr,23,1,1,0,0
+24,3,Lynbrook A,12,Sohil Rathi,23,4,0,0,16
+24,2,Mission San Jose B,10,Aarush Iyer,23,1,0,0,4
+24,2,Mission San Jose B,8,Andy Liu,23,3,0,0,12
+24,2,Mission San Jose B,7,Aravind Muralidharan,23,1,0,0,4
+24,2,Mission San Jose B,6,Ishaan Kabra,23,2,1,0,4
