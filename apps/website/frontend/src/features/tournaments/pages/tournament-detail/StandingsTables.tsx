@@ -41,7 +41,15 @@ function DataTable({ headers, rows }: { headers: Array<{ key: string; label: str
   );
 }
 
-export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: TeamStandingsRow[]; showWinsLosses?: boolean }) {
+export function TeamStandingsTable({
+  rows,
+  showWinsLosses = true,
+  onTeamSelect,
+}: {
+  rows: TeamStandingsRow[];
+  showWinsLosses?: boolean;
+  onTeamSelect?: (teamId: number) => void;
+}) {
   const headers = [
     { key: "rank", label: "Rank", numeric: true },
     { key: "name", label: "Team" },
@@ -59,7 +67,18 @@ export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: Team
 
   const tableRows = rows.map((r) => ({
     rank: r.rank,
-    name: r.name,
+    name: onTeamSelect ? (
+      <button
+        type="button"
+        className="sbInlineLink"
+        style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+        onClick={() => onTeamSelect(r.team_id)}
+      >
+        {r.name}
+      </button>
+    ) : (
+      r.name
+    ),
     wins: r.wins ?? 0,
     losses: r.losses ?? 0,
     gp: r.games_played ?? 0,
@@ -75,7 +94,7 @@ export function TeamStandingsTable({ rows, showWinsLosses = true }: { rows: Team
   return <DataTable headers={headers} rows={tableRows} />;
 }
 
-export function IndividualStandingsTable({ rows }: { rows: IndividualStandingsRow[] }) {
+export function IndividualStandingsTable({ rows, onPlayerSelect }: { rows: IndividualStandingsRow[]; onPlayerSelect?: (playerId: number) => void }) {
   const headers = [
     { key: "rank", label: "Rank", numeric: true },
     { key: "name", label: "Player" },
@@ -102,7 +121,18 @@ export function IndividualStandingsTable({ rows }: { rows: IndividualStandingsRo
 
   const tableRows = sortedRows.map((r, idx) => ({
     rank: idx + 1,
-    name: r.name,
+    name: onPlayerSelect ? (
+      <button
+        type="button"
+        className="sbInlineLink"
+        style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+        onClick={() => onPlayerSelect(r.player_id)}
+      >
+        {r.name}
+      </button>
+    ) : (
+      r.name
+    ),
     team: r.team,
     gp: r.games_played,
     "4s": r["4s"],
