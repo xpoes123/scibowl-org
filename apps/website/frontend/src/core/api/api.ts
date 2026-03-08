@@ -49,6 +49,16 @@ type TournamentStatsManifest = {
   schema_version: number;
   generated_at: string;
   tournament: { slug: string; name: string };
+  datasets?: Partial<{
+    teams: string;
+    players: string;
+    rounds: string;
+    games: string;
+    game_teams: string;
+    game_players: string;
+    game_teams_by_category: string;
+    game_players_by_category: string;
+  }>;
   views: {
     team_standings: string;
     individual_standings: string;
@@ -374,6 +384,20 @@ export const tournamentsAPI = {
     if (response.status === 404) return null;
     if (!response.ok) throw new Error("Failed to load stats manifest");
     return parseJsonOrNullIfHtml(response, "stats manifest");
+  },
+
+  getTournamentStatsCsvObjects: async (slug: string, statsPath: string): Promise<Array<Record<string, string>> | null> => {
+    const encodedSlug = encodeURIComponent(slug);
+    const relPath = encodeStatsPath(statsPath);
+    const statsUrl = buildStatsUrl(`${encodedSlug}/${relPath}`);
+
+    const response = await fetch(statsUrl, { headers: { Accept: "text/csv" } });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error("Failed to load stats CSV");
+
+    const text = await readTextOrNullIfHtml(response);
+    if (!text) throw new Error("Failed to load stats CSV");
+    return csvRowsToObjects(parseCsv(text, `stats csv (${statsPath})`));
   },
 
   getTournamentStandings: async (slug: string, files?: { team: string; individual: string } | null) => {
