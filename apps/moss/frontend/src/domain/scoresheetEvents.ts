@@ -31,7 +31,12 @@ export type ScoresheetEventPayload =
   | { bonus_question_id: number; team_id: string; result: AttemptResult }
   | { boundary_before_question: number; kind: ScoresheetMarkerKind }
   | { boundary_before_question: number }
-  | { team_id: string; boundary_before_question: number; active_player_ids: string[] };
+  | {
+      team_id: string;
+      boundary_before_question: number;
+      active_player_ids: string[];
+      ordered_player_ids?: string[];
+    };
 
 export type ScoresheetEvent = {
   id: string;
