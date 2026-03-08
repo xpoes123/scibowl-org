@@ -193,7 +193,7 @@ export function TeamDetailView({
 
         const agg = categoryAggByGameId.get(gameId) ?? { tu_pts: 0, b_pts: 0, c: 0, i: 0, n: 0, bc: 0, bi: 0, bu: 0 };
         const tuh = agg.c + agg.i + agg.n;
-        const bh = agg.bc + agg.bi + agg.bu;
+        const bh = agg.bc + agg.bi;
         const ppb = bh > 0 ? agg.b_pts / bh : 0;
 
         return {
@@ -240,7 +240,7 @@ export function TeamDetailView({
       const roundLabel = formatRoundLabel(g?.round_number ?? null, (roundInfo?.round_name ?? g?.round_name) || "", (roundInfo?.packet_name ?? g?.packet_name) || "");
 
       const tuh = toInt(t.tossups_correct) + toInt(t.tossups_incorrect) + toInt(t.tossups_no_penalty);
-      const bh = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect) + toInt(t.bonuses_unheard);
+      const bh = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect);
       const ppb = bh > 0 ? toInt(t.bonus_points) / bh : 0;
 
       return {

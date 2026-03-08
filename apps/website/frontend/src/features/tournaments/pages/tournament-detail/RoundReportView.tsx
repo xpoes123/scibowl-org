@@ -191,7 +191,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
 
     const out = Array.from(byTeam.values()).map((t) => {
       const tuh = t.tossups_correct + t.tossups_incorrect + t.tossups_no_penalty;
-      const bh = t.bonuses_correct + t.bonuses_incorrect + t.bonuses_unheard;
+      const bh = t.bonuses_correct + t.bonuses_incorrect;
       const ppb = bh > 0 ? t.bonus_points / bh : 0;
       const ppg = t.games_played > 0 ? t.score / t.games_played : 0;
 
