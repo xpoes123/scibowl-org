@@ -179,8 +179,18 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 15,2,16,Mira Loma A,ENERGY,8,10,2,0,1,1,1,1
 15,2,16,Mira Loma A,MATH,4,0,1,0,3,0,1,3
 15,2,16,Mira Loma A,PHYSICS,4,10,2,1,1,1,1,2
-16,1,14,Palo Alto,BIOLOGY,0,0,0,0,1,0,0,1
-16,2,2,Mission San Jose B,BIOLOGY,0,0,0,0,1,0,0,1
+16,1,14,Palo Alto,BIOLOGY,8,0,2,0,2,0,2,2
+16,1,14,Palo Alto,CHEMISTRY,8,20,2,0,2,2,0,2
+16,1,14,Palo Alto,EARTH_SPACE,0,10,1,1,2,1,0,3
+16,1,14,Palo Alto,ENERGY,8,20,2,0,1,2,0,1
+16,1,14,Palo Alto,MATH,12,20,3,0,1,2,1,1
+16,1,14,Palo Alto,PHYSICS,-4,0,0,1,3,0,0,4
+16,2,2,Mission San Jose B,BIOLOGY,8,20,2,0,2,2,0,2
+16,2,2,Mission San Jose B,CHEMISTRY,0,0,0,0,4,0,0,4
+16,2,2,Mission San Jose B,EARTH_SPACE,8,30,3,1,0,3,0,1
+16,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
+16,2,2,Mission San Jose B,MATH,4,10,1,0,3,1,0,3
+16,2,2,Mission San Jose B,PHYSICS,4,0,2,1,1,0,1,3
 17,1,8,Dougherty Valley A,BIOLOGY,12,10,3,0,1,1,2,1
 17,1,8,Dougherty Valley A,CHEMISTRY,8,0,2,0,2,0,2,2
 17,1,8,Dougherty Valley A,EARTH_SPACE,0,10,1,1,2,1,0,3
