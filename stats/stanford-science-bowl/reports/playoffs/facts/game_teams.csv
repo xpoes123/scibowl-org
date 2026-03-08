@@ -29,8 +29,8 @@ game_id,slot,team_id,team_name,score,tossup_points,bonus_points,tossups_correct,
 14,2,12,Saratoga,94,44,50,12,1,10,5,7,11
 15,1,3,Lynbrook A,116,36,80,12,3,8,8,4,11
 15,2,16,Mira Loma A,50,20,30,6,1,16,3,3,17
-16,1,14,Palo Alto,0,0,0,0,0,1,0,0,1
-16,2,2,Mission San Jose B,0,0,0,0,0,1,0,0,1
+16,1,14,Palo Alto,102,32,70,10,2,11,7,3,13
+16,2,2,Mission San Jose B,98,28,70,9,2,12,7,1,15
 17,1,8,Dougherty Valley A,28,8,20,6,4,13,2,4,17
 17,2,1,Amador Valley A,144,44,100,15,4,4,10,5,8
 18,1,6,Foothill A,68,28,40,7,0,16,4,3,16

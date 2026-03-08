@@ -10,63 +10,63 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 9,32,Achuth Vinay,Clovis North,3,2,0,7,9,8,2.6666666666666665
 10,58,Alex Ge,Saratoga,2,2,0,4,6,8,4.0
 11,74,Roshan Annamalai,Mission San Jose A,2,2,0,4,6,8,4.0
-12,12,Sohil Rathi,Lynbrook A,3,2,1,6,9,4,1.3333333333333333
-13,10,Aarush Iyer,Mission San Jose B,2,1,0,5,6,4,2.0
-14,30,Athithan Elamaran,Foothill A,3,1,0,6,7,4,1.3333333333333333
-15,51,Elliot Boyce,GSB A,2,1,0,5,6,4,2.0
-16,48,Ethan Chan,Davidson B,2,1,0,5,6,4,2.0
-17,11,Evan Liu,Lynbrook A,3,1,0,8,9,4,1.3333333333333333
-18,1,Gaurav Gupta,Amador Valley A,3,1,0,8,9,4,1.3333333333333333
-19,6,Ishaan Kabra,Mission San Jose B,2,1,0,5,6,4,2.0
-20,28,Jake Nguyen,Foothill A,3,1,0,8,9,4,1.3333333333333333
-21,31,Justin Do,Clovis North,3,1,0,8,9,4,1.3333333333333333
-22,76,Krish Singh,Mira Loma A,2,1,0,5,6,4,2.0
-23,43,Lucas Wu,Davidson A,2,1,0,5,6,4,2.0
-24,34,Majed Almasri,Clovis North,3,1,0,8,9,4,1.3333333333333333
-25,35,Meera Malkar,Clovis North,3,1,0,8,9,4,1.3333333333333333
-26,55,Olivia Kim,GSB A,1,1,0,2,3,4,4.0
-27,62,Roland Pratt,Irvington A,2,1,0,5,6,4,2.0
-28,17,Sudhanva Belur,Archbishop Mitty A,3,1,0,8,9,4,1.3333333333333333
-29,2,Rohan Garg,Amador Valley A,3,2,2,5,9,0,0.0
-30,14,Andrew Liu,Lynbrook A,3,1,1,7,9,0,0.0
-31,27,Bhagirath Bandigari,Foothill A,3,1,1,7,9,0,0.0
-32,66,Rasia Yu,Palo Alto,1,1,1,1,3,0,0.0
-33,24,Aaron Cohen,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
-34,72,Advaith Mopuri,Mission San Jose A,2,0,0,6,6,0,0.0
-35,54,Ali Sherazi,GSB A,3,0,0,9,9,0,0.0
-36,73,Anish Agarwal,Mission San Jose A,1,0,0,3,3,0,0.0
-37,16,Anish Roy,Archbishop Mitty A,3,0,0,9,9,0,0.0
-38,7,Aravind Muralidharan,Mission San Jose B,2,0,0,6,6,0,0.0
-39,38,Ashwin Shekhar,Dougherty Valley A,3,0,0,9,9,0,0.0
-40,65,Avyukt Bhardwaj,Irvington A,2,0,0,2,2,0,0.0
-41,20,Ben Zheng,Archbishop Mitty A,3,0,0,9,9,0,0.0
-42,49,Bourne Zhou,Davidson B,2,0,0,2,2,0,0.0
-43,78,Bryan Nasr,Mira Loma A,2,0,0,6,6,0,0.0
-44,47,Casey Fong,Davidson B,2,0,0,4,4,0,0.0
-45,5,Dalbert Wu,Amador Valley A,1,0,0,1,1,0,0.0
-46,59,Ethan Pan,Saratoga,2,0,0,6,6,0,0.0
-47,63,Ishaan Agrawal,Irvington A,2,0,0,5,5,0,0.0
-48,45,Julian Kuang,Davidson A,2,0,0,6,6,0,0.0
-49,46,Kaison Fong,Davidson B,2,0,0,6,6,0,0.0
-50,68,Kevin Pei,Palo Alto,1,0,0,3,3,0,0.0
-51,21,Lucas Quan,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
-52,61,Matthew Wang,Irvington A,2,0,0,6,6,0,0.0
-53,57,Max Rombakh,Saratoga,2,0,0,6,6,0,0.0
-54,53,Neil Dixit,GSB A,3,0,0,9,9,0,0.0
-55,26,Parv Surjan,Foothill A,1,0,0,2,2,0,0.0
-56,15,Philip Kohr,Lynbrook A,3,0,0,9,9,0,0.0
-57,56,Quinn Gifford,Saratoga,2,0,0,6,6,0,0.0
-58,75,Rutvik Arora,Mission San Jose A,1,0,0,3,3,0,0.0
-59,4,Samarth Jain,Amador Valley A,3,0,0,8,8,0,0.0
-60,69,Sayan Singh,Palo Alto,1,0,0,3,3,0,0.0
-61,29,Shashank Vedula,Foothill A,3,0,0,9,9,0,0.0
-62,50,Shayan Sattarvand,Davidson B,2,0,0,6,6,0,0.0
-63,79,Sudeep Suresh,Mira Loma A,2,0,0,6,6,0,0.0
-64,22,Zanda Zhu,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
-65,64,Arjun Murugappan,Irvington A,2,1,2,2,5,-4,-2.0
-66,39,Alan Chen,Dougherty Valley A,3,0,1,8,9,-4,-1.3333333333333333
-67,41,Alexander Weaver,Davidson A,2,0,1,5,6,-4,-2.0
-68,67,Andrew Wen,Palo Alto,1,0,1,2,3,-4,-4.0
-69,8,Andy Liu,Mission San Jose B,2,0,1,5,6,-4,-2.0
+12,66,Rasia Yu,Palo Alto,2,2,1,3,6,4,2.0
+13,12,Sohil Rathi,Lynbrook A,3,2,1,6,9,4,1.3333333333333333
+14,10,Aarush Iyer,Mission San Jose B,3,1,0,8,9,4,1.3333333333333333
+15,7,Aravind Muralidharan,Mission San Jose B,3,1,0,8,9,4,1.3333333333333333
+16,30,Athithan Elamaran,Foothill A,3,1,0,6,7,4,1.3333333333333333
+17,51,Elliot Boyce,GSB A,2,1,0,5,6,4,2.0
+18,48,Ethan Chan,Davidson B,2,1,0,5,6,4,2.0
+19,11,Evan Liu,Lynbrook A,3,1,0,8,9,4,1.3333333333333333
+20,1,Gaurav Gupta,Amador Valley A,3,1,0,8,9,4,1.3333333333333333
+21,6,Ishaan Kabra,Mission San Jose B,3,1,0,8,9,4,1.3333333333333333
+22,28,Jake Nguyen,Foothill A,3,1,0,8,9,4,1.3333333333333333
+23,31,Justin Do,Clovis North,3,1,0,8,9,4,1.3333333333333333
+24,76,Krish Singh,Mira Loma A,2,1,0,5,6,4,2.0
+25,43,Lucas Wu,Davidson A,2,1,0,5,6,4,2.0
+26,34,Majed Almasri,Clovis North,3,1,0,8,9,4,1.3333333333333333
+27,35,Meera Malkar,Clovis North,3,1,0,8,9,4,1.3333333333333333
+28,55,Olivia Kim,GSB A,1,1,0,2,3,4,4.0
+29,62,Roland Pratt,Irvington A,2,1,0,5,6,4,2.0
+30,17,Sudhanva Belur,Archbishop Mitty A,3,1,0,8,9,4,1.3333333333333333
+31,2,Rohan Garg,Amador Valley A,3,2,2,5,9,0,0.0
+32,14,Andrew Liu,Lynbrook A,3,1,1,7,9,0,0.0
+33,67,Andrew Wen,Palo Alto,2,1,1,4,6,0,0.0
+34,27,Bhagirath Bandigari,Foothill A,3,1,1,7,9,0,0.0
+35,24,Aaron Cohen,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
+36,72,Advaith Mopuri,Mission San Jose A,2,0,0,6,6,0,0.0
+37,54,Ali Sherazi,GSB A,3,0,0,9,9,0,0.0
+38,73,Anish Agarwal,Mission San Jose A,1,0,0,3,3,0,0.0
+39,16,Anish Roy,Archbishop Mitty A,3,0,0,9,9,0,0.0
+40,38,Ashwin Shekhar,Dougherty Valley A,3,0,0,9,9,0,0.0
+41,65,Avyukt Bhardwaj,Irvington A,2,0,0,2,2,0,0.0
+42,20,Ben Zheng,Archbishop Mitty A,3,0,0,9,9,0,0.0
+43,49,Bourne Zhou,Davidson B,2,0,0,2,2,0,0.0
+44,78,Bryan Nasr,Mira Loma A,2,0,0,6,6,0,0.0
+45,47,Casey Fong,Davidson B,2,0,0,4,4,0,0.0
+46,5,Dalbert Wu,Amador Valley A,1,0,0,1,1,0,0.0
+47,59,Ethan Pan,Saratoga,2,0,0,6,6,0,0.0
+48,63,Ishaan Agrawal,Irvington A,2,0,0,5,5,0,0.0
+49,45,Julian Kuang,Davidson A,2,0,0,6,6,0,0.0
+50,46,Kaison Fong,Davidson B,2,0,0,6,6,0,0.0
+51,68,Kevin Pei,Palo Alto,2,0,0,6,6,0,0.0
+52,21,Lucas Quan,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
+53,61,Matthew Wang,Irvington A,2,0,0,6,6,0,0.0
+54,57,Max Rombakh,Saratoga,2,0,0,6,6,0,0.0
+55,53,Neil Dixit,GSB A,3,0,0,9,9,0,0.0
+56,26,Parv Surjan,Foothill A,1,0,0,2,2,0,0.0
+57,15,Philip Kohr,Lynbrook A,3,0,0,9,9,0,0.0
+58,56,Quinn Gifford,Saratoga,2,0,0,6,6,0,0.0
+59,75,Rutvik Arora,Mission San Jose A,1,0,0,3,3,0,0.0
+60,4,Samarth Jain,Amador Valley A,3,0,0,8,8,0,0.0
+61,69,Sayan Singh,Palo Alto,2,0,0,6,6,0,0.0
+62,29,Shashank Vedula,Foothill A,3,0,0,9,9,0,0.0
+63,50,Shayan Sattarvand,Davidson B,2,0,0,6,6,0,0.0
+64,79,Sudeep Suresh,Mira Loma A,2,0,0,6,6,0,0.0
+65,22,Zanda Zhu,BASIS Silicon Valley A,2,0,0,6,6,0,0.0
+66,64,Arjun Murugappan,Irvington A,2,1,2,2,5,-4,-2.0
+67,39,Alan Chen,Dougherty Valley A,3,0,1,8,9,-4,-1.3333333333333333
+68,41,Alexander Weaver,Davidson A,2,0,1,5,6,-4,-2.0
+69,8,Andy Liu,Mission San Jose B,3,0,1,8,9,-4,-1.3333333333333333
 70,44,Filip Ramazan,Davidson A,1,0,1,1,2,-4,-4.0
 71,37,Keshav Verma,Dougherty Valley A,3,0,1,8,9,-4,-1.3333333333333333
