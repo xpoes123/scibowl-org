@@ -239,2365 +239,1491 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 20,2,3,Lynbrook A,ENERGY,8,10,2,0,1,1,1,1
 20,2,3,Lynbrook A,MATH,12,30,3,0,1,3,0,1
 20,2,3,Lynbrook A,PHYSICS,8,20,3,1,0,2,1,1
-21,1,17,Folsom City,BIOLOGY,16,20,4,0,0,2,2,0
-21,1,17,Folsom City,CHEMISTRY,12,30,3,0,1,3,0,1
-21,1,17,Folsom City,EARTH_SPACE,8,20,3,1,0,2,1,1
-21,1,17,Folsom City,ENERGY,8,20,2,0,1,2,0,1
-21,1,17,Folsom City,MATH,8,10,2,0,2,1,1,2
-21,1,17,Folsom City,PHYSICS,12,20,3,0,1,2,1,1
-21,2,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-21,2,18,Albany A,CHEMISTRY,0,0,0,0,4,0,0,4
-21,2,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
-21,2,18,Albany A,ENERGY,4,0,1,0,2,0,1,2
-21,2,18,Albany A,MATH,8,10,2,0,2,1,1,2
-21,2,18,Albany A,PHYSICS,4,0,1,0,3,0,1,3
-22,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
-22,1,19,Cupertino A,CHEMISTRY,16,20,4,0,0,2,2,0
-22,1,19,Cupertino A,EARTH_SPACE,8,0,2,0,2,0,2,2
-22,1,19,Cupertino A,ENERGY,8,20,2,0,1,2,0,1
-22,1,19,Cupertino A,MATH,8,10,2,0,2,1,1,2
-22,1,19,Cupertino A,PHYSICS,12,20,3,0,1,2,1,1
-22,2,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-22,2,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
-22,2,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-22,2,20,Albany B,ENERGY,4,0,1,0,2,0,1,2
-22,2,20,Albany B,MATH,0,0,0,0,4,0,0,4
-22,2,20,Albany B,PHYSICS,4,10,1,0,3,1,0,3
-23,1,21,BASIS Fremont,BIOLOGY,0,0,0,0,4,0,0,4
-23,1,21,BASIS Fremont,CHEMISTRY,8,0,2,0,2,0,2,2
-23,1,21,BASIS Fremont,EARTH_SPACE,-8,0,0,2,2,0,0,4
-23,1,21,BASIS Fremont,ENERGY,0,0,0,0,3,0,0,3
-23,1,21,BASIS Fremont,MATH,4,0,1,0,3,0,1,3
-23,1,21,BASIS Fremont,PHYSICS,4,10,1,0,3,1,0,3
-23,2,1,Amador Valley A,BIOLOGY,16,40,4,0,0,4,0,0
-23,2,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
-23,2,1,Amador Valley A,EARTH_SPACE,8,30,3,1,0,3,0,1
-23,2,1,Amador Valley A,ENERGY,12,20,3,0,0,2,1,0
-23,2,1,Amador Valley A,MATH,12,30,3,0,1,3,0,1
-23,2,1,Amador Valley A,PHYSICS,8,30,3,1,0,3,0,1
-24,1,22,Amador Valley B,BIOLOGY,0,0,0,0,4,0,0,4
-24,1,22,Amador Valley B,CHEMISTRY,0,0,0,0,4,0,0,4
-24,1,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-24,1,22,Amador Valley B,ENERGY,8,20,2,0,1,2,0,1
-24,1,22,Amador Valley B,MATH,4,10,1,0,3,1,0,3
-24,1,22,Amador Valley B,PHYSICS,4,10,1,0,3,1,0,3
-24,2,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
-24,2,5,BASIS Silicon Valley A,CHEMISTRY,16,30,4,0,0,3,1,0
-24,2,5,BASIS Silicon Valley A,EARTH_SPACE,16,30,4,0,0,3,1,0
-24,2,5,BASIS Silicon Valley A,ENERGY,0,10,1,1,1,1,0,2
-24,2,5,BASIS Silicon Valley A,MATH,12,30,3,0,1,3,0,1
-24,2,5,BASIS Silicon Valley A,PHYSICS,12,30,3,0,1,3,0,1
-25,1,4,Archbishop Mitty A,BIOLOGY,16,30,4,0,0,3,1,0
-25,1,4,Archbishop Mitty A,CHEMISTRY,16,40,4,0,0,4,0,0
-25,1,4,Archbishop Mitty A,EARTH_SPACE,4,20,2,1,1,2,0,2
-25,1,4,Archbishop Mitty A,ENERGY,8,20,2,0,1,2,0,1
-25,1,4,Archbishop Mitty A,MATH,12,30,3,0,1,3,0,1
-25,1,4,Archbishop Mitty A,PHYSICS,8,20,3,1,0,2,1,1
-25,2,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
-25,2,23,American A,CHEMISTRY,0,0,0,0,4,0,0,4
-25,2,23,American A,EARTH_SPACE,0,0,0,0,4,0,0,4
-25,2,23,American A,ENERGY,4,0,1,0,2,0,1,2
-25,2,23,American A,MATH,4,10,1,0,3,1,0,3
-25,2,23,American A,PHYSICS,0,0,0,0,4,0,0,4
-26,1,24,BASIS Silicon Valley B,BIOLOGY,0,20,2,2,0,2,0,2
-26,1,24,BASIS Silicon Valley B,CHEMISTRY,8,20,2,0,2,2,0,2
-26,1,24,BASIS Silicon Valley B,EARTH_SPACE,8,10,2,0,2,1,1,2
-26,1,24,BASIS Silicon Valley B,ENERGY,12,20,3,0,0,2,1,0
-26,1,24,BASIS Silicon Valley B,MATH,16,20,4,0,0,2,2,0
-26,1,24,BASIS Silicon Valley B,PHYSICS,16,20,4,0,0,2,2,0
-26,2,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
-26,2,25,American B,CHEMISTRY,4,0,1,0,3,0,1,3
-26,2,25,American B,EARTH_SPACE,0,0,0,0,4,0,0,4
-26,2,25,American B,ENERGY,0,0,0,0,3,0,0,3
-26,2,25,American B,MATH,0,0,0,0,4,0,0,4
-26,2,25,American B,PHYSICS,0,0,0,0,4,0,0,4
-27,1,26,Archbishop Mitty B,BIOLOGY,0,10,1,1,2,1,0,3
-27,1,26,Archbishop Mitty B,CHEMISTRY,4,0,1,0,3,0,1,3
-27,1,26,Archbishop Mitty B,EARTH_SPACE,16,40,4,0,0,4,0,0
-27,1,26,Archbishop Mitty B,ENERGY,4,10,1,0,2,1,0,2
-27,1,26,Archbishop Mitty B,MATH,8,20,2,0,2,2,0,2
-27,1,26,Archbishop Mitty B,PHYSICS,4,10,1,0,3,1,0,3
-27,2,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
-27,2,27,Irvington B,CHEMISTRY,8,10,2,0,2,1,1,2
-27,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
-27,2,27,Irvington B,ENERGY,8,10,2,0,1,1,1,1
-27,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
-27,2,27,Irvington B,PHYSICS,12,10,3,0,1,1,2,1
-28,1,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
-28,1,28,GSB B,CHEMISTRY,8,20,2,0,2,2,0,2
-28,1,28,GSB B,EARTH_SPACE,8,20,2,0,2,2,0,2
-28,1,28,GSB B,ENERGY,4,10,1,0,2,1,0,2
-28,1,28,GSB B,MATH,8,20,2,0,2,2,0,2
-28,1,28,GSB B,PHYSICS,0,0,0,0,4,0,0,4
-28,2,29,California,BIOLOGY,0,10,1,1,2,1,0,3
-28,2,29,California,CHEMISTRY,8,10,2,0,2,1,1,2
-28,2,29,California,EARTH_SPACE,4,10,1,0,3,1,0,3
-28,2,29,California,ENERGY,4,20,2,1,0,2,0,1
-28,2,29,California,MATH,4,10,1,0,3,1,0,3
-28,2,29,California,PHYSICS,16,20,4,0,0,2,2,0
-29,1,30,Chico A,BIOLOGY,4,0,1,0,3,0,1,3
-29,1,30,Chico A,CHEMISTRY,8,0,2,0,2,0,2,2
-29,1,30,Chico A,EARTH_SPACE,0,10,1,1,2,1,0,3
-29,1,30,Chico A,ENERGY,8,10,2,0,1,1,1,1
-29,1,30,Chico A,MATH,0,0,0,0,4,0,0,4
-29,1,30,Chico A,PHYSICS,12,10,3,0,1,1,2,1
-29,2,31,Mountain House B,BIOLOGY,8,10,2,0,2,1,1,2
-29,2,31,Mountain House B,CHEMISTRY,8,10,2,0,2,1,1,2
-29,2,31,Mountain House B,EARTH_SPACE,4,10,1,0,3,1,0,3
-29,2,31,Mountain House B,ENERGY,-4,0,0,1,2,0,0,3
-29,2,31,Mountain House B,MATH,12,20,3,0,1,2,1,1
-29,2,31,Mountain House B,PHYSICS,0,0,0,0,4,0,0,4
-30,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-30,1,32,Chico B,CHEMISTRY,4,0,1,0,3,0,1,3
-30,1,32,Chico B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-30,1,32,Chico B,ENERGY,0,0,0,0,3,0,0,3
-30,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
-30,1,32,Chico B,PHYSICS,0,0,0,0,4,0,0,4
-30,2,8,Dougherty Valley A,BIOLOGY,8,30,3,1,0,3,0,1
-30,2,8,Dougherty Valley A,CHEMISTRY,12,20,3,0,1,2,1,1
-30,2,8,Dougherty Valley A,EARTH_SPACE,16,30,4,0,0,3,1,0
-30,2,8,Dougherty Valley A,ENERGY,12,20,3,0,0,2,1,0
-30,2,8,Dougherty Valley A,MATH,16,30,4,0,0,3,1,0
-30,2,8,Dougherty Valley A,PHYSICS,8,20,3,1,0,2,1,1
-31,1,7,Clovis North,BIOLOGY,8,30,3,1,0,3,0,1
-31,1,7,Clovis North,CHEMISTRY,8,20,3,1,0,2,1,1
-31,1,7,Clovis North,EARTH_SPACE,12,20,3,0,1,2,1,1
-31,1,7,Clovis North,ENERGY,8,10,2,0,1,1,1,1
-31,1,7,Clovis North,MATH,4,10,1,0,3,1,0,3
-31,1,7,Clovis North,PHYSICS,8,20,3,1,0,2,1,1
-31,2,33,Quarry Lane A,BIOLOGY,0,0,0,0,4,0,0,4
-31,2,33,Quarry Lane A,CHEMISTRY,4,10,1,0,3,1,0,3
-31,2,33,Quarry Lane A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-31,2,33,Quarry Lane A,ENERGY,4,0,1,0,2,0,0,3
-31,2,33,Quarry Lane A,MATH,0,0,0,0,4,0,0,4
-31,2,33,Quarry Lane A,PHYSICS,0,0,0,0,4,0,0,4
-32,1,34,Stanford Online,BIOLOGY,8,10,2,0,2,1,1,2
-32,1,34,Stanford Online,CHEMISTRY,4,20,2,1,1,2,0,2
-32,1,34,Stanford Online,EARTH_SPACE,-8,0,0,2,2,0,0,4
-32,1,34,Stanford Online,ENERGY,12,20,3,0,0,2,1,0
-32,1,34,Stanford Online,MATH,8,10,2,0,2,1,1,2
-32,1,34,Stanford Online,PHYSICS,12,20,3,0,1,2,1,1
-32,2,35,Cupertino B,BIOLOGY,4,10,2,1,1,1,1,2
-32,2,35,Cupertino B,CHEMISTRY,8,0,2,0,2,0,2,2
-32,2,35,Cupertino B,EARTH_SPACE,12,10,3,0,1,1,2,1
-32,2,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
-32,2,35,Cupertino B,MATH,4,10,1,0,3,1,0,3
-32,2,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
-33,1,36,Homestead,BIOLOGY,8,20,2,0,2,2,0,2
-33,1,36,Homestead,CHEMISTRY,0,0,0,0,4,0,0,4
-33,1,36,Homestead,EARTH_SPACE,12,20,3,0,1,2,1,1
-33,1,36,Homestead,ENERGY,4,10,1,0,2,1,0,2
-33,1,36,Homestead,MATH,4,10,1,0,3,1,0,3
-33,1,36,Homestead,PHYSICS,0,0,0,0,4,0,0,4
-33,2,9,Davidson A,BIOLOGY,4,10,2,1,1,1,1,2
-33,2,9,Davidson A,CHEMISTRY,8,30,3,1,0,3,0,1
-33,2,9,Davidson A,EARTH_SPACE,0,10,1,1,2,1,0,3
-33,2,9,Davidson A,ENERGY,8,10,2,0,1,1,1,1
-33,2,9,Davidson A,MATH,12,20,3,0,1,2,1,1
-33,2,9,Davidson A,PHYSICS,16,30,4,0,0,3,1,0
-34,1,10,Davidson B,BIOLOGY,4,10,1,0,3,1,0,3
-34,1,10,Davidson B,CHEMISTRY,8,30,3,1,0,3,0,1
-34,1,10,Davidson B,EARTH_SPACE,4,10,1,0,3,1,0,3
-34,1,10,Davidson B,ENERGY,8,20,2,0,1,2,0,1
-34,1,10,Davidson B,MATH,16,40,4,0,0,4,0,0
-34,1,10,Davidson B,PHYSICS,8,20,2,0,2,2,0,2
-34,2,37,Mountain House A,BIOLOGY,0,0,1,1,2,0,1,3
-34,2,37,Mountain House A,CHEMISTRY,4,10,1,0,3,1,0,3
-34,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
-34,2,37,Mountain House A,ENERGY,4,10,1,0,2,1,0,2
-34,2,37,Mountain House A,MATH,0,0,0,0,4,0,0,4
-34,2,37,Mountain House A,PHYSICS,8,10,2,0,2,1,1,2
-35,1,38,Dougherty Valley B,BIOLOGY,4,10,1,0,3,1,0,3
-35,1,38,Dougherty Valley B,CHEMISTRY,12,30,3,0,1,3,0,1
-35,1,38,Dougherty Valley B,EARTH_SPACE,8,0,2,0,2,0,2,2
-35,1,38,Dougherty Valley B,ENERGY,0,0,0,0,3,0,0,3
-35,1,38,Dougherty Valley B,MATH,8,20,3,1,0,2,1,1
-35,1,38,Dougherty Valley B,PHYSICS,0,10,1,1,2,1,0,3
-35,2,3,Lynbrook A,BIOLOGY,4,20,2,1,1,2,0,2
-35,2,3,Lynbrook A,CHEMISTRY,4,10,1,0,3,1,0,3
-35,2,3,Lynbrook A,EARTH_SPACE,4,20,2,1,1,2,0,2
-35,2,3,Lynbrook A,ENERGY,12,20,3,0,0,2,0,1
-35,2,3,Lynbrook A,MATH,4,10,1,0,3,1,0,3
-35,2,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
-36,1,39,El Camino A,BIOLOGY,4,10,1,0,3,1,0,3
-36,1,39,El Camino A,CHEMISTRY,4,0,1,0,3,0,1,3
-36,1,39,El Camino A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-36,1,39,El Camino A,ENERGY,8,10,2,0,1,1,1,1
-36,1,39,El Camino A,MATH,8,0,2,0,2,0,1,3
-36,1,39,El Camino A,PHYSICS,-4,0,0,1,3,0,0,4
-36,2,16,Mira Loma A,BIOLOGY,8,30,3,1,0,3,0,1
-36,2,16,Mira Loma A,CHEMISTRY,12,30,3,0,1,3,0,1
-36,2,16,Mira Loma A,EARTH_SPACE,4,20,2,1,1,2,0,2
-36,2,16,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
-36,2,16,Mira Loma A,MATH,8,20,2,0,2,2,0,2
-36,2,16,Mira Loma A,PHYSICS,16,30,4,0,0,3,1,0
-37,1,6,Foothill A,BIOLOGY,0,20,2,2,0,2,0,2
-37,1,6,Foothill A,CHEMISTRY,12,30,3,0,1,3,0,1
-37,1,6,Foothill A,EARTH_SPACE,12,10,3,0,1,1,2,1
-37,1,6,Foothill A,ENERGY,12,20,3,0,0,2,1,0
-37,1,6,Foothill A,MATH,0,0,0,0,4,0,0,4
-37,1,6,Foothill A,PHYSICS,8,20,3,1,0,2,1,1
-37,2,40,El Camino B,BIOLOGY,4,0,1,0,3,0,1,3
-37,2,40,El Camino B,CHEMISTRY,0,0,1,1,2,0,1,3
-37,2,40,El Camino B,EARTH_SPACE,4,0,1,0,3,0,1,3
-37,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
-37,2,40,El Camino B,MATH,12,10,3,0,1,1,2,1
-37,2,40,El Camino B,PHYSICS,0,0,0,0,4,0,0,4
-38,1,41,Evergreen Valley,BIOLOGY,4,0,1,0,3,0,1,3
-38,1,41,Evergreen Valley,CHEMISTRY,0,0,0,0,4,0,0,4
-38,1,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
-38,1,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-38,1,41,Evergreen Valley,MATH,4,0,1,0,3,0,1,3
-38,1,41,Evergreen Valley,PHYSICS,0,0,0,0,4,0,0,4
-38,2,11,GSB A,BIOLOGY,12,30,3,0,1,3,0,1
-38,2,11,GSB A,CHEMISTRY,12,20,3,0,1,2,1,1
-38,2,11,GSB A,EARTH_SPACE,0,10,1,1,2,1,0,3
-38,2,11,GSB A,ENERGY,12,20,3,0,0,2,1,0
-38,2,11,GSB A,MATH,12,30,3,0,1,3,0,1
-38,2,11,GSB A,PHYSICS,16,30,4,0,0,3,1,0
-39,1,42,Foothill B,BIOLOGY,8,30,3,1,0,3,0,1
-39,1,42,Foothill B,CHEMISTRY,8,0,2,0,2,0,2,2
-39,1,42,Foothill B,EARTH_SPACE,8,0,2,0,2,0,2,2
-39,1,42,Foothill B,ENERGY,4,0,1,0,2,0,1,2
-39,1,42,Foothill B,MATH,8,10,2,0,2,1,0,3
-39,1,42,Foothill B,PHYSICS,8,20,2,0,2,2,0,2
-39,2,43,Los Gatos,BIOLOGY,4,10,1,0,3,1,0,3
-39,2,43,Los Gatos,CHEMISTRY,0,0,0,0,4,0,0,4
-39,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-39,2,43,Los Gatos,ENERGY,4,0,1,0,2,0,1,2
-39,2,43,Los Gatos,MATH,8,10,2,0,2,1,1,2
-39,2,43,Los Gatos,PHYSICS,8,0,2,0,2,0,2,2
-40,1,13,Irvington A,BIOLOGY,0,0,0,0,4,0,0,4
-40,1,13,Irvington A,CHEMISTRY,8,20,2,0,2,2,0,2
-40,1,13,Irvington A,EARTH_SPACE,4,10,1,0,3,1,0,3
-40,1,13,Irvington A,ENERGY,8,10,2,0,1,1,1,1
-40,1,13,Irvington A,MATH,0,0,0,0,4,0,0,4
-40,1,13,Irvington A,PHYSICS,4,10,1,0,3,1,0,3
-40,2,15,Mission San Jose A,BIOLOGY,8,30,3,1,0,3,0,1
-40,2,15,Mission San Jose A,CHEMISTRY,4,20,2,1,1,2,0,2
-40,2,15,Mission San Jose A,EARTH_SPACE,8,30,3,1,0,3,0,1
-40,2,15,Mission San Jose A,ENERGY,0,10,1,1,1,1,0,2
-40,2,15,Mission San Jose A,MATH,12,30,3,0,1,3,0,1
-40,2,15,Mission San Jose A,PHYSICS,8,30,3,1,0,3,0,1
-41,1,44,Miller,BIOLOGY,4,10,1,0,3,1,0,3
-41,1,44,Miller,CHEMISTRY,0,0,0,0,4,0,0,4
-41,1,44,Miller,EARTH_SPACE,12,20,3,0,1,2,0,2
-41,1,44,Miller,ENERGY,0,0,0,0,3,0,0,3
-41,1,44,Miller,MATH,4,10,1,0,3,1,0,3
-41,1,44,Miller,PHYSICS,12,20,3,0,1,2,0,2
-41,2,45,Lynbrook B,BIOLOGY,8,20,3,1,0,2,0,2
-41,2,45,Lynbrook B,CHEMISTRY,16,40,4,0,0,4,0,0
-41,2,45,Lynbrook B,EARTH_SPACE,4,10,1,0,3,1,0,3
-41,2,45,Lynbrook B,ENERGY,12,20,3,0,0,2,0,1
-41,2,45,Lynbrook B,MATH,12,30,3,0,1,3,0,1
-41,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
-42,1,46,Mira Loma B,BIOLOGY,0,0,0,0,4,0,0,4
-42,1,46,Mira Loma B,CHEMISTRY,0,0,0,0,4,0,0,4
-42,1,46,Mira Loma B,EARTH_SPACE,0,0,0,0,4,0,0,4
-42,1,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
-42,1,46,Mira Loma B,MATH,4,10,1,0,3,1,0,3
-42,1,46,Mira Loma B,PHYSICS,0,0,0,0,4,0,0,4
-42,2,14,Palo Alto,BIOLOGY,8,30,3,1,0,3,0,1
-42,2,14,Palo Alto,CHEMISTRY,16,30,4,0,0,3,1,0
-42,2,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-42,2,14,Palo Alto,ENERGY,0,0,0,0,3,0,0,3
-42,2,14,Palo Alto,MATH,12,30,3,0,1,3,0,1
-42,2,14,Palo Alto,PHYSICS,16,40,4,0,0,4,0,0
-43,1,12,Saratoga,BIOLOGY,4,10,1,0,3,1,0,3
-43,1,12,Saratoga,CHEMISTRY,8,20,2,0,2,2,0,2
-43,1,12,Saratoga,EARTH_SPACE,8,20,2,0,2,2,0,2
-43,1,12,Saratoga,ENERGY,0,10,1,1,1,1,0,2
-43,1,12,Saratoga,MATH,12,20,3,0,1,2,1,1
-43,1,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
-43,2,2,Mission San Jose B,BIOLOGY,0,20,2,2,0,2,0,2
-43,2,2,Mission San Jose B,CHEMISTRY,8,20,2,0,2,2,0,2
-43,2,2,Mission San Jose B,EARTH_SPACE,0,10,2,2,0,1,1,2
-43,2,2,Mission San Jose B,ENERGY,8,20,2,0,1,2,0,1
-43,2,2,Mission San Jose B,MATH,4,10,1,0,3,1,0,3
-43,2,2,Mission San Jose B,PHYSICS,4,20,2,1,1,2,0,2
-44,1,47,San Mateo,BIOLOGY,4,0,1,0,3,0,1,3
-44,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-44,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
-44,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
-44,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
-<<<<<<< HEAD
-44,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-44,2,48,Quarry Lane B,BIOLOGY,12,20,3,0,1,2,1,1
-44,2,48,Quarry Lane B,CHEMISTRY,4,0,1,0,3,0,1,3
-44,2,48,Quarry Lane B,EARTH_SPACE,8,10,2,0,2,1,1,2
-44,2,48,Quarry Lane B,ENERGY,12,0,3,0,0,0,3,0
-44,2,48,Quarry Lane B,MATH,12,20,3,0,1,2,1,1
-44,2,48,Quarry Lane B,PHYSICS,12,0,3,0,1,0,3,1
-45,1,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
-45,1,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-45,1,5,BASIS Silicon Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
-45,1,5,BASIS Silicon Valley A,ENERGY,8,20,2,0,1,2,0,1
-45,1,5,BASIS Silicon Valley A,MATH,12,20,3,0,1,2,1,1
-45,1,5,BASIS Silicon Valley A,PHYSICS,4,10,2,1,1,1,1,2
-45,2,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-45,2,43,Los Gatos,CHEMISTRY,-8,0,0,2,2,0,0,4
-45,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-45,2,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
-45,2,43,Los Gatos,MATH,0,0,0,0,4,0,0,4
-45,2,43,Los Gatos,PHYSICS,8,0,2,0,2,0,2,2
-46,1,12,Saratoga,BIOLOGY,8,20,3,1,0,2,1,1
-46,1,12,Saratoga,CHEMISTRY,8,20,3,1,0,2,1,1
-46,1,12,Saratoga,EARTH_SPACE,12,30,3,0,1,3,0,1
-46,1,12,Saratoga,ENERGY,12,30,3,0,0,3,0,0
-46,1,12,Saratoga,MATH,12,20,3,0,1,2,1,1
-46,1,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
-46,2,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-46,2,18,Albany A,CHEMISTRY,0,0,0,0,4,0,0,4
-46,2,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
-46,2,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
-46,2,18,Albany A,MATH,4,10,1,0,3,1,0,3
-46,2,18,Albany A,PHYSICS,4,10,1,0,3,1,0,3
-47,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-47,1,20,Albany B,CHEMISTRY,4,0,1,0,3,0,1,3
-47,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-47,1,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
-47,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
-47,1,20,Albany B,PHYSICS,0,0,0,0,4,0,0,4
-47,2,36,Homestead,BIOLOGY,8,10,2,0,2,1,1,2
-47,2,36,Homestead,CHEMISTRY,0,0,1,1,2,0,1,3
-47,2,36,Homestead,EARTH_SPACE,16,40,4,0,0,4,0,0
-47,2,36,Homestead,ENERGY,8,10,2,0,1,1,1,1
-47,2,36,Homestead,MATH,0,10,1,1,2,1,0,3
-47,2,36,Homestead,PHYSICS,16,10,4,0,0,1,3,0
-48,1,1,Amador Valley A,BIOLOGY,0,20,2,2,0,2,0,2
-48,1,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
-48,1,1,Amador Valley A,EARTH_SPACE,4,20,2,1,1,2,0,2
-48,1,1,Amador Valley A,ENERGY,4,10,2,1,0,1,1,1
-48,1,1,Amador Valley A,MATH,8,30,3,1,0,3,0,1
-48,1,1,Amador Valley A,PHYSICS,4,10,2,1,1,1,1,2
-48,2,34,Stanford Online,BIOLOGY,-4,10,1,2,1,1,0,3
-48,2,34,Stanford Online,CHEMISTRY,8,10,2,0,2,1,1,2
-48,2,34,Stanford Online,EARTH_SPACE,8,10,2,0,2,1,1,2
-48,2,34,Stanford Online,ENERGY,-4,10,1,2,0,1,0,2
-48,2,34,Stanford Online,MATH,0,0,0,0,4,0,0,4
-48,2,34,Stanford Online,PHYSICS,4,10,1,0,3,1,0,3
-49,1,22,Amador Valley B,BIOLOGY,4,0,1,0,3,0,1,3
-49,1,22,Amador Valley B,CHEMISTRY,4,0,1,0,3,0,1,3
-49,1,22,Amador Valley B,EARTH_SPACE,8,10,2,0,2,1,1,2
-49,1,22,Amador Valley B,ENERGY,0,0,0,0,3,0,0,3
-49,1,22,Amador Valley B,MATH,4,0,1,0,3,0,1,3
-49,1,22,Amador Valley B,PHYSICS,8,10,2,0,2,1,1,2
-49,2,16,Mira Loma A,BIOLOGY,4,10,2,1,1,1,1,2
-49,2,16,Mira Loma A,CHEMISTRY,12,20,3,0,1,2,1,1
-49,2,16,Mira Loma A,EARTH_SPACE,8,10,2,0,2,1,1,2
-49,2,16,Mira Loma A,ENERGY,8,20,2,0,1,2,0,1
-49,2,16,Mira Loma A,MATH,8,20,2,0,2,2,0,2
-49,2,16,Mira Loma A,PHYSICS,4,10,2,1,1,1,1,2
-50,1,23,American A,BIOLOGY,-4,0,1,2,1,0,1,3
-50,1,23,American A,CHEMISTRY,-4,0,0,1,3,0,0,4
-50,1,23,American A,EARTH_SPACE,0,0,0,0,4,0,0,4
-50,1,23,American A,ENERGY,4,0,2,1,0,0,2,1
-50,1,23,American A,MATH,12,10,3,0,1,1,2,1
-50,1,23,American A,PHYSICS,12,30,3,0,1,3,0,1
-50,2,31,Mountain House B,BIOLOGY,8,10,2,0,2,1,1,2
-50,2,31,Mountain House B,CHEMISTRY,4,10,2,1,1,1,1,2
-50,2,31,Mountain House B,EARTH_SPACE,12,20,3,0,1,2,1,1
-50,2,31,Mountain House B,ENERGY,4,0,1,0,2,0,1,2
-50,2,31,Mountain House B,MATH,0,0,0,0,4,0,0,4
-50,2,31,Mountain House B,PHYSICS,4,0,1,0,3,0,1,3
-51,1,25,American B,BIOLOGY,0,0,0,0,4,0,0,4
-51,1,25,American B,CHEMISTRY,-8,0,0,2,2,0,0,4
-51,1,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
-51,1,25,American B,ENERGY,4,10,1,0,2,1,0,2
-51,1,25,American B,MATH,4,0,1,0,3,0,1,3
-51,1,25,American B,PHYSICS,0,0,0,0,4,0,0,4
-51,2,33,Quarry Lane A,BIOLOGY,12,10,3,0,1,1,2,1
-51,2,33,Quarry Lane A,CHEMISTRY,8,10,3,1,0,1,2,1
-51,2,33,Quarry Lane A,EARTH_SPACE,8,10,2,0,2,1,1,2
-51,2,33,Quarry Lane A,ENERGY,0,0,0,0,3,0,0,3
-51,2,33,Quarry Lane A,MATH,4,0,1,0,3,0,1,3
-51,2,33,Quarry Lane A,PHYSICS,12,0,3,0,1,0,3,1
-52,1,4,Archbishop Mitty A,BIOLOGY,4,20,2,1,1,2,0,2
-52,1,4,Archbishop Mitty A,CHEMISTRY,0,10,1,1,2,1,0,3
-52,1,4,Archbishop Mitty A,EARTH_SPACE,8,10,2,0,2,1,1,2
-52,1,4,Archbishop Mitty A,ENERGY,4,20,2,1,0,2,0,1
-52,1,4,Archbishop Mitty A,MATH,8,20,2,0,2,2,0,2
-52,1,4,Archbishop Mitty A,PHYSICS,4,10,1,0,3,1,0,3
-52,2,3,Lynbrook A,BIOLOGY,8,10,2,0,2,1,1,2
-52,2,3,Lynbrook A,CHEMISTRY,12,20,3,0,1,2,1,1
-52,2,3,Lynbrook A,EARTH_SPACE,4,20,2,1,1,2,0,2
-52,2,3,Lynbrook A,ENERGY,0,0,1,1,1,0,1,2
-52,2,3,Lynbrook A,MATH,8,20,2,0,2,2,0,2
-52,2,3,Lynbrook A,PHYSICS,8,30,3,1,0,3,0,1
-53,1,26,Archbishop Mitty B,BIOLOGY,12,10,3,0,1,1,2,1
-53,1,26,Archbishop Mitty B,CHEMISTRY,8,10,2,0,2,1,1,2
-53,1,26,Archbishop Mitty B,EARTH_SPACE,4,20,2,1,1,2,0,2
-53,1,26,Archbishop Mitty B,ENERGY,0,0,0,0,3,0,0,3
-53,1,26,Archbishop Mitty B,MATH,12,30,3,0,1,3,0,1
-53,1,26,Archbishop Mitty B,PHYSICS,12,20,3,0,1,2,1,1
-53,2,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-53,2,32,Chico B,CHEMISTRY,-4,0,0,1,3,0,0,4
-53,2,32,Chico B,EARTH_SPACE,0,0,0,0,4,0,0,4
-53,2,32,Chico B,ENERGY,4,0,2,1,0,0,2,1
-53,2,32,Chico B,MATH,0,0,0,0,4,0,0,4
-53,2,32,Chico B,PHYSICS,4,10,1,0,3,1,0,3
-54,1,21,BASIS Fremont,BIOLOGY,8,10,2,0,2,1,1,2
-54,1,21,BASIS Fremont,CHEMISTRY,8,10,2,0,2,1,1,2
-54,1,21,BASIS Fremont,EARTH_SPACE,8,20,2,0,2,2,0,2
-54,1,21,BASIS Fremont,ENERGY,4,20,2,1,0,2,0,1
-54,1,21,BASIS Fremont,MATH,0,0,0,0,4,0,0,4
-54,1,21,BASIS Fremont,PHYSICS,0,10,1,1,2,1,0,3
-54,2,37,Mountain House A,BIOLOGY,4,10,1,0,3,1,0,3
-54,2,37,Mountain House A,CHEMISTRY,-4,10,1,2,1,1,0,3
-54,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
-54,2,37,Mountain House A,ENERGY,0,0,0,0,3,0,0,3
-54,2,37,Mountain House A,MATH,4,0,1,0,3,0,1,3
-54,2,37,Mountain House A,PHYSICS,12,10,3,0,1,1,2,1
-55,1,11,GSB A,BIOLOGY,16,20,4,0,0,2,2,0
-55,1,11,GSB A,CHEMISTRY,12,10,3,0,1,1,2,1
-55,1,11,GSB A,EARTH_SPACE,8,30,3,1,0,3,0,1
-55,1,11,GSB A,ENERGY,8,10,2,0,1,1,1,1
-55,1,11,GSB A,MATH,12,30,3,0,1,3,0,1
-55,1,11,GSB A,PHYSICS,4,10,1,0,3,1,0,3
-55,2,24,BASIS Silicon Valley B,BIOLOGY,-4,0,0,1,3,0,0,4
-55,2,24,BASIS Silicon Valley B,CHEMISTRY,-4,0,1,2,1,0,1,3
-55,2,24,BASIS Silicon Valley B,EARTH_SPACE,4,10,1,0,3,1,0,3
-55,2,24,BASIS Silicon Valley B,ENERGY,4,10,1,0,2,1,0,2
-55,2,24,BASIS Silicon Valley B,MATH,4,10,1,0,3,1,0,3
-55,2,24,BASIS Silicon Valley B,PHYSICS,8,20,2,0,2,2,0,2
-56,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
-56,1,29,California,CHEMISTRY,-8,0,0,2,2,0,0,4
-56,1,29,California,EARTH_SPACE,4,0,1,0,3,0,1,3
-56,1,29,California,ENERGY,0,0,0,0,3,0,0,3
-56,1,29,California,MATH,0,0,0,0,4,0,0,4
-56,1,29,California,PHYSICS,8,10,2,0,2,1,1,2
-56,2,15,Mission San Jose A,BIOLOGY,4,20,2,1,1,2,0,2
-56,2,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
-56,2,15,Mission San Jose A,EARTH_SPACE,4,20,2,1,1,2,0,2
-56,2,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
-56,2,15,Mission San Jose A,MATH,12,30,3,0,1,3,0,1
-56,2,15,Mission San Jose A,PHYSICS,8,10,2,0,2,1,1,2
-57,1,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
-57,1,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
-57,1,30,Chico A,EARTH_SPACE,4,0,1,0,3,0,0,4
-57,1,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
-57,1,30,Chico A,MATH,4,0,1,0,3,0,0,4
-57,1,30,Chico A,PHYSICS,0,0,0,0,4,0,0,4
-57,2,38,Dougherty Valley B,BIOLOGY,16,30,4,0,0,3,0,1
-57,2,38,Dougherty Valley B,CHEMISTRY,12,20,3,0,1,2,0,2
-57,2,38,Dougherty Valley B,EARTH_SPACE,4,0,1,0,3,0,0,4
-57,2,38,Dougherty Valley B,ENERGY,8,10,2,0,1,1,0,2
-57,2,38,Dougherty Valley B,MATH,12,20,3,0,1,2,0,2
-57,2,38,Dougherty Valley B,PHYSICS,8,10,2,0,2,1,1,2
-58,1,7,Clovis North,BIOLOGY,12,20,3,0,1,2,1,1
-58,1,7,Clovis North,CHEMISTRY,16,40,4,0,0,4,0,0
-58,1,7,Clovis North,EARTH_SPACE,12,0,3,0,1,0,3,1
-58,1,7,Clovis North,ENERGY,8,20,2,0,1,2,0,1
-58,1,7,Clovis North,MATH,8,20,2,0,2,2,0,2
-58,1,7,Clovis North,PHYSICS,12,30,3,0,1,3,0,1
-58,2,41,Evergreen Valley,BIOLOGY,0,0,0,0,4,0,0,4
-58,2,41,Evergreen Valley,CHEMISTRY,0,0,0,0,4,0,0,4
-58,2,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
-58,2,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-58,2,41,Evergreen Valley,MATH,0,0,0,0,4,0,0,4
-58,2,41,Evergreen Valley,PHYSICS,0,10,1,1,2,1,0,3
-59,1,19,Cupertino A,BIOLOGY,-4,0,0,1,3,0,0,4
-59,1,19,Cupertino A,CHEMISTRY,8,10,2,0,2,1,1,2
-59,1,19,Cupertino A,EARTH_SPACE,4,10,1,0,3,1,0,3
-59,1,19,Cupertino A,ENERGY,4,10,1,0,2,1,0,2
-59,1,19,Cupertino A,MATH,8,10,2,0,2,1,1,2
-59,1,19,Cupertino A,PHYSICS,12,20,3,0,1,2,1,1
-59,2,6,Foothill A,BIOLOGY,16,40,4,0,0,4,0,0
-59,2,6,Foothill A,CHEMISTRY,0,20,2,2,0,2,0,2
-59,2,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
-59,2,6,Foothill A,ENERGY,8,10,2,0,1,1,1,1
-59,2,6,Foothill A,MATH,8,10,2,0,2,1,1,2
-59,2,6,Foothill A,PHYSICS,0,0,1,1,2,0,1,3
-60,1,35,Cupertino B,BIOLOGY,12,30,3,0,1,3,0,1
-60,1,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
-60,1,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-60,1,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
-60,1,35,Cupertino B,MATH,0,0,0,0,4,0,0,4
-60,1,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
-60,2,10,Davidson B,BIOLOGY,4,0,1,0,3,0,1,3
-60,2,10,Davidson B,CHEMISTRY,16,20,4,0,0,2,2,0
-60,2,10,Davidson B,EARTH_SPACE,12,20,3,0,1,2,1,1
-60,2,10,Davidson B,ENERGY,8,10,2,0,1,1,1,1
-60,2,10,Davidson B,MATH,16,30,4,0,0,3,1,0
-60,2,10,Davidson B,PHYSICS,12,30,3,0,1,3,0,1
-61,1,9,Davidson A,BIOLOGY,16,10,4,0,0,1,3,0
-61,1,9,Davidson A,CHEMISTRY,8,20,3,1,0,2,1,1
-61,1,9,Davidson A,EARTH_SPACE,16,40,4,0,0,4,0,0
-61,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
-61,1,9,Davidson A,MATH,8,30,3,1,0,3,0,1
-61,1,9,Davidson A,PHYSICS,12,30,3,0,1,3,0,1
-61,2,40,El Camino B,BIOLOGY,0,0,0,0,4,0,0,4
-61,2,40,El Camino B,CHEMISTRY,0,0,0,0,4,0,0,4
-61,2,40,El Camino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-61,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
-61,2,40,El Camino B,MATH,0,0,0,0,4,0,0,4
-61,2,40,El Camino B,PHYSICS,4,10,1,0,3,1,0,3
-62,1,8,Dougherty Valley A,BIOLOGY,12,30,3,0,1,3,0,1
-62,1,8,Dougherty Valley A,CHEMISTRY,0,0,0,0,4,0,0,4
-62,1,8,Dougherty Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
-62,1,8,Dougherty Valley A,ENERGY,0,0,0,0,3,0,0,3
-62,1,8,Dougherty Valley A,MATH,8,20,2,0,2,2,0,2
-62,1,8,Dougherty Valley A,PHYSICS,8,10,2,0,2,1,1,2
-62,2,14,Palo Alto,BIOLOGY,4,0,1,0,3,0,1,3
-62,2,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
-62,2,14,Palo Alto,EARTH_SPACE,4,10,1,0,3,1,0,3
-62,2,14,Palo Alto,ENERGY,12,30,3,0,0,3,0,0
-62,2,14,Palo Alto,MATH,8,10,2,0,2,1,1,2
-62,2,14,Palo Alto,PHYSICS,8,20,2,0,2,2,0,2
-63,1,42,Foothill B,BIOLOGY,8,0,2,0,2,0,2,2
-63,1,42,Foothill B,CHEMISTRY,0,10,1,1,2,1,0,3
-63,1,42,Foothill B,EARTH_SPACE,0,0,0,0,4,0,0,4
-63,1,42,Foothill B,ENERGY,8,10,2,0,1,1,0,2
-63,1,42,Foothill B,MATH,-4,0,0,1,3,0,0,4
-63,1,42,Foothill B,PHYSICS,4,0,1,0,3,0,1,3
-63,2,39,El Camino A,BIOLOGY,0,0,0,0,4,0,0,4
-63,2,39,El Camino A,CHEMISTRY,8,20,2,0,2,2,0,2
-63,2,39,El Camino A,EARTH_SPACE,12,20,3,0,1,2,1,1
-63,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-63,2,39,El Camino A,MATH,4,0,1,0,3,0,1,3
-63,2,39,El Camino A,PHYSICS,12,20,3,0,1,2,1,1
-64,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
-64,1,47,San Mateo,CHEMISTRY,4,0,1,0,3,0,1,3
-64,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
-64,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
-64,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
-64,1,47,San Mateo,PHYSICS,-4,0,0,1,3,0,0,4
-64,2,17,Folsom City,BIOLOGY,16,20,4,0,0,2,2,0
-64,2,17,Folsom City,CHEMISTRY,12,30,3,0,1,3,0,1
-64,2,17,Folsom City,EARTH_SPACE,16,30,4,0,0,3,1,0
-64,2,17,Folsom City,ENERGY,12,20,3,0,0,2,1,0
-64,2,17,Folsom City,MATH,8,10,2,0,2,1,1,2
-64,2,17,Folsom City,PHYSICS,12,20,3,0,1,2,1,1
-65,1,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
-65,1,28,GSB B,CHEMISTRY,8,10,2,0,2,1,1,2
-65,1,28,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
-65,1,28,GSB B,ENERGY,8,10,2,0,1,1,1,1
-65,1,28,GSB B,MATH,4,10,1,0,3,1,0,3
-65,1,28,GSB B,PHYSICS,4,10,1,0,3,1,0,3
-65,2,44,Miller,BIOLOGY,16,30,4,0,0,3,1,0
-65,2,44,Miller,CHEMISTRY,8,0,2,0,2,0,2,2
-65,2,44,Miller,EARTH_SPACE,8,20,2,0,2,2,0,2
-65,2,44,Miller,ENERGY,4,0,1,0,2,0,1,2
-65,2,44,Miller,MATH,12,10,3,0,1,1,2,1
-65,2,44,Miller,PHYSICS,8,10,2,0,2,1,1,2
-66,1,13,Irvington A,BIOLOGY,4,20,2,1,1,2,0,2
-66,1,13,Irvington A,CHEMISTRY,0,10,1,1,2,1,0,3
-66,1,13,Irvington A,EARTH_SPACE,4,10,1,0,3,1,0,3
-66,1,13,Irvington A,ENERGY,4,10,1,0,2,1,0,2
-66,1,13,Irvington A,MATH,4,20,2,1,1,2,0,2
-66,1,13,Irvington A,PHYSICS,16,30,4,0,0,3,0,1
-66,2,45,Lynbrook B,BIOLOGY,-4,10,1,2,1,1,0,3
-66,2,45,Lynbrook B,CHEMISTRY,12,20,3,0,1,2,0,2
-66,2,45,Lynbrook B,EARTH_SPACE,12,0,3,0,1,0,0,4
-66,2,45,Lynbrook B,ENERGY,0,10,1,1,1,1,0,2
-66,2,45,Lynbrook B,MATH,4,10,1,0,3,1,0,3
-66,2,45,Lynbrook B,PHYSICS,-4,0,0,1,3,0,0,4
-67,1,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
-67,1,27,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
-67,1,27,Irvington B,EARTH_SPACE,4,0,1,0,3,0,1,3
-67,1,27,Irvington B,ENERGY,0,0,1,1,1,0,1,2
-67,1,27,Irvington B,MATH,8,10,2,0,2,1,1,2
-67,1,27,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
-67,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-67,2,46,Mira Loma B,CHEMISTRY,12,10,3,0,1,1,2,1
-67,2,46,Mira Loma B,EARTH_SPACE,8,10,2,0,2,1,1,2
-67,2,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
-67,2,46,Mira Loma B,MATH,4,0,1,0,3,0,1,3
-67,2,46,Mira Loma B,PHYSICS,8,10,2,0,2,1,1,2
-68,1,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
-68,1,48,Quarry Lane B,CHEMISTRY,8,10,2,0,2,1,1,2
-68,1,48,Quarry Lane B,EARTH_SPACE,4,0,1,0,3,0,1,3
-68,1,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
-68,1,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-68,1,48,Quarry Lane B,PHYSICS,-4,0,0,1,3,0,0,4
-68,2,2,Mission San Jose B,BIOLOGY,8,20,3,1,0,2,1,1
-68,2,2,Mission San Jose B,CHEMISTRY,0,10,2,2,0,1,1,2
-68,2,2,Mission San Jose B,EARTH_SPACE,0,10,2,2,0,1,1,2
-68,2,2,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
-68,2,2,Mission San Jose B,MATH,16,40,4,0,0,4,0,0
-68,2,2,Mission San Jose B,PHYSICS,16,30,4,0,0,3,1,0
-69,1,47,San Mateo,BIOLOGY,8,20,2,0,2,2,0,2
-69,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-69,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
-69,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
-69,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
-69,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-69,2,18,Albany A,BIOLOGY,4,0,1,0,3,0,1,3
-69,2,18,Albany A,CHEMISTRY,4,0,1,0,3,0,1,3
-69,2,18,Albany A,EARTH_SPACE,4,0,1,0,3,0,1,3
-69,2,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
-69,2,18,Albany A,MATH,16,20,4,0,0,2,2,0
-69,2,18,Albany A,PHYSICS,0,0,0,0,4,0,0,4
-70,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-70,1,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
-70,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-70,1,20,Albany B,ENERGY,4,0,1,0,2,0,1,2
-70,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
-70,1,20,Albany B,PHYSICS,4,0,1,0,3,0,1,3
-70,2,6,Foothill A,BIOLOGY,8,20,3,1,0,2,1,1
-70,2,6,Foothill A,CHEMISTRY,12,20,3,0,1,2,1,1
-70,2,6,Foothill A,EARTH_SPACE,16,10,4,0,0,1,3,0
-70,2,6,Foothill A,ENERGY,4,10,2,1,0,1,1,1
-70,2,6,Foothill A,MATH,16,40,4,0,0,4,0,0
-70,2,6,Foothill A,PHYSICS,4,20,2,1,1,2,0,2
-71,1,1,Amador Valley A,BIOLOGY,-8,0,1,3,0,0,1,3
-71,1,1,Amador Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-71,1,1,Amador Valley A,EARTH_SPACE,16,10,4,0,0,1,3,0
-71,1,1,Amador Valley A,ENERGY,12,30,3,0,0,3,0,0
-71,1,1,Amador Valley A,MATH,16,40,4,0,0,4,0,0
-71,1,1,Amador Valley A,PHYSICS,-4,10,1,2,1,1,0,3
-71,2,37,Mountain House A,BIOLOGY,0,0,0,0,4,0,0,4
-71,2,37,Mountain House A,CHEMISTRY,0,0,0,0,4,0,0,4
-71,2,37,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
-71,2,37,Mountain House A,ENERGY,0,0,0,0,3,0,0,3
-71,2,37,Mountain House A,MATH,0,0,0,0,4,0,0,4
-71,2,37,Mountain House A,PHYSICS,12,30,3,0,1,3,0,1
-72,1,22,Amador Valley B,BIOLOGY,0,0,1,1,2,0,1,3
-72,1,22,Amador Valley B,CHEMISTRY,0,0,1,1,2,0,1,3
-72,1,22,Amador Valley B,EARTH_SPACE,4,0,1,0,3,0,1,3
-72,1,22,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
-72,1,22,Amador Valley B,MATH,-4,10,1,2,1,1,0,3
-72,1,22,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
-72,2,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-72,2,43,Los Gatos,CHEMISTRY,12,0,3,0,1,0,3,1
-72,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-72,2,43,Los Gatos,ENERGY,4,0,1,0,2,0,1,2
-72,2,43,Los Gatos,MATH,12,10,3,0,1,1,2,1
-72,2,43,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
-73,1,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
-73,1,23,American A,CHEMISTRY,0,0,0,0,4,0,0,4
-73,1,23,American A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-73,1,23,American A,ENERGY,0,0,0,0,3,0,0,3
-73,1,23,American A,MATH,0,0,0,0,4,0,0,4
-73,1,23,American A,PHYSICS,-4,0,0,1,3,0,0,4
-73,2,3,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
-73,2,3,Lynbrook A,CHEMISTRY,16,30,4,0,0,3,1,0
-73,2,3,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,1,0
-73,2,3,Lynbrook A,ENERGY,12,20,3,0,0,2,1,0
-73,2,3,Lynbrook A,MATH,16,40,4,0,0,4,0,0
-73,2,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
-74,1,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
-74,1,25,American B,CHEMISTRY,0,0,0,0,4,0,0,4
-74,1,25,American B,EARTH_SPACE,4,10,1,0,3,1,0,3
-74,1,25,American B,ENERGY,0,0,0,0,3,0,0,3
-74,1,25,American B,MATH,4,0,1,0,3,0,1,3
-74,1,25,American B,PHYSICS,0,0,0,0,4,0,0,4
-74,2,11,GSB A,BIOLOGY,8,20,3,1,0,2,1,1
-74,2,11,GSB A,CHEMISTRY,12,20,3,0,1,2,1,1
-74,2,11,GSB A,EARTH_SPACE,0,0,0,0,4,0,0,4
-74,2,11,GSB A,ENERGY,-4,10,1,2,0,1,0,2
-74,2,11,GSB A,MATH,8,30,3,1,0,3,0,1
-74,2,11,GSB A,PHYSICS,-4,10,1,2,1,1,0,3
-75,1,4,Archbishop Mitty A,BIOLOGY,16,20,4,0,0,2,1,1
-75,1,4,Archbishop Mitty A,CHEMISTRY,16,40,4,0,0,4,0,0
-75,1,4,Archbishop Mitty A,EARTH_SPACE,16,20,4,0,0,2,2,0
-75,1,4,Archbishop Mitty A,ENERGY,4,10,2,1,0,1,1,1
-75,1,4,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
-75,1,4,Archbishop Mitty A,PHYSICS,-8,0,0,2,2,0,0,4
-75,2,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
-75,2,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
-75,2,30,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
-75,2,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
-75,2,30,Chico A,MATH,4,0,1,0,3,0,0,4
-75,2,30,Chico A,PHYSICS,4,0,1,0,3,0,1,3
-76,1,26,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
-76,1,26,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
-76,1,26,Archbishop Mitty B,EARTH_SPACE,12,20,3,0,1,2,1,1
-76,1,26,Archbishop Mitty B,ENERGY,-4,0,0,1,2,0,0,3
-76,1,26,Archbishop Mitty B,MATH,12,0,3,0,1,0,3,1
-76,1,26,Archbishop Mitty B,PHYSICS,0,0,0,0,4,0,0,4
-76,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-76,2,46,Mira Loma B,CHEMISTRY,8,0,2,0,2,0,2,2
-76,2,46,Mira Loma B,EARTH_SPACE,4,10,1,0,3,1,0,3
-76,2,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
-76,2,46,Mira Loma B,MATH,4,0,1,0,3,0,1,3
-76,2,46,Mira Loma B,PHYSICS,12,20,3,0,1,2,1,1
-77,1,21,BASIS Fremont,BIOLOGY,0,0,0,0,4,0,0,4
-77,1,21,BASIS Fremont,CHEMISTRY,4,0,1,0,3,0,1,3
-77,1,21,BASIS Fremont,EARTH_SPACE,8,0,3,1,0,0,3,1
-77,1,21,BASIS Fremont,ENERGY,4,0,1,0,2,0,1,2
-77,1,21,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
-77,1,21,BASIS Fremont,PHYSICS,4,10,1,0,3,1,0,3
-77,2,35,Cupertino B,BIOLOGY,12,10,3,0,1,1,2,1
-77,2,35,Cupertino B,CHEMISTRY,8,0,2,0,2,0,2,2
-77,2,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-77,2,35,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
-77,2,35,Cupertino B,MATH,4,10,2,1,1,1,1,2
-77,2,35,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
-78,1,39,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
-78,1,39,El Camino A,CHEMISTRY,0,0,0,0,4,0,0,4
-78,1,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-78,1,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-78,1,39,El Camino A,MATH,4,10,1,0,3,1,0,3
-78,1,39,El Camino A,PHYSICS,4,0,1,0,3,0,1,3
-78,2,5,BASIS Silicon Valley A,BIOLOGY,0,20,2,2,0,2,0,2
-78,2,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-78,2,5,BASIS Silicon Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
-78,2,5,BASIS Silicon Valley A,ENERGY,12,30,3,0,0,3,0,0
-78,2,5,BASIS Silicon Valley A,MATH,12,20,3,0,1,2,1,1
-78,2,5,BASIS Silicon Valley A,PHYSICS,4,10,2,1,1,1,1,2
-79,1,24,BASIS Silicon Valley B,BIOLOGY,4,10,1,0,3,1,0,3
-79,1,24,BASIS Silicon Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
-79,1,24,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-79,1,24,BASIS Silicon Valley B,ENERGY,4,0,1,0,2,0,1,2
-79,1,24,BASIS Silicon Valley B,MATH,0,10,1,1,2,1,0,3
-79,1,24,BASIS Silicon Valley B,PHYSICS,8,30,3,1,0,3,0,1
-79,2,7,Clovis North,BIOLOGY,12,30,3,0,1,3,0,1
-79,2,7,Clovis North,CHEMISTRY,12,30,3,0,1,3,0,1
-79,2,7,Clovis North,EARTH_SPACE,4,0,2,1,1,0,2,2
-79,2,7,Clovis North,ENERGY,4,20,2,1,0,2,0,1
-79,2,7,Clovis North,MATH,8,20,3,1,0,2,1,1
-79,2,7,Clovis North,PHYSICS,0,0,0,0,4,0,0,4
-80,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
-80,1,29,California,CHEMISTRY,4,0,1,0,3,0,0,4
-80,1,29,California,EARTH_SPACE,0,0,0,0,4,0,0,4
-80,1,29,California,ENERGY,-4,0,0,1,2,0,0,3
-80,1,29,California,MATH,0,10,1,1,2,1,0,3
-80,1,29,California,PHYSICS,4,10,1,0,3,1,0,3
-80,2,44,Miller,BIOLOGY,8,20,3,1,0,2,0,2
-80,2,44,Miller,CHEMISTRY,8,10,2,0,2,1,0,3
-80,2,44,Miller,EARTH_SPACE,16,30,4,0,0,3,0,1
-80,2,44,Miller,ENERGY,8,20,2,0,1,2,0,1
-80,2,44,Miller,MATH,12,30,3,0,1,3,0,1
-80,2,44,Miller,PHYSICS,8,20,2,0,2,2,0,2
-81,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-81,1,32,Chico B,CHEMISTRY,0,0,0,0,4,0,0,4
-81,1,32,Chico B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-81,1,32,Chico B,ENERGY,4,0,1,0,2,0,1,2
-81,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
-81,1,32,Chico B,PHYSICS,0,10,1,1,2,1,0,3
-81,2,14,Palo Alto,BIOLOGY,8,20,3,1,0,2,1,1
-81,2,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
-81,2,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-81,2,14,Palo Alto,ENERGY,4,20,2,1,0,2,0,1
-81,2,14,Palo Alto,MATH,16,30,4,0,0,3,1,0
-81,2,14,Palo Alto,PHYSICS,12,30,3,0,1,3,0,1
-82,1,9,Davidson A,BIOLOGY,4,0,2,1,1,0,2,2
-82,1,9,Davidson A,CHEMISTRY,16,40,4,0,0,4,0,0
-82,1,9,Davidson A,EARTH_SPACE,16,40,4,0,0,4,0,0
-82,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
-82,1,9,Davidson A,MATH,16,40,4,0,0,4,0,0
-82,1,9,Davidson A,PHYSICS,16,40,4,0,0,4,0,0
-82,2,19,Cupertino A,BIOLOGY,0,0,0,0,4,0,0,4
-82,2,19,Cupertino A,CHEMISTRY,0,0,0,0,4,0,0,4
-82,2,19,Cupertino A,EARTH_SPACE,0,0,0,0,4,0,0,4
-82,2,19,Cupertino A,ENERGY,-4,0,0,1,2,0,0,3
-82,2,19,Cupertino A,MATH,0,0,0,0,4,0,0,4
-82,2,19,Cupertino A,PHYSICS,-4,0,0,1,3,0,0,4
-83,1,10,Davidson B,BIOLOGY,-8,0,0,2,2,0,0,4
-83,1,10,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
-83,1,10,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
-83,1,10,Davidson B,ENERGY,4,0,1,0,2,0,1,2
-83,1,10,Davidson B,MATH,12,20,3,0,1,2,1,1
-83,1,10,Davidson B,PHYSICS,8,10,2,0,2,1,1,2
-83,2,34,Stanford Online,BIOLOGY,8,10,2,0,2,1,1,2
-83,2,34,Stanford Online,CHEMISTRY,4,10,1,0,3,1,0,3
-83,2,34,Stanford Online,EARTH_SPACE,0,0,1,1,2,0,1,3
-83,2,34,Stanford Online,ENERGY,8,20,2,0,1,2,0,1
-83,2,34,Stanford Online,MATH,0,0,1,1,2,0,1,3
-83,2,34,Stanford Online,PHYSICS,0,10,1,1,2,1,0,3
-84,1,8,Dougherty Valley A,BIOLOGY,12,30,3,0,1,3,0,1
-84,1,8,Dougherty Valley A,CHEMISTRY,12,30,3,0,1,3,0,1
-84,1,8,Dougherty Valley A,EARTH_SPACE,12,20,3,0,1,2,1,1
-84,1,8,Dougherty Valley A,ENERGY,8,20,2,0,1,2,0,1
-84,1,8,Dougherty Valley A,MATH,12,10,3,0,1,1,2,1
-84,1,8,Dougherty Valley A,PHYSICS,0,10,1,1,2,1,0,3
-84,2,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
-84,2,27,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
-84,2,27,Irvington B,EARTH_SPACE,4,10,1,0,3,1,0,3
-84,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-84,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
-84,2,27,Irvington B,PHYSICS,8,0,2,0,2,0,2,2
-85,1,38,Dougherty Valley B,BIOLOGY,12,10,3,0,1,1,2,1
-85,1,38,Dougherty Valley B,CHEMISTRY,8,20,2,0,2,2,0,2
-85,1,38,Dougherty Valley B,EARTH_SPACE,4,10,1,0,3,1,0,3
-85,1,38,Dougherty Valley B,ENERGY,4,20,2,1,0,2,0,1
-85,1,38,Dougherty Valley B,MATH,12,30,3,0,1,3,0,1
-85,1,38,Dougherty Valley B,PHYSICS,4,0,2,1,1,0,2,2
-85,2,31,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
-85,2,31,Mountain House B,CHEMISTRY,4,0,1,0,3,0,1,3
-85,2,31,Mountain House B,EARTH_SPACE,8,10,2,0,2,1,1,2
-85,2,31,Mountain House B,ENERGY,4,10,1,0,2,1,0,2
-85,2,31,Mountain House B,MATH,4,0,1,0,3,0,1,3
-85,2,31,Mountain House B,PHYSICS,0,0,1,1,2,0,1,3
-86,1,40,El Camino B,BIOLOGY,4,0,2,1,1,0,2,2
-86,1,40,El Camino B,CHEMISTRY,4,0,1,0,3,0,1,3
-86,1,40,El Camino B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-86,1,40,El Camino B,ENERGY,12,0,3,0,0,0,3,0
-86,1,40,El Camino B,MATH,4,10,2,1,1,1,1,2
-86,1,40,El Camino B,PHYSICS,4,0,1,0,3,0,1,3
-86,2,36,Homestead,BIOLOGY,0,0,1,1,2,0,1,3
-86,2,36,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
-86,2,36,Homestead,EARTH_SPACE,8,10,2,0,2,1,1,2
-86,2,36,Homestead,ENERGY,-4,0,0,1,2,0,0,3
-86,2,36,Homestead,MATH,0,0,1,1,2,0,1,3
-86,2,36,Homestead,PHYSICS,4,0,1,0,3,0,1,3
-87,1,41,Evergreen Valley,BIOLOGY,4,10,2,1,1,1,1,2
-87,1,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-87,1,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
-87,1,41,Evergreen Valley,ENERGY,4,0,1,0,2,0,1,2
-87,1,41,Evergreen Valley,MATH,8,10,2,0,2,1,1,2
-87,1,41,Evergreen Valley,PHYSICS,4,0,1,0,3,0,1,3
-87,2,33,Quarry Lane A,BIOLOGY,4,0,2,1,1,0,2,2
-87,2,33,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
-87,2,33,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
-87,2,33,Quarry Lane A,ENERGY,4,10,1,0,2,1,0,2
-87,2,33,Quarry Lane A,MATH,0,0,0,0,4,0,0,4
-87,2,33,Quarry Lane A,PHYSICS,-4,0,0,1,3,0,0,4
-88,1,17,Folsom City,BIOLOGY,4,10,1,0,3,1,0,3
-88,1,17,Folsom City,CHEMISTRY,0,0,0,0,4,0,0,4
-88,1,17,Folsom City,EARTH_SPACE,4,10,1,0,3,1,0,3
-88,1,17,Folsom City,ENERGY,8,10,2,0,1,1,1,1
-88,1,17,Folsom City,MATH,4,0,1,0,3,0,1,3
-88,1,17,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
-88,2,2,Mission San Jose B,BIOLOGY,4,10,2,1,1,1,1,2
-88,2,2,Mission San Jose B,CHEMISTRY,12,20,3,0,1,2,1,1
-88,2,2,Mission San Jose B,EARTH_SPACE,12,30,3,0,1,3,0,1
-88,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
-88,2,2,Mission San Jose B,MATH,8,30,3,1,0,3,0,1
-88,2,2,Mission San Jose B,PHYSICS,8,20,3,1,0,2,1,1
-89,1,16,Mira Loma A,BIOLOGY,8,20,3,1,0,2,1,1
-89,1,16,Mira Loma A,CHEMISTRY,-4,10,1,2,1,1,0,3
-89,1,16,Mira Loma A,EARTH_SPACE,12,0,3,0,1,0,3,1
-89,1,16,Mira Loma A,ENERGY,4,0,2,1,0,0,2,1
-89,1,16,Mira Loma A,MATH,8,10,2,0,2,1,0,3
-89,1,16,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
-89,2,42,Foothill B,BIOLOGY,0,0,0,0,4,0,0,4
-89,2,42,Foothill B,CHEMISTRY,4,0,2,1,1,0,2,2
-89,2,42,Foothill B,EARTH_SPACE,0,0,0,0,4,0,0,4
-89,2,42,Foothill B,ENERGY,0,0,0,0,3,0,0,3
-89,2,42,Foothill B,MATH,8,10,2,0,2,1,1,2
-89,2,42,Foothill B,PHYSICS,0,0,0,0,4,0,0,4
-90,1,13,Irvington A,BIOLOGY,4,10,2,1,1,1,1,2
-90,1,13,Irvington A,CHEMISTRY,4,10,2,1,1,1,1,2
-90,1,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-90,1,13,Irvington A,ENERGY,12,30,3,0,0,3,0,0
-90,1,13,Irvington A,MATH,8,20,3,1,0,2,1,1
-90,1,13,Irvington A,PHYSICS,12,30,3,0,1,3,0,1
-90,2,28,GSB B,BIOLOGY,4,0,1,0,3,0,1,3
-90,2,28,GSB B,CHEMISTRY,4,0,1,0,3,0,1,3
-90,2,28,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
-90,2,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
-90,2,28,GSB B,MATH,4,10,1,0,3,1,0,3
-90,2,28,GSB B,PHYSICS,0,0,0,0,4,0,0,4
-91,1,15,Mission San Jose A,BIOLOGY,12,30,3,0,1,3,0,1
-91,1,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
-91,1,15,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
-91,1,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
-91,1,15,Mission San Jose A,MATH,8,30,3,1,0,3,0,1
-91,1,15,Mission San Jose A,PHYSICS,12,30,3,0,1,3,0,1
-91,2,45,Lynbrook B,BIOLOGY,0,10,1,1,2,1,0,3
-91,2,45,Lynbrook B,CHEMISTRY,0,10,1,1,2,1,0,3
-91,2,45,Lynbrook B,EARTH_SPACE,0,0,0,0,4,0,0,4
-91,2,45,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
-91,2,45,Lynbrook B,MATH,0,10,1,1,2,1,0,3
-91,2,45,Lynbrook B,PHYSICS,0,0,0,0,4,0,0,4
-92,1,12,Saratoga,BIOLOGY,12,30,3,0,1,3,0,1
-92,1,12,Saratoga,CHEMISTRY,8,30,3,1,0,3,0,1
-92,1,12,Saratoga,EARTH_SPACE,12,20,3,0,1,2,1,1
-92,1,12,Saratoga,ENERGY,12,30,3,0,0,3,0,0
-92,1,12,Saratoga,MATH,16,20,4,0,0,2,2,0
-92,1,12,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
-92,2,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
-92,2,48,Quarry Lane B,CHEMISTRY,4,10,1,0,3,1,0,3
-92,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-92,2,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
-92,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-92,2,48,Quarry Lane B,PHYSICS,0,0,0,0,4,0,0,4
-93,1,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-93,1,18,Albany A,CHEMISTRY,4,10,1,0,3,1,0,3
-93,1,18,Albany A,EARTH_SPACE,0,0,0,0,4,0,0,4
-93,1,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
-93,1,18,Albany A,MATH,0,0,0,0,4,0,0,4
-93,1,18,Albany A,PHYSICS,4,0,1,0,3,0,1,3
-93,2,48,Quarry Lane B,BIOLOGY,12,20,3,0,1,2,1,1
-93,2,48,Quarry Lane B,CHEMISTRY,0,0,1,1,2,0,1,3
-93,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-93,2,48,Quarry Lane B,ENERGY,4,0,1,0,2,0,1,2
-93,2,48,Quarry Lane B,MATH,12,10,3,0,1,1,2,1
-93,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
-94,1,40,El Camino B,BIOLOGY,12,10,3,0,1,1,2,1
-94,1,40,El Camino B,CHEMISTRY,12,10,3,0,1,1,2,1
-94,1,40,El Camino B,EARTH_SPACE,8,0,2,0,2,0,2,2
-94,1,40,El Camino B,ENERGY,8,20,2,0,1,2,0,1
-94,1,40,El Camino B,MATH,-4,0,0,1,3,0,0,4
-94,1,40,El Camino B,PHYSICS,0,0,0,0,4,0,0,4
-94,2,20,Albany B,BIOLOGY,4,10,1,0,3,1,0,3
-94,2,20,Albany B,CHEMISTRY,4,0,1,0,3,0,1,3
-94,2,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-94,2,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
-94,2,20,Albany B,MATH,4,0,1,0,3,0,1,3
-94,2,20,Albany B,PHYSICS,4,10,1,0,3,1,0,3
-95,1,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
-95,1,10,Davidson B,CHEMISTRY,4,10,1,0,3,1,0,3
-95,1,10,Davidson B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-95,1,10,Davidson B,ENERGY,4,10,1,0,2,1,0,2
-95,1,10,Davidson B,MATH,8,20,2,0,2,2,0,2
-95,1,10,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
-95,2,1,Amador Valley A,BIOLOGY,0,0,2,2,0,0,2,2
-95,2,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
-95,2,1,Amador Valley A,EARTH_SPACE,8,20,3,1,0,2,1,1
-95,2,1,Amador Valley A,ENERGY,-4,10,1,2,0,1,0,2
-95,2,1,Amador Valley A,MATH,8,20,2,0,2,2,0,2
-95,2,1,Amador Valley A,PHYSICS,12,10,3,0,1,1,2,1
-96,1,42,Foothill B,BIOLOGY,8,0,2,0,2,0,2,2
-96,1,42,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
-96,1,42,Foothill B,EARTH_SPACE,8,10,2,0,2,1,1,2
-96,1,42,Foothill B,ENERGY,4,10,1,0,2,1,0,2
-96,1,42,Foothill B,MATH,4,10,1,0,3,1,0,3
-96,1,42,Foothill B,PHYSICS,8,0,2,0,2,0,2,2
-96,2,22,Amador Valley B,BIOLOGY,4,10,1,0,3,1,0,3
-96,2,22,Amador Valley B,CHEMISTRY,8,0,2,0,2,0,2,2
-96,2,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-96,2,22,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
-96,2,22,Amador Valley B,MATH,12,30,3,0,1,3,0,1
-96,2,22,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
-97,1,38,Dougherty Valley B,BIOLOGY,12,30,3,0,1,3,0,1
-97,1,38,Dougherty Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
-97,1,38,Dougherty Valley B,EARTH_SPACE,0,10,1,1,2,1,0,3
-97,1,38,Dougherty Valley B,ENERGY,8,0,2,0,1,0,2,1
-97,1,38,Dougherty Valley B,MATH,4,20,2,1,1,2,0,2
-97,1,38,Dougherty Valley B,PHYSICS,0,10,1,1,2,1,0,3
-97,2,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
-97,2,23,American A,CHEMISTRY,12,10,3,0,1,1,2,1
-97,2,23,American A,EARTH_SPACE,4,10,1,0,3,1,0,3
-97,2,23,American A,ENERGY,-4,0,0,1,2,0,0,3
-97,2,23,American A,MATH,0,0,1,1,2,0,1,3
-97,2,23,American A,PHYSICS,8,10,2,0,2,1,1,2
-98,1,41,Evergreen Valley,BIOLOGY,16,0,4,0,0,0,4,0
-98,1,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-98,1,41,Evergreen Valley,EARTH_SPACE,4,10,1,0,3,1,0,3
-98,1,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-98,1,41,Evergreen Valley,MATH,4,10,2,1,1,1,1,2
-98,1,41,Evergreen Valley,PHYSICS,8,0,2,0,2,0,2,2
-98,2,25,American B,BIOLOGY,0,0,0,0,4,0,0,4
-98,2,25,American B,CHEMISTRY,4,0,1,0,3,0,1,3
-98,2,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
-98,2,25,American B,ENERGY,4,10,1,0,2,1,0,2
-98,2,25,American B,MATH,8,0,2,0,2,0,2,2
-98,2,25,American B,PHYSICS,8,10,2,0,2,1,1,2
-99,1,31,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
-99,1,31,Mountain House B,CHEMISTRY,0,0,0,0,4,0,0,4
-99,1,31,Mountain House B,EARTH_SPACE,4,0,1,0,3,0,1,3
-99,1,31,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
-99,1,31,Mountain House B,MATH,4,0,1,0,3,0,1,3
-99,1,31,Mountain House B,PHYSICS,4,10,1,0,3,1,0,3
-99,2,4,Archbishop Mitty A,BIOLOGY,12,20,3,0,1,2,1,1
-99,2,4,Archbishop Mitty A,CHEMISTRY,8,20,3,1,0,2,1,1
-99,2,4,Archbishop Mitty A,EARTH_SPACE,8,10,2,0,2,1,1,2
-99,2,4,Archbishop Mitty A,ENERGY,-4,0,0,1,2,0,0,3
-99,2,4,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
-99,2,4,Archbishop Mitty A,PHYSICS,4,0,2,1,1,0,2,2
-100,1,26,Archbishop Mitty B,BIOLOGY,0,0,0,0,4,0,0,4
-100,1,26,Archbishop Mitty B,CHEMISTRY,4,0,1,0,3,0,1,3
-100,1,26,Archbishop Mitty B,EARTH_SPACE,0,10,1,1,2,1,0,3
-100,1,26,Archbishop Mitty B,ENERGY,0,0,0,0,3,0,0,3
-100,1,26,Archbishop Mitty B,MATH,0,10,1,1,2,1,0,3
-100,1,26,Archbishop Mitty B,PHYSICS,8,0,2,0,2,0,2,2
-100,2,8,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
-100,2,8,Dougherty Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
-100,2,8,Dougherty Valley A,EARTH_SPACE,8,20,2,0,2,2,0,2
-100,2,8,Dougherty Valley A,ENERGY,12,10,3,0,0,1,2,0
-100,2,8,Dougherty Valley A,MATH,8,20,2,0,2,2,0,2
-100,2,8,Dougherty Valley A,PHYSICS,4,0,2,1,1,0,2,2
-101,1,21,BASIS Fremont,BIOLOGY,8,0,3,1,0,0,3,1
-101,1,21,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
-101,1,21,BASIS Fremont,EARTH_SPACE,4,10,1,0,3,1,0,3
-101,1,21,BASIS Fremont,ENERGY,0,0,0,0,3,0,0,3
-101,1,21,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
-101,1,21,BASIS Fremont,PHYSICS,4,0,1,0,3,0,1,3
-101,2,34,Stanford Online,BIOLOGY,4,0,1,0,3,0,1,3
-101,2,34,Stanford Online,CHEMISTRY,4,20,2,1,1,2,0,2
-101,2,34,Stanford Online,EARTH_SPACE,4,0,1,0,3,0,1,3
-101,2,34,Stanford Online,ENERGY,-4,10,1,2,0,1,0,2
-101,2,34,Stanford Online,MATH,-4,0,0,1,3,0,0,4
-101,2,34,Stanford Online,PHYSICS,4,0,1,0,3,0,1,3
-102,1,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
-102,1,5,BASIS Silicon Valley A,CHEMISTRY,8,20,2,0,2,2,0,2
-102,1,5,BASIS Silicon Valley A,EARTH_SPACE,0,0,0,0,4,0,0,4
-102,1,5,BASIS Silicon Valley A,ENERGY,4,10,2,1,0,1,1,1
-102,1,5,BASIS Silicon Valley A,MATH,4,20,2,1,1,2,0,2
-102,1,5,BASIS Silicon Valley A,PHYSICS,4,20,2,1,1,2,0,2
-102,2,16,Mira Loma A,BIOLOGY,-4,0,0,1,3,0,0,4
-102,2,16,Mira Loma A,CHEMISTRY,8,20,2,0,2,2,0,2
-102,2,16,Mira Loma A,EARTH_SPACE,16,20,4,0,0,2,2,0
-102,2,16,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
-102,2,16,Mira Loma A,MATH,8,10,2,0,2,1,1,2
-102,2,16,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
-103,1,33,Quarry Lane A,BIOLOGY,-4,0,0,1,3,0,0,4
-103,1,33,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
-103,1,33,Quarry Lane A,EARTH_SPACE,0,10,1,1,2,1,0,3
-103,1,33,Quarry Lane A,ENERGY,0,0,0,0,3,0,0,3
-103,1,33,Quarry Lane A,MATH,4,0,1,0,3,0,1,3
-103,1,33,Quarry Lane A,PHYSICS,0,0,0,0,4,0,0,4
-103,2,24,BASIS Silicon Valley B,BIOLOGY,12,10,3,0,1,1,2,1
-103,2,24,BASIS Silicon Valley B,CHEMISTRY,4,20,2,1,1,2,0,2
-103,2,24,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-103,2,24,BASIS Silicon Valley B,ENERGY,-4,0,1,2,0,0,1,2
-103,2,24,BASIS Silicon Valley B,MATH,8,30,3,1,0,3,0,1
-103,2,24,BASIS Silicon Valley B,PHYSICS,16,20,4,0,0,2,2,0
-104,1,29,California,BIOLOGY,-4,0,0,1,3,0,0,4
-104,1,29,California,CHEMISTRY,16,10,4,0,0,1,3,0
-104,1,29,California,EARTH_SPACE,0,10,1,1,2,1,0,3
-104,1,29,California,ENERGY,12,20,3,0,0,2,1,0
-104,1,29,California,MATH,0,0,0,0,4,0,0,4
-104,1,29,California,PHYSICS,12,10,3,0,1,1,2,1
-104,2,45,Lynbrook B,BIOLOGY,16,20,4,0,0,2,2,0
-104,2,45,Lynbrook B,CHEMISTRY,-4,0,0,1,3,0,0,4
-104,2,45,Lynbrook B,EARTH_SPACE,8,20,2,0,2,2,0,2
-104,2,45,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
-104,2,45,Lynbrook B,MATH,12,30,3,0,1,3,0,1
-104,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
-105,1,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
-105,1,30,Chico A,CHEMISTRY,4,0,1,0,3,0,0,4
-105,1,30,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
-105,1,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
-105,1,30,Chico A,MATH,0,0,0,0,4,0,0,4
-105,1,30,Chico A,PHYSICS,0,0,0,0,4,0,0,4
-105,2,3,Lynbrook A,BIOLOGY,8,30,3,1,0,3,0,1
-105,2,3,Lynbrook A,CHEMISTRY,4,20,2,1,1,2,0,2
-105,2,3,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,0,1
-105,2,3,Lynbrook A,ENERGY,8,20,2,0,1,2,0,1
-105,2,3,Lynbrook A,MATH,12,30,3,0,1,3,0,1
-105,2,3,Lynbrook A,PHYSICS,0,20,2,2,0,2,0,2
-106,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-106,1,32,Chico B,CHEMISTRY,-4,0,0,1,3,0,0,4
-106,1,32,Chico B,EARTH_SPACE,0,10,1,1,2,1,0,3
-106,1,32,Chico B,ENERGY,8,0,2,0,1,0,2,1
-106,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
-106,1,32,Chico B,PHYSICS,-4,0,0,1,3,0,0,4
-106,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-106,2,46,Mira Loma B,CHEMISTRY,12,20,3,0,1,2,1,1
-106,2,46,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
-106,2,46,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
-106,2,46,Mira Loma B,MATH,12,10,3,0,1,1,2,1
-106,2,46,Mira Loma B,PHYSICS,8,0,2,0,2,0,2,2
-107,1,7,Clovis North,BIOLOGY,8,20,2,0,2,2,0,2
-107,1,7,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
-107,1,7,Clovis North,EARTH_SPACE,8,0,2,0,2,0,2,2
-107,1,7,Clovis North,ENERGY,8,20,2,0,1,2,0,1
-107,1,7,Clovis North,MATH,0,0,0,0,4,0,0,4
-107,1,7,Clovis North,PHYSICS,4,10,1,0,3,1,0,3
-107,2,11,GSB A,BIOLOGY,4,10,1,0,3,1,0,3
-107,2,11,GSB A,CHEMISTRY,-4,0,0,1,3,0,0,4
-107,2,11,GSB A,EARTH_SPACE,0,10,1,1,2,1,0,3
-107,2,11,GSB A,ENERGY,0,0,1,1,1,0,1,2
-107,2,11,GSB A,MATH,12,30,3,0,1,3,0,1
-107,2,11,GSB A,PHYSICS,4,10,2,1,1,1,1,2
-108,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
-108,1,19,Cupertino A,CHEMISTRY,16,30,4,0,0,3,1,0
-108,1,19,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-108,1,19,Cupertino A,ENERGY,8,10,2,0,1,1,1,1
-108,1,19,Cupertino A,MATH,4,0,2,1,1,0,2,2
-108,1,19,Cupertino A,PHYSICS,8,20,2,0,2,2,0,2
-108,2,36,Homestead,BIOLOGY,8,10,2,0,2,1,1,2
-108,2,36,Homestead,CHEMISTRY,0,0,0,0,4,0,0,4
-108,2,36,Homestead,EARTH_SPACE,0,0,0,0,4,0,0,4
-108,2,36,Homestead,ENERGY,4,0,1,0,2,0,1,2
-108,2,36,Homestead,MATH,4,0,1,0,3,0,1,3
-108,2,36,Homestead,PHYSICS,8,10,2,0,2,1,1,2
-109,1,35,Cupertino B,BIOLOGY,0,10,1,1,2,1,0,3
-109,1,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
-109,1,35,Cupertino B,EARTH_SPACE,4,0,1,0,3,0,1,3
-109,1,35,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
-109,1,35,Cupertino B,MATH,8,10,2,0,2,1,1,2
-109,1,35,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
-109,2,37,Mountain House A,BIOLOGY,4,0,1,0,3,0,1,3
-109,2,37,Mountain House A,CHEMISTRY,-8,0,0,2,2,0,0,4
-109,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
-109,2,37,Mountain House A,ENERGY,8,0,2,0,1,0,2,1
-109,2,37,Mountain House A,MATH,8,10,2,0,2,1,1,2
-109,2,37,Mountain House A,PHYSICS,16,30,4,0,0,3,1,0
-110,1,9,Davidson A,BIOLOGY,12,20,3,0,1,2,1,1
-110,1,9,Davidson A,CHEMISTRY,8,20,3,1,0,2,1,1
-110,1,9,Davidson A,EARTH_SPACE,8,20,2,0,2,2,0,2
-110,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
-110,1,9,Davidson A,MATH,12,30,3,0,1,3,0,1
-110,1,9,Davidson A,PHYSICS,12,20,3,0,1,2,1,1
-110,2,6,Foothill A,BIOLOGY,4,10,1,0,3,1,0,3
-110,2,6,Foothill A,CHEMISTRY,0,0,1,1,2,0,1,3
-110,2,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
-110,2,6,Foothill A,ENERGY,0,0,0,0,3,0,0,3
-110,2,6,Foothill A,MATH,4,10,1,0,3,1,0,3
-110,2,6,Foothill A,PHYSICS,0,10,1,1,2,1,0,3
-111,1,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-111,1,43,Los Gatos,CHEMISTRY,12,20,3,0,1,2,1,1
-111,1,43,Los Gatos,EARTH_SPACE,4,0,1,0,3,0,1,3
-111,1,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
-111,1,43,Los Gatos,MATH,4,10,1,0,3,1,0,3
-111,1,43,Los Gatos,PHYSICS,-4,0,1,2,1,0,0,4
-111,2,39,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
-111,2,39,El Camino A,CHEMISTRY,-4,0,0,1,3,0,0,4
-111,2,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-111,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-111,2,39,El Camino A,MATH,8,0,2,0,2,0,2,2
-111,2,39,El Camino A,PHYSICS,8,10,2,0,2,1,1,2
-112,1,17,Folsom City,BIOLOGY,12,10,3,0,1,1,2,1
-112,1,17,Folsom City,CHEMISTRY,-4,0,0,1,3,0,0,4
-112,1,17,Folsom City,EARTH_SPACE,4,20,2,1,1,2,0,2
-112,1,17,Folsom City,ENERGY,0,0,0,0,3,0,0,3
-112,1,17,Folsom City,MATH,12,30,3,0,1,3,0,1
-112,1,17,Folsom City,PHYSICS,-4,0,0,1,3,0,0,4
-112,2,12,Saratoga,BIOLOGY,4,10,1,0,3,1,0,3
-112,2,12,Saratoga,CHEMISTRY,12,30,3,0,1,3,0,1
-112,2,12,Saratoga,EARTH_SPACE,8,10,2,0,2,1,1,2
-112,2,12,Saratoga,ENERGY,4,10,2,1,0,1,1,1
-112,2,12,Saratoga,MATH,4,0,1,0,3,0,1,3
-112,2,12,Saratoga,PHYSICS,12,20,3,0,1,2,1,1
-113,1,15,Mission San Jose A,BIOLOGY,16,30,4,0,0,3,1,0
-113,1,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
-113,1,15,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
-113,1,15,Mission San Jose A,ENERGY,12,20,3,0,0,2,1,0
-113,1,15,Mission San Jose A,MATH,8,20,2,0,2,2,0,2
-113,1,15,Mission San Jose A,PHYSICS,0,20,2,2,0,2,0,2
-113,2,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
-113,2,28,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
-113,2,28,GSB B,EARTH_SPACE,0,0,0,0,4,0,0,4
-113,2,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
-113,2,28,GSB B,MATH,8,20,2,0,2,2,0,2
-113,2,28,GSB B,PHYSICS,8,10,2,0,2,1,1,2
-114,1,13,Irvington A,BIOLOGY,0,10,1,1,2,1,0,3
-114,1,13,Irvington A,CHEMISTRY,16,30,4,0,0,3,1,0
-114,1,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-114,1,13,Irvington A,ENERGY,0,10,1,1,1,1,0,2
-114,1,13,Irvington A,MATH,4,10,1,0,3,1,0,3
-114,1,13,Irvington A,PHYSICS,8,10,2,0,2,1,1,2
-114,2,44,Miller,BIOLOGY,12,0,3,0,1,0,3,1
-114,2,44,Miller,CHEMISTRY,0,0,0,0,4,0,0,4
-114,2,44,Miller,EARTH_SPACE,0,10,1,1,2,1,0,3
-114,2,44,Miller,ENERGY,0,0,0,0,3,0,0,3
-114,2,44,Miller,MATH,8,20,2,0,2,2,0,2
-114,2,44,Miller,PHYSICS,8,10,2,0,2,1,1,2
-115,1,14,Palo Alto,BIOLOGY,16,40,4,0,0,4,0,0
-115,1,14,Palo Alto,CHEMISTRY,8,30,3,1,0,3,0,1
-115,1,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-115,1,14,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
-115,1,14,Palo Alto,MATH,12,30,3,0,1,3,0,1
-115,1,14,Palo Alto,PHYSICS,8,20,3,1,0,2,1,1
-115,2,27,Irvington B,BIOLOGY,0,0,0,0,4,0,0,4
-115,2,27,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
-115,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
-115,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-115,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
-115,2,27,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
-116,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
-116,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-116,1,47,San Mateo,EARTH_SPACE,4,10,1,0,3,1,0,3
-116,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
-116,1,47,San Mateo,MATH,4,0,1,0,3,0,1,3
-116,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-116,2,2,Mission San Jose B,BIOLOGY,4,20,2,1,1,2,0,2
-116,2,2,Mission San Jose B,CHEMISTRY,4,20,2,1,1,2,0,2
-116,2,2,Mission San Jose B,EARTH_SPACE,12,20,3,0,1,2,0,2
-116,2,2,Mission San Jose B,ENERGY,4,10,2,1,0,1,1,1
-116,2,2,Mission San Jose B,MATH,0,20,2,2,0,2,0,2
-116,2,2,Mission San Jose B,PHYSICS,16,20,4,0,0,2,2,0
-117,1,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-117,1,18,Albany A,CHEMISTRY,0,0,1,1,2,0,1,3
-117,1,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
-117,1,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
-117,1,18,Albany A,MATH,-4,0,0,1,3,0,0,4
-117,1,18,Albany A,PHYSICS,0,0,0,0,4,0,0,4
-117,2,2,Mission San Jose B,BIOLOGY,8,30,3,1,0,3,0,1
-117,2,2,Mission San Jose B,CHEMISTRY,4,10,2,1,1,1,1,2
-117,2,2,Mission San Jose B,EARTH_SPACE,8,10,3,1,0,1,2,1
-117,2,2,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
-117,2,2,Mission San Jose B,MATH,0,10,1,1,2,1,0,3
-117,2,2,Mission San Jose B,PHYSICS,16,40,4,0,0,4,0,0
-118,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-118,1,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
-118,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-118,1,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
-118,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
-118,1,20,Albany B,PHYSICS,0,0,0,0,4,0,0,4
-118,2,9,Davidson A,BIOLOGY,16,30,4,0,0,3,1,0
-118,2,9,Davidson A,CHEMISTRY,8,30,3,1,0,3,0,1
-118,2,9,Davidson A,EARTH_SPACE,16,30,4,0,0,3,1,0
-118,2,9,Davidson A,ENERGY,12,20,3,0,0,2,1,0
-118,2,9,Davidson A,MATH,8,10,2,0,2,1,1,2
-118,2,9,Davidson A,PHYSICS,0,10,2,2,0,1,1,2
-119,1,1,Amador Valley A,BIOLOGY,0,10,2,2,0,1,1,2
-119,1,1,Amador Valley A,CHEMISTRY,4,20,2,1,1,2,0,2
-119,1,1,Amador Valley A,EARTH_SPACE,4,10,2,1,1,1,1,2
-119,1,1,Amador Valley A,ENERGY,12,20,3,0,0,2,1,0
-119,1,1,Amador Valley A,MATH,8,10,2,0,2,1,1,2
-119,1,1,Amador Valley A,PHYSICS,4,20,2,1,1,2,0,2
-119,2,35,Cupertino B,BIOLOGY,8,20,2,0,2,2,0,2
-119,2,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
-119,2,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-119,2,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
-119,2,35,Cupertino B,MATH,4,10,1,0,3,1,0,3
-119,2,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
-120,1,22,Amador Valley B,BIOLOGY,4,20,2,1,1,2,0,2
-120,1,22,Amador Valley B,CHEMISTRY,-4,0,0,1,3,0,0,4
-120,1,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-120,1,22,Amador Valley B,ENERGY,8,10,2,0,1,1,1,1
-120,1,22,Amador Valley B,MATH,0,10,1,1,2,1,0,3
-120,1,22,Amador Valley B,PHYSICS,8,10,2,0,2,1,1,2
-120,2,39,El Camino A,BIOLOGY,0,0,0,0,4,0,0,4
-120,2,39,El Camino A,CHEMISTRY,4,10,1,0,3,1,0,3
-120,2,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-120,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-120,2,39,El Camino A,MATH,-4,0,1,2,1,0,1,3
-120,2,39,El Camino A,PHYSICS,0,10,1,1,2,1,0,3
-121,1,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
-121,1,23,American A,CHEMISTRY,16,10,4,0,0,1,3,0
-121,1,23,American A,EARTH_SPACE,4,0,1,0,3,0,1,3
-121,1,23,American A,ENERGY,-4,0,0,1,2,0,0,3
-121,1,23,American A,MATH,8,10,2,0,2,1,1,2
-121,1,23,American A,PHYSICS,0,0,0,0,4,0,0,4
-121,2,30,Chico A,BIOLOGY,0,10,1,1,2,1,0,3
-121,2,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
-121,2,30,Chico A,EARTH_SPACE,8,0,2,0,2,0,2,2
-121,2,30,Chico A,ENERGY,4,10,1,0,2,1,0,2
-121,2,30,Chico A,MATH,4,0,1,0,3,0,1,3
-121,2,30,Chico A,PHYSICS,4,10,2,1,1,1,1,2
-122,1,7,Clovis North,BIOLOGY,8,30,3,1,0,3,0,1
-122,1,7,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
-122,1,7,Clovis North,EARTH_SPACE,4,0,1,0,3,0,1,3
-122,1,7,Clovis North,ENERGY,8,10,2,0,1,1,1,1
-122,1,7,Clovis North,MATH,12,10,3,0,1,1,2,1
-122,1,7,Clovis North,PHYSICS,8,30,3,1,0,3,0,1
-122,2,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
-122,2,25,American B,CHEMISTRY,4,0,1,0,3,0,0,4
-122,2,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
-122,2,25,American B,ENERGY,0,0,0,0,3,0,0,3
-122,2,25,American B,MATH,0,0,0,0,4,0,0,4
-122,2,25,American B,PHYSICS,0,0,0,0,4,0,0,4
-123,1,4,Archbishop Mitty A,BIOLOGY,12,10,3,0,1,1,2,1
-123,1,4,Archbishop Mitty A,CHEMISTRY,0,20,2,2,0,2,0,2
-123,1,4,Archbishop Mitty A,EARTH_SPACE,4,10,2,1,1,1,1,2
-123,1,4,Archbishop Mitty A,ENERGY,0,0,1,1,1,0,1,2
-123,1,4,Archbishop Mitty A,MATH,4,0,1,0,3,0,1,3
-123,1,4,Archbishop Mitty A,PHYSICS,8,20,2,0,2,2,0,2
-123,2,38,Dougherty Valley B,BIOLOGY,0,10,1,1,2,1,0,3
-123,2,38,Dougherty Valley B,CHEMISTRY,-8,0,0,2,2,0,0,4
-123,2,38,Dougherty Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-123,2,38,Dougherty Valley B,ENERGY,0,0,1,1,1,0,1,2
-123,2,38,Dougherty Valley B,MATH,4,0,2,1,1,0,2,2
-123,2,38,Dougherty Valley B,PHYSICS,4,10,1,0,3,1,0,3
-124,1,14,Palo Alto,BIOLOGY,8,10,3,1,0,1,2,1
-124,1,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
-124,1,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-124,1,14,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
-124,1,14,Palo Alto,MATH,8,10,2,0,2,1,1,2
-124,1,14,Palo Alto,PHYSICS,8,30,3,1,0,3,0,1
-124,2,26,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
-124,2,26,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
-124,2,26,Archbishop Mitty B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-124,2,26,Archbishop Mitty B,ENERGY,4,10,1,0,2,1,0,2
-124,2,26,Archbishop Mitty B,MATH,0,0,0,0,4,0,0,4
-124,2,26,Archbishop Mitty B,PHYSICS,4,0,1,0,3,0,1,3
-125,1,21,BASIS Fremont,BIOLOGY,4,10,1,0,3,1,0,3
-125,1,21,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
-125,1,21,BASIS Fremont,EARTH_SPACE,4,20,2,1,1,2,0,2
-125,1,21,BASIS Fremont,ENERGY,0,0,1,1,1,0,1,2
-125,1,21,BASIS Fremont,MATH,0,0,0,0,4,0,0,4
-125,1,21,BASIS Fremont,PHYSICS,8,10,2,0,2,1,1,2
-125,2,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
-125,2,10,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
-125,2,10,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
-125,2,10,Davidson B,ENERGY,0,10,1,1,1,1,0,2
-125,2,10,Davidson B,MATH,4,0,1,0,3,0,1,3
-125,2,10,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
-126,1,5,BASIS Silicon Valley A,BIOLOGY,8,30,3,1,0,3,0,1
-126,1,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-126,1,5,BASIS Silicon Valley A,EARTH_SPACE,12,10,3,0,1,1,2,1
-126,1,5,BASIS Silicon Valley A,ENERGY,8,10,2,0,1,1,1,1
-126,1,5,BASIS Silicon Valley A,MATH,4,0,1,0,3,0,1,3
-126,1,5,BASIS Silicon Valley A,PHYSICS,16,40,4,0,0,4,0,0
-126,2,42,Foothill B,BIOLOGY,-8,0,0,2,2,0,0,4
-126,2,42,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
-126,2,42,Foothill B,EARTH_SPACE,4,0,1,0,3,0,1,3
-126,2,42,Foothill B,ENERGY,0,0,0,0,3,0,0,3
-126,2,42,Foothill B,MATH,0,0,1,1,2,0,1,3
-126,2,42,Foothill B,PHYSICS,-4,0,0,1,3,0,0,4
-127,1,24,BASIS Silicon Valley B,BIOLOGY,-4,0,0,1,3,0,0,4
-127,1,24,BASIS Silicon Valley B,CHEMISTRY,12,30,3,0,1,3,0,1
-127,1,24,BASIS Silicon Valley B,EARTH_SPACE,8,0,2,0,2,0,2,2
-127,1,24,BASIS Silicon Valley B,ENERGY,4,20,2,1,0,2,0,1
-127,1,24,BASIS Silicon Valley B,MATH,8,0,2,0,2,0,2,2
-127,1,24,BASIS Silicon Valley B,PHYSICS,8,10,2,0,2,1,1,2
-127,2,41,Evergreen Valley,BIOLOGY,8,0,2,0,2,0,2,2
-127,2,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-127,2,41,Evergreen Valley,EARTH_SPACE,0,0,0,0,4,0,0,4
-127,2,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-127,2,41,Evergreen Valley,MATH,4,0,1,0,3,0,1,3
-127,2,41,Evergreen Valley,PHYSICS,4,10,1,0,3,1,0,3
-128,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
-128,1,29,California,CHEMISTRY,4,0,2,1,1,0,2,2
-128,1,29,California,EARTH_SPACE,4,0,1,0,3,0,1,3
-128,1,29,California,ENERGY,0,0,0,0,3,0,0,3
-128,1,29,California,MATH,-4,0,0,1,3,0,0,4
-128,1,29,California,PHYSICS,8,10,2,0,2,1,1,2
-128,2,13,Irvington A,BIOLOGY,12,10,3,0,1,1,2,1
-128,2,13,Irvington A,CHEMISTRY,4,20,2,1,1,2,0,2
-128,2,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-128,2,13,Irvington A,ENERGY,12,20,3,0,0,2,1,0
-128,2,13,Irvington A,MATH,12,10,3,0,1,1,2,1
-128,2,13,Irvington A,PHYSICS,4,10,1,0,3,1,0,3
-129,1,32,Chico B,BIOLOGY,4,10,1,0,3,1,0,3
-129,1,32,Chico B,CHEMISTRY,12,0,3,0,1,0,3,1
-129,1,32,Chico B,EARTH_SPACE,4,10,1,0,3,1,0,3
-129,1,32,Chico B,ENERGY,-8,0,0,2,1,0,0,3
-129,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
-129,1,32,Chico B,PHYSICS,8,10,2,0,2,1,1,2
-129,2,27,Irvington B,BIOLOGY,12,30,3,0,1,3,0,1
-129,2,27,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
-129,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
-129,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-129,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
-129,2,27,Irvington B,PHYSICS,4,10,1,0,3,1,0,3
-130,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
-130,1,19,Cupertino A,CHEMISTRY,-4,10,1,2,1,1,0,3
-130,1,19,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-130,1,19,Cupertino A,ENERGY,4,0,1,0,2,0,1,2
-130,1,19,Cupertino A,MATH,4,0,1,0,3,0,1,3
-130,1,19,Cupertino A,PHYSICS,-4,0,1,2,1,0,1,3
-130,2,40,El Camino B,BIOLOGY,0,10,1,1,2,1,0,3
-130,2,40,El Camino B,CHEMISTRY,0,0,0,0,4,0,0,4
-130,2,40,El Camino B,EARTH_SPACE,8,10,2,0,2,1,1,2
-130,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
-130,2,40,El Camino B,MATH,4,0,2,1,1,0,2,2
-130,2,40,El Camino B,PHYSICS,8,0,2,0,2,0,2,2
-131,1,8,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
-131,1,8,Dougherty Valley A,CHEMISTRY,12,10,3,0,1,1,2,1
-131,1,8,Dougherty Valley A,EARTH_SPACE,4,10,1,0,3,1,0,3
-131,1,8,Dougherty Valley A,ENERGY,8,10,2,0,1,1,1,1
-131,1,8,Dougherty Valley A,MATH,8,10,2,0,2,1,1,2
-131,1,8,Dougherty Valley A,PHYSICS,8,20,2,0,2,2,0,2
-131,2,46,Mira Loma B,BIOLOGY,-8,0,0,2,2,0,0,4
-131,2,46,Mira Loma B,CHEMISTRY,4,0,1,0,3,0,1,3
-131,2,46,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
-131,2,46,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
-131,2,46,Mira Loma B,MATH,0,0,0,0,4,0,0,4
-131,2,46,Mira Loma B,PHYSICS,0,0,0,0,4,0,0,4
-132,1,17,Folsom City,BIOLOGY,8,20,3,1,0,2,1,1
-132,1,17,Folsom City,CHEMISTRY,8,10,3,1,0,1,2,1
-132,1,17,Folsom City,EARTH_SPACE,12,10,3,0,1,1,2,1
-132,1,17,Folsom City,ENERGY,12,10,3,0,0,1,2,0
-132,1,17,Folsom City,MATH,8,10,2,0,2,1,1,2
-132,1,17,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
-132,2,48,Quarry Lane B,BIOLOGY,-4,0,0,1,3,0,0,4
-132,2,48,Quarry Lane B,CHEMISTRY,0,0,0,0,4,0,0,4
-132,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-132,2,48,Quarry Lane B,ENERGY,0,0,0,0,3,0,0,3
-132,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-132,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
-133,1,6,Foothill A,BIOLOGY,12,20,3,0,1,2,1,1
-133,1,6,Foothill A,CHEMISTRY,4,20,2,1,1,2,0,2
-133,1,6,Foothill A,EARTH_SPACE,12,0,3,0,1,0,3,1
-133,1,6,Foothill A,ENERGY,4,0,1,0,2,0,1,2
-133,1,6,Foothill A,MATH,0,0,1,1,2,0,1,3
-133,1,6,Foothill A,PHYSICS,8,10,2,0,2,1,1,2
-133,2,36,Homestead,BIOLOGY,0,0,0,0,4,0,0,4
-133,2,36,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
-133,2,36,Homestead,EARTH_SPACE,4,0,1,0,3,0,1,3
-133,2,36,Homestead,ENERGY,4,10,1,0,2,1,0,2
-133,2,36,Homestead,MATH,12,20,3,0,1,2,1,1
-133,2,36,Homestead,PHYSICS,8,10,2,0,2,1,1,2
-134,1,33,Quarry Lane A,BIOLOGY,0,0,0,0,4,0,0,4
-134,1,33,Quarry Lane A,CHEMISTRY,4,0,1,0,3,0,1,3
-134,1,33,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
-134,1,33,Quarry Lane A,ENERGY,-4,0,0,1,2,0,0,3
-134,1,33,Quarry Lane A,MATH,8,0,2,0,2,0,2,2
-134,1,33,Quarry Lane A,PHYSICS,4,0,1,0,3,0,1,3
-134,2,11,GSB A,BIOLOGY,16,40,4,0,0,4,0,0
-134,2,11,GSB A,CHEMISTRY,4,20,2,1,1,2,0,2
-134,2,11,GSB A,EARTH_SPACE,16,20,4,0,0,2,2,0
-134,2,11,GSB A,ENERGY,8,20,2,0,1,2,0,1
-134,2,11,GSB A,MATH,-4,0,0,1,3,0,0,4
-134,2,11,GSB A,PHYSICS,4,20,2,1,1,2,0,2
-135,1,28,GSB B,BIOLOGY,4,10,1,0,3,1,0,3
-135,1,28,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
-135,1,28,GSB B,EARTH_SPACE,8,0,2,0,2,0,2,2
-135,1,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
-135,1,28,GSB B,MATH,8,20,2,0,2,2,0,2
-135,1,28,GSB B,PHYSICS,4,10,1,0,3,1,0,3
-135,2,45,Lynbrook B,BIOLOGY,12,20,3,0,1,2,1,1
-135,2,45,Lynbrook B,CHEMISTRY,8,10,2,0,2,1,1,2
-135,2,45,Lynbrook B,EARTH_SPACE,8,10,2,0,2,1,1,2
-135,2,45,Lynbrook B,ENERGY,4,10,1,0,2,1,0,2
-135,2,45,Lynbrook B,MATH,8,20,2,0,2,2,0,2
-135,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
-136,1,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-136,1,43,Los Gatos,CHEMISTRY,0,0,1,1,2,0,1,3
-136,1,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-136,1,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
-136,1,43,Los Gatos,MATH,0,0,0,0,4,0,0,4
-136,1,43,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
-136,2,16,Mira Loma A,BIOLOGY,12,20,3,0,1,2,1,1
-136,2,16,Mira Loma A,CHEMISTRY,8,30,3,1,0,3,0,1
-136,2,16,Mira Loma A,EARTH_SPACE,8,0,2,0,2,0,2,2
-136,2,16,Mira Loma A,ENERGY,8,0,2,0,1,0,1,2
-136,2,16,Mira Loma A,MATH,4,0,1,0,3,0,1,3
-136,2,16,Mira Loma A,PHYSICS,12,20,3,0,1,2,1,1
-137,1,3,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
-137,1,3,Lynbrook A,CHEMISTRY,16,40,4,0,0,4,0,0
-137,1,3,Lynbrook A,EARTH_SPACE,4,10,2,1,1,1,1,2
-137,1,3,Lynbrook A,ENERGY,4,10,2,1,0,1,1,1
-137,1,3,Lynbrook A,MATH,8,10,2,0,2,1,1,2
-137,1,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
-137,2,31,Mountain House B,BIOLOGY,-4,0,0,1,3,0,0,4
-137,2,31,Mountain House B,CHEMISTRY,-4,0,0,1,3,0,0,4
-137,2,31,Mountain House B,EARTH_SPACE,4,10,1,0,3,1,0,3
-137,2,31,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
-137,2,31,Mountain House B,MATH,-4,0,0,1,3,0,0,4
-137,2,31,Mountain House B,PHYSICS,0,0,0,0,4,0,0,4
-138,1,15,Mission San Jose A,BIOLOGY,8,30,3,1,0,3,0,1
-138,1,15,Mission San Jose A,CHEMISTRY,0,20,2,2,0,2,0,2
-138,1,15,Mission San Jose A,EARTH_SPACE,16,20,4,0,0,2,2,0
-138,1,15,Mission San Jose A,ENERGY,4,10,2,1,0,1,1,1
-138,1,15,Mission San Jose A,MATH,4,10,1,0,3,1,0,3
-138,1,15,Mission San Jose A,PHYSICS,8,10,2,0,2,1,1,2
-138,2,44,Miller,BIOLOGY,4,10,1,0,3,1,0,3
-138,2,44,Miller,CHEMISTRY,4,0,1,0,3,0,1,3
-138,2,44,Miller,EARTH_SPACE,0,0,0,0,4,0,0,4
-138,2,44,Miller,ENERGY,0,0,1,1,1,0,1,2
-138,2,44,Miller,MATH,4,20,2,1,1,2,0,2
-138,2,44,Miller,PHYSICS,8,20,2,0,2,2,0,2
-139,1,37,Mountain House A,BIOLOGY,4,0,1,0,3,0,0,4
-139,1,37,Mountain House A,CHEMISTRY,-4,0,0,1,3,0,0,4
-139,1,37,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
-139,1,37,Mountain House A,ENERGY,8,20,2,0,1,2,0,1
-139,1,37,Mountain House A,MATH,16,30,4,0,0,3,0,1
-139,1,37,Mountain House A,PHYSICS,4,0,1,0,3,0,0,4
-139,2,34,Stanford Online,BIOLOGY,8,20,2,0,2,2,0,2
-139,2,34,Stanford Online,CHEMISTRY,16,20,4,0,0,2,0,2
-139,2,34,Stanford Online,EARTH_SPACE,8,10,2,0,2,1,0,3
-139,2,34,Stanford Online,ENERGY,-8,0,0,2,1,0,0,3
-139,2,34,Stanford Online,MATH,-4,0,0,1,3,0,0,4
-139,2,34,Stanford Online,PHYSICS,12,20,3,0,1,2,0,2
-140,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
-140,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-140,1,47,San Mateo,EARTH_SPACE,4,10,1,0,3,1,0,3
-140,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
-140,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
-140,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-140,2,12,Saratoga,BIOLOGY,8,20,2,0,2,2,0,2
-140,2,12,Saratoga,CHEMISTRY,0,20,2,2,0,2,0,2
-140,2,12,Saratoga,EARTH_SPACE,12,0,3,0,1,0,3,1
-140,2,12,Saratoga,ENERGY,4,20,2,1,0,2,0,1
-140,2,12,Saratoga,MATH,8,30,3,1,0,3,0,1
-140,2,12,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
-=======
-44,1,47,San Mateo,PHYSICS,-4,0,0,1,3,0,0,4
-44,2,1,Folsom City,BIOLOGY,16,20,4,0,0,2,2,0
-44,2,1,Folsom City,CHEMISTRY,12,30,3,0,1,3,0,1
-44,2,1,Folsom City,EARTH_SPACE,16,30,4,0,0,3,1,0
-44,2,1,Folsom City,ENERGY,12,20,3,0,0,2,1,0
-44,2,1,Folsom City,MATH,8,10,2,0,2,1,1,2
-44,2,1,Folsom City,PHYSICS,12,20,3,0,1,2,1,1
-45,1,15,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
-45,1,15,GSB B,CHEMISTRY,8,10,2,0,2,1,1,2
-45,1,15,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
-45,1,15,GSB B,ENERGY,8,10,2,0,1,1,1,1
-45,1,15,GSB B,MATH,4,10,1,0,3,1,0,3
-45,1,15,GSB B,PHYSICS,4,10,1,0,3,1,0,3
-45,2,41,Miller,BIOLOGY,16,30,4,0,0,3,1,0
-45,2,41,Miller,CHEMISTRY,8,0,2,0,2,0,2,2
-45,2,41,Miller,EARTH_SPACE,8,20,2,0,2,2,0,2
-45,2,41,Miller,ENERGY,4,0,1,0,2,0,1,2
-45,2,41,Miller,MATH,12,10,3,0,1,1,2,1
-45,2,41,Miller,PHYSICS,8,10,2,0,2,1,1,2
-46,1,39,Irvington A,BIOLOGY,4,20,2,1,1,2,0,2
-46,1,39,Irvington A,CHEMISTRY,0,10,1,1,2,1,0,3
-46,1,39,Irvington A,EARTH_SPACE,4,10,1,0,3,1,0,3
-46,1,39,Irvington A,ENERGY,4,10,1,0,2,1,0,2
-46,1,39,Irvington A,MATH,4,20,2,1,1,2,0,2
-46,1,39,Irvington A,PHYSICS,16,30,4,0,0,3,0,1
-46,2,42,Lynbrook B,BIOLOGY,-4,10,1,2,1,1,0,3
-46,2,42,Lynbrook B,CHEMISTRY,12,20,3,0,1,2,0,2
-46,2,42,Lynbrook B,EARTH_SPACE,12,0,3,0,1,0,0,4
-46,2,42,Lynbrook B,ENERGY,0,10,1,1,1,1,0,2
-46,2,42,Lynbrook B,MATH,4,10,1,0,3,1,0,3
-46,2,42,Lynbrook B,PHYSICS,-4,0,0,1,3,0,0,4
-47,1,14,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
-47,1,14,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
-47,1,14,Irvington B,EARTH_SPACE,4,0,1,0,3,0,1,3
-47,1,14,Irvington B,ENERGY,0,0,1,1,1,0,1,2
-47,1,14,Irvington B,MATH,8,10,2,0,2,1,1,2
-47,1,14,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
-47,2,43,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-47,2,43,Mira Loma B,CHEMISTRY,12,10,3,0,1,1,2,1
-47,2,43,Mira Loma B,EARTH_SPACE,8,10,2,0,2,1,1,2
-47,2,43,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
-47,2,43,Mira Loma B,MATH,4,0,1,0,3,0,1,3
-47,2,43,Mira Loma B,PHYSICS,8,10,2,0,2,1,1,2
-48,1,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
-48,1,48,Quarry Lane B,CHEMISTRY,8,10,2,0,2,1,1,2
-48,1,48,Quarry Lane B,EARTH_SPACE,4,0,1,0,3,0,1,3
-48,1,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
-48,1,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-48,1,48,Quarry Lane B,PHYSICS,-4,0,0,1,3,0,0,4
-48,2,46,Mission San Jose B,BIOLOGY,8,20,3,1,0,2,1,1
-48,2,46,Mission San Jose B,CHEMISTRY,0,10,2,2,0,1,1,2
-48,2,46,Mission San Jose B,EARTH_SPACE,0,10,2,2,0,1,1,2
-48,2,46,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
-48,2,46,Mission San Jose B,MATH,16,40,4,0,0,4,0,0
-48,2,46,Mission San Jose B,PHYSICS,16,30,4,0,0,3,1,0
-49,1,47,San Mateo,BIOLOGY,8,20,2,0,2,2,0,2
-49,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-49,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
-49,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
-49,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
-49,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-49,2,2,Albany A,BIOLOGY,4,0,1,0,3,0,1,3
-49,2,2,Albany A,CHEMISTRY,4,0,1,0,3,0,1,3
-49,2,2,Albany A,EARTH_SPACE,4,0,1,0,3,0,1,3
-49,2,2,Albany A,ENERGY,0,0,0,0,3,0,0,3
-49,2,2,Albany A,MATH,16,20,4,0,0,2,2,0
-49,2,2,Albany A,PHYSICS,0,0,0,0,4,0,0,4
-50,1,4,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-50,1,4,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
-50,1,4,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-50,1,4,Albany B,ENERGY,4,0,1,0,2,0,1,2
-50,1,4,Albany B,MATH,0,0,0,0,4,0,0,4
-50,1,4,Albany B,PHYSICS,4,0,1,0,3,0,1,3
-50,2,33,Foothill A,BIOLOGY,8,20,3,1,0,2,1,1
-50,2,33,Foothill A,CHEMISTRY,12,20,3,0,1,2,1,1
-50,2,33,Foothill A,EARTH_SPACE,16,10,4,0,0,1,3,0
-50,2,33,Foothill A,ENERGY,4,10,2,1,0,1,1,1
-50,2,33,Foothill A,MATH,16,40,4,0,0,4,0,0
-50,2,33,Foothill A,PHYSICS,4,20,2,1,1,2,0,2
-51,1,6,Amador Valley A,BIOLOGY,-8,0,1,3,0,0,1,3
-51,1,6,Amador Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-51,1,6,Amador Valley A,EARTH_SPACE,16,10,4,0,0,1,3,0
-51,1,6,Amador Valley A,ENERGY,12,30,3,0,0,3,0,0
-51,1,6,Amador Valley A,MATH,16,40,4,0,0,4,0,0
-51,1,6,Amador Valley A,PHYSICS,-4,10,1,2,1,1,0,3
-51,2,28,Mountain House A,BIOLOGY,0,0,0,0,4,0,0,4
-51,2,28,Mountain House A,CHEMISTRY,0,0,0,0,4,0,0,4
-51,2,28,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
-51,2,28,Mountain House A,ENERGY,0,0,0,0,3,0,0,3
-51,2,28,Mountain House A,MATH,0,0,0,0,4,0,0,4
-51,2,28,Mountain House A,PHYSICS,12,30,3,0,1,3,0,1
-52,1,7,Amador Valley B,BIOLOGY,0,0,1,1,2,0,1,3
-52,1,7,Amador Valley B,CHEMISTRY,0,0,1,1,2,0,1,3
-52,1,7,Amador Valley B,EARTH_SPACE,4,0,1,0,3,0,1,3
-52,1,7,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
-52,1,7,Amador Valley B,MATH,-4,10,1,2,1,1,0,3
-52,1,7,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
-52,2,38,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-52,2,38,Los Gatos,CHEMISTRY,12,0,3,0,1,0,3,1
-52,2,38,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-52,2,38,Los Gatos,ENERGY,4,0,1,0,2,0,1,2
-52,2,38,Los Gatos,MATH,12,10,3,0,1,1,2,1
-52,2,38,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
-53,1,10,American A,BIOLOGY,0,0,0,0,4,0,0,4
-53,1,10,American A,CHEMISTRY,0,0,0,0,4,0,0,4
-53,1,10,American A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-53,1,10,American A,ENERGY,0,0,0,0,3,0,0,3
-53,1,10,American A,MATH,0,0,0,0,4,0,0,4
-53,1,10,American A,PHYSICS,-4,0,0,1,3,0,0,4
-53,2,30,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
-53,2,30,Lynbrook A,CHEMISTRY,16,30,4,0,0,3,1,0
-53,2,30,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,1,0
-53,2,30,Lynbrook A,ENERGY,12,20,3,0,0,2,1,0
-53,2,30,Lynbrook A,MATH,16,40,4,0,0,4,0,0
-53,2,30,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
-54,1,12,American B,BIOLOGY,4,10,1,0,3,1,0,3
-54,1,12,American B,CHEMISTRY,0,0,0,0,4,0,0,4
-54,1,12,American B,EARTH_SPACE,4,10,1,0,3,1,0,3
-54,1,12,American B,ENERGY,0,0,0,0,3,0,0,3
-54,1,12,American B,MATH,4,0,1,0,3,0,1,3
-54,1,12,American B,PHYSICS,0,0,0,0,4,0,0,4
-54,2,36,GSB A,BIOLOGY,8,20,3,1,0,2,1,1
-54,2,36,GSB A,CHEMISTRY,12,20,3,0,1,2,1,1
-54,2,36,GSB A,EARTH_SPACE,0,0,0,0,4,0,0,4
-54,2,36,GSB A,ENERGY,-4,10,1,2,0,1,0,2
-54,2,36,GSB A,MATH,8,30,3,1,0,3,0,1
-54,2,36,GSB A,PHYSICS,-4,10,1,2,1,1,0,3
-55,1,9,Archbishop Mitty A,BIOLOGY,16,20,4,0,0,2,1,1
-55,1,9,Archbishop Mitty A,CHEMISTRY,16,40,4,0,0,4,0,0
-55,1,9,Archbishop Mitty A,EARTH_SPACE,16,20,4,0,0,2,2,0
-55,1,9,Archbishop Mitty A,ENERGY,4,10,2,1,0,1,1,1
-55,1,9,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
-55,1,9,Archbishop Mitty A,PHYSICS,-8,0,0,2,2,0,0,4
-55,2,17,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
-55,2,17,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
-55,2,17,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
-55,2,17,Chico A,ENERGY,0,0,0,0,3,0,0,3
-55,2,17,Chico A,MATH,4,0,1,0,3,0,0,4
-55,2,17,Chico A,PHYSICS,4,0,1,0,3,0,1,3
-56,1,13,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
-56,1,13,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
-56,1,13,Archbishop Mitty B,EARTH_SPACE,12,20,3,0,1,2,1,1
-56,1,13,Archbishop Mitty B,ENERGY,-4,0,0,1,2,0,0,3
-56,1,13,Archbishop Mitty B,MATH,12,0,3,0,1,0,3,1
-56,1,13,Archbishop Mitty B,PHYSICS,0,0,0,0,4,0,0,4
-56,2,43,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-56,2,43,Mira Loma B,CHEMISTRY,8,0,2,0,2,0,2,2
-56,2,43,Mira Loma B,EARTH_SPACE,4,10,1,0,3,1,0,3
-56,2,43,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
-56,2,43,Mira Loma B,MATH,4,0,1,0,3,0,1,3
-56,2,43,Mira Loma B,PHYSICS,12,20,3,0,1,2,1,1
-57,1,5,BASIS Fremont,BIOLOGY,0,0,0,0,4,0,0,4
-57,1,5,BASIS Fremont,CHEMISTRY,4,0,1,0,3,0,1,3
-57,1,5,BASIS Fremont,EARTH_SPACE,8,0,3,1,0,0,3,1
-57,1,5,BASIS Fremont,ENERGY,4,0,1,0,2,0,1,2
-57,1,5,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
-57,1,5,BASIS Fremont,PHYSICS,4,10,1,0,3,1,0,3
-57,2,24,Cupertino B,BIOLOGY,12,10,3,0,1,1,2,1
-57,2,24,Cupertino B,CHEMISTRY,8,0,2,0,2,0,2,2
-57,2,24,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-57,2,24,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
-57,2,24,Cupertino B,MATH,4,10,2,1,1,1,1,2
-57,2,24,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
-58,1,31,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
-58,1,31,El Camino A,CHEMISTRY,0,0,0,0,4,0,0,4
-58,1,31,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-58,1,31,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-58,1,31,El Camino A,MATH,4,10,1,0,3,1,0,3
-58,1,31,El Camino A,PHYSICS,4,0,1,0,3,0,1,3
-58,2,8,BASIS Silicon Valley A,BIOLOGY,0,20,2,2,0,2,0,2
-58,2,8,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-58,2,8,BASIS Silicon Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
-58,2,8,BASIS Silicon Valley A,ENERGY,12,30,3,0,0,3,0,0
-58,2,8,BASIS Silicon Valley A,MATH,12,20,3,0,1,2,1,1
-58,2,8,BASIS Silicon Valley A,PHYSICS,4,10,2,1,1,1,1,2
-59,1,11,BASIS Silicon Valley B,BIOLOGY,4,10,1,0,3,1,0,3
-59,1,11,BASIS Silicon Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
-59,1,11,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-59,1,11,BASIS Silicon Valley B,ENERGY,4,0,1,0,2,0,1,2
-59,1,11,BASIS Silicon Valley B,MATH,0,10,1,1,2,1,0,3
-59,1,11,BASIS Silicon Valley B,PHYSICS,8,30,3,1,0,3,0,1
-59,2,21,Clovis North,BIOLOGY,12,30,3,0,1,3,0,1
-59,2,21,Clovis North,CHEMISTRY,12,30,3,0,1,3,0,1
-59,2,21,Clovis North,EARTH_SPACE,4,0,2,1,1,0,2,2
-59,2,21,Clovis North,ENERGY,4,20,2,1,0,2,0,1
-59,2,21,Clovis North,MATH,8,20,3,1,0,2,1,1
-59,2,21,Clovis North,PHYSICS,0,0,0,0,4,0,0,4
-60,1,16,California,BIOLOGY,0,0,0,0,4,0,0,4
-60,1,16,California,CHEMISTRY,4,0,1,0,3,0,0,4
-60,1,16,California,EARTH_SPACE,0,0,0,0,4,0,0,4
-60,1,16,California,ENERGY,-4,0,0,1,2,0,0,3
-60,1,16,California,MATH,0,10,1,1,2,1,0,3
-60,1,16,California,PHYSICS,4,10,1,0,3,1,0,3
-60,2,41,Miller,BIOLOGY,8,20,3,1,0,2,0,2
-60,2,41,Miller,CHEMISTRY,8,10,2,0,2,1,0,3
-60,2,41,Miller,EARTH_SPACE,16,30,4,0,0,3,0,1
-60,2,41,Miller,ENERGY,8,20,2,0,1,2,0,1
-60,2,41,Miller,MATH,12,30,3,0,1,3,0,1
-60,2,41,Miller,PHYSICS,8,20,2,0,2,2,0,2
-61,1,19,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-61,1,19,Chico B,CHEMISTRY,0,0,0,0,4,0,0,4
-61,1,19,Chico B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-61,1,19,Chico B,ENERGY,4,0,1,0,2,0,1,2
-61,1,19,Chico B,MATH,0,0,0,0,4,0,0,4
-61,1,19,Chico B,PHYSICS,0,10,1,1,2,1,0,3
-61,2,44,Palo Alto,BIOLOGY,8,20,3,1,0,2,1,1
-61,2,44,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
-61,2,44,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-61,2,44,Palo Alto,ENERGY,4,20,2,1,0,2,0,1
-61,2,44,Palo Alto,MATH,16,30,4,0,0,3,1,0
-61,2,44,Palo Alto,PHYSICS,12,30,3,0,1,3,0,1
-62,1,26,Davidson A,BIOLOGY,4,0,2,1,1,0,2,2
-62,1,26,Davidson A,CHEMISTRY,16,40,4,0,0,4,0,0
-62,1,26,Davidson A,EARTH_SPACE,16,40,4,0,0,4,0,0
-62,1,26,Davidson A,ENERGY,12,30,3,0,0,3,0,0
-62,1,26,Davidson A,MATH,16,40,4,0,0,4,0,0
-62,1,26,Davidson A,PHYSICS,16,40,4,0,0,4,0,0
-62,2,3,Cupertino A,BIOLOGY,0,0,0,0,4,0,0,4
-62,2,3,Cupertino A,CHEMISTRY,0,0,0,0,4,0,0,4
-62,2,3,Cupertino A,EARTH_SPACE,0,0,0,0,4,0,0,4
-62,2,3,Cupertino A,ENERGY,-4,0,0,1,2,0,0,3
-62,2,3,Cupertino A,MATH,0,0,0,0,4,0,0,4
-62,2,3,Cupertino A,PHYSICS,-4,0,0,1,3,0,0,4
-63,1,27,Davidson B,BIOLOGY,-8,0,0,2,2,0,0,4
-63,1,27,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
-63,1,27,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
-63,1,27,Davidson B,ENERGY,4,0,1,0,2,0,1,2
-63,1,27,Davidson B,MATH,12,20,3,0,1,2,1,1
-63,1,27,Davidson B,PHYSICS,8,10,2,0,2,1,1,2
-63,2,23,Stanford Online,BIOLOGY,8,10,2,0,2,1,1,2
-63,2,23,Stanford Online,CHEMISTRY,4,10,1,0,3,1,0,3
-63,2,23,Stanford Online,EARTH_SPACE,0,0,1,1,2,0,1,3
-63,2,23,Stanford Online,ENERGY,8,20,2,0,1,2,0,1
-63,2,23,Stanford Online,MATH,0,0,1,1,2,0,1,3
-63,2,23,Stanford Online,PHYSICS,0,10,1,1,2,1,0,3
-64,1,20,Dougherty Valley A,BIOLOGY,12,30,3,0,1,3,0,1
-64,1,20,Dougherty Valley A,CHEMISTRY,12,30,3,0,1,3,0,1
-64,1,20,Dougherty Valley A,EARTH_SPACE,12,20,3,0,1,2,1,1
-64,1,20,Dougherty Valley A,ENERGY,8,20,2,0,1,2,0,1
-64,1,20,Dougherty Valley A,MATH,12,10,3,0,1,1,2,1
-64,1,20,Dougherty Valley A,PHYSICS,0,10,1,1,2,1,0,3
-64,2,14,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
-64,2,14,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
-64,2,14,Irvington B,EARTH_SPACE,4,10,1,0,3,1,0,3
-64,2,14,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-64,2,14,Irvington B,MATH,4,0,1,0,3,0,1,3
-64,2,14,Irvington B,PHYSICS,8,0,2,0,2,0,2,2
-65,1,29,Dougherty Valley B,BIOLOGY,12,10,3,0,1,1,2,1
-65,1,29,Dougherty Valley B,CHEMISTRY,8,20,2,0,2,2,0,2
-65,1,29,Dougherty Valley B,EARTH_SPACE,4,10,1,0,3,1,0,3
-65,1,29,Dougherty Valley B,ENERGY,4,20,2,1,0,2,0,1
-65,1,29,Dougherty Valley B,MATH,12,30,3,0,1,3,0,1
-65,1,29,Dougherty Valley B,PHYSICS,4,0,2,1,1,0,2,2
-65,2,18,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
-65,2,18,Mountain House B,CHEMISTRY,4,0,1,0,3,0,1,3
-65,2,18,Mountain House B,EARTH_SPACE,8,10,2,0,2,1,1,2
-65,2,18,Mountain House B,ENERGY,4,10,1,0,2,1,0,2
-65,2,18,Mountain House B,MATH,4,0,1,0,3,0,1,3
-65,2,18,Mountain House B,PHYSICS,0,0,1,1,2,0,1,3
-66,1,34,El Camino B,BIOLOGY,4,0,2,1,1,0,2,2
-66,1,34,El Camino B,CHEMISTRY,4,0,1,0,3,0,1,3
-66,1,34,El Camino B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-66,1,34,El Camino B,ENERGY,12,0,3,0,0,0,3,0
-66,1,34,El Camino B,MATH,4,10,2,1,1,1,1,2
-66,1,34,El Camino B,PHYSICS,4,0,1,0,3,0,1,3
-66,2,25,Homestead,BIOLOGY,0,0,1,1,2,0,1,3
-66,2,25,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
-66,2,25,Homestead,EARTH_SPACE,8,10,2,0,2,1,1,2
-66,2,25,Homestead,ENERGY,-4,0,0,1,2,0,0,3
-66,2,25,Homestead,MATH,0,0,1,1,2,0,1,3
-66,2,25,Homestead,PHYSICS,4,0,1,0,3,0,1,3
-67,1,35,Evergreen Valley,BIOLOGY,4,10,2,1,1,1,1,2
-67,1,35,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-67,1,35,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
-67,1,35,Evergreen Valley,ENERGY,4,0,1,0,2,0,1,2
-67,1,35,Evergreen Valley,MATH,8,10,2,0,2,1,1,2
-67,1,35,Evergreen Valley,PHYSICS,4,0,1,0,3,0,1,3
-67,2,22,Quarry Lane A,BIOLOGY,4,0,2,1,1,0,2,2
-67,2,22,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
-67,2,22,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
-67,2,22,Quarry Lane A,ENERGY,4,10,1,0,2,1,0,2
-67,2,22,Quarry Lane A,MATH,0,0,0,0,4,0,0,4
-67,2,22,Quarry Lane A,PHYSICS,-4,0,0,1,3,0,0,4
-68,1,1,Folsom City,BIOLOGY,4,10,1,0,3,1,0,3
-68,1,1,Folsom City,CHEMISTRY,0,0,0,0,4,0,0,4
-68,1,1,Folsom City,EARTH_SPACE,4,10,1,0,3,1,0,3
-68,1,1,Folsom City,ENERGY,8,10,2,0,1,1,1,1
-68,1,1,Folsom City,MATH,4,0,1,0,3,0,1,3
-68,1,1,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
-68,2,46,Mission San Jose B,BIOLOGY,4,10,2,1,1,1,1,2
-68,2,46,Mission San Jose B,CHEMISTRY,12,20,3,0,1,2,1,1
-68,2,46,Mission San Jose B,EARTH_SPACE,12,30,3,0,1,3,0,1
-68,2,46,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
-68,2,46,Mission San Jose B,MATH,8,30,3,1,0,3,0,1
-68,2,46,Mission San Jose B,PHYSICS,8,20,3,1,0,2,1,1
-69,1,32,Mira Loma A,BIOLOGY,8,20,3,1,0,2,1,1
-69,1,32,Mira Loma A,CHEMISTRY,-4,10,1,2,1,1,0,3
-69,1,32,Mira Loma A,EARTH_SPACE,12,0,3,0,1,0,3,1
-69,1,32,Mira Loma A,ENERGY,4,0,2,1,0,0,2,1
-69,1,32,Mira Loma A,MATH,8,10,2,0,2,1,0,3
-69,1,32,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
-69,2,37,Foothill B,BIOLOGY,0,0,0,0,4,0,0,4
-69,2,37,Foothill B,CHEMISTRY,4,0,2,1,1,0,2,2
-69,2,37,Foothill B,EARTH_SPACE,0,0,0,0,4,0,0,4
-69,2,37,Foothill B,ENERGY,0,0,0,0,3,0,0,3
-69,2,37,Foothill B,MATH,8,10,2,0,2,1,1,2
-69,2,37,Foothill B,PHYSICS,0,0,0,0,4,0,0,4
-70,1,39,Irvington A,BIOLOGY,4,10,2,1,1,1,1,2
-70,1,39,Irvington A,CHEMISTRY,4,10,2,1,1,1,1,2
-70,1,39,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-70,1,39,Irvington A,ENERGY,12,30,3,0,0,3,0,0
-70,1,39,Irvington A,MATH,8,20,3,1,0,2,1,1
-70,1,39,Irvington A,PHYSICS,12,30,3,0,1,3,0,1
-70,2,15,GSB B,BIOLOGY,4,0,1,0,3,0,1,3
-70,2,15,GSB B,CHEMISTRY,4,0,1,0,3,0,1,3
-70,2,15,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
-70,2,15,GSB B,ENERGY,0,0,0,0,3,0,0,3
-70,2,15,GSB B,MATH,4,10,1,0,3,1,0,3
-70,2,15,GSB B,PHYSICS,0,0,0,0,4,0,0,4
-71,1,40,Mission San Jose A,BIOLOGY,12,30,3,0,1,3,0,1
-71,1,40,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
-71,1,40,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
-71,1,40,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
-71,1,40,Mission San Jose A,MATH,8,30,3,1,0,3,0,1
-71,1,40,Mission San Jose A,PHYSICS,12,30,3,0,1,3,0,1
-71,2,42,Lynbrook B,BIOLOGY,0,10,1,1,2,1,0,3
-71,2,42,Lynbrook B,CHEMISTRY,0,10,1,1,2,1,0,3
-71,2,42,Lynbrook B,EARTH_SPACE,0,0,0,0,4,0,0,4
-71,2,42,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
-71,2,42,Lynbrook B,MATH,0,10,1,1,2,1,0,3
-71,2,42,Lynbrook B,PHYSICS,0,0,0,0,4,0,0,4
-72,1,45,Saratoga,BIOLOGY,12,30,3,0,1,3,0,1
-72,1,45,Saratoga,CHEMISTRY,8,30,3,1,0,3,0,1
-72,1,45,Saratoga,EARTH_SPACE,12,20,3,0,1,2,1,1
-72,1,45,Saratoga,ENERGY,12,30,3,0,0,3,0,0
-72,1,45,Saratoga,MATH,16,20,4,0,0,2,2,0
-72,1,45,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
-72,2,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
-72,2,48,Quarry Lane B,CHEMISTRY,4,10,1,0,3,1,0,3
-72,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-72,2,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
-72,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-72,2,48,Quarry Lane B,PHYSICS,0,0,0,0,4,0,0,4
-73,1,2,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-73,1,2,Albany A,CHEMISTRY,4,10,1,0,3,1,0,3
-73,1,2,Albany A,EARTH_SPACE,0,0,0,0,4,0,0,4
-73,1,2,Albany A,ENERGY,0,0,0,0,3,0,0,3
-73,1,2,Albany A,MATH,0,0,0,0,4,0,0,4
-73,1,2,Albany A,PHYSICS,4,0,1,0,3,0,1,3
-73,2,48,Quarry Lane B,BIOLOGY,12,20,3,0,1,2,1,1
-73,2,48,Quarry Lane B,CHEMISTRY,0,0,1,1,2,0,1,3
-73,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-73,2,48,Quarry Lane B,ENERGY,4,0,1,0,2,0,1,2
-73,2,48,Quarry Lane B,MATH,12,10,3,0,1,1,2,1
-73,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
-74,1,34,El Camino B,BIOLOGY,12,10,3,0,1,1,2,1
-74,1,34,El Camino B,CHEMISTRY,12,10,3,0,1,1,2,1
-74,1,34,El Camino B,EARTH_SPACE,8,0,2,0,2,0,2,2
-74,1,34,El Camino B,ENERGY,8,20,2,0,1,2,0,1
-74,1,34,El Camino B,MATH,-4,0,0,1,3,0,0,4
-74,1,34,El Camino B,PHYSICS,0,0,0,0,4,0,0,4
-74,2,4,Albany B,BIOLOGY,4,10,1,0,3,1,0,3
-74,2,4,Albany B,CHEMISTRY,4,0,1,0,3,0,1,3
-74,2,4,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-74,2,4,Albany B,ENERGY,0,0,0,0,3,0,0,3
-74,2,4,Albany B,MATH,4,0,1,0,3,0,1,3
-74,2,4,Albany B,PHYSICS,4,10,1,0,3,1,0,3
-75,1,27,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
-75,1,27,Davidson B,CHEMISTRY,4,10,1,0,3,1,0,3
-75,1,27,Davidson B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-75,1,27,Davidson B,ENERGY,4,10,1,0,2,1,0,2
-75,1,27,Davidson B,MATH,8,20,2,0,2,2,0,2
-75,1,27,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
-75,2,6,Amador Valley A,BIOLOGY,0,0,2,2,0,0,2,2
-75,2,6,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
-75,2,6,Amador Valley A,EARTH_SPACE,8,20,3,1,0,2,1,1
-75,2,6,Amador Valley A,ENERGY,-4,10,1,2,0,1,0,2
-75,2,6,Amador Valley A,MATH,8,20,2,0,2,2,0,2
-75,2,6,Amador Valley A,PHYSICS,12,10,3,0,1,1,2,1
-76,1,37,Foothill B,BIOLOGY,8,0,2,0,2,0,2,2
-76,1,37,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
-76,1,37,Foothill B,EARTH_SPACE,8,10,2,0,2,1,1,2
-76,1,37,Foothill B,ENERGY,4,10,1,0,2,1,0,2
-76,1,37,Foothill B,MATH,4,10,1,0,3,1,0,3
-76,1,37,Foothill B,PHYSICS,8,0,2,0,2,0,2,2
-76,2,7,Amador Valley B,BIOLOGY,4,10,1,0,3,1,0,3
-76,2,7,Amador Valley B,CHEMISTRY,8,0,2,0,2,0,2,2
-76,2,7,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-76,2,7,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
-76,2,7,Amador Valley B,MATH,12,30,3,0,1,3,0,1
-76,2,7,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
-77,1,29,Dougherty Valley B,BIOLOGY,12,30,3,0,1,3,0,1
-77,1,29,Dougherty Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
-77,1,29,Dougherty Valley B,EARTH_SPACE,0,10,1,1,2,1,0,3
-77,1,29,Dougherty Valley B,ENERGY,8,0,2,0,1,0,2,1
-77,1,29,Dougherty Valley B,MATH,4,20,2,1,1,2,0,2
-77,1,29,Dougherty Valley B,PHYSICS,0,10,1,1,2,1,0,3
-77,2,10,American A,BIOLOGY,0,0,0,0,4,0,0,4
-77,2,10,American A,CHEMISTRY,12,10,3,0,1,1,2,1
-77,2,10,American A,EARTH_SPACE,4,10,1,0,3,1,0,3
-77,2,10,American A,ENERGY,-4,0,0,1,2,0,0,3
-77,2,10,American A,MATH,0,0,1,1,2,0,1,3
-77,2,10,American A,PHYSICS,8,10,2,0,2,1,1,2
-78,1,35,Evergreen Valley,BIOLOGY,16,0,4,0,0,0,4,0
-78,1,35,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-78,1,35,Evergreen Valley,EARTH_SPACE,4,10,1,0,3,1,0,3
-78,1,35,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-78,1,35,Evergreen Valley,MATH,4,10,2,1,1,1,1,2
-78,1,35,Evergreen Valley,PHYSICS,8,0,2,0,2,0,2,2
-78,2,12,American B,BIOLOGY,0,0,0,0,4,0,0,4
-78,2,12,American B,CHEMISTRY,4,0,1,0,3,0,1,3
-78,2,12,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
-78,2,12,American B,ENERGY,4,10,1,0,2,1,0,2
-78,2,12,American B,MATH,8,0,2,0,2,0,2,2
-78,2,12,American B,PHYSICS,8,10,2,0,2,1,1,2
-79,1,18,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
-79,1,18,Mountain House B,CHEMISTRY,0,0,0,0,4,0,0,4
-79,1,18,Mountain House B,EARTH_SPACE,4,0,1,0,3,0,1,3
-79,1,18,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
-79,1,18,Mountain House B,MATH,4,0,1,0,3,0,1,3
-79,1,18,Mountain House B,PHYSICS,4,10,1,0,3,1,0,3
-79,2,9,Archbishop Mitty A,BIOLOGY,12,20,3,0,1,2,1,1
-79,2,9,Archbishop Mitty A,CHEMISTRY,8,20,3,1,0,2,1,1
-79,2,9,Archbishop Mitty A,EARTH_SPACE,8,10,2,0,2,1,1,2
-79,2,9,Archbishop Mitty A,ENERGY,-4,0,0,1,2,0,0,3
-79,2,9,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
-79,2,9,Archbishop Mitty A,PHYSICS,4,0,2,1,1,0,2,2
-80,1,13,Archbishop Mitty B,BIOLOGY,0,0,0,0,4,0,0,4
-80,1,13,Archbishop Mitty B,CHEMISTRY,4,0,1,0,3,0,1,3
-80,1,13,Archbishop Mitty B,EARTH_SPACE,0,10,1,1,2,1,0,3
-80,1,13,Archbishop Mitty B,ENERGY,0,0,0,0,3,0,0,3
-80,1,13,Archbishop Mitty B,MATH,0,10,1,1,2,1,0,3
-80,1,13,Archbishop Mitty B,PHYSICS,8,0,2,0,2,0,2,2
-80,2,20,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
-80,2,20,Dougherty Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
-80,2,20,Dougherty Valley A,EARTH_SPACE,8,20,2,0,2,2,0,2
-80,2,20,Dougherty Valley A,ENERGY,12,10,3,0,0,1,2,0
-80,2,20,Dougherty Valley A,MATH,8,20,2,0,2,2,0,2
-80,2,20,Dougherty Valley A,PHYSICS,4,0,2,1,1,0,2,2
-81,1,5,BASIS Fremont,BIOLOGY,8,0,3,1,0,0,3,1
-81,1,5,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
-81,1,5,BASIS Fremont,EARTH_SPACE,4,10,1,0,3,1,0,3
-81,1,5,BASIS Fremont,ENERGY,0,0,0,0,3,0,0,3
-81,1,5,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
-81,1,5,BASIS Fremont,PHYSICS,4,0,1,0,3,0,1,3
-81,2,23,Stanford Online,BIOLOGY,4,0,1,0,3,0,1,3
-81,2,23,Stanford Online,CHEMISTRY,4,20,2,1,1,2,0,2
-81,2,23,Stanford Online,EARTH_SPACE,4,0,1,0,3,0,1,3
-81,2,23,Stanford Online,ENERGY,-4,10,1,2,0,1,0,2
-81,2,23,Stanford Online,MATH,-4,0,0,1,3,0,0,4
-81,2,23,Stanford Online,PHYSICS,4,0,1,0,3,0,1,3
-82,1,8,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
-82,1,8,BASIS Silicon Valley A,CHEMISTRY,8,20,2,0,2,2,0,2
-82,1,8,BASIS Silicon Valley A,EARTH_SPACE,0,0,0,0,4,0,0,4
-82,1,8,BASIS Silicon Valley A,ENERGY,4,10,2,1,0,1,1,1
-82,1,8,BASIS Silicon Valley A,MATH,4,20,2,1,1,2,0,2
-82,1,8,BASIS Silicon Valley A,PHYSICS,4,20,2,1,1,2,0,2
-82,2,32,Mira Loma A,BIOLOGY,-4,0,0,1,3,0,0,4
-82,2,32,Mira Loma A,CHEMISTRY,8,20,2,0,2,2,0,2
-82,2,32,Mira Loma A,EARTH_SPACE,16,20,4,0,0,2,2,0
-82,2,32,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
-82,2,32,Mira Loma A,MATH,8,10,2,0,2,1,1,2
-82,2,32,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
-83,1,22,Quarry Lane A,BIOLOGY,-4,0,0,1,3,0,0,4
-83,1,22,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
-83,1,22,Quarry Lane A,EARTH_SPACE,0,10,1,1,2,1,0,3
-83,1,22,Quarry Lane A,ENERGY,0,0,0,0,3,0,0,3
-83,1,22,Quarry Lane A,MATH,4,0,1,0,3,0,1,3
-83,1,22,Quarry Lane A,PHYSICS,0,0,0,0,4,0,0,4
-83,2,11,BASIS Silicon Valley B,BIOLOGY,12,10,3,0,1,1,2,1
-83,2,11,BASIS Silicon Valley B,CHEMISTRY,4,20,2,1,1,2,0,2
-83,2,11,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-83,2,11,BASIS Silicon Valley B,ENERGY,-4,0,1,2,0,0,1,2
-83,2,11,BASIS Silicon Valley B,MATH,8,30,3,1,0,3,0,1
-83,2,11,BASIS Silicon Valley B,PHYSICS,16,20,4,0,0,2,2,0
-84,1,16,California,BIOLOGY,-4,0,0,1,3,0,0,4
-84,1,16,California,CHEMISTRY,16,10,4,0,0,1,3,0
-84,1,16,California,EARTH_SPACE,0,10,1,1,2,1,0,3
-84,1,16,California,ENERGY,12,20,3,0,0,2,1,0
-84,1,16,California,MATH,0,0,0,0,4,0,0,4
-84,1,16,California,PHYSICS,12,10,3,0,1,1,2,1
-84,2,42,Lynbrook B,BIOLOGY,16,20,4,0,0,2,2,0
-84,2,42,Lynbrook B,CHEMISTRY,-4,0,0,1,3,0,0,4
-84,2,42,Lynbrook B,EARTH_SPACE,8,20,2,0,2,2,0,2
-84,2,42,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
-84,2,42,Lynbrook B,MATH,12,30,3,0,1,3,0,1
-84,2,42,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
-85,1,17,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
-85,1,17,Chico A,CHEMISTRY,4,0,1,0,3,0,0,4
-85,1,17,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
-85,1,17,Chico A,ENERGY,0,0,0,0,3,0,0,3
-85,1,17,Chico A,MATH,0,0,0,0,4,0,0,4
-85,1,17,Chico A,PHYSICS,0,0,0,0,4,0,0,4
-85,2,30,Lynbrook A,BIOLOGY,8,30,3,1,0,3,0,1
-85,2,30,Lynbrook A,CHEMISTRY,4,20,2,1,1,2,0,2
-85,2,30,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,0,1
-85,2,30,Lynbrook A,ENERGY,8,20,2,0,1,2,0,1
-85,2,30,Lynbrook A,MATH,12,30,3,0,1,3,0,1
-85,2,30,Lynbrook A,PHYSICS,0,20,2,2,0,2,0,2
-86,1,19,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
-86,1,19,Chico B,CHEMISTRY,-4,0,0,1,3,0,0,4
-86,1,19,Chico B,EARTH_SPACE,0,10,1,1,2,1,0,3
-86,1,19,Chico B,ENERGY,8,0,2,0,1,0,2,1
-86,1,19,Chico B,MATH,0,0,0,0,4,0,0,4
-86,1,19,Chico B,PHYSICS,-4,0,0,1,3,0,0,4
-86,2,43,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
-86,2,43,Mira Loma B,CHEMISTRY,12,20,3,0,1,2,1,1
-86,2,43,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
-86,2,43,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
-86,2,43,Mira Loma B,MATH,12,10,3,0,1,1,2,1
-86,2,43,Mira Loma B,PHYSICS,8,0,2,0,2,0,2,2
-87,1,21,Clovis North,BIOLOGY,8,20,2,0,2,2,0,2
-87,1,21,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
-87,1,21,Clovis North,EARTH_SPACE,8,0,2,0,2,0,2,2
-87,1,21,Clovis North,ENERGY,8,20,2,0,1,2,0,1
-87,1,21,Clovis North,MATH,0,0,0,0,4,0,0,4
-87,1,21,Clovis North,PHYSICS,4,10,1,0,3,1,0,3
-87,2,36,GSB A,BIOLOGY,4,10,1,0,3,1,0,3
-87,2,36,GSB A,CHEMISTRY,-4,0,0,1,3,0,0,4
-87,2,36,GSB A,EARTH_SPACE,0,10,1,1,2,1,0,3
-87,2,36,GSB A,ENERGY,0,0,1,1,1,0,1,2
-87,2,36,GSB A,MATH,12,30,3,0,1,3,0,1
-87,2,36,GSB A,PHYSICS,4,10,2,1,1,1,1,2
-88,1,3,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
-88,1,3,Cupertino A,CHEMISTRY,16,30,4,0,0,3,1,0
-88,1,3,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-88,1,3,Cupertino A,ENERGY,8,10,2,0,1,1,1,1
-88,1,3,Cupertino A,MATH,4,0,2,1,1,0,2,2
-88,1,3,Cupertino A,PHYSICS,8,20,2,0,2,2,0,2
-88,2,25,Homestead,BIOLOGY,8,10,2,0,2,1,1,2
-88,2,25,Homestead,CHEMISTRY,0,0,0,0,4,0,0,4
-88,2,25,Homestead,EARTH_SPACE,0,0,0,0,4,0,0,4
-88,2,25,Homestead,ENERGY,4,0,1,0,2,0,1,2
-88,2,25,Homestead,MATH,4,0,1,0,3,0,1,3
-88,2,25,Homestead,PHYSICS,8,10,2,0,2,1,1,2
-89,1,24,Cupertino B,BIOLOGY,0,10,1,1,2,1,0,3
-89,1,24,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
-89,1,24,Cupertino B,EARTH_SPACE,4,0,1,0,3,0,1,3
-89,1,24,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
-89,1,24,Cupertino B,MATH,8,10,2,0,2,1,1,2
-89,1,24,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
-89,2,28,Mountain House A,BIOLOGY,4,0,1,0,3,0,1,3
-89,2,28,Mountain House A,CHEMISTRY,-8,0,0,2,2,0,0,4
-89,2,28,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
-89,2,28,Mountain House A,ENERGY,8,0,2,0,1,0,2,1
-89,2,28,Mountain House A,MATH,8,10,2,0,2,1,1,2
-89,2,28,Mountain House A,PHYSICS,16,30,4,0,0,3,1,0
-90,1,26,Davidson A,BIOLOGY,12,20,3,0,1,2,1,1
-90,1,26,Davidson A,CHEMISTRY,8,20,3,1,0,2,1,1
-90,1,26,Davidson A,EARTH_SPACE,8,20,2,0,2,2,0,2
-90,1,26,Davidson A,ENERGY,12,30,3,0,0,3,0,0
-90,1,26,Davidson A,MATH,12,30,3,0,1,3,0,1
-90,1,26,Davidson A,PHYSICS,12,20,3,0,1,2,1,1
-90,2,33,Foothill A,BIOLOGY,4,10,1,0,3,1,0,3
-90,2,33,Foothill A,CHEMISTRY,0,0,1,1,2,0,1,3
-90,2,33,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
-90,2,33,Foothill A,ENERGY,0,0,0,0,3,0,0,3
-90,2,33,Foothill A,MATH,4,10,1,0,3,1,0,3
-90,2,33,Foothill A,PHYSICS,0,10,1,1,2,1,0,3
-91,1,38,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-91,1,38,Los Gatos,CHEMISTRY,12,20,3,0,1,2,1,1
-91,1,38,Los Gatos,EARTH_SPACE,4,0,1,0,3,0,1,3
-91,1,38,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
-91,1,38,Los Gatos,MATH,4,10,1,0,3,1,0,3
-91,1,38,Los Gatos,PHYSICS,-4,0,1,2,1,0,0,4
-91,2,31,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
-91,2,31,El Camino A,CHEMISTRY,-4,0,0,1,3,0,0,4
-91,2,31,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-91,2,31,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-91,2,31,El Camino A,MATH,8,0,2,0,2,0,2,2
-91,2,31,El Camino A,PHYSICS,8,10,2,0,2,1,1,2
-92,1,1,Folsom City,BIOLOGY,12,10,3,0,1,1,2,1
-92,1,1,Folsom City,CHEMISTRY,-4,0,0,1,3,0,0,4
-92,1,1,Folsom City,EARTH_SPACE,4,20,2,1,1,2,0,2
-92,1,1,Folsom City,ENERGY,0,0,0,0,3,0,0,3
-92,1,1,Folsom City,MATH,12,30,3,0,1,3,0,1
-92,1,1,Folsom City,PHYSICS,-4,0,0,1,3,0,0,4
-92,2,45,Saratoga,BIOLOGY,4,10,1,0,3,1,0,3
-92,2,45,Saratoga,CHEMISTRY,12,30,3,0,1,3,0,1
-92,2,45,Saratoga,EARTH_SPACE,8,10,2,0,2,1,1,2
-92,2,45,Saratoga,ENERGY,4,10,2,1,0,1,1,1
-92,2,45,Saratoga,MATH,4,0,1,0,3,0,1,3
-92,2,45,Saratoga,PHYSICS,12,20,3,0,1,2,1,1
-93,1,40,Mission San Jose A,BIOLOGY,16,30,4,0,0,3,1,0
-93,1,40,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
-93,1,40,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
-93,1,40,Mission San Jose A,ENERGY,12,20,3,0,0,2,1,0
-93,1,40,Mission San Jose A,MATH,8,20,2,0,2,2,0,2
-93,1,40,Mission San Jose A,PHYSICS,0,20,2,2,0,2,0,2
-93,2,15,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
-93,2,15,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
-93,2,15,GSB B,EARTH_SPACE,0,0,0,0,4,0,0,4
-93,2,15,GSB B,ENERGY,0,0,0,0,3,0,0,3
-93,2,15,GSB B,MATH,8,20,2,0,2,2,0,2
-93,2,15,GSB B,PHYSICS,8,10,2,0,2,1,1,2
-94,1,39,Irvington A,BIOLOGY,0,10,1,1,2,1,0,3
-94,1,39,Irvington A,CHEMISTRY,16,30,4,0,0,3,1,0
-94,1,39,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-94,1,39,Irvington A,ENERGY,0,10,1,1,1,1,0,2
-94,1,39,Irvington A,MATH,4,10,1,0,3,1,0,3
-94,1,39,Irvington A,PHYSICS,8,10,2,0,2,1,1,2
-94,2,41,Miller,BIOLOGY,12,0,3,0,1,0,3,1
-94,2,41,Miller,CHEMISTRY,0,0,0,0,4,0,0,4
-94,2,41,Miller,EARTH_SPACE,0,10,1,1,2,1,0,3
-94,2,41,Miller,ENERGY,0,0,0,0,3,0,0,3
-94,2,41,Miller,MATH,8,20,2,0,2,2,0,2
-94,2,41,Miller,PHYSICS,8,10,2,0,2,1,1,2
-95,1,44,Palo Alto,BIOLOGY,16,40,4,0,0,4,0,0
-95,1,44,Palo Alto,CHEMISTRY,8,30,3,1,0,3,0,1
-95,1,44,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-95,1,44,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
-95,1,44,Palo Alto,MATH,12,30,3,0,1,3,0,1
-95,1,44,Palo Alto,PHYSICS,8,20,3,1,0,2,1,1
-95,2,14,Irvington B,BIOLOGY,0,0,0,0,4,0,0,4
-95,2,14,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
-95,2,14,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
-95,2,14,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-95,2,14,Irvington B,MATH,4,0,1,0,3,0,1,3
-95,2,14,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
-96,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
-96,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
-96,1,47,San Mateo,EARTH_SPACE,4,10,1,0,3,1,0,3
-96,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
-96,1,47,San Mateo,MATH,4,0,1,0,3,0,1,3
-96,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-96,2,46,Mission San Jose B,BIOLOGY,4,20,2,1,1,2,0,2
-96,2,46,Mission San Jose B,CHEMISTRY,4,20,2,1,1,2,0,2
-96,2,46,Mission San Jose B,EARTH_SPACE,12,20,3,0,1,2,0,2
-96,2,46,Mission San Jose B,ENERGY,4,10,2,1,0,1,1,1
-96,2,46,Mission San Jose B,MATH,0,20,2,2,0,2,0,2
-96,2,46,Mission San Jose B,PHYSICS,16,20,4,0,0,2,2,0
-97,1,2,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
-97,1,2,Albany A,CHEMISTRY,0,0,1,1,2,0,1,3
-97,1,2,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
-97,1,2,Albany A,ENERGY,0,0,0,0,3,0,0,3
-97,1,2,Albany A,MATH,-4,0,0,1,3,0,0,4
-97,1,2,Albany A,PHYSICS,0,0,0,0,4,0,0,4
-97,2,46,Mission San Jose B,BIOLOGY,8,30,3,1,0,3,0,1
-97,2,46,Mission San Jose B,CHEMISTRY,4,10,2,1,1,1,1,2
-97,2,46,Mission San Jose B,EARTH_SPACE,8,10,3,1,0,1,2,1
-97,2,46,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
-97,2,46,Mission San Jose B,MATH,0,10,1,1,2,1,0,3
-97,2,46,Mission San Jose B,PHYSICS,16,40,4,0,0,4,0,0
-98,1,4,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
-98,1,4,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
-98,1,4,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
-98,1,4,Albany B,ENERGY,0,0,0,0,3,0,0,3
-98,1,4,Albany B,MATH,0,0,0,0,4,0,0,4
-98,1,4,Albany B,PHYSICS,0,0,0,0,4,0,0,4
-98,2,26,Davidson A,BIOLOGY,16,30,4,0,0,3,1,0
-98,2,26,Davidson A,CHEMISTRY,8,30,3,1,0,3,0,1
-98,2,26,Davidson A,EARTH_SPACE,16,30,4,0,0,3,1,0
-98,2,26,Davidson A,ENERGY,12,20,3,0,0,2,1,0
-98,2,26,Davidson A,MATH,8,10,2,0,2,1,1,2
-98,2,26,Davidson A,PHYSICS,0,10,2,2,0,1,1,2
-99,1,6,Amador Valley A,BIOLOGY,0,10,2,2,0,1,1,2
-99,1,6,Amador Valley A,CHEMISTRY,4,20,2,1,1,2,0,2
-99,1,6,Amador Valley A,EARTH_SPACE,4,10,2,1,1,1,1,2
-99,1,6,Amador Valley A,ENERGY,12,20,3,0,0,2,1,0
-99,1,6,Amador Valley A,MATH,8,10,2,0,2,1,1,2
-99,1,6,Amador Valley A,PHYSICS,4,20,2,1,1,2,0,2
-99,2,24,Cupertino B,BIOLOGY,8,20,2,0,2,2,0,2
-99,2,24,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
-99,2,24,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
-99,2,24,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
-99,2,24,Cupertino B,MATH,4,10,1,0,3,1,0,3
-99,2,24,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
-100,1,7,Amador Valley B,BIOLOGY,4,20,2,1,1,2,0,2
-100,1,7,Amador Valley B,CHEMISTRY,-4,0,0,1,3,0,0,4
-100,1,7,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-100,1,7,Amador Valley B,ENERGY,8,10,2,0,1,1,1,1
-100,1,7,Amador Valley B,MATH,0,10,1,1,2,1,0,3
-100,1,7,Amador Valley B,PHYSICS,8,10,2,0,2,1,1,2
-100,2,31,El Camino A,BIOLOGY,0,0,0,0,4,0,0,4
-100,2,31,El Camino A,CHEMISTRY,4,10,1,0,3,1,0,3
-100,2,31,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-100,2,31,El Camino A,ENERGY,0,0,0,0,3,0,0,3
-100,2,31,El Camino A,MATH,-4,0,1,2,1,0,1,3
-100,2,31,El Camino A,PHYSICS,0,10,1,1,2,1,0,3
-101,1,10,American A,BIOLOGY,0,0,0,0,4,0,0,4
-101,1,10,American A,CHEMISTRY,16,10,4,0,0,1,3,0
-101,1,10,American A,EARTH_SPACE,4,0,1,0,3,0,1,3
-101,1,10,American A,ENERGY,-4,0,0,1,2,0,0,3
-101,1,10,American A,MATH,8,10,2,0,2,1,1,2
-101,1,10,American A,PHYSICS,0,0,0,0,4,0,0,4
-101,2,17,Chico A,BIOLOGY,0,10,1,1,2,1,0,3
-101,2,17,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
-101,2,17,Chico A,EARTH_SPACE,8,0,2,0,2,0,2,2
-101,2,17,Chico A,ENERGY,4,10,1,0,2,1,0,2
-101,2,17,Chico A,MATH,4,0,1,0,3,0,1,3
-101,2,17,Chico A,PHYSICS,4,10,2,1,1,1,1,2
-102,1,21,Clovis North,BIOLOGY,8,30,3,1,0,3,0,1
-102,1,21,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
-102,1,21,Clovis North,EARTH_SPACE,4,0,1,0,3,0,1,3
-102,1,21,Clovis North,ENERGY,8,10,2,0,1,1,1,1
-102,1,21,Clovis North,MATH,12,10,3,0,1,1,2,1
-102,1,21,Clovis North,PHYSICS,8,30,3,1,0,3,0,1
-102,2,12,American B,BIOLOGY,4,10,1,0,3,1,0,3
-102,2,12,American B,CHEMISTRY,4,0,1,0,3,0,0,4
-102,2,12,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
-102,2,12,American B,ENERGY,0,0,0,0,3,0,0,3
-102,2,12,American B,MATH,0,0,0,0,4,0,0,4
-102,2,12,American B,PHYSICS,0,0,0,0,4,0,0,4
-103,1,9,Archbishop Mitty A,BIOLOGY,12,10,3,0,1,1,2,1
-103,1,9,Archbishop Mitty A,CHEMISTRY,0,20,2,2,0,2,0,2
-103,1,9,Archbishop Mitty A,EARTH_SPACE,4,10,2,1,1,1,1,2
-103,1,9,Archbishop Mitty A,ENERGY,0,0,1,1,1,0,1,2
-103,1,9,Archbishop Mitty A,MATH,4,0,1,0,3,0,1,3
-103,1,9,Archbishop Mitty A,PHYSICS,8,20,2,0,2,2,0,2
-103,2,29,Dougherty Valley B,BIOLOGY,0,10,1,1,2,1,0,3
-103,2,29,Dougherty Valley B,CHEMISTRY,-8,0,0,2,2,0,0,4
-103,2,29,Dougherty Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
-103,2,29,Dougherty Valley B,ENERGY,0,0,1,1,1,0,1,2
-103,2,29,Dougherty Valley B,MATH,4,0,2,1,1,0,2,2
-103,2,29,Dougherty Valley B,PHYSICS,4,10,1,0,3,1,0,3
-104,1,44,Palo Alto,BIOLOGY,8,10,3,1,0,1,2,1
-104,1,44,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
-104,1,44,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
-104,1,44,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
-104,1,44,Palo Alto,MATH,8,10,2,0,2,1,1,2
-104,1,44,Palo Alto,PHYSICS,8,30,3,1,0,3,0,1
-104,2,13,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
-104,2,13,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
-104,2,13,Archbishop Mitty B,EARTH_SPACE,-4,0,0,1,3,0,0,4
-104,2,13,Archbishop Mitty B,ENERGY,4,10,1,0,2,1,0,2
-104,2,13,Archbishop Mitty B,MATH,0,0,0,0,4,0,0,4
-104,2,13,Archbishop Mitty B,PHYSICS,4,0,1,0,3,0,1,3
-105,1,5,BASIS Fremont,BIOLOGY,4,10,1,0,3,1,0,3
-105,1,5,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
-105,1,5,BASIS Fremont,EARTH_SPACE,4,20,2,1,1,2,0,2
-105,1,5,BASIS Fremont,ENERGY,0,0,1,1,1,0,1,2
-105,1,5,BASIS Fremont,MATH,0,0,0,0,4,0,0,4
-105,1,5,BASIS Fremont,PHYSICS,8,10,2,0,2,1,1,2
-105,2,27,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
-105,2,27,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
-105,2,27,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
-105,2,27,Davidson B,ENERGY,0,10,1,1,1,1,0,2
-105,2,27,Davidson B,MATH,4,0,1,0,3,0,1,3
-105,2,27,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
-106,1,8,BASIS Silicon Valley A,BIOLOGY,8,30,3,1,0,3,0,1
-106,1,8,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
-106,1,8,BASIS Silicon Valley A,EARTH_SPACE,12,10,3,0,1,1,2,1
-106,1,8,BASIS Silicon Valley A,ENERGY,8,10,2,0,1,1,1,1
-106,1,8,BASIS Silicon Valley A,MATH,4,0,1,0,3,0,1,3
-106,1,8,BASIS Silicon Valley A,PHYSICS,16,40,4,0,0,4,0,0
-106,2,37,Foothill B,BIOLOGY,-8,0,0,2,2,0,0,4
-106,2,37,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
-106,2,37,Foothill B,EARTH_SPACE,4,0,1,0,3,0,1,3
-106,2,37,Foothill B,ENERGY,0,0,0,0,3,0,0,3
-106,2,37,Foothill B,MATH,0,0,1,1,2,0,1,3
-106,2,37,Foothill B,PHYSICS,-4,0,0,1,3,0,0,4
-107,1,11,BASIS Silicon Valley B,BIOLOGY,-4,0,0,1,3,0,0,4
-107,1,11,BASIS Silicon Valley B,CHEMISTRY,12,30,3,0,1,3,0,1
-107,1,11,BASIS Silicon Valley B,EARTH_SPACE,8,0,2,0,2,0,2,2
-107,1,11,BASIS Silicon Valley B,ENERGY,4,20,2,1,0,2,0,1
-107,1,11,BASIS Silicon Valley B,MATH,8,0,2,0,2,0,2,2
-107,1,11,BASIS Silicon Valley B,PHYSICS,8,10,2,0,2,1,1,2
-107,2,35,Evergreen Valley,BIOLOGY,8,0,2,0,2,0,2,2
-107,2,35,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
-107,2,35,Evergreen Valley,EARTH_SPACE,0,0,0,0,4,0,0,4
-107,2,35,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
-107,2,35,Evergreen Valley,MATH,4,0,1,0,3,0,1,3
-107,2,35,Evergreen Valley,PHYSICS,4,10,1,0,3,1,0,3
-108,1,16,California,BIOLOGY,0,0,0,0,4,0,0,4
-108,1,16,California,CHEMISTRY,4,0,2,1,1,0,2,2
-108,1,16,California,EARTH_SPACE,4,0,1,0,3,0,1,3
-108,1,16,California,ENERGY,0,0,0,0,3,0,0,3
-108,1,16,California,MATH,-4,0,0,1,3,0,0,4
-108,1,16,California,PHYSICS,8,10,2,0,2,1,1,2
-108,2,39,Irvington A,BIOLOGY,12,10,3,0,1,1,2,1
-108,2,39,Irvington A,CHEMISTRY,4,20,2,1,1,2,0,2
-108,2,39,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
-108,2,39,Irvington A,ENERGY,12,20,3,0,0,2,1,0
-108,2,39,Irvington A,MATH,12,10,3,0,1,1,2,1
-108,2,39,Irvington A,PHYSICS,4,10,1,0,3,1,0,3
-109,1,19,Chico B,BIOLOGY,4,10,1,0,3,1,0,3
-109,1,19,Chico B,CHEMISTRY,12,0,3,0,1,0,3,1
-109,1,19,Chico B,EARTH_SPACE,4,10,1,0,3,1,0,3
-109,1,19,Chico B,ENERGY,-8,0,0,2,1,0,0,3
-109,1,19,Chico B,MATH,0,0,0,0,4,0,0,4
-109,1,19,Chico B,PHYSICS,8,10,2,0,2,1,1,2
-109,2,14,Irvington B,BIOLOGY,12,30,3,0,1,3,0,1
-109,2,14,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
-109,2,14,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
-109,2,14,Irvington B,ENERGY,0,0,0,0,3,0,0,3
-109,2,14,Irvington B,MATH,4,0,1,0,3,0,1,3
-109,2,14,Irvington B,PHYSICS,4,10,1,0,3,1,0,3
-110,1,3,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
-110,1,3,Cupertino A,CHEMISTRY,-4,10,1,2,1,1,0,3
-110,1,3,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
-110,1,3,Cupertino A,ENERGY,4,0,1,0,2,0,1,2
-110,1,3,Cupertino A,MATH,4,0,1,0,3,0,1,3
-110,1,3,Cupertino A,PHYSICS,-4,0,1,2,1,0,1,3
-110,2,34,El Camino B,BIOLOGY,0,10,1,1,2,1,0,3
-110,2,34,El Camino B,CHEMISTRY,0,0,0,0,4,0,0,4
-110,2,34,El Camino B,EARTH_SPACE,8,10,2,0,2,1,1,2
-110,2,34,El Camino B,ENERGY,0,0,0,0,3,0,0,3
-110,2,34,El Camino B,MATH,4,0,2,1,1,0,2,2
-110,2,34,El Camino B,PHYSICS,8,0,2,0,2,0,2,2
-111,1,20,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
-111,1,20,Dougherty Valley A,CHEMISTRY,12,10,3,0,1,1,2,1
-111,1,20,Dougherty Valley A,EARTH_SPACE,4,10,1,0,3,1,0,3
-111,1,20,Dougherty Valley A,ENERGY,8,10,2,0,1,1,1,1
-111,1,20,Dougherty Valley A,MATH,8,10,2,0,2,1,1,2
-111,1,20,Dougherty Valley A,PHYSICS,8,20,2,0,2,2,0,2
-111,2,43,Mira Loma B,BIOLOGY,-8,0,0,2,2,0,0,4
-111,2,43,Mira Loma B,CHEMISTRY,4,0,1,0,3,0,1,3
-111,2,43,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
-111,2,43,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
-111,2,43,Mira Loma B,MATH,0,0,0,0,4,0,0,4
-111,2,43,Mira Loma B,PHYSICS,0,0,0,0,4,0,0,4
-112,1,1,Folsom City,BIOLOGY,8,20,3,1,0,2,1,1
-112,1,1,Folsom City,CHEMISTRY,8,10,3,1,0,1,2,1
-112,1,1,Folsom City,EARTH_SPACE,12,10,3,0,1,1,2,1
-112,1,1,Folsom City,ENERGY,12,10,3,0,0,1,2,0
-112,1,1,Folsom City,MATH,8,10,2,0,2,1,1,2
-112,1,1,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
-112,2,48,Quarry Lane B,BIOLOGY,-4,0,0,1,3,0,0,4
-112,2,48,Quarry Lane B,CHEMISTRY,0,0,0,0,4,0,0,4
-112,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
-112,2,48,Quarry Lane B,ENERGY,0,0,0,0,3,0,0,3
-112,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
-112,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
-113,1,33,Foothill A,BIOLOGY,12,20,3,0,1,2,1,1
-113,1,33,Foothill A,CHEMISTRY,4,20,2,1,1,2,0,2
-113,1,33,Foothill A,EARTH_SPACE,12,0,3,0,1,0,3,1
-113,1,33,Foothill A,ENERGY,4,0,1,0,2,0,1,2
-113,1,33,Foothill A,MATH,0,0,1,1,2,0,1,3
-113,1,33,Foothill A,PHYSICS,8,10,2,0,2,1,1,2
-113,2,25,Homestead,BIOLOGY,0,0,0,0,4,0,0,4
-113,2,25,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
-113,2,25,Homestead,EARTH_SPACE,4,0,1,0,3,0,1,3
-113,2,25,Homestead,ENERGY,4,10,1,0,2,1,0,2
-113,2,25,Homestead,MATH,12,20,3,0,1,2,1,1
-113,2,25,Homestead,PHYSICS,8,10,2,0,2,1,1,2
-114,1,22,Quarry Lane A,BIOLOGY,0,0,0,0,4,0,0,4
-114,1,22,Quarry Lane A,CHEMISTRY,4,0,1,0,3,0,1,3
-114,1,22,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
-114,1,22,Quarry Lane A,ENERGY,-4,0,0,1,2,0,0,3
-114,1,22,Quarry Lane A,MATH,8,0,2,0,2,0,2,2
-114,1,22,Quarry Lane A,PHYSICS,4,0,1,0,3,0,1,3
-114,2,36,GSB A,BIOLOGY,16,40,4,0,0,4,0,0
-114,2,36,GSB A,CHEMISTRY,4,20,2,1,1,2,0,2
-114,2,36,GSB A,EARTH_SPACE,16,20,4,0,0,2,2,0
-114,2,36,GSB A,ENERGY,8,20,2,0,1,2,0,1
-114,2,36,GSB A,MATH,-4,0,0,1,3,0,0,4
-114,2,36,GSB A,PHYSICS,4,20,2,1,1,2,0,2
-115,1,15,GSB B,BIOLOGY,4,10,1,0,3,1,0,3
-115,1,15,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
-115,1,15,GSB B,EARTH_SPACE,8,0,2,0,2,0,2,2
-115,1,15,GSB B,ENERGY,0,0,0,0,3,0,0,3
-115,1,15,GSB B,MATH,8,20,2,0,2,2,0,2
-115,1,15,GSB B,PHYSICS,4,10,1,0,3,1,0,3
-115,2,42,Lynbrook B,BIOLOGY,12,20,3,0,1,2,1,1
-115,2,42,Lynbrook B,CHEMISTRY,8,10,2,0,2,1,1,2
-115,2,42,Lynbrook B,EARTH_SPACE,8,10,2,0,2,1,1,2
-115,2,42,Lynbrook B,ENERGY,4,10,1,0,2,1,0,2
-115,2,42,Lynbrook B,MATH,8,20,2,0,2,2,0,2
-115,2,42,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
-116,1,38,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
-116,1,38,Los Gatos,CHEMISTRY,0,0,1,1,2,0,1,3
-116,1,38,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
-116,1,38,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
-116,1,38,Los Gatos,MATH,0,0,0,0,4,0,0,4
-116,1,38,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
-116,2,32,Mira Loma A,BIOLOGY,12,20,3,0,1,2,1,1
-116,2,32,Mira Loma A,CHEMISTRY,8,30,3,1,0,3,0,1
-116,2,32,Mira Loma A,EARTH_SPACE,8,0,2,0,2,0,2,2
-116,2,32,Mira Loma A,ENERGY,8,0,2,0,1,0,1,2
-116,2,32,Mira Loma A,MATH,4,0,1,0,3,0,1,3
-116,2,32,Mira Loma A,PHYSICS,12,20,3,0,1,2,1,1
-117,1,30,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
-117,1,30,Lynbrook A,CHEMISTRY,16,40,4,0,0,4,0,0
-117,1,30,Lynbrook A,EARTH_SPACE,4,10,2,1,1,1,1,2
-117,1,30,Lynbrook A,ENERGY,4,10,2,1,0,1,1,1
-117,1,30,Lynbrook A,MATH,8,10,2,0,2,1,1,2
-117,1,30,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
-117,2,18,Mountain House B,BIOLOGY,-4,0,0,1,3,0,0,4
-117,2,18,Mountain House B,CHEMISTRY,-4,0,0,1,3,0,0,4
-117,2,18,Mountain House B,EARTH_SPACE,4,10,1,0,3,1,0,3
-117,2,18,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
-117,2,18,Mountain House B,MATH,-4,0,0,1,3,0,0,4
-117,2,18,Mountain House B,PHYSICS,0,0,0,0,4,0,0,4
-118,1,40,Mission San Jose A,BIOLOGY,8,30,3,1,0,3,0,1
-118,1,40,Mission San Jose A,CHEMISTRY,0,20,2,2,0,2,0,2
-118,1,40,Mission San Jose A,EARTH_SPACE,16,20,4,0,0,2,2,0
-118,1,40,Mission San Jose A,ENERGY,4,10,2,1,0,1,1,1
-118,1,40,Mission San Jose A,MATH,4,10,1,0,3,1,0,3
-118,1,40,Mission San Jose A,PHYSICS,8,10,2,0,2,1,1,2
-118,2,41,Miller,BIOLOGY,4,10,1,0,3,1,0,3
-118,2,41,Miller,CHEMISTRY,4,0,1,0,3,0,1,3
-118,2,41,Miller,EARTH_SPACE,0,0,0,0,4,0,0,4
-118,2,41,Miller,ENERGY,0,0,1,1,1,0,1,2
-118,2,41,Miller,MATH,4,20,2,1,1,2,0,2
-118,2,41,Miller,PHYSICS,8,20,2,0,2,2,0,2
-119,1,28,Mountain House A,BIOLOGY,4,0,1,0,3,0,0,4
-119,1,28,Mountain House A,CHEMISTRY,-4,0,0,1,3,0,0,4
-119,1,28,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
-119,1,28,Mountain House A,ENERGY,8,20,2,0,1,2,0,1
-119,1,28,Mountain House A,MATH,16,30,4,0,0,3,0,1
-119,1,28,Mountain House A,PHYSICS,4,0,1,0,3,0,0,4
-119,2,23,Stanford Online,BIOLOGY,8,20,2,0,2,2,0,2
-119,2,23,Stanford Online,CHEMISTRY,16,20,4,0,0,2,0,2
-119,2,23,Stanford Online,EARTH_SPACE,8,10,2,0,2,1,0,3
-119,2,23,Stanford Online,ENERGY,-8,0,0,2,1,0,0,3
-119,2,23,Stanford Online,MATH,-4,0,0,1,3,0,0,4
-119,2,23,Stanford Online,PHYSICS,12,20,3,0,1,2,0,2
+21,1,1,Amador Valley A,BIOLOGY,4,0,2,1,1,0,2,2
+21,1,1,Amador Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
+21,1,1,Amador Valley A,EARTH_SPACE,4,20,2,1,1,2,0,2
+21,1,1,Amador Valley A,ENERGY,0,0,0,0,3,0,0,3
+21,1,1,Amador Valley A,MATH,8,20,3,1,0,2,1,1
+21,1,1,Amador Valley A,PHYSICS,8,10,3,1,0,1,2,1
+21,2,6,Foothill A,BIOLOGY,-4,0,0,1,3,0,0,4
+21,2,6,Foothill A,CHEMISTRY,-4,0,0,1,3,0,0,4
+21,2,6,Foothill A,EARTH_SPACE,-12,0,0,3,1,0,0,4
+21,2,6,Foothill A,ENERGY,12,10,3,0,0,1,2,0
+21,2,6,Foothill A,MATH,-4,10,1,2,1,1,0,3
+21,2,6,Foothill A,PHYSICS,0,0,0,0,4,0,0,4
+22,1,14,Palo Alto,BIOLOGY,-4,0,0,1,3,0,0,4
+22,1,14,Palo Alto,CHEMISTRY,8,10,2,0,2,1,1,2
+22,1,14,Palo Alto,EARTH_SPACE,0,0,1,1,2,0,1,3
+22,1,14,Palo Alto,ENERGY,-4,0,0,1,2,0,0,3
+22,1,14,Palo Alto,MATH,8,0,2,0,2,0,2,2
+22,1,14,Palo Alto,PHYSICS,8,20,2,0,2,2,0,2
+22,2,5,BASIS Silicon Valley A,BIOLOGY,0,0,0,0,4,0,0,4
+22,2,5,BASIS Silicon Valley A,CHEMISTRY,4,10,1,0,3,1,0,3
+22,2,5,BASIS Silicon Valley A,EARTH_SPACE,0,0,0,0,4,0,0,4
+22,2,5,BASIS Silicon Valley A,ENERGY,8,20,2,0,1,2,0,1
+22,2,5,BASIS Silicon Valley A,MATH,0,10,1,1,2,1,0,3
+22,2,5,BASIS Silicon Valley A,PHYSICS,8,10,2,0,2,1,1,2
+23,1,15,Mission San Jose A,BIOLOGY,-4,10,1,2,1,1,0,3
+23,1,15,Mission San Jose A,CHEMISTRY,16,10,4,0,0,1,3,0
+23,1,15,Mission San Jose A,EARTH_SPACE,-8,10,1,3,0,1,0,3
+23,1,15,Mission San Jose A,ENERGY,4,10,1,0,2,1,0,2
+23,1,15,Mission San Jose A,MATH,4,0,1,0,3,0,1,3
+23,1,15,Mission San Jose A,PHYSICS,4,10,1,0,3,1,0,3
+23,2,9,Davidson A,BIOLOGY,12,0,3,0,1,0,3,1
+23,2,9,Davidson A,CHEMISTRY,-4,0,0,1,3,0,0,4
+23,2,9,Davidson A,EARTH_SPACE,12,20,3,0,1,2,1,1
+23,2,9,Davidson A,ENERGY,4,0,1,0,2,0,1,2
+23,2,9,Davidson A,MATH,4,10,2,1,1,1,1,2
+23,2,9,Davidson A,PHYSICS,12,30,3,0,1,3,0,1
+24,1,3,Lynbrook A,BIOLOGY,-4,0,0,1,3,0,0,4
+24,1,3,Lynbrook A,CHEMISTRY,4,10,2,1,1,1,1,2
+24,1,3,Lynbrook A,EARTH_SPACE,0,0,1,1,2,0,1,3
+24,1,3,Lynbrook A,ENERGY,4,20,2,1,0,2,0,1
+24,1,3,Lynbrook A,MATH,8,0,2,0,2,0,2,2
+24,1,3,Lynbrook A,PHYSICS,8,10,2,0,2,1,1,2
+24,2,2,Mission San Jose B,BIOLOGY,4,0,1,0,3,0,1,3
+24,2,2,Mission San Jose B,CHEMISTRY,4,0,1,0,3,0,1,3
+24,2,2,Mission San Jose B,EARTH_SPACE,4,10,1,0,3,1,0,3
+24,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
+24,2,2,Mission San Jose B,MATH,0,10,1,1,2,1,0,3
+24,2,2,Mission San Jose B,PHYSICS,8,20,2,0,2,2,0,2
+25,1,17,Folsom City,BIOLOGY,16,20,4,0,0,2,2,0
+25,1,17,Folsom City,CHEMISTRY,12,30,3,0,1,3,0,1
+25,1,17,Folsom City,EARTH_SPACE,8,20,3,1,0,2,1,1
+25,1,17,Folsom City,ENERGY,8,20,2,0,1,2,0,1
+25,1,17,Folsom City,MATH,8,10,2,0,2,1,1,2
+25,1,17,Folsom City,PHYSICS,12,20,3,0,1,2,1,1
+25,2,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
+25,2,18,Albany A,CHEMISTRY,0,0,0,0,4,0,0,4
+25,2,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
+25,2,18,Albany A,ENERGY,4,0,1,0,2,0,1,2
+25,2,18,Albany A,MATH,8,10,2,0,2,1,1,2
+25,2,18,Albany A,PHYSICS,4,0,1,0,3,0,1,3
+26,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
+26,1,19,Cupertino A,CHEMISTRY,16,20,4,0,0,2,2,0
+26,1,19,Cupertino A,EARTH_SPACE,8,0,2,0,2,0,2,2
+26,1,19,Cupertino A,ENERGY,8,20,2,0,1,2,0,1
+26,1,19,Cupertino A,MATH,8,10,2,0,2,1,1,2
+26,1,19,Cupertino A,PHYSICS,12,20,3,0,1,2,1,1
+26,2,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
+26,2,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
+26,2,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
+26,2,20,Albany B,ENERGY,4,0,1,0,2,0,1,2
+26,2,20,Albany B,MATH,0,0,0,0,4,0,0,4
+26,2,20,Albany B,PHYSICS,4,10,1,0,3,1,0,3
+27,1,21,BASIS Fremont,BIOLOGY,0,0,0,0,4,0,0,4
+27,1,21,BASIS Fremont,CHEMISTRY,8,0,2,0,2,0,2,2
+27,1,21,BASIS Fremont,EARTH_SPACE,-8,0,0,2,2,0,0,4
+27,1,21,BASIS Fremont,ENERGY,0,0,0,0,3,0,0,3
+27,1,21,BASIS Fremont,MATH,4,0,1,0,3,0,1,3
+27,1,21,BASIS Fremont,PHYSICS,4,10,1,0,3,1,0,3
+27,2,1,Amador Valley A,BIOLOGY,16,40,4,0,0,4,0,0
+27,2,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
+27,2,1,Amador Valley A,EARTH_SPACE,8,30,3,1,0,3,0,1
+27,2,1,Amador Valley A,ENERGY,12,20,3,0,0,2,1,0
+27,2,1,Amador Valley A,MATH,12,30,3,0,1,3,0,1
+27,2,1,Amador Valley A,PHYSICS,8,30,3,1,0,3,0,1
+28,1,22,Amador Valley B,BIOLOGY,0,0,0,0,4,0,0,4
+28,1,22,Amador Valley B,CHEMISTRY,0,0,0,0,4,0,0,4
+28,1,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+28,1,22,Amador Valley B,ENERGY,8,20,2,0,1,2,0,1
+28,1,22,Amador Valley B,MATH,4,10,1,0,3,1,0,3
+28,1,22,Amador Valley B,PHYSICS,4,10,1,0,3,1,0,3
+28,2,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
+28,2,5,BASIS Silicon Valley A,CHEMISTRY,16,30,4,0,0,3,1,0
+28,2,5,BASIS Silicon Valley A,EARTH_SPACE,16,30,4,0,0,3,1,0
+28,2,5,BASIS Silicon Valley A,ENERGY,0,10,1,1,1,1,0,2
+28,2,5,BASIS Silicon Valley A,MATH,12,30,3,0,1,3,0,1
+28,2,5,BASIS Silicon Valley A,PHYSICS,12,30,3,0,1,3,0,1
+29,1,4,Archbishop Mitty A,BIOLOGY,16,30,4,0,0,3,1,0
+29,1,4,Archbishop Mitty A,CHEMISTRY,16,40,4,0,0,4,0,0
+29,1,4,Archbishop Mitty A,EARTH_SPACE,4,20,2,1,1,2,0,2
+29,1,4,Archbishop Mitty A,ENERGY,8,20,2,0,1,2,0,1
+29,1,4,Archbishop Mitty A,MATH,12,30,3,0,1,3,0,1
+29,1,4,Archbishop Mitty A,PHYSICS,8,20,3,1,0,2,1,1
+29,2,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
+29,2,23,American A,CHEMISTRY,0,0,0,0,4,0,0,4
+29,2,23,American A,EARTH_SPACE,0,0,0,0,4,0,0,4
+29,2,23,American A,ENERGY,4,0,1,0,2,0,1,2
+29,2,23,American A,MATH,4,10,1,0,3,1,0,3
+29,2,23,American A,PHYSICS,0,0,0,0,4,0,0,4
+30,1,24,BASIS Silicon Valley B,BIOLOGY,0,20,2,2,0,2,0,2
+30,1,24,BASIS Silicon Valley B,CHEMISTRY,8,20,2,0,2,2,0,2
+30,1,24,BASIS Silicon Valley B,EARTH_SPACE,8,10,2,0,2,1,1,2
+30,1,24,BASIS Silicon Valley B,ENERGY,12,20,3,0,0,2,1,0
+30,1,24,BASIS Silicon Valley B,MATH,16,20,4,0,0,2,2,0
+30,1,24,BASIS Silicon Valley B,PHYSICS,16,20,4,0,0,2,2,0
+30,2,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
+30,2,25,American B,CHEMISTRY,4,0,1,0,3,0,1,3
+30,2,25,American B,EARTH_SPACE,0,0,0,0,4,0,0,4
+30,2,25,American B,ENERGY,0,0,0,0,3,0,0,3
+30,2,25,American B,MATH,0,0,0,0,4,0,0,4
+30,2,25,American B,PHYSICS,0,0,0,0,4,0,0,4
+31,1,26,Archbishop Mitty B,BIOLOGY,0,10,1,1,2,1,0,3
+31,1,26,Archbishop Mitty B,CHEMISTRY,4,0,1,0,3,0,1,3
+31,1,26,Archbishop Mitty B,EARTH_SPACE,16,40,4,0,0,4,0,0
+31,1,26,Archbishop Mitty B,ENERGY,4,10,1,0,2,1,0,2
+31,1,26,Archbishop Mitty B,MATH,8,20,2,0,2,2,0,2
+31,1,26,Archbishop Mitty B,PHYSICS,4,10,1,0,3,1,0,3
+31,2,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
+31,2,27,Irvington B,CHEMISTRY,8,10,2,0,2,1,1,2
+31,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
+31,2,27,Irvington B,ENERGY,8,10,2,0,1,1,1,1
+31,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
+31,2,27,Irvington B,PHYSICS,12,10,3,0,1,1,2,1
+32,1,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
+32,1,28,GSB B,CHEMISTRY,8,20,2,0,2,2,0,2
+32,1,28,GSB B,EARTH_SPACE,8,20,2,0,2,2,0,2
+32,1,28,GSB B,ENERGY,4,10,1,0,2,1,0,2
+32,1,28,GSB B,MATH,8,20,2,0,2,2,0,2
+32,1,28,GSB B,PHYSICS,0,0,0,0,4,0,0,4
+32,2,29,California,BIOLOGY,0,10,1,1,2,1,0,3
+32,2,29,California,CHEMISTRY,8,10,2,0,2,1,1,2
+32,2,29,California,EARTH_SPACE,4,10,1,0,3,1,0,3
+32,2,29,California,ENERGY,4,20,2,1,0,2,0,1
+32,2,29,California,MATH,4,10,1,0,3,1,0,3
+32,2,29,California,PHYSICS,16,20,4,0,0,2,2,0
+33,1,30,Chico A,BIOLOGY,4,0,1,0,3,0,1,3
+33,1,30,Chico A,CHEMISTRY,8,0,2,0,2,0,2,2
+33,1,30,Chico A,EARTH_SPACE,0,10,1,1,2,1,0,3
+33,1,30,Chico A,ENERGY,8,10,2,0,1,1,1,1
+33,1,30,Chico A,MATH,0,0,0,0,4,0,0,4
+33,1,30,Chico A,PHYSICS,12,10,3,0,1,1,2,1
+33,2,31,Mountain House B,BIOLOGY,8,10,2,0,2,1,1,2
+33,2,31,Mountain House B,CHEMISTRY,8,10,2,0,2,1,1,2
+33,2,31,Mountain House B,EARTH_SPACE,4,10,1,0,3,1,0,3
+33,2,31,Mountain House B,ENERGY,-4,0,0,1,2,0,0,3
+33,2,31,Mountain House B,MATH,12,20,3,0,1,2,1,1
+33,2,31,Mountain House B,PHYSICS,0,0,0,0,4,0,0,4
+34,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
+34,1,32,Chico B,CHEMISTRY,4,0,1,0,3,0,1,3
+34,1,32,Chico B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+34,1,32,Chico B,ENERGY,0,0,0,0,3,0,0,3
+34,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
+34,1,32,Chico B,PHYSICS,0,0,0,0,4,0,0,4
+34,2,8,Dougherty Valley A,BIOLOGY,8,30,3,1,0,3,0,1
+34,2,8,Dougherty Valley A,CHEMISTRY,12,20,3,0,1,2,1,1
+34,2,8,Dougherty Valley A,EARTH_SPACE,16,30,4,0,0,3,1,0
+34,2,8,Dougherty Valley A,ENERGY,12,20,3,0,0,2,1,0
+34,2,8,Dougherty Valley A,MATH,16,30,4,0,0,3,1,0
+34,2,8,Dougherty Valley A,PHYSICS,8,20,3,1,0,2,1,1
+35,1,7,Clovis North,BIOLOGY,8,30,3,1,0,3,0,1
+35,1,7,Clovis North,CHEMISTRY,8,20,3,1,0,2,1,1
+35,1,7,Clovis North,EARTH_SPACE,12,20,3,0,1,2,1,1
+35,1,7,Clovis North,ENERGY,8,10,2,0,1,1,1,1
+35,1,7,Clovis North,MATH,4,10,1,0,3,1,0,3
+35,1,7,Clovis North,PHYSICS,8,20,3,1,0,2,1,1
+35,2,33,Quarry Lane A,BIOLOGY,0,0,0,0,4,0,0,4
+35,2,33,Quarry Lane A,CHEMISTRY,4,10,1,0,3,1,0,3
+35,2,33,Quarry Lane A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+35,2,33,Quarry Lane A,ENERGY,4,0,1,0,2,0,0,3
+35,2,33,Quarry Lane A,MATH,0,0,0,0,4,0,0,4
+35,2,33,Quarry Lane A,PHYSICS,0,0,0,0,4,0,0,4
+36,1,34,Stanford Online,BIOLOGY,8,10,2,0,2,1,1,2
+36,1,34,Stanford Online,CHEMISTRY,4,20,2,1,1,2,0,2
+36,1,34,Stanford Online,EARTH_SPACE,-8,0,0,2,2,0,0,4
+36,1,34,Stanford Online,ENERGY,12,20,3,0,0,2,1,0
+36,1,34,Stanford Online,MATH,8,10,2,0,2,1,1,2
+36,1,34,Stanford Online,PHYSICS,12,20,3,0,1,2,1,1
+36,2,35,Cupertino B,BIOLOGY,4,10,2,1,1,1,1,2
+36,2,35,Cupertino B,CHEMISTRY,8,0,2,0,2,0,2,2
+36,2,35,Cupertino B,EARTH_SPACE,12,10,3,0,1,1,2,1
+36,2,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
+36,2,35,Cupertino B,MATH,4,10,1,0,3,1,0,3
+36,2,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
+37,1,36,Homestead,BIOLOGY,8,20,2,0,2,2,0,2
+37,1,36,Homestead,CHEMISTRY,0,0,0,0,4,0,0,4
+37,1,36,Homestead,EARTH_SPACE,12,20,3,0,1,2,1,1
+37,1,36,Homestead,ENERGY,4,10,1,0,2,1,0,2
+37,1,36,Homestead,MATH,4,10,1,0,3,1,0,3
+37,1,36,Homestead,PHYSICS,0,0,0,0,4,0,0,4
+37,2,9,Davidson A,BIOLOGY,4,10,2,1,1,1,1,2
+37,2,9,Davidson A,CHEMISTRY,8,30,3,1,0,3,0,1
+37,2,9,Davidson A,EARTH_SPACE,0,10,1,1,2,1,0,3
+37,2,9,Davidson A,ENERGY,8,10,2,0,1,1,1,1
+37,2,9,Davidson A,MATH,12,20,3,0,1,2,1,1
+37,2,9,Davidson A,PHYSICS,16,30,4,0,0,3,1,0
+38,1,10,Davidson B,BIOLOGY,4,10,1,0,3,1,0,3
+38,1,10,Davidson B,CHEMISTRY,8,30,3,1,0,3,0,1
+38,1,10,Davidson B,EARTH_SPACE,4,10,1,0,3,1,0,3
+38,1,10,Davidson B,ENERGY,8,20,2,0,1,2,0,1
+38,1,10,Davidson B,MATH,16,40,4,0,0,4,0,0
+38,1,10,Davidson B,PHYSICS,8,20,2,0,2,2,0,2
+38,2,37,Mountain House A,BIOLOGY,0,0,1,1,2,0,1,3
+38,2,37,Mountain House A,CHEMISTRY,4,10,1,0,3,1,0,3
+38,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
+38,2,37,Mountain House A,ENERGY,4,10,1,0,2,1,0,2
+38,2,37,Mountain House A,MATH,0,0,0,0,4,0,0,4
+38,2,37,Mountain House A,PHYSICS,8,10,2,0,2,1,1,2
+39,1,38,Dougherty Valley B,BIOLOGY,4,10,1,0,3,1,0,3
+39,1,38,Dougherty Valley B,CHEMISTRY,12,30,3,0,1,3,0,1
+39,1,38,Dougherty Valley B,EARTH_SPACE,8,0,2,0,2,0,2,2
+39,1,38,Dougherty Valley B,ENERGY,0,0,0,0,3,0,0,3
+39,1,38,Dougherty Valley B,MATH,8,20,3,1,0,2,1,1
+39,1,38,Dougherty Valley B,PHYSICS,0,10,1,1,2,1,0,3
+39,2,3,Lynbrook A,BIOLOGY,4,20,2,1,1,2,0,2
+39,2,3,Lynbrook A,CHEMISTRY,4,10,1,0,3,1,0,3
+39,2,3,Lynbrook A,EARTH_SPACE,4,20,2,1,1,2,0,2
+39,2,3,Lynbrook A,ENERGY,12,20,3,0,0,2,0,1
+39,2,3,Lynbrook A,MATH,4,10,1,0,3,1,0,3
+39,2,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
+40,1,39,El Camino A,BIOLOGY,4,10,1,0,3,1,0,3
+40,1,39,El Camino A,CHEMISTRY,4,0,1,0,3,0,1,3
+40,1,39,El Camino A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+40,1,39,El Camino A,ENERGY,8,10,2,0,1,1,1,1
+40,1,39,El Camino A,MATH,8,0,2,0,2,0,1,3
+40,1,39,El Camino A,PHYSICS,-4,0,0,1,3,0,0,4
+40,2,16,Mira Loma A,BIOLOGY,8,30,3,1,0,3,0,1
+40,2,16,Mira Loma A,CHEMISTRY,12,30,3,0,1,3,0,1
+40,2,16,Mira Loma A,EARTH_SPACE,4,20,2,1,1,2,0,2
+40,2,16,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
+40,2,16,Mira Loma A,MATH,8,20,2,0,2,2,0,2
+40,2,16,Mira Loma A,PHYSICS,16,30,4,0,0,3,1,0
+41,1,6,Foothill A,BIOLOGY,0,20,2,2,0,2,0,2
+41,1,6,Foothill A,CHEMISTRY,12,30,3,0,1,3,0,1
+41,1,6,Foothill A,EARTH_SPACE,12,10,3,0,1,1,2,1
+41,1,6,Foothill A,ENERGY,12,20,3,0,0,2,1,0
+41,1,6,Foothill A,MATH,0,0,0,0,4,0,0,4
+41,1,6,Foothill A,PHYSICS,8,20,3,1,0,2,1,1
+41,2,40,El Camino B,BIOLOGY,4,0,1,0,3,0,1,3
+41,2,40,El Camino B,CHEMISTRY,0,0,1,1,2,0,1,3
+41,2,40,El Camino B,EARTH_SPACE,4,0,1,0,3,0,1,3
+41,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
+41,2,40,El Camino B,MATH,12,10,3,0,1,1,2,1
+41,2,40,El Camino B,PHYSICS,0,0,0,0,4,0,0,4
+42,1,41,Evergreen Valley,BIOLOGY,4,0,1,0,3,0,1,3
+42,1,41,Evergreen Valley,CHEMISTRY,0,0,0,0,4,0,0,4
+42,1,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
+42,1,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
+42,1,41,Evergreen Valley,MATH,4,0,1,0,3,0,1,3
+42,1,41,Evergreen Valley,PHYSICS,0,0,0,0,4,0,0,4
+42,2,11,GSB A,BIOLOGY,12,30,3,0,1,3,0,1
+42,2,11,GSB A,CHEMISTRY,12,20,3,0,1,2,1,1
+42,2,11,GSB A,EARTH_SPACE,0,10,1,1,2,1,0,3
+42,2,11,GSB A,ENERGY,12,20,3,0,0,2,1,0
+42,2,11,GSB A,MATH,12,30,3,0,1,3,0,1
+42,2,11,GSB A,PHYSICS,16,30,4,0,0,3,1,0
+43,1,42,Foothill B,BIOLOGY,8,30,3,1,0,3,0,1
+43,1,42,Foothill B,CHEMISTRY,8,0,2,0,2,0,2,2
+43,1,42,Foothill B,EARTH_SPACE,8,0,2,0,2,0,2,2
+43,1,42,Foothill B,ENERGY,4,0,1,0,2,0,1,2
+43,1,42,Foothill B,MATH,8,10,2,0,2,1,0,3
+43,1,42,Foothill B,PHYSICS,8,20,2,0,2,2,0,2
+43,2,43,Los Gatos,BIOLOGY,4,10,1,0,3,1,0,3
+43,2,43,Los Gatos,CHEMISTRY,0,0,0,0,4,0,0,4
+43,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
+43,2,43,Los Gatos,ENERGY,4,0,1,0,2,0,1,2
+43,2,43,Los Gatos,MATH,8,10,2,0,2,1,1,2
+43,2,43,Los Gatos,PHYSICS,8,0,2,0,2,0,2,2
+44,1,13,Irvington A,BIOLOGY,0,0,0,0,4,0,0,4
+44,1,13,Irvington A,CHEMISTRY,8,20,2,0,2,2,0,2
+44,1,13,Irvington A,EARTH_SPACE,4,10,1,0,3,1,0,3
+44,1,13,Irvington A,ENERGY,8,10,2,0,1,1,1,1
+44,1,13,Irvington A,MATH,0,0,0,0,4,0,0,4
+44,1,13,Irvington A,PHYSICS,4,10,1,0,3,1,0,3
+44,2,15,Mission San Jose A,BIOLOGY,8,30,3,1,0,3,0,1
+44,2,15,Mission San Jose A,CHEMISTRY,4,20,2,1,1,2,0,2
+44,2,15,Mission San Jose A,EARTH_SPACE,8,30,3,1,0,3,0,1
+44,2,15,Mission San Jose A,ENERGY,0,10,1,1,1,1,0,2
+44,2,15,Mission San Jose A,MATH,12,30,3,0,1,3,0,1
+44,2,15,Mission San Jose A,PHYSICS,8,30,3,1,0,3,0,1
+45,1,44,Miller,BIOLOGY,4,10,1,0,3,1,0,3
+45,1,44,Miller,CHEMISTRY,0,0,0,0,4,0,0,4
+45,1,44,Miller,EARTH_SPACE,12,20,3,0,1,2,0,2
+45,1,44,Miller,ENERGY,0,0,0,0,3,0,0,3
+45,1,44,Miller,MATH,4,10,1,0,3,1,0,3
+45,1,44,Miller,PHYSICS,12,20,3,0,1,2,0,2
+45,2,45,Lynbrook B,BIOLOGY,8,20,3,1,0,2,0,2
+45,2,45,Lynbrook B,CHEMISTRY,16,40,4,0,0,4,0,0
+45,2,45,Lynbrook B,EARTH_SPACE,4,10,1,0,3,1,0,3
+45,2,45,Lynbrook B,ENERGY,12,20,3,0,0,2,0,1
+45,2,45,Lynbrook B,MATH,12,30,3,0,1,3,0,1
+45,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
+46,1,46,Mira Loma B,BIOLOGY,0,0,0,0,4,0,0,4
+46,1,46,Mira Loma B,CHEMISTRY,0,0,0,0,4,0,0,4
+46,1,46,Mira Loma B,EARTH_SPACE,0,0,0,0,4,0,0,4
+46,1,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
+46,1,46,Mira Loma B,MATH,4,10,1,0,3,1,0,3
+46,1,46,Mira Loma B,PHYSICS,0,0,0,0,4,0,0,4
+46,2,14,Palo Alto,BIOLOGY,8,30,3,1,0,3,0,1
+46,2,14,Palo Alto,CHEMISTRY,16,30,4,0,0,3,1,0
+46,2,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
+46,2,14,Palo Alto,ENERGY,0,0,0,0,3,0,0,3
+46,2,14,Palo Alto,MATH,12,30,3,0,1,3,0,1
+46,2,14,Palo Alto,PHYSICS,16,40,4,0,0,4,0,0
+47,1,12,Saratoga,BIOLOGY,4,10,1,0,3,1,0,3
+47,1,12,Saratoga,CHEMISTRY,8,20,2,0,2,2,0,2
+47,1,12,Saratoga,EARTH_SPACE,8,20,2,0,2,2,0,2
+47,1,12,Saratoga,ENERGY,0,10,1,1,1,1,0,2
+47,1,12,Saratoga,MATH,12,20,3,0,1,2,1,1
+47,1,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
+47,2,2,Mission San Jose B,BIOLOGY,0,20,2,2,0,2,0,2
+47,2,2,Mission San Jose B,CHEMISTRY,8,20,2,0,2,2,0,2
+47,2,2,Mission San Jose B,EARTH_SPACE,0,10,2,2,0,1,1,2
+47,2,2,Mission San Jose B,ENERGY,8,20,2,0,1,2,0,1
+47,2,2,Mission San Jose B,MATH,4,10,1,0,3,1,0,3
+47,2,2,Mission San Jose B,PHYSICS,4,20,2,1,1,2,0,2
+48,1,47,San Mateo,BIOLOGY,4,0,1,0,3,0,1,3
+48,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
+48,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
+48,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
+48,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
+48,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
+48,2,48,Quarry Lane B,BIOLOGY,12,20,3,0,1,2,1,1
+48,2,48,Quarry Lane B,CHEMISTRY,4,0,1,0,3,0,1,3
+48,2,48,Quarry Lane B,EARTH_SPACE,8,10,2,0,2,1,1,2
+48,2,48,Quarry Lane B,ENERGY,12,0,3,0,0,0,3,0
+48,2,48,Quarry Lane B,MATH,12,20,3,0,1,2,1,1
+48,2,48,Quarry Lane B,PHYSICS,12,0,3,0,1,0,3,1
+49,1,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
+49,1,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
+49,1,5,BASIS Silicon Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
+49,1,5,BASIS Silicon Valley A,ENERGY,8,20,2,0,1,2,0,1
+49,1,5,BASIS Silicon Valley A,MATH,12,20,3,0,1,2,1,1
+49,1,5,BASIS Silicon Valley A,PHYSICS,4,10,2,1,1,1,1,2
+49,2,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
+49,2,43,Los Gatos,CHEMISTRY,-8,0,0,2,2,0,0,4
+49,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
+49,2,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
+49,2,43,Los Gatos,MATH,0,0,0,0,4,0,0,4
+49,2,43,Los Gatos,PHYSICS,8,0,2,0,2,0,2,2
+50,1,12,Saratoga,BIOLOGY,8,20,3,1,0,2,1,1
+50,1,12,Saratoga,CHEMISTRY,8,20,3,1,0,2,1,1
+50,1,12,Saratoga,EARTH_SPACE,12,30,3,0,1,3,0,1
+50,1,12,Saratoga,ENERGY,12,30,3,0,0,3,0,0
+50,1,12,Saratoga,MATH,12,20,3,0,1,2,1,1
+50,1,12,Saratoga,PHYSICS,4,20,2,1,1,2,0,2
+50,2,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
+50,2,18,Albany A,CHEMISTRY,0,0,0,0,4,0,0,4
+50,2,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
+50,2,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
+50,2,18,Albany A,MATH,4,10,1,0,3,1,0,3
+50,2,18,Albany A,PHYSICS,4,10,1,0,3,1,0,3
+51,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
+51,1,20,Albany B,CHEMISTRY,4,0,1,0,3,0,1,3
+51,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
+51,1,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
+51,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
+51,1,20,Albany B,PHYSICS,0,0,0,0,4,0,0,4
+51,2,36,Homestead,BIOLOGY,8,10,2,0,2,1,1,2
+51,2,36,Homestead,CHEMISTRY,0,0,1,1,2,0,1,3
+51,2,36,Homestead,EARTH_SPACE,16,40,4,0,0,4,0,0
+51,2,36,Homestead,ENERGY,8,10,2,0,1,1,1,1
+51,2,36,Homestead,MATH,0,10,1,1,2,1,0,3
+51,2,36,Homestead,PHYSICS,16,10,4,0,0,1,3,0
+52,1,1,Amador Valley A,BIOLOGY,0,20,2,2,0,2,0,2
+52,1,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
+52,1,1,Amador Valley A,EARTH_SPACE,4,20,2,1,1,2,0,2
+52,1,1,Amador Valley A,ENERGY,4,10,2,1,0,1,1,1
+52,1,1,Amador Valley A,MATH,8,30,3,1,0,3,0,1
+52,1,1,Amador Valley A,PHYSICS,4,10,2,1,1,1,1,2
+52,2,34,Stanford Online,BIOLOGY,-4,10,1,2,1,1,0,3
+52,2,34,Stanford Online,CHEMISTRY,8,10,2,0,2,1,1,2
+52,2,34,Stanford Online,EARTH_SPACE,8,10,2,0,2,1,1,2
+52,2,34,Stanford Online,ENERGY,-4,10,1,2,0,1,0,2
+52,2,34,Stanford Online,MATH,0,0,0,0,4,0,0,4
+52,2,34,Stanford Online,PHYSICS,4,10,1,0,3,1,0,3
+53,1,22,Amador Valley B,BIOLOGY,4,0,1,0,3,0,1,3
+53,1,22,Amador Valley B,CHEMISTRY,4,0,1,0,3,0,1,3
+53,1,22,Amador Valley B,EARTH_SPACE,8,10,2,0,2,1,1,2
+53,1,22,Amador Valley B,ENERGY,0,0,0,0,3,0,0,3
+53,1,22,Amador Valley B,MATH,4,0,1,0,3,0,1,3
+53,1,22,Amador Valley B,PHYSICS,8,10,2,0,2,1,1,2
+53,2,16,Mira Loma A,BIOLOGY,4,10,2,1,1,1,1,2
+53,2,16,Mira Loma A,CHEMISTRY,12,20,3,0,1,2,1,1
+53,2,16,Mira Loma A,EARTH_SPACE,8,10,2,0,2,1,1,2
+53,2,16,Mira Loma A,ENERGY,8,20,2,0,1,2,0,1
+53,2,16,Mira Loma A,MATH,8,20,2,0,2,2,0,2
+53,2,16,Mira Loma A,PHYSICS,4,10,2,1,1,1,1,2
+54,1,23,American A,BIOLOGY,-4,0,1,2,1,0,1,3
+54,1,23,American A,CHEMISTRY,-4,0,0,1,3,0,0,4
+54,1,23,American A,EARTH_SPACE,0,0,0,0,4,0,0,4
+54,1,23,American A,ENERGY,4,0,2,1,0,0,2,1
+54,1,23,American A,MATH,12,10,3,0,1,1,2,1
+54,1,23,American A,PHYSICS,12,30,3,0,1,3,0,1
+54,2,31,Mountain House B,BIOLOGY,8,10,2,0,2,1,1,2
+54,2,31,Mountain House B,CHEMISTRY,4,10,2,1,1,1,1,2
+54,2,31,Mountain House B,EARTH_SPACE,12,20,3,0,1,2,1,1
+54,2,31,Mountain House B,ENERGY,4,0,1,0,2,0,1,2
+54,2,31,Mountain House B,MATH,0,0,0,0,4,0,0,4
+54,2,31,Mountain House B,PHYSICS,4,0,1,0,3,0,1,3
+55,1,25,American B,BIOLOGY,0,0,0,0,4,0,0,4
+55,1,25,American B,CHEMISTRY,-8,0,0,2,2,0,0,4
+55,1,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
+55,1,25,American B,ENERGY,4,10,1,0,2,1,0,2
+55,1,25,American B,MATH,4,0,1,0,3,0,1,3
+55,1,25,American B,PHYSICS,0,0,0,0,4,0,0,4
+55,2,33,Quarry Lane A,BIOLOGY,12,10,3,0,1,1,2,1
+55,2,33,Quarry Lane A,CHEMISTRY,8,10,3,1,0,1,2,1
+55,2,33,Quarry Lane A,EARTH_SPACE,8,10,2,0,2,1,1,2
+55,2,33,Quarry Lane A,ENERGY,0,0,0,0,3,0,0,3
+55,2,33,Quarry Lane A,MATH,4,0,1,0,3,0,1,3
+55,2,33,Quarry Lane A,PHYSICS,12,0,3,0,1,0,3,1
+56,1,4,Archbishop Mitty A,BIOLOGY,4,20,2,1,1,2,0,2
+56,1,4,Archbishop Mitty A,CHEMISTRY,0,10,1,1,2,1,0,3
+56,1,4,Archbishop Mitty A,EARTH_SPACE,8,10,2,0,2,1,1,2
+56,1,4,Archbishop Mitty A,ENERGY,4,20,2,1,0,2,0,1
+56,1,4,Archbishop Mitty A,MATH,8,20,2,0,2,2,0,2
+56,1,4,Archbishop Mitty A,PHYSICS,4,10,1,0,3,1,0,3
+56,2,3,Lynbrook A,BIOLOGY,8,10,2,0,2,1,1,2
+56,2,3,Lynbrook A,CHEMISTRY,12,20,3,0,1,2,1,1
+56,2,3,Lynbrook A,EARTH_SPACE,4,20,2,1,1,2,0,2
+56,2,3,Lynbrook A,ENERGY,0,0,1,1,1,0,1,2
+56,2,3,Lynbrook A,MATH,8,20,2,0,2,2,0,2
+56,2,3,Lynbrook A,PHYSICS,8,30,3,1,0,3,0,1
+57,1,26,Archbishop Mitty B,BIOLOGY,12,10,3,0,1,1,2,1
+57,1,26,Archbishop Mitty B,CHEMISTRY,8,10,2,0,2,1,1,2
+57,1,26,Archbishop Mitty B,EARTH_SPACE,4,20,2,1,1,2,0,2
+57,1,26,Archbishop Mitty B,ENERGY,0,0,0,0,3,0,0,3
+57,1,26,Archbishop Mitty B,MATH,12,30,3,0,1,3,0,1
+57,1,26,Archbishop Mitty B,PHYSICS,12,20,3,0,1,2,1,1
+57,2,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
+57,2,32,Chico B,CHEMISTRY,-4,0,0,1,3,0,0,4
+57,2,32,Chico B,EARTH_SPACE,0,0,0,0,4,0,0,4
+57,2,32,Chico B,ENERGY,4,0,2,1,0,0,2,1
+57,2,32,Chico B,MATH,0,0,0,0,4,0,0,4
+57,2,32,Chico B,PHYSICS,4,10,1,0,3,1,0,3
+58,1,21,BASIS Fremont,BIOLOGY,8,10,2,0,2,1,1,2
+58,1,21,BASIS Fremont,CHEMISTRY,8,10,2,0,2,1,1,2
+58,1,21,BASIS Fremont,EARTH_SPACE,8,20,2,0,2,2,0,2
+58,1,21,BASIS Fremont,ENERGY,4,20,2,1,0,2,0,1
+58,1,21,BASIS Fremont,MATH,0,0,0,0,4,0,0,4
+58,1,21,BASIS Fremont,PHYSICS,0,10,1,1,2,1,0,3
+58,2,37,Mountain House A,BIOLOGY,4,10,1,0,3,1,0,3
+58,2,37,Mountain House A,CHEMISTRY,-4,10,1,2,1,1,0,3
+58,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
+58,2,37,Mountain House A,ENERGY,0,0,0,0,3,0,0,3
+58,2,37,Mountain House A,MATH,4,0,1,0,3,0,1,3
+58,2,37,Mountain House A,PHYSICS,12,10,3,0,1,1,2,1
+59,1,11,GSB A,BIOLOGY,16,20,4,0,0,2,2,0
+59,1,11,GSB A,CHEMISTRY,12,10,3,0,1,1,2,1
+59,1,11,GSB A,EARTH_SPACE,8,30,3,1,0,3,0,1
+59,1,11,GSB A,ENERGY,8,10,2,0,1,1,1,1
+59,1,11,GSB A,MATH,12,30,3,0,1,3,0,1
+59,1,11,GSB A,PHYSICS,4,10,1,0,3,1,0,3
+59,2,24,BASIS Silicon Valley B,BIOLOGY,-4,0,0,1,3,0,0,4
+59,2,24,BASIS Silicon Valley B,CHEMISTRY,-4,0,1,2,1,0,1,3
+59,2,24,BASIS Silicon Valley B,EARTH_SPACE,4,10,1,0,3,1,0,3
+59,2,24,BASIS Silicon Valley B,ENERGY,4,10,1,0,2,1,0,2
+59,2,24,BASIS Silicon Valley B,MATH,4,10,1,0,3,1,0,3
+59,2,24,BASIS Silicon Valley B,PHYSICS,8,20,2,0,2,2,0,2
+60,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
+60,1,29,California,CHEMISTRY,-8,0,0,2,2,0,0,4
+60,1,29,California,EARTH_SPACE,4,0,1,0,3,0,1,3
+60,1,29,California,ENERGY,0,0,0,0,3,0,0,3
+60,1,29,California,MATH,0,0,0,0,4,0,0,4
+60,1,29,California,PHYSICS,8,10,2,0,2,1,1,2
+60,2,15,Mission San Jose A,BIOLOGY,4,20,2,1,1,2,0,2
+60,2,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
+60,2,15,Mission San Jose A,EARTH_SPACE,4,20,2,1,1,2,0,2
+60,2,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
+60,2,15,Mission San Jose A,MATH,12,30,3,0,1,3,0,1
+60,2,15,Mission San Jose A,PHYSICS,8,10,2,0,2,1,1,2
+61,1,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
+61,1,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
+61,1,30,Chico A,EARTH_SPACE,4,0,1,0,3,0,0,4
+61,1,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
+61,1,30,Chico A,MATH,4,0,1,0,3,0,0,4
+61,1,30,Chico A,PHYSICS,0,0,0,0,4,0,0,4
+61,2,38,Dougherty Valley B,BIOLOGY,16,30,4,0,0,3,0,1
+61,2,38,Dougherty Valley B,CHEMISTRY,12,20,3,0,1,2,0,2
+61,2,38,Dougherty Valley B,EARTH_SPACE,4,0,1,0,3,0,0,4
+61,2,38,Dougherty Valley B,ENERGY,8,10,2,0,1,1,0,2
+61,2,38,Dougherty Valley B,MATH,12,20,3,0,1,2,0,2
+61,2,38,Dougherty Valley B,PHYSICS,8,10,2,0,2,1,1,2
+62,1,7,Clovis North,BIOLOGY,12,20,3,0,1,2,1,1
+62,1,7,Clovis North,CHEMISTRY,16,40,4,0,0,4,0,0
+62,1,7,Clovis North,EARTH_SPACE,12,0,3,0,1,0,3,1
+62,1,7,Clovis North,ENERGY,8,20,2,0,1,2,0,1
+62,1,7,Clovis North,MATH,8,20,2,0,2,2,0,2
+62,1,7,Clovis North,PHYSICS,12,30,3,0,1,3,0,1
+62,2,41,Evergreen Valley,BIOLOGY,0,0,0,0,4,0,0,4
+62,2,41,Evergreen Valley,CHEMISTRY,0,0,0,0,4,0,0,4
+62,2,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
+62,2,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
+62,2,41,Evergreen Valley,MATH,0,0,0,0,4,0,0,4
+62,2,41,Evergreen Valley,PHYSICS,0,10,1,1,2,1,0,3
+63,1,19,Cupertino A,BIOLOGY,-4,0,0,1,3,0,0,4
+63,1,19,Cupertino A,CHEMISTRY,8,10,2,0,2,1,1,2
+63,1,19,Cupertino A,EARTH_SPACE,4,10,1,0,3,1,0,3
+63,1,19,Cupertino A,ENERGY,4,10,1,0,2,1,0,2
+63,1,19,Cupertino A,MATH,8,10,2,0,2,1,1,2
+63,1,19,Cupertino A,PHYSICS,12,20,3,0,1,2,1,1
+63,2,6,Foothill A,BIOLOGY,16,40,4,0,0,4,0,0
+63,2,6,Foothill A,CHEMISTRY,0,20,2,2,0,2,0,2
+63,2,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
+63,2,6,Foothill A,ENERGY,8,10,2,0,1,1,1,1
+63,2,6,Foothill A,MATH,8,10,2,0,2,1,1,2
+63,2,6,Foothill A,PHYSICS,0,0,1,1,2,0,1,3
+64,1,35,Cupertino B,BIOLOGY,12,30,3,0,1,3,0,1
+64,1,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
+64,1,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
+64,1,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
+64,1,35,Cupertino B,MATH,0,0,0,0,4,0,0,4
+64,1,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
+64,2,10,Davidson B,BIOLOGY,4,0,1,0,3,0,1,3
+64,2,10,Davidson B,CHEMISTRY,16,20,4,0,0,2,2,0
+64,2,10,Davidson B,EARTH_SPACE,12,20,3,0,1,2,1,1
+64,2,10,Davidson B,ENERGY,8,10,2,0,1,1,1,1
+64,2,10,Davidson B,MATH,16,30,4,0,0,3,1,0
+64,2,10,Davidson B,PHYSICS,12,30,3,0,1,3,0,1
+65,1,9,Davidson A,BIOLOGY,16,10,4,0,0,1,3,0
+65,1,9,Davidson A,CHEMISTRY,8,20,3,1,0,2,1,1
+65,1,9,Davidson A,EARTH_SPACE,16,40,4,0,0,4,0,0
+65,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
+65,1,9,Davidson A,MATH,8,30,3,1,0,3,0,1
+65,1,9,Davidson A,PHYSICS,12,30,3,0,1,3,0,1
+65,2,40,El Camino B,BIOLOGY,0,0,0,0,4,0,0,4
+65,2,40,El Camino B,CHEMISTRY,0,0,0,0,4,0,0,4
+65,2,40,El Camino B,EARTH_SPACE,0,0,0,0,4,0,0,4
+65,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
+65,2,40,El Camino B,MATH,0,0,0,0,4,0,0,4
+65,2,40,El Camino B,PHYSICS,4,10,1,0,3,1,0,3
+66,1,8,Dougherty Valley A,BIOLOGY,12,30,3,0,1,3,0,1
+66,1,8,Dougherty Valley A,CHEMISTRY,0,0,0,0,4,0,0,4
+66,1,8,Dougherty Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
+66,1,8,Dougherty Valley A,ENERGY,0,0,0,0,3,0,0,3
+66,1,8,Dougherty Valley A,MATH,8,20,2,0,2,2,0,2
+66,1,8,Dougherty Valley A,PHYSICS,8,10,2,0,2,1,1,2
+66,2,14,Palo Alto,BIOLOGY,4,0,1,0,3,0,1,3
+66,2,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
+66,2,14,Palo Alto,EARTH_SPACE,4,10,1,0,3,1,0,3
+66,2,14,Palo Alto,ENERGY,12,30,3,0,0,3,0,0
+66,2,14,Palo Alto,MATH,8,10,2,0,2,1,1,2
+66,2,14,Palo Alto,PHYSICS,8,20,2,0,2,2,0,2
+67,1,42,Foothill B,BIOLOGY,8,0,2,0,2,0,2,2
+67,1,42,Foothill B,CHEMISTRY,0,10,1,1,2,1,0,3
+67,1,42,Foothill B,EARTH_SPACE,0,0,0,0,4,0,0,4
+67,1,42,Foothill B,ENERGY,8,10,2,0,1,1,0,2
+67,1,42,Foothill B,MATH,-4,0,0,1,3,0,0,4
+67,1,42,Foothill B,PHYSICS,4,0,1,0,3,0,1,3
+67,2,39,El Camino A,BIOLOGY,0,0,0,0,4,0,0,4
+67,2,39,El Camino A,CHEMISTRY,8,20,2,0,2,2,0,2
+67,2,39,El Camino A,EARTH_SPACE,12,20,3,0,1,2,1,1
+67,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
+67,2,39,El Camino A,MATH,4,0,1,0,3,0,1,3
+67,2,39,El Camino A,PHYSICS,12,20,3,0,1,2,1,1
+68,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
+68,1,47,San Mateo,CHEMISTRY,4,0,1,0,3,0,1,3
+68,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
+68,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
+68,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
+68,1,47,San Mateo,PHYSICS,-4,0,0,1,3,0,0,4
+68,2,17,Folsom City,BIOLOGY,16,20,4,0,0,2,2,0
+68,2,17,Folsom City,CHEMISTRY,12,30,3,0,1,3,0,1
+68,2,17,Folsom City,EARTH_SPACE,16,30,4,0,0,3,1,0
+68,2,17,Folsom City,ENERGY,12,20,3,0,0,2,1,0
+68,2,17,Folsom City,MATH,8,10,2,0,2,1,1,2
+68,2,17,Folsom City,PHYSICS,12,20,3,0,1,2,1,1
+69,1,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
+69,1,28,GSB B,CHEMISTRY,8,10,2,0,2,1,1,2
+69,1,28,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
+69,1,28,GSB B,ENERGY,8,10,2,0,1,1,1,1
+69,1,28,GSB B,MATH,4,10,1,0,3,1,0,3
+69,1,28,GSB B,PHYSICS,4,10,1,0,3,1,0,3
+69,2,44,Miller,BIOLOGY,16,30,4,0,0,3,1,0
+69,2,44,Miller,CHEMISTRY,8,0,2,0,2,0,2,2
+69,2,44,Miller,EARTH_SPACE,8,20,2,0,2,2,0,2
+69,2,44,Miller,ENERGY,4,0,1,0,2,0,1,2
+69,2,44,Miller,MATH,12,10,3,0,1,1,2,1
+69,2,44,Miller,PHYSICS,8,10,2,0,2,1,1,2
+70,1,13,Irvington A,BIOLOGY,4,20,2,1,1,2,0,2
+70,1,13,Irvington A,CHEMISTRY,0,10,1,1,2,1,0,3
+70,1,13,Irvington A,EARTH_SPACE,4,10,1,0,3,1,0,3
+70,1,13,Irvington A,ENERGY,4,10,1,0,2,1,0,2
+70,1,13,Irvington A,MATH,4,20,2,1,1,2,0,2
+70,1,13,Irvington A,PHYSICS,16,30,4,0,0,3,0,1
+70,2,45,Lynbrook B,BIOLOGY,-4,10,1,2,1,1,0,3
+70,2,45,Lynbrook B,CHEMISTRY,12,20,3,0,1,2,0,2
+70,2,45,Lynbrook B,EARTH_SPACE,12,0,3,0,1,0,0,4
+70,2,45,Lynbrook B,ENERGY,0,10,1,1,1,1,0,2
+70,2,45,Lynbrook B,MATH,4,10,1,0,3,1,0,3
+70,2,45,Lynbrook B,PHYSICS,-4,0,0,1,3,0,0,4
+71,1,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
+71,1,27,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
+71,1,27,Irvington B,EARTH_SPACE,4,0,1,0,3,0,1,3
+71,1,27,Irvington B,ENERGY,0,0,1,1,1,0,1,2
+71,1,27,Irvington B,MATH,8,10,2,0,2,1,1,2
+71,1,27,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
+71,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
+71,2,46,Mira Loma B,CHEMISTRY,12,10,3,0,1,1,2,1
+71,2,46,Mira Loma B,EARTH_SPACE,8,10,2,0,2,1,1,2
+71,2,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
+71,2,46,Mira Loma B,MATH,4,0,1,0,3,0,1,3
+71,2,46,Mira Loma B,PHYSICS,8,10,2,0,2,1,1,2
+72,1,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
+72,1,48,Quarry Lane B,CHEMISTRY,8,10,2,0,2,1,1,2
+72,1,48,Quarry Lane B,EARTH_SPACE,4,0,1,0,3,0,1,3
+72,1,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
+72,1,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
+72,1,48,Quarry Lane B,PHYSICS,-4,0,0,1,3,0,0,4
+72,2,2,Mission San Jose B,BIOLOGY,8,20,3,1,0,2,1,1
+72,2,2,Mission San Jose B,CHEMISTRY,0,10,2,2,0,1,1,2
+72,2,2,Mission San Jose B,EARTH_SPACE,0,10,2,2,0,1,1,2
+72,2,2,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
+72,2,2,Mission San Jose B,MATH,16,40,4,0,0,4,0,0
+72,2,2,Mission San Jose B,PHYSICS,16,30,4,0,0,3,1,0
+73,1,47,San Mateo,BIOLOGY,8,20,2,0,2,2,0,2
+73,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
+73,1,47,San Mateo,EARTH_SPACE,0,0,0,0,4,0,0,4
+73,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
+73,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
+73,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
+73,2,18,Albany A,BIOLOGY,4,0,1,0,3,0,1,3
+73,2,18,Albany A,CHEMISTRY,4,0,1,0,3,0,1,3
+73,2,18,Albany A,EARTH_SPACE,4,0,1,0,3,0,1,3
+73,2,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
+73,2,18,Albany A,MATH,16,20,4,0,0,2,2,0
+73,2,18,Albany A,PHYSICS,0,0,0,0,4,0,0,4
+74,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
+74,1,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
+74,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
+74,1,20,Albany B,ENERGY,4,0,1,0,2,0,1,2
+74,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
+74,1,20,Albany B,PHYSICS,4,0,1,0,3,0,1,3
+74,2,6,Foothill A,BIOLOGY,8,20,3,1,0,2,1,1
+74,2,6,Foothill A,CHEMISTRY,12,20,3,0,1,2,1,1
+74,2,6,Foothill A,EARTH_SPACE,16,10,4,0,0,1,3,0
+74,2,6,Foothill A,ENERGY,4,10,2,1,0,1,1,1
+74,2,6,Foothill A,MATH,16,40,4,0,0,4,0,0
+74,2,6,Foothill A,PHYSICS,4,20,2,1,1,2,0,2
+75,1,1,Amador Valley A,BIOLOGY,-8,0,1,3,0,0,1,3
+75,1,1,Amador Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
+75,1,1,Amador Valley A,EARTH_SPACE,16,10,4,0,0,1,3,0
+75,1,1,Amador Valley A,ENERGY,12,30,3,0,0,3,0,0
+75,1,1,Amador Valley A,MATH,16,40,4,0,0,4,0,0
+75,1,1,Amador Valley A,PHYSICS,-4,10,1,2,1,1,0,3
+75,2,37,Mountain House A,BIOLOGY,0,0,0,0,4,0,0,4
+75,2,37,Mountain House A,CHEMISTRY,0,0,0,0,4,0,0,4
+75,2,37,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
+75,2,37,Mountain House A,ENERGY,0,0,0,0,3,0,0,3
+75,2,37,Mountain House A,MATH,0,0,0,0,4,0,0,4
+75,2,37,Mountain House A,PHYSICS,12,30,3,0,1,3,0,1
+76,1,22,Amador Valley B,BIOLOGY,0,0,1,1,2,0,1,3
+76,1,22,Amador Valley B,CHEMISTRY,0,0,1,1,2,0,1,3
+76,1,22,Amador Valley B,EARTH_SPACE,4,0,1,0,3,0,1,3
+76,1,22,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
+76,1,22,Amador Valley B,MATH,-4,10,1,2,1,1,0,3
+76,1,22,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
+76,2,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
+76,2,43,Los Gatos,CHEMISTRY,12,0,3,0,1,0,3,1
+76,2,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
+76,2,43,Los Gatos,ENERGY,4,0,1,0,2,0,1,2
+76,2,43,Los Gatos,MATH,12,10,3,0,1,1,2,1
+76,2,43,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
+77,1,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
+77,1,23,American A,CHEMISTRY,0,0,0,0,4,0,0,4
+77,1,23,American A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+77,1,23,American A,ENERGY,0,0,0,0,3,0,0,3
+77,1,23,American A,MATH,0,0,0,0,4,0,0,4
+77,1,23,American A,PHYSICS,-4,0,0,1,3,0,0,4
+77,2,3,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
+77,2,3,Lynbrook A,CHEMISTRY,16,30,4,0,0,3,1,0
+77,2,3,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,1,0
+77,2,3,Lynbrook A,ENERGY,12,20,3,0,0,2,1,0
+77,2,3,Lynbrook A,MATH,16,40,4,0,0,4,0,0
+77,2,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
+78,1,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
+78,1,25,American B,CHEMISTRY,0,0,0,0,4,0,0,4
+78,1,25,American B,EARTH_SPACE,4,10,1,0,3,1,0,3
+78,1,25,American B,ENERGY,0,0,0,0,3,0,0,3
+78,1,25,American B,MATH,4,0,1,0,3,0,1,3
+78,1,25,American B,PHYSICS,0,0,0,0,4,0,0,4
+78,2,11,GSB A,BIOLOGY,8,20,3,1,0,2,1,1
+78,2,11,GSB A,CHEMISTRY,12,20,3,0,1,2,1,1
+78,2,11,GSB A,EARTH_SPACE,0,0,0,0,4,0,0,4
+78,2,11,GSB A,ENERGY,-4,10,1,2,0,1,0,2
+78,2,11,GSB A,MATH,8,30,3,1,0,3,0,1
+78,2,11,GSB A,PHYSICS,-4,10,1,2,1,1,0,3
+79,1,4,Archbishop Mitty A,BIOLOGY,16,20,4,0,0,2,1,1
+79,1,4,Archbishop Mitty A,CHEMISTRY,16,40,4,0,0,4,0,0
+79,1,4,Archbishop Mitty A,EARTH_SPACE,16,20,4,0,0,2,2,0
+79,1,4,Archbishop Mitty A,ENERGY,4,10,2,1,0,1,1,1
+79,1,4,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
+79,1,4,Archbishop Mitty A,PHYSICS,-8,0,0,2,2,0,0,4
+79,2,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
+79,2,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
+79,2,30,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
+79,2,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
+79,2,30,Chico A,MATH,4,0,1,0,3,0,0,4
+79,2,30,Chico A,PHYSICS,4,0,1,0,3,0,1,3
+80,1,26,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
+80,1,26,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
+80,1,26,Archbishop Mitty B,EARTH_SPACE,12,20,3,0,1,2,1,1
+80,1,26,Archbishop Mitty B,ENERGY,-4,0,0,1,2,0,0,3
+80,1,26,Archbishop Mitty B,MATH,12,0,3,0,1,0,3,1
+80,1,26,Archbishop Mitty B,PHYSICS,0,0,0,0,4,0,0,4
+80,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
+80,2,46,Mira Loma B,CHEMISTRY,8,0,2,0,2,0,2,2
+80,2,46,Mira Loma B,EARTH_SPACE,4,10,1,0,3,1,0,3
+80,2,46,Mira Loma B,ENERGY,8,20,2,0,1,2,0,1
+80,2,46,Mira Loma B,MATH,4,0,1,0,3,0,1,3
+80,2,46,Mira Loma B,PHYSICS,12,20,3,0,1,2,1,1
+81,1,21,BASIS Fremont,BIOLOGY,0,0,0,0,4,0,0,4
+81,1,21,BASIS Fremont,CHEMISTRY,4,0,1,0,3,0,1,3
+81,1,21,BASIS Fremont,EARTH_SPACE,8,0,3,1,0,0,3,1
+81,1,21,BASIS Fremont,ENERGY,4,0,1,0,2,0,1,2
+81,1,21,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
+81,1,21,BASIS Fremont,PHYSICS,4,10,1,0,3,1,0,3
+81,2,35,Cupertino B,BIOLOGY,12,10,3,0,1,1,2,1
+81,2,35,Cupertino B,CHEMISTRY,8,0,2,0,2,0,2,2
+81,2,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
+81,2,35,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
+81,2,35,Cupertino B,MATH,4,10,2,1,1,1,1,2
+81,2,35,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
+82,1,39,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
+82,1,39,El Camino A,CHEMISTRY,0,0,0,0,4,0,0,4
+82,1,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
+82,1,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
+82,1,39,El Camino A,MATH,4,10,1,0,3,1,0,3
+82,1,39,El Camino A,PHYSICS,4,0,1,0,3,0,1,3
+82,2,5,BASIS Silicon Valley A,BIOLOGY,0,20,2,2,0,2,0,2
+82,2,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
+82,2,5,BASIS Silicon Valley A,EARTH_SPACE,12,30,3,0,1,3,0,1
+82,2,5,BASIS Silicon Valley A,ENERGY,12,30,3,0,0,3,0,0
+82,2,5,BASIS Silicon Valley A,MATH,12,20,3,0,1,2,1,1
+82,2,5,BASIS Silicon Valley A,PHYSICS,4,10,2,1,1,1,1,2
+83,1,24,BASIS Silicon Valley B,BIOLOGY,4,10,1,0,3,1,0,3
+83,1,24,BASIS Silicon Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
+83,1,24,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+83,1,24,BASIS Silicon Valley B,ENERGY,4,0,1,0,2,0,1,2
+83,1,24,BASIS Silicon Valley B,MATH,0,10,1,1,2,1,0,3
+83,1,24,BASIS Silicon Valley B,PHYSICS,8,30,3,1,0,3,0,1
+83,2,7,Clovis North,BIOLOGY,12,30,3,0,1,3,0,1
+83,2,7,Clovis North,CHEMISTRY,12,30,3,0,1,3,0,1
+83,2,7,Clovis North,EARTH_SPACE,4,0,2,1,1,0,2,2
+83,2,7,Clovis North,ENERGY,4,20,2,1,0,2,0,1
+83,2,7,Clovis North,MATH,8,20,3,1,0,2,1,1
+83,2,7,Clovis North,PHYSICS,0,0,0,0,4,0,0,4
+84,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
+84,1,29,California,CHEMISTRY,4,0,1,0,3,0,0,4
+84,1,29,California,EARTH_SPACE,0,0,0,0,4,0,0,4
+84,1,29,California,ENERGY,-4,0,0,1,2,0,0,3
+84,1,29,California,MATH,0,10,1,1,2,1,0,3
+84,1,29,California,PHYSICS,4,10,1,0,3,1,0,3
+84,2,44,Miller,BIOLOGY,8,20,3,1,0,2,0,2
+84,2,44,Miller,CHEMISTRY,8,10,2,0,2,1,0,3
+84,2,44,Miller,EARTH_SPACE,16,30,4,0,0,3,0,1
+84,2,44,Miller,ENERGY,8,20,2,0,1,2,0,1
+84,2,44,Miller,MATH,12,30,3,0,1,3,0,1
+84,2,44,Miller,PHYSICS,8,20,2,0,2,2,0,2
+85,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
+85,1,32,Chico B,CHEMISTRY,0,0,0,0,4,0,0,4
+85,1,32,Chico B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+85,1,32,Chico B,ENERGY,4,0,1,0,2,0,1,2
+85,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
+85,1,32,Chico B,PHYSICS,0,10,1,1,2,1,0,3
+85,2,14,Palo Alto,BIOLOGY,8,20,3,1,0,2,1,1
+85,2,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
+85,2,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
+85,2,14,Palo Alto,ENERGY,4,20,2,1,0,2,0,1
+85,2,14,Palo Alto,MATH,16,30,4,0,0,3,1,0
+85,2,14,Palo Alto,PHYSICS,12,30,3,0,1,3,0,1
+86,1,9,Davidson A,BIOLOGY,4,0,2,1,1,0,2,2
+86,1,9,Davidson A,CHEMISTRY,16,40,4,0,0,4,0,0
+86,1,9,Davidson A,EARTH_SPACE,16,40,4,0,0,4,0,0
+86,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
+86,1,9,Davidson A,MATH,16,40,4,0,0,4,0,0
+86,1,9,Davidson A,PHYSICS,16,40,4,0,0,4,0,0
+86,2,19,Cupertino A,BIOLOGY,0,0,0,0,4,0,0,4
+86,2,19,Cupertino A,CHEMISTRY,0,0,0,0,4,0,0,4
+86,2,19,Cupertino A,EARTH_SPACE,0,0,0,0,4,0,0,4
+86,2,19,Cupertino A,ENERGY,-4,0,0,1,2,0,0,3
+86,2,19,Cupertino A,MATH,0,0,0,0,4,0,0,4
+86,2,19,Cupertino A,PHYSICS,-4,0,0,1,3,0,0,4
+87,1,10,Davidson B,BIOLOGY,-8,0,0,2,2,0,0,4
+87,1,10,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
+87,1,10,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
+87,1,10,Davidson B,ENERGY,4,0,1,0,2,0,1,2
+87,1,10,Davidson B,MATH,12,20,3,0,1,2,1,1
+87,1,10,Davidson B,PHYSICS,8,10,2,0,2,1,1,2
+87,2,34,Stanford Online,BIOLOGY,8,10,2,0,2,1,1,2
+87,2,34,Stanford Online,CHEMISTRY,4,10,1,0,3,1,0,3
+87,2,34,Stanford Online,EARTH_SPACE,0,0,1,1,2,0,1,3
+87,2,34,Stanford Online,ENERGY,8,20,2,0,1,2,0,1
+87,2,34,Stanford Online,MATH,0,0,1,1,2,0,1,3
+87,2,34,Stanford Online,PHYSICS,0,10,1,1,2,1,0,3
+88,1,8,Dougherty Valley A,BIOLOGY,12,30,3,0,1,3,0,1
+88,1,8,Dougherty Valley A,CHEMISTRY,12,30,3,0,1,3,0,1
+88,1,8,Dougherty Valley A,EARTH_SPACE,12,20,3,0,1,2,1,1
+88,1,8,Dougherty Valley A,ENERGY,8,20,2,0,1,2,0,1
+88,1,8,Dougherty Valley A,MATH,12,10,3,0,1,1,2,1
+88,1,8,Dougherty Valley A,PHYSICS,0,10,1,1,2,1,0,3
+88,2,27,Irvington B,BIOLOGY,4,0,1,0,3,0,1,3
+88,2,27,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
+88,2,27,Irvington B,EARTH_SPACE,4,10,1,0,3,1,0,3
+88,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
+88,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
+88,2,27,Irvington B,PHYSICS,8,0,2,0,2,0,2,2
+89,1,38,Dougherty Valley B,BIOLOGY,12,10,3,0,1,1,2,1
+89,1,38,Dougherty Valley B,CHEMISTRY,8,20,2,0,2,2,0,2
+89,1,38,Dougherty Valley B,EARTH_SPACE,4,10,1,0,3,1,0,3
+89,1,38,Dougherty Valley B,ENERGY,4,20,2,1,0,2,0,1
+89,1,38,Dougherty Valley B,MATH,12,30,3,0,1,3,0,1
+89,1,38,Dougherty Valley B,PHYSICS,4,0,2,1,1,0,2,2
+89,2,31,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
+89,2,31,Mountain House B,CHEMISTRY,4,0,1,0,3,0,1,3
+89,2,31,Mountain House B,EARTH_SPACE,8,10,2,0,2,1,1,2
+89,2,31,Mountain House B,ENERGY,4,10,1,0,2,1,0,2
+89,2,31,Mountain House B,MATH,4,0,1,0,3,0,1,3
+89,2,31,Mountain House B,PHYSICS,0,0,1,1,2,0,1,3
+90,1,40,El Camino B,BIOLOGY,4,0,2,1,1,0,2,2
+90,1,40,El Camino B,CHEMISTRY,4,0,1,0,3,0,1,3
+90,1,40,El Camino B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+90,1,40,El Camino B,ENERGY,12,0,3,0,0,0,3,0
+90,1,40,El Camino B,MATH,4,10,2,1,1,1,1,2
+90,1,40,El Camino B,PHYSICS,4,0,1,0,3,0,1,3
+90,2,36,Homestead,BIOLOGY,0,0,1,1,2,0,1,3
+90,2,36,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
+90,2,36,Homestead,EARTH_SPACE,8,10,2,0,2,1,1,2
+90,2,36,Homestead,ENERGY,-4,0,0,1,2,0,0,3
+90,2,36,Homestead,MATH,0,0,1,1,2,0,1,3
+90,2,36,Homestead,PHYSICS,4,0,1,0,3,0,1,3
+91,1,41,Evergreen Valley,BIOLOGY,4,10,2,1,1,1,1,2
+91,1,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
+91,1,41,Evergreen Valley,EARTH_SPACE,4,0,1,0,3,0,1,3
+91,1,41,Evergreen Valley,ENERGY,4,0,1,0,2,0,1,2
+91,1,41,Evergreen Valley,MATH,8,10,2,0,2,1,1,2
+91,1,41,Evergreen Valley,PHYSICS,4,0,1,0,3,0,1,3
+91,2,33,Quarry Lane A,BIOLOGY,4,0,2,1,1,0,2,2
+91,2,33,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
+91,2,33,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
+91,2,33,Quarry Lane A,ENERGY,4,10,1,0,2,1,0,2
+91,2,33,Quarry Lane A,MATH,0,0,0,0,4,0,0,4
+91,2,33,Quarry Lane A,PHYSICS,-4,0,0,1,3,0,0,4
+92,1,17,Folsom City,BIOLOGY,4,10,1,0,3,1,0,3
+92,1,17,Folsom City,CHEMISTRY,0,0,0,0,4,0,0,4
+92,1,17,Folsom City,EARTH_SPACE,4,10,1,0,3,1,0,3
+92,1,17,Folsom City,ENERGY,8,10,2,0,1,1,1,1
+92,1,17,Folsom City,MATH,4,0,1,0,3,0,1,3
+92,1,17,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
+92,2,2,Mission San Jose B,BIOLOGY,4,10,2,1,1,1,1,2
+92,2,2,Mission San Jose B,CHEMISTRY,12,20,3,0,1,2,1,1
+92,2,2,Mission San Jose B,EARTH_SPACE,12,30,3,0,1,3,0,1
+92,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
+92,2,2,Mission San Jose B,MATH,8,30,3,1,0,3,0,1
+92,2,2,Mission San Jose B,PHYSICS,8,20,3,1,0,2,1,1
+93,1,16,Mira Loma A,BIOLOGY,8,20,3,1,0,2,1,1
+93,1,16,Mira Loma A,CHEMISTRY,-4,10,1,2,1,1,0,3
+93,1,16,Mira Loma A,EARTH_SPACE,12,0,3,0,1,0,3,1
+93,1,16,Mira Loma A,ENERGY,4,0,2,1,0,0,2,1
+93,1,16,Mira Loma A,MATH,8,10,2,0,2,1,0,3
+93,1,16,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
+93,2,42,Foothill B,BIOLOGY,0,0,0,0,4,0,0,4
+93,2,42,Foothill B,CHEMISTRY,4,0,2,1,1,0,2,2
+93,2,42,Foothill B,EARTH_SPACE,0,0,0,0,4,0,0,4
+93,2,42,Foothill B,ENERGY,0,0,0,0,3,0,0,3
+93,2,42,Foothill B,MATH,8,10,2,0,2,1,1,2
+93,2,42,Foothill B,PHYSICS,0,0,0,0,4,0,0,4
+94,1,13,Irvington A,BIOLOGY,4,10,2,1,1,1,1,2
+94,1,13,Irvington A,CHEMISTRY,4,10,2,1,1,1,1,2
+94,1,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
+94,1,13,Irvington A,ENERGY,12,30,3,0,0,3,0,0
+94,1,13,Irvington A,MATH,8,20,3,1,0,2,1,1
+94,1,13,Irvington A,PHYSICS,12,30,3,0,1,3,0,1
+94,2,28,GSB B,BIOLOGY,4,0,1,0,3,0,1,3
+94,2,28,GSB B,CHEMISTRY,4,0,1,0,3,0,1,3
+94,2,28,GSB B,EARTH_SPACE,4,0,1,0,3,0,1,3
+94,2,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
+94,2,28,GSB B,MATH,4,10,1,0,3,1,0,3
+94,2,28,GSB B,PHYSICS,0,0,0,0,4,0,0,4
+95,1,15,Mission San Jose A,BIOLOGY,12,30,3,0,1,3,0,1
+95,1,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
+95,1,15,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
+95,1,15,Mission San Jose A,ENERGY,12,30,3,0,0,3,0,0
+95,1,15,Mission San Jose A,MATH,8,30,3,1,0,3,0,1
+95,1,15,Mission San Jose A,PHYSICS,12,30,3,0,1,3,0,1
+95,2,45,Lynbrook B,BIOLOGY,0,10,1,1,2,1,0,3
+95,2,45,Lynbrook B,CHEMISTRY,0,10,1,1,2,1,0,3
+95,2,45,Lynbrook B,EARTH_SPACE,0,0,0,0,4,0,0,4
+95,2,45,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
+95,2,45,Lynbrook B,MATH,0,10,1,1,2,1,0,3
+95,2,45,Lynbrook B,PHYSICS,0,0,0,0,4,0,0,4
+96,1,12,Saratoga,BIOLOGY,12,30,3,0,1,3,0,1
+96,1,12,Saratoga,CHEMISTRY,8,30,3,1,0,3,0,1
+96,1,12,Saratoga,EARTH_SPACE,12,20,3,0,1,2,1,1
+96,1,12,Saratoga,ENERGY,12,30,3,0,0,3,0,0
+96,1,12,Saratoga,MATH,16,20,4,0,0,2,2,0
+96,1,12,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
+96,2,48,Quarry Lane B,BIOLOGY,4,0,1,0,3,0,1,3
+96,2,48,Quarry Lane B,CHEMISTRY,4,10,1,0,3,1,0,3
+96,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
+96,2,48,Quarry Lane B,ENERGY,-4,0,0,1,2,0,0,3
+96,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
+96,2,48,Quarry Lane B,PHYSICS,0,0,0,0,4,0,0,4
+97,1,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
+97,1,18,Albany A,CHEMISTRY,4,10,1,0,3,1,0,3
+97,1,18,Albany A,EARTH_SPACE,0,0,0,0,4,0,0,4
+97,1,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
+97,1,18,Albany A,MATH,0,0,0,0,4,0,0,4
+97,1,18,Albany A,PHYSICS,4,0,1,0,3,0,1,3
+97,2,48,Quarry Lane B,BIOLOGY,12,20,3,0,1,2,1,1
+97,2,48,Quarry Lane B,CHEMISTRY,0,0,1,1,2,0,1,3
+97,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
+97,2,48,Quarry Lane B,ENERGY,4,0,1,0,2,0,1,2
+97,2,48,Quarry Lane B,MATH,12,10,3,0,1,1,2,1
+97,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
+98,1,40,El Camino B,BIOLOGY,12,10,3,0,1,1,2,1
+98,1,40,El Camino B,CHEMISTRY,12,10,3,0,1,1,2,1
+98,1,40,El Camino B,EARTH_SPACE,8,0,2,0,2,0,2,2
+98,1,40,El Camino B,ENERGY,8,20,2,0,1,2,0,1
+98,1,40,El Camino B,MATH,-4,0,0,1,3,0,0,4
+98,1,40,El Camino B,PHYSICS,0,0,0,0,4,0,0,4
+98,2,20,Albany B,BIOLOGY,4,10,1,0,3,1,0,3
+98,2,20,Albany B,CHEMISTRY,4,0,1,0,3,0,1,3
+98,2,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
+98,2,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
+98,2,20,Albany B,MATH,4,0,1,0,3,0,1,3
+98,2,20,Albany B,PHYSICS,4,10,1,0,3,1,0,3
+99,1,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
+99,1,10,Davidson B,CHEMISTRY,4,10,1,0,3,1,0,3
+99,1,10,Davidson B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+99,1,10,Davidson B,ENERGY,4,10,1,0,2,1,0,2
+99,1,10,Davidson B,MATH,8,20,2,0,2,2,0,2
+99,1,10,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
+99,2,1,Amador Valley A,BIOLOGY,0,0,2,2,0,0,2,2
+99,2,1,Amador Valley A,CHEMISTRY,0,20,2,2,0,2,0,2
+99,2,1,Amador Valley A,EARTH_SPACE,8,20,3,1,0,2,1,1
+99,2,1,Amador Valley A,ENERGY,-4,10,1,2,0,1,0,2
+99,2,1,Amador Valley A,MATH,8,20,2,0,2,2,0,2
+99,2,1,Amador Valley A,PHYSICS,12,10,3,0,1,1,2,1
+100,1,42,Foothill B,BIOLOGY,8,0,2,0,2,0,2,2
+100,1,42,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
+100,1,42,Foothill B,EARTH_SPACE,8,10,2,0,2,1,1,2
+100,1,42,Foothill B,ENERGY,4,10,1,0,2,1,0,2
+100,1,42,Foothill B,MATH,4,10,1,0,3,1,0,3
+100,1,42,Foothill B,PHYSICS,8,0,2,0,2,0,2,2
+100,2,22,Amador Valley B,BIOLOGY,4,10,1,0,3,1,0,3
+100,2,22,Amador Valley B,CHEMISTRY,8,0,2,0,2,0,2,2
+100,2,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+100,2,22,Amador Valley B,ENERGY,4,10,1,0,2,1,0,2
+100,2,22,Amador Valley B,MATH,12,30,3,0,1,3,0,1
+100,2,22,Amador Valley B,PHYSICS,4,0,1,0,3,0,1,3
+101,1,38,Dougherty Valley B,BIOLOGY,12,30,3,0,1,3,0,1
+101,1,38,Dougherty Valley B,CHEMISTRY,4,10,1,0,3,1,0,3
+101,1,38,Dougherty Valley B,EARTH_SPACE,0,10,1,1,2,1,0,3
+101,1,38,Dougherty Valley B,ENERGY,8,0,2,0,1,0,2,1
+101,1,38,Dougherty Valley B,MATH,4,20,2,1,1,2,0,2
+101,1,38,Dougherty Valley B,PHYSICS,0,10,1,1,2,1,0,3
+101,2,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
+101,2,23,American A,CHEMISTRY,12,10,3,0,1,1,2,1
+101,2,23,American A,EARTH_SPACE,4,10,1,0,3,1,0,3
+101,2,23,American A,ENERGY,-4,0,0,1,2,0,0,3
+101,2,23,American A,MATH,0,0,1,1,2,0,1,3
+101,2,23,American A,PHYSICS,8,10,2,0,2,1,1,2
+102,1,41,Evergreen Valley,BIOLOGY,16,0,4,0,0,0,4,0
+102,1,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
+102,1,41,Evergreen Valley,EARTH_SPACE,4,10,1,0,3,1,0,3
+102,1,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
+102,1,41,Evergreen Valley,MATH,4,10,2,1,1,1,1,2
+102,1,41,Evergreen Valley,PHYSICS,8,0,2,0,2,0,2,2
+102,2,25,American B,BIOLOGY,0,0,0,0,4,0,0,4
+102,2,25,American B,CHEMISTRY,4,0,1,0,3,0,1,3
+102,2,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
+102,2,25,American B,ENERGY,4,10,1,0,2,1,0,2
+102,2,25,American B,MATH,8,0,2,0,2,0,2,2
+102,2,25,American B,PHYSICS,8,10,2,0,2,1,1,2
+103,1,31,Mountain House B,BIOLOGY,0,0,0,0,4,0,0,4
+103,1,31,Mountain House B,CHEMISTRY,0,0,0,0,4,0,0,4
+103,1,31,Mountain House B,EARTH_SPACE,4,0,1,0,3,0,1,3
+103,1,31,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
+103,1,31,Mountain House B,MATH,4,0,1,0,3,0,1,3
+103,1,31,Mountain House B,PHYSICS,4,10,1,0,3,1,0,3
+103,2,4,Archbishop Mitty A,BIOLOGY,12,20,3,0,1,2,1,1
+103,2,4,Archbishop Mitty A,CHEMISTRY,8,20,3,1,0,2,1,1
+103,2,4,Archbishop Mitty A,EARTH_SPACE,8,10,2,0,2,1,1,2
+103,2,4,Archbishop Mitty A,ENERGY,-4,0,0,1,2,0,0,3
+103,2,4,Archbishop Mitty A,MATH,12,20,3,0,1,2,1,1
+103,2,4,Archbishop Mitty A,PHYSICS,4,0,2,1,1,0,2,2
+104,1,26,Archbishop Mitty B,BIOLOGY,0,0,0,0,4,0,0,4
+104,1,26,Archbishop Mitty B,CHEMISTRY,4,0,1,0,3,0,1,3
+104,1,26,Archbishop Mitty B,EARTH_SPACE,0,10,1,1,2,1,0,3
+104,1,26,Archbishop Mitty B,ENERGY,0,0,0,0,3,0,0,3
+104,1,26,Archbishop Mitty B,MATH,0,10,1,1,2,1,0,3
+104,1,26,Archbishop Mitty B,PHYSICS,8,0,2,0,2,0,2,2
+104,2,8,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
+104,2,8,Dougherty Valley A,CHEMISTRY,8,10,2,0,2,1,1,2
+104,2,8,Dougherty Valley A,EARTH_SPACE,8,20,2,0,2,2,0,2
+104,2,8,Dougherty Valley A,ENERGY,12,10,3,0,0,1,2,0
+104,2,8,Dougherty Valley A,MATH,8,20,2,0,2,2,0,2
+104,2,8,Dougherty Valley A,PHYSICS,4,0,2,1,1,0,2,2
+105,1,21,BASIS Fremont,BIOLOGY,8,0,3,1,0,0,3,1
+105,1,21,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
+105,1,21,BASIS Fremont,EARTH_SPACE,4,10,1,0,3,1,0,3
+105,1,21,BASIS Fremont,ENERGY,0,0,0,0,3,0,0,3
+105,1,21,BASIS Fremont,MATH,8,0,2,0,2,0,2,2
+105,1,21,BASIS Fremont,PHYSICS,4,0,1,0,3,0,1,3
+105,2,34,Stanford Online,BIOLOGY,4,0,1,0,3,0,1,3
+105,2,34,Stanford Online,CHEMISTRY,4,20,2,1,1,2,0,2
+105,2,34,Stanford Online,EARTH_SPACE,4,0,1,0,3,0,1,3
+105,2,34,Stanford Online,ENERGY,-4,10,1,2,0,1,0,2
+105,2,34,Stanford Online,MATH,-4,0,0,1,3,0,0,4
+105,2,34,Stanford Online,PHYSICS,4,0,1,0,3,0,1,3
+106,1,5,BASIS Silicon Valley A,BIOLOGY,16,40,4,0,0,4,0,0
+106,1,5,BASIS Silicon Valley A,CHEMISTRY,8,20,2,0,2,2,0,2
+106,1,5,BASIS Silicon Valley A,EARTH_SPACE,0,0,0,0,4,0,0,4
+106,1,5,BASIS Silicon Valley A,ENERGY,4,10,2,1,0,1,1,1
+106,1,5,BASIS Silicon Valley A,MATH,4,20,2,1,1,2,0,2
+106,1,5,BASIS Silicon Valley A,PHYSICS,4,20,2,1,1,2,0,2
+106,2,16,Mira Loma A,BIOLOGY,-4,0,0,1,3,0,0,4
+106,2,16,Mira Loma A,CHEMISTRY,8,20,2,0,2,2,0,2
+106,2,16,Mira Loma A,EARTH_SPACE,16,20,4,0,0,2,2,0
+106,2,16,Mira Loma A,ENERGY,4,10,1,0,2,1,0,2
+106,2,16,Mira Loma A,MATH,8,10,2,0,2,1,1,2
+106,2,16,Mira Loma A,PHYSICS,8,10,2,0,2,1,1,2
+107,1,33,Quarry Lane A,BIOLOGY,-4,0,0,1,3,0,0,4
+107,1,33,Quarry Lane A,CHEMISTRY,0,0,0,0,4,0,0,4
+107,1,33,Quarry Lane A,EARTH_SPACE,0,10,1,1,2,1,0,3
+107,1,33,Quarry Lane A,ENERGY,0,0,0,0,3,0,0,3
+107,1,33,Quarry Lane A,MATH,4,0,1,0,3,0,1,3
+107,1,33,Quarry Lane A,PHYSICS,0,0,0,0,4,0,0,4
+107,2,24,BASIS Silicon Valley B,BIOLOGY,12,10,3,0,1,1,2,1
+107,2,24,BASIS Silicon Valley B,CHEMISTRY,4,20,2,1,1,2,0,2
+107,2,24,BASIS Silicon Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+107,2,24,BASIS Silicon Valley B,ENERGY,-4,0,1,2,0,0,1,2
+107,2,24,BASIS Silicon Valley B,MATH,8,30,3,1,0,3,0,1
+107,2,24,BASIS Silicon Valley B,PHYSICS,16,20,4,0,0,2,2,0
+108,1,29,California,BIOLOGY,-4,0,0,1,3,0,0,4
+108,1,29,California,CHEMISTRY,16,10,4,0,0,1,3,0
+108,1,29,California,EARTH_SPACE,0,10,1,1,2,1,0,3
+108,1,29,California,ENERGY,12,20,3,0,0,2,1,0
+108,1,29,California,MATH,0,0,0,0,4,0,0,4
+108,1,29,California,PHYSICS,12,10,3,0,1,1,2,1
+108,2,45,Lynbrook B,BIOLOGY,16,20,4,0,0,2,2,0
+108,2,45,Lynbrook B,CHEMISTRY,-4,0,0,1,3,0,0,4
+108,2,45,Lynbrook B,EARTH_SPACE,8,20,2,0,2,2,0,2
+108,2,45,Lynbrook B,ENERGY,0,0,0,0,3,0,0,3
+108,2,45,Lynbrook B,MATH,12,30,3,0,1,3,0,1
+108,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
+109,1,30,Chico A,BIOLOGY,0,0,0,0,4,0,0,4
+109,1,30,Chico A,CHEMISTRY,4,0,1,0,3,0,0,4
+109,1,30,Chico A,EARTH_SPACE,0,0,0,0,4,0,0,4
+109,1,30,Chico A,ENERGY,0,0,0,0,3,0,0,3
+109,1,30,Chico A,MATH,0,0,0,0,4,0,0,4
+109,1,30,Chico A,PHYSICS,0,0,0,0,4,0,0,4
+109,2,3,Lynbrook A,BIOLOGY,8,30,3,1,0,3,0,1
+109,2,3,Lynbrook A,CHEMISTRY,4,20,2,1,1,2,0,2
+109,2,3,Lynbrook A,EARTH_SPACE,16,30,4,0,0,3,0,1
+109,2,3,Lynbrook A,ENERGY,8,20,2,0,1,2,0,1
+109,2,3,Lynbrook A,MATH,12,30,3,0,1,3,0,1
+109,2,3,Lynbrook A,PHYSICS,0,20,2,2,0,2,0,2
+110,1,32,Chico B,BIOLOGY,0,0,0,0,4,0,0,4
+110,1,32,Chico B,CHEMISTRY,-4,0,0,1,3,0,0,4
+110,1,32,Chico B,EARTH_SPACE,0,10,1,1,2,1,0,3
+110,1,32,Chico B,ENERGY,8,0,2,0,1,0,2,1
+110,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
+110,1,32,Chico B,PHYSICS,-4,0,0,1,3,0,0,4
+110,2,46,Mira Loma B,BIOLOGY,12,10,3,0,1,1,2,1
+110,2,46,Mira Loma B,CHEMISTRY,12,20,3,0,1,2,1,1
+110,2,46,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
+110,2,46,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
+110,2,46,Mira Loma B,MATH,12,10,3,0,1,1,2,1
+110,2,46,Mira Loma B,PHYSICS,8,0,2,0,2,0,2,2
+111,1,7,Clovis North,BIOLOGY,8,20,2,0,2,2,0,2
+111,1,7,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
+111,1,7,Clovis North,EARTH_SPACE,8,0,2,0,2,0,2,2
+111,1,7,Clovis North,ENERGY,8,20,2,0,1,2,0,1
+111,1,7,Clovis North,MATH,0,0,0,0,4,0,0,4
+111,1,7,Clovis North,PHYSICS,4,10,1,0,3,1,0,3
+111,2,11,GSB A,BIOLOGY,4,10,1,0,3,1,0,3
+111,2,11,GSB A,CHEMISTRY,-4,0,0,1,3,0,0,4
+111,2,11,GSB A,EARTH_SPACE,0,10,1,1,2,1,0,3
+111,2,11,GSB A,ENERGY,0,0,1,1,1,0,1,2
+111,2,11,GSB A,MATH,12,30,3,0,1,3,0,1
+111,2,11,GSB A,PHYSICS,4,10,2,1,1,1,1,2
+112,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
+112,1,19,Cupertino A,CHEMISTRY,16,30,4,0,0,3,1,0
+112,1,19,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
+112,1,19,Cupertino A,ENERGY,8,10,2,0,1,1,1,1
+112,1,19,Cupertino A,MATH,4,0,2,1,1,0,2,2
+112,1,19,Cupertino A,PHYSICS,8,20,2,0,2,2,0,2
+112,2,36,Homestead,BIOLOGY,8,10,2,0,2,1,1,2
+112,2,36,Homestead,CHEMISTRY,0,0,0,0,4,0,0,4
+112,2,36,Homestead,EARTH_SPACE,0,0,0,0,4,0,0,4
+112,2,36,Homestead,ENERGY,4,0,1,0,2,0,1,2
+112,2,36,Homestead,MATH,4,0,1,0,3,0,1,3
+112,2,36,Homestead,PHYSICS,8,10,2,0,2,1,1,2
+113,1,35,Cupertino B,BIOLOGY,0,10,1,1,2,1,0,3
+113,1,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
+113,1,35,Cupertino B,EARTH_SPACE,4,0,1,0,3,0,1,3
+113,1,35,Cupertino B,ENERGY,4,0,1,0,2,0,1,2
+113,1,35,Cupertino B,MATH,8,10,2,0,2,1,1,2
+113,1,35,Cupertino B,PHYSICS,0,0,0,0,4,0,0,4
+113,2,37,Mountain House A,BIOLOGY,4,0,1,0,3,0,1,3
+113,2,37,Mountain House A,CHEMISTRY,-8,0,0,2,2,0,0,4
+113,2,37,Mountain House A,EARTH_SPACE,4,0,1,0,3,0,1,3
+113,2,37,Mountain House A,ENERGY,8,0,2,0,1,0,2,1
+113,2,37,Mountain House A,MATH,8,10,2,0,2,1,1,2
+113,2,37,Mountain House A,PHYSICS,16,30,4,0,0,3,1,0
+114,1,9,Davidson A,BIOLOGY,12,20,3,0,1,2,1,1
+114,1,9,Davidson A,CHEMISTRY,8,20,3,1,0,2,1,1
+114,1,9,Davidson A,EARTH_SPACE,8,20,2,0,2,2,0,2
+114,1,9,Davidson A,ENERGY,12,30,3,0,0,3,0,0
+114,1,9,Davidson A,MATH,12,30,3,0,1,3,0,1
+114,1,9,Davidson A,PHYSICS,12,20,3,0,1,2,1,1
+114,2,6,Foothill A,BIOLOGY,4,10,1,0,3,1,0,3
+114,2,6,Foothill A,CHEMISTRY,0,0,1,1,2,0,1,3
+114,2,6,Foothill A,EARTH_SPACE,4,20,2,1,1,2,0,2
+114,2,6,Foothill A,ENERGY,0,0,0,0,3,0,0,3
+114,2,6,Foothill A,MATH,4,10,1,0,3,1,0,3
+114,2,6,Foothill A,PHYSICS,0,10,1,1,2,1,0,3
+115,1,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
+115,1,43,Los Gatos,CHEMISTRY,12,20,3,0,1,2,1,1
+115,1,43,Los Gatos,EARTH_SPACE,4,0,1,0,3,0,1,3
+115,1,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
+115,1,43,Los Gatos,MATH,4,10,1,0,3,1,0,3
+115,1,43,Los Gatos,PHYSICS,-4,0,1,2,1,0,0,4
+115,2,39,El Camino A,BIOLOGY,4,0,1,0,3,0,1,3
+115,2,39,El Camino A,CHEMISTRY,-4,0,0,1,3,0,0,4
+115,2,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
+115,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
+115,2,39,El Camino A,MATH,8,0,2,0,2,0,2,2
+115,2,39,El Camino A,PHYSICS,8,10,2,0,2,1,1,2
+116,1,17,Folsom City,BIOLOGY,12,10,3,0,1,1,2,1
+116,1,17,Folsom City,CHEMISTRY,-4,0,0,1,3,0,0,4
+116,1,17,Folsom City,EARTH_SPACE,4,20,2,1,1,2,0,2
+116,1,17,Folsom City,ENERGY,0,0,0,0,3,0,0,3
+116,1,17,Folsom City,MATH,12,30,3,0,1,3,0,1
+116,1,17,Folsom City,PHYSICS,-4,0,0,1,3,0,0,4
+116,2,12,Saratoga,BIOLOGY,4,10,1,0,3,1,0,3
+116,2,12,Saratoga,CHEMISTRY,12,30,3,0,1,3,0,1
+116,2,12,Saratoga,EARTH_SPACE,8,10,2,0,2,1,1,2
+116,2,12,Saratoga,ENERGY,4,10,2,1,0,1,1,1
+116,2,12,Saratoga,MATH,4,0,1,0,3,0,1,3
+116,2,12,Saratoga,PHYSICS,12,20,3,0,1,2,1,1
+117,1,15,Mission San Jose A,BIOLOGY,16,30,4,0,0,3,1,0
+117,1,15,Mission San Jose A,CHEMISTRY,8,30,3,1,0,3,0,1
+117,1,15,Mission San Jose A,EARTH_SPACE,16,40,4,0,0,4,0,0
+117,1,15,Mission San Jose A,ENERGY,12,20,3,0,0,2,1,0
+117,1,15,Mission San Jose A,MATH,8,20,2,0,2,2,0,2
+117,1,15,Mission San Jose A,PHYSICS,0,20,2,2,0,2,0,2
+117,2,28,GSB B,BIOLOGY,0,0,0,0,4,0,0,4
+117,2,28,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
+117,2,28,GSB B,EARTH_SPACE,0,0,0,0,4,0,0,4
+117,2,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
+117,2,28,GSB B,MATH,8,20,2,0,2,2,0,2
+117,2,28,GSB B,PHYSICS,8,10,2,0,2,1,1,2
+118,1,13,Irvington A,BIOLOGY,0,10,1,1,2,1,0,3
+118,1,13,Irvington A,CHEMISTRY,16,30,4,0,0,3,1,0
+118,1,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
+118,1,13,Irvington A,ENERGY,0,10,1,1,1,1,0,2
+118,1,13,Irvington A,MATH,4,10,1,0,3,1,0,3
+118,1,13,Irvington A,PHYSICS,8,10,2,0,2,1,1,2
+118,2,44,Miller,BIOLOGY,12,0,3,0,1,0,3,1
+118,2,44,Miller,CHEMISTRY,0,0,0,0,4,0,0,4
+118,2,44,Miller,EARTH_SPACE,0,10,1,1,2,1,0,3
+118,2,44,Miller,ENERGY,0,0,0,0,3,0,0,3
+118,2,44,Miller,MATH,8,20,2,0,2,2,0,2
+118,2,44,Miller,PHYSICS,8,10,2,0,2,1,1,2
+119,1,14,Palo Alto,BIOLOGY,16,40,4,0,0,4,0,0
+119,1,14,Palo Alto,CHEMISTRY,8,30,3,1,0,3,0,1
+119,1,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
+119,1,14,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
+119,1,14,Palo Alto,MATH,12,30,3,0,1,3,0,1
+119,1,14,Palo Alto,PHYSICS,8,20,3,1,0,2,1,1
+119,2,27,Irvington B,BIOLOGY,0,0,0,0,4,0,0,4
+119,2,27,Irvington B,CHEMISTRY,0,0,0,0,4,0,0,4
+119,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
+119,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
+119,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
+119,2,27,Irvington B,PHYSICS,0,0,0,0,4,0,0,4
 120,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
 120,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
 120,1,47,San Mateo,EARTH_SPACE,4,10,1,0,3,1,0,3
-120,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
-120,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
+120,1,47,San Mateo,ENERGY,4,10,1,0,2,1,0,2
+120,1,47,San Mateo,MATH,4,0,1,0,3,0,1,3
 120,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
-120,2,45,Saratoga,BIOLOGY,8,20,2,0,2,2,0,2
-120,2,45,Saratoga,CHEMISTRY,0,20,2,2,0,2,0,2
-120,2,45,Saratoga,EARTH_SPACE,12,0,3,0,1,0,3,1
-120,2,45,Saratoga,ENERGY,4,20,2,1,0,2,0,1
-120,2,45,Saratoga,MATH,8,30,3,1,0,3,0,1
-120,2,45,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
->>>>>>> 8090f3e (Round 5 stats)
+120,2,2,Mission San Jose B,BIOLOGY,4,20,2,1,1,2,0,2
+120,2,2,Mission San Jose B,CHEMISTRY,4,20,2,1,1,2,0,2
+120,2,2,Mission San Jose B,EARTH_SPACE,12,20,3,0,1,2,0,2
+120,2,2,Mission San Jose B,ENERGY,4,10,2,1,0,1,1,1
+120,2,2,Mission San Jose B,MATH,0,20,2,2,0,2,0,2
+120,2,2,Mission San Jose B,PHYSICS,16,20,4,0,0,2,2,0
+121,1,18,Albany A,BIOLOGY,0,0,0,0,4,0,0,4
+121,1,18,Albany A,CHEMISTRY,0,0,1,1,2,0,1,3
+121,1,18,Albany A,EARTH_SPACE,4,10,1,0,3,1,0,3
+121,1,18,Albany A,ENERGY,0,0,0,0,3,0,0,3
+121,1,18,Albany A,MATH,-4,0,0,1,3,0,0,4
+121,1,18,Albany A,PHYSICS,0,0,0,0,4,0,0,4
+121,2,2,Mission San Jose B,BIOLOGY,8,30,3,1,0,3,0,1
+121,2,2,Mission San Jose B,CHEMISTRY,4,10,2,1,1,1,1,2
+121,2,2,Mission San Jose B,EARTH_SPACE,8,10,3,1,0,1,2,1
+121,2,2,Mission San Jose B,ENERGY,12,20,3,0,0,2,1,0
+121,2,2,Mission San Jose B,MATH,0,10,1,1,2,1,0,3
+121,2,2,Mission San Jose B,PHYSICS,16,40,4,0,0,4,0,0
+122,1,20,Albany B,BIOLOGY,0,0,0,0,4,0,0,4
+122,1,20,Albany B,CHEMISTRY,0,0,0,0,4,0,0,4
+122,1,20,Albany B,EARTH_SPACE,0,0,0,0,4,0,0,4
+122,1,20,Albany B,ENERGY,0,0,0,0,3,0,0,3
+122,1,20,Albany B,MATH,0,0,0,0,4,0,0,4
+122,1,20,Albany B,PHYSICS,0,0,0,0,4,0,0,4
+122,2,9,Davidson A,BIOLOGY,16,30,4,0,0,3,1,0
+122,2,9,Davidson A,CHEMISTRY,8,30,3,1,0,3,0,1
+122,2,9,Davidson A,EARTH_SPACE,16,30,4,0,0,3,1,0
+122,2,9,Davidson A,ENERGY,12,20,3,0,0,2,1,0
+122,2,9,Davidson A,MATH,8,10,2,0,2,1,1,2
+122,2,9,Davidson A,PHYSICS,0,10,2,2,0,1,1,2
+123,1,1,Amador Valley A,BIOLOGY,0,10,2,2,0,1,1,2
+123,1,1,Amador Valley A,CHEMISTRY,4,20,2,1,1,2,0,2
+123,1,1,Amador Valley A,EARTH_SPACE,4,10,2,1,1,1,1,2
+123,1,1,Amador Valley A,ENERGY,12,20,3,0,0,2,1,0
+123,1,1,Amador Valley A,MATH,8,10,2,0,2,1,1,2
+123,1,1,Amador Valley A,PHYSICS,4,20,2,1,1,2,0,2
+123,2,35,Cupertino B,BIOLOGY,8,20,2,0,2,2,0,2
+123,2,35,Cupertino B,CHEMISTRY,0,0,0,0,4,0,0,4
+123,2,35,Cupertino B,EARTH_SPACE,0,0,0,0,4,0,0,4
+123,2,35,Cupertino B,ENERGY,0,0,0,0,3,0,0,3
+123,2,35,Cupertino B,MATH,4,10,1,0,3,1,0,3
+123,2,35,Cupertino B,PHYSICS,4,10,1,0,3,1,0,3
+124,1,22,Amador Valley B,BIOLOGY,4,20,2,1,1,2,0,2
+124,1,22,Amador Valley B,CHEMISTRY,-4,0,0,1,3,0,0,4
+124,1,22,Amador Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+124,1,22,Amador Valley B,ENERGY,8,10,2,0,1,1,1,1
+124,1,22,Amador Valley B,MATH,0,10,1,1,2,1,0,3
+124,1,22,Amador Valley B,PHYSICS,8,10,2,0,2,1,1,2
+124,2,39,El Camino A,BIOLOGY,0,0,0,0,4,0,0,4
+124,2,39,El Camino A,CHEMISTRY,4,10,1,0,3,1,0,3
+124,2,39,El Camino A,EARTH_SPACE,4,0,1,0,3,0,1,3
+124,2,39,El Camino A,ENERGY,0,0,0,0,3,0,0,3
+124,2,39,El Camino A,MATH,-4,0,1,2,1,0,1,3
+124,2,39,El Camino A,PHYSICS,0,10,1,1,2,1,0,3
+125,1,23,American A,BIOLOGY,0,0,0,0,4,0,0,4
+125,1,23,American A,CHEMISTRY,16,10,4,0,0,1,3,0
+125,1,23,American A,EARTH_SPACE,4,0,1,0,3,0,1,3
+125,1,23,American A,ENERGY,-4,0,0,1,2,0,0,3
+125,1,23,American A,MATH,8,10,2,0,2,1,1,2
+125,1,23,American A,PHYSICS,0,0,0,0,4,0,0,4
+125,2,30,Chico A,BIOLOGY,0,10,1,1,2,1,0,3
+125,2,30,Chico A,CHEMISTRY,0,0,0,0,4,0,0,4
+125,2,30,Chico A,EARTH_SPACE,8,0,2,0,2,0,2,2
+125,2,30,Chico A,ENERGY,4,10,1,0,2,1,0,2
+125,2,30,Chico A,MATH,4,0,1,0,3,0,1,3
+125,2,30,Chico A,PHYSICS,4,10,2,1,1,1,1,2
+126,1,7,Clovis North,BIOLOGY,8,30,3,1,0,3,0,1
+126,1,7,Clovis North,CHEMISTRY,12,20,3,0,1,2,1,1
+126,1,7,Clovis North,EARTH_SPACE,4,0,1,0,3,0,1,3
+126,1,7,Clovis North,ENERGY,8,10,2,0,1,1,1,1
+126,1,7,Clovis North,MATH,12,10,3,0,1,1,2,1
+126,1,7,Clovis North,PHYSICS,8,30,3,1,0,3,0,1
+126,2,25,American B,BIOLOGY,4,10,1,0,3,1,0,3
+126,2,25,American B,CHEMISTRY,4,0,1,0,3,0,0,4
+126,2,25,American B,EARTH_SPACE,4,0,1,0,3,0,1,3
+126,2,25,American B,ENERGY,0,0,0,0,3,0,0,3
+126,2,25,American B,MATH,0,0,0,0,4,0,0,4
+126,2,25,American B,PHYSICS,0,0,0,0,4,0,0,4
+127,1,4,Archbishop Mitty A,BIOLOGY,12,10,3,0,1,1,2,1
+127,1,4,Archbishop Mitty A,CHEMISTRY,0,20,2,2,0,2,0,2
+127,1,4,Archbishop Mitty A,EARTH_SPACE,4,10,2,1,1,1,1,2
+127,1,4,Archbishop Mitty A,ENERGY,0,0,1,1,1,0,1,2
+127,1,4,Archbishop Mitty A,MATH,4,0,1,0,3,0,1,3
+127,1,4,Archbishop Mitty A,PHYSICS,8,20,2,0,2,2,0,2
+127,2,38,Dougherty Valley B,BIOLOGY,0,10,1,1,2,1,0,3
+127,2,38,Dougherty Valley B,CHEMISTRY,-8,0,0,2,2,0,0,4
+127,2,38,Dougherty Valley B,EARTH_SPACE,0,0,0,0,4,0,0,4
+127,2,38,Dougherty Valley B,ENERGY,0,0,1,1,1,0,1,2
+127,2,38,Dougherty Valley B,MATH,4,0,2,1,1,0,2,2
+127,2,38,Dougherty Valley B,PHYSICS,4,10,1,0,3,1,0,3
+128,1,14,Palo Alto,BIOLOGY,8,10,3,1,0,1,2,1
+128,1,14,Palo Alto,CHEMISTRY,16,40,4,0,0,4,0,0
+128,1,14,Palo Alto,EARTH_SPACE,16,30,4,0,0,3,1,0
+128,1,14,Palo Alto,ENERGY,4,10,2,1,0,1,1,1
+128,1,14,Palo Alto,MATH,8,10,2,0,2,1,1,2
+128,1,14,Palo Alto,PHYSICS,8,30,3,1,0,3,0,1
+128,2,26,Archbishop Mitty B,BIOLOGY,4,10,1,0,3,1,0,3
+128,2,26,Archbishop Mitty B,CHEMISTRY,0,0,0,0,4,0,0,4
+128,2,26,Archbishop Mitty B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+128,2,26,Archbishop Mitty B,ENERGY,4,10,1,0,2,1,0,2
+128,2,26,Archbishop Mitty B,MATH,0,0,0,0,4,0,0,4
+128,2,26,Archbishop Mitty B,PHYSICS,4,0,1,0,3,0,1,3
+129,1,21,BASIS Fremont,BIOLOGY,4,10,1,0,3,1,0,3
+129,1,21,BASIS Fremont,CHEMISTRY,0,0,0,0,4,0,0,4
+129,1,21,BASIS Fremont,EARTH_SPACE,4,20,2,1,1,2,0,2
+129,1,21,BASIS Fremont,ENERGY,0,0,1,1,1,0,1,2
+129,1,21,BASIS Fremont,MATH,0,0,0,0,4,0,0,4
+129,1,21,BASIS Fremont,PHYSICS,8,10,2,0,2,1,1,2
+129,2,10,Davidson B,BIOLOGY,0,0,0,0,4,0,0,4
+129,2,10,Davidson B,CHEMISTRY,12,20,3,0,1,2,1,1
+129,2,10,Davidson B,EARTH_SPACE,4,0,1,0,3,0,1,3
+129,2,10,Davidson B,ENERGY,0,10,1,1,1,1,0,2
+129,2,10,Davidson B,MATH,4,0,1,0,3,0,1,3
+129,2,10,Davidson B,PHYSICS,4,0,1,0,3,0,1,3
+130,1,5,BASIS Silicon Valley A,BIOLOGY,8,30,3,1,0,3,0,1
+130,1,5,BASIS Silicon Valley A,CHEMISTRY,16,40,4,0,0,4,0,0
+130,1,5,BASIS Silicon Valley A,EARTH_SPACE,12,10,3,0,1,1,2,1
+130,1,5,BASIS Silicon Valley A,ENERGY,8,10,2,0,1,1,1,1
+130,1,5,BASIS Silicon Valley A,MATH,4,0,1,0,3,0,1,3
+130,1,5,BASIS Silicon Valley A,PHYSICS,16,40,4,0,0,4,0,0
+130,2,42,Foothill B,BIOLOGY,-8,0,0,2,2,0,0,4
+130,2,42,Foothill B,CHEMISTRY,0,0,0,0,4,0,0,4
+130,2,42,Foothill B,EARTH_SPACE,4,0,1,0,3,0,1,3
+130,2,42,Foothill B,ENERGY,0,0,0,0,3,0,0,3
+130,2,42,Foothill B,MATH,0,0,1,1,2,0,1,3
+130,2,42,Foothill B,PHYSICS,-4,0,0,1,3,0,0,4
+131,1,24,BASIS Silicon Valley B,BIOLOGY,-4,0,0,1,3,0,0,4
+131,1,24,BASIS Silicon Valley B,CHEMISTRY,12,30,3,0,1,3,0,1
+131,1,24,BASIS Silicon Valley B,EARTH_SPACE,8,0,2,0,2,0,2,2
+131,1,24,BASIS Silicon Valley B,ENERGY,4,20,2,1,0,2,0,1
+131,1,24,BASIS Silicon Valley B,MATH,8,0,2,0,2,0,2,2
+131,1,24,BASIS Silicon Valley B,PHYSICS,8,10,2,0,2,1,1,2
+131,2,41,Evergreen Valley,BIOLOGY,8,0,2,0,2,0,2,2
+131,2,41,Evergreen Valley,CHEMISTRY,4,0,1,0,3,0,1,3
+131,2,41,Evergreen Valley,EARTH_SPACE,0,0,0,0,4,0,0,4
+131,2,41,Evergreen Valley,ENERGY,0,0,0,0,3,0,0,3
+131,2,41,Evergreen Valley,MATH,4,0,1,0,3,0,1,3
+131,2,41,Evergreen Valley,PHYSICS,4,10,1,0,3,1,0,3
+132,1,29,California,BIOLOGY,0,0,0,0,4,0,0,4
+132,1,29,California,CHEMISTRY,4,0,2,1,1,0,2,2
+132,1,29,California,EARTH_SPACE,4,0,1,0,3,0,1,3
+132,1,29,California,ENERGY,0,0,0,0,3,0,0,3
+132,1,29,California,MATH,-4,0,0,1,3,0,0,4
+132,1,29,California,PHYSICS,8,10,2,0,2,1,1,2
+132,2,13,Irvington A,BIOLOGY,12,10,3,0,1,1,2,1
+132,2,13,Irvington A,CHEMISTRY,4,20,2,1,1,2,0,2
+132,2,13,Irvington A,EARTH_SPACE,4,0,1,0,3,0,1,3
+132,2,13,Irvington A,ENERGY,12,20,3,0,0,2,1,0
+132,2,13,Irvington A,MATH,12,10,3,0,1,1,2,1
+132,2,13,Irvington A,PHYSICS,4,10,1,0,3,1,0,3
+133,1,32,Chico B,BIOLOGY,4,10,1,0,3,1,0,3
+133,1,32,Chico B,CHEMISTRY,12,0,3,0,1,0,3,1
+133,1,32,Chico B,EARTH_SPACE,4,10,1,0,3,1,0,3
+133,1,32,Chico B,ENERGY,-8,0,0,2,1,0,0,3
+133,1,32,Chico B,MATH,0,0,0,0,4,0,0,4
+133,1,32,Chico B,PHYSICS,8,10,2,0,2,1,1,2
+133,2,27,Irvington B,BIOLOGY,12,30,3,0,1,3,0,1
+133,2,27,Irvington B,CHEMISTRY,4,0,1,0,3,0,1,3
+133,2,27,Irvington B,EARTH_SPACE,0,0,0,0,4,0,0,4
+133,2,27,Irvington B,ENERGY,0,0,0,0,3,0,0,3
+133,2,27,Irvington B,MATH,4,0,1,0,3,0,1,3
+133,2,27,Irvington B,PHYSICS,4,10,1,0,3,1,0,3
+134,1,19,Cupertino A,BIOLOGY,8,10,2,0,2,1,1,2
+134,1,19,Cupertino A,CHEMISTRY,-4,10,1,2,1,1,0,3
+134,1,19,Cupertino A,EARTH_SPACE,4,0,1,0,3,0,1,3
+134,1,19,Cupertino A,ENERGY,4,0,1,0,2,0,1,2
+134,1,19,Cupertino A,MATH,4,0,1,0,3,0,1,3
+134,1,19,Cupertino A,PHYSICS,-4,0,1,2,1,0,1,3
+134,2,40,El Camino B,BIOLOGY,0,10,1,1,2,1,0,3
+134,2,40,El Camino B,CHEMISTRY,0,0,0,0,4,0,0,4
+134,2,40,El Camino B,EARTH_SPACE,8,10,2,0,2,1,1,2
+134,2,40,El Camino B,ENERGY,0,0,0,0,3,0,0,3
+134,2,40,El Camino B,MATH,4,0,2,1,1,0,2,2
+134,2,40,El Camino B,PHYSICS,8,0,2,0,2,0,2,2
+135,1,8,Dougherty Valley A,BIOLOGY,16,30,4,0,0,3,1,0
+135,1,8,Dougherty Valley A,CHEMISTRY,12,10,3,0,1,1,2,1
+135,1,8,Dougherty Valley A,EARTH_SPACE,4,10,1,0,3,1,0,3
+135,1,8,Dougherty Valley A,ENERGY,8,10,2,0,1,1,1,1
+135,1,8,Dougherty Valley A,MATH,8,10,2,0,2,1,1,2
+135,1,8,Dougherty Valley A,PHYSICS,8,20,2,0,2,2,0,2
+135,2,46,Mira Loma B,BIOLOGY,-8,0,0,2,2,0,0,4
+135,2,46,Mira Loma B,CHEMISTRY,4,0,1,0,3,0,1,3
+135,2,46,Mira Loma B,EARTH_SPACE,4,0,1,0,3,0,1,3
+135,2,46,Mira Loma B,ENERGY,-4,0,0,1,2,0,0,3
+135,2,46,Mira Loma B,MATH,0,0,0,0,4,0,0,4
+135,2,46,Mira Loma B,PHYSICS,0,0,0,0,4,0,0,4
+136,1,17,Folsom City,BIOLOGY,8,20,3,1,0,2,1,1
+136,1,17,Folsom City,CHEMISTRY,8,10,3,1,0,1,2,1
+136,1,17,Folsom City,EARTH_SPACE,12,10,3,0,1,1,2,1
+136,1,17,Folsom City,ENERGY,12,10,3,0,0,1,2,0
+136,1,17,Folsom City,MATH,8,10,2,0,2,1,1,2
+136,1,17,Folsom City,PHYSICS,4,10,1,0,3,1,0,3
+136,2,48,Quarry Lane B,BIOLOGY,-4,0,0,1,3,0,0,4
+136,2,48,Quarry Lane B,CHEMISTRY,0,0,0,0,4,0,0,4
+136,2,48,Quarry Lane B,EARTH_SPACE,4,10,1,0,3,1,0,3
+136,2,48,Quarry Lane B,ENERGY,0,0,0,0,3,0,0,3
+136,2,48,Quarry Lane B,MATH,-4,0,0,1,3,0,0,4
+136,2,48,Quarry Lane B,PHYSICS,4,0,1,0,3,0,1,3
+137,1,6,Foothill A,BIOLOGY,12,20,3,0,1,2,1,1
+137,1,6,Foothill A,CHEMISTRY,4,20,2,1,1,2,0,2
+137,1,6,Foothill A,EARTH_SPACE,12,0,3,0,1,0,3,1
+137,1,6,Foothill A,ENERGY,4,0,1,0,2,0,1,2
+137,1,6,Foothill A,MATH,0,0,1,1,2,0,1,3
+137,1,6,Foothill A,PHYSICS,8,10,2,0,2,1,1,2
+137,2,36,Homestead,BIOLOGY,0,0,0,0,4,0,0,4
+137,2,36,Homestead,CHEMISTRY,4,10,1,0,3,1,0,3
+137,2,36,Homestead,EARTH_SPACE,4,0,1,0,3,0,1,3
+137,2,36,Homestead,ENERGY,4,10,1,0,2,1,0,2
+137,2,36,Homestead,MATH,12,20,3,0,1,2,1,1
+137,2,36,Homestead,PHYSICS,8,10,2,0,2,1,1,2
+138,1,33,Quarry Lane A,BIOLOGY,0,0,0,0,4,0,0,4
+138,1,33,Quarry Lane A,CHEMISTRY,4,0,1,0,3,0,1,3
+138,1,33,Quarry Lane A,EARTH_SPACE,0,0,0,0,4,0,0,4
+138,1,33,Quarry Lane A,ENERGY,-4,0,0,1,2,0,0,3
+138,1,33,Quarry Lane A,MATH,8,0,2,0,2,0,2,2
+138,1,33,Quarry Lane A,PHYSICS,4,0,1,0,3,0,1,3
+138,2,11,GSB A,BIOLOGY,16,40,4,0,0,4,0,0
+138,2,11,GSB A,CHEMISTRY,4,20,2,1,1,2,0,2
+138,2,11,GSB A,EARTH_SPACE,16,20,4,0,0,2,2,0
+138,2,11,GSB A,ENERGY,8,20,2,0,1,2,0,1
+138,2,11,GSB A,MATH,-4,0,0,1,3,0,0,4
+138,2,11,GSB A,PHYSICS,4,20,2,1,1,2,0,2
+139,1,28,GSB B,BIOLOGY,4,10,1,0,3,1,0,3
+139,1,28,GSB B,CHEMISTRY,0,0,0,0,4,0,0,4
+139,1,28,GSB B,EARTH_SPACE,8,0,2,0,2,0,2,2
+139,1,28,GSB B,ENERGY,0,0,0,0,3,0,0,3
+139,1,28,GSB B,MATH,8,20,2,0,2,2,0,2
+139,1,28,GSB B,PHYSICS,4,10,1,0,3,1,0,3
+139,2,45,Lynbrook B,BIOLOGY,12,20,3,0,1,2,1,1
+139,2,45,Lynbrook B,CHEMISTRY,8,10,2,0,2,1,1,2
+139,2,45,Lynbrook B,EARTH_SPACE,8,10,2,0,2,1,1,2
+139,2,45,Lynbrook B,ENERGY,4,10,1,0,2,1,0,2
+139,2,45,Lynbrook B,MATH,8,20,2,0,2,2,0,2
+139,2,45,Lynbrook B,PHYSICS,4,10,1,0,3,1,0,3
+140,1,43,Los Gatos,BIOLOGY,0,0,0,0,4,0,0,4
+140,1,43,Los Gatos,CHEMISTRY,0,0,1,1,2,0,1,3
+140,1,43,Los Gatos,EARTH_SPACE,0,0,0,0,4,0,0,4
+140,1,43,Los Gatos,ENERGY,0,0,0,0,3,0,0,3
+140,1,43,Los Gatos,MATH,0,0,0,0,4,0,0,4
+140,1,43,Los Gatos,PHYSICS,0,0,0,0,4,0,0,4
+140,2,16,Mira Loma A,BIOLOGY,12,20,3,0,1,2,1,1
+140,2,16,Mira Loma A,CHEMISTRY,8,30,3,1,0,3,0,1
+140,2,16,Mira Loma A,EARTH_SPACE,8,0,2,0,2,0,2,2
+140,2,16,Mira Loma A,ENERGY,8,0,2,0,1,0,1,2
+140,2,16,Mira Loma A,MATH,4,0,1,0,3,0,1,3
+140,2,16,Mira Loma A,PHYSICS,12,20,3,0,1,2,1,1
+141,1,3,Lynbrook A,BIOLOGY,16,30,4,0,0,3,1,0
+141,1,3,Lynbrook A,CHEMISTRY,16,40,4,0,0,4,0,0
+141,1,3,Lynbrook A,EARTH_SPACE,4,10,2,1,1,1,1,2
+141,1,3,Lynbrook A,ENERGY,4,10,2,1,0,1,1,1
+141,1,3,Lynbrook A,MATH,8,10,2,0,2,1,1,2
+141,1,3,Lynbrook A,PHYSICS,12,30,3,0,1,3,0,1
+141,2,31,Mountain House B,BIOLOGY,-4,0,0,1,3,0,0,4
+141,2,31,Mountain House B,CHEMISTRY,-4,0,0,1,3,0,0,4
+141,2,31,Mountain House B,EARTH_SPACE,4,10,1,0,3,1,0,3
+141,2,31,Mountain House B,ENERGY,0,0,0,0,3,0,0,3
+141,2,31,Mountain House B,MATH,-4,0,0,1,3,0,0,4
+141,2,31,Mountain House B,PHYSICS,0,0,0,0,4,0,0,4
+142,1,15,Mission San Jose A,BIOLOGY,8,30,3,1,0,3,0,1
+142,1,15,Mission San Jose A,CHEMISTRY,0,20,2,2,0,2,0,2
+142,1,15,Mission San Jose A,EARTH_SPACE,16,20,4,0,0,2,2,0
+142,1,15,Mission San Jose A,ENERGY,4,10,2,1,0,1,1,1
+142,1,15,Mission San Jose A,MATH,4,10,1,0,3,1,0,3
+142,1,15,Mission San Jose A,PHYSICS,8,10,2,0,2,1,1,2
+142,2,44,Miller,BIOLOGY,4,10,1,0,3,1,0,3
+142,2,44,Miller,CHEMISTRY,4,0,1,0,3,0,1,3
+142,2,44,Miller,EARTH_SPACE,0,0,0,0,4,0,0,4
+142,2,44,Miller,ENERGY,0,0,1,1,1,0,1,2
+142,2,44,Miller,MATH,4,20,2,1,1,2,0,2
+142,2,44,Miller,PHYSICS,8,20,2,0,2,2,0,2
+143,1,37,Mountain House A,BIOLOGY,4,0,1,0,3,0,0,4
+143,1,37,Mountain House A,CHEMISTRY,-4,0,0,1,3,0,0,4
+143,1,37,Mountain House A,EARTH_SPACE,0,0,0,0,4,0,0,4
+143,1,37,Mountain House A,ENERGY,8,20,2,0,1,2,0,1
+143,1,37,Mountain House A,MATH,16,30,4,0,0,3,0,1
+143,1,37,Mountain House A,PHYSICS,4,0,1,0,3,0,0,4
+143,2,34,Stanford Online,BIOLOGY,8,20,2,0,2,2,0,2
+143,2,34,Stanford Online,CHEMISTRY,16,20,4,0,0,2,0,2
+143,2,34,Stanford Online,EARTH_SPACE,8,10,2,0,2,1,0,3
+143,2,34,Stanford Online,ENERGY,-8,0,0,2,1,0,0,3
+143,2,34,Stanford Online,MATH,-4,0,0,1,3,0,0,4
+143,2,34,Stanford Online,PHYSICS,12,20,3,0,1,2,0,2
+144,1,47,San Mateo,BIOLOGY,0,0,0,0,4,0,0,4
+144,1,47,San Mateo,CHEMISTRY,0,0,0,0,4,0,0,4
+144,1,47,San Mateo,EARTH_SPACE,4,10,1,0,3,1,0,3
+144,1,47,San Mateo,ENERGY,0,0,0,0,3,0,0,3
+144,1,47,San Mateo,MATH,0,0,0,0,4,0,0,4
+144,1,47,San Mateo,PHYSICS,0,0,0,0,4,0,0,4
+144,2,12,Saratoga,BIOLOGY,8,20,2,0,2,2,0,2
+144,2,12,Saratoga,CHEMISTRY,0,20,2,2,0,2,0,2
+144,2,12,Saratoga,EARTH_SPACE,12,0,3,0,1,0,3,1
+144,2,12,Saratoga,ENERGY,4,20,2,1,0,2,0,1
+144,2,12,Saratoga,MATH,8,30,3,1,0,3,0,1
+144,2,12,Saratoga,PHYSICS,16,30,4,0,0,3,1,0
