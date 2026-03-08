@@ -1,0 +1,35 @@
+game_id,slot,team_id,team_name,score,tossup_points,bonus_points,tossups_correct,tossups_incorrect,tossups_no_penalty,bonuses_correct,bonuses_incorrect,bonuses_unheard
+1,1,1,Amador Valley A,112,12,100,10,7,6,10,0,13
+1,2,2,Mission San Jose B,134,44,90,12,1,10,9,3,11
+2,1,3,Lynbrook A,90,20,70,10,5,8,7,3,13
+2,2,4,Archbishop Mitty A,142,52,90,13,0,10,9,4,10
+3,1,5,BASIS Silicon Valley A,138,48,90,14,2,7,9,5,9
+3,2,6,Foothill A,30,0,30,5,5,13,3,2,18
+4,1,7,Clovis North,84,24,60,8,2,13,6,2,15
+4,2,8,Dougherty Valley A,92,32,60,10,2,11,6,4,13
+5,1,9,Davidson A,128,28,100,13,6,4,10,3,10
+5,2,10,Davidson B,44,24,20,8,2,13,2,5,16
+6,1,11,GSB A,98,28,70,9,2,12,7,2,14
+6,2,12,Saratoga,66,16,50,9,5,9,5,4,14
+7,1,13,Irvington A,40,0,40,5,5,13,4,1,18
+7,2,14,Palo Alto,132,32,100,12,4,7,10,2,11
+8,1,15,Mission San Jose A,176,36,140,15,6,2,14,1,8
+8,2,16,Mira Loma A,46,16,30,5,1,17,3,2,18
+9,1,14,Palo Alto,102,32,70,10,2,11,7,3,13
+9,2,2,Mission San Jose B,98,28,70,9,2,12,7,1,15
+10,1,13,Irvington A,18,8,10,5,3,15,1,4,18
+10,2,1,Amador Valley A,150,40,110,14,4,5,11,3,9
+11,1,4,Archbishop Mitty A,26,-4,30,4,5,14,3,1,19
+11,2,15,Mission San Jose A,144,44,100,14,3,6,10,4,9
+12,1,5,BASIS Silicon Valley A,144,44,100,12,1,10,10,2,11
+12,2,11,GSB A,42,12,30,6,3,14,3,3,17
+13,1,7,Clovis North,114,44,70,11,0,12,7,4,12
+13,2,10,Davidson B,78,28,50,7,0,16,5,2,16
+14,1,9,Davidson A,126,36,90,12,3,8,9,3,11
+14,2,8,Dougherty Valley A,92,32,60,10,2,11,6,4,13
+15,1,6,Foothill A,108,28,80,9,2,12,8,1,14
+15,2,12,Saratoga,94,44,50,12,1,10,5,7,11
+16,1,3,Lynbrook A,116,36,80,12,3,8,8,4,11
+16,2,16,Mira Loma A,50,20,30,6,1,16,3,3,17
+17,1,14,Palo Alto,0,0,0,0,0,1,0,0,1
+17,2,2,Mission San Jose B,0,0,0,0,0,1,0,0,1
