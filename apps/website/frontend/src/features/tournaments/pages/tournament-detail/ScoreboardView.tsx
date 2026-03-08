@@ -213,7 +213,7 @@ export function ScoreboardView({ games, gameTeams, gamePlayers, rounds, roundVal
             const gameTitle = t1 && t2 ? `${t1.team_name} ${toInt(t1.score)} – ${toInt(t2.score)} ${t2.team_name}` : `Game ${g.game_id}`;
 
             const teamSummaryRows = teams.map((t) => {
-              const bonusesHeard = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect) + toInt(t.bonuses_unheard);
+              const bonusesHeard = toInt(t.bonuses_correct) + toInt(t.bonuses_incorrect);
               const bonusPoints = toInt(t.bonus_points);
               const ppb = bonusesHeard > 0 ? bonusPoints / bonusesHeard : 0;
               return {
