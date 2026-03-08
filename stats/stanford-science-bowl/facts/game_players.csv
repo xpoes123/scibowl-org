@@ -126,14 +126,14 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 15,16,Mira Loma A,78,Bryan Nasr,23,1,0,0,4
 15,16,Mira Loma A,76,Krish Singh,23,0,0,0,0
 15,16,Mira Loma A,79,Sudeep Suresh,23,1,1,0,0
-16,2,Mission San Jose B,10,Aarush Iyer,1,0,0,0,0
-16,2,Mission San Jose B,8,Andy Liu,1,0,0,0,0
-16,2,Mission San Jose B,7,Aravind Muralidharan,1,0,0,0,0
-16,2,Mission San Jose B,6,Ishaan Kabra,1,0,0,0,0
-16,14,Palo Alto,67,Andrew Wen,1,0,0,0,0
-16,14,Palo Alto,68,Kevin Pei,1,0,0,0,0
-16,14,Palo Alto,66,Rasia Yu,1,0,0,0,0
-16,14,Palo Alto,69,Sayan Singh,1,0,0,0,0
+16,2,Mission San Jose B,10,Aarush Iyer,23,1,0,0,4
+16,2,Mission San Jose B,8,Andy Liu,23,1,1,0,0
+16,2,Mission San Jose B,7,Aravind Muralidharan,23,2,0,0,8
+16,2,Mission San Jose B,6,Ishaan Kabra,23,5,1,0,16
+16,14,Palo Alto,67,Andrew Wen,23,5,1,0,16
+16,14,Palo Alto,68,Kevin Pei,23,3,1,0,8
+16,14,Palo Alto,66,Rasia Yu,23,2,0,0,8
+16,14,Palo Alto,69,Sayan Singh,23,0,0,0,0
 17,1,Amador Valley A,1,Gaurav Gupta,23,3,1,0,8
 17,1,Amador Valley A,3,Ritwik Aeka,23,1,1,0,0
 17,1,Amador Valley A,2,Rohan Garg,23,10,2,0,32
