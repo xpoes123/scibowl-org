@@ -205,7 +205,7 @@ class AdvancementStandingsReorderTestCase(SimpleTestCase):
         self.assertEqual([row[1] for row in reordered], [20, 30, 10])
         self.assertEqual([row[0] for row in reordered], [1, 2, 3])
 
-    def test_advancement_sort_preserves_existing_order_within_same_round_bucket(self):
+    def test_advancement_sort_uses_playoff_only_record_by_default_within_same_round_bucket(self):
         cols = ["rank", "team_id", "name", "wins"]
         rows = [
             (1, 10, "Alpha", 5),
@@ -217,6 +217,32 @@ class AdvancementStandingsReorderTestCase(SimpleTestCase):
             cols=cols,
             rows=rows,
             team_advancement_rounds={20: 7, 30: 7},
+            team_advancement_records={
+                20: {"win_pct": 0.9, "wins": 9.0, "points": 1000.0},
+                30: {"win_pct": 1.0, "wins": 9.0, "points": 900.0},
+            },
+        )
+
+        self.assertEqual([row[1] for row in reordered], [30, 20, 10])
+        self.assertEqual([row[0] for row in reordered], [1, 2, 3])
+
+    def test_advancement_sort_can_include_prelims_when_requested(self):
+        cols = ["rank", "team_id", "name", "wins"]
+        rows = [
+            (1, 10, "Alpha", 5),
+            (2, 20, "Beta", 4),
+            (3, 30, "Gamma", 3),
+        ]
+
+        reordered = _reorder_team_standings_rows_for_advancement(
+            cols=cols,
+            rows=rows,
+            team_advancement_rounds={20: 7, 30: 7},
+            team_advancement_records={
+                20: {"win_pct": 0.9, "wins": 9.0, "points": 1000.0},
+                30: {"win_pct": 1.0, "wins": 9.0, "points": 900.0},
+            },
+            ignore_prelims_for_advancers=False,
         )
 
         self.assertEqual([row[1] for row in reordered], [20, 30, 10])

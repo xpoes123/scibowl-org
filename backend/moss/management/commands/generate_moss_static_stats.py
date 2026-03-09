@@ -791,11 +791,79 @@ def _fetch_team_advancement_rounds(
         }
 
 
+def _fetch_team_record_metrics(
+    *,
+    db_alias: str,
+    tournament_id: int,
+    round_numbers: list[int],
+) -> dict[int, dict[str, float]]:
+    if not round_numbers:
+        return {}
+
+    placeholders = ", ".join(["%s"] * len(round_numbers))
+    sql = f"""
+        WITH game_team AS (
+          SELECT
+            g.id AS game_id,
+            o.tournament_team_id AS tournament_team_id,
+            SUM(o.points) AS points
+          FROM moss_gameteamquestionoutcome o
+          JOIN moss_game g ON g.id = o.game_id
+          JOIN tournaments_round r ON r.id = g.round_id
+          WHERE g.tournament_id = %s
+            AND r.round_number IN ({placeholders})
+          GROUP BY g.id, o.tournament_team_id
+        ),
+        with_opp AS (
+          SELECT
+            a.tournament_team_id AS tournament_team_id,
+            a.points AS points,
+            b.points AS opp_points
+          FROM game_team a
+          JOIN game_team b
+            ON b.game_id = a.game_id
+           AND b.tournament_team_id <> a.tournament_team_id
+        )
+        SELECT
+          tournament_team_id,
+          COUNT(*) AS games_played,
+          SUM(
+            CASE
+              WHEN points > opp_points THEN 1
+              WHEN points = opp_points THEN 0.5
+              ELSE 0
+            END
+          ) AS wins,
+          SUM(points) AS points
+        FROM with_opp
+        GROUP BY tournament_team_id
+    """
+    params: list[Any] = [tournament_id, *round_numbers]
+    with connections[db_alias].cursor() as cursor:
+        cursor.execute(sql, params)
+        out: dict[int, dict[str, float]] = {}
+        for team_id, games_played, wins, points in cursor.fetchall():
+            if team_id is None:
+                continue
+            gp = float(games_played or 0)
+            w = float(wins or 0)
+            pts = float(points or 0)
+            out[int(team_id)] = {
+                "games_played": gp,
+                "wins": w,
+                "win_pct": (w / gp) if gp > 0 else 0.0,
+                "points": pts,
+            }
+        return out
+
+
 def _reorder_team_standings_rows_for_advancement(
     *,
     cols: list[str],
     rows: list[tuple[Any, ...]],
     team_advancement_rounds: dict[int, int],
+    team_advancement_records: dict[int, dict[str, float]] | None = None,
+    ignore_prelims_for_advancers: bool = True,
 ) -> list[tuple[Any, ...]]:
     if not rows or not team_advancement_rounds:
         return rows
@@ -811,19 +879,30 @@ def _reorder_team_standings_rows_for_advancement(
         except (TypeError, ValueError):
             team_id = None
         deepest_round = team_advancement_rounds.get(team_id) if team_id is not None else None
+        record = (
+            (team_advancement_records or {}).get(team_id, {})
+            if deepest_round is not None and ignore_prelims_for_advancers
+            else {}
+        )
+        win_pct = float(record.get("win_pct", 0.0))
+        wins = float(record.get("wins", 0.0))
+        points = float(record.get("points", 0.0))
         sortable.append(
             (
                 0 if deepest_round is not None else 1,
                 -(deepest_round or 0),
+                -win_pct,
+                -wins,
+                -points,
                 original_idx,
                 row,
             )
         )
 
-    sortable.sort(key=lambda item: (item[0], item[1], item[2]))
+    sortable.sort(key=lambda item: (item[0], item[1], item[2], item[3], item[4], item[5]))
 
     reordered: list[tuple[Any, ...]] = []
-    for new_rank, (_missing_flag, _neg_round, _original_idx, row) in enumerate(sortable, start=1):
+    for new_rank, (_missing_flag, _neg_round, _neg_win_pct, _neg_wins, _neg_points, _original_idx, row) in enumerate(sortable, start=1):
         row_list = list(row)
         row_list[rank_idx] = new_rank
         reordered.append(tuple(row_list))
@@ -915,6 +994,14 @@ class Command(BaseCommand):
             ),
         )
         parser.add_argument(
+            "--playoff-standings-include-prelims",
+            action="store_true",
+            help=(
+                "For combined overall team standings, include prelim games when ordering teams that made playoffs. "
+                "By default, playoff teams are ordered using playoff-only results within each playoff-round bucket."
+            ),
+        )
+        parser.add_argument(
             "paths",
             nargs="+",
             help="One or more moss_scoresheet export JSON files, or directories containing them (searched recursively).",
@@ -991,6 +1078,7 @@ class Command(BaseCommand):
         assume_yes: bool = options["yes"]
         no_dedupe: bool = options["no_dedupe"]
         no_sync_frontends: bool = options["no_sync_frontends"]
+        playoff_standings_include_prelims: bool = options["playoff_standings_include_prelims"]
         raw_paths: list[str] = options["paths"]
 
         repo_root = Path(settings.BASE_DIR).parent
@@ -1058,6 +1146,7 @@ class Command(BaseCommand):
                     yes=assume_yes,
                     no_dedupe=no_dedupe,
                     no_sync_frontends=True,
+                    playoff_standings_include_prelims=playoff_standings_include_prelims,
                     structured_round_root=str(report["root_dir"]),
                 )
 
@@ -1073,6 +1162,7 @@ class Command(BaseCommand):
                 yes=assume_yes,
                 no_dedupe=no_dedupe,
                 no_sync_frontends=True,
+                playoff_standings_include_prelims=playoff_standings_include_prelims,
                 structured_round_root=str(root_dir),
                 structured_rounds_combined=True,
             )
@@ -1307,6 +1397,15 @@ class Command(BaseCommand):
                 tournament_id=tournament.id,
                 advancement_round_numbers=advancement_round_numbers,
             )
+            team_advancement_records = (
+                {}
+                if playoff_standings_include_prelims
+                else _fetch_team_record_metrics(
+                    db_alias=db_alias,
+                    tournament_id=tournament.id,
+                    round_numbers=advancement_round_numbers,
+                )
+            )
 
             def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
                 out_path = output_dir / filename
@@ -1319,6 +1418,8 @@ class Command(BaseCommand):
                         cols=cols,
                         rows=rows,
                         team_advancement_rounds=team_advancement_rounds,
+                        team_advancement_records=team_advancement_records,
+                        ignore_prelims_for_advancers=not playoff_standings_include_prelims,
                     )
                 out_path.parent.mkdir(parents=True, exist_ok=True)
                 with out_path.open("w", encoding="utf-8", newline="") as f:
