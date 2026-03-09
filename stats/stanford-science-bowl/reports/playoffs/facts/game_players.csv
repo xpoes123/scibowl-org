@@ -215,3 +215,19 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 26,2,Mission San Jose B,8,Andy Liu,23,2,0,0,8
 26,2,Mission San Jose B,7,Aravind Muralidharan,23,0,1,0,-4
 26,2,Mission San Jose B,6,Ishaan Kabra,23,2,1,0,4
+27,5,BASIS Silicon Valley A,24,Aaron Cohen,23,0,1,0,-4
+27,5,BASIS Silicon Valley A,23,Larry Zhao,23,3,0,0,12
+27,5,BASIS Silicon Valley A,21,Lucas Quan,23,3,0,0,12
+27,5,BASIS Silicon Valley A,22,Zanda Zhu,23,0,0,0,0
+27,9,Davidson A,41,Alexander Weaver,23,2,0,0,8
+27,9,Davidson A,45,Julian Kuang,23,3,1,0,8
+27,9,Davidson A,43,Lucas Wu,23,4,0,0,16
+27,9,Davidson A,42,Yajur Chandar,23,4,2,0,8
+28,15,Mission San Jose A,72,Advaith Mopuri,23,4,0,0,16
+28,15,Mission San Jose A,74,Roshan Annamalai,23,5,1,0,16
+28,15,Mission San Jose A,75,Rutvik Arora,23,1,0,0,4
+28,15,Mission San Jose A,71,Theenash Sengupta,23,4,3,0,4
+28,14,Palo Alto,67,Andrew Wen,23,2,3,0,-4
+28,14,Palo Alto,68,Kevin Pei,23,2,0,0,8
+28,14,Palo Alto,66,Rasia Yu,23,2,0,0,8
+28,14,Palo Alto,69,Sayan Singh,23,0,0,0,0

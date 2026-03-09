@@ -51,3 +51,7 @@ game_id,slot,team_id,team_name,score,tossup_points,bonus_points,tossups_correct,
 25,2,1,Amador Valley A,60,20,40,8,3,12,4,4,15
 26,1,2,Mission San Jose B,42,12,30,5,2,16,3,2,18
 26,2,15,Mission San Jose A,112,32,80,12,4,7,8,4,11
+27,1,9,Davidson A,110,40,70,13,3,7,7,6,10
+27,2,5,BASIS Silicon Valley A,30,20,10,6,1,16,1,5,17
+28,1,15,Mission San Jose A,130,40,90,14,4,5,9,5,9
+28,2,14,Palo Alto,12,12,0,6,3,14,0,6,17

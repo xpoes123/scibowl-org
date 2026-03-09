@@ -388,3 +388,28 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 26,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,0,1,0,-4
 26,2,Mission San Jose B,6,Ishaan Kabra,ENERGY,1,0,0,4
 26,2,Mission San Jose B,6,Ishaan Kabra,MATH,1,0,0,4
+27,5,BASIS Silicon Valley A,24,Aaron Cohen,EARTH_SPACE,0,1,0,-4
+27,5,BASIS Silicon Valley A,23,Larry Zhao,BIOLOGY,2,0,0,8
+27,5,BASIS Silicon Valley A,23,Larry Zhao,ENERGY,1,0,0,4
+27,5,BASIS Silicon Valley A,21,Lucas Quan,CHEMISTRY,1,0,0,4
+27,5,BASIS Silicon Valley A,21,Lucas Quan,ENERGY,1,0,0,4
+27,5,BASIS Silicon Valley A,21,Lucas Quan,MATH,1,0,0,4
+27,9,Davidson A,41,Alexander Weaver,EARTH_SPACE,2,0,0,8
+27,9,Davidson A,45,Julian Kuang,ENERGY,1,0,0,4
+27,9,Davidson A,45,Julian Kuang,MATH,2,1,0,4
+27,9,Davidson A,43,Lucas Wu,PHYSICS,4,0,0,16
+27,9,Davidson A,42,Yajur Chandar,BIOLOGY,1,1,0,0
+27,9,Davidson A,42,Yajur Chandar,CHEMISTRY,3,1,0,8
+28,15,Mission San Jose A,72,Advaith Mopuri,ENERGY,1,0,0,4
+28,15,Mission San Jose A,72,Advaith Mopuri,MATH,3,0,0,12
+28,15,Mission San Jose A,74,Roshan Annamalai,EARTH_SPACE,2,1,0,4
+28,15,Mission San Jose A,74,Roshan Annamalai,PHYSICS,3,0,0,12
+28,15,Mission San Jose A,75,Rutvik Arora,PHYSICS,1,0,0,4
+28,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,2,1,0,4
+28,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,2,2,0,0
+28,14,Palo Alto,67,Andrew Wen,ENERGY,1,1,0,0
+28,14,Palo Alto,67,Andrew Wen,MATH,1,0,0,4
+28,14,Palo Alto,67,Andrew Wen,PHYSICS,0,2,0,-8
+28,14,Palo Alto,68,Kevin Pei,CHEMISTRY,1,0,0,4
+28,14,Palo Alto,68,Kevin Pei,ENERGY,1,0,0,4
+28,14,Palo Alto,66,Rasia Yu,BIOLOGY,2,0,0,8
