@@ -1,6 +1,6 @@
 rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
 1,1,Amador Valley A,10,32.4,27,6,7,40,27,240,8.88888888888889
-2,9,Davidson A,9,32.0,25,3,8,36,25,200,8.0
+2,9,Davidson A,10,30.2,26,3,11,40,26,210,8.076923076923077
 3,11,GSB A,8,27.5,17,2,13,32,17,160,9.411764705882353
 4,4,Archbishop Mitty A,8,27.25,18,1,13,32,18,150,8.333333333333334
 5,45,Lynbrook B,5,27.2,10,1,9,20,10,100,10.0
@@ -10,7 +10,7 @@ rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_h
 9,38,Dougherty Valley B,5,26.0,13,3,4,20,13,90,6.923076923076923
 10,44,Miller,5,26.0,11,1,8,20,11,90,8.181818181818182
 11,2,Mission San Jose B,10,25.0,20,5,15,40,20,190,9.5
-12,15,Mission San Jose A,11,24.363636363636363,22,5,17,44,22,200,9.090909090909092
+12,15,Mission San Jose A,12,24.666666666666668,24,5,19,48,24,220,9.166666666666666
 13,8,Dougherty Valley A,8,23.0,16,0,16,32,16,120,7.5
 14,28,GSB B,5,22.4,8,0,12,20,8,80,10.0
 15,24,BASIS Silicon Valley B,5,21.2,11,2,7,20,11,70,6.363636363636363

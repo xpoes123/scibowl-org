@@ -1,10 +1,10 @@
 rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
 1,1,Amador Valley A,5,20.8,8,2,5,15,8,80,10.0
 2,11,GSB A,3,20.0,5,0,4,9,5,40,8.0
-3,15,Mission San Jose A,6,18.666666666666668,10,2,6,18,10,80,8.0
+3,9,Davidson A,5,16.8,8,2,5,15,8,60,7.5
 4,7,Clovis North,3,16.666666666666668,5,0,4,9,5,30,6.0
-5,9,Davidson A,4,16.5,6,2,4,12,6,50,8.333333333333334
-6,5,BASIS Silicon Valley A,5,16.4,8,0,7,15,8,50,6.25
+5,5,BASIS Silicon Valley A,5,16.4,8,0,7,15,8,50,6.25
+6,15,Mission San Jose A,7,16.0,11,3,7,21,11,80,7.2727272727272725
 7,16,Mira Loma A,2,16.0,3,0,3,6,3,20,6.666666666666667
 8,2,Mission San Jose B,5,13.2,5,1,9,15,5,50,10.0
 9,3,Lynbrook A,4,13.0,6,3,3,12,6,40,6.666666666666667
