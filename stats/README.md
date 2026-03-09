@@ -10,6 +10,34 @@ python backend/manage.py generate_moss_static_stats --pretty --tournament-slug <
 
 Multiple independent reports (e.g. `prelims`, `playoffs`) can be generated per tournament by running the command multiple times with `--report-key` / `--report-label`. The default report is `combined`.
 
+For a folder layout where first-level subdirectories are reports and nested subdirectories are rounds, use:
+
+```bash
+python backend/manage.py generate_moss_static_stats \
+  --pretty \
+  --tournament-slug <slug> \
+  --reports-from-subdirs \
+  path/to/report-root/
+```
+
+Example:
+
+```text
+SSB/
+  Prelims/
+    Round 1/
+      *.json
+    Round 2/
+      *.json
+  Playoffs/
+    Double Elimination 1/
+      *.json
+    Double Elimination 2/
+      *.json
+```
+
+This generates inferred `prelims` and `playoffs` reports, plus `combined`.
+
 ## Layout
 
 - `stats/<slug>/reports.json` (index of available reports and their `manifest.json` paths)

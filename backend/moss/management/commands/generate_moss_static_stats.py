@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import tempfile
 import csv
 import subprocess
 import re
+from uuid import uuid4
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -373,6 +375,203 @@ def _round_phase_rank(*labels: str) -> int:
     return 0
 
 
+def _report_phase_rank(report_label: str) -> int:
+    normalized = _normalize_space(report_label).casefold()
+    if normalized.startswith("prelim"):
+        return 0
+    if normalized.startswith("playoff"):
+        return 1
+    return 50
+
+
+def _discover_reports_from_subdirs(
+    root_dir: Path,
+) -> tuple[list[dict[str, Any]], list[Path], list[str]]:
+    warnings: list[str] = []
+    if not root_dir.exists():
+        raise CommandError(f"File not found: {root_dir}")
+    if not root_dir.is_dir():
+        raise CommandError(
+            f"--reports-from-subdirs expects a directory root, got: {root_dir}"
+        )
+
+    direct_json_files = sorted(p for p in root_dir.glob("*.json") if p.is_file())
+    if direct_json_files:
+        raise CommandError(
+            "--reports-from-subdirs does not allow export JSON files directly in the root folder. "
+            "Place exports inside per-report subdirectories."
+        )
+
+    reports: list[dict[str, Any]] = []
+    all_paths: list[Path] = []
+    seen_report_keys: set[str] = set()
+
+    for child in sorted(root_dir.iterdir(), key=lambda p: p.name.casefold()):
+        if not child.is_dir():
+            continue
+        json_files = sorted(p for p in child.rglob("*.json") if p.is_file())
+        if not json_files:
+            continue
+
+        report_label = _normalize_space(child.name)
+        if not report_label:
+            raise CommandError(f"Invalid empty report folder name: {child}")
+
+        report_key = _normalize_report_key(report_label)
+        if report_key in seen_report_keys:
+            raise CommandError(
+                f"Multiple report folders normalize to the same report key: {report_key}"
+            )
+        seen_report_keys.add(report_key)
+
+        reports.append(
+            {
+                "key": report_key,
+                "label": report_label,
+                "root_dir": child,
+                "paths": json_files,
+            }
+        )
+        all_paths.extend(json_files)
+
+    if not reports:
+        raise CommandError(
+            f"No report folders containing export JSON files were found under: {root_dir}"
+        )
+
+    return reports, all_paths, warnings
+
+
+def _infer_round_assignments_from_report_structure(
+    export_inputs: list[tuple[Path, bytes, dict[str, Any]]],
+    *,
+    root_dir: Path,
+    combine_reports: bool,
+) -> tuple[dict[str, dict[str, Any]], str, list[str]]:
+    round_assignments: dict[str, dict[str, Any]] = {}
+    warnings: list[str] = []
+    report_rounds: dict[str, dict[str, Any]] = {}
+
+    for source_path, _raw, export_obj in export_inputs:
+        try:
+            rel = source_path.resolve().relative_to(root_dir.resolve())
+        except Exception as e:
+            raise CommandError(
+                f"Structured report input is not under the expected root {root_dir}: {source_path}"
+            ) from e
+
+        if combine_reports:
+            if len(rel.parts) < 3:
+                raise CommandError(
+                    "Expected structured report paths like <report>/<round>/<file>.json in "
+                    f"{root_dir}, got: {source_path}"
+                )
+            report_label = _normalize_space(rel.parts[0])
+            round_folder_name = _normalize_space(rel.parts[1])
+        else:
+            if len(rel.parts) < 2:
+                raise CommandError(
+                    "Expected per-report paths like <round>/<file>.json in "
+                    f"{root_dir}, got: {source_path}"
+                )
+            report_label = _normalize_space(root_dir.name)
+            round_folder_name = _normalize_space(rel.parts[0])
+
+        if not round_folder_name:
+            raise CommandError(f"Invalid empty round folder name for {source_path}")
+
+        sp = str(source_path)
+        packet_name = _normalize_space(_packet_label_from_export_obj(export_obj))
+        checksum = _packet_checksum_from_export_obj(export_obj)
+        round_number_guess = _parse_round_number_from_name(round_folder_name)
+
+        rounds_for_report = report_rounds.setdefault(report_label, {})
+        rounds_for_report.setdefault(
+            round_folder_name,
+            {
+                "round_folder_name": round_folder_name,
+                "round_number_guess": round_number_guess,
+                "packet_name": packet_name,
+                "checksum": checksum,
+            },
+        )
+
+    assigned_by_report_and_round: dict[tuple[str, str], int] = {}
+
+    if combine_reports:
+        round_items: list[dict[str, Any]] = []
+        for report_label, rounds in report_rounds.items():
+            for round_folder_name, info in rounds.items():
+                round_items.append(
+                    {
+                        "report_label": report_label,
+                        "round_folder_name": round_folder_name,
+                        "round_number_guess": info["round_number_guess"],
+                    }
+                )
+
+        round_items.sort(
+            key=lambda item: (
+                _report_phase_rank(item["report_label"]),
+                item["round_number_guess"] if item["round_number_guess"] is not None else 999999,
+                item["round_folder_name"].casefold(),
+                item["report_label"].casefold(),
+            )
+        )
+
+        for idx, item in enumerate(round_items, start=1):
+            assigned_by_report_and_round[
+                (item["report_label"], item["round_folder_name"])
+            ] = idx
+    else:
+        for report_label, rounds in report_rounds.items():
+            parsed_numbers = [
+                info["round_number_guess"]
+                for info in rounds.values()
+                if info["round_number_guess"] is not None
+            ]
+            use_parsed_numbers = (
+                len(parsed_numbers) == len(rounds)
+                and len(set(parsed_numbers)) == len(parsed_numbers)
+            )
+
+            if use_parsed_numbers:
+                for round_folder_name, info in rounds.items():
+                    assigned_by_report_and_round[(report_label, round_folder_name)] = int(
+                        info["round_number_guess"]
+                    )
+                continue
+
+            sorted_rounds = sorted(
+                rounds.items(),
+                key=lambda item: (
+                    item[1]["round_number_guess"] if item[1]["round_number_guess"] is not None else 999999,
+                    item[0].casefold(),
+                ),
+            )
+            for idx, (round_folder_name, _info) in enumerate(sorted_rounds, start=1):
+                assigned_by_report_and_round[(report_label, round_folder_name)] = idx
+
+    for source_path, _raw, export_obj in export_inputs:
+        rel = source_path.resolve().relative_to(root_dir.resolve())
+        if combine_reports:
+            report_label = _normalize_space(rel.parts[0])
+            round_folder_name = _normalize_space(rel.parts[1])
+        else:
+            report_label = _normalize_space(root_dir.name)
+            round_folder_name = _normalize_space(rel.parts[0])
+        packet_name = _normalize_space(_packet_label_from_export_obj(export_obj)) or round_folder_name
+        round_assignments[str(source_path)] = {
+            "round_number": assigned_by_report_and_round[(report_label, round_folder_name)],
+            "name": round_folder_name,
+            "packet_name": packet_name,
+            "packet_checksum": _packet_checksum_from_export_obj(export_obj),
+        }
+
+    mode = "structured_folder_combined" if combine_reports else "structured_folder"
+    return round_assignments, mode, warnings
+
+
 def _infer_round_assignments(
     export_inputs: list[tuple[Path, bytes, dict[str, Any]]],
 ) -> tuple[dict[str, dict[str, Any]], str, list[str]]:
@@ -549,6 +748,15 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser) -> None:
         parser.add_argument(
+            "--reports-from-subdirs",
+            action="store_true",
+            help=(
+                "Treat the single input directory as a report root whose first-level subdirectories "
+                "are reports and nested subdirectories are round folders. Generates inferred reports "
+                "plus a combined report."
+            ),
+        )
+        parser.add_argument(
             "--report-key",
             type=str,
             required=False,
@@ -621,6 +829,17 @@ class Command(BaseCommand):
             nargs="+",
             help="One or more moss_scoresheet export JSON files, or directories containing them (searched recursively).",
         )
+        parser.add_argument(
+            "--structured-round-root",
+            type=str,
+            required=False,
+            help=argparse.SUPPRESS,
+        )
+        parser.add_argument(
+            "--structured-rounds-combined",
+            action="store_true",
+            help=argparse.SUPPRESS,
+        )
 
     def _sync_frontends(self, *, repo_root: Path) -> None:
         scripts: list[tuple[str, Path]] = [
@@ -667,6 +886,9 @@ class Command(BaseCommand):
                 self.stderr.write(result.stderr.rstrip())
 
     def handle(self, *args, **options) -> None:
+        reports_from_subdirs: bool = options["reports_from_subdirs"]
+        structured_round_root_raw: str | None = options.get("structured_round_root")
+        structured_rounds_combined: bool = options["structured_rounds_combined"]
         report_key = _normalize_report_key(options.get("report_key"))
         report_label_raw: str | None = options.get("report_label")
         report_label = (report_label_raw or _default_report_label(report_key)).strip()
@@ -682,6 +904,94 @@ class Command(BaseCommand):
         raw_paths: list[str] = options["paths"]
 
         repo_root = Path(settings.BASE_DIR).parent
+        if reports_from_subdirs:
+            if report_key != "combined":
+                raise CommandError(
+                    "--reports-from-subdirs cannot be combined with --report-key."
+                )
+            if report_label_raw is not None:
+                raise CommandError(
+                    "--reports-from-subdirs cannot be combined with --report-label."
+                )
+            if len(raw_paths) != 1:
+                raise CommandError(
+                    "--reports-from-subdirs expects exactly one root directory path."
+                )
+            if structured_round_root_raw:
+                raise CommandError(
+                    "--reports-from-subdirs cannot be combined with --structured-round-root."
+                )
+
+            raw_output_dir: str | None = options.get("output_dir")
+            if raw_output_dir:
+                output_dir_path = Path(raw_output_dir)
+                tournament_root_output_dir = (
+                    output_dir_path
+                    if output_dir_path.is_absolute()
+                    else (repo_root / output_dir_path)
+                )
+            else:
+                slug_for_default = (tournament_slug or "").strip()
+                if not slug_for_default:
+                    raise CommandError(
+                        "Pass --tournament-slug (or --output-dir) to choose an output folder."
+                    )
+                tournament_root_output_dir = repo_root / "stats" / slug_for_default
+
+            slug = (
+                tournament_slug
+                or _infer_slug_from_output_dir(
+                    repo_root=repo_root, output_dir=tournament_root_output_dir
+                )
+            ).strip()
+            if not slug:
+                raise CommandError(
+                    "Could not infer tournament slug; pass --tournament-slug."
+                )
+            name = (tournament_name or slug).strip()
+
+            root_dir = Path(raw_paths[0]).expanduser()
+            reports, _all_paths, discovery_warnings = _discover_reports_from_subdirs(root_dir)
+            for w in discovery_warnings:
+                self.stderr.write(self.style.WARNING(f"WARNING: {w}"))
+
+            for report in reports:
+                call_command(
+                    "generate_moss_static_stats",
+                    *[str(p) for p in report["paths"]],
+                    report_key=report["key"],
+                    report_label=report["label"],
+                    output_dir=str(tournament_root_output_dir / "reports" / report["key"]),
+                    tournament_slug=slug,
+                    tournament_name=name,
+                    pretty=pretty,
+                    yes=assume_yes,
+                    no_dedupe=no_dedupe,
+                    no_sync_frontends=True,
+                    structured_round_root=str(report["root_dir"]),
+                )
+
+            call_command(
+                "generate_moss_static_stats",
+                *[str(p) for report in reports for p in report["paths"]],
+                report_key="combined",
+                report_label="Combined",
+                output_dir=str(tournament_root_output_dir),
+                tournament_slug=slug,
+                tournament_name=name,
+                pretty=pretty,
+                yes=assume_yes,
+                no_dedupe=no_dedupe,
+                no_sync_frontends=True,
+                structured_round_root=str(root_dir),
+                structured_rounds_combined=True,
+            )
+
+            if not no_sync_frontends:
+                self._sync_frontends(repo_root=repo_root)
+                self.stdout.write(self.style.SUCCESS("Synced stats into website and MoSS frontends."))
+            return
+
         raw_output_dir: str | None = options.get("output_dir")
         if raw_output_dir:
             output_dir_path = Path(raw_output_dir)
@@ -763,9 +1073,18 @@ class Command(BaseCommand):
                 }
             )
 
-        round_assignments, round_mode, round_warnings = _infer_round_assignments(
-            export_inputs
-        )
+        if structured_round_root_raw:
+            round_assignments, round_mode, round_warnings = (
+                _infer_round_assignments_from_report_structure(
+                    export_inputs,
+                    root_dir=Path(structured_round_root_raw).expanduser(),
+                    combine_reports=structured_rounds_combined,
+                )
+            )
+        else:
+            round_assignments, round_mode, round_warnings = _infer_round_assignments(
+                export_inputs
+            )
         for w in round_warnings:
             self.stderr.write(self.style.WARNING(f"WARNING: {w}"))
 
@@ -817,7 +1136,7 @@ class Command(BaseCommand):
 
         # Build everything using an ephemeral local SQLite DB (separate alias) so we
         # never touch any configured persistent DB, even if one exists locally.
-        db_alias = "moss_stats"
+        db_alias = f"moss_stats_{uuid4().hex[:8]}"
         original_databases = dict(settings.DATABASES)
         if db_alias in settings.DATABASES:
             raise CommandError(
