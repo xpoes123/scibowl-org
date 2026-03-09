@@ -384,6 +384,10 @@ def _report_phase_rank(report_label: str) -> int:
     return 50
 
 
+def _is_advancement_report_label(report_label: str) -> bool:
+    return _normalize_space(report_label).casefold().startswith("playoff")
+
+
 def _discover_reports_from_subdirs(
     root_dir: Path,
 ) -> tuple[list[dict[str, Any]], list[Path], list[str]]:
@@ -561,11 +565,13 @@ def _infer_round_assignments_from_report_structure(
             report_label = _normalize_space(root_dir.name)
             round_folder_name = _normalize_space(rel.parts[0])
         packet_name = _normalize_space(_packet_label_from_export_obj(export_obj)) or round_folder_name
+        is_advancement = _is_advancement_report_label(report_label)
         round_assignments[str(source_path)] = {
             "round_number": assigned_by_report_and_round[(report_label, round_folder_name)],
             "name": round_folder_name,
             "packet_name": packet_name,
             "packet_checksum": _packet_checksum_from_export_obj(export_obj),
+            "is_advancement": is_advancement,
         }
 
     mode = "structured_folder_combined" if combine_reports else "structured_folder"
@@ -738,6 +744,90 @@ def _infer_round_assignments(
         next_round_number += 1
 
     return round_assignments, "folder", warnings
+
+
+def _advancement_round_numbers(
+    round_assignments: dict[str, dict[str, Any]],
+) -> list[int]:
+    return sorted(
+        {
+            int(info["round_number"])
+            for info in round_assignments.values()
+            if info.get("is_advancement") is True
+            and isinstance(info.get("round_number"), int)
+            and not isinstance(info.get("round_number"), bool)
+        }
+    )
+
+
+def _fetch_team_advancement_rounds(
+    *,
+    db_alias: str,
+    tournament_id: int,
+    advancement_round_numbers: list[int],
+) -> dict[int, int]:
+    if not advancement_round_numbers:
+        return {}
+
+    placeholders = ", ".join(["%s"] * len(advancement_round_numbers))
+    sql = f"""
+        SELECT
+          gt.tournament_team_id AS team_id,
+          MAX(r.round_number) AS deepest_round
+        FROM moss_gameteam gt
+        JOIN moss_game g ON g.id = gt.game_id
+        JOIN tournaments_round r ON r.id = g.round_id
+        WHERE g.tournament_id = %s
+          AND r.round_number IN ({placeholders})
+        GROUP BY gt.tournament_team_id
+    """
+    params: list[Any] = [tournament_id, *advancement_round_numbers]
+    with connections[db_alias].cursor() as cursor:
+        cursor.execute(sql, params)
+        return {
+            int(team_id): int(deepest_round)
+            for team_id, deepest_round in cursor.fetchall()
+            if team_id is not None and deepest_round is not None
+        }
+
+
+def _reorder_team_standings_rows_for_advancement(
+    *,
+    cols: list[str],
+    rows: list[tuple[Any, ...]],
+    team_advancement_rounds: dict[int, int],
+) -> list[tuple[Any, ...]]:
+    if not rows or not team_advancement_rounds:
+        return rows
+
+    rank_idx = cols.index("rank")
+    team_id_idx = cols.index("team_id")
+
+    sortable = []
+    for original_idx, row in enumerate(rows):
+        team_id_raw = row[team_id_idx]
+        try:
+            team_id = int(team_id_raw)
+        except (TypeError, ValueError):
+            team_id = None
+        deepest_round = team_advancement_rounds.get(team_id) if team_id is not None else None
+        sortable.append(
+            (
+                0 if deepest_round is not None else 1,
+                -(deepest_round or 0),
+                original_idx,
+                row,
+            )
+        )
+
+    sortable.sort(key=lambda item: (item[0], item[1], item[2]))
+
+    reordered: list[tuple[Any, ...]] = []
+    for new_rank, (_missing_flag, _neg_round, _original_idx, row) in enumerate(sortable, start=1):
+        row_list = list(row)
+        row_list[rank_idx] = new_rank
+        reordered.append(tuple(row_list))
+    return reordered
 
 
 class Command(BaseCommand):
@@ -1211,6 +1301,12 @@ class Command(BaseCommand):
             team_category_sql = (sql_dir / "team_category_standings.sql").read_text(encoding="utf-8")
             individual_category_sql = (sql_dir / "individual_category_standings.sql").read_text(encoding="utf-8")
             rounds_summary: list[dict[str, Any]] = []
+            advancement_round_numbers = _advancement_round_numbers(round_assignments)
+            team_advancement_rounds = _fetch_team_advancement_rounds(
+                db_alias=db_alias,
+                tournament_id=tournament.id,
+                advancement_round_numbers=advancement_round_numbers,
+            )
 
             def write_csv(*, filename: str, sql: str, params: list[Any]) -> None:
                 out_path = output_dir / filename
@@ -1218,6 +1314,12 @@ class Command(BaseCommand):
                     cursor.execute(sql, params)
                     cols = [d[0] for d in cursor.description or []]
                     rows = cursor.fetchall()
+                if filename == "team_standings.csv":
+                    rows = _reorder_team_standings_rows_for_advancement(
+                        cols=cols,
+                        rows=rows,
+                        team_advancement_rounds=team_advancement_rounds,
+                    )
                 out_path.parent.mkdir(parents=True, exist_ok=True)
                 with out_path.open("w", encoding="utf-8", newline="") as f:
                     writer = csv.writer(f)
