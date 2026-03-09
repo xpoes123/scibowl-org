@@ -287,3 +287,27 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 24,2,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
 24,2,2,Mission San Jose B,MATH,0,10,1,1,2,1,0,3
 24,2,2,Mission San Jose B,PHYSICS,8,20,2,0,2,2,0,2
+25,1,14,Palo Alto,BIOLOGY,4,0,1,0,3,0,1,3
+25,1,14,Palo Alto,CHEMISTRY,0,0,1,1,2,0,1,3
+25,1,14,Palo Alto,EARTH_SPACE,8,20,2,0,2,2,0,2
+25,1,14,Palo Alto,ENERGY,8,10,2,0,1,1,1,1
+25,1,14,Palo Alto,MATH,8,10,2,0,2,1,1,2
+25,1,14,Palo Alto,PHYSICS,8,20,2,0,2,2,0,2
+25,2,1,Amador Valley A,BIOLOGY,12,10,3,0,1,1,2,1
+25,2,1,Amador Valley A,CHEMISTRY,-4,0,0,1,3,0,0,4
+25,2,1,Amador Valley A,EARTH_SPACE,0,0,0,0,4,0,0,4
+25,2,1,Amador Valley A,ENERGY,4,10,1,0,2,1,0,2
+25,2,1,Amador Valley A,MATH,4,20,2,1,1,2,0,2
+25,2,1,Amador Valley A,PHYSICS,4,0,2,1,1,0,2,2
+26,1,2,Mission San Jose B,BIOLOGY,-4,0,0,1,3,0,0,4
+26,1,2,Mission San Jose B,CHEMISTRY,4,0,1,0,3,0,1,3
+26,1,2,Mission San Jose B,EARTH_SPACE,-4,0,0,1,3,0,0,4
+26,1,2,Mission San Jose B,ENERGY,4,10,1,0,2,1,0,2
+26,1,2,Mission San Jose B,MATH,12,20,3,0,1,2,1,1
+26,1,2,Mission San Jose B,PHYSICS,0,0,0,0,4,0,0,4
+26,2,15,Mission San Jose A,BIOLOGY,4,20,2,1,1,2,0,2
+26,2,15,Mission San Jose A,CHEMISTRY,4,20,2,1,1,2,0,2
+26,2,15,Mission San Jose A,EARTH_SPACE,12,10,3,0,1,1,2,1
+26,2,15,Mission San Jose A,ENERGY,0,10,1,1,1,1,0,2
+26,2,15,Mission San Jose A,MATH,-4,0,0,1,3,0,0,4
+26,2,15,Mission San Jose A,PHYSICS,16,20,4,0,0,2,2,0

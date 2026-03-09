@@ -199,3 +199,19 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 24,2,Mission San Jose B,8,Andy Liu,23,3,0,0,12
 24,2,Mission San Jose B,7,Aravind Muralidharan,23,1,0,0,4
 24,2,Mission San Jose B,6,Ishaan Kabra,23,2,1,0,4
+25,1,Amador Valley A,1,Gaurav Gupta,23,0,2,0,-8
+25,1,Amador Valley A,3,Ritwik Aeka,23,3,0,0,12
+25,1,Amador Valley A,2,Rohan Garg,23,5,1,0,16
+25,1,Amador Valley A,4,Samarth Jain,23,0,0,0,0
+25,14,Palo Alto,67,Andrew Wen,23,3,0,0,12
+25,14,Palo Alto,68,Kevin Pei,23,6,1,0,20
+25,14,Palo Alto,66,Rasia Yu,23,1,0,0,4
+25,14,Palo Alto,69,Sayan Singh,23,0,0,0,0
+26,15,Mission San Jose A,72,Advaith Mopuri,23,0,1,0,-4
+26,15,Mission San Jose A,74,Roshan Annamalai,23,4,2,0,8
+26,15,Mission San Jose A,75,Rutvik Arora,23,4,0,0,16
+26,15,Mission San Jose A,71,Theenash Sengupta,23,4,1,0,12
+26,2,Mission San Jose B,10,Aarush Iyer,23,1,0,0,4
+26,2,Mission San Jose B,8,Andy Liu,23,2,0,0,8
+26,2,Mission San Jose B,7,Aravind Muralidharan,23,0,1,0,-4
+26,2,Mission San Jose B,6,Ishaan Kabra,23,2,1,0,4
