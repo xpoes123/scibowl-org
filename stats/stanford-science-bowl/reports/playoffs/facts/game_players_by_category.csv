@@ -413,3 +413,19 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 28,14,Palo Alto,68,Kevin Pei,CHEMISTRY,1,0,0,4
 28,14,Palo Alto,68,Kevin Pei,ENERGY,1,0,0,4
 28,14,Palo Alto,66,Rasia Yu,BIOLOGY,2,0,0,8
+29,5,BASIS Silicon Valley A,24,Aaron Cohen,EARTH_SPACE,1,0,0,4
+29,5,BASIS Silicon Valley A,23,Larry Zhao,BIOLOGY,1,1,0,0
+29,5,BASIS Silicon Valley A,21,Lucas Quan,CHEMISTRY,0,1,0,-4
+29,5,BASIS Silicon Valley A,21,Lucas Quan,EARTH_SPACE,0,1,0,-4
+29,5,BASIS Silicon Valley A,21,Lucas Quan,MATH,1,1,0,0
+29,5,BASIS Silicon Valley A,21,Lucas Quan,PHYSICS,1,1,0,0
+29,15,Mission San Jose A,72,Advaith Mopuri,ENERGY,1,0,0,4
+29,15,Mission San Jose A,72,Advaith Mopuri,MATH,1,2,0,-4
+29,15,Mission San Jose A,72,Advaith Mopuri,PHYSICS,2,0,0,8
+29,15,Mission San Jose A,74,Roshan Annamalai,CHEMISTRY,1,0,0,4
+29,15,Mission San Jose A,74,Roshan Annamalai,EARTH_SPACE,1,1,0,0
+29,15,Mission San Jose A,74,Roshan Annamalai,PHYSICS,1,1,0,0
+29,15,Mission San Jose A,75,Rutvik Arora,MATH,1,0,0,4
+29,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,1,2,0,-4
+29,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,2,0,0,8
+29,15,Mission San Jose A,71,Theenash Sengupta,ENERGY,1,0,0,4

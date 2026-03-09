@@ -231,3 +231,11 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 28,14,Palo Alto,68,Kevin Pei,23,2,0,0,8
 28,14,Palo Alto,66,Rasia Yu,23,2,0,0,8
 28,14,Palo Alto,69,Sayan Singh,23,0,0,0,0
+29,5,BASIS Silicon Valley A,24,Aaron Cohen,23,1,0,0,4
+29,5,BASIS Silicon Valley A,23,Larry Zhao,23,1,1,0,0
+29,5,BASIS Silicon Valley A,21,Lucas Quan,23,2,4,0,-8
+29,5,BASIS Silicon Valley A,22,Zanda Zhu,23,0,0,0,0
+29,15,Mission San Jose A,72,Advaith Mopuri,23,4,2,0,8
+29,15,Mission San Jose A,74,Roshan Annamalai,23,3,2,0,4
+29,15,Mission San Jose A,75,Rutvik Arora,23,1,0,0,4
+29,15,Mission San Jose A,71,Theenash Sengupta,23,4,2,0,8

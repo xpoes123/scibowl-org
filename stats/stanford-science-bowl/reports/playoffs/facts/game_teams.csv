@@ -55,3 +55,5 @@ game_id,slot,team_id,team_name,score,tossup_points,bonus_points,tossups_correct,
 27,2,5,BASIS Silicon Valley A,30,20,10,6,1,16,1,5,17
 28,1,15,Mission San Jose A,130,40,90,14,4,5,9,5,9
 28,2,14,Palo Alto,12,12,0,6,3,14,0,6,17
+29,1,5,BASIS Silicon Valley A,16,-4,20,4,5,14,2,2,19
+29,2,15,Mission San Jose A,94,24,70,12,6,5,7,5,11
