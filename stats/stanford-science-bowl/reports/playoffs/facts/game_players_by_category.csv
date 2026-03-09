@@ -429,3 +429,15 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 29,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,1,2,0,-4
 29,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,2,0,0,8
 29,15,Mission San Jose A,71,Theenash Sengupta,ENERGY,1,0,0,4
+30,9,Davidson A,41,Alexander Weaver,EARTH_SPACE,0,1,0,-4
+30,9,Davidson A,43,Lucas Wu,ENERGY,1,0,0,4
+30,9,Davidson A,43,Lucas Wu,MATH,1,0,0,4
+30,9,Davidson A,43,Lucas Wu,PHYSICS,1,0,0,4
+30,9,Davidson A,42,Yajur Chandar,CHEMISTRY,1,0,0,4
+30,9,Davidson A,42,Yajur Chandar,ENERGY,1,0,0,4
+30,15,Mission San Jose A,72,Advaith Mopuri,MATH,2,0,0,8
+30,15,Mission San Jose A,74,Roshan Annamalai,EARTH_SPACE,3,0,0,12
+30,15,Mission San Jose A,74,Roshan Annamalai,PHYSICS,2,0,0,8
+30,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,3,1,0,8
+30,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,3,0,0,12
+30,15,Mission San Jose A,71,Theenash Sengupta,ENERGY,1,1,0,0

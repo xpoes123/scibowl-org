@@ -239,3 +239,11 @@ game_id,team_id,team_name,player_id,player_name,pairs_heard,tossups_correct,toss
 29,15,Mission San Jose A,74,Roshan Annamalai,23,3,2,0,4
 29,15,Mission San Jose A,75,Rutvik Arora,23,1,0,0,4
 29,15,Mission San Jose A,71,Theenash Sengupta,23,4,2,0,8
+30,9,Davidson A,41,Alexander Weaver,23,0,1,0,-4
+30,9,Davidson A,45,Julian Kuang,23,0,0,0,0
+30,9,Davidson A,43,Lucas Wu,23,3,0,0,12
+30,9,Davidson A,42,Yajur Chandar,23,2,0,0,8
+30,15,Mission San Jose A,72,Advaith Mopuri,23,2,0,0,8
+30,15,Mission San Jose A,74,Roshan Annamalai,23,5,0,0,20
+30,15,Mission San Jose A,75,Rutvik Arora,23,0,0,0,0
+30,15,Mission San Jose A,71,Theenash Sengupta,23,7,2,0,20

@@ -1,7 +1,7 @@
 rank,team_id,name,games_played,points_per_game,4s,-4s,0s,tossups_heard,bonuses_heard,bonus_points,points_per_bonus
-1,9,Davidson A,4,35.0,12,2,2,16,12,100,8.333333333333334
+1,9,Davidson A,5,28.8,13,2,5,20,13,100,7.6923076923076925
 2,10,Davidson B,2,28.0,4,0,4,8,4,40,10.0
-3,15,Mission San Jose A,6,24.333333333333332,14,5,5,24,14,110,7.857142857142857
+3,15,Mission San Jose A,7,24.857142857142858,16,5,7,28,16,130,8.125
 4,3,Lynbrook A,4,21.0,8,2,6,16,8,60,7.5
 5,1,Amador Valley A,5,14.8,11,5,4,20,11,50,4.545454545454546
 6,2,Mission San Jose B,5,14.0,8,3,9,20,8,50,6.25

@@ -1,29 +1,29 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,2,Rohan Garg,Amador Valley A,5,37,15,63,115,88,17.6
-2,71,Theenash Sengupta,Mission San Jose A,6,32,10,96,138,88,14.666666666666666
+1,71,Theenash Sengupta,Mission San Jose A,7,39,12,110,161,108,15.428571428571429
+2,2,Rohan Garg,Amador Valley A,5,37,15,63,115,88,17.6
 3,68,Kevin Pei,Palo Alto,5,22,3,90,115,76,15.2
-4,21,Lucas Quan,BASIS Silicon Valley A,5,20,6,89,115,56,11.2
-5,12,Sohil Rathi,Lynbrook A,4,20,6,66,92,56,14.0
-6,43,Lucas Wu,Davidson A,4,14,0,78,92,56,14.0
-7,8,Andy Liu,Mission San Jose B,5,15,3,97,115,48,9.6
-8,23,Larry Zhao,BASIS Silicon Valley A,5,14,2,99,115,48,9.6
-9,32,Achuth Vinay,Clovis North,3,13,1,55,69,48,16.0
-10,6,Ishaan Kabra,Mission San Jose B,5,17,7,91,115,40,8.0
-11,72,Advaith Mopuri,Mission San Jose A,6,14,4,120,138,40,6.666666666666667
-12,74,Roshan Annamalai,Mission San Jose A,6,22,13,103,138,36,6.0
-13,45,Julian Kuang,Davidson A,4,13,4,75,92,36,9.0
-14,3,Ritwik Aeka,Amador Valley A,5,12,3,100,115,36,7.2
-15,36,Soham Chatterjee,Dougherty Valley A,3,11,2,56,69,36,12.0
-16,31,Justin Do,Clovis North,3,10,1,58,69,36,12.0
-17,42,Yajur Chandar,Davidson A,4,12,4,64,80,32,8.0
+4,43,Lucas Wu,Davidson A,5,17,0,98,115,68,13.6
+5,74,Roshan Annamalai,Mission San Jose A,7,27,13,121,161,56,8.0
+6,21,Lucas Quan,BASIS Silicon Valley A,5,20,6,89,115,56,11.2
+7,12,Sohil Rathi,Lynbrook A,4,20,6,66,92,56,14.0
+8,72,Advaith Mopuri,Mission San Jose A,7,16,4,141,161,48,6.857142857142857
+9,8,Andy Liu,Mission San Jose B,5,15,3,97,115,48,9.6
+10,23,Larry Zhao,BASIS Silicon Valley A,5,14,2,99,115,48,9.6
+11,32,Achuth Vinay,Clovis North,3,13,1,55,69,48,16.0
+12,6,Ishaan Kabra,Mission San Jose B,5,17,7,91,115,40,8.0
+13,42,Yajur Chandar,Davidson A,5,14,4,85,103,40,8.0
+14,45,Julian Kuang,Davidson A,5,13,4,98,115,36,7.2
+15,3,Ritwik Aeka,Amador Valley A,5,12,3,100,115,36,7.2
+16,36,Soham Chatterjee,Dougherty Valley A,3,11,2,56,69,36,12.0
+17,31,Justin Do,Clovis North,3,10,1,58,69,36,12.0
 18,30,Athithan Elamaran,Foothill A,4,11,3,66,80,32,8.0
 19,58,Alex Ge,Saratoga,2,9,1,36,46,32,16.0
 20,11,Evan Liu,Lynbrook A,4,9,1,82,92,32,8.0
 21,67,Andrew Wen,Palo Alto,5,15,8,92,115,28,5.6
 22,14,Andrew Liu,Lynbrook A,4,12,5,75,92,28,7.0
-23,41,Alexander Weaver,Davidson A,4,11,4,77,92,28,7.0
+23,41,Alexander Weaver,Davidson A,5,11,5,99,115,24,4.8
 24,66,Rasia Yu,Palo Alto,5,7,1,107,115,24,4.8
-25,75,Rutvik Arora,Mission San Jose A,5,7,1,95,103,24,4.8
+25,75,Rutvik Arora,Mission San Jose A,6,7,1,118,126,24,4.0
 26,59,Ethan Pan,Saratoga,2,6,0,40,46,24,12.0
 27,18,Richard Peng,Archbishop Mitty A,3,12,7,50,69,20,6.666666666666667
 28,77,Abhinav Krishna Senthil Kumar,Mira Loma A,2,6,1,39,46,20,10.0
