@@ -9,6 +9,7 @@ from moss.management.commands.generate_moss_static_stats import (
     _discover_reports_from_subdirs,
     _infer_round_assignments,
     _infer_round_assignments_from_report_structure,
+    _reorder_team_standings_rows_for_advancement,
 )
 
 
@@ -184,3 +185,39 @@ class StructuredRoundAssignmentsTestCase(SimpleTestCase):
         self.assertEqual(round_assignments[str(exports[0][0])]["round_number"], 3)
         self.assertEqual(round_assignments[str(exports[0][0])]["name"], "Double Elimination 1")
         self.assertEqual(warnings, [])
+
+
+class AdvancementStandingsReorderTestCase(SimpleTestCase):
+    def test_advancement_sort_moves_later_round_teams_above_non_advancers(self):
+        cols = ["rank", "team_id", "name", "wins"]
+        rows = [
+            (1, 10, "Alpha", 5),
+            (2, 20, "Beta", 4),
+            (3, 30, "Gamma", 3),
+        ]
+
+        reordered = _reorder_team_standings_rows_for_advancement(
+            cols=cols,
+            rows=rows,
+            team_advancement_rounds={20: 8, 30: 6},
+        )
+
+        self.assertEqual([row[1] for row in reordered], [20, 30, 10])
+        self.assertEqual([row[0] for row in reordered], [1, 2, 3])
+
+    def test_advancement_sort_preserves_existing_order_within_same_round_bucket(self):
+        cols = ["rank", "team_id", "name", "wins"]
+        rows = [
+            (1, 10, "Alpha", 5),
+            (2, 20, "Beta", 4),
+            (3, 30, "Gamma", 3),
+        ]
+
+        reordered = _reorder_team_standings_rows_for_advancement(
+            cols=cols,
+            rows=rows,
+            team_advancement_rounds={20: 7, 30: 7},
+        )
+
+        self.assertEqual([row[1] for row in reordered], [20, 30, 10])
+        self.assertEqual([row[0] for row in reordered], [1, 2, 3])
