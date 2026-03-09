@@ -1,40 +1,40 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,43,Lucas Wu,Davidson A,3,5,0,7,12,20,6.666666666666667
-2,2,Rohan Garg,Amador Valley A,5,8,4,8,20,16,3.2
-3,8,Andy Liu,Mission San Jose B,5,6,2,12,20,16,3.2
-4,12,Sohil Rathi,Lynbrook A,4,6,2,8,16,16,4.0
-5,75,Rutvik Arora,Mission San Jose A,3,5,1,4,10,16,5.333333333333333
-6,21,Lucas Quan,BASIS Silicon Valley A,3,4,1,7,12,12,4.0
-7,68,Kevin Pei,Palo Alto,4,3,0,13,16,12,3.0
+1,43,Lucas Wu,Davidson A,4,9,0,7,16,36,9.0
+2,75,Rutvik Arora,Mission San Jose A,4,6,1,7,14,20,5.0
+3,2,Rohan Garg,Amador Valley A,5,8,4,8,20,16,3.2
+4,8,Andy Liu,Mission San Jose B,5,6,2,12,20,16,3.2
+5,12,Sohil Rathi,Lynbrook A,4,6,2,8,16,16,4.0
+6,21,Lucas Quan,BASIS Silicon Valley A,4,4,1,11,16,12,3.0
+7,68,Kevin Pei,Palo Alto,5,3,0,17,20,12,2.4
 8,34,Majed Almasri,Clovis North,3,3,0,9,12,12,4.0
-9,1,Gaurav Gupta,Amador Valley A,5,3,1,16,20,8,1.6
-10,63,Ishaan Agrawal,Irvington A,2,3,1,2,6,8,4.0
-11,78,Bryan Nasr,Mira Loma A,2,2,0,6,8,8,4.0
-12,46,Kaison Fong,Davidson B,2,2,0,6,8,8,4.0
-13,50,Shayan Sattarvand,Davidson B,2,2,0,6,8,8,4.0
-14,67,Andrew Wen,Palo Alto,4,3,2,11,16,4,1.0
+9,74,Roshan Annamalai,Mission San Jose A,5,5,3,12,20,8,1.6
+10,1,Gaurav Gupta,Amador Valley A,5,3,1,16,20,8,1.6
+11,63,Ishaan Agrawal,Irvington A,2,3,1,2,6,8,4.0
+12,78,Bryan Nasr,Mira Loma A,2,2,0,6,8,8,4.0
+13,46,Kaison Fong,Davidson B,2,2,0,6,8,8,4.0
+14,50,Shayan Sattarvand,Davidson B,2,2,0,6,8,8,4.0
 15,30,Athithan Elamaran,Foothill A,4,2,1,11,14,4,1.0
 16,20,Ben Zheng,Archbishop Mitty A,3,2,1,9,12,4,1.3333333333333333
 17,6,Ishaan Kabra,Mission San Jose B,5,2,1,17,20,4,0.8
-18,45,Julian Kuang,Davidson A,3,2,1,9,12,4,1.3333333333333333
+18,45,Julian Kuang,Davidson A,4,2,1,13,16,4,1.0
 19,14,Andrew Liu,Lynbrook A,4,1,0,15,16,4,1.0
 20,27,Bhagirath Bandigari,Foothill A,4,1,0,15,16,4,1.0
 21,28,Jake Nguyen,Foothill A,4,1,0,15,16,4,1.0
 22,35,Meera Malkar,Clovis North,3,1,0,11,12,4,1.3333333333333333
 23,15,Philip Kohr,Lynbrook A,4,1,0,15,16,4,1.0
 24,62,Roland Pratt,Irvington A,2,1,0,7,8,4,2.0
-25,22,Zanda Zhu,BASIS Silicon Valley A,3,1,0,11,12,4,1.3333333333333333
+25,22,Zanda Zhu,BASIS Silicon Valley A,4,1,0,15,16,4,1.0
 26,53,Neil Dixit,GSB A,3,3,3,6,12,0,0.0
 27,38,Ashwin Shekhar,Dougherty Valley A,3,2,2,8,12,0,0.0
-28,41,Alexander Weaver,Davidson A,3,1,1,10,12,0,0.0
+28,41,Alexander Weaver,Davidson A,4,1,1,14,16,0,0.0
 29,31,Justin Do,Clovis North,3,1,1,10,12,0,0.0
 30,52,Kabir Mahajan,GSB A,3,1,1,10,12,0,0.0
 31,79,Sudeep Suresh,Mira Loma A,2,1,1,6,8,0,0.0
-32,24,Aaron Cohen,BASIS Silicon Valley A,3,0,0,12,12,0,0.0
+32,24,Aaron Cohen,BASIS Silicon Valley A,4,0,0,16,16,0,0.0
 33,10,Aarush Iyer,Mission San Jose B,5,0,0,20,20,0,0.0
 34,77,Abhinav Krishna Senthil Kumar,Mira Loma A,2,0,0,8,8,0,0.0
 35,32,Achuth Vinay,Clovis North,3,0,0,12,12,0,0.0
-36,72,Advaith Mopuri,Mission San Jose A,4,0,0,16,16,0,0.0
+36,72,Advaith Mopuri,Mission San Jose A,5,0,0,20,20,0,0.0
 37,39,Alan Chen,Dougherty Valley A,3,0,0,12,12,0,0.0
 38,58,Alex Ge,Saratoga,2,0,0,8,8,0,0.0
 39,54,Ali Sherazi,GSB A,3,0,0,12,12,0,0.0
@@ -52,20 +52,20 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 51,11,Evan Liu,Lynbrook A,4,0,0,16,16,0,0.0
 52,44,Filip Ramazan,Davidson A,1,0,0,2,2,0,0.0
 53,76,Krish Singh,Mira Loma A,2,0,0,8,8,0,0.0
-54,23,Larry Zhao,BASIS Silicon Valley A,3,0,0,12,12,0,0.0
+54,23,Larry Zhao,BASIS Silicon Valley A,4,0,0,16,16,0,0.0
 55,55,Olivia Kim,GSB A,1,0,0,4,4,0,0.0
 56,26,Parv Surjan,Foothill A,1,0,0,2,2,0,0.0
 57,56,Quinn Gifford,Saratoga,2,0,0,8,8,0,0.0
-58,66,Rasia Yu,Palo Alto,4,0,0,16,16,0,0.0
+58,66,Rasia Yu,Palo Alto,5,0,0,20,20,0,0.0
 59,3,Ritwik Aeka,Amador Valley A,5,0,0,20,20,0,0.0
 60,4,Samarth Jain,Amador Valley A,5,0,0,18,18,0,0.0
-61,69,Sayan Singh,Palo Alto,4,0,0,16,16,0,0.0
+61,69,Sayan Singh,Palo Alto,5,0,0,20,20,0,0.0
 62,29,Shashank Vedula,Foothill A,4,0,0,16,16,0,0.0
 63,36,Soham Chatterjee,Dougherty Valley A,3,0,0,12,12,0,0.0
 64,17,Sudhanva Belur,Archbishop Mitty A,3,0,0,12,12,0,0.0
-65,71,Theenash Sengupta,Mission San Jose A,4,0,0,16,16,0,0.0
-66,42,Yajur Chandar,Davidson A,3,0,0,10,10,0,0.0
-67,74,Roshan Annamalai,Mission San Jose A,4,2,3,11,16,-4,-1.0
+65,71,Theenash Sengupta,Mission San Jose A,5,0,0,20,20,0,0.0
+66,42,Yajur Chandar,Davidson A,4,0,0,14,14,0,0.0
+67,67,Andrew Wen,Palo Alto,5,3,4,13,20,-4,-0.8
 68,37,Keshav Verma,Dougherty Valley A,3,0,1,11,12,-4,-1.3333333333333333
 69,61,Matthew Wang,Irvington A,2,0,1,7,8,-4,-2.0
 70,57,Max Rombakh,Saratoga,2,2,4,2,8,-8,-4.0

@@ -1,34 +1,34 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,71,Theenash Sengupta,Mission San Jose A,4,12,0,4,16,48,12.0
+1,71,Theenash Sengupta,Mission San Jose A,5,14,2,4,20,48,9.6
 2,11,Evan Liu,Lynbrook A,4,7,1,8,16,24,6.0
-3,31,Justin Do,Clovis North,3,6,0,6,12,24,8.0
-4,68,Kevin Pei,Palo Alto,4,6,1,9,16,20,5.0
-5,2,Rohan Garg,Amador Valley A,5,6,1,13,20,20,4.0
-6,39,Alan Chen,Dougherty Valley A,3,5,0,7,12,20,6.666666666666667
-7,21,Lucas Quan,BASIS Silicon Valley A,3,5,0,7,12,20,6.666666666666667
+3,68,Kevin Pei,Palo Alto,5,7,1,12,20,24,4.8
+4,31,Justin Do,Clovis North,3,6,0,6,12,24,8.0
+5,21,Lucas Quan,BASIS Silicon Valley A,4,6,0,10,16,24,6.0
+6,2,Rohan Garg,Amador Valley A,5,6,1,13,20,20,4.0
+7,39,Alan Chen,Dougherty Valley A,3,5,0,7,12,20,6.666666666666667
 8,58,Alex Ge,Saratoga,2,5,1,2,8,16,8.0
 9,18,Richard Peng,Archbishop Mitty A,3,5,2,5,12,12,4.0
-10,1,Gaurav Gupta,Amador Valley A,5,3,1,16,20,8,1.6
-11,12,Sohil Rathi,Lynbrook A,4,3,1,12,16,8,2.0
-12,10,Aarush Iyer,Mission San Jose B,5,2,0,18,20,8,1.6
-13,43,Lucas Wu,Davidson A,3,2,0,10,12,8,2.6666666666666665
-14,28,Jake Nguyen,Foothill A,4,2,1,13,16,4,1.0
-15,42,Yajur Chandar,Davidson A,3,2,1,7,10,4,1.3333333333333333
-16,24,Aaron Cohen,BASIS Silicon Valley A,3,1,0,11,12,4,1.3333333333333333
+10,42,Yajur Chandar,Davidson A,4,5,2,7,14,12,3.0
+11,1,Gaurav Gupta,Amador Valley A,5,3,1,16,20,8,1.6
+12,12,Sohil Rathi,Lynbrook A,4,3,1,12,16,8,2.0
+13,10,Aarush Iyer,Mission San Jose B,5,2,0,18,20,8,1.6
+14,43,Lucas Wu,Davidson A,4,2,0,14,16,8,2.0
+15,28,Jake Nguyen,Foothill A,4,2,1,13,16,4,1.0
+16,24,Aaron Cohen,BASIS Silicon Valley A,4,1,0,15,16,4,1.0
 17,77,Abhinav Krishna Senthil Kumar,Mira Loma A,2,1,0,7,8,4,2.0
-18,41,Alexander Weaver,Davidson A,3,1,0,11,12,4,1.3333333333333333
+18,41,Alexander Weaver,Davidson A,4,1,0,15,16,4,1.0
 19,14,Andrew Liu,Lynbrook A,4,1,0,15,16,4,1.0
-20,67,Andrew Wen,Palo Alto,4,1,0,15,16,4,1.0
+20,67,Andrew Wen,Palo Alto,5,1,0,19,20,4,0.8
 21,73,Anish Agarwal,Mission San Jose A,2,1,0,5,6,4,2.0
 22,49,Bourne Zhou,Davidson B,2,1,0,3,4,4,2.0
 23,6,Ishaan Kabra,Mission San Jose B,5,1,0,19,20,4,0.8
-24,23,Larry Zhao,BASIS Silicon Valley A,3,1,0,11,12,4,1.3333333333333333
+24,23,Larry Zhao,BASIS Silicon Valley A,4,1,0,15,16,4,1.0
 25,53,Neil Dixit,GSB A,3,1,0,11,12,4,1.3333333333333333
 26,56,Quinn Gifford,Saratoga,2,1,0,7,8,4,2.0
 27,50,Shayan Sattarvand,Davidson B,2,1,0,7,8,4,2.0
 28,63,Ishaan Agrawal,Irvington A,2,1,1,4,6,0,0.0
 29,32,Achuth Vinay,Clovis North,3,0,0,12,12,0,0.0
-30,72,Advaith Mopuri,Mission San Jose A,4,0,0,16,16,0,0.0
+30,72,Advaith Mopuri,Mission San Jose A,5,0,0,20,20,0,0.0
 31,54,Ali Sherazi,GSB A,3,0,0,12,12,0,0.0
 32,8,Andy Liu,Mission San Jose B,5,0,0,20,20,0,0.0
 33,16,Anish Roy,Archbishop Mitty A,3,0,0,12,12,0,0.0
@@ -56,17 +56,17 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 55,55,Olivia Kim,GSB A,1,0,0,4,4,0,0.0
 56,26,Parv Surjan,Foothill A,1,0,0,2,2,0,0.0
 57,15,Philip Kohr,Lynbrook A,4,0,0,16,16,0,0.0
-58,66,Rasia Yu,Palo Alto,4,0,0,16,16,0,0.0
+58,66,Rasia Yu,Palo Alto,5,0,0,20,20,0,0.0
 59,3,Ritwik Aeka,Amador Valley A,5,0,0,20,20,0,0.0
 60,62,Roland Pratt,Irvington A,2,0,0,8,8,0,0.0
-61,75,Rutvik Arora,Mission San Jose A,3,0,0,10,10,0,0.0
+61,75,Rutvik Arora,Mission San Jose A,4,0,0,14,14,0,0.0
 62,4,Samarth Jain,Amador Valley A,5,0,0,18,18,0,0.0
-63,69,Sayan Singh,Palo Alto,4,0,0,16,16,0,0.0
+63,69,Sayan Singh,Palo Alto,5,0,0,20,20,0,0.0
 64,36,Soham Chatterjee,Dougherty Valley A,3,0,0,12,12,0,0.0
 65,79,Sudeep Suresh,Mira Loma A,2,0,0,8,8,0,0.0
 66,17,Sudhanva Belur,Archbishop Mitty A,3,0,0,12,12,0,0.0
-67,22,Zanda Zhu,BASIS Silicon Valley A,3,0,0,12,12,0,0.0
+67,22,Zanda Zhu,BASIS Silicon Valley A,4,0,0,16,16,0,0.0
 68,64,Arjun Murugappan,Irvington A,2,0,1,5,6,-4,-2.0
-69,45,Julian Kuang,Davidson A,3,0,1,11,12,-4,-1.3333333333333333
+69,45,Julian Kuang,Davidson A,4,0,1,15,16,-4,-1.0
 70,29,Shashank Vedula,Foothill A,4,0,1,15,16,-4,-1.0
-71,74,Roshan Annamalai,Mission San Jose A,4,0,2,14,16,-8,-2.0
+71,74,Roshan Annamalai,Mission San Jose A,5,0,2,18,20,-8,-1.6
