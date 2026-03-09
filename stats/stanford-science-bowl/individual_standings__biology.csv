@@ -3,21 +3,21 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 2,32,Achuth Vinay,Clovis North,8,20,2,10,32,72,9.0
 3,23,Larry Zhao,BASIS Silicon Valley A,8,20,3,9,32,68,8.5
 4,14,Andrew Liu,Lynbrook A,9,20,4,12,36,64,7.111111111111111
-5,18,Richard Peng,Archbishop Mitty A,8,17,3,12,32,56,7.0
-6,71,Theenash Sengupta,Mission San Jose A,8,19,6,7,32,52,6.5
+5,71,Theenash Sengupta,Mission San Jose A,9,21,7,8,36,56,6.222222222222222
+6,18,Richard Peng,Archbishop Mitty A,8,17,3,12,32,56,7.0
 7,52,Kabir Mahajan,GSB A,8,14,2,16,32,48,6.0
 8,81,Kavin Anreddy,Folsom City,5,11,0,9,20,44,8.8
-9,66,Rasia Yu,Palo Alto,8,12,3,17,32,36,4.5
+9,66,Rasia Yu,Palo Alto,9,13,3,20,36,40,4.444444444444445
 10,163,Rosa Lee,Cupertino B,5,11,2,7,20,36,7.2
 11,59,Ethan Pan,Saratoga,7,10,1,15,26,36,5.142857142857143
 12,177,Tannishtha Chakraborthy,Dougherty Valley B,5,10,1,9,20,36,7.2
-13,42,Yajur Chandar,Davidson A,6,10,3,9,22,28,4.666666666666667
-14,207,Pranik Biswas,Miller,5,7,0,13,20,28,5.6
-15,192,Joshua Huang,Evergreen Valley,5,7,1,12,20,24,4.8
-16,58,Alex Ge,Saratoga,7,6,0,22,28,24,3.4285714285714284
-17,128,Gabriella Liu,Irvington B,5,6,0,14,20,24,4.8
-18,161,Vikrant Chintanaboina,Stanford Online,5,6,0,14,20,24,4.8
-19,3,Ritwik Aeka,Amador Valley A,9,15,10,11,36,20,2.2222222222222223
+13,3,Ritwik Aeka,Amador Valley A,10,18,10,12,40,32,3.2
+14,42,Yajur Chandar,Davidson A,6,10,3,9,22,28,4.666666666666667
+15,207,Pranik Biswas,Miller,5,7,0,13,20,28,5.6
+16,192,Joshua Huang,Evergreen Valley,5,7,1,12,20,24,4.8
+17,58,Alex Ge,Saratoga,7,6,0,22,28,24,3.4285714285714284
+18,128,Gabriella Liu,Irvington B,5,6,0,14,20,24,4.8
+19,161,Vikrant Chintanaboina,Stanford Online,5,6,0,14,20,24,4.8
 20,76,Krish Singh,Mira Loma A,7,9,4,15,28,20,2.857142857142857
 21,210,Matthew Yuan,Lynbrook B,5,9,4,7,20,20,4.0
 22,44,Filip Ramazan,Davidson A,3,6,1,3,10,20,6.666666666666667
@@ -25,41 +25,41 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 24,64,Arjun Murugappan,Irvington A,7,8,4,14,26,16,2.2857142857142856
 25,224,Dhruv Subramanian,Quarry Lane B,5,5,1,12,18,16,3.2
 26,206,Shien Fang,Miller,5,5,1,14,20,16,3.2
-27,10,Aarush Iyer,Mission San Jose B,9,4,0,30,34,16,1.7777777777777777
+27,10,Aarush Iyer,Mission San Jose B,10,4,0,34,38,16,1.6
 28,102,Kevin Chen,BASIS Fremont,5,4,0,16,20,16,3.2
 29,27,Bhagirath Bandigari,Foothill A,9,9,6,21,36,12,1.3333333333333333
 30,112,Jonathan Gao,BASIS Silicon Valley B,5,6,3,11,20,12,2.4
 31,122,Advait Reddy Duvvuru,Archbishop Mitty B,5,4,1,15,20,12,2.4
-32,8,Andy Liu,Mission San Jose B,9,4,1,31,36,12,1.3333333333333333
+32,8,Andy Liu,Mission San Jose B,10,4,1,35,40,12,1.2
 33,188,Jaylyn Sanchez,El Camino B,5,4,1,15,20,12,2.4
 34,216,Kapilan Karunakaran,Mira Loma B,5,4,1,15,20,12,2.4
 35,169,Madeline Brown,Homestead,5,4,1,15,20,12,2.4
 36,197,Sahana Venkat,Foothill B,5,4,1,15,20,12,2.4
 37,77,Abhinav Krishna Senthil Kumar,Mira Loma A,7,3,0,25,28,12,1.7142857142857142
-38,6,Ishaan Kabra,Mission San Jose B,9,3,0,33,36,12,1.3333333333333333
+38,6,Ishaan Kabra,Mission San Jose B,10,3,0,37,40,12,1.2
 39,217,Jeeva Karthy,Mira Loma B,5,3,0,17,20,12,2.4
-40,68,Kevin Pei,Palo Alto,8,3,0,29,32,12,1.5
+40,68,Kevin Pei,Palo Alto,9,3,0,33,36,12,1.3333333333333333
 41,220,Navya Kayath,San Mateo,5,3,0,17,20,12,2.4
 42,82,Pushkal Mishra,Folsom City,5,3,0,17,20,12,2.4
 43,33,Renard Wu,Clovis North,3,3,0,5,8,12,4.0
 44,182,Swaraj Adhikari,El Camino A,5,3,0,17,20,12,2.4
-45,7,Aravind Muralidharan,Mission San Jose B,9,8,6,22,36,8,0.8888888888888888
-46,159,Angad Hayer,Quarry Lane A,5,3,1,16,20,8,1.6
-47,51,Elliot Boyce,GSB A,4,3,1,12,16,8,2.0
-48,187,Grant Kitchen,El Camino B,5,3,1,16,20,8,1.6
-49,175,Hasita Venkat Raman,Mountain House A,5,3,1,16,20,8,1.6
-50,29,Shashank Vedula,Foothill A,9,3,1,32,36,8,0.8888888888888888
-51,50,Shayan Sattarvand,Davidson B,7,3,1,24,28,8,1.1428571428571428
-52,104,Srijon Mandal,Amador Valley B,5,3,1,16,20,8,1.6
-53,67,Andrew Wen,Palo Alto,8,2,0,30,32,8,1.0
-54,170,Everett Tung,Homestead,5,2,0,18,20,8,1.6
-55,223,Gautham Doddapaneni,Quarry Lane B,5,2,0,14,16,8,1.6
-56,143,Greta Nikolai,Chico A,5,2,0,16,18,8,1.6
-57,28,Jake Nguyen,Foothill A,9,2,0,34,36,8,0.8888888888888888
-58,17,Sudhanva Belur,Archbishop Mitty A,8,2,0,30,32,8,1.0
-59,117,Thomas Nguyen,American B,5,2,0,18,20,8,1.6
-60,214,Vincent Qin,Lynbrook B,4,2,0,14,16,8,2.0
-61,193,Zichao Zhou,Evergreen Valley,5,2,0,18,20,8,1.6
+45,159,Angad Hayer,Quarry Lane A,5,3,1,16,20,8,1.6
+46,51,Elliot Boyce,GSB A,4,3,1,12,16,8,2.0
+47,187,Grant Kitchen,El Camino B,5,3,1,16,20,8,1.6
+48,175,Hasita Venkat Raman,Mountain House A,5,3,1,16,20,8,1.6
+49,29,Shashank Vedula,Foothill A,9,3,1,32,36,8,0.8888888888888888
+50,50,Shayan Sattarvand,Davidson B,7,3,1,24,28,8,1.1428571428571428
+51,104,Srijon Mandal,Amador Valley B,5,3,1,16,20,8,1.6
+52,67,Andrew Wen,Palo Alto,9,2,0,34,36,8,0.8888888888888888
+53,170,Everett Tung,Homestead,5,2,0,18,20,8,1.6
+54,223,Gautham Doddapaneni,Quarry Lane B,5,2,0,14,16,8,1.6
+55,143,Greta Nikolai,Chico A,5,2,0,16,18,8,1.6
+56,28,Jake Nguyen,Foothill A,9,2,0,34,36,8,0.8888888888888888
+57,17,Sudhanva Belur,Archbishop Mitty A,8,2,0,30,32,8,1.0
+58,117,Thomas Nguyen,American B,5,2,0,18,20,8,1.6
+59,214,Vincent Qin,Lynbrook B,4,2,0,14,16,8,2.0
+60,193,Zichao Zhou,Evergreen Valley,5,2,0,18,20,8,1.6
+61,7,Aravind Muralidharan,Mission San Jose B,10,8,7,25,40,4,0.4
 62,229,Aarnav Rudraraju,BASIS Fremont,4,2,1,13,16,4,1.0
 63,200,Austin Lin,Foothill B,5,2,1,17,20,4,0.8
 64,49,Bourne Zhou,Davidson B,7,2,1,11,14,4,0.5714285714285714
@@ -69,7 +69,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 68,24,Aaron Cohen,BASIS Silicon Valley A,8,1,0,31,32,4,0.5
 69,108,Abhinav Shivalli,American A,2,1,0,5,6,4,2.0
 70,180,Adhrit Viswanth Balaji,Dougherty Valley B,5,1,0,17,18,4,0.8
-71,72,Advaith Mopuri,Mission San Jose A,8,1,0,31,32,4,0.5
+71,72,Advaith Mopuri,Mission San Jose A,9,1,0,35,36,4,0.4444444444444444
 72,211,Alex Ma,Lynbrook B,4,1,0,13,14,4,1.0
 73,41,Alexander Weaver,Davidson A,8,1,0,31,32,4,0.5
 74,73,Anish Agarwal,Mission San Jose A,5,1,0,13,14,4,0.8
@@ -97,7 +97,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 96,15,Philip Kohr,Lynbrook A,8,1,0,31,32,4,0.5
 97,106,Pratham Mehta,Amador Valley B,5,1,0,19,20,4,0.8
 98,56,Quinn Gifford,Saratoga,7,1,0,23,24,4,0.5714285714285714
-99,74,Roshan Annamalai,Mission San Jose A,8,1,0,31,32,4,0.5
+99,74,Roshan Annamalai,Mission San Jose A,9,1,0,35,36,4,0.4444444444444444
 100,125,Saatvik Chauhan,Archbishop Mitty B,5,1,0,15,16,4,0.8
 101,174,Sampriti Brahma,Mountain House A,5,1,0,19,20,4,0.8
 102,150,Steven Tang,Mountain House B,4,1,0,13,14,4,1.0
@@ -194,13 +194,13 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 193,213,Rishab Medepalli,Lynbrook B,3,0,0,10,10,0,0.0
 194,62,Roland Pratt,Irvington A,7,0,0,24,24,0,0.0
 195,124,Ruoyu Zhou,Archbishop Mitty B,5,0,0,14,14,0,0.0
-196,75,Rutvik Arora,Mission San Jose A,6,0,0,18,18,0,0.0
+196,75,Rutvik Arora,Mission San Jose A,7,0,0,22,22,0,0.0
 197,13,Ryan Bansal,Lynbrook A,5,0,0,16,16,0,0.0
 198,184,Ryan Chen,El Camino A,4,0,0,16,16,0,0.0
 199,101,Ryan Yan,BASIS Fremont,5,0,0,20,20,0,0.0
 200,215,Sai-Sanaathan Vemireddy,Mira Loma B,5,0,0,20,20,0,0.0
 201,176,Saicharan Avuthu,Mountain House A,4,0,0,8,8,0,0.0
-202,4,Samarth Jain,Amador Valley A,8,0,0,28,28,0,0.0
+202,4,Samarth Jain,Amador Valley A,9,0,0,32,32,0,0.0
 203,123,Samiha Das,Archbishop Mitty B,5,0,0,20,20,0,0.0
 204,119,Sanjay Seshadri,American B,5,0,0,20,20,0,0.0
 205,172,Shrikoustubh Veldanda,Mountain House A,5,0,0,12,12,0,0.0
@@ -216,14 +216,14 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 215,139,Vihaan Tigadikar,California,5,0,0,20,20,0,0.0
 216,60,Warren Chee,Saratoga,3,0,0,10,10,0,0.0
 217,22,Zanda Zhu,BASIS Silicon Valley A,7,0,0,28,28,0,0.0
-218,2,Rohan Garg,Amador Valley A,9,2,3,31,36,-4,-0.4444444444444444
+218,2,Rohan Garg,Amador Valley A,10,2,3,35,40,-4,-0.4
 219,137,Lucas Chi,California,5,1,2,17,20,-4,-0.8
-220,1,Gaurav Gupta,Amador Valley A,9,0,1,35,36,-4,-0.4444444444444444
+220,1,Gaurav Gupta,Amador Valley A,10,0,1,39,40,-4,-0.4
 221,116,Jason Zhao,BASIS Silicon Valley B,2,0,1,5,6,-4,-2.0
 222,103,Olive Leuten,Amador Valley B,5,0,1,19,20,-4,-0.8
 223,91,Pranav Burra,Cupertino A,5,0,1,19,20,-4,-0.8
 224,109,Ryan Liu,American A,4,0,1,13,14,-4,-1.0
-225,69,Sayan Singh,Palo Alto,7,0,1,25,26,-4,-0.5714285714285714
+225,69,Sayan Singh,Palo Alto,8,0,1,29,30,-4,-0.5
 226,111,Srithan Devarashetty,American A,5,0,1,15,16,-4,-0.8
 227,162,Vinayak Vikram,Stanford Online,5,0,1,19,20,-4,-0.8
 228,144,YiLun Liu,Chico A,5,0,1,17,18,-4,-0.8
