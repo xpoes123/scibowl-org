@@ -57,7 +57,13 @@ agg AS (
   GROUP BY tournament_team_id
 )
 SELECT
-  ROW_NUMBER() OVER (ORDER BY agg.wins DESC, agg.points DESC, tt.name ASC) AS rank,
+  ROW_NUMBER() OVER (
+    ORDER BY
+      (CAST(agg.wins AS REAL) / NULLIF(agg.games_played, 0)) DESC,
+      agg.wins DESC,
+      agg.points DESC,
+      tt.name ASC
+  ) AS rank,
   tt.id AS team_id,
   tt.name AS name,
   agg.wins AS wins,
