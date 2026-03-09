@@ -47,3 +47,7 @@ game_id,slot,team_id,team_name,score,tossup_points,bonus_points,tossups_correct,
 23,2,9,Davidson A,100,40,60,12,2,9,6,6,11
 24,1,3,Lynbrook A,60,20,40,9,4,10,4,5,14
 24,2,2,Mission San Jose B,74,24,50,7,1,15,5,2,16
+25,1,14,Palo Alto,96,36,60,10,1,12,6,4,13
+25,2,1,Amador Valley A,60,20,40,8,3,12,4,4,15
+26,1,2,Mission San Jose B,42,12,30,5,2,16,3,2,18
+26,2,15,Mission San Jose A,112,32,80,12,4,7,8,4,11

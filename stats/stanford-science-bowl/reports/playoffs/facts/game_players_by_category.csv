@@ -361,3 +361,30 @@ game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups
 24,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,1,0,0,4
 24,2,Mission San Jose B,6,Ishaan Kabra,MATH,0,1,0,-4
 24,2,Mission San Jose B,6,Ishaan Kabra,PHYSICS,1,0,0,4
+25,1,Amador Valley A,1,Gaurav Gupta,MATH,0,1,0,-4
+25,1,Amador Valley A,1,Gaurav Gupta,PHYSICS,0,1,0,-4
+25,1,Amador Valley A,3,Ritwik Aeka,BIOLOGY,3,0,0,12
+25,1,Amador Valley A,2,Rohan Garg,CHEMISTRY,0,1,0,-4
+25,1,Amador Valley A,2,Rohan Garg,ENERGY,1,0,0,4
+25,1,Amador Valley A,2,Rohan Garg,MATH,2,0,0,8
+25,1,Amador Valley A,2,Rohan Garg,PHYSICS,2,0,0,8
+25,14,Palo Alto,67,Andrew Wen,MATH,1,0,0,4
+25,14,Palo Alto,67,Andrew Wen,PHYSICS,2,0,0,8
+25,14,Palo Alto,68,Kevin Pei,CHEMISTRY,1,1,0,0
+25,14,Palo Alto,68,Kevin Pei,EARTH_SPACE,2,0,0,8
+25,14,Palo Alto,68,Kevin Pei,ENERGY,2,0,0,8
+25,14,Palo Alto,68,Kevin Pei,MATH,1,0,0,4
+25,14,Palo Alto,66,Rasia Yu,BIOLOGY,1,0,0,4
+26,15,Mission San Jose A,72,Advaith Mopuri,MATH,0,1,0,-4
+26,15,Mission San Jose A,74,Roshan Annamalai,CHEMISTRY,0,1,0,-4
+26,15,Mission San Jose A,74,Roshan Annamalai,EARTH_SPACE,3,0,0,12
+26,15,Mission San Jose A,74,Roshan Annamalai,ENERGY,1,1,0,0
+26,15,Mission San Jose A,75,Rutvik Arora,PHYSICS,4,0,0,16
+26,15,Mission San Jose A,71,Theenash Sengupta,BIOLOGY,2,1,0,4
+26,15,Mission San Jose A,71,Theenash Sengupta,CHEMISTRY,2,0,0,8
+26,2,Mission San Jose B,10,Aarush Iyer,CHEMISTRY,1,0,0,4
+26,2,Mission San Jose B,8,Andy Liu,MATH,2,0,0,8
+26,2,Mission San Jose B,7,Aravind Muralidharan,BIOLOGY,0,1,0,-4
+26,2,Mission San Jose B,6,Ishaan Kabra,EARTH_SPACE,0,1,0,-4
+26,2,Mission San Jose B,6,Ishaan Kabra,ENERGY,1,0,0,4
+26,2,Mission San Jose B,6,Ishaan Kabra,MATH,1,0,0,4
