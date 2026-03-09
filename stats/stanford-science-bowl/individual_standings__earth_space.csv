@@ -1,7 +1,7 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,74,Roshan Annamalai,Mission San Jose A,12,32,7,9,48,100,8.333333333333334
+1,74,Roshan Annamalai,Mission San Jose A,13,35,7,10,52,112,8.615384615384615
 2,68,Kevin Pei,Palo Alto,10,23,2,15,40,84,8.4
-3,41,Alexander Weaver,Davidson A,10,22,3,15,40,76,7.6
+3,41,Alexander Weaver,Davidson A,11,22,3,19,44,76,6.909090909090909
 4,37,Keshav Verma,Dougherty Valley A,8,18,1,13,32,68,8.5
 5,17,Sudhanva Belur,Archbishop Mitty A,8,17,4,11,32,52,6.5
 6,29,Shashank Vedula,Foothill A,9,17,6,13,36,44,4.888888888888889
@@ -49,7 +49,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 48,63,Ishaan Agrawal,Irvington A,7,2,0,24,26,8,1.1428571428571428
 49,192,Joshua Huang,Evergreen Valley,5,2,0,18,20,8,1.6
 50,46,Kaison Fong,Davidson B,7,2,0,26,28,8,1.1428571428571428
-51,43,Lucas Wu,Davidson A,10,2,0,38,40,8,0.8
+51,43,Lucas Wu,Davidson A,11,2,0,42,44,8,0.7272727272727273
 52,148,Neel Raina,Mountain House B,5,2,0,18,20,8,1.6
 53,103,Olive Leuten,Amador Valley B,5,2,0,18,20,8,1.6
 54,26,Parv Surjan,Foothill A,3,2,0,6,8,8,2.6666666666666665
@@ -109,7 +109,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 108,9,Abhiraam Girish,Mission San Jose B,1,0,0,2,2,0,0.0
 109,32,Achuth Vinay,Clovis North,8,0,0,32,32,0,0.0
 110,131,Aditya Arun,Irvington B,3,0,0,12,12,0,0.0
-111,72,Advaith Mopuri,Mission San Jose A,12,0,0,48,48,0,0.0
+111,72,Advaith Mopuri,Mission San Jose A,13,0,0,52,52,0,0.0
 112,185,Agrima Rai,El Camino A,2,0,0,8,8,0,0.0
 113,204,Aiden Gao,Los Gatos,5,0,0,20,20,0,0.0
 114,39,Alan Chen,Dougherty Valley A,8,0,0,32,32,0,0.0
@@ -214,16 +214,16 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 213,118,Sudesh Srivatsan,American B,5,0,0,20,20,0,0.0
 214,219,Surbhi Sakshi,San Mateo,5,0,0,20,20,0,0.0
 215,140,Sushrut Pola,California,2,0,0,8,8,0,0.0
-216,71,Theenash Sengupta,Mission San Jose A,12,0,0,48,48,0,0.0
+216,71,Theenash Sengupta,Mission San Jose A,13,0,0,52,52,0,0.0
 217,117,Thomas Nguyen,American B,5,0,0,20,20,0,0.0
 218,60,Warren Chee,Saratoga,3,0,0,10,10,0,0.0
-219,42,Yajur Chandar,Davidson A,8,0,0,30,30,0,0.0
+219,42,Yajur Chandar,Davidson A,9,0,0,34,34,0,0.0
 220,144,YiLun Liu,Chico A,5,0,0,18,18,0,0.0
 221,126,Yixin Xu,Archbishop Mitty B,4,0,0,10,10,0,0.0
 222,22,Zanda Zhu,BASIS Silicon Valley A,9,0,0,36,36,0,0.0
 223,53,Neil Dixit,GSB A,8,1,2,29,32,-4,-0.5
-224,45,Julian Kuang,Davidson A,10,0,1,39,40,-4,-0.4
+224,45,Julian Kuang,Davidson A,11,0,1,43,44,-4,-0.36363636363636365
 225,31,Justin Do,Clovis North,8,0,1,31,32,-4,-0.5
 226,154,Maddy Dietz,Chico B,5,0,1,19,20,-4,-0.8
-227,75,Rutvik Arora,Mission San Jose A,10,0,1,33,34,-4,-0.4
+227,75,Rutvik Arora,Mission San Jose A,11,0,1,37,38,-4,-0.36363636363636365
 228,36,Soham Chatterjee,Dougherty Valley A,8,0,1,31,32,-4,-0.5

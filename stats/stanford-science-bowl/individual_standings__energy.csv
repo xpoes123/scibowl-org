@@ -1,12 +1,12 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,71,Theenash Sengupta,Mission San Jose A,12,13,2,21,36,44,3.6666666666666665
-2,43,Lucas Wu,Davidson A,10,10,0,20,30,40,4.0
+1,43,Lucas Wu,Davidson A,11,11,0,22,33,44,4.0
+2,71,Theenash Sengupta,Mission San Jose A,13,13,3,23,39,40,3.076923076923077
 3,68,Kevin Pei,Palo Alto,10,9,0,21,30,36,3.6
 4,23,Larry Zhao,BASIS Silicon Valley A,10,9,0,21,30,36,3.6
 5,58,Alex Ge,Saratoga,7,8,0,13,21,32,4.571428571428571
 6,14,Andrew Liu,Lynbrook A,9,10,3,14,27,28,3.111111111111111
 7,18,Richard Peng,Archbishop Mitty A,8,9,2,13,24,28,3.5
-8,42,Yajur Chandar,Davidson A,8,7,0,15,22,28,3.5
+8,42,Yajur Chandar,Davidson A,9,7,0,18,25,28,3.111111111111111
 9,21,Lucas Quan,BASIS Silicon Valley A,10,8,2,20,30,24,2.4
 10,77,Abhinav Krishna Senthil Kumar,Mira Loma A,7,7,1,13,21,24,3.4285714285714284
 11,3,Ritwik Aeka,Amador Valley A,10,7,1,22,30,24,2.4
@@ -15,7 +15,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 14,36,Soham Chatterjee,Dougherty Valley A,8,6,0,18,24,24,3.0
 15,52,Kabir Mahajan,GSB A,8,6,1,17,24,20,2.5
 16,34,Majed Almasri,Clovis North,8,6,1,17,24,20,2.5
-17,74,Roshan Annamalai,Mission San Jose A,12,6,1,29,36,20,1.6666666666666667
+17,74,Roshan Annamalai,Mission San Jose A,13,6,1,32,39,20,1.5384615384615385
 18,50,Shayan Sattarvand,Davidson B,7,6,1,14,21,20,2.857142857142857
 19,173,Ibrahim Nadeem,Mountain House A,5,5,0,10,15,20,4.0
 20,6,Ishaan Kabra,Mission San Jose B,10,5,0,25,30,20,2.0
@@ -28,18 +28,18 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 27,2,Rohan Garg,Amador Valley A,10,6,3,21,30,12,1.2
 28,229,Aarnav Rudraraju,BASIS Fremont,4,4,1,7,12,12,3.0
 29,115,Liam Tran,BASIS Silicon Valley B,5,4,1,10,15,12,2.4
-30,72,Advaith Mopuri,Mission San Jose A,12,3,0,33,36,12,1.0
-31,7,Aravind Muralidharan,Mission San Jose B,10,3,0,27,30,12,1.2
-32,38,Ashwin Shekhar,Dougherty Valley A,8,3,0,20,23,12,1.5
-33,30,Athithan Elamaran,Foothill A,9,3,0,21,24,12,1.3333333333333333
-34,200,Austin Lin,Foothill B,5,3,0,12,15,12,2.4
-35,143,Greta Nikolai,Chico A,5,3,0,11,14,12,2.4
-36,28,Jake Nguyen,Foothill A,9,3,0,24,27,12,1.3333333333333333
-37,81,Kavin Anreddy,Folsom City,5,3,0,12,15,12,2.4
-38,61,Matthew Wang,Irvington A,7,3,0,18,21,12,1.7142857142857142
-39,180,Adhrit Viswanth Balaji,Dougherty Valley B,5,4,2,8,14,8,1.6
-40,8,Andy Liu,Mission San Jose B,10,4,2,24,30,8,0.8
-41,161,Vikrant Chintanaboina,Stanford Online,5,4,2,9,15,8,1.6
+30,7,Aravind Muralidharan,Mission San Jose B,10,3,0,27,30,12,1.2
+31,38,Ashwin Shekhar,Dougherty Valley A,8,3,0,20,23,12,1.5
+32,30,Athithan Elamaran,Foothill A,9,3,0,21,24,12,1.3333333333333333
+33,200,Austin Lin,Foothill B,5,3,0,12,15,12,2.4
+34,143,Greta Nikolai,Chico A,5,3,0,11,14,12,2.4
+35,28,Jake Nguyen,Foothill A,9,3,0,24,27,12,1.3333333333333333
+36,81,Kavin Anreddy,Folsom City,5,3,0,12,15,12,2.4
+37,61,Matthew Wang,Irvington A,7,3,0,18,21,12,1.7142857142857142
+38,180,Adhrit Viswanth Balaji,Dougherty Valley B,5,4,2,8,14,8,1.6
+39,8,Andy Liu,Mission San Jose B,10,4,2,24,30,8,0.8
+40,161,Vikrant Chintanaboina,Stanford Online,5,4,2,9,15,8,1.6
+41,72,Advaith Mopuri,Mission San Jose A,13,3,1,35,39,8,0.6153846153846154
 42,112,Jonathan Gao,BASIS Silicon Valley B,5,3,1,11,15,8,1.6
 43,154,Maddy Dietz,Chico B,5,3,1,11,15,8,1.6
 44,225,Neel Gupta,Quarry Lane B,5,3,1,8,12,8,1.6
@@ -52,7 +52,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 51,203,Atharava Pandey,Los Gatos,5,2,0,13,15,8,1.6
 52,92,Brandon Seo,Cupertino A,5,2,0,13,15,8,1.6
 53,217,Jeeva Karthy,Mira Loma B,5,2,0,13,15,8,1.6
-54,45,Julian Kuang,Davidson A,10,2,0,28,30,8,0.8
+54,45,Julian Kuang,Davidson A,11,2,0,31,33,8,0.7272727272727273
 55,135,Kaiyuan Ding,GSB B,5,2,0,13,15,8,1.6
 56,76,Krish Singh,Mira Loma A,7,2,0,19,21,8,1.1428571428571428
 57,55,Olivia Kim,GSB A,4,2,0,10,12,8,2.0
@@ -69,7 +69,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 68,53,Neil Dixit,GSB A,8,3,2,19,24,4,0.5
 69,66,Rasia Yu,Palo Alto,10,3,2,25,30,4,0.4
 70,39,Alan Chen,Dougherty Valley A,8,2,1,21,24,4,0.5
-71,41,Alexander Weaver,Davidson A,10,2,1,27,30,4,0.4
+71,41,Alexander Weaver,Davidson A,11,2,1,30,33,4,0.36363636363636365
 72,11,Evan Liu,Lynbrook A,8,2,1,19,22,4,0.5
 73,37,Keshav Verma,Dougherty Valley A,8,2,1,21,24,4,0.5
 74,137,Lucas Chi,California,5,2,1,12,15,4,0.8
@@ -226,4 +226,4 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 225,138,Kavin Jain,California,5,0,1,14,15,-4,-0.8
 226,100,Lexing Liu,BASIS Fremont,5,0,1,14,15,-4,-0.8
 227,162,Vinayak Vikram,Stanford Online,5,2,4,9,15,-8,-1.6
-228,75,Rutvik Arora,Mission San Jose A,10,0,2,23,25,-8,-0.8
+228,75,Rutvik Arora,Mission San Jose A,11,0,2,26,28,-8,-0.7272727272727273

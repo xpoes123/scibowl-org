@@ -1,13 +1,13 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
-1,21,Lucas Quan,BASIS Silicon Valley A,10,24,1,15,40,92,9.2
-2,71,Theenash Sengupta,Mission San Jose A,12,28,7,13,48,84,7.0
+1,71,Theenash Sengupta,Mission San Jose A,13,31,7,14,52,96,7.384615384615385
+2,21,Lucas Quan,BASIS Silicon Valley A,10,24,1,15,40,92,9.2
 3,31,Justin Do,Clovis North,8,22,1,9,32,84,10.5
 4,68,Kevin Pei,Palo Alto,10,17,2,21,40,60,6.0
 5,18,Richard Peng,Archbishop Mitty A,8,19,6,7,32,52,6.5
-6,11,Evan Liu,Lynbrook A,8,14,1,15,30,52,6.5
-7,50,Shayan Sattarvand,Davidson B,7,14,1,13,28,52,7.428571428571429
-8,39,Alan Chen,Dougherty Valley A,8,13,0,19,32,52,6.5
-9,43,Lucas Wu,Davidson A,10,14,2,24,40,48,4.8
+6,43,Lucas Wu,Davidson A,11,15,2,27,44,52,4.7272727272727275
+7,11,Evan Liu,Lynbrook A,8,14,1,15,30,52,6.5
+8,50,Shayan Sattarvand,Davidson B,7,14,1,13,28,52,7.428571428571429
+9,39,Alan Chen,Dougherty Valley A,8,13,0,19,32,52,6.5
 10,58,Alex Ge,Saratoga,7,14,3,11,28,44,6.285714285714286
 11,77,Abhinav Krishna Senthil Kumar,Mira Loma A,7,13,3,12,28,40,5.714285714285714
 12,67,Andrew Wen,Palo Alto,10,10,0,30,40,40,4.0
@@ -28,7 +28,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 27,179,Armaan Syed,Dougherty Valley B,5,4,0,14,18,16,3.2
 28,200,Austin Lin,Foothill B,5,4,0,16,20,16,3.2
 29,1,Gaurav Gupta,Amador Valley A,10,10,7,23,40,12,1.2
-30,42,Yajur Chandar,Davidson A,8,6,3,21,30,12,1.5
+30,42,Yajur Chandar,Davidson A,9,6,3,25,34,12,1.3333333333333333
 31,7,Aravind Muralidharan,Mission San Jose B,10,4,1,35,40,12,1.2
 32,81,Kavin Anreddy,Folsom City,5,4,1,15,20,12,2.4
 33,148,Neel Raina,Mountain House B,5,4,1,15,20,12,2.4
@@ -47,12 +47,12 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 46,138,Kavin Jain,California,5,4,2,14,20,8,1.6
 47,115,Liam Tran,BASIS Silicon Valley B,5,4,2,14,20,8,1.6
 48,112,Jonathan Gao,BASIS Silicon Valley B,5,3,1,16,20,8,1.6
-49,45,Julian Kuang,Davidson A,10,3,1,36,40,8,0.8
+49,45,Julian Kuang,Davidson A,11,3,1,40,44,8,0.7272727272727273
 50,52,Kabir Mahajan,GSB A,8,3,1,28,32,8,1.0
 51,99,Aarnav Rudiaiaju,BASIS Fremont,1,2,0,2,4,8,8.0
 52,122,Advait Reddy Duvvuru,Archbishop Mitty B,5,2,0,18,20,8,1.6
 53,88,Alex Bowen,Albany A,4,2,0,12,14,8,2.0
-54,41,Alexander Weaver,Davidson A,10,2,0,38,40,8,0.8
+54,41,Alexander Weaver,Davidson A,11,2,0,42,44,8,0.7272727272727273
 55,73,Anish Agarwal,Mission San Jose A,5,2,0,12,14,8,1.6
 56,205,Arthur Chang,Miller,5,2,0,18,20,8,1.6
 57,49,Bourne Zhou,Davidson B,7,2,0,12,14,8,1.1428571428571428
@@ -67,7 +67,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 66,162,Vinayak Vikram,Stanford Online,5,2,0,18,20,8,1.6
 67,180,Adhrit Viswanth Balaji,Dougherty Valley B,5,3,2,13,18,4,0.8
 68,8,Andy Liu,Mission San Jose B,10,3,2,35,40,4,0.4
-69,74,Roshan Annamalai,Mission San Jose A,12,3,2,43,48,4,0.3333333333333333
+69,74,Roshan Annamalai,Mission San Jose A,13,3,2,47,52,4,0.3076923076923077
 70,64,Arjun Murugappan,Irvington A,7,2,1,23,26,4,0.5714285714285714
 71,155,Devi Schumann,Chico B,5,2,1,17,20,4,0.8
 72,6,Ishaan Kabra,Mission San Jose B,10,2,1,37,40,4,0.4
@@ -104,7 +104,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 103,119,Sanjay Seshadri,American B,5,1,0,19,20,4,0.8
 104,177,Tannishtha Chakraborthy,Dougherty Valley B,5,1,0,19,20,4,0.8
 105,126,Yixin Xu,Archbishop Mitty B,4,1,0,9,10,4,1.0
-106,72,Advaith Mopuri,Mission San Jose A,12,1,1,46,48,0,0.0
+106,72,Advaith Mopuri,Mission San Jose A,13,1,1,50,52,0,0.0
 107,201,Anya Agarwal,Los Gatos,5,1,1,18,20,0,0.0
 108,87,Benton Vargo,Albany A,5,1,1,18,20,0,0.0
 109,226,Elaine Gu,Quarry Lane B,5,1,1,16,18,0,0.0
@@ -187,7 +187,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 186,62,Roland Pratt,Irvington A,7,0,0,24,24,0,0.0
 187,163,Rosa Lee,Cupertino B,5,0,0,20,20,0,0.0
 188,124,Ruoyu Zhou,Archbishop Mitty B,5,0,0,14,14,0,0.0
-189,75,Rutvik Arora,Mission San Jose A,10,0,0,34,34,0,0.0
+189,75,Rutvik Arora,Mission San Jose A,11,0,0,38,38,0,0.0
 190,13,Ryan Bansal,Lynbrook A,5,0,0,16,16,0,0.0
 191,109,Ryan Liu,American A,4,0,0,14,14,0,0.0
 192,101,Ryan Yan,BASIS Fremont,5,0,0,20,20,0,0.0
