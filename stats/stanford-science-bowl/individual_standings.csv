@@ -1,30 +1,30 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
 1,21,Lucas Quan,BASIS Silicon Valley A,10,74,10,146,230,256,25.6
 2,68,Kevin Pei,Palo Alto,10,59,4,167,230,220,22.0
-3,43,Lucas Wu,Davidson A,10,52,2,176,230,200,20.0
-4,71,Theenash Sengupta,Mission San Jose A,12,69,20,187,276,196,16.333333333333332
+3,43,Lucas Wu,Davidson A,11,57,3,193,253,216,19.636363636363637
+4,71,Theenash Sengupta,Mission San Jose A,13,75,22,202,299,212,16.307692307692307
 5,2,Rohan Garg,Amador Valley A,10,72,24,134,230,192,19.2
-6,67,Andrew Wen,Palo Alto,10,55,12,163,230,172,17.2
-7,74,Roshan Annamalai,Mission San Jose A,12,58,17,201,276,164,13.666666666666666
+6,74,Roshan Annamalai,Mission San Jose A,13,61,17,221,299,176,13.538461538461538
+7,67,Andrew Wen,Palo Alto,10,55,12,163,230,172,17.2
 8,77,Abhinav Krishna Senthil Kumar,Mira Loma A,7,46,6,109,161,160,22.857142857142858
 9,18,Richard Peng,Archbishop Mitty A,8,49,14,121,184,140,17.5
 10,58,Alex Ge,Saratoga,7,37,3,121,161,136,19.428571428571427
 11,6,Ishaan Kabra,Mission San Jose B,10,46,14,170,230,128,12.8
-12,31,Justin Do,Clovis North,8,36,4,144,184,128,16.0
-13,50,Shayan Sattarvand,Davidson B,7,36,4,121,161,128,18.285714285714285
-14,81,Kavin Anreddy,Folsom City,5,34,2,79,115,128,25.6
-15,14,Andrew Liu,Lynbrook A,9,39,8,160,207,124,13.777777777777779
-16,36,Soham Chatterjee,Dougherty Valley A,8,35,4,145,184,124,15.5
-17,12,Sohil Rathi,Lynbrook A,9,38,8,127,173,120,13.333333333333334
-18,45,Julian Kuang,Davidson A,10,35,6,189,230,116,11.6
+12,45,Julian Kuang,Davidson A,11,38,6,209,253,128,11.636363636363637
+13,31,Justin Do,Clovis North,8,36,4,144,184,128,16.0
+14,50,Shayan Sattarvand,Davidson B,7,36,4,121,161,128,18.285714285714285
+15,81,Kavin Anreddy,Folsom City,5,34,2,79,115,128,25.6
+16,14,Andrew Liu,Lynbrook A,9,39,8,160,207,124,13.777777777777779
+17,36,Soham Chatterjee,Dougherty Valley A,8,35,4,145,184,124,15.5
+18,12,Sohil Rathi,Lynbrook A,9,38,8,127,173,120,13.333333333333334
 19,8,Andy Liu,Mission San Jose B,10,38,10,182,230,112,11.2
 20,23,Larry Zhao,BASIS Silicon Valley A,10,33,5,192,230,112,11.2
 21,32,Achuth Vinay,Clovis North,8,30,3,151,184,108,13.5
-22,72,Advaith Mopuri,Mission San Jose A,12,31,6,239,276,100,8.333333333333334
-23,173,Ibrahim Nadeem,Mountain House A,5,28,3,84,115,100,20.0
-24,38,Ashwin Shekhar,Dougherty Valley A,8,27,2,144,173,100,12.5
+22,173,Ibrahim Nadeem,Mountain House A,5,28,3,84,115,100,20.0
+23,38,Ashwin Shekhar,Dougherty Valley A,8,27,2,144,173,100,12.5
+24,72,Advaith Mopuri,Mission San Jose A,13,32,8,259,299,96,7.384615384615385
 25,115,Liam Tran,BASIS Silicon Valley B,5,28,4,83,115,96,19.2
-26,41,Alexander Weaver,Davidson A,10,28,5,197,230,92,9.2
+26,41,Alexander Weaver,Davidson A,11,28,5,220,253,92,8.363636363636363
 27,80,Joshua Wu,Folsom City,5,26,3,86,115,92,18.4
 28,53,Neil Dixit,GSB A,8,35,13,136,184,88,11.0
 29,52,Kabir Mahajan,GSB A,8,27,6,151,184,84,10.5
@@ -35,7 +35,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 34,56,Quinn Gifford,Saratoga,7,21,3,113,137,72,10.285714285714286
 35,3,Ritwik Aeka,Amador Valley A,10,28,11,191,230,68,6.8
 36,161,Vikrant Chintanaboina,Stanford Online,5,21,4,90,115,68,13.6
-37,42,Yajur Chandar,Davidson A,8,24,8,140,172,64,8.0
+37,42,Yajur Chandar,Davidson A,9,24,8,163,195,64,7.111111111111111
 38,30,Athithan Elamaran,Foothill A,9,23,7,154,184,64,7.111111111111111
 39,37,Keshav Verma,Dougherty Valley A,8,21,5,158,184,64,8.0
 40,34,Majed Almasri,Clovis North,8,19,3,162,184,64,8.0
@@ -117,7 +117,7 @@ rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,poin
 116,35,Meera Malkar,Clovis North,7,6,0,132,138,24,3.4285714285714284
 117,90,Namita Gaidhani,Cupertino A,5,6,0,88,94,24,4.8
 118,4,Samarth Jain,Amador Valley A,9,6,0,179,185,24,2.6666666666666665
-119,75,Rutvik Arora,Mission San Jose A,10,9,4,182,195,20,2.0
+119,75,Rutvik Arora,Mission San Jose A,11,9,4,205,218,20,1.8181818181818181
 120,20,Ben Zheng,Archbishop Mitty A,7,7,2,152,161,20,2.857142857142857
 121,79,Sudeep Suresh,Mira Loma A,7,7,2,152,161,20,2.857142857142857
 122,49,Bourne Zhou,Davidson B,7,6,1,72,79,20,2.857142857142857
