@@ -1,76 +1,76 @@
 rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
 1,6,Kaiwen Yao,Eagles A,6,42,3,93,138,156,26.0
-2,63,Kian Dhawan,Montgomery Blair A,5,42,4,69,115,152,30.4
-3,36,Aldric Benalan,WWPN A,5,33,5,77,115,112,22.4
-4,43,Ryan Karim,Shallow Walk team A,4,27,1,63,91,104,26.0
-5,12,Andrew Zhao,Richard Montgomery,5,24,2,88,114,88,17.6
-6,72,Alex Wang,poolesville village idiots,4,24,3,64,91,84,21.0
-7,54,Eric Xie,Kiruna Scholars,6,18,2,117,137,64,10.666666666666666
-8,62,Evan Zhang,Montgomery Blair A,5,19,4,92,115,60,12.0
-9,24,Arjun Deshpande,South Jersey,5,18,3,94,115,60,12.0
-10,19,Ian Wang,Basis,3,15,1,53,69,56,18.666666666666668
-11,39,Easton Wei,WWPN A,5,16,4,95,115,48,9.6
-12,52,Hrishi Bhooma,Kiruna Scholars,6,15,3,119,137,48,8.0
-13,51,Sophia Guo,Kiruna Scholars,6,15,3,119,137,48,8.0
-14,11,Ethan Pei,Richard Montgomery,5,12,0,102,114,48,9.6
-15,25,Monish Saravana Kumar,South Jersey,5,14,4,97,115,40,8.0
-16,58,Arman Ayazi,Montgomery Blair B,3,14,5,46,65,36,12.0
-17,46,Abhinav Anand,Gargy Bomy,3,11,2,56,69,36,12.0
-18,14,Jason Liu,North Allegheny,3,9,0,60,69,36,12.0
-19,26,Dennis Ji,South Jersey,5,10,2,103,115,32,6.4
-20,73,Caleb Wen,poolesville village idiots,4,9,1,81,91,32,8.0
+2,58,Kian Dhawan,Montgomery Blair A,5,42,4,69,115,152,30.4
+3,31,Aldric Benalan,WWPN A,5,33,5,77,115,112,22.4
+4,38,Ryan Karim,Shallow Walk team A,4,27,1,63,91,104,26.0
+5,69,Andrew Zhao,Richard Montgomery,5,24,2,88,114,88,17.6
+6,71,Alex Wang,poolesville village idiots,4,24,3,64,91,84,21.0
+7,49,Eric Xie,Kiruna Scholars,6,18,2,117,137,64,10.666666666666666
+8,57,Evan Zhang,Montgomery Blair A,5,19,4,92,115,60,12.0
+9,19,Arjun Deshpande,South Jersey,5,18,3,94,115,60,12.0
+10,14,Ian Wang,Basis,3,15,1,53,69,56,18.666666666666668
+11,34,Easton Wei,WWPN A,5,16,4,95,115,48,9.6
+12,47,Hrishi Bhooma,Kiruna Scholars,6,15,3,119,137,48,8.0
+13,46,Sophia Guo,Kiruna Scholars,6,15,3,119,137,48,8.0
+14,68,Ethan Pei,Richard Montgomery,5,12,0,102,114,48,9.6
+15,20,Monish Saravana Kumar,South Jersey,5,14,4,97,115,40,8.0
+16,53,Arman Ayazi,Montgomery Blair B,3,14,5,46,65,36,12.0
+17,41,Abhinav Anand,Gargy Bomy,3,11,2,56,69,36,12.0
+18,9,Jason Liu,North Allegheny,3,9,0,60,69,36,12.0
+19,21,Dennis Ji,South Jersey,5,10,2,103,115,32,6.4
+20,72,Caleb Wen,poolesville village idiots,4,9,1,81,91,32,8.0
 21,7,Angelina Li,Eagles A,6,7,0,131,138,28,4.666666666666667
 22,1,Pritham Singh,Centreville HS Team 1,2,7,0,39,46,28,14.0
-23,53,Rohan Bairi,Kiruna Scholars,5,7,0,95,102,28,5.6
-24,16,Hongyi Wang,North Allegheny,3,9,3,57,69,24,8.0
+23,48,Rohan Bairi,Kiruna Scholars,5,7,0,95,102,28,5.6
+24,11,Hongyi Wang,North Allegheny,3,9,3,57,69,24,8.0
 25,8,Oliver Yang,Eagles A,4,6,0,86,92,24,6.0
-26,47,Sanjay Oruganti,Gargy Bomy,3,9,4,56,69,20,6.666666666666667
-27,71,Keshav Ramaswamy,Richard Montgomery,4,7,2,82,91,20,5.0
-28,10,David He,Richard Montgomery,5,6,1,94,101,20,4.0
-29,20,Sumer Chaudhary,Basis,3,5,0,64,69,20,6.666666666666667
-30,38,Ishaan Arya,WWPN A,5,6,2,107,115,16,3.2
-31,42,Riyan Nayak,Shallow Walk team A,4,5,1,85,91,16,4.0
-32,27,Akhil Mandapati,South Jersey,3,4,0,43,47,16,5.333333333333333
-33,64,Chris Wang,Montgomery Blair A,5,4,0,101,105,16,3.2
-34,57,Henry Lu,Montgomery Blair B,3,4,0,61,65,16,5.333333333333333
-35,56,William Qian,Montgomery Blair B,3,6,3,56,65,12,4.0
-36,15,Leonardo Yu,North Allegheny,3,5,2,62,69,12,4.0
-37,29,Allen Liu,Eagles B,2,4,1,39,44,12,6.0
-38,30,Madhuram Sharma,Eagles B,2,4,1,39,44,12,6.0
-39,37,Aahan Mahakud,WWPN A,5,3,0,112,115,12,2.4
-40,17,Andrew Feng,North Allegheny,3,3,0,44,47,12,4.0
+26,42,Sanjay Oruganti,Gargy Bomy,3,9,4,56,69,20,6.666666666666667
+27,66,Keshav Ramaswamy,Richard Montgomery,4,7,2,82,91,20,5.0
+28,67,David He,Richard Montgomery,5,6,1,94,101,20,4.0
+29,15,Sumer Chaudhary,Basis,3,5,0,64,69,20,6.666666666666667
+30,33,Ishaan Arya,WWPN A,5,6,2,107,115,16,3.2
+31,37,Riyan Nayak,Shallow Walk team A,4,5,1,85,91,16,4.0
+32,22,Akhil Mandapati,South Jersey,3,4,0,43,47,16,5.333333333333333
+33,59,Chris Wang,Montgomery Blair A,5,4,0,101,105,16,3.2
+34,52,Henry Lu,Montgomery Blair B,3,4,0,61,65,16,5.333333333333333
+35,51,William Qian,Montgomery Blair B,3,6,3,56,65,12,4.0
+36,10,Leonardo Yu,North Allegheny,3,5,2,62,69,12,4.0
+37,24,Allen Liu,Eagles B,2,4,1,39,44,12,6.0
+38,25,Madhuram Sharma,Eagles B,2,4,1,39,44,12,6.0
+39,32,Aahan Mahakud,WWPN A,5,3,0,112,115,12,2.4
+40,12,Andrew Feng,North Allegheny,3,3,0,44,47,12,4.0
 41,2,Arjun Ganesan,Centreville HS Team 1,2,3,0,43,46,12,6.0
-42,34,Eli Segal,Eagles C,2,3,0,43,46,12,6.0
-43,61,Kevin Feng,Montgomery Blair A,4,3,0,78,81,12,3.0
-44,32,Kingshuk Roy,Eagles C,2,3,0,43,46,12,6.0
-45,33,Matthew Du,Eagles C,2,3,0,43,46,12,6.0
+42,29,Eli Segal,Eagles C,2,3,0,43,46,12,6.0
+43,56,Kevin Feng,Montgomery Blair A,4,3,0,78,81,12,3.0
+44,27,Kingshuk Roy,Eagles C,2,3,0,43,46,12,6.0
+45,28,Matthew Du,Eagles C,2,3,0,43,46,12,6.0
 46,5,Max Xu,Eagles A,4,3,0,89,92,12,3.0
-47,41,Rishvanth Balasubramanian,Shallow Walk team A,4,4,2,85,91,8,2.0
-48,23,Gyan Chande,South Jersey,4,3,1,64,68,8,2.0
+47,36,Rishvanth Balasubramanian,Shallow Walk team A,4,4,2,85,91,8,2.0
+48,18,Gyan Chande,South Jersey,4,3,1,64,68,8,2.0
 49,76,Vishruth Kadiyala,Eagles A,4,3,1,88,92,8,2.0
-50,28,Anvita A,Eagles B,2,2,0,42,44,8,4.0
-51,50,Dhairya Mathur,Gargy Bomy,3,2,1,53,56,4,1.3333333333333333
-52,35,Ryan Yang,Eagles C,2,2,1,43,46,4,2.0
-53,74,Alvin Tong,poolesville village idiots,4,1,0,90,91,4,1.0
-54,22,Jueon Kim,Basis,3,1,0,68,69,4,1.3333333333333333
-55,60,Kenneth Liu,Montgomery Blair B,1,1,0,11,12,4,4.0
-56,55,Nathan Liang,Kiruna Scholars,2,1,0,34,35,4,2.0
-57,9,Ryan Hyon,Centreville HS Team 1,1,1,0,22,23,4,4.0
-58,70,Steven Qi,WCHS A,1,1,0,5,6,4,4.0
-59,31,Lilly Yang,Eagles B,2,1,1,42,44,0,0.0
-60,69,Allen Chang,WCHS A,2,0,0,40,40,0,0.0
+50,23,Anvita A,Eagles B,2,2,0,42,44,8,4.0
+51,45,Dhairya Mathur,Gargy Bomy,3,2,1,53,56,4,1.3333333333333333
+52,30,Ryan Yang,Eagles C,2,2,1,43,46,4,2.0
+53,73,Alvin Tong,poolesville village idiots,4,1,0,90,91,4,1.0
+54,17,Jueon Kim,Basis,3,1,0,68,69,4,1.3333333333333333
+55,55,Kenneth Liu,Montgomery Blair B,1,1,0,11,12,4,4.0
+56,50,Nathan Liang,Kiruna Scholars,2,1,0,34,35,4,2.0
+57,75,Ryan Hyon,Centreville HS Team 1,1,1,0,22,23,4,4.0
+58,65,Steven Qi,WCHS A,1,1,0,5,6,4,4.0
+59,26,Lilly Yang,Eagles B,2,1,1,42,44,0,0.0
+60,64,Allen Chang,WCHS A,2,0,0,40,40,0,0.0
 61,4,Ishaan Nandamudi,Centreville HS Team 1,1,0,0,23,23,0,0.0
-62,49,Jason Mak,Gargy Bomy,1,0,0,13,13,0,0.0
-63,18,Kaartic Muralidharan,North Allegheny,2,0,0,22,22,0,0.0
-64,65,Sam Easaw,Montgomery Blair A,3,0,0,44,44,0,0.0
-65,13,Sedric Su,Richard Montgomery,2,0,0,36,36,0,0.0
+62,44,Jason Mak,Gargy Bomy,1,0,0,13,13,0,0.0
+63,13,Kaartic Muralidharan,North Allegheny,2,0,0,22,22,0,0.0
+64,60,Sam Easaw,Montgomery Blair A,3,0,0,44,44,0,0.0
+65,70,Sedric Su,Richard Montgomery,2,0,0,36,36,0,0.0
 66,3,Yeojune Yun,Centreville HS Team 1,2,0,0,46,46,0,0.0
-67,48,Likhith Malipati,Gargy Bomy,3,5,6,58,69,-4,-1.3333333333333333
-68,44,Prithwish Chatterjee,Shallow Walk team A,4,1,2,46,49,-4,-1.0
-69,66,Beirui Zhang,WCHS A,2,0,1,45,46,-4,-2.0
-70,21,Neel Jain,Basis,3,0,1,68,69,-4,-1.3333333333333333
-71,45,Nimit Agarwal,Shallow Walk team A,4,0,1,41,42,-4,-1.0
-72,59,Abhijay Banerjee,Montgomery Blair B,3,2,4,47,53,-8,-2.6666666666666665
-73,75,Denis Motuzenko,poolesville village idiots,4,1,3,87,91,-8,-2.0
-74,67,Aaron Zhou,WCHS A,2,3,8,35,46,-20,-10.0
-75,68,Andrew Li,WCHS A,2,0,5,41,46,-20,-10.0
+67,43,Likhith Malipati,Gargy Bomy,3,5,6,58,69,-4,-1.3333333333333333
+68,39,Prithwish Chatterjee,Shallow Walk team A,4,1,2,46,49,-4,-1.0
+69,61,Beirui Zhang,WCHS A,2,0,1,45,46,-4,-2.0
+70,16,Neel Jain,Basis,3,0,1,68,69,-4,-1.3333333333333333
+71,40,Nimit Agarwal,Shallow Walk team A,4,0,1,41,42,-4,-1.0
+72,54,Abhijay Banerjee,Montgomery Blair B,3,2,4,47,53,-8,-2.6666666666666665
+73,74,Denis Motuzenko,poolesville village idiots,4,1,3,87,91,-8,-2.0
+74,62,Aaron Zhou,WCHS A,2,3,8,35,46,-20,-10.0
+75,63,Andrew Li,WCHS A,2,0,5,41,46,-20,-10.0
