@@ -1,77 +1,77 @@
 player_id,player_name,grade_level,team_id,team_name
-19,Ian Wang,,5,Basis
-22,Jueon Kim,,5,Basis
-21,Neel Jain,,5,Basis
-20,Sumer Chaudhary,,5,Basis
+14,Ian Wang,,4,Basis
+17,Jueon Kim,,4,Basis
+16,Neel Jain,,4,Basis
+15,Sumer Chaudhary,,4,Basis
 2,Arjun Ganesan,,1,Centreville HS Team 1
 4,Ishaan Nandamudi,,1,Centreville HS Team 1
 1,Pritham Singh,,1,Centreville HS Team 1
-9,Ryan Hyon,,1,Centreville HS Team 1
+75,Ryan Hyon,,1,Centreville HS Team 1
 3,Yeojune Yun,,1,Centreville HS Team 1
 7,Angelina Li,,2,Eagles A
 6,Kaiwen Yao,,2,Eagles A
 5,Max Xu,,2,Eagles A
 8,Oliver Yang,,2,Eagles A
 76,Vishruth Kadiyala,,2,Eagles A
-29,Allen Liu,,7,Eagles B
-28,Anvita A,,7,Eagles B
-31,Lilly Yang,,7,Eagles B
-30,Madhuram Sharma,,7,Eagles B
-34,Eli Segal,,8,Eagles C
-32,Kingshuk Roy,,8,Eagles C
-33,Matthew Du,,8,Eagles C
-35,Ryan Yang,,8,Eagles C
-46,Abhinav Anand,,11,Gargy Bomy
-50,Dhairya Mathur,,11,Gargy Bomy
-49,Jason Mak,,11,Gargy Bomy
-48,Likhith Malipati,,11,Gargy Bomy
-47,Sanjay Oruganti,,11,Gargy Bomy
-54,Eric Xie,,12,Kiruna Scholars
-52,Hrishi Bhooma,,12,Kiruna Scholars
-55,Nathan Liang,,12,Kiruna Scholars
-53,Rohan Bairi,,12,Kiruna Scholars
-51,Sophia Guo,,12,Kiruna Scholars
-64,Chris Wang,,14,Montgomery Blair A
-62,Evan Zhang,,14,Montgomery Blair A
-61,Kevin Feng,,14,Montgomery Blair A
-63,Kian Dhawan,,14,Montgomery Blair A
-65,Sam Easaw,,14,Montgomery Blair A
-59,Abhijay Banerjee,,13,Montgomery Blair B
-58,Arman Ayazi,,13,Montgomery Blair B
-57,Henry Lu,,13,Montgomery Blair B
-60,Kenneth Liu,,13,Montgomery Blair B
-56,William Qian,,13,Montgomery Blair B
-17,Andrew Feng,,4,North Allegheny
-16,Hongyi Wang,,4,North Allegheny
-14,Jason Liu,,4,North Allegheny
-18,Kaartic Muralidharan,,4,North Allegheny
-15,Leonardo Yu,,4,North Allegheny
-12,Andrew Zhao,,3,Richard Montgomery
-10,David He,,3,Richard Montgomery
-11,Ethan Pei,,3,Richard Montgomery
-71,Keshav Ramaswamy,,3,Richard Montgomery
-13,Sedric Su,,3,Richard Montgomery
-45,Nimit Agarwal,,10,Shallow Walk team A
-44,Prithwish Chatterjee,,10,Shallow Walk team A
-41,Rishvanth Balasubramanian,,10,Shallow Walk team A
-42,Riyan Nayak,,10,Shallow Walk team A
-43,Ryan Karim,,10,Shallow Walk team A
-27,Akhil Mandapati,,6,South Jersey
-24,Arjun Deshpande,,6,South Jersey
-26,Dennis Ji,,6,South Jersey
-23,Gyan Chande,,6,South Jersey
-25,Monish Saravana Kumar,,6,South Jersey
-67,Aaron Zhou,,15,WCHS A
-69,Allen Chang,,15,WCHS A
-68,Andrew Li,,15,WCHS A
-66,Beirui Zhang,,15,WCHS A
-70,Steven Qi,,15,WCHS A
-37,Aahan Mahakud,,9,WWPN A
-36,Aldric Benalan,,9,WWPN A
-39,Easton Wei,,9,WWPN A
-38,Ishaan Arya,,9,WWPN A
-40,Rithik Gumpu,,9,WWPN A
-72,Alex Wang,,16,poolesville village idiots
-74,Alvin Tong,,16,poolesville village idiots
-73,Caleb Wen,,16,poolesville village idiots
-75,Denis Motuzenko,,16,poolesville village idiots
+24,Allen Liu,,6,Eagles B
+23,Anvita A,,6,Eagles B
+26,Lilly Yang,,6,Eagles B
+25,Madhuram Sharma,,6,Eagles B
+29,Eli Segal,,7,Eagles C
+27,Kingshuk Roy,,7,Eagles C
+28,Matthew Du,,7,Eagles C
+30,Ryan Yang,,7,Eagles C
+41,Abhinav Anand,,10,Gargy Bomy
+45,Dhairya Mathur,,10,Gargy Bomy
+44,Jason Mak,,10,Gargy Bomy
+43,Likhith Malipati,,10,Gargy Bomy
+42,Sanjay Oruganti,,10,Gargy Bomy
+49,Eric Xie,,11,Kiruna Scholars
+47,Hrishi Bhooma,,11,Kiruna Scholars
+50,Nathan Liang,,11,Kiruna Scholars
+48,Rohan Bairi,,11,Kiruna Scholars
+46,Sophia Guo,,11,Kiruna Scholars
+59,Chris Wang,,13,Montgomery Blair A
+57,Evan Zhang,,13,Montgomery Blair A
+56,Kevin Feng,,13,Montgomery Blair A
+58,Kian Dhawan,,13,Montgomery Blair A
+60,Sam Easaw,,13,Montgomery Blair A
+54,Abhijay Banerjee,,12,Montgomery Blair B
+53,Arman Ayazi,,12,Montgomery Blair B
+52,Henry Lu,,12,Montgomery Blair B
+55,Kenneth Liu,,12,Montgomery Blair B
+51,William Qian,,12,Montgomery Blair B
+12,Andrew Feng,,3,North Allegheny
+11,Hongyi Wang,,3,North Allegheny
+9,Jason Liu,,3,North Allegheny
+13,Kaartic Muralidharan,,3,North Allegheny
+10,Leonardo Yu,,3,North Allegheny
+69,Andrew Zhao,,15,Richard Montgomery
+67,David He,,15,Richard Montgomery
+68,Ethan Pei,,15,Richard Montgomery
+66,Keshav Ramaswamy,,15,Richard Montgomery
+70,Sedric Su,,15,Richard Montgomery
+40,Nimit Agarwal,,9,Shallow Walk team A
+39,Prithwish Chatterjee,,9,Shallow Walk team A
+36,Rishvanth Balasubramanian,,9,Shallow Walk team A
+37,Riyan Nayak,,9,Shallow Walk team A
+38,Ryan Karim,,9,Shallow Walk team A
+22,Akhil Mandapati,,5,South Jersey
+19,Arjun Deshpande,,5,South Jersey
+21,Dennis Ji,,5,South Jersey
+18,Gyan Chande,,5,South Jersey
+20,Monish Saravana Kumar,,5,South Jersey
+62,Aaron Zhou,,14,WCHS A
+64,Allen Chang,,14,WCHS A
+63,Andrew Li,,14,WCHS A
+61,Beirui Zhang,,14,WCHS A
+65,Steven Qi,,14,WCHS A
+32,Aahan Mahakud,,8,WWPN A
+31,Aldric Benalan,,8,WWPN A
+34,Easton Wei,,8,WWPN A
+33,Ishaan Arya,,8,WWPN A
+35,Rithik Gumpu,,8,WWPN A
+71,Alex Wang,,16,poolesville village idiots
+73,Alvin Tong,,16,poolesville village idiots
+72,Caleb Wen,,16,poolesville village idiots
+74,Denis Motuzenko,,16,poolesville village idiots

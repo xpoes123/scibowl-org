@@ -11,114 +11,114 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 1,2,2,Eagles A,ENERGY,8,20,2,0,1,2,0,1
 1,2,2,Eagles A,MATH,12,10,3,0,1,1,2,1
 1,2,2,Eagles A,PHYSICS,8,20,2,0,2,2,0,2
-2,1,1,Centreville HS Team 1,BIOLOGY,4,10,1,0,3,1,0,3
-2,1,1,Centreville HS Team 1,CHEMISTRY,4,0,1,0,3,0,0,4
-2,1,1,Centreville HS Team 1,EARTH_SPACE,8,0,2,0,2,0,2,2
-2,1,1,Centreville HS Team 1,ENERGY,0,0,0,0,3,0,0,3
-2,1,1,Centreville HS Team 1,MATH,4,0,1,0,3,0,1,3
-2,1,1,Centreville HS Team 1,PHYSICS,8,10,2,0,2,1,0,3
-2,2,3,Richard Montgomery,BIOLOGY,12,20,3,0,1,2,0,2
-2,2,3,Richard Montgomery,CHEMISTRY,8,20,2,0,2,2,0,2
-2,2,3,Richard Montgomery,EARTH_SPACE,0,0,1,1,2,0,1,3
-2,2,3,Richard Montgomery,ENERGY,12,10,3,0,0,1,2,0
-2,2,3,Richard Montgomery,MATH,4,10,1,0,3,1,0,3
-2,2,3,Richard Montgomery,PHYSICS,4,10,1,0,3,1,0,3
-3,1,4,North Allegheny,BIOLOGY,4,20,2,1,1,2,0,2
-3,1,4,North Allegheny,CHEMISTRY,8,10,2,0,2,1,1,2
-3,1,4,North Allegheny,EARTH_SPACE,4,10,1,0,3,1,0,3
-3,1,4,North Allegheny,ENERGY,8,20,2,0,1,2,0,1
-3,1,4,North Allegheny,MATH,8,20,2,0,2,2,0,2
-3,1,4,North Allegheny,PHYSICS,8,10,2,0,2,1,1,2
-3,2,5,Basis,BIOLOGY,0,0,0,0,4,0,0,4
-3,2,5,Basis,CHEMISTRY,0,0,0,0,4,0,0,4
-3,2,5,Basis,EARTH_SPACE,8,20,2,0,2,2,0,2
-3,2,5,Basis,ENERGY,4,10,1,0,2,1,0,2
-3,2,5,Basis,MATH,4,10,1,0,3,1,0,3
-3,2,5,Basis,PHYSICS,0,20,2,2,0,2,0,2
-4,1,6,South Jersey,BIOLOGY,8,30,3,1,0,3,0,1
-4,1,6,South Jersey,CHEMISTRY,0,0,1,1,2,0,1,3
-4,1,6,South Jersey,EARTH_SPACE,12,10,3,0,1,1,2,1
-4,1,6,South Jersey,ENERGY,4,10,1,0,2,1,0,2
-4,1,6,South Jersey,MATH,0,10,1,1,2,1,0,3
-4,1,6,South Jersey,PHYSICS,4,20,2,1,1,2,0,2
-4,2,7,Eagles B,BIOLOGY,0,0,0,0,4,0,0,4
-4,2,7,Eagles B,CHEMISTRY,4,0,1,0,3,0,1,3
-4,2,7,Eagles B,EARTH_SPACE,0,10,1,1,2,1,0,3
-4,2,7,Eagles B,ENERGY,8,20,2,0,1,2,0,1
-4,2,7,Eagles B,MATH,4,20,2,1,1,2,0,2
-4,2,7,Eagles B,PHYSICS,0,0,0,0,4,0,0,4
-5,1,8,Eagles C,BIOLOGY,0,0,0,0,4,0,0,4
-5,1,8,Eagles C,CHEMISTRY,0,0,0,0,4,0,0,4
-5,1,8,Eagles C,EARTH_SPACE,0,0,1,1,2,0,1,3
-5,1,8,Eagles C,ENERGY,4,0,1,0,2,0,1,2
-5,1,8,Eagles C,MATH,0,0,0,0,4,0,0,4
-5,1,8,Eagles C,PHYSICS,4,10,1,0,3,1,0,3
-5,2,9,WWPN A,BIOLOGY,8,20,3,1,0,2,1,1
-5,2,9,WWPN A,CHEMISTRY,16,10,4,0,0,1,3,0
-5,2,9,WWPN A,EARTH_SPACE,12,30,3,0,1,3,0,1
-5,2,9,WWPN A,ENERGY,8,20,2,0,1,2,0,1
-5,2,9,WWPN A,MATH,12,20,3,0,1,2,1,1
-5,2,9,WWPN A,PHYSICS,0,0,1,1,2,0,1,3
-6,1,10,Shallow Walk team A,BIOLOGY,12,0,3,0,1,0,3,1
-6,1,10,Shallow Walk team A,CHEMISTRY,8,20,2,0,2,2,0,2
-6,1,10,Shallow Walk team A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-6,1,10,Shallow Walk team A,ENERGY,8,20,2,0,1,2,0,1
-6,1,10,Shallow Walk team A,MATH,8,20,2,0,2,2,0,2
-6,1,10,Shallow Walk team A,PHYSICS,16,20,4,0,0,2,2,0
-6,2,11,Gargy Bomy,BIOLOGY,0,0,0,0,4,0,0,4
-6,2,11,Gargy Bomy,CHEMISTRY,-4,10,1,2,1,1,0,3
-6,2,11,Gargy Bomy,EARTH_SPACE,12,20,3,0,1,2,1,1
-6,2,11,Gargy Bomy,ENERGY,4,10,1,0,2,1,0,2
-6,2,11,Gargy Bomy,MATH,0,20,2,2,0,2,0,2
-6,2,11,Gargy Bomy,PHYSICS,-8,0,0,2,2,0,0,4
-7,1,12,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
-7,1,12,Kiruna Scholars,CHEMISTRY,8,20,3,1,0,2,1,1
-7,1,12,Kiruna Scholars,EARTH_SPACE,4,0,2,1,0,0,2,1
-7,1,12,Kiruna Scholars,ENERGY,4,10,1,0,2,1,0,2
-7,1,12,Kiruna Scholars,MATH,-4,0,0,1,3,0,0,4
-7,1,12,Kiruna Scholars,PHYSICS,12,30,3,0,1,3,0,1
-7,2,13,Montgomery Blair B,BIOLOGY,4,20,2,1,1,2,0,2
-7,2,13,Montgomery Blair B,CHEMISTRY,4,0,1,0,3,0,1,3
-7,2,13,Montgomery Blair B,EARTH_SPACE,0,0,0,0,3,0,0,3
-7,2,13,Montgomery Blair B,ENERGY,0,0,1,1,1,0,1,2
-7,2,13,Montgomery Blair B,MATH,16,40,4,0,0,4,0,0
-7,2,13,Montgomery Blair B,PHYSICS,-12,0,0,3,1,0,0,4
-8,1,14,Montgomery Blair A,BIOLOGY,16,30,4,0,0,3,1,0
-8,1,14,Montgomery Blair A,CHEMISTRY,16,20,4,0,0,2,2,0
-8,1,14,Montgomery Blair A,EARTH_SPACE,16,30,4,0,0,3,1,0
-8,1,14,Montgomery Blair A,ENERGY,12,20,3,0,0,2,1,0
-8,1,14,Montgomery Blair A,MATH,16,40,4,0,0,4,0,0
-8,1,14,Montgomery Blair A,PHYSICS,4,20,2,1,1,2,0,2
-8,2,15,WCHS A,BIOLOGY,-12,0,0,3,1,0,0,4
-8,2,15,WCHS A,CHEMISTRY,-8,0,0,2,2,0,0,4
-8,2,15,WCHS A,EARTH_SPACE,-12,0,0,3,1,0,0,4
-8,2,15,WCHS A,ENERGY,-8,0,0,2,1,0,0,3
-8,2,15,WCHS A,MATH,-4,0,0,1,3,0,0,4
-8,2,15,WCHS A,PHYSICS,-4,10,1,2,1,1,0,3
-9,1,3,Richard Montgomery,BIOLOGY,8,10,2,0,2,1,1,2
-9,1,3,Richard Montgomery,CHEMISTRY,4,10,1,0,3,1,0,3
-9,1,3,Richard Montgomery,EARTH_SPACE,0,0,0,0,3,0,0,3
-9,1,3,Richard Montgomery,ENERGY,8,10,2,0,1,1,1,1
-9,1,3,Richard Montgomery,MATH,12,20,3,0,1,2,1,1
-9,1,3,Richard Montgomery,PHYSICS,0,10,1,1,2,1,0,3
-9,2,16,poolesville village idiots,BIOLOGY,0,10,1,1,2,1,0,3
-9,2,16,poolesville village idiots,CHEMISTRY,8,20,3,1,0,2,1,1
-9,2,16,poolesville village idiots,EARTH_SPACE,12,10,3,0,0,1,2,0
-9,2,16,poolesville village idiots,ENERGY,4,10,1,0,2,1,0,2
-9,2,16,poolesville village idiots,MATH,4,0,1,0,3,0,1,3
-9,2,16,poolesville village idiots,PHYSICS,12,30,3,0,1,3,0,1
-10,1,8,Eagles C,BIOLOGY,8,0,2,0,2,0,2,2
-10,1,8,Eagles C,CHEMISTRY,4,10,1,0,3,1,0,3
-10,1,8,Eagles C,EARTH_SPACE,4,10,1,0,3,1,0,3
-10,1,8,Eagles C,ENERGY,0,0,0,0,3,0,0,3
-10,1,8,Eagles C,MATH,8,0,2,0,2,0,2,2
-10,1,8,Eagles C,PHYSICS,8,20,2,0,2,2,0,2
-10,2,5,Basis,BIOLOGY,0,0,0,0,4,0,0,4
-10,2,5,Basis,CHEMISTRY,4,0,1,0,3,0,1,3
-10,2,5,Basis,EARTH_SPACE,8,10,2,0,2,1,1,2
-10,2,5,Basis,ENERGY,12,30,3,0,0,3,0,0
-10,2,5,Basis,MATH,4,0,1,0,3,0,1,3
-10,2,5,Basis,PHYSICS,8,0,2,0,2,0,2,2
+2,1,3,North Allegheny,BIOLOGY,4,20,2,1,1,2,0,2
+2,1,3,North Allegheny,CHEMISTRY,8,10,2,0,2,1,1,2
+2,1,3,North Allegheny,EARTH_SPACE,4,10,1,0,3,1,0,3
+2,1,3,North Allegheny,ENERGY,8,20,2,0,1,2,0,1
+2,1,3,North Allegheny,MATH,8,20,2,0,2,2,0,2
+2,1,3,North Allegheny,PHYSICS,8,10,2,0,2,1,1,2
+2,2,4,Basis,BIOLOGY,0,0,0,0,4,0,0,4
+2,2,4,Basis,CHEMISTRY,0,0,0,0,4,0,0,4
+2,2,4,Basis,EARTH_SPACE,8,20,2,0,2,2,0,2
+2,2,4,Basis,ENERGY,4,10,1,0,2,1,0,2
+2,2,4,Basis,MATH,4,10,1,0,3,1,0,3
+2,2,4,Basis,PHYSICS,0,20,2,2,0,2,0,2
+3,1,5,South Jersey,BIOLOGY,8,30,3,1,0,3,0,1
+3,1,5,South Jersey,CHEMISTRY,0,0,1,1,2,0,1,3
+3,1,5,South Jersey,EARTH_SPACE,12,10,3,0,1,1,2,1
+3,1,5,South Jersey,ENERGY,4,10,1,0,2,1,0,2
+3,1,5,South Jersey,MATH,0,10,1,1,2,1,0,3
+3,1,5,South Jersey,PHYSICS,4,20,2,1,1,2,0,2
+3,2,6,Eagles B,BIOLOGY,0,0,0,0,4,0,0,4
+3,2,6,Eagles B,CHEMISTRY,4,0,1,0,3,0,1,3
+3,2,6,Eagles B,EARTH_SPACE,0,10,1,1,2,1,0,3
+3,2,6,Eagles B,ENERGY,8,20,2,0,1,2,0,1
+3,2,6,Eagles B,MATH,4,20,2,1,1,2,0,2
+3,2,6,Eagles B,PHYSICS,0,0,0,0,4,0,0,4
+4,1,7,Eagles C,BIOLOGY,0,0,0,0,4,0,0,4
+4,1,7,Eagles C,CHEMISTRY,0,0,0,0,4,0,0,4
+4,1,7,Eagles C,EARTH_SPACE,0,0,1,1,2,0,1,3
+4,1,7,Eagles C,ENERGY,4,0,1,0,2,0,1,2
+4,1,7,Eagles C,MATH,0,0,0,0,4,0,0,4
+4,1,7,Eagles C,PHYSICS,4,10,1,0,3,1,0,3
+4,2,8,WWPN A,BIOLOGY,8,20,3,1,0,2,1,1
+4,2,8,WWPN A,CHEMISTRY,16,10,4,0,0,1,3,0
+4,2,8,WWPN A,EARTH_SPACE,12,30,3,0,1,3,0,1
+4,2,8,WWPN A,ENERGY,8,20,2,0,1,2,0,1
+4,2,8,WWPN A,MATH,12,20,3,0,1,2,1,1
+4,2,8,WWPN A,PHYSICS,0,0,1,1,2,0,1,3
+5,1,9,Shallow Walk team A,BIOLOGY,12,0,3,0,1,0,3,1
+5,1,9,Shallow Walk team A,CHEMISTRY,8,20,2,0,2,2,0,2
+5,1,9,Shallow Walk team A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+5,1,9,Shallow Walk team A,ENERGY,8,20,2,0,1,2,0,1
+5,1,9,Shallow Walk team A,MATH,8,20,2,0,2,2,0,2
+5,1,9,Shallow Walk team A,PHYSICS,16,20,4,0,0,2,2,0
+5,2,10,Gargy Bomy,BIOLOGY,0,0,0,0,4,0,0,4
+5,2,10,Gargy Bomy,CHEMISTRY,-4,10,1,2,1,1,0,3
+5,2,10,Gargy Bomy,EARTH_SPACE,12,20,3,0,1,2,1,1
+5,2,10,Gargy Bomy,ENERGY,4,10,1,0,2,1,0,2
+5,2,10,Gargy Bomy,MATH,0,20,2,2,0,2,0,2
+5,2,10,Gargy Bomy,PHYSICS,-8,0,0,2,2,0,0,4
+6,1,11,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
+6,1,11,Kiruna Scholars,CHEMISTRY,8,20,3,1,0,2,1,1
+6,1,11,Kiruna Scholars,EARTH_SPACE,4,0,2,1,0,0,2,1
+6,1,11,Kiruna Scholars,ENERGY,4,10,1,0,2,1,0,2
+6,1,11,Kiruna Scholars,MATH,-4,0,0,1,3,0,0,4
+6,1,11,Kiruna Scholars,PHYSICS,12,30,3,0,1,3,0,1
+6,2,12,Montgomery Blair B,BIOLOGY,4,20,2,1,1,2,0,2
+6,2,12,Montgomery Blair B,CHEMISTRY,4,0,1,0,3,0,1,3
+6,2,12,Montgomery Blair B,EARTH_SPACE,0,0,0,0,3,0,0,3
+6,2,12,Montgomery Blair B,ENERGY,0,0,1,1,1,0,1,2
+6,2,12,Montgomery Blair B,MATH,16,40,4,0,0,4,0,0
+6,2,12,Montgomery Blair B,PHYSICS,-12,0,0,3,1,0,0,4
+7,1,13,Montgomery Blair A,BIOLOGY,16,30,4,0,0,3,1,0
+7,1,13,Montgomery Blair A,CHEMISTRY,16,20,4,0,0,2,2,0
+7,1,13,Montgomery Blair A,EARTH_SPACE,16,30,4,0,0,3,1,0
+7,1,13,Montgomery Blair A,ENERGY,12,20,3,0,0,2,1,0
+7,1,13,Montgomery Blair A,MATH,16,40,4,0,0,4,0,0
+7,1,13,Montgomery Blair A,PHYSICS,4,20,2,1,1,2,0,2
+7,2,14,WCHS A,BIOLOGY,-12,0,0,3,1,0,0,4
+7,2,14,WCHS A,CHEMISTRY,-8,0,0,2,2,0,0,4
+7,2,14,WCHS A,EARTH_SPACE,-12,0,0,3,1,0,0,4
+7,2,14,WCHS A,ENERGY,-8,0,0,2,1,0,0,3
+7,2,14,WCHS A,MATH,-4,0,0,1,3,0,0,4
+7,2,14,WCHS A,PHYSICS,-4,10,1,2,1,1,0,3
+8,1,15,Richard Montgomery,BIOLOGY,8,10,2,0,2,1,1,2
+8,1,15,Richard Montgomery,CHEMISTRY,4,10,1,0,3,1,0,3
+8,1,15,Richard Montgomery,EARTH_SPACE,0,0,0,0,3,0,0,3
+8,1,15,Richard Montgomery,ENERGY,8,10,2,0,1,1,1,1
+8,1,15,Richard Montgomery,MATH,12,20,3,0,1,2,1,1
+8,1,15,Richard Montgomery,PHYSICS,0,10,1,1,2,1,0,3
+8,2,16,poolesville village idiots,BIOLOGY,0,10,1,1,2,1,0,3
+8,2,16,poolesville village idiots,CHEMISTRY,8,20,3,1,0,2,1,1
+8,2,16,poolesville village idiots,EARTH_SPACE,12,10,3,0,0,1,2,0
+8,2,16,poolesville village idiots,ENERGY,4,10,1,0,2,1,0,2
+8,2,16,poolesville village idiots,MATH,4,0,1,0,3,0,1,3
+8,2,16,poolesville village idiots,PHYSICS,12,30,3,0,1,3,0,1
+9,1,1,Centreville HS Team 1,BIOLOGY,4,10,1,0,3,1,0,3
+9,1,1,Centreville HS Team 1,CHEMISTRY,4,0,1,0,3,0,0,4
+9,1,1,Centreville HS Team 1,EARTH_SPACE,8,0,2,0,2,0,2,2
+9,1,1,Centreville HS Team 1,ENERGY,0,0,0,0,3,0,0,3
+9,1,1,Centreville HS Team 1,MATH,4,0,1,0,3,0,1,3
+9,1,1,Centreville HS Team 1,PHYSICS,8,10,2,0,2,1,0,3
+9,2,15,Richard Montgomery,BIOLOGY,12,20,3,0,1,2,0,2
+9,2,15,Richard Montgomery,CHEMISTRY,8,20,2,0,2,2,0,2
+9,2,15,Richard Montgomery,EARTH_SPACE,0,0,1,1,2,0,1,3
+9,2,15,Richard Montgomery,ENERGY,12,10,3,0,0,1,2,0
+9,2,15,Richard Montgomery,MATH,4,10,1,0,3,1,0,3
+9,2,15,Richard Montgomery,PHYSICS,4,10,1,0,3,1,0,3
+10,1,7,Eagles C,BIOLOGY,8,0,2,0,2,0,2,2
+10,1,7,Eagles C,CHEMISTRY,4,10,1,0,3,1,0,3
+10,1,7,Eagles C,EARTH_SPACE,4,10,1,0,3,1,0,3
+10,1,7,Eagles C,ENERGY,0,0,0,0,3,0,0,3
+10,1,7,Eagles C,MATH,8,0,2,0,2,0,2,2
+10,1,7,Eagles C,PHYSICS,8,20,2,0,2,2,0,2
+10,2,4,Basis,BIOLOGY,0,0,0,0,4,0,0,4
+10,2,4,Basis,CHEMISTRY,4,0,1,0,3,0,1,3
+10,2,4,Basis,EARTH_SPACE,8,10,2,0,2,1,1,2
+10,2,4,Basis,ENERGY,12,30,3,0,0,3,0,0
+10,2,4,Basis,MATH,4,0,1,0,3,0,1,3
+10,2,4,Basis,PHYSICS,8,0,2,0,2,0,2,2
 11,1,16,poolesville village idiots,BIOLOGY,4,0,1,0,3,0,1,3
 11,1,16,poolesville village idiots,CHEMISTRY,12,20,3,0,1,2,1,1
 11,1,16,poolesville village idiots,EARTH_SPACE,0,0,0,0,4,0,0,4
@@ -131,216 +131,216 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 11,2,2,Eagles A,ENERGY,8,20,2,0,1,2,0,1
 11,2,2,Eagles A,MATH,8,0,2,0,2,0,2,2
 11,2,2,Eagles A,PHYSICS,8,20,2,0,2,2,0,2
-12,1,7,Eagles B,BIOLOGY,0,0,0,0,4,0,0,4
-12,1,7,Eagles B,CHEMISTRY,0,0,0,0,3,0,0,3
-12,1,7,Eagles B,EARTH_SPACE,8,0,2,0,2,0,2,2
-12,1,7,Eagles B,ENERGY,4,10,1,0,2,1,0,2
-12,1,7,Eagles B,MATH,8,0,2,0,2,0,2,2
-12,1,7,Eagles B,PHYSICS,-4,0,0,1,2,0,0,3
-12,2,13,Montgomery Blair B,BIOLOGY,16,10,4,0,0,1,3,0
-12,2,13,Montgomery Blair B,CHEMISTRY,4,0,1,0,2,0,1,2
-12,2,13,Montgomery Blair B,EARTH_SPACE,4,0,1,0,3,0,1,3
-12,2,13,Montgomery Blair B,ENERGY,8,20,2,0,1,2,0,1
-12,2,13,Montgomery Blair B,MATH,4,10,1,0,3,1,0,3
-12,2,13,Montgomery Blair B,PHYSICS,4,20,2,1,0,2,0,1
-13,1,11,Gargy Bomy,BIOLOGY,8,10,2,0,2,1,1,2
-13,1,11,Gargy Bomy,CHEMISTRY,4,10,2,1,1,1,1,2
-13,1,11,Gargy Bomy,EARTH_SPACE,8,20,3,1,0,2,1,1
-13,1,11,Gargy Bomy,ENERGY,4,10,2,1,0,1,1,1
-13,1,11,Gargy Bomy,MATH,4,0,1,0,3,0,1,3
-13,1,11,Gargy Bomy,PHYSICS,0,10,1,1,2,1,0,3
-13,2,15,WCHS A,BIOLOGY,0,0,0,0,4,0,0,4
-13,2,15,WCHS A,CHEMISTRY,4,0,1,0,3,0,1,3
-13,2,15,WCHS A,EARTH_SPACE,0,0,0,0,4,0,0,4
-13,2,15,WCHS A,ENERGY,0,0,0,0,3,0,0,3
-13,2,15,WCHS A,MATH,0,0,1,1,2,0,1,3
-13,2,15,WCHS A,PHYSICS,4,0,1,0,3,0,1,3
-14,1,12,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
-14,1,12,Kiruna Scholars,CHEMISTRY,8,20,2,0,2,2,0,2
-14,1,12,Kiruna Scholars,EARTH_SPACE,12,30,3,0,1,3,0,1
-14,1,12,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
-14,1,12,Kiruna Scholars,MATH,12,10,3,0,1,1,2,1
-14,1,12,Kiruna Scholars,PHYSICS,0,10,1,1,2,1,0,3
-14,2,6,South Jersey,BIOLOGY,4,10,1,0,3,1,0,3
-14,2,6,South Jersey,CHEMISTRY,8,0,2,0,2,0,2,2
-14,2,6,South Jersey,EARTH_SPACE,0,0,1,1,2,0,1,3
-14,2,6,South Jersey,ENERGY,12,30,3,0,0,3,0,0
-14,2,6,South Jersey,MATH,4,10,1,0,3,1,0,3
-14,2,6,South Jersey,PHYSICS,8,10,2,0,2,1,1,2
-15,1,14,Montgomery Blair A,BIOLOGY,4,10,2,1,1,1,1,2
-15,1,14,Montgomery Blair A,CHEMISTRY,16,30,4,0,0,3,1,0
-15,1,14,Montgomery Blair A,EARTH_SPACE,12,20,3,0,1,2,1,1
-15,1,14,Montgomery Blair A,ENERGY,0,10,1,1,1,1,0,2
-15,1,14,Montgomery Blair A,MATH,4,10,1,0,3,1,0,3
-15,1,14,Montgomery Blair A,PHYSICS,0,10,1,1,2,1,0,3
-15,2,10,Shallow Walk team A,BIOLOGY,8,10,2,0,2,1,1,2
-15,2,10,Shallow Walk team A,CHEMISTRY,-4,0,0,1,3,0,0,4
-15,2,10,Shallow Walk team A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-15,2,10,Shallow Walk team A,ENERGY,8,20,2,0,1,2,0,1
-15,2,10,Shallow Walk team A,MATH,8,20,2,0,2,2,0,2
-15,2,10,Shallow Walk team A,PHYSICS,0,0,1,1,2,0,1,3
-16,1,9,WWPN A,BIOLOGY,0,10,1,1,2,1,0,3
-16,1,9,WWPN A,CHEMISTRY,12,10,3,0,1,1,2,1
-16,1,9,WWPN A,EARTH_SPACE,8,30,3,1,0,3,0,1
-16,1,9,WWPN A,ENERGY,4,0,2,1,0,0,2,1
-16,1,9,WWPN A,MATH,4,10,1,0,3,1,0,3
-16,1,9,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
-16,2,4,North Allegheny,BIOLOGY,12,10,3,0,1,1,2,1
-16,2,4,North Allegheny,CHEMISTRY,4,10,1,0,3,1,0,3
-16,2,4,North Allegheny,EARTH_SPACE,4,10,1,0,3,1,0,3
-16,2,4,North Allegheny,ENERGY,4,10,1,0,2,1,0,2
-16,2,4,North Allegheny,MATH,8,20,2,0,2,2,0,2
-16,2,4,North Allegheny,PHYSICS,0,10,1,1,2,1,0,3
+12,1,6,Eagles B,BIOLOGY,0,0,0,0,4,0,0,4
+12,1,6,Eagles B,CHEMISTRY,0,0,0,0,3,0,0,3
+12,1,6,Eagles B,EARTH_SPACE,8,0,2,0,2,0,2,2
+12,1,6,Eagles B,ENERGY,4,10,1,0,2,1,0,2
+12,1,6,Eagles B,MATH,8,0,2,0,2,0,2,2
+12,1,6,Eagles B,PHYSICS,-4,0,0,1,2,0,0,3
+12,2,12,Montgomery Blair B,BIOLOGY,16,10,4,0,0,1,3,0
+12,2,12,Montgomery Blair B,CHEMISTRY,4,0,1,0,2,0,1,2
+12,2,12,Montgomery Blair B,EARTH_SPACE,4,0,1,0,3,0,1,3
+12,2,12,Montgomery Blair B,ENERGY,8,20,2,0,1,2,0,1
+12,2,12,Montgomery Blair B,MATH,4,10,1,0,3,1,0,3
+12,2,12,Montgomery Blair B,PHYSICS,4,20,2,1,0,2,0,1
+13,1,10,Gargy Bomy,BIOLOGY,8,10,2,0,2,1,1,2
+13,1,10,Gargy Bomy,CHEMISTRY,4,10,2,1,1,1,1,2
+13,1,10,Gargy Bomy,EARTH_SPACE,8,20,3,1,0,2,1,1
+13,1,10,Gargy Bomy,ENERGY,4,10,2,1,0,1,1,1
+13,1,10,Gargy Bomy,MATH,4,0,1,0,3,0,1,3
+13,1,10,Gargy Bomy,PHYSICS,0,10,1,1,2,1,0,3
+13,2,14,WCHS A,BIOLOGY,0,0,0,0,4,0,0,4
+13,2,14,WCHS A,CHEMISTRY,4,0,1,0,3,0,1,3
+13,2,14,WCHS A,EARTH_SPACE,0,0,0,0,4,0,0,4
+13,2,14,WCHS A,ENERGY,0,0,0,0,3,0,0,3
+13,2,14,WCHS A,MATH,0,0,1,1,2,0,1,3
+13,2,14,WCHS A,PHYSICS,4,0,1,0,3,0,1,3
+14,1,11,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
+14,1,11,Kiruna Scholars,CHEMISTRY,8,20,2,0,2,2,0,2
+14,1,11,Kiruna Scholars,EARTH_SPACE,12,30,3,0,1,3,0,1
+14,1,11,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
+14,1,11,Kiruna Scholars,MATH,12,10,3,0,1,1,2,1
+14,1,11,Kiruna Scholars,PHYSICS,0,10,1,1,2,1,0,3
+14,2,5,South Jersey,BIOLOGY,4,10,1,0,3,1,0,3
+14,2,5,South Jersey,CHEMISTRY,8,0,2,0,2,0,2,2
+14,2,5,South Jersey,EARTH_SPACE,0,0,1,1,2,0,1,3
+14,2,5,South Jersey,ENERGY,12,30,3,0,0,3,0,0
+14,2,5,South Jersey,MATH,4,10,1,0,3,1,0,3
+14,2,5,South Jersey,PHYSICS,8,10,2,0,2,1,1,2
+15,1,13,Montgomery Blair A,BIOLOGY,4,10,2,1,1,1,1,2
+15,1,13,Montgomery Blair A,CHEMISTRY,16,30,4,0,0,3,1,0
+15,1,13,Montgomery Blair A,EARTH_SPACE,12,20,3,0,1,2,1,1
+15,1,13,Montgomery Blair A,ENERGY,0,10,1,1,1,1,0,2
+15,1,13,Montgomery Blair A,MATH,4,10,1,0,3,1,0,3
+15,1,13,Montgomery Blair A,PHYSICS,0,10,1,1,2,1,0,3
+15,2,9,Shallow Walk team A,BIOLOGY,8,10,2,0,2,1,1,2
+15,2,9,Shallow Walk team A,CHEMISTRY,-4,0,0,1,3,0,0,4
+15,2,9,Shallow Walk team A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+15,2,9,Shallow Walk team A,ENERGY,8,20,2,0,1,2,0,1
+15,2,9,Shallow Walk team A,MATH,8,20,2,0,2,2,0,2
+15,2,9,Shallow Walk team A,PHYSICS,0,0,1,1,2,0,1,3
+16,1,8,WWPN A,BIOLOGY,0,10,1,1,2,1,0,3
+16,1,8,WWPN A,CHEMISTRY,12,10,3,0,1,1,2,1
+16,1,8,WWPN A,EARTH_SPACE,8,30,3,1,0,3,0,1
+16,1,8,WWPN A,ENERGY,4,0,2,1,0,0,2,1
+16,1,8,WWPN A,MATH,4,10,1,0,3,1,0,3
+16,1,8,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
+16,2,3,North Allegheny,BIOLOGY,12,10,3,0,1,1,2,1
+16,2,3,North Allegheny,CHEMISTRY,4,10,1,0,3,1,0,3
+16,2,3,North Allegheny,EARTH_SPACE,4,10,1,0,3,1,0,3
+16,2,3,North Allegheny,ENERGY,4,10,1,0,2,1,0,2
+16,2,3,North Allegheny,MATH,8,20,2,0,2,2,0,2
+16,2,3,North Allegheny,PHYSICS,0,10,1,1,2,1,0,3
 17,1,16,poolesville village idiots,BIOLOGY,0,10,1,1,2,1,0,3
 17,1,16,poolesville village idiots,CHEMISTRY,12,10,3,0,1,1,2,1
 17,1,16,poolesville village idiots,EARTH_SPACE,-4,0,0,1,3,0,0,4
 17,1,16,poolesville village idiots,ENERGY,-4,0,0,1,2,0,0,3
 17,1,16,poolesville village idiots,MATH,8,10,2,0,2,1,1,2
 17,1,16,poolesville village idiots,PHYSICS,16,20,4,0,0,2,2,0
-17,2,5,Basis,BIOLOGY,4,0,1,0,3,0,1,3
-17,2,5,Basis,CHEMISTRY,4,0,1,0,3,0,1,3
-17,2,5,Basis,EARTH_SPACE,4,10,1,0,3,1,0,3
-17,2,5,Basis,ENERGY,4,10,1,0,2,1,0,2
-17,2,5,Basis,MATH,8,0,2,0,2,0,1,3
-17,2,5,Basis,PHYSICS,0,0,0,0,4,0,0,4
-18,1,11,Gargy Bomy,BIOLOGY,0,0,0,0,4,0,0,4
-18,1,11,Gargy Bomy,CHEMISTRY,12,10,3,0,1,1,2,1
-18,1,11,Gargy Bomy,EARTH_SPACE,8,0,2,0,2,0,2,2
-18,1,11,Gargy Bomy,ENERGY,0,0,1,1,1,0,1,2
-18,1,11,Gargy Bomy,MATH,0,10,1,1,2,1,0,3
-18,1,11,Gargy Bomy,PHYSICS,4,20,2,1,1,2,0,2
-18,2,6,South Jersey,BIOLOGY,16,30,4,0,0,3,1,0
-18,2,6,South Jersey,CHEMISTRY,0,0,0,0,4,0,0,4
-18,2,6,South Jersey,EARTH_SPACE,4,10,1,0,3,1,0,3
-18,2,6,South Jersey,ENERGY,4,10,1,0,2,1,0,2
-18,2,6,South Jersey,MATH,8,20,2,0,2,2,0,2
-18,2,6,South Jersey,PHYSICS,0,0,2,2,0,0,2,2
-19,1,10,Shallow Walk team A,BIOLOGY,-4,0,0,1,3,0,0,4
-19,1,10,Shallow Walk team A,CHEMISTRY,12,0,3,0,1,0,3,1
-19,1,10,Shallow Walk team A,EARTH_SPACE,8,10,2,0,2,1,1,2
-19,1,10,Shallow Walk team A,ENERGY,8,10,2,0,1,1,1,1
-19,1,10,Shallow Walk team A,MATH,4,10,2,1,0,1,1,1
-19,1,10,Shallow Walk team A,PHYSICS,4,0,2,1,1,0,2,2
-19,2,13,Montgomery Blair B,BIOLOGY,8,10,3,1,0,1,2,1
-19,2,13,Montgomery Blair B,CHEMISTRY,-4,0,0,1,3,0,0,4
-19,2,13,Montgomery Blair B,EARTH_SPACE,8,10,2,0,2,1,1,2
-19,2,13,Montgomery Blair B,ENERGY,0,10,1,1,1,1,0,2
-19,2,13,Montgomery Blair B,MATH,0,10,1,1,1,1,0,2
-19,2,13,Montgomery Blair B,PHYSICS,-4,10,1,2,1,1,0,3
-20,1,4,North Allegheny,BIOLOGY,-4,10,1,2,1,1,0,3
-20,1,4,North Allegheny,CHEMISTRY,4,0,1,0,3,0,1,3
-20,1,4,North Allegheny,EARTH_SPACE,4,0,1,0,3,0,1,3
-20,1,4,North Allegheny,ENERGY,0,0,0,0,3,0,0,3
-20,1,4,North Allegheny,MATH,4,0,1,0,3,0,1,3
-20,1,4,North Allegheny,PHYSICS,4,10,2,1,1,1,1,2
-20,2,3,Richard Montgomery,BIOLOGY,12,30,3,0,1,3,0,1
-20,2,3,Richard Montgomery,CHEMISTRY,12,20,3,0,1,2,1,1
-20,2,3,Richard Montgomery,EARTH_SPACE,4,0,1,0,3,0,1,3
-20,2,3,Richard Montgomery,ENERGY,12,10,3,0,0,1,2,0
-20,2,3,Richard Montgomery,MATH,0,0,0,0,4,0,0,4
-20,2,3,Richard Montgomery,PHYSICS,8,0,2,0,2,0,2,2
-21,1,12,Kiruna Scholars,BIOLOGY,4,0,1,0,3,0,1,3
-21,1,12,Kiruna Scholars,CHEMISTRY,12,10,3,0,1,1,2,1
-21,1,12,Kiruna Scholars,EARTH_SPACE,8,10,2,0,2,1,1,2
-21,1,12,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
-21,1,12,Kiruna Scholars,MATH,8,20,2,0,2,2,0,2
-21,1,12,Kiruna Scholars,PHYSICS,8,10,2,0,2,1,1,2
+17,2,4,Basis,BIOLOGY,4,0,1,0,3,0,1,3
+17,2,4,Basis,CHEMISTRY,4,0,1,0,3,0,1,3
+17,2,4,Basis,EARTH_SPACE,4,10,1,0,3,1,0,3
+17,2,4,Basis,ENERGY,4,10,1,0,2,1,0,2
+17,2,4,Basis,MATH,8,0,2,0,2,0,1,3
+17,2,4,Basis,PHYSICS,0,0,0,0,4,0,0,4
+18,1,10,Gargy Bomy,BIOLOGY,0,0,0,0,4,0,0,4
+18,1,10,Gargy Bomy,CHEMISTRY,12,10,3,0,1,1,2,1
+18,1,10,Gargy Bomy,EARTH_SPACE,8,0,2,0,2,0,2,2
+18,1,10,Gargy Bomy,ENERGY,0,0,1,1,1,0,1,2
+18,1,10,Gargy Bomy,MATH,0,10,1,1,2,1,0,3
+18,1,10,Gargy Bomy,PHYSICS,4,20,2,1,1,2,0,2
+18,2,5,South Jersey,BIOLOGY,16,30,4,0,0,3,1,0
+18,2,5,South Jersey,CHEMISTRY,0,0,0,0,4,0,0,4
+18,2,5,South Jersey,EARTH_SPACE,4,10,1,0,3,1,0,3
+18,2,5,South Jersey,ENERGY,4,10,1,0,2,1,0,2
+18,2,5,South Jersey,MATH,8,20,2,0,2,2,0,2
+18,2,5,South Jersey,PHYSICS,0,0,2,2,0,0,2,2
+19,1,9,Shallow Walk team A,BIOLOGY,-4,0,0,1,3,0,0,4
+19,1,9,Shallow Walk team A,CHEMISTRY,12,0,3,0,1,0,3,1
+19,1,9,Shallow Walk team A,EARTH_SPACE,8,10,2,0,2,1,1,2
+19,1,9,Shallow Walk team A,ENERGY,8,10,2,0,1,1,1,1
+19,1,9,Shallow Walk team A,MATH,4,10,2,1,0,1,1,1
+19,1,9,Shallow Walk team A,PHYSICS,4,0,2,1,1,0,2,2
+19,2,12,Montgomery Blair B,BIOLOGY,8,10,3,1,0,1,2,1
+19,2,12,Montgomery Blair B,CHEMISTRY,-4,0,0,1,3,0,0,4
+19,2,12,Montgomery Blair B,EARTH_SPACE,8,10,2,0,2,1,1,2
+19,2,12,Montgomery Blair B,ENERGY,0,10,1,1,1,1,0,2
+19,2,12,Montgomery Blair B,MATH,0,10,1,1,1,1,0,2
+19,2,12,Montgomery Blair B,PHYSICS,-4,10,1,2,1,1,0,3
+20,1,3,North Allegheny,BIOLOGY,-4,10,1,2,1,1,0,3
+20,1,3,North Allegheny,CHEMISTRY,4,0,1,0,3,0,1,3
+20,1,3,North Allegheny,EARTH_SPACE,4,0,1,0,3,0,1,3
+20,1,3,North Allegheny,ENERGY,0,0,0,0,3,0,0,3
+20,1,3,North Allegheny,MATH,4,0,1,0,3,0,1,3
+20,1,3,North Allegheny,PHYSICS,4,10,2,1,1,1,1,2
+20,2,15,Richard Montgomery,BIOLOGY,12,30,3,0,1,3,0,1
+20,2,15,Richard Montgomery,CHEMISTRY,12,20,3,0,1,2,1,1
+20,2,15,Richard Montgomery,EARTH_SPACE,4,0,1,0,3,0,1,3
+20,2,15,Richard Montgomery,ENERGY,12,10,3,0,0,1,2,0
+20,2,15,Richard Montgomery,MATH,0,0,0,0,4,0,0,4
+20,2,15,Richard Montgomery,PHYSICS,8,0,2,0,2,0,2,2
+21,1,11,Kiruna Scholars,BIOLOGY,4,0,1,0,3,0,1,3
+21,1,11,Kiruna Scholars,CHEMISTRY,12,10,3,0,1,1,2,1
+21,1,11,Kiruna Scholars,EARTH_SPACE,8,10,2,0,2,1,1,2
+21,1,11,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
+21,1,11,Kiruna Scholars,MATH,8,20,2,0,2,2,0,2
+21,1,11,Kiruna Scholars,PHYSICS,8,10,2,0,2,1,1,2
 21,2,2,Eagles A,BIOLOGY,4,10,1,0,3,1,0,3
 21,2,2,Eagles A,CHEMISTRY,4,0,1,0,3,0,1,3
 21,2,2,Eagles A,EARTH_SPACE,0,10,1,1,2,1,0,3
 21,2,2,Eagles A,ENERGY,12,10,3,0,0,1,2,0
 21,2,2,Eagles A,MATH,8,10,2,0,2,1,1,2
 21,2,2,Eagles A,PHYSICS,8,20,2,0,2,2,0,2
-22,1,14,Montgomery Blair A,BIOLOGY,4,0,2,1,1,0,2,2
-22,1,14,Montgomery Blair A,CHEMISTRY,12,10,3,0,1,1,2,1
-22,1,14,Montgomery Blair A,EARTH_SPACE,4,0,1,0,3,0,1,3
-22,1,14,Montgomery Blair A,ENERGY,4,0,1,0,2,0,1,2
-22,1,14,Montgomery Blair A,MATH,4,10,2,1,1,1,1,2
-22,1,14,Montgomery Blair A,PHYSICS,8,20,2,0,2,2,0,2
-22,2,9,WWPN A,BIOLOGY,-4,0,0,1,3,0,0,4
-22,2,9,WWPN A,CHEMISTRY,4,0,1,0,3,0,1,3
-22,2,9,WWPN A,EARTH_SPACE,12,0,3,0,1,0,3,1
-22,2,9,WWPN A,ENERGY,8,10,2,0,1,1,1,1
-22,2,9,WWPN A,MATH,4,10,2,1,1,1,1,2
-22,2,9,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
-23,1,3,Richard Montgomery,BIOLOGY,8,20,2,0,2,2,0,2
-23,1,3,Richard Montgomery,CHEMISTRY,8,10,2,0,2,1,1,2
-23,1,3,Richard Montgomery,EARTH_SPACE,4,10,1,0,3,1,0,3
-23,1,3,Richard Montgomery,ENERGY,4,10,2,1,0,1,1,1
-23,1,3,Richard Montgomery,MATH,0,0,0,0,4,0,0,4
-23,1,3,Richard Montgomery,PHYSICS,8,0,2,0,2,0,2,2
-23,2,10,Shallow Walk team A,BIOLOGY,0,0,0,0,4,0,0,4
-23,2,10,Shallow Walk team A,CHEMISTRY,4,0,1,0,3,0,1,3
-23,2,10,Shallow Walk team A,EARTH_SPACE,4,0,1,0,3,0,1,3
-23,2,10,Shallow Walk team A,ENERGY,4,0,1,0,2,0,1,2
-23,2,10,Shallow Walk team A,MATH,8,10,2,0,2,1,1,2
-23,2,10,Shallow Walk team A,PHYSICS,4,0,1,0,3,0,1,3
-24,1,6,South Jersey,BIOLOGY,-4,0,1,2,1,0,1,3
-24,1,6,South Jersey,CHEMISTRY,4,0,1,0,3,0,1,3
-24,1,6,South Jersey,EARTH_SPACE,4,10,1,0,3,1,0,3
-24,1,6,South Jersey,ENERGY,8,10,2,0,1,1,1,1
-24,1,6,South Jersey,MATH,8,20,3,1,0,2,1,1
-24,1,6,South Jersey,PHYSICS,8,10,2,0,2,1,1,2
+22,1,13,Montgomery Blair A,BIOLOGY,4,0,2,1,1,0,2,2
+22,1,13,Montgomery Blair A,CHEMISTRY,12,10,3,0,1,1,2,1
+22,1,13,Montgomery Blair A,EARTH_SPACE,4,0,1,0,3,0,1,3
+22,1,13,Montgomery Blair A,ENERGY,4,0,1,0,2,0,1,2
+22,1,13,Montgomery Blair A,MATH,4,10,2,1,1,1,1,2
+22,1,13,Montgomery Blair A,PHYSICS,8,20,2,0,2,2,0,2
+22,2,8,WWPN A,BIOLOGY,-4,0,0,1,3,0,0,4
+22,2,8,WWPN A,CHEMISTRY,4,0,1,0,3,0,1,3
+22,2,8,WWPN A,EARTH_SPACE,12,0,3,0,1,0,3,1
+22,2,8,WWPN A,ENERGY,8,10,2,0,1,1,1,1
+22,2,8,WWPN A,MATH,4,10,2,1,1,1,1,2
+22,2,8,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
+23,1,15,Richard Montgomery,BIOLOGY,8,20,2,0,2,2,0,2
+23,1,15,Richard Montgomery,CHEMISTRY,8,10,2,0,2,1,1,2
+23,1,15,Richard Montgomery,EARTH_SPACE,4,10,1,0,3,1,0,3
+23,1,15,Richard Montgomery,ENERGY,4,10,2,1,0,1,1,1
+23,1,15,Richard Montgomery,MATH,0,0,0,0,4,0,0,4
+23,1,15,Richard Montgomery,PHYSICS,8,0,2,0,2,0,2,2
+23,2,9,Shallow Walk team A,BIOLOGY,0,0,0,0,4,0,0,4
+23,2,9,Shallow Walk team A,CHEMISTRY,4,0,1,0,3,0,1,3
+23,2,9,Shallow Walk team A,EARTH_SPACE,4,0,1,0,3,0,1,3
+23,2,9,Shallow Walk team A,ENERGY,4,0,1,0,2,0,1,2
+23,2,9,Shallow Walk team A,MATH,8,10,2,0,2,1,1,2
+23,2,9,Shallow Walk team A,PHYSICS,4,0,1,0,3,0,1,3
+24,1,5,South Jersey,BIOLOGY,-4,0,1,2,1,0,1,3
+24,1,5,South Jersey,CHEMISTRY,4,0,1,0,3,0,1,3
+24,1,5,South Jersey,EARTH_SPACE,4,10,1,0,3,1,0,3
+24,1,5,South Jersey,ENERGY,8,10,2,0,1,1,1,1
+24,1,5,South Jersey,MATH,8,20,3,1,0,2,1,1
+24,1,5,South Jersey,PHYSICS,8,10,2,0,2,1,1,2
 24,2,16,poolesville village idiots,BIOLOGY,4,0,1,0,3,0,1,3
 24,2,16,poolesville village idiots,CHEMISTRY,12,10,3,0,1,1,2,1
 24,2,16,poolesville village idiots,EARTH_SPACE,0,0,0,0,4,0,0,4
 24,2,16,poolesville village idiots,ENERGY,0,0,1,1,1,0,1,2
 24,2,16,poolesville village idiots,MATH,-4,0,0,1,3,0,0,4
 24,2,16,poolesville village idiots,PHYSICS,8,10,2,0,2,1,1,2
-25,1,12,Kiruna Scholars,BIOLOGY,0,10,1,1,2,1,0,3
-25,1,12,Kiruna Scholars,CHEMISTRY,4,20,2,1,1,2,0,2
-25,1,12,Kiruna Scholars,EARTH_SPACE,0,10,1,1,2,1,0,3
-25,1,12,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
-25,1,12,Kiruna Scholars,MATH,4,0,1,0,3,0,1,3
-25,1,12,Kiruna Scholars,PHYSICS,4,10,2,1,1,1,1,2
-25,2,3,Richard Montgomery,BIOLOGY,4,0,2,1,1,0,2,2
-25,2,3,Richard Montgomery,CHEMISTRY,8,0,2,0,2,0,2,2
-25,2,3,Richard Montgomery,EARTH_SPACE,0,0,0,0,4,0,0,4
-25,2,3,Richard Montgomery,ENERGY,8,20,2,0,1,2,0,1
-25,2,3,Richard Montgomery,MATH,0,10,1,1,2,1,0,3
-25,2,3,Richard Montgomery,PHYSICS,4,0,1,0,3,0,1,3
-26,1,6,South Jersey,BIOLOGY,16,30,4,0,0,3,1,0
-26,1,6,South Jersey,CHEMISTRY,0,0,0,0,4,0,0,4
-26,1,6,South Jersey,EARTH_SPACE,0,0,0,0,4,0,0,4
-26,1,6,South Jersey,ENERGY,4,10,1,0,2,1,0,2
-26,1,6,South Jersey,MATH,4,10,1,0,3,1,0,3
-26,1,6,South Jersey,PHYSICS,8,0,2,0,2,0,2,2
-26,2,9,WWPN A,BIOLOGY,-4,0,0,1,3,0,0,4
-26,2,9,WWPN A,CHEMISTRY,12,10,3,0,1,1,2,1
-26,2,9,WWPN A,EARTH_SPACE,8,10,2,0,2,1,1,2
-26,2,9,WWPN A,ENERGY,8,10,2,0,1,1,1,1
-26,2,9,WWPN A,MATH,12,20,3,0,1,2,1,1
-26,2,9,WWPN A,PHYSICS,4,10,2,1,1,1,1,2
-27,1,14,Montgomery Blair A,BIOLOGY,16,0,4,0,0,0,4,0
-27,1,14,Montgomery Blair A,CHEMISTRY,8,20,2,0,2,2,0,2
-27,1,14,Montgomery Blair A,EARTH_SPACE,12,0,3,0,1,0,3,1
-27,1,14,Montgomery Blair A,ENERGY,0,0,1,1,1,0,1,2
-27,1,14,Montgomery Blair A,MATH,4,10,1,0,3,1,0,3
-27,1,14,Montgomery Blair A,PHYSICS,4,10,1,0,3,1,0,3
+25,1,11,Kiruna Scholars,BIOLOGY,0,10,1,1,2,1,0,3
+25,1,11,Kiruna Scholars,CHEMISTRY,4,20,2,1,1,2,0,2
+25,1,11,Kiruna Scholars,EARTH_SPACE,0,10,1,1,2,1,0,3
+25,1,11,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
+25,1,11,Kiruna Scholars,MATH,4,0,1,0,3,0,1,3
+25,1,11,Kiruna Scholars,PHYSICS,4,10,2,1,1,1,1,2
+25,2,15,Richard Montgomery,BIOLOGY,4,0,2,1,1,0,2,2
+25,2,15,Richard Montgomery,CHEMISTRY,8,0,2,0,2,0,2,2
+25,2,15,Richard Montgomery,EARTH_SPACE,0,0,0,0,4,0,0,4
+25,2,15,Richard Montgomery,ENERGY,8,20,2,0,1,2,0,1
+25,2,15,Richard Montgomery,MATH,0,10,1,1,2,1,0,3
+25,2,15,Richard Montgomery,PHYSICS,4,0,1,0,3,0,1,3
+26,1,5,South Jersey,BIOLOGY,16,30,4,0,0,3,1,0
+26,1,5,South Jersey,CHEMISTRY,0,0,0,0,4,0,0,4
+26,1,5,South Jersey,EARTH_SPACE,0,0,0,0,4,0,0,4
+26,1,5,South Jersey,ENERGY,4,10,1,0,2,1,0,2
+26,1,5,South Jersey,MATH,4,10,1,0,3,1,0,3
+26,1,5,South Jersey,PHYSICS,8,0,2,0,2,0,2,2
+26,2,8,WWPN A,BIOLOGY,-4,0,0,1,3,0,0,4
+26,2,8,WWPN A,CHEMISTRY,12,10,3,0,1,1,2,1
+26,2,8,WWPN A,EARTH_SPACE,8,10,2,0,2,1,1,2
+26,2,8,WWPN A,ENERGY,8,10,2,0,1,1,1,1
+26,2,8,WWPN A,MATH,12,20,3,0,1,2,1,1
+26,2,8,WWPN A,PHYSICS,4,10,2,1,1,1,1,2
+27,1,13,Montgomery Blair A,BIOLOGY,16,0,4,0,0,0,4,0
+27,1,13,Montgomery Blair A,CHEMISTRY,8,20,2,0,2,2,0,2
+27,1,13,Montgomery Blair A,EARTH_SPACE,12,0,3,0,1,0,3,1
+27,1,13,Montgomery Blair A,ENERGY,0,0,1,1,1,0,1,2
+27,1,13,Montgomery Blair A,MATH,4,10,1,0,3,1,0,3
+27,1,13,Montgomery Blair A,PHYSICS,4,10,1,0,3,1,0,3
 27,2,2,Eagles A,BIOLOGY,0,0,0,0,4,0,0,4
 27,2,2,Eagles A,CHEMISTRY,8,10,2,0,2,1,1,2
 27,2,2,Eagles A,EARTH_SPACE,-4,0,0,1,3,0,0,4
 27,2,2,Eagles A,ENERGY,8,0,2,0,1,0,2,1
 27,2,2,Eagles A,MATH,8,0,2,0,2,0,2,2
 27,2,2,Eagles A,PHYSICS,12,20,3,0,1,2,1,1
-28,1,12,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
-28,1,12,Kiruna Scholars,CHEMISTRY,8,10,2,0,2,1,1,2
-28,1,12,Kiruna Scholars,EARTH_SPACE,4,0,1,0,3,0,1,3
-28,1,12,Kiruna Scholars,ENERGY,4,0,1,0,2,0,1,2
-28,1,12,Kiruna Scholars,MATH,12,20,3,0,1,2,1,1
-28,1,12,Kiruna Scholars,PHYSICS,8,0,2,0,2,0,2,2
-28,2,9,WWPN A,BIOLOGY,8,0,2,0,2,0,2,2
-28,2,9,WWPN A,CHEMISTRY,0,10,1,1,2,1,0,3
-28,2,9,WWPN A,EARTH_SPACE,8,10,2,0,2,1,1,2
-28,2,9,WWPN A,ENERGY,0,0,1,1,1,0,1,2
-28,2,9,WWPN A,MATH,0,0,0,0,4,0,0,4
-28,2,9,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
-29,1,12,Kiruna Scholars,BIOLOGY,4,0,1,0,3,0,1,3
-29,1,12,Kiruna Scholars,CHEMISTRY,8,0,2,0,2,0,2,2
-29,1,12,Kiruna Scholars,EARTH_SPACE,4,0,1,0,3,0,1,3
-29,1,12,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
-29,1,12,Kiruna Scholars,MATH,8,0,2,0,2,0,2,2
-29,1,12,Kiruna Scholars,PHYSICS,0,0,0,0,4,0,0,4
+28,1,11,Kiruna Scholars,BIOLOGY,8,10,2,0,2,1,1,2
+28,1,11,Kiruna Scholars,CHEMISTRY,8,10,2,0,2,1,1,2
+28,1,11,Kiruna Scholars,EARTH_SPACE,4,0,1,0,3,0,1,3
+28,1,11,Kiruna Scholars,ENERGY,4,0,1,0,2,0,1,2
+28,1,11,Kiruna Scholars,MATH,12,20,3,0,1,2,1,1
+28,1,11,Kiruna Scholars,PHYSICS,8,0,2,0,2,0,2,2
+28,2,8,WWPN A,BIOLOGY,8,0,2,0,2,0,2,2
+28,2,8,WWPN A,CHEMISTRY,0,10,1,1,2,1,0,3
+28,2,8,WWPN A,EARTH_SPACE,8,10,2,0,2,1,1,2
+28,2,8,WWPN A,ENERGY,0,0,1,1,1,0,1,2
+28,2,8,WWPN A,MATH,0,0,0,0,4,0,0,4
+28,2,8,WWPN A,PHYSICS,8,10,2,0,2,1,1,2
+29,1,11,Kiruna Scholars,BIOLOGY,4,0,1,0,3,0,1,3
+29,1,11,Kiruna Scholars,CHEMISTRY,8,0,2,0,2,0,2,2
+29,1,11,Kiruna Scholars,EARTH_SPACE,4,0,1,0,3,0,1,3
+29,1,11,Kiruna Scholars,ENERGY,0,0,0,0,3,0,0,3
+29,1,11,Kiruna Scholars,MATH,8,0,2,0,2,0,2,2
+29,1,11,Kiruna Scholars,PHYSICS,0,0,0,0,4,0,0,4
 29,2,2,Eagles A,BIOLOGY,0,0,0,0,4,0,0,4
 29,2,2,Eagles A,CHEMISTRY,0,0,0,0,4,0,0,4
 29,2,2,Eagles A,EARTH_SPACE,4,0,1,0,3,0,1,3
@@ -353,9 +353,9 @@ game_id,slot,team_id,team_name,category,tossup_points,bonus_points,tossups_corre
 30,1,2,Eagles A,ENERGY,-4,0,0,1,2,0,0,3
 30,1,2,Eagles A,MATH,0,0,0,0,4,0,0,4
 30,1,2,Eagles A,PHYSICS,8,10,2,0,2,1,1,2
-30,2,14,Montgomery Blair A,BIOLOGY,16,10,4,0,0,1,3,0
-30,2,14,Montgomery Blair A,CHEMISTRY,8,10,2,0,2,1,1,2
-30,2,14,Montgomery Blair A,EARTH_SPACE,-4,0,0,1,3,0,0,4
-30,2,14,Montgomery Blair A,ENERGY,8,0,2,0,1,0,2,1
-30,2,14,Montgomery Blair A,MATH,12,30,3,0,1,3,0,1
-30,2,14,Montgomery Blair A,PHYSICS,4,10,1,0,3,1,0,3
+30,2,13,Montgomery Blair A,BIOLOGY,16,10,4,0,0,1,3,0
+30,2,13,Montgomery Blair A,CHEMISTRY,8,10,2,0,2,1,1,2
+30,2,13,Montgomery Blair A,EARTH_SPACE,-4,0,0,1,3,0,0,4
+30,2,13,Montgomery Blair A,ENERGY,8,0,2,0,1,0,2,1
+30,2,13,Montgomery Blair A,MATH,12,30,3,0,1,3,0,1
+30,2,13,Montgomery Blair A,PHYSICS,4,10,1,0,3,1,0,3
