@@ -242,6 +242,13 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   return { wrapRef, wrapStyle };
 }
 
+type TimerState = {
+  durationMs: number;
+  remainingMs: number;
+  isRunning: boolean;
+  lastUpdatedAtMs: number;
+};
+
 type ScoreboardSnapshotV1 = {
   format: "moss_scoreboard_snapshot";
   version: 1;
@@ -251,6 +258,7 @@ type ScoreboardSnapshotV1 = {
   scoresheet_base_state: ScoresheetState;
   scoresheet_events: ScoresheetEvent[];
   created_at_ms: number;
+  timer: TimerState | null;
 };
 
 type ScoreboardDisplayMessageV1 = ScoreboardDisplayMessage<ScoreboardSnapshotV1>;
@@ -1158,7 +1166,138 @@ function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
   return true;
 }
 
-function MossTopNav() {
+const TIMER_PRESETS: { label: string; ms: number }[] = [
+  { label: "8m", ms: 8 * 60 * 1000 },
+  { label: "2m", ms: 2 * 60 * 1000 },
+  { label: "8m", ms: 8 * 60 * 1000 },
+];
+
+function formatTimerMs(ms: number): string {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${sec.toString().padStart(2, "0")}`;
+}
+
+type TimerControls = {
+  timer: TimerState | null;
+  onPreset: (ms: number) => void;
+  onToggle: () => void;
+  onReset: () => void;
+};
+
+function NavTimer({ controls }: { controls: TimerControls }) {
+  const { timer, onPreset, onToggle, onReset } = controls;
+  const [liveMs, setLiveMs] = useState<number>(() => timer?.remainingMs ?? 0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState("");
+
+  useEffect(() => {
+    if (!timer) { setLiveMs(0); return; }
+    const compute = () =>
+      timer.isRunning
+        ? Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs))
+        : timer.remainingMs;
+    setLiveMs(compute());
+    if (!timer.isRunning) return;
+    const id = window.setInterval(() => setLiveMs(compute()), 200);
+    return () => window.clearInterval(id);
+  }, [timer]);
+
+  function parseEditValue(raw: string): number | null {
+    const trimmed = raw.trim();
+    const colonMatch = trimmed.match(/^(\d+):(\d{1,2})$/);
+    if (colonMatch) {
+      const min = parseInt(colonMatch[1], 10);
+      const sec = parseInt(colonMatch[2], 10);
+      if (sec < 60) return (min * 60 + sec) * 1000;
+    }
+    const num = parseFloat(trimmed);
+    if (!isNaN(num) && num > 0) return Math.round(num * 60 * 1000);
+    return null;
+  }
+
+  function commitEdit() {
+    const parsed = parseEditValue(editValue);
+    if (parsed !== null) onPreset(parsed);
+    setIsEditing(false);
+  }
+
+  const isWarning = timer !== null && liveMs <= 10_000 && liveMs > 0;
+
+  return (
+    <div className="mossNavTimer">
+      {isEditing ? (
+        <input
+          className="mossNavTimerInput"
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onBlur={commitEdit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") commitEdit();
+            if (e.key === "Escape") setIsEditing(false);
+          }}
+          autoFocus
+          placeholder="8:00"
+          aria-label="Set timer duration (e.g. 8:00)"
+        />
+      ) : (
+        <button
+          type="button"
+          className={[
+            "mossNavTimerDisplay",
+            timer?.isRunning ? "mossNavTimerDisplay--running" : "",
+            isWarning ? "mossNavTimerDisplay--warning" : "",
+          ].filter(Boolean).join(" ")}
+          onClick={() => {
+            setEditValue(timer ? formatTimerMs(timer.remainingMs) : "8:00");
+            setIsEditing(true);
+          }}
+          title="Click to set duration"
+          aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
+        >
+          {timer ? formatTimerMs(liveMs) : "—:——"}
+        </button>
+      )}
+      <button
+        type="button"
+        className="mossNavTimerBtn"
+        onClick={onToggle}
+        disabled={!timer}
+        aria-label={timer?.isRunning ? "Pause timer" : "Start timer"}
+        title={timer?.isRunning ? "Pause" : "Start"}
+      >
+        {timer?.isRunning ? "⏸" : "▶"}
+      </button>
+      <button
+        type="button"
+        className="mossNavTimerBtn"
+        onClick={onReset}
+        disabled={!timer}
+        aria-label="Reset timer"
+        title="Reset"
+      >
+        ↺
+      </button>
+      <div className="mossNavTimerDivider" aria-hidden="true" />
+      <div className="mossNavTimerPresets">
+        {TIMER_PRESETS.map((preset, i) => (
+          <button
+            key={i}
+            type="button"
+            className="mossNavTimerPreset"
+            onClick={() => onPreset(preset.ms)}
+            title={`Set timer to ${preset.label}`}
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
 
@@ -1169,6 +1308,7 @@ function MossTopNav() {
           <img src={logoSrc} alt="MoSS" className="sbTopNavLogo" />
           <span className="sbTopNavBrandText">MoSS</span>
         </a>
+        {timerControls && <NavTimer controls={timerControls} />}
       </div>
     </header>
   );
@@ -1243,6 +1383,21 @@ function ScoreboardDisplayApp() {
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
   const projectorTeamFitKey = useMemo(() => teams.map((t) => `${t.id}:${t.name}`).join("|"), [teams]);
+
+  const displayTimer = snapshot?.timer ?? null;
+  const [projectorLiveMs, setProjectorLiveMs] = useState<number>(0);
+
+  useEffect(() => {
+    if (!displayTimer) { setProjectorLiveMs(0); return; }
+    const compute = () =>
+      displayTimer.isRunning
+        ? Math.max(0, displayTimer.remainingMs - (Date.now() - displayTimer.lastUpdatedAtMs))
+        : displayTimer.remainingMs;
+    setProjectorLiveMs(compute());
+    if (!displayTimer.isRunning) return;
+    const id = window.setInterval(() => setProjectorLiveMs(compute()), 200);
+    return () => window.clearInterval(id);
+  }, [displayTimer]);
 
   useEffect(() => {
     if (!isProjectorLayout) return;
@@ -1480,6 +1635,21 @@ function ScoreboardDisplayApp() {
         .join(" ")}
       aria-label="Scoreboard display"
     >
+      {isProjectorLayout && displayTimer !== null && (
+        <div className="projectorTimerBanner">
+          <span
+            className={[
+              "projectorTimerDisplay",
+              displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
+              displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                ? "projectorTimerDisplay--warning"
+                : "",
+            ].filter(Boolean).join(" ")}
+          >
+            {formatTimerMs(projectorLiveMs)}
+          </span>
+        </div>
+      )}
       <div className="card scoresheetCard" aria-label="Scoresheet">
         <div className="header">
           <div>
@@ -1755,6 +1925,7 @@ function ModeratorApp() {
   const [scoresheetBonusEditModal, setScoresheetBonusEditModal] = useState<ScoresheetBonusEditModalState>(null);
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [timer, setTimer] = useState<TimerState | null>(null);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
@@ -2117,7 +2288,8 @@ function ModeratorApp() {
     scoresheet_base_state: scoresheetBaseState,
     scoresheet_events: scoresheetEvents,
     created_at_ms: Date.now(),
-  }), [data, game, scoresheetBaseState, scoresheetEvents, snapshotMeta?.game_instance_id]);
+    timer,
+  }), [data, game, scoresheetBaseState, scoresheetEvents, snapshotMeta?.game_instance_id, timer]);
 
   const scoreboardChannelRef = useRef<BroadcastChannel | null>(null);
   const scoreboardSnapshotRef = useRef<ScoreboardSnapshotV1>(scoreboardSnapshot);
@@ -2161,6 +2333,26 @@ function ModeratorApp() {
     if (!channel) return;
     safePostScoreboardMessage(channel, { kind: "moss.scoreboard.snapshot", snapshot: scoreboardSnapshot });
   }, [scoreboardSnapshot]);
+
+  function handleTimerPreset(ms: number) {
+    setTimer({ durationMs: ms, remainingMs: ms, isRunning: false, lastUpdatedAtMs: Date.now() });
+  }
+
+  function handleTimerToggle() {
+    setTimer((prev) => {
+      if (!prev) return prev;
+      const now = Date.now();
+      if (prev.isRunning) {
+        const remaining = Math.max(0, prev.remainingMs - (now - prev.lastUpdatedAtMs));
+        return { ...prev, isRunning: false, remainingMs: remaining, lastUpdatedAtMs: now };
+      }
+      return { ...prev, isRunning: true, lastUpdatedAtMs: now };
+    });
+  }
+
+  function handleTimerReset() {
+    setTimer((prev) => prev && { ...prev, isRunning: false, remainingMs: prev.durationMs, lastUpdatedAtMs: Date.now() });
+  }
 
   function openScoreboardDisplay() {
     const url = new URL(window.location.href);
@@ -4918,7 +5110,7 @@ function ModeratorApp() {
 
   return (
     <div className="sbAppFrame">
-      <MossTopNav />
+      <MossTopNav timerControls={{ timer, onPreset: handleTimerPreset, onToggle: handleTimerToggle, onReset: handleTimerReset }} />
       <div className="page">
         <div
           ref={mainLayoutRef}
