@@ -6,9 +6,10 @@ type Props = {
   children: ReactNode;
   className?: string;
   disabled?: boolean;
+  hideHoldingLabel?: boolean;
 };
 
-export default function HoldToConfirmButton({ holdMs, onConfirm, children, className, disabled }: Props) {
+export default function HoldToConfirmButton({ holdMs, onConfirm, children, className, disabled, hideHoldingLabel }: Props) {
   const [isHolding, setIsHolding] = useState(false);
   const [progress, setProgress] = useState(0);
   const holdTimeoutRef = useRef<number | null>(null);
@@ -61,7 +62,7 @@ export default function HoldToConfirmButton({ holdMs, onConfirm, children, class
       didConfirmRef.current = true;
       clearTimers();
       setIsHolding(false);
-      setProgress(1);
+      setProgress(0);
       onConfirm();
     }, holdMsClamped);
   }
@@ -87,7 +88,7 @@ export default function HoldToConfirmButton({ holdMs, onConfirm, children, class
       aria-label={typeof children === "string" ? children : undefined}
     >
       <span className="holdConfirmButtonLabel">
-        {isHolding ? "Holding…" : children}
+        {isHolding && !hideHoldingLabel ? "Holding…" : children}
       </span>
     </button>
   );

@@ -1274,6 +1274,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
         onConfirm={onReset}
         disabled={!timer}
         className="mossNavTimerBtn mossNavTimerResetBtn"
+        hideHoldingLabel
       >
         ↺
       </HoldToConfirmButton>
