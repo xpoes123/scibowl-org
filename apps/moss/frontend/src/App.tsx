@@ -1167,9 +1167,9 @@ function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
 }
 
 const TIMER_PRESETS: { label: string; ms: number }[] = [
-  { label: "8m", ms: 8 * 60 * 1000 },
-  { label: "2m", ms: 2 * 60 * 1000 },
-  { label: "8m", ms: 8 * 60 * 1000 },
+  { label: "8m",  ms: 8  * 60 * 1000 },
+  { label: "10m", ms: 10 * 60 * 1000 },
+  { label: "12m", ms: 12 * 60 * 1000 },
 ];
 
 function formatTimerMs(ms: number): string {
