@@ -1269,16 +1269,14 @@ function NavTimer({ controls }: { controls: TimerControls }) {
       >
         {timer?.isRunning ? "⏸" : "▶"}
       </button>
-      <button
-        type="button"
-        className="mossNavTimerBtn"
-        onClick={onReset}
+      <HoldToConfirmButton
+        holdMs={1000}
+        onConfirm={onReset}
         disabled={!timer}
-        aria-label="Reset timer"
-        title="Reset"
+        className="mossNavTimerBtn mossNavTimerResetBtn"
       >
         ↺
-      </button>
+      </HoldToConfirmButton>
       <div className="mossNavTimerDivider" aria-hidden="true" />
       <div className="mossNavTimerPresets">
         {TIMER_PRESETS.map((preset, i) => (
