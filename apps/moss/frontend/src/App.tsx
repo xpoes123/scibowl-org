@@ -1633,26 +1633,26 @@ function ScoreboardDisplayApp() {
         .join(" ")}
       aria-label="Scoreboard display"
     >
-      {isProjectorLayout && displayTimer !== null && (
-        <div className="projectorTimerBanner">
-          <span
-            className={[
-              "projectorTimerDisplay",
-              displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
-              displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
-                ? "projectorTimerDisplay--warning"
-                : "",
-            ].filter(Boolean).join(" ")}
-          >
-            {formatTimerMs(projectorLiveMs)}
-          </span>
-        </div>
-      )}
       <div className="card scoresheetCard" aria-label="Scoresheet">
         <div className="header">
           <div>
             <h2 className="title">Scoresheet</h2>
           </div>
+          {isProjectorLayout && displayTimer !== null && (
+            <div className="projectorTimerInline">
+              <span
+                className={[
+                  "projectorTimerDisplay",
+                  displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
+                  displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                    ? "projectorTimerDisplay--warning"
+                    : "",
+                ].filter(Boolean).join(" ")}
+              >
+                {formatTimerMs(projectorLiveMs)}
+              </span>
+            </div>
+          )}
           <div className="scoreboardDisplayActions">
             <button
               type="button"
