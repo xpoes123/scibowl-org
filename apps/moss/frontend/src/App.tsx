@@ -242,6 +242,13 @@ function useScoresheetStickyHeaderOffsets(headerKey: string): {
   return { wrapRef, wrapStyle };
 }
 
+type TimerState = {
+  durationMs: number;
+  remainingMs: number;
+  isRunning: boolean;
+  lastUpdatedAtMs: number;
+};
+
 type ScoreboardSnapshotV1 = {
   format: "moss_scoreboard_snapshot";
   version: 1;
@@ -251,6 +258,7 @@ type ScoreboardSnapshotV1 = {
   scoresheet_base_state: ScoresheetState;
   scoresheet_events: ScoresheetEvent[];
   created_at_ms: number;
+  timer: TimerState | null;
 };
 
 type ScoreboardDisplayMessageV1 = ScoreboardDisplayMessage<ScoreboardSnapshotV1>;
@@ -1158,7 +1166,207 @@ function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
   return true;
 }
 
-function MossTopNav() {
+const TIMER_PRESETS: { label: string; ms: number }[] = [
+  { label: "8m",  ms: 8  * 60 * 1000 },
+  { label: "10m", ms: 10 * 60 * 1000 },
+  { label: "12m", ms: 12 * 60 * 1000 },
+];
+
+function formatTimerMs(ms: number): string {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${sec.toString().padStart(2, "0")}`;
+}
+
+type TimerControls = {
+  timer: TimerState | null;
+  onPreset: (ms: number) => void;
+  onToggle: () => void;
+  onReset: () => void;
+};
+
+function NavTimer({ controls }: { controls: TimerControls }) {
+  const { timer, onPreset, onToggle, onReset } = controls;
+  const [liveMs, setLiveMs] = useState<number>(() => timer?.remainingMs ?? 0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const [editInitialValue, setEditInitialValue] = useState("");
+  const [pendingAction, setPendingAction] = useState<{ label: string; action: () => void } | null>(null);
+
+  useEffect(() => {
+    if (!timer) { setLiveMs(0); return; }
+    const compute = () =>
+      timer.isRunning
+        ? Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs))
+        : timer.remainingMs;
+    setLiveMs(compute());
+    if (!timer.isRunning) return;
+    const id = window.setInterval(() => setLiveMs(compute()), 200);
+    return () => window.clearInterval(id);
+  }, [timer]);
+
+  function parseEditValue(raw: string): number | null {
+    const trimmed = raw.trim();
+    const colonMatch = trimmed.match(/^(\d+):(\d{1,2})$/);
+    if (colonMatch) {
+      const min = parseInt(colonMatch[1], 10);
+      const sec = parseInt(colonMatch[2], 10);
+      if (sec < 60) return (min * 60 + sec) * 1000;
+    }
+    const num = parseFloat(trimmed);
+    if (!isNaN(num) && num > 0) return Math.round(num * 60 * 1000);
+    return null;
+  }
+
+  function commitEdit() {
+    if (editValue !== editInitialValue) {
+      const parsed = parseEditValue(editValue);
+      if (parsed !== null) onPreset(parsed);
+    }
+    setIsEditing(false);
+  }
+
+  function enterEditMode() {
+    const val = timer ? formatTimerMs(timer.remainingMs) : "8:00";
+    setEditValue(val);
+    setEditInitialValue(val);
+    setIsEditing(true);
+  }
+
+  const isWarning = timer !== null && liveMs <= 10_000 && liveMs > 0;
+
+  if (pendingAction) {
+    return (
+      <div className="mossNavTimer mossNavTimerConfirm">
+        <span className="mossNavTimerConfirmLabel">{pendingAction.label}</span>
+        <button
+          type="button"
+          className="mossNavTimerConfirmCancel secondary"
+          onClick={() => setPendingAction(null)}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => { pendingAction.action(); setPendingAction(null); }}
+        >
+          Confirm
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mossNavTimer">
+      {isEditing ? (
+          <input
+            className="mossNavTimerInput"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitEdit();
+              if (e.key === "Escape") setIsEditing(false);
+            }}
+            autoFocus
+            placeholder="8:00"
+            aria-label="Set timer duration (e.g. 8:00)"
+          />
+        ) : (
+          <button
+            type="button"
+            className={[
+              "mossNavTimerDisplay",
+              timer?.isRunning ? "mossNavTimerDisplay--running" : "",
+              isWarning ? "mossNavTimerDisplay--warning" : "",
+            ].filter(Boolean).join(" ")}
+            onClick={() => {
+              if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
+                setPendingAction({
+                  label: "Stop and edit timer?",
+                  action: () => {
+                    onToggle();
+                    const currentMs = Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
+                    const val = formatTimerMs(currentMs);
+                    setEditValue(val);
+                    setEditInitialValue(val);
+                    setIsEditing(true);
+                  },
+                });
+              } else {
+                enterEditMode();
+              }
+            }}
+            title="Click to set duration"
+            aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
+          >
+            {timer ? formatTimerMs(liveMs) : "—:——"}
+          </button>
+      )}
+      <button
+        type="button"
+        className="mossNavTimerBtn"
+        onClick={onToggle}
+        disabled={!timer}
+        aria-label={timer?.isRunning ? "Pause timer" : "Start timer"}
+        title={timer?.isRunning ? "Pause" : "Start"}
+      >
+        {timer?.isRunning ? (
+          <svg className="pauseIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <line x1="7" y1="4" x2="7" y2="20" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+            <line x1="17" y1="4" x2="17" y2="20" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+          </svg>
+        ) : (
+          <svg className="playIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 3.5l14 8.5-14 8.5V3.5z" fill="currentColor" />
+          </svg>
+        )}
+      </button>
+      <button
+        type="button"
+        className="mossNavTimerBtn mossNavTimerResetBtn"
+        disabled={!timer}
+        title="Reset"
+        aria-label="Reset timer"
+        onClick={() => {
+          if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
+            setPendingAction({ label: "Clear timer?", action: onReset });
+          } else {
+            onReset();
+          }
+        }}
+      >
+        <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M20 4v6h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      <div className="mossNavTimerDivider" aria-hidden="true" />
+      <div className="mossNavTimerPresets">
+        {TIMER_PRESETS.map((preset, i) => (
+          <button
+            key={i}
+            type="button"
+            className="mossNavTimerPreset"
+            onClick={() => {
+              if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
+                setPendingAction({ label: `Set timer to ${preset.label}?`, action: () => onPreset(preset.ms) });
+              } else {
+                onPreset(preset.ms);
+              }
+            }}
+            title={`Set timer to ${preset.label}`}
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
 
@@ -1169,6 +1377,7 @@ function MossTopNav() {
           <img src={logoSrc} alt="MoSS" className="sbTopNavLogo" />
           <span className="sbTopNavBrandText">MoSS</span>
         </a>
+        {timerControls && <NavTimer controls={timerControls} />}
       </div>
     </header>
   );
@@ -1182,10 +1391,7 @@ function ScoreboardDisplayApp() {
   const [rowAdvanceMode, setRowAdvanceMode] = useState<ScoreboardRowAdvanceMode>(() => loadScoreboardRowAdvanceMode());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const lastAutoScrolledPairIdRef = useRef<number | null>(null);
-  const projectorTeamNameElsRef = useRef<Record<string, HTMLSpanElement | null>>({});
-  const [projectorTeamNameFitByTeamId, setProjectorTeamNameFitByTeamId] = useState<
-    Record<string, { fontPx: number; allowWrap: boolean }>
-  >({});
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   useEffect(() => {
     saveScoreboardDisplayView(displayView);
@@ -1242,76 +1448,32 @@ function ScoreboardDisplayApp() {
   }, [teams]);
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
-  const projectorTeamFitKey = useMemo(() => teams.map((t) => `${t.id}:${t.name}`).join("|"), [teams]);
 
   useEffect(() => {
-    if (!isProjectorLayout) return;
-
-    let raf = 0;
-
-    const measureCanvas = document.createElement("canvas");
-    const ctx = measureCanvas.getContext("2d");
-    if (!ctx) return;
-
-    const MAX_FONT_PX = 72;
-    const MIN_FONT_PX = 36;
-
-    const recompute = () => {
-      const next: Record<string, { fontPx: number; allowWrap: boolean }> = {};
-
-      for (const team of teams) {
-        const el = projectorTeamNameElsRef.current[team.id];
-        if (!el) continue;
-        const available = el.clientWidth;
-        if (!available) continue;
-
-        const computed = window.getComputedStyle(el);
-        const fontStyle = computed.fontStyle || "normal";
-        const fontVariant = computed.fontVariant || "normal";
-        const fontWeight = computed.fontWeight || "600";
-        const fontFamily = computed.fontFamily || "system-ui";
-
-        ctx.font = `${fontStyle} ${fontVariant} ${fontWeight} ${MAX_FONT_PX}px ${fontFamily}`;
-        const textWidthAtMax = ctx.measureText(team.name).width;
-
-        const targetWidth = Math.max(0, available - 6);
-        if (textWidthAtMax <= targetWidth) {
-          next[team.id] = { fontPx: MAX_FONT_PX, allowWrap: false };
-          continue;
-        }
-
-        const scaled = Math.floor(MAX_FONT_PX * (targetWidth / Math.max(1, textWidthAtMax)));
-        const clamped = Math.max(MIN_FONT_PX, Math.min(MAX_FONT_PX, scaled));
-        const allowWrap = clamped === MIN_FONT_PX && scaled < MIN_FONT_PX;
-        next[team.id] = { fontPx: clamped, allowWrap };
-      }
-
-      setProjectorTeamNameFitByTeamId(next);
-    };
-
-    const schedule = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(recompute);
-    };
-
-    schedule();
-    window.addEventListener("resize", schedule);
-
-    let ro: ResizeObserver | null = null;
-    if ("ResizeObserver" in window) {
-      ro = new ResizeObserver(schedule);
-      for (const team of teams) {
-        const el = projectorTeamNameElsRef.current[team.id];
-        if (el) ro.observe(el);
-      }
+    if (isProjectorLayout) {
+      document.documentElement.classList.add("projector-mode");
+    } else {
+      document.documentElement.classList.remove("projector-mode");
     }
-
     return () => {
-      window.removeEventListener("resize", schedule);
-      if (raf) cancelAnimationFrame(raf);
-      if (ro) ro.disconnect();
+      document.documentElement.classList.remove("projector-mode");
     };
-  }, [isProjectorLayout, projectorTeamFitKey]);
+  }, [isProjectorLayout]);
+
+  const displayTimer = snapshot?.timer ?? null;
+  const [projectorLiveMs, setProjectorLiveMs] = useState<number>(0);
+
+  useEffect(() => {
+    if (!displayTimer) { setProjectorLiveMs(0); return; }
+    const compute = () =>
+      displayTimer.isRunning
+        ? Math.max(0, displayTimer.remainingMs - (Date.now() - displayTimer.lastUpdatedAtMs))
+        : displayTimer.remainingMs;
+    setProjectorLiveMs(compute());
+    if (!displayTimer.isRunning) return;
+    const id = window.setInterval(() => setProjectorLiveMs(compute()), 200);
+    return () => window.clearInterval(id);
+  }, [displayTimer]);
 
   const formatAttemptCellTextForView = (
     attemptValue: Attempt | undefined,
@@ -1469,59 +1631,45 @@ function ScoreboardDisplayApp() {
     );
   }
 
-  return (
-    <div
-      className={[
-        "scoreboardDisplayRoot",
-        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
-        isProjectorLayout ? "scoreboardDisplayRoot--projector" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      aria-label="Scoreboard display"
-    >
-      <div className="card scoresheetCard" aria-label="Scoresheet">
-        <div className="header">
-          <div>
-            <h2 className="title">Scoresheet</h2>
-          </div>
-          <div className="scoreboardDisplayActions">
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
-            >
-              Toggle Projector View
-            </button>
-            <button
-              type="button"
-              className="secondary scoreboardDisplayGearButton"
-              aria-label="Open display settings"
-              title="Display settings"
-              onClick={() => setIsSettingsOpen(true)}
-            >
-              ⚙
-            </button>
-          </div>
-        </div>
+  const settingsModal = (
+    <ScoreboardDisplaySettingsModal
+      isOpen={isSettingsOpen}
+      onClose={() => setIsSettingsOpen(false)}
+      mode={rowAdvanceMode}
+      onModeChange={setRowAdvanceMode}
+    />
+  );
 
-        <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
-          <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
-          <table
-            className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
-          >
-            {isProjectorLayout && (
-              <colgroup>
-                <col className="scoresheetColPair" />
-                <col className="scoresheetColT1" />
-                <col className="scoresheetColB1" />
-                <col className="scoresheetColR1" />
-                <col className="scoresheetColT2" />
-                <col className="scoresheetColB2" />
-                <col className="scoresheetColR2" />
-              </colgroup>
-            )}
-            <thead>
+  const tableWrap = (
+    <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
+      <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
+      <table
+        className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
+      >
+        {isProjectorLayout ? (
+          <colgroup>
+            <col className="scoresheetColT1" />
+            <col className="scoresheetColB1" />
+            <col className="scoresheetColR1" />
+            <col className="scoresheetColPair" />
+            <col className="scoresheetColT2" />
+            <col className="scoresheetColB2" />
+            <col className="scoresheetColR2" />
+          </colgroup>
+        ) : null}
+        <thead>
+          {isProjectorLayout ? (
+            <tr>
+              <th>T</th>
+              <th>B</th>
+              <th className="scoresheetGroupEnd">S</th>
+              <th className="scoresheetPairHeader">#</th>
+              <th>T</th>
+              <th>B</th>
+              <th>S</th>
+            </tr>
+          ) : (
+            <>
               {displayView === "default" && (
                 <tr>
                   <th className="scoresheetPairHeader" aria-hidden="true" />
@@ -1556,20 +1704,7 @@ function ScoreboardDisplayApp() {
                     ].filter(Boolean).join(" ")}
                   >
                     <div className="scoresheetTeamHeaderInner">
-                      <span
-                        className="scoresheetTeamName"
-                        ref={(el) => {
-                          projectorTeamNameElsRef.current[team.id] = el;
-                        }}
-                        style={
-                          isProjectorLayout
-                            ? {
-                              fontSize: `${projectorTeamNameFitByTeamId[team.id]?.fontPx ?? 72}px`,
-                              whiteSpace: projectorTeamNameFitByTeamId[team.id]?.allowWrap ? "normal" : "nowrap",
-                            }
-                            : undefined
-                        }
-                      >
+                      <span className="scoresheetTeamName">
                         {team.name}
                       </span>
                       <span className="pill scoresheetScorePill">
@@ -1588,108 +1723,222 @@ function ScoreboardDisplayApp() {
                     key={`${team.id}_r`}
                     className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
                   >
-                    {isProjectorLayout ? "S" : "Total"}
+                    Total
                   </th>,
                 ])}
               </tr>
-            </thead>
-            <tbody>
-              {(() => {
-                const colSpan = 1 + teams.length * 3;
-                const nodes: ReactNode[] = [];
+            </>
+          )}
+        </thead>
+        <tbody>
+          {(() => {
+            const colSpan = 1 + teams.length * 3;
+            const nodes: ReactNode[] = [];
 
-                for (let i = 0; i < scoredPairs.rows.length; i++) {
-                  const row = scoredPairs.rows[i];
-                  const boundaryBeforeQuestion = row.pairId;
-                  const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+            for (let i = 0; i < scoredPairs.rows.length; i++) {
+              const row = scoredPairs.rows[i];
+              const boundaryBeforeQuestion = row.pairId;
+              const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
 
-                  if (markerKind !== undefined) {
-                    nodes.push(
-                      <tr
-                        key={`boundary_${boundaryBeforeQuestion}`}
-                        className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
-                      >
-                        <td colSpan={colSpan}>
-                          <div className="scoresheetBoundaryButton" aria-hidden="true">
-                            <span className="scoresheetBoundaryLabel">{markerKind}</span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
+              if (markerKind !== undefined) {
+                nodes.push(
+                  <tr
+                    key={`boundary_${boundaryBeforeQuestion}`}
+                    className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                  >
+                    <td colSpan={colSpan}>
+                      <div className="scoresheetBoundaryButton" aria-hidden="true">
+                        <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              }
 
-                  const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
-                  nodes.push(
-                    <tr
-                      key={`row_${row.pairId}`}
-                      data-pair-id={row.pairId}
-                      className={isActivePair ? "scoresheetRowActive" : undefined}
-                    >
-                      <td className="scoresheetPairCell">
-                        <span className="pairLinkDisplay">{row.pairId}</span>
-                      </td>
-                      {row.perTeam.flatMap((teamRow, teamIndex) => {
-                        const isGroupEnd = teamIndex < row.perTeam.length - 1;
-                        const tossupResult = teamRow.tossupAttempt?.result;
-                        const bonusResult = teamRow.bonusAttempt?.result;
+              const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
 
-                        const tossupCellClass = [
-                          "scoresheetAttemptCell",
-                          tossupResult === "correct"
-                            ? "scoresheetCellCorrect"
-                            : tossupResult === "incorrect"
-                              ? "scoresheetCellIncorrect"
-                              : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ");
+              const renderTeamCells = (teamRow: typeof row.perTeam[0], isGroupEnd: boolean) => {
+                const tossupResult = teamRow.tossupAttempt?.result;
+                const bonusResult = teamRow.bonusAttempt?.result;
+                const tossupCellClass = [
+                  "scoresheetAttemptCell",
+                  tossupResult === "correct" ? "scoresheetCellCorrect"
+                    : tossupResult === "incorrect" ? "scoresheetCellIncorrect" : "",
+                ].filter(Boolean).join(" ");
+                const bonusCellClass = [
+                  "scoresheetAttemptCell",
+                  bonusResult === "correct" ? "scoresheetCellCorrect"
+                    : bonusResult === "incorrect" ? "scoresheetCellIncorrect" : "",
+                ].filter(Boolean).join(" ");
+                return [
+                  <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                    <span className="scoresheetAttemptCellDisplay">
+                      {formatAttemptCellTextForView(teamRow.tossupAttempt, row.tossup?.question_type)}
+                    </span>
+                  </td>,
+                  <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                    <span className="scoresheetAttemptCellDisplay">
+                      {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
+                    </span>
+                  </td>,
+                  <td
+                    key={`${teamRow.teamId}_r`}
+                    className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
+                  >
+                    {teamRow.runningTotal}
+                  </td>,
+                ];
+              };
 
-                        const bonusCellClass = [
-                          "scoresheetAttemptCell",
-                          bonusResult === "correct"
-                            ? "scoresheetCellCorrect"
-                            : bonusResult === "incorrect"
-                              ? "scoresheetCellIncorrect"
-                              : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ");
+              if (isProjectorLayout) {
+                nodes.push(
+                  <tr
+                    key={`row_${row.pairId}`}
+                    data-pair-id={row.pairId}
+                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                  >
+                    {row.perTeam[0] && renderTeamCells(row.perTeam[0], true)}
+                    <td className="scoresheetPairCell scoresheetNumberCell">
+                      <span className="pairLinkDisplay">{row.pairId}</span>
+                    </td>
+                    {row.perTeam[1] && renderTeamCells(row.perTeam[1], false)}
+                  </tr>
+                );
+              } else {
+                nodes.push(
+                  <tr
+                    key={`row_${row.pairId}`}
+                    data-pair-id={row.pairId}
+                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                  >
+                    <td className="scoresheetPairCell">
+                      <span className="pairLinkDisplay">{row.pairId}</span>
+                    </td>
+                    {row.perTeam.flatMap((teamRow, teamIndex) =>
+                      renderTeamCells(teamRow, teamIndex < row.perTeam.length - 1)
+                    )}
+                  </tr>
+                );
+              }
+            }
 
-                        return [
-                          <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                            <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellTextForView(teamRow.tossupAttempt, row.tossup?.question_type)}
-                            </span>
-                          </td>,
-                          <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                            <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
-                            </span>
-                          </td>,
-                          <td
-                            key={`${teamRow.teamId}_r`}
-                            className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
-                          >
-                            {teamRow.runningTotal}
-                          </td>,
-                        ];
-                      })}
-                    </tr>
-                  );
-                }
+            return nodes;
+          })()}
+        </tbody>
+      </table>
+    </div>
+  );
 
-                return nodes;
-              })()}
-            </tbody>
-          </table>
+  if (isProjectorLayout) {
+    return (
+      <div className="scoreboardDisplayRoot scoreboardDisplayRoot--large scoreboardDisplayRoot--projector" aria-label="Scoreboard display">
+        <div className={["projectorNav", isNavCollapsed ? "projectorNav--collapsed" : ""].filter(Boolean).join(" ")}>
+          {!isNavCollapsed && (
+            <a href={import.meta.env.BASE_URL} className="sbTopNavBrand" aria-label="Go to MoSS home">
+              <img src={`${import.meta.env.BASE_URL}logo_big.png`} alt="MoSS" className="sbTopNavLogo" />
+              <span className="sbTopNavBrandText">MoSS</span>
+            </a>
+          )}
+          <div className="projectorNavControls">
+            {!isNavCollapsed && (
+              <>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+                >
+                  Toggle Projector View
+                </button>
+                <button
+                  type="button"
+                  className="secondary scoreboardDisplayGearButton"
+                  aria-label="Open display settings"
+                  title="Display settings"
+                  onClick={() => setIsSettingsOpen(true)}
+                >
+                  ⚙
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              className="projectorNavCollapseBtn"
+              onClick={() => setIsNavCollapsed((v) => !v)}
+              title={isNavCollapsed ? "Show controls" : "Hide controls"}
+            >
+              </button>
+          </div>
         </div>
+
+        <div className="projectorBody">
+          <div className="projectorScoreBanner">
+            <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
+            </span>
+            <div className="projectorScoreBannerCenter">
+              {displayTimer !== null && (
+                <span
+                  className={[
+                    "projectorTimerDisplay",
+                    displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
+                    displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                      ? "projectorTimerDisplay--warning"
+                      : "",
+                  ].filter(Boolean).join(" ")}
+                >
+                  {formatTimerMs(projectorLiveMs)}
+                </span>
+              )}
+            </div>
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
+            </span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
+          </div>
+
+          {tableWrap}
+        </div>
+        {settingsModal}
       </div>
-      <ScoreboardDisplaySettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        mode={rowAdvanceMode}
-        onModeChange={setRowAdvanceMode}
-      />
+    );
+  }
+
+  return (
+    <div
+      className={[
+        "scoreboardDisplayRoot",
+        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
+      ].filter(Boolean).join(" ")}
+      aria-label="Scoreboard display"
+    >
+      <div className="card scoresheetCard" aria-label="Scoresheet">
+        <div className="header">
+          <div>
+            <h2 className="title">Scoresheet</h2>
+          </div>
+          <div className="scoreboardDisplayActions">
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+            >
+              Toggle Projector View
+            </button>
+            <button
+              type="button"
+              className="secondary scoreboardDisplayGearButton"
+              aria-label="Open display settings"
+              title="Display settings"
+              onClick={() => setIsSettingsOpen(true)}
+            >
+              ⚙
+            </button>
+          </div>
+        </div>
+        {tableWrap}
+      </div>
+      {settingsModal}
     </div>
   );
 }
@@ -1755,6 +2004,7 @@ function ModeratorApp() {
   const [scoresheetBonusEditModal, setScoresheetBonusEditModal] = useState<ScoresheetBonusEditModalState>(null);
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [timer, setTimer] = useState<TimerState | null>(null);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
@@ -2117,7 +2367,8 @@ function ModeratorApp() {
     scoresheet_base_state: scoresheetBaseState,
     scoresheet_events: scoresheetEvents,
     created_at_ms: Date.now(),
-  }), [data, game, scoresheetBaseState, scoresheetEvents, snapshotMeta?.game_instance_id]);
+    timer,
+  }), [data, game, scoresheetBaseState, scoresheetEvents, snapshotMeta?.game_instance_id, timer]);
 
   const scoreboardChannelRef = useRef<BroadcastChannel | null>(null);
   const scoreboardSnapshotRef = useRef<ScoreboardSnapshotV1>(scoreboardSnapshot);
@@ -2161,6 +2412,26 @@ function ModeratorApp() {
     if (!channel) return;
     safePostScoreboardMessage(channel, { kind: "moss.scoreboard.snapshot", snapshot: scoreboardSnapshot });
   }, [scoreboardSnapshot]);
+
+  function handleTimerPreset(ms: number) {
+    setTimer({ durationMs: ms, remainingMs: ms, isRunning: false, lastUpdatedAtMs: Date.now() });
+  }
+
+  function handleTimerToggle() {
+    setTimer((prev) => {
+      if (!prev) return prev;
+      const now = Date.now();
+      if (prev.isRunning) {
+        const remaining = Math.max(0, prev.remainingMs - (now - prev.lastUpdatedAtMs));
+        return { ...prev, isRunning: false, remainingMs: remaining, lastUpdatedAtMs: now };
+      }
+      return { ...prev, isRunning: true, lastUpdatedAtMs: now };
+    });
+  }
+
+  function handleTimerReset() {
+    setTimer(null);
+  }
 
   function openScoreboardDisplay() {
     const url = new URL(window.location.href);
@@ -4918,7 +5189,7 @@ function ModeratorApp() {
 
   return (
     <div className="sbAppFrame">
-      <MossTopNav />
+      <MossTopNav timerControls={{ timer, onPreset: handleTimerPreset, onToggle: handleTimerToggle, onReset: handleTimerReset }} />
       <div className="page">
         <div
           ref={mainLayoutRef}
