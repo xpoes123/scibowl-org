@@ -1380,6 +1380,17 @@ function ScoreboardDisplayApp() {
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
 
+  useEffect(() => {
+    if (isProjectorLayout) {
+      document.documentElement.classList.add("projector-mode");
+    } else {
+      document.documentElement.classList.remove("projector-mode");
+    }
+    return () => {
+      document.documentElement.classList.remove("projector-mode");
+    };
+  }, [isProjectorLayout]);
+
   const displayTimer = snapshot?.timer ?? null;
   const [projectorLiveMs, setProjectorLiveMs] = useState<number>(0);
 

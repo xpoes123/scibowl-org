@@ -32,6 +32,11 @@ html {
   }
 }
 
+html.projector-mode {
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+
 body {
   margin: 0;
   background: var(--sb-bg);
@@ -1680,6 +1685,8 @@ button.word.wordBold {
   max-width: none;
   margin: 0;
   padding: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .scoreboardDisplayRoot--projector .scoresheetTeamHeaderInner {
