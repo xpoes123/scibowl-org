@@ -2066,7 +2066,7 @@ button.word.wordBold {
 .projectorScoreBannerName {
   font-size: clamp(18px, 2.2vw, 36px);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.4;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;
