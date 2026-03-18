@@ -1902,6 +1902,41 @@ button.word.wordBold {
   animation: timerWarningFlash 0.7s ease-in-out infinite;
 }
 
+/* Question Timer */
+.questionTimerDisplay {
+  color: var(--sb-text);
+  background: white;
+  border: 1px solid #d6d6de;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  min-width: 5ch;
+  text-align: center;
+  transition: color 0.15s, background 0.15s;
+}
+
+.questionTimerDisplay:hover:not(:disabled) {
+  background: var(--sb-border);
+}
+
+.questionTimerDisplay--disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@keyframes questionTimerBgFlash {
+  0%, 100% { background: #fee2e2; }
+  50% { background: white; }
+}
+
+.questionTimerDisplay--warning {
+  animation: questionTimerBgFlash 0.6s ease-in-out infinite;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
 .mossNavTimerInput {
   font: inherit;
   width: 5ch;

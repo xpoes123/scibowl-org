@@ -249,6 +249,12 @@ type TimerState = {
   lastUpdatedAtMs: number;
 };
 
+type QuestionTimerState = {
+  remainingMs: number;
+  isRunning: boolean;
+  lastUpdatedAtMs: number;
+};
+
 type ScoreboardSnapshotV1 = {
   format: "moss_scoreboard_snapshot";
   version: 1;
@@ -1366,6 +1372,63 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   );
 }
 
+function QuestionTimer({
+  timer,
+  startMs,
+  disabled,
+  onClick,
+}: {
+  timer: QuestionTimerState | null;
+  startMs: number;
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  const [liveMs, setLiveMs] = useState<number>(() =>
+    disabled ? 0 : (timer?.remainingMs ?? startMs)
+  );
+
+  useEffect(() => {
+    if (disabled) { setLiveMs(0); return; }
+    if (!timer) { setLiveMs(startMs); return; }
+    const compute = () =>
+      timer.isRunning
+        ? Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs))
+        : timer.remainingMs;
+    setLiveMs(compute());
+    if (!timer.isRunning) return;
+    const id = window.setInterval(() => setLiveMs(compute()), 50);
+    return () => window.clearInterval(id);
+  }, [timer, startMs, disabled]);
+
+  useEffect(() => {
+    if (!timer) setLiveMs(disabled ? 0 : startMs);
+  }, [startMs, disabled, timer]);
+
+  const isBonus = startMs === 20_000;
+  const isWarning = isBonus && !disabled && liveMs > 0 && liveMs <= 5_000;
+  const isRunning = timer?.isRunning ?? false;
+  const displaySec = disabled ? "0.0" : (liveMs / 1000).toFixed(1);
+
+  const classes = [
+    "questionTimerDisplay",
+    isRunning ? "questionTimerDisplay--running" : "",
+    isWarning ? "questionTimerDisplay--warning" : "",
+    disabled ? "questionTimerDisplay--disabled" : "",
+  ].filter(Boolean).join(" ");
+
+  return (
+    <button
+      type="button"
+      className={classes}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={disabled ? "Timer disabled" : isRunning ? "Reset timer" : "Start timer"}
+    >
+      {displaySec}s
+    </button>
+  );
+}
+
 function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
@@ -2005,6 +2068,7 @@ function ModeratorApp() {
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [timer, setTimer] = useState<TimerState | null>(null);
+  const [questionTimer, setQuestionTimer] = useState<QuestionTimerState | null>(null);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
@@ -2433,6 +2497,15 @@ function ModeratorApp() {
     setTimer(null);
   }
 
+  function handleQuestionTimerClick() {
+    if (questionTimerDisabled) return;
+    setQuestionTimer({
+      remainingMs: questionTimerStartMs,
+      isRunning: true,
+      lastUpdatedAtMs: Date.now(),
+    });
+  }
+
   function openScoreboardDisplay() {
     const url = new URL(window.location.href);
     url.searchParams.set("display", "scoreboard");
@@ -2830,6 +2903,25 @@ function ModeratorApp() {
     if (!tossupQ || !bonusQ) return false;
     return (attempts[tossupQ.id] ?? []).some((a) => a.result === "correct");
   }, [attempts, bonusQ, tossupQ]);
+
+  const questionTimerStartMs = bonusEnabled ? 20_000 : 5_000;
+
+  const tossupIsDone = bonusEnabled ||
+    (!!tossupQ && teams.every((t) =>
+      (attempts[tossupQ.id] ?? []).some((a) => a.teamId === t.id && a.result !== undefined)
+    ));
+  const bonusIsDone = !!bonusQ && (attempts[bonusQ.id] ?? []).some((a) => a.result !== undefined);
+  const questionTimerDisabled = tossupIsDone && (bonusIsDone || !bonusQ || !bonusEnabled);
+
+  useEffect(() => {
+    setQuestionTimer(null);
+  }, [pairIdx]);
+
+  // Reset when switching from tossup to bonus phase
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setQuestionTimer(null);
+  }, [bonusEnabled]);
 
   const scoredPairs = useMemo(() => {
     const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
@@ -5204,6 +5296,12 @@ function ModeratorApp() {
                     {data.packet} ({data.year})
                   </h1>
                 </div>
+                <QuestionTimer
+                  timer={questionTimer}
+                  startMs={questionTimerStartMs}
+                  disabled={questionTimerDisabled}
+                  onClick={handleQuestionTimerClick}
+                />
               </div>
 
               <div className="questionBlurWrap">
