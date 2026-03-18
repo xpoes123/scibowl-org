@@ -1904,6 +1904,8 @@ button.word.wordBold {
 
 /* Question Timer */
 .questionTimerDisplay {
+  position: relative;
+  overflow: hidden;
   color: var(--sb-text);
   background: white;
   border: 1px solid #d6d6de;
@@ -1914,27 +1916,47 @@ button.word.wordBold {
   cursor: pointer;
   min-width: 5ch;
   text-align: center;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s;
 }
 
 .questionTimerDisplay:hover:not(:disabled) {
   background: var(--sb-border);
 }
 
-.questionTimerDisplay--disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-@keyframes questionTimerBgFlash {
-  0%, 100% { background: #fee2e2; }
-  50% { background: white; }
-}
-
 .questionTimerDisplay--warning {
-  animation: questionTimerBgFlash 0.6s ease-in-out infinite;
   color: #dc2626;
   border-color: #fca5a5;
+}
+
+.questionTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+@keyframes questionTimerFlash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.questionTimerFlashOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fca5a5;
+  pointer-events: none;
+  animation: questionTimerFlash 0.5s ease-out 1 forwards;
+}
+
+.questionTimerHoldBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--sb-text);
+  pointer-events: none;
+  border-radius: 0 0 10px 10px;
 }
 
 .mossNavTimerInput {
