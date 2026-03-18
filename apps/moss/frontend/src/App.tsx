@@ -1191,6 +1191,8 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   const [liveMs, setLiveMs] = useState<number>(() => timer?.remainingMs ?? 0);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
+  const [editInitialValue, setEditInitialValue] = useState("");
+  const [pendingAction, setPendingAction] = useState<{ label: string; action: () => void } | null>(null);
 
   useEffect(() => {
     if (!timer) { setLiveMs(0); return; }
@@ -1218,12 +1220,42 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   }
 
   function commitEdit() {
-    const parsed = parseEditValue(editValue);
-    if (parsed !== null) onPreset(parsed);
+    if (editValue !== editInitialValue) {
+      const parsed = parseEditValue(editValue);
+      if (parsed !== null) onPreset(parsed);
+    }
     setIsEditing(false);
   }
 
+  function enterEditMode() {
+    const val = timer ? formatTimerMs(timer.remainingMs) : "8:00";
+    setEditValue(val);
+    setEditInitialValue(val);
+    setIsEditing(true);
+  }
+
   const isWarning = timer !== null && liveMs <= 10_000 && liveMs > 0;
+
+  if (pendingAction) {
+    return (
+      <div className="mossNavTimer mossNavTimerConfirm">
+        <span className="mossNavTimerConfirmLabel">{pendingAction.label}</span>
+        <button
+          type="button"
+          className="mossNavTimerConfirmCancel secondary"
+          onClick={() => setPendingAction(null)}
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => { pendingAction.action(); setPendingAction(null); }}
+        >
+          Confirm
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="mossNavTimer">
@@ -1250,8 +1282,21 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             isWarning ? "mossNavTimerDisplay--warning" : "",
           ].filter(Boolean).join(" ")}
           onClick={() => {
-            setEditValue(timer ? formatTimerMs(timer.remainingMs) : "8:00");
-            setIsEditing(true);
+            if (timer?.isRunning) {
+              setPendingAction({
+                label: "Stop and edit timer?",
+                action: () => {
+                  onToggle();
+                  const currentMs = Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
+                  const val = formatTimerMs(currentMs);
+                  setEditValue(val);
+                  setEditInitialValue(val);
+                  setIsEditing(true);
+                },
+              });
+            } else {
+              enterEditMode();
+            }
           }}
           title="Click to set duration"
           aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
@@ -1269,16 +1314,25 @@ function NavTimer({ controls }: { controls: TimerControls }) {
       >
         {timer?.isRunning ? "⏸" : "▶"}
       </button>
-      <HoldToConfirmButton
-        holdMs={1000}
-        onConfirm={onReset}
-        disabled={!timer}
+      <button
+        type="button"
         className="mossNavTimerBtn mossNavTimerResetBtn"
-        hideHoldingLabel
+        disabled={!timer}
         title="Reset"
+        aria-label="Reset timer"
+        onClick={() => {
+          if (timer?.isRunning) {
+            setPendingAction({ label: "Clear timer?", action: onReset });
+          } else {
+            onReset();
+          }
+        }}
       >
-        ↺
-      </HoldToConfirmButton>
+        <svg className="refreshIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M20 4v6h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
       <div className="mossNavTimerDivider" aria-hidden="true" />
       <div className="mossNavTimerPresets">
         {TIMER_PRESETS.map((preset, i) => (
@@ -1286,7 +1340,13 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             key={i}
             type="button"
             className="mossNavTimerPreset"
-            onClick={() => onPreset(preset.ms)}
+            onClick={() => {
+              if (timer?.isRunning) {
+                setPendingAction({ label: `Set timer to ${preset.label}?`, action: () => onPreset(preset.ms) });
+              } else {
+                onPreset(preset.ms);
+              }
+            }}
             title={`Set timer to ${preset.label}`}
           >
             {preset.label}
