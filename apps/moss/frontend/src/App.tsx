@@ -1783,12 +1783,10 @@ function ScoreboardDisplayApp() {
         </div>
 
         <div className="projectorScoreBanner">
-          <div className="projectorScoreBannerTeam projectorScoreBannerTeam--left">
-            <span className="projectorScoreBannerName">{teams[0]?.name}</span>
-            <span className="projectorScoreBannerScore">
-              {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
-            </span>
-          </div>
+          <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
+          <span className="projectorScoreBannerScore">
+            {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
+          </span>
           <div className="projectorScoreBannerCenter">
             {displayTimer !== null && (
               <span
@@ -1804,12 +1802,10 @@ function ScoreboardDisplayApp() {
               </span>
             )}
           </div>
-          <div className="projectorScoreBannerTeam projectorScoreBannerTeam--right">
-            <span className="projectorScoreBannerScore">
-              {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
-            </span>
-            <span className="projectorScoreBannerName">{teams[1]?.name}</span>
-          </div>
+          <span className="projectorScoreBannerScore">
+            {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
+          </span>
+          <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
         </div>
 
         {tableWrap}
