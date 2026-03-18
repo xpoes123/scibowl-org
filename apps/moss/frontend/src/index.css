@@ -2044,6 +2044,14 @@ button.word.wordBold {
   color: var(--sb-text);
 }
 
+.projectorBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 16px;
+}
+
 /* ── Projector Score Banner ──────────────────────────────────── */
 
 .projectorScoreBanner {

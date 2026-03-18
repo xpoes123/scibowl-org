@@ -1801,33 +1801,35 @@ function ScoreboardDisplayApp() {
           </div>
         </div>
 
-        <div className="projectorScoreBanner">
-          <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
-          <span className="projectorScoreBannerScore">
-            {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
-          </span>
-          <div className="projectorScoreBannerCenter">
-            {displayTimer !== null && (
-              <span
-                className={[
-                  "projectorTimerDisplay",
-                  displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
-                  displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
-                    ? "projectorTimerDisplay--warning"
-                    : "",
-                ].filter(Boolean).join(" ")}
-              >
-                {formatTimerMs(projectorLiveMs)}
-              </span>
-            )}
+        <div className="projectorBody">
+          <div className="projectorScoreBanner">
+            <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
+            </span>
+            <div className="projectorScoreBannerCenter">
+              {displayTimer !== null && (
+                <span
+                  className={[
+                    "projectorTimerDisplay",
+                    displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
+                    displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                      ? "projectorTimerDisplay--warning"
+                      : "",
+                  ].filter(Boolean).join(" ")}
+                >
+                  {formatTimerMs(projectorLiveMs)}
+                </span>
+              )}
+            </div>
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
+            </span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
           </div>
-          <span className="projectorScoreBannerScore">
-            {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
-          </span>
-          <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
-        </div>
 
-        {tableWrap}
+          {tableWrap}
+        </div>
         {settingsModal}
       </div>
     );
