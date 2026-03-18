@@ -1275,6 +1275,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
         disabled={!timer}
         className="mossNavTimerBtn mossNavTimerResetBtn"
         hideHoldingLabel
+        title="Reset"
       >
         ↺
       </HoldToConfirmButton>
@@ -1321,10 +1322,7 @@ function ScoreboardDisplayApp() {
   const [rowAdvanceMode, setRowAdvanceMode] = useState<ScoreboardRowAdvanceMode>(() => loadScoreboardRowAdvanceMode());
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const lastAutoScrolledPairIdRef = useRef<number | null>(null);
-  const projectorTeamNameElsRef = useRef<Record<string, HTMLSpanElement | null>>({});
-  const [projectorTeamNameFitByTeamId, setProjectorTeamNameFitByTeamId] = useState<
-    Record<string, { fontPx: number; allowWrap: boolean }>
-  >({});
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   useEffect(() => {
     saveScoreboardDisplayView(displayView);
@@ -1381,7 +1379,6 @@ function ScoreboardDisplayApp() {
   }, [teams]);
 
   const isProjectorLayout = displayView === "large" && teams.length === 2;
-  const projectorTeamFitKey = useMemo(() => teams.map((t) => `${t.id}:${t.name}`).join("|"), [teams]);
 
   const displayTimer = snapshot?.timer ?? null;
   const [projectorLiveMs, setProjectorLiveMs] = useState<number>(0);
@@ -1397,75 +1394,6 @@ function ScoreboardDisplayApp() {
     const id = window.setInterval(() => setProjectorLiveMs(compute()), 200);
     return () => window.clearInterval(id);
   }, [displayTimer]);
-
-  useEffect(() => {
-    if (!isProjectorLayout) return;
-
-    let raf = 0;
-
-    const measureCanvas = document.createElement("canvas");
-    const ctx = measureCanvas.getContext("2d");
-    if (!ctx) return;
-
-    const MAX_FONT_PX = 72;
-    const MIN_FONT_PX = 36;
-
-    const recompute = () => {
-      const next: Record<string, { fontPx: number; allowWrap: boolean }> = {};
-
-      for (const team of teams) {
-        const el = projectorTeamNameElsRef.current[team.id];
-        if (!el) continue;
-        const available = el.clientWidth;
-        if (!available) continue;
-
-        const computed = window.getComputedStyle(el);
-        const fontStyle = computed.fontStyle || "normal";
-        const fontVariant = computed.fontVariant || "normal";
-        const fontWeight = computed.fontWeight || "600";
-        const fontFamily = computed.fontFamily || "system-ui";
-
-        ctx.font = `${fontStyle} ${fontVariant} ${fontWeight} ${MAX_FONT_PX}px ${fontFamily}`;
-        const textWidthAtMax = ctx.measureText(team.name).width;
-
-        const targetWidth = Math.max(0, available - 6);
-        if (textWidthAtMax <= targetWidth) {
-          next[team.id] = { fontPx: MAX_FONT_PX, allowWrap: false };
-          continue;
-        }
-
-        const scaled = Math.floor(MAX_FONT_PX * (targetWidth / Math.max(1, textWidthAtMax)));
-        const clamped = Math.max(MIN_FONT_PX, Math.min(MAX_FONT_PX, scaled));
-        const allowWrap = clamped === MIN_FONT_PX && scaled < MIN_FONT_PX;
-        next[team.id] = { fontPx: clamped, allowWrap };
-      }
-
-      setProjectorTeamNameFitByTeamId(next);
-    };
-
-    const schedule = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(recompute);
-    };
-
-    schedule();
-    window.addEventListener("resize", schedule);
-
-    let ro: ResizeObserver | null = null;
-    if ("ResizeObserver" in window) {
-      ro = new ResizeObserver(schedule);
-      for (const team of teams) {
-        const el = projectorTeamNameElsRef.current[team.id];
-        if (el) ro.observe(el);
-      }
-    }
-
-    return () => {
-      window.removeEventListener("resize", schedule);
-      if (raf) cancelAnimationFrame(raf);
-      if (ro) ro.disconnect();
-    };
-  }, [isProjectorLayout, projectorTeamFitKey]);
 
   const formatAttemptCellTextForView = (
     attemptValue: Attempt | undefined,
@@ -1623,74 +1551,45 @@ function ScoreboardDisplayApp() {
     );
   }
 
-  return (
-    <div
-      className={[
-        "scoreboardDisplayRoot",
-        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
-        isProjectorLayout ? "scoreboardDisplayRoot--projector" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      aria-label="Scoreboard display"
-    >
-      <div className="card scoresheetCard" aria-label="Scoresheet">
-        <div className="header">
-          <div>
-            <h2 className="title">Scoresheet</h2>
-          </div>
-          {isProjectorLayout && displayTimer !== null && (
-            <div className="projectorTimerInline">
-              <span
-                className={[
-                  "projectorTimerDisplay",
-                  displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
-                  displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
-                    ? "projectorTimerDisplay--warning"
-                    : "",
-                ].filter(Boolean).join(" ")}
-              >
-                {formatTimerMs(projectorLiveMs)}
-              </span>
-            </div>
-          )}
-          <div className="scoreboardDisplayActions">
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
-            >
-              Toggle Projector View
-            </button>
-            <button
-              type="button"
-              className="secondary scoreboardDisplayGearButton"
-              aria-label="Open display settings"
-              title="Display settings"
-              onClick={() => setIsSettingsOpen(true)}
-            >
-              ⚙
-            </button>
-          </div>
-        </div>
+  const settingsModal = (
+    <ScoreboardDisplaySettingsModal
+      isOpen={isSettingsOpen}
+      onClose={() => setIsSettingsOpen(false)}
+      mode={rowAdvanceMode}
+      onModeChange={setRowAdvanceMode}
+    />
+  );
 
-        <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
-          <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
-          <table
-            className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
-          >
-            {isProjectorLayout && (
-              <colgroup>
-                <col className="scoresheetColPair" />
-                <col className="scoresheetColT1" />
-                <col className="scoresheetColB1" />
-                <col className="scoresheetColR1" />
-                <col className="scoresheetColT2" />
-                <col className="scoresheetColB2" />
-                <col className="scoresheetColR2" />
-              </colgroup>
-            )}
-            <thead>
+  const tableWrap = (
+    <div ref={displayScoresheetWrapRef} className="scoresheetTableWrap" style={displayScoresheetWrapStyle}>
+      <div className="scoresheetStickyHeaderBackplate" aria-hidden="true" />
+      <table
+        className={["scoresheetTable", isProjectorLayout ? "scoresheetTable--projector" : ""].filter(Boolean).join(" ")}
+      >
+        {isProjectorLayout ? (
+          <colgroup>
+            <col className="scoresheetColT1" />
+            <col className="scoresheetColB1" />
+            <col className="scoresheetColR1" />
+            <col className="scoresheetColPair" />
+            <col className="scoresheetColT2" />
+            <col className="scoresheetColB2" />
+            <col className="scoresheetColR2" />
+          </colgroup>
+        ) : null}
+        <thead>
+          {isProjectorLayout ? (
+            <tr>
+              <th>T</th>
+              <th>B</th>
+              <th className="scoresheetGroupEnd">S</th>
+              <th className="scoresheetPairHeader">#</th>
+              <th>T</th>
+              <th>B</th>
+              <th>S</th>
+            </tr>
+          ) : (
+            <>
               {displayView === "default" && (
                 <tr>
                   <th className="scoresheetPairHeader" aria-hidden="true" />
@@ -1725,20 +1624,7 @@ function ScoreboardDisplayApp() {
                     ].filter(Boolean).join(" ")}
                   >
                     <div className="scoresheetTeamHeaderInner">
-                      <span
-                        className="scoresheetTeamName"
-                        ref={(el) => {
-                          projectorTeamNameElsRef.current[team.id] = el;
-                        }}
-                        style={
-                          isProjectorLayout
-                            ? {
-                              fontSize: `${projectorTeamNameFitByTeamId[team.id]?.fontPx ?? 72}px`,
-                              whiteSpace: projectorTeamNameFitByTeamId[team.id]?.allowWrap ? "normal" : "nowrap",
-                            }
-                            : undefined
-                        }
-                      >
+                      <span className="scoresheetTeamName">
                         {team.name}
                       </span>
                       <span className="pill scoresheetScorePill">
@@ -1757,108 +1643,216 @@ function ScoreboardDisplayApp() {
                     key={`${team.id}_r`}
                     className={teamIndex < teams.length - 1 ? "scoresheetGroupEnd" : ""}
                   >
-                    {isProjectorLayout ? "S" : "Total"}
+                    Total
                   </th>,
                 ])}
               </tr>
-            </thead>
-            <tbody>
-              {(() => {
-                const colSpan = 1 + teams.length * 3;
-                const nodes: ReactNode[] = [];
+            </>
+          )}
+        </thead>
+        <tbody>
+          {(() => {
+            const colSpan = 1 + teams.length * 3;
+            const nodes: ReactNode[] = [];
 
-                for (let i = 0; i < scoredPairs.rows.length; i++) {
-                  const row = scoredPairs.rows[i];
-                  const boundaryBeforeQuestion = row.pairId;
-                  const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+            for (let i = 0; i < scoredPairs.rows.length; i++) {
+              const row = scoredPairs.rows[i];
+              const boundaryBeforeQuestion = row.pairId;
+              const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
 
-                  if (markerKind !== undefined) {
-                    nodes.push(
-                      <tr
-                        key={`boundary_${boundaryBeforeQuestion}`}
-                        className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
-                      >
-                        <td colSpan={colSpan}>
-                          <div className="scoresheetBoundaryButton" aria-hidden="true">
-                            <span className="scoresheetBoundaryLabel">{markerKind}</span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
+              if (markerKind !== undefined) {
+                nodes.push(
+                  <tr
+                    key={`boundary_${boundaryBeforeQuestion}`}
+                    className={["scoresheetBoundaryRow", "scoresheetBoundaryRowMarked"].join(" ")}
+                  >
+                    <td colSpan={colSpan}>
+                      <div className="scoresheetBoundaryButton" aria-hidden="true">
+                        <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              }
 
-                  const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
-                  nodes.push(
-                    <tr
-                      key={`row_${row.pairId}`}
-                      data-pair-id={row.pairId}
-                      className={isActivePair ? "scoresheetRowActive" : undefined}
-                    >
-                      <td className="scoresheetPairCell">
-                        <span className="pairLinkDisplay">{row.pairId}</span>
-                      </td>
-                      {row.perTeam.flatMap((teamRow, teamIndex) => {
-                        const isGroupEnd = teamIndex < row.perTeam.length - 1;
-                        const tossupResult = teamRow.tossupAttempt?.result;
-                        const bonusResult = teamRow.bonusAttempt?.result;
+              const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
 
-                        const tossupCellClass = [
-                          "scoresheetAttemptCell",
-                          tossupResult === "correct"
-                            ? "scoresheetCellCorrect"
-                            : tossupResult === "incorrect"
-                              ? "scoresheetCellIncorrect"
-                              : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ");
+              const renderTeamCells = (teamRow: typeof row.perTeam[0], isGroupEnd: boolean) => {
+                const tossupResult = teamRow.tossupAttempt?.result;
+                const bonusResult = teamRow.bonusAttempt?.result;
+                const tossupCellClass = [
+                  "scoresheetAttemptCell",
+                  tossupResult === "correct" ? "scoresheetCellCorrect"
+                    : tossupResult === "incorrect" ? "scoresheetCellIncorrect" : "",
+                ].filter(Boolean).join(" ");
+                const bonusCellClass = [
+                  "scoresheetAttemptCell",
+                  bonusResult === "correct" ? "scoresheetCellCorrect"
+                    : bonusResult === "incorrect" ? "scoresheetCellIncorrect" : "",
+                ].filter(Boolean).join(" ");
+                return [
+                  <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
+                    <span className="scoresheetAttemptCellDisplay">
+                      {formatAttemptCellTextForView(teamRow.tossupAttempt, row.tossup?.question_type)}
+                    </span>
+                  </td>,
+                  <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
+                    <span className="scoresheetAttemptCellDisplay">
+                      {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
+                    </span>
+                  </td>,
+                  <td
+                    key={`${teamRow.teamId}_r`}
+                    className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
+                  >
+                    {teamRow.runningTotal}
+                  </td>,
+                ];
+              };
 
-                        const bonusCellClass = [
-                          "scoresheetAttemptCell",
-                          bonusResult === "correct"
-                            ? "scoresheetCellCorrect"
-                            : bonusResult === "incorrect"
-                              ? "scoresheetCellIncorrect"
-                              : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ");
+              if (isProjectorLayout) {
+                nodes.push(
+                  <tr
+                    key={`row_${row.pairId}`}
+                    data-pair-id={row.pairId}
+                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                  >
+                    {row.perTeam[0] && renderTeamCells(row.perTeam[0], true)}
+                    <td className="scoresheetPairCell scoresheetNumberCell">
+                      <span className="pairLinkDisplay">{row.pairId}</span>
+                    </td>
+                    {row.perTeam[1] && renderTeamCells(row.perTeam[1], false)}
+                  </tr>
+                );
+              } else {
+                nodes.push(
+                  <tr
+                    key={`row_${row.pairId}`}
+                    data-pair-id={row.pairId}
+                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                  >
+                    <td className="scoresheetPairCell">
+                      <span className="pairLinkDisplay">{row.pairId}</span>
+                    </td>
+                    {row.perTeam.flatMap((teamRow, teamIndex) =>
+                      renderTeamCells(teamRow, teamIndex < row.perTeam.length - 1)
+                    )}
+                  </tr>
+                );
+              }
+            }
 
-                        return [
-                          <td key={`${teamRow.teamId}_t`} className={tossupCellClass || undefined}>
-                            <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellTextForView(teamRow.tossupAttempt, row.tossup?.question_type)}
-                            </span>
-                          </td>,
-                          <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
-                            <span className="scoresheetAttemptCellDisplay">
-                              {formatAttemptCellTextForView(teamRow.bonusAttempt, row.bonus?.question_type)}
-                            </span>
-                          </td>,
-                          <td
-                            key={`${teamRow.teamId}_r`}
-                            className={["scoresheetNumberCell", isGroupEnd ? "scoresheetGroupEnd" : ""].filter(Boolean).join(" ")}
-                          >
-                            {teamRow.runningTotal}
-                          </td>,
-                        ];
-                      })}
-                    </tr>
-                  );
-                }
+            return nodes;
+          })()}
+        </tbody>
+      </table>
+    </div>
+  );
 
-                return nodes;
-              })()}
-            </tbody>
-          </table>
+  if (isProjectorLayout) {
+    return (
+      <div className="scoreboardDisplayRoot scoreboardDisplayRoot--large scoreboardDisplayRoot--projector" aria-label="Scoreboard display">
+        <div className={["projectorNav", isNavCollapsed ? "projectorNav--collapsed" : ""].filter(Boolean).join(" ")}>
+          {!isNavCollapsed && (
+            <div className="projectorNavControls">
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+              >
+                Toggle Projector View
+              </button>
+              <button
+                type="button"
+                className="secondary scoreboardDisplayGearButton"
+                aria-label="Open display settings"
+                title="Display settings"
+                onClick={() => setIsSettingsOpen(true)}
+              >
+                ⚙
+              </button>
+            </div>
+          )}
+          <button
+            type="button"
+            className="projectorNavCollapseBtn"
+            onClick={() => setIsNavCollapsed((v) => !v)}
+            title={isNavCollapsed ? "Show controls" : "Hide controls"}
+          >
+            </button>
         </div>
+
+        <div className="projectorScoreBanner">
+          <div className="projectorScoreBannerTeam projectorScoreBannerTeam--left">
+            <span className="projectorScoreBannerName">{teams[0]?.name}</span>
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
+            </span>
+          </div>
+          <div className="projectorScoreBannerCenter">
+            {displayTimer !== null && (
+              <span
+                className={[
+                  "projectorTimerDisplay",
+                  displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
+                  displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                    ? "projectorTimerDisplay--warning"
+                    : "",
+                ].filter(Boolean).join(" ")}
+              >
+                {formatTimerMs(projectorLiveMs)}
+              </span>
+            )}
+          </div>
+          <div className="projectorScoreBannerTeam projectorScoreBannerTeam--right">
+            <span className="projectorScoreBannerScore">
+              {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
+            </span>
+            <span className="projectorScoreBannerName">{teams[1]?.name}</span>
+          </div>
+        </div>
+
+        {tableWrap}
+        {settingsModal}
       </div>
-      <ScoreboardDisplaySettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        mode={rowAdvanceMode}
-        onModeChange={setRowAdvanceMode}
-      />
+    );
+  }
+
+  return (
+    <div
+      className={[
+        "scoreboardDisplayRoot",
+        displayView === "large" ? "scoreboardDisplayRoot--large" : "",
+      ].filter(Boolean).join(" ")}
+      aria-label="Scoreboard display"
+    >
+      <div className="card scoresheetCard" aria-label="Scoresheet">
+        <div className="header">
+          <div>
+            <h2 className="title">Scoresheet</h2>
+          </div>
+          <div className="scoreboardDisplayActions">
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+            >
+              Toggle Projector View
+            </button>
+            <button
+              type="button"
+              className="secondary scoreboardDisplayGearButton"
+              aria-label="Open display settings"
+              title="Display settings"
+              onClick={() => setIsSettingsOpen(true)}
+            >
+              ⚙
+            </button>
+          </div>
+        </div>
+        {tableWrap}
+      </div>
+      {settingsModal}
     </div>
   );
 }
@@ -2350,7 +2344,7 @@ function ModeratorApp() {
   }
 
   function handleTimerReset() {
-    setTimer((prev) => prev && { ...prev, isRunning: false, remainingMs: prev.durationMs, lastUpdatedAtMs: Date.now() });
+    setTimer(null);
   }
 
   function openScoreboardDisplay() {

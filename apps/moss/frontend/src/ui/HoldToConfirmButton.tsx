@@ -7,9 +7,10 @@ type Props = {
   className?: string;
   disabled?: boolean;
   hideHoldingLabel?: boolean;
+  title?: string;
 };
 
-export default function HoldToConfirmButton({ holdMs, onConfirm, children, className, disabled, hideHoldingLabel }: Props) {
+export default function HoldToConfirmButton({ holdMs, onConfirm, children, className, disabled, hideHoldingLabel, title }: Props) {
   const [isHolding, setIsHolding] = useState(false);
   const [progress, setProgress] = useState(0);
   const holdTimeoutRef = useRef<number | null>(null);
@@ -76,6 +77,7 @@ export default function HoldToConfirmButton({ holdMs, onConfirm, children, class
       type="button"
       className={["holdConfirmButton", className ?? ""].filter(Boolean).join(" ")}
       disabled={disabled}
+      title={title}
       onPointerDown={(e) => {
         if (e.button !== 0) return;
         (e.currentTarget as HTMLButtonElement).setPointerCapture?.(e.pointerId);
