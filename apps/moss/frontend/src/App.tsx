@@ -2551,12 +2551,14 @@ function ModeratorApp() {
     setQuestionTimer((prev) => {
       const now = Date.now();
       if (!prev) return { remainingMs: questionTimerStartMs, isRunning: true, lastUpdatedAtMs: now };
+      const currentRemaining = prev.isRunning
+        ? Math.max(0, prev.remainingMs - (now - prev.lastUpdatedAtMs))
+        : prev.remainingMs;
+      // If expired, clicks do nothing — must hold to reset
+      if (currentRemaining === 0) return prev;
       if (prev.isRunning) {
-        const remaining = Math.max(0, prev.remainingMs - (now - prev.lastUpdatedAtMs));
-        return { ...prev, isRunning: false, remainingMs: remaining, lastUpdatedAtMs: now };
+        return { ...prev, isRunning: false, remainingMs: currentRemaining, lastUpdatedAtMs: now };
       }
-      // If expired (remainingMs reached 0), restart fresh instead of resuming from 0
-      if (prev.remainingMs === 0) return { remainingMs: questionTimerStartMs, isRunning: true, lastUpdatedAtMs: now };
       return { ...prev, isRunning: true, lastUpdatedAtMs: now };
     });
   }
