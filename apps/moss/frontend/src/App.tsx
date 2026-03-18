@@ -1312,7 +1312,16 @@ function NavTimer({ controls }: { controls: TimerControls }) {
         aria-label={timer?.isRunning ? "Pause timer" : "Start timer"}
         title={timer?.isRunning ? "Pause" : "Start"}
       >
-        {timer?.isRunning ? "⏸" : "▶"}
+        {timer?.isRunning ? (
+          <svg className="pauseIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <line x1="7" y1="4" x2="7" y2="20" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+            <line x1="17" y1="4" x2="17" y2="20" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+          </svg>
+        ) : (
+          <svg className="playIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 3.5l14 8.5-14 8.5V3.5z" fill="currentColor" />
+          </svg>
+        )}
       </button>
       <button
         type="button"
