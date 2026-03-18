@@ -1754,32 +1754,40 @@ function ScoreboardDisplayApp() {
       <div className="scoreboardDisplayRoot scoreboardDisplayRoot--large scoreboardDisplayRoot--projector" aria-label="Scoreboard display">
         <div className={["projectorNav", isNavCollapsed ? "projectorNav--collapsed" : ""].filter(Boolean).join(" ")}>
           {!isNavCollapsed && (
-            <div className="projectorNavControls">
-              <button
-                type="button"
-                className="secondary"
-                onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
-              >
-                Toggle Projector View
-              </button>
-              <button
-                type="button"
-                className="secondary scoreboardDisplayGearButton"
-                aria-label="Open display settings"
-                title="Display settings"
-                onClick={() => setIsSettingsOpen(true)}
-              >
-                ⚙
-              </button>
-            </div>
+            <a href={import.meta.env.BASE_URL} className="sbTopNavBrand" aria-label="Go to MoSS home">
+              <img src={`${import.meta.env.BASE_URL}logo_big.png`} alt="MoSS" className="sbTopNavLogo" />
+              <span className="sbTopNavBrandText">MoSS</span>
+            </a>
           )}
-          <button
-            type="button"
-            className="projectorNavCollapseBtn"
-            onClick={() => setIsNavCollapsed((v) => !v)}
-            title={isNavCollapsed ? "Show controls" : "Hide controls"}
-          >
-            </button>
+          <div className="projectorNavControls">
+            {!isNavCollapsed && (
+              <>
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setDisplayView((v) => (v === "default" ? "large" : "default"))}
+                >
+                  Toggle Projector View
+                </button>
+                <button
+                  type="button"
+                  className="secondary scoreboardDisplayGearButton"
+                  aria-label="Open display settings"
+                  title="Display settings"
+                  onClick={() => setIsSettingsOpen(true)}
+                >
+                  ⚙
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              className="projectorNavCollapseBtn"
+              onClick={() => setIsNavCollapsed((v) => !v)}
+              title={isNavCollapsed ? "Show controls" : "Hide controls"}
+            >
+              </button>
+          </div>
         </div>
 
         <div className="projectorScoreBanner">
