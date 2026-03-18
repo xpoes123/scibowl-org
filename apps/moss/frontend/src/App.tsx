@@ -1282,7 +1282,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
               isWarning ? "mossNavTimerDisplay--warning" : "",
             ].filter(Boolean).join(" ")}
             onClick={() => {
-              if (timer?.isRunning) {
+              if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
                 setPendingAction({
                   label: "Stop and edit timer?",
                   action: () => {
@@ -1330,7 +1330,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
         title="Reset"
         aria-label="Reset timer"
         onClick={() => {
-          if (timer?.isRunning) {
+          if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
             setPendingAction({ label: "Clear timer?", action: onReset });
           } else {
             onReset();
@@ -1350,7 +1350,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             type="button"
             className="mossNavTimerPreset"
             onClick={() => {
-              if (timer?.isRunning) {
+              if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
                 setPendingAction({ label: `Set timer to ${preset.label}?`, action: () => onPreset(preset.ms) });
               } else {
                 onPreset(preset.ms);
