@@ -1873,11 +1873,7 @@ button.word.wordBold {
 }
 
 .mossNavTimerDisplay {
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  color: var(--sb-muted);
+  color: var(--sb-text);
   background: white;
   border: 1px solid #d6d6de;
   padding: 10px 12px;
@@ -1907,14 +1903,13 @@ button.word.wordBold {
 }
 
 .mossNavTimerInput {
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  width: 6ch;
-  border: 1px solid var(--sb-border);
-  border-radius: 6px;
-  padding: 3px 6px;
-  background: var(--sb-card);
+  font: inherit;
+  width: 5ch;
+  box-sizing: content-box;
+  border: 1px solid #d6d6de;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: white;
   color: var(--sb-text);
   text-align: center;
 }
@@ -1935,6 +1930,9 @@ button.word.wordBold {
   line-height: inherit;
   min-width: 3em;
   text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: background 0.15s, color 0.15s;
 }
 
@@ -1950,6 +1948,20 @@ button.word.wordBold {
 .mossNavTimerResetBtn {
   margin-top: 0;
   width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mossNavTimerResetBtn:not(:disabled):hover .refreshIcon {
+  transform: rotate(180deg);
+}
+
+.pauseIcon,
+.playIcon {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .mossNavTimerDivider {
@@ -1981,6 +1993,14 @@ button.word.wordBold {
 
 .mossNavTimerPreset:hover {
   background: var(--sb-border);
+}
+
+.mossNavTimerConfirm {
+  gap: 10px;
+}
+
+.mossNavTimerConfirmLabel {
+  white-space: nowrap;
 }
 
 /* ── Projector Nav ───────────────────────────────────────────── */

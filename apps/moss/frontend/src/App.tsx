@@ -1260,49 +1260,49 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   return (
     <div className="mossNavTimer">
       {isEditing ? (
-        <input
-          className="mossNavTimerInput"
-          value={editValue}
-          onChange={(e) => setEditValue(e.target.value)}
-          onBlur={commitEdit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") commitEdit();
-            if (e.key === "Escape") setIsEditing(false);
-          }}
-          autoFocus
-          placeholder="8:00"
-          aria-label="Set timer duration (e.g. 8:00)"
-        />
-      ) : (
-        <button
-          type="button"
-          className={[
-            "mossNavTimerDisplay",
-            timer?.isRunning ? "mossNavTimerDisplay--running" : "",
-            isWarning ? "mossNavTimerDisplay--warning" : "",
-          ].filter(Boolean).join(" ")}
-          onClick={() => {
-            if (timer?.isRunning) {
-              setPendingAction({
-                label: "Stop and edit timer?",
-                action: () => {
-                  onToggle();
-                  const currentMs = Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
-                  const val = formatTimerMs(currentMs);
-                  setEditValue(val);
-                  setEditInitialValue(val);
-                  setIsEditing(true);
-                },
-              });
-            } else {
-              enterEditMode();
-            }
-          }}
-          title="Click to set duration"
-          aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
-        >
-          {timer ? formatTimerMs(liveMs) : "—:——"}
-        </button>
+          <input
+            className="mossNavTimerInput"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={commitEdit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitEdit();
+              if (e.key === "Escape") setIsEditing(false);
+            }}
+            autoFocus
+            placeholder="8:00"
+            aria-label="Set timer duration (e.g. 8:00)"
+          />
+        ) : (
+          <button
+            type="button"
+            className={[
+              "mossNavTimerDisplay",
+              timer?.isRunning ? "mossNavTimerDisplay--running" : "",
+              isWarning ? "mossNavTimerDisplay--warning" : "",
+            ].filter(Boolean).join(" ")}
+            onClick={() => {
+              if (timer?.isRunning) {
+                setPendingAction({
+                  label: "Stop and edit timer?",
+                  action: () => {
+                    onToggle();
+                    const currentMs = Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
+                    const val = formatTimerMs(currentMs);
+                    setEditValue(val);
+                    setEditInitialValue(val);
+                    setIsEditing(true);
+                  },
+                });
+              } else {
+                enterEditMode();
+              }
+            }}
+            title="Click to set duration"
+            aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
+          >
+            {timer ? formatTimerMs(liveMs) : "—:——"}
+          </button>
       )}
       <button
         type="button"
