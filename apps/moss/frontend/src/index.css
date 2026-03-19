@@ -1873,6 +1873,8 @@ button.word.wordBold {
 }
 
 .mossNavTimerDisplay {
+  position: relative;
+  overflow: hidden;
   color: var(--sb-text);
   background: white;
   border: 1px solid #d6d6de;
@@ -1893,13 +1895,14 @@ button.word.wordBold {
   color: var(--sb-text);
 }
 
-@keyframes timerWarningFlash {
-  0%, 100% { color: #dc2626; }
-  50% { color: #fca5a5; }
+.mossNavTimerDisplay--warning {
+  color: #dc2626;
 }
 
-.mossNavTimerDisplay--warning {
-  animation: timerWarningFlash 0.7s ease-in-out infinite;
+.mossNavTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 /* Question Timer */
@@ -2177,6 +2180,8 @@ button.word.wordBold {
 /* ── Projector Timer ─────────────────────────────────────────── */
 
 .projectorTimerDisplay {
+  position: relative;
+  overflow: hidden;
   font-family: inherit;
   font-size: clamp(48px, 8vw, 96px);
   font-weight: 700;
@@ -2195,7 +2200,13 @@ button.word.wordBold {
 }
 
 .projectorTimerDisplay--warning {
-  animation: timerWarningFlash 0.7s ease-in-out infinite;
+  color: #dc2626;
+}
+
+.projectorTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 .pairLinkDisplay {

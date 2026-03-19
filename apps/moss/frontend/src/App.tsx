@@ -1240,7 +1240,9 @@ function NavTimer({ controls }: { controls: TimerControls }) {
     setIsEditing(true);
   }
 
-  const isWarning = timer !== null && liveMs <= 10_000 && liveMs > 0;
+  const isWarning = timer !== null && liveMs <= 5_000 && liveMs > 0;
+  const isExpired = timer !== null && liveMs === 0;
+  const navFlashKey = isWarning ? Math.ceil(liveMs / 1000) : 0;
 
   if (pendingAction) {
     return (
@@ -1286,6 +1288,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
               "mossNavTimerDisplay",
               timer?.isRunning ? "mossNavTimerDisplay--running" : "",
               isWarning ? "mossNavTimerDisplay--warning" : "",
+              isExpired ? "mossNavTimerDisplay--expired" : "",
             ].filter(Boolean).join(" ")}
             onClick={() => {
               if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
@@ -1308,6 +1311,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
           >
             {timer ? formatTimerMs(liveMs) : "—:——"}
+            {isWarning && <div key={navFlashKey} className="questionTimerFlashOverlay" />}
           </button>
       )}
       <button
@@ -1994,12 +1998,16 @@ function ScoreboardDisplayApp() {
                   className={[
                     "projectorTimerDisplay",
                     displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
-                    displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                    displayTimer.isRunning && projectorLiveMs <= 5_000 && projectorLiveMs > 0
                       ? "projectorTimerDisplay--warning"
                       : "",
+                    projectorLiveMs === 0 ? "projectorTimerDisplay--expired" : "",
                   ].filter(Boolean).join(" ")}
                 >
                   {formatTimerMs(projectorLiveMs)}
+                  {displayTimer.isRunning && projectorLiveMs <= 5_000 && projectorLiveMs > 0 && (
+                    <div key={Math.ceil(projectorLiveMs / 1000)} className="questionTimerFlashOverlay" />
+                  )}
                 </span>
               )}
             </div>
