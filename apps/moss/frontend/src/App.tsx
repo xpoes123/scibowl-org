@@ -1497,6 +1497,30 @@ function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
   );
 }
 
+const MAX_SUFFIX_CHARS = 15;
+const FALLBACK_SUFFIX_CHARS = 7;
+
+function getNameParts(name: string): { main: string; suffix: string } {
+  const words = name.trim().split(/\s+/);
+  if (words.length <= 1) return { main: name, suffix: "" };
+
+  const lastTwo = words.slice(-2).join(" ");
+  if (lastTwo.length <= MAX_SUFFIX_CHARS) {
+    const mainWords = words.slice(0, -2);
+    return {
+      main: mainWords.length ? mainWords.join(" ") : "",
+      suffix: mainWords.length ? " " + lastTwo : lastTwo,
+    };
+  }
+
+  const lastOne = words[words.length - 1];
+  if (lastOne.length <= MAX_SUFFIX_CHARS) {
+    return { main: words.slice(0, -1).join(" "), suffix: " " + lastOne };
+  }
+
+  return { main: name.slice(0, -FALLBACK_SUFFIX_CHARS), suffix: name.slice(-FALLBACK_SUFFIX_CHARS) };
+}
+
 function ScoreboardDisplayApp() {
   const [snapshot, setSnapshot] = useState<ScoreboardSnapshotV1 | null>(null);
   const [channelError, setChannelError] = useState<string | null>(null);
@@ -1943,6 +1967,9 @@ function ScoreboardDisplayApp() {
     </div>
   );
 
+  const { main: team0Main, suffix: team0Suffix } = getNameParts(teams[0]?.name ?? "");
+  const { main: team1Main, suffix: team1Suffix } = getNameParts(teams[1]?.name ?? "");
+
   if (isProjectorLayout) {
     return (
       <div className="scoreboardDisplayRoot scoreboardDisplayRoot--large scoreboardDisplayRoot--projector" aria-label="Scoreboard display">
@@ -1986,7 +2013,10 @@ function ScoreboardDisplayApp() {
 
         <div className="projectorBody">
           <div className="projectorScoreBanner">
-            <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--left">
+              {team0Main && <span className="projectorNameMain">{team0Main}</span>}
+              {team0Suffix && <span className="projectorNameSuffix">{team0Suffix}</span>}
+            </span>
             <span className="projectorScoreBannerScore">
               {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
             </span>
@@ -2012,7 +2042,10 @@ function ScoreboardDisplayApp() {
             <span className="projectorScoreBannerScore">
               {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
             </span>
-            <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--right">
+              {team1Main && <span className="projectorNameMain">{team1Main}</span>}
+              {team1Suffix && <span className="projectorNameSuffix">{team1Suffix}</span>}
+            </span>
           </div>
 
           {tableWrap}

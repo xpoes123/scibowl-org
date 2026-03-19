@@ -2152,21 +2152,29 @@ button.word.wordBold {
 }
 
 .projectorScoreBannerName {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
   font-size: clamp(18px, 2.2vw, 36px);
   font-weight: 700;
   line-height: 1.4;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.projectorScoreBannerName--left {
-  text-align: left;
 }
 
 .projectorScoreBannerName--right {
-  text-align: right;
+  justify-content: flex-end;
+}
+
+.projectorNameMain {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.projectorNameSuffix {
+  flex-shrink: 0;
+  white-space: pre;
 }
 
 .projectorScoreBannerScore {
