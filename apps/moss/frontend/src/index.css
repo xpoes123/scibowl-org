@@ -1873,6 +1873,8 @@ button.word.wordBold {
 }
 
 .mossNavTimerDisplay {
+  position: relative;
+  overflow: hidden;
   color: var(--sb-text);
   background: white;
   border: 1px solid #d6d6de;
@@ -1893,14 +1895,63 @@ button.word.wordBold {
   color: var(--sb-text);
 }
 
-@keyframes timerWarningFlash {
-  0%, 100% { color: #dc2626; }
-  50% { color: #fca5a5; }
+.mossNavTimerDisplay--warning {
+  color: #dc2626;
 }
 
-.mossNavTimerDisplay--warning {
-  animation: timerWarningFlash 0.7s ease-in-out infinite;
+.mossNavTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
+
+/* Question Timer */
+.questionTimerDisplay {
+  position: relative;
+  overflow: hidden;
+  color: var(--sb-text);
+  background: white;
+  border: 1px solid #d6d6de;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  min-width: 5ch;
+  text-align: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.questionTimerDisplay:hover:not(:disabled) {
+  background: var(--sb-border);
+}
+
+.questionTimerDisplay--warning {
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.questionTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+@keyframes questionTimerFlash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.questionTimerFlashOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fca5a5;
+  pointer-events: none;
+  animation: questionTimerFlash 0.5s ease-out 1 forwards;
+}
+
 
 .mossNavTimerInput {
   font: inherit;
@@ -2092,21 +2143,29 @@ button.word.wordBold {
 }
 
 .projectorScoreBannerName {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
   font-size: clamp(18px, 2.2vw, 36px);
   font-weight: 700;
   line-height: 1.4;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.projectorScoreBannerName--left {
-  text-align: left;
 }
 
 .projectorScoreBannerName--right {
-  text-align: right;
+  justify-content: flex-end;
+}
+
+.projectorNameMain {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.projectorNameSuffix {
+  flex-shrink: 0;
+  white-space: pre;
 }
 
 .projectorScoreBannerScore {
@@ -2120,6 +2179,8 @@ button.word.wordBold {
 /* ── Projector Timer ─────────────────────────────────────────── */
 
 .projectorTimerDisplay {
+  position: relative;
+  overflow: hidden;
   font-family: inherit;
   font-size: clamp(48px, 8vw, 96px);
   font-weight: 700;
@@ -2138,7 +2199,13 @@ button.word.wordBold {
 }
 
 .projectorTimerDisplay--warning {
-  animation: timerWarningFlash 0.7s ease-in-out infinite;
+  color: #dc2626;
+}
+
+.projectorTimerDisplay--expired {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 .pairLinkDisplay {

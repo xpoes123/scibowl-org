@@ -249,6 +249,11 @@ type TimerState = {
   lastUpdatedAtMs: number;
 };
 
+type QuestionTimerState = {
+  remainingMs: number;
+  lastUpdatedAtMs: number;
+};
+
 type ScoreboardSnapshotV1 = {
   format: "moss_scoreboard_snapshot";
   version: 1;
@@ -1234,7 +1239,8 @@ function NavTimer({ controls }: { controls: TimerControls }) {
     setIsEditing(true);
   }
 
-  const isWarning = timer !== null && liveMs <= 10_000 && liveMs > 0;
+  const isWarning = timer !== null && liveMs <= 5_000 && liveMs > 0;
+  const isExpired = timer !== null && liveMs === 0;
 
   if (pendingAction) {
     return (
@@ -1280,6 +1286,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
               "mossNavTimerDisplay",
               timer?.isRunning ? "mossNavTimerDisplay--running" : "",
               isWarning ? "mossNavTimerDisplay--warning" : "",
+              isExpired ? "mossNavTimerDisplay--expired" : "",
             ].filter(Boolean).join(" ")}
             onClick={() => {
               if (timer && (timer.isRunning || timer.remainingMs < timer.durationMs)) {
@@ -1302,6 +1309,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
           >
             {timer ? formatTimerMs(liveMs) : "—:——"}
+            {isWarning && <div className="questionTimerFlashOverlay" />}
           </button>
       )}
       <button
@@ -1366,6 +1374,61 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   );
 }
 
+function QuestionTimer({
+  timer,
+  startMs,
+  disabled,
+  locked,
+  onClick,
+}: {
+  timer: QuestionTimerState | null;
+  startMs: number;
+  disabled: boolean;
+  locked: boolean;
+  onClick: () => void;
+}) {
+  const [liveMs, setLiveMs] = useState<number>(() =>
+    disabled ? 0 : (timer?.remainingMs ?? startMs)
+  );
+
+  useEffect(() => {
+    if (disabled) { setLiveMs(0); return; }
+    if (!timer) { setLiveMs(startMs); return; }
+    const compute = () => Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
+    setLiveMs(compute());
+    const id = window.setInterval(() => setLiveMs(compute()), 50);
+    return () => window.clearInterval(id);
+  }, [timer, startMs, disabled]);
+
+  useEffect(() => {
+    if (!timer) setLiveMs(disabled ? 0 : startMs);
+  }, [startMs, disabled, timer]);
+
+  const isBonus = startMs === 20_000;
+  const isWarning = isBonus && !disabled && !locked && liveMs > 0 && liveMs <= 5_000;
+  const isExpired = !disabled && !locked && timer !== null && liveMs === 0;
+  const displaySec = disabled ? "0.0" : (liveMs / 1000).toFixed(1);
+
+  const classes = [
+    "questionTimerDisplay",
+    isWarning ? "questionTimerDisplay--warning" : "",
+    isExpired ? "questionTimerDisplay--expired" : "",
+  ].filter(Boolean).join(" ");
+
+  return (
+    <button
+      type="button"
+      className={classes}
+      onClick={disabled || locked ? undefined : onClick}
+      disabled={disabled || locked}
+      aria-label={disabled || locked ? "Timer disabled" : timer ? "Reset timer" : "Start timer"}
+    >
+      {displaySec}s
+      {isWarning && <div className="questionTimerFlashOverlay" />}
+    </button>
+  );
+}
+
 function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
   const logoSrc = `${import.meta.env.BASE_URL}logo_big.png`;
   const mossHomeHref = import.meta.env.BASE_URL;
@@ -1381,6 +1444,30 @@ function MossTopNav({ timerControls }: { timerControls?: TimerControls }) {
       </div>
     </header>
   );
+}
+
+const MAX_SUFFIX_CHARS = 15;
+const FALLBACK_SUFFIX_CHARS = 7;
+
+function getNameParts(name: string): { main: string; suffix: string } {
+  const words = name.trim().split(/\s+/);
+  if (words.length <= 1) return { main: name, suffix: "" };
+
+  const lastTwo = words.slice(-2).join(" ");
+  if (lastTwo.length <= MAX_SUFFIX_CHARS) {
+    const mainWords = words.slice(0, -2);
+    return {
+      main: mainWords.length ? mainWords.join(" ") : "",
+      suffix: mainWords.length ? " " + lastTwo : lastTwo,
+    };
+  }
+
+  const lastOne = words[words.length - 1];
+  if (lastOne.length <= MAX_SUFFIX_CHARS) {
+    return { main: words.slice(0, -1).join(" "), suffix: " " + lastOne };
+  }
+
+  return { main: name.slice(0, -FALLBACK_SUFFIX_CHARS), suffix: name.slice(-FALLBACK_SUFFIX_CHARS) };
 }
 
 function ScoreboardDisplayApp() {
@@ -1829,6 +1916,9 @@ function ScoreboardDisplayApp() {
     </div>
   );
 
+  const { main: team0Main, suffix: team0Suffix } = getNameParts(teams[0]?.name ?? "");
+  const { main: team1Main, suffix: team1Suffix } = getNameParts(teams[1]?.name ?? "");
+
   if (isProjectorLayout) {
     return (
       <div className="scoreboardDisplayRoot scoreboardDisplayRoot--large scoreboardDisplayRoot--projector" aria-label="Scoreboard display">
@@ -1872,7 +1962,10 @@ function ScoreboardDisplayApp() {
 
         <div className="projectorBody">
           <div className="projectorScoreBanner">
-            <span className="projectorScoreBannerName projectorScoreBannerName--left">{teams[0]?.name}</span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--left">
+              {team0Main && <span className="projectorNameMain">{team0Main}</span>}
+              {team0Suffix && <span className="projectorNameSuffix">{team0Suffix}</span>}
+            </span>
             <span className="projectorScoreBannerScore">
               {scoredPairs.totals.find((t) => t.teamId === teams[0]?.id)?.total ?? 0}
             </span>
@@ -1882,19 +1975,26 @@ function ScoreboardDisplayApp() {
                   className={[
                     "projectorTimerDisplay",
                     displayTimer.isRunning ? "projectorTimerDisplay--running" : "",
-                    displayTimer.isRunning && projectorLiveMs <= 10_000 && projectorLiveMs > 0
+                    displayTimer.isRunning && projectorLiveMs <= 5_000 && projectorLiveMs > 0
                       ? "projectorTimerDisplay--warning"
                       : "",
+                    projectorLiveMs === 0 ? "projectorTimerDisplay--expired" : "",
                   ].filter(Boolean).join(" ")}
                 >
                   {formatTimerMs(projectorLiveMs)}
+                  {displayTimer.isRunning && projectorLiveMs <= 5_000 && projectorLiveMs > 0 && (
+                    <div className="questionTimerFlashOverlay" />
+                  )}
                 </span>
               )}
             </div>
             <span className="projectorScoreBannerScore">
               {scoredPairs.totals.find((t) => t.teamId === teams[1]?.id)?.total ?? 0}
             </span>
-            <span className="projectorScoreBannerName projectorScoreBannerName--right">{teams[1]?.name}</span>
+            <span className="projectorScoreBannerName projectorScoreBannerName--right">
+              {team1Main && <span className="projectorNameMain">{team1Main}</span>}
+              {team1Suffix && <span className="projectorNameSuffix">{team1Suffix}</span>}
+            </span>
           </div>
 
           {tableWrap}
@@ -2005,6 +2105,7 @@ function ModeratorApp() {
   const [lastActor, setLastActor] = useState<{ teamId: string; playerId?: string } | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [timer, setTimer] = useState<TimerState | null>(null);
+  const [questionTimer, setQuestionTimer] = useState<QuestionTimerState | null>(null);
   const attemptPopupRef = useRef<HTMLDivElement | null>(null);
   const bonusPopupRef = useRef<HTMLDivElement | null>(null);
   const scoresheetBoundaryPopupRef = useRef<HTMLDivElement | null>(null);
@@ -2433,6 +2534,18 @@ function ModeratorApp() {
     setTimer(null);
   }
 
+  function handleQuestionTimerClick() {
+    if (questionTimerDisabled) return;
+    setQuestionTimer((prev) => {
+      if (!prev) {
+        // Full (never started or was reset) → start
+        return { remainingMs: questionTimerStartMs, lastUpdatedAtMs: Date.now() };
+      }
+      // Running or expired → reset to full, stopped
+      return null;
+    });
+  }
+
   function openScoreboardDisplay() {
     const url = new URL(window.location.href);
     url.searchParams.set("display", "scoreboard");
@@ -2830,6 +2943,25 @@ function ModeratorApp() {
     if (!tossupQ || !bonusQ) return false;
     return (attempts[tossupQ.id] ?? []).some((a) => a.result === "correct");
   }, [attempts, bonusQ, tossupQ]);
+
+  const questionTimerStartMs = bonusEnabled ? 20_000 : 5_000;
+
+  const tossupIsDone = bonusEnabled ||
+    (!!tossupQ && teams.every((t) =>
+      (attempts[tossupQ.id] ?? []).some((a) => a.teamId === t.id && a.result !== undefined)
+    ));
+  const bonusIsDone = !!bonusQ && (attempts[bonusQ.id] ?? []).some((a) => a.result !== undefined);
+  const questionTimerDisabled = tossupIsDone && (bonusIsDone || !bonusQ || !bonusEnabled);
+
+  useEffect(() => {
+    setQuestionTimer(null);
+  }, [pairIdx]);
+
+  // Reset when switching from tossup to bonus phase
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setQuestionTimer(null);
+  }, [bonusEnabled]);
 
   const scoredPairs = useMemo(() => {
     const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
@@ -5204,6 +5336,13 @@ function ModeratorApp() {
                     {data.packet} ({data.year})
                   </h1>
                 </div>
+                <QuestionTimer
+                  timer={questionTimer}
+                  startMs={questionTimerStartMs}
+                  disabled={questionTimerDisabled}
+                  locked={isQuestionBlurred}
+                  onClick={handleQuestionTimerClick}
+                />
               </div>
 
               <div className="questionBlurWrap">
