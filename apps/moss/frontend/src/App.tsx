@@ -251,7 +251,6 @@ type TimerState = {
 
 type QuestionTimerState = {
   remainingMs: number;
-  isRunning: boolean;
   lastUpdatedAtMs: number;
 };
 
@@ -1375,40 +1374,28 @@ function NavTimer({ controls }: { controls: TimerControls }) {
   );
 }
 
-const QUESTION_TIMER_HOLD_MS = 800;
-
 function QuestionTimer({
   timer,
   startMs,
   disabled,
   locked,
-  onToggle,
-  onReset,
+  onClick,
 }: {
   timer: QuestionTimerState | null;
   startMs: number;
   disabled: boolean;
   locked: boolean;
-  onToggle: () => void;
-  onReset: () => void;
+  onClick: () => void;
 }) {
   const [liveMs, setLiveMs] = useState<number>(() =>
     disabled ? 0 : (timer?.remainingMs ?? startMs)
   );
-  const [holdFill, setHoldFill] = useState(0);
-  const holdStartMsRef = useRef<number | null>(null);
-  const holdIntervalRef = useRef<number | null>(null);
-  const holdCompletedRef = useRef(false);
 
   useEffect(() => {
     if (disabled) { setLiveMs(0); return; }
     if (!timer) { setLiveMs(startMs); return; }
-    const compute = () =>
-      timer.isRunning
-        ? Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs))
-        : timer.remainingMs;
+    const compute = () => Math.max(0, timer.remainingMs - (Date.now() - timer.lastUpdatedAtMs));
     setLiveMs(compute());
-    if (!timer.isRunning) return;
     const id = window.setInterval(() => setLiveMs(compute()), 50);
     return () => window.clearInterval(id);
   }, [timer, startMs, disabled]);
@@ -1417,45 +1404,13 @@ function QuestionTimer({
     if (!timer) setLiveMs(disabled ? 0 : startMs);
   }, [startMs, disabled, timer]);
 
-  function startHold() {
-    holdStartMsRef.current = Date.now();
-    holdCompletedRef.current = false;
-    setHoldFill(0);
-    holdIntervalRef.current = window.setInterval(() => {
-      const elapsed = Date.now() - (holdStartMsRef.current ?? Date.now());
-      const fill = Math.min(1, elapsed / QUESTION_TIMER_HOLD_MS);
-      setHoldFill(fill);
-      if (fill >= 1) {
-        clearInterval(holdIntervalRef.current!);
-        holdIntervalRef.current = null;
-        holdCompletedRef.current = true;
-        setHoldFill(0);
-        onReset();
-      }
-    }, 16);
-  }
-
-  function cancelHold(shouldToggle: boolean) {
-    if (holdIntervalRef.current) {
-      clearInterval(holdIntervalRef.current);
-      holdIntervalRef.current = null;
-    }
-    const completed = holdCompletedRef.current;
-    holdStartMsRef.current = null;
-    holdCompletedRef.current = false;
-    setHoldFill(0);
-    if (shouldToggle && !completed) onToggle();
-  }
-
   const isBonus = startMs === 20_000;
   const isWarning = isBonus && !disabled && !locked && liveMs > 0 && liveMs <= 5_000;
   const isExpired = !disabled && !locked && timer !== null && liveMs === 0;
-  const isRunning = timer?.isRunning ?? false;
   const displaySec = disabled ? "0.0" : (liveMs / 1000).toFixed(1);
 
   const classes = [
     "questionTimerDisplay",
-    isRunning ? "questionTimerDisplay--running" : "",
     isWarning ? "questionTimerDisplay--warning" : "",
     isExpired ? "questionTimerDisplay--expired" : "",
   ].filter(Boolean).join(" ");
@@ -1464,17 +1419,11 @@ function QuestionTimer({
     <button
       type="button"
       className={classes}
-      onPointerDown={(e) => { if (!disabled) { e.preventDefault(); startHold(); } }}
-      onPointerUp={() => cancelHold(true)}
-      onPointerLeave={() => cancelHold(false)}
-      onPointerCancel={() => cancelHold(false)}
+      onClick={disabled || locked ? undefined : onClick}
       disabled={disabled || locked}
-      aria-label={disabled || locked ? "Timer disabled" : isRunning ? "Pause timer" : "Start timer"}
+      aria-label={disabled || locked ? "Timer disabled" : timer ? "Reset timer" : "Start timer"}
     >
       {displaySec}s
-      {holdFill > 0 && (
-        <div className="questionTimerHoldBar" style={{ width: `${holdFill * 100}%` }} />
-      )}
       {isWarning && <div className="questionTimerFlashOverlay" />}
     </button>
   );
@@ -2585,25 +2534,16 @@ function ModeratorApp() {
     setTimer(null);
   }
 
-  function handleQuestionTimerToggle() {
+  function handleQuestionTimerClick() {
     if (questionTimerDisabled) return;
     setQuestionTimer((prev) => {
-      const now = Date.now();
-      if (!prev) return { remainingMs: questionTimerStartMs, isRunning: true, lastUpdatedAtMs: now };
-      const currentRemaining = prev.isRunning
-        ? Math.max(0, prev.remainingMs - (now - prev.lastUpdatedAtMs))
-        : prev.remainingMs;
-      // If expired, clicks do nothing — must hold to reset
-      if (currentRemaining === 0) return prev;
-      if (prev.isRunning) {
-        return { ...prev, isRunning: false, remainingMs: currentRemaining, lastUpdatedAtMs: now };
+      if (!prev) {
+        // Full (never started or was reset) → start
+        return { remainingMs: questionTimerStartMs, lastUpdatedAtMs: Date.now() };
       }
-      return { ...prev, isRunning: true, lastUpdatedAtMs: now };
+      // Running or expired → reset to full, stopped
+      return null;
     });
-  }
-
-  function handleQuestionTimerReset() {
-    setQuestionTimer(null);
   }
 
   function openScoreboardDisplay() {
@@ -5401,8 +5341,7 @@ function ModeratorApp() {
                   startMs={questionTimerStartMs}
                   disabled={questionTimerDisabled}
                   locked={isQuestionBlurred}
-                  onToggle={handleQuestionTimerToggle}
-                  onReset={handleQuestionTimerReset}
+                  onClick={handleQuestionTimerClick}
                 />
               </div>
 

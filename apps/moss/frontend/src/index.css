@@ -1952,15 +1952,6 @@ button.word.wordBold {
   animation: questionTimerFlash 0.5s ease-out 1 forwards;
 }
 
-.questionTimerHoldBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: var(--sb-text);
-  pointer-events: none;
-  border-radius: 0 0 10px 10px;
-}
 
 .mossNavTimerInput {
   font: inherit;
