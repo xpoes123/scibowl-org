@@ -1242,7 +1242,6 @@ function NavTimer({ controls }: { controls: TimerControls }) {
 
   const isWarning = timer !== null && liveMs <= 5_000 && liveMs > 0;
   const isExpired = timer !== null && liveMs === 0;
-  const navFlashKey = isWarning ? Math.ceil(liveMs / 1000) : 0;
 
   if (pendingAction) {
     return (
@@ -1311,7 +1310,7 @@ function NavTimer({ controls }: { controls: TimerControls }) {
             aria-label={`Timer: ${timer ? formatTimerMs(liveMs) : "not set"}. Click to set duration.`}
           >
             {timer ? formatTimerMs(liveMs) : "—:——"}
-            {isWarning && <div key={navFlashKey} className="questionTimerFlashOverlay" />}
+            {isWarning && <div className="questionTimerFlashOverlay" />}
           </button>
       )}
       <button
@@ -1453,7 +1452,6 @@ function QuestionTimer({
   const isExpired = !disabled && !locked && timer !== null && liveMs === 0;
   const isRunning = timer?.isRunning ?? false;
   const displaySec = disabled ? "0.0" : (liveMs / 1000).toFixed(1);
-  const flashKey = isWarning ? Math.ceil(liveMs / 1000) : 0;
 
   const classes = [
     "questionTimerDisplay",
@@ -1477,7 +1475,7 @@ function QuestionTimer({
       {holdFill > 0 && (
         <div className="questionTimerHoldBar" style={{ width: `${holdFill * 100}%` }} />
       )}
-      {isWarning && <div key={flashKey} className="questionTimerFlashOverlay" />}
+      {isWarning && <div className="questionTimerFlashOverlay" />}
     </button>
   );
 }
@@ -2006,7 +2004,7 @@ function ScoreboardDisplayApp() {
                 >
                   {formatTimerMs(projectorLiveMs)}
                   {displayTimer.isRunning && projectorLiveMs <= 5_000 && projectorLiveMs > 0 && (
-                    <div key={Math.ceil(projectorLiveMs / 1000)} className="questionTimerFlashOverlay" />
+                    <div className="questionTimerFlashOverlay" />
                   )}
                 </span>
               )}
