@@ -53,8 +53,8 @@
         "mode": "ONLINE",
         "timezone": "America/New_York",
         "dates": {
-            "start": "2026-04-04",
-            "end": "2026-04-04"
+            "start": "2026-04-19",
+            "end": "2026-04-19"
         },
         "divisions": [
             "HS"
@@ -645,6 +645,55 @@
         "contacts": [],
         "links": [],
         "updated_at": "2026-01-06T00:00:00Z"
+    },
+    {
+        "slug": "clements-invitational-2026",
+        "name": "Clements Invitational 2026",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2026-04-26",
+            "end": "2026-04-26"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Online tournament. 24-team field split into 4 round robin groups, with 16 teams advancing to double elimination. Held the weekend before Nationals.",
+            "writing_team": "Clements High School"
+        },
+        "format": {
+            "summary": "Second annual Clements Invitational - 24 teams across 4 RR groups with 16 advancing to DE",
+            "rounds_guaranteed": 5
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "https://discord.gg/N9f7eGGV2v",
+                "label": "Discord Server"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Register via the form. $25 fee may be paid after registration.",
+            "url": "https://forms.gle/BFyWAGdffhhJmXzXA",
+            "cost": "$25 per team",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-04-19"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1AXQ4eqwwtYCIG0W7ShhC0sGus0dC2CPs30aVtGYZFsE/edit?usp=sharing",
+                "label": "Tournament Info"
+            }
+        ],
+        "updated_at": "2026-03-18T00:00:00Z"
     },
     {
         "slug": "berkeley-science-bowl",
