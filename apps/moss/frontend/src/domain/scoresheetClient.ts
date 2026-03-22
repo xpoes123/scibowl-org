@@ -89,6 +89,32 @@ export async function fetchScoresheetEvents(scoresheetId: number, afterSeq = 0, 
   return response.json();
 }
 
+export async function createScoresheet(
+  tournamentSlug: string,
+  teamAName: string,
+  teamBName: string
+): Promise<{ scoresheet_id: number; game_id: number } | null> {
+  const token = import.meta.env.VITE_MOSS_API_TOKEN as string | undefined;
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/moss/scoresheets/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { "X-MOSS-API-TOKEN": token } : {}),
+      },
+      body: JSON.stringify({
+        tournament_slug: tournamentSlug,
+        team_a_name: teamAName,
+        team_b_name: teamBName,
+      }),
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
+  }
+}
+
 export function getRemoteScoresheetId(): number | null {
   const params = new URLSearchParams(window.location.search);
   const queryValue = params.get("scoresheet_id");
