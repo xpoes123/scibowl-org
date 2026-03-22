@@ -19,6 +19,29 @@
 - PDF question import tooling: [`scripts/question_import/question_pdfs/README.md`](./scripts/question_import/question_pdfs/README.md)
 - Testing/CI setup notes: [`TESTING_SETUP.md`](./TESTING_SETUP.md)
 
+## Deployment Architecture 
+```
+Browser
+  │
+  ├──▶ Vercel: Hosts two React frontends (static files: HTML, JS, CSS)
+  │      ├── scibowl.live          → website frontend (tournament listings, stats, packet archive)
+  │      ├── moss.scibowl.live     → MoSS moderating app
+  │      └── *.vercel.app          → auto-generated PR preview deployments
+  │            │
+  │            │  (API calls: fetch/POST to Railway)
+  │            ▼
+  ├──▶ Railway: Runs Django backend (a persistent Python web server)
+  │      └── Receives API requests from the frontends, runs 24/7, not serverless.
+  │            │
+  │            │  (SQL queries: reads/writes game data)
+  │            ▼
+  ├──▶ Supabase: Hosts PostgreSQL database
+  │      └── The actual tables. Railway reads/writes here, decoupling frontend from database.
+  │
+  └──▶ AWS S3 (via Vercel serverless function) — game state snapshots
+         └── MoSS periodically uploads game export snapshots, independent of Railway/Supabase.
+```
+
 ## License
 
 Scibowl.Live is licensed under the **GNU General Public License v3.0**. See the [LICENSE](./LICENSE) file for the full text.
