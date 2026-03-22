@@ -3,4 +3,3 @@ builder = "DOCKERFILE"
 
 [deploy]
 preDeployCommand = "python manage.py migrate"
-startCommand = "gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
