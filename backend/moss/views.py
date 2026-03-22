@@ -3,12 +3,46 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import transaction
 
-from .models import Scoresheet, ScoresheetEvent
+from django.conf import settings
+
+from .models import Game, GameTeam, Scoresheet, ScoresheetEvent, TournamentTeam
 from .serializers import (
     ScoresheetEventOutSerializer,
     ScoresheetEventPostSerializer,
 )
 from .services.snapshots import maybe_write_snapshot
+
+
+class ScoresheetCreateView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        token = getattr(settings, "MOSS_API_TOKEN", None)
+        if token:
+            if request.META.get("HTTP_X_MOSS_API_TOKEN", "") != token:
+                return Response({"detail": "Unauthorized."}, status=status.HTTP_403_FORBIDDEN)
+
+        tournament_slug = request.data.get("tournament_slug")
+        team_a_name = (request.data.get("team_a_name") or "").strip() or "Team A"
+        team_b_name = (request.data.get("team_b_name") or "").strip() or "Team B"
+
+        if not tournament_slug:
+            return Response({"detail": "tournament_slug is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        from tournaments.models import Tournament
+        try:
+            tournament = Tournament.objects.get(slug=tournament_slug)
+        except Tournament.DoesNotExist:
+            return Response({"detail": "Tournament not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        with transaction.atomic():
+            game = Game.objects.create(tournament=tournament)
+            scoresheet = Scoresheet.objects.create(game=game)
+            for slot, name in enumerate([team_a_name, team_b_name], start=1):
+                team, _ = TournamentTeam.objects.get_or_create(tournament=tournament, name=name)
+                GameTeam.objects.create(game=game, tournament_team=team, slot=slot)
+
+        return Response({"scoresheet_id": scoresheet.id, "game_id": game.id}, status=status.HTTP_201_CREATED)
 
 
 class ScoresheetEventsView(APIView):

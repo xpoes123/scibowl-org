@@ -15,7 +15,7 @@ import "katex/dist/katex.min.css";
 import packetJson from "./assets/sample_packet.json";
 import tournamentsJson from "./assets/tournaments.json";
 import { splitRichParts, type RichTextPart } from "./text/renderPacketText";
-import { getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
+import { createScoresheet, getRemoteScoresheetId, postScoresheetEvent } from "./domain/scoresheetClient";
 import {
   buildScoresheetEvent,
   encodeLocationForEvent,
@@ -2090,6 +2090,7 @@ function ModeratorApp() {
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
   const [scoresheetBaseState, setScoresheetBaseState] = useState<ScoresheetState>(() => initialScoresheetState());
   const [scoresheetEvents, setScoresheetEvents] = useState<ScoresheetEvent[]>([]);
+  const [createdScoresheetId, setCreatedScoresheetId] = useState<number | null>(null);
   const scoresheetState = useMemo(
     () => reduceScoresheetEvents(scoresheetEvents, scoresheetBaseState),
     [scoresheetBaseState, scoresheetEvents]
@@ -2309,7 +2310,7 @@ function ModeratorApp() {
         bonus: { correct: 10, incorrect: 0 },
       },
       event_log: {
-        scoresheet_id: remoteScoresheetId,
+        scoresheet_id: effectiveScoresheetId,
         next_seq: scoresheetState.lastSeq + 1,
         events: normalizedEventLog,
       },
@@ -2416,26 +2417,27 @@ function ModeratorApp() {
   }, [isTournamentRosterChooserOpen]);
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
+  const effectiveScoresheetId = remoteScoresheetId ?? createdScoresheetId;
   const remoteReady = useMemo(() => {
-    if (!remoteScoresheetId || !game) return false;
+    if (!effectiveScoresheetId || !game) return false;
     return game.teams.every((team) => {
       if (!Number.isFinite(Number(team.id))) return false;
       return team.players.every((player) => Number.isFinite(Number(player.id)));
     });
-  }, [remoteScoresheetId, game]);
+  }, [effectiveScoresheetId, game]);
 
   function appendScoresheetEvents(newEvents: ScoresheetEvent[]) {
     if (!newEvents.length) return;
     const startSeq = scoresheetState.lastSeq + 1;
-    if (remoteScoresheetId && !remoteReady) {
+    if (effectiveScoresheetId && !remoteReady) {
       console.warn("Remote scoresheet configured but local team ids are not numeric; skipping remote post.");
     }
-    if (remoteReady && remoteScoresheetId) {
+    if (remoteReady && effectiveScoresheetId) {
       void (async () => {
         for (let i = 0; i < newEvents.length; i += 1) {
           const event = newEvents[i];
           try {
-            await postScoresheetEvent(remoteScoresheetId, event, startSeq + i);
+            await postScoresheetEvent(effectiveScoresheetId, event, startSeq + i);
           } catch (err) {
             console.warn("Failed to post scoresheet event", err);
             break;
@@ -3497,6 +3499,15 @@ function ModeratorApp() {
     setScoresheetBoundaryPopup(null);
     setLineupChangeModal(null);
     setIsNewGameOpen(false);
+    setCreatedScoresheetId(null);
+
+    if (draftRosterChoice.kind === "tournament") {
+      const slug = draftRosterChoice.tournamentSlug;
+      const teamNames = draftTeams.map((t) => t.name.trim());
+      void createScoresheet(slug, teamNames[0] ?? "Team A", teamNames[1] ?? "Team B").then((result) => {
+        if (result) setCreatedScoresheetId(result.scoresheet_id);
+      });
+    }
   }
 
   async function onPacketFilePicked(file: File | null) {
