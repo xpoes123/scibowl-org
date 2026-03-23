@@ -2420,11 +2420,14 @@ function ModeratorApp() {
   const effectiveScoresheetId = remoteScoresheetId ?? createdScoresheetId;
   const remoteReady = useMemo(() => {
     if (!effectiveScoresheetId || !game) return false;
+    // Auto-created scoresheet: team IDs are from the local roster and may be non-numeric; that's fine.
+    if (createdScoresheetId !== null) return true;
+    // Pre-existing scoresheet (URL param): require numeric IDs to match DB records.
     return game.teams.every((team) => {
       if (!Number.isFinite(Number(team.id))) return false;
       return team.players.every((player) => Number.isFinite(Number(player.id)));
     });
-  }, [effectiveScoresheetId, game]);
+  }, [effectiveScoresheetId, createdScoresheetId, game]);
 
   function appendScoresheetEvents(newEvents: ScoresheetEvent[]) {
     if (!newEvents.length) return;
