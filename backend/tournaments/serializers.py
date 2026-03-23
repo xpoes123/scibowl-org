@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tournament, Team, Coach, Player, Room, Round, Game
+from .models import Tournament, Team, Coach, Player, Room, Round
 
 
 class TournamentDirectorSerializer(serializers.Serializer):
@@ -105,26 +105,3 @@ class RoundSerializer(serializers.ModelSerializer):
         fields = ['id', 'round_number', 'name', 'packet_name']
 
 
-class GameSerializer(serializers.ModelSerializer):
-    """Serializer for games."""
-    team1_name = serializers.CharField(source='team1.name', read_only=True)
-    team2_name = serializers.CharField(source='team2.name', read_only=True)
-    team1_pool = serializers.CharField(source='team1.pool', read_only=True)
-    team2_pool = serializers.CharField(source='team2.pool', read_only=True)
-    round_number = serializers.IntegerField(source='round.round_number', read_only=True)
-    room_name = serializers.CharField(source='room.name', read_only=True)
-    winner_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Game
-        fields = [
-            'id', 'round_number', 'room', 'room_name', 'pool',
-            'team1_name', 'team2_name', 'team1_pool', 'team2_pool',
-            'team1_score', 'team2_score',
-            'current_tossup', 'is_complete', 'winner_name',
-            'started_at', 'completed_at'
-        ]
-
-    def get_winner_name(self, obj):
-        winner = obj.winner
-        return winner.name if winner else None
