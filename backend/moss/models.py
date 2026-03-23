@@ -15,13 +15,6 @@ class Game(models.Model):
         on_delete=models.CASCADE,
         related_name="moss_games",
     )
-    round = models.ForeignKey(
-        "tournaments.Round",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="moss_games",
-    )
     room = models.ForeignKey(
         "tournaments.Room",
         on_delete=models.SET_NULL,

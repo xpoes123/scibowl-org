@@ -192,7 +192,6 @@ def ingest_scoresheet_exports(
 
             game = Game.objects.using(using).create(
                 tournament_id=tournament_id,
-                round=round_obj,
                 status="COMPLETED",
                 started_at=None,
                 completed_at=exported_dt,

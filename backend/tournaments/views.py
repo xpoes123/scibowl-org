@@ -273,7 +273,6 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
 
                             moss_game = moss_models.Game.objects.create(
                                 tournament=tournament,
-                                round=round_obj,
                                 room=room,
                                 status="SCHEDULED",
                             )
