@@ -75,7 +75,6 @@ class Command(BaseCommand):
                 tournament=tournament,
                 name=team_name,
                 school=school,
-                seed=idx,
                 pool=pool,
             )
             teams.append(team)
@@ -87,10 +86,6 @@ class Command(BaseCommand):
                     team=team,
                     name=f"{team_name.split()[0]} Player {player_idx + 1}",
                     grade_level=str(11 if player_idx < 3 else 10),
-                    total_points=0,
-                    tossups_heard=0,
-                    correct_buzzes=0,
-                    incorrect_buzzes=0,
                 )
 
             self.stdout.write(self.style.SUCCESS(f'Created team: {team_name} with 5 players'))
