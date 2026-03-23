@@ -80,15 +80,10 @@ class CoachSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     """Serializer for players."""
     team_name = serializers.CharField(source='team.name', read_only=True)
-    accuracy = serializers.ReadOnlyField()
-    
+
     class Meta:
         model = Player
-        fields = [
-            'id', 'name', 'grade_level', 'team_name',
-            'total_points', 'tossups_heard', 'correct_buzzes', 'incorrect_buzzes',
-            'accuracy'
-        ]
+        fields = ['id', 'name', 'grade_level', 'team_name']
 
 
 class RoomSerializer(serializers.ModelSerializer):

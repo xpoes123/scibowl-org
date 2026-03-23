@@ -3,13 +3,6 @@ from django.contrib import admin
 from . import models
 
 
-@admin.register(models.TournamentPlayer)
-class TournamentPlayerAdmin(admin.ModelAdmin):
-    list_display = ["name", "tournament_team", "grade_level"]
-    list_filter = ["tournament_team__tournament"]
-    search_fields = ["name", "tournament_team__name"]
-
-
 @admin.register(models.Game)
 class GameAdmin(admin.ModelAdmin):
     list_display = ["id", "tournament", "status", "round", "room", "started_at", "completed_at"]

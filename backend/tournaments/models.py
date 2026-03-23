@@ -141,28 +141,15 @@ class Player(models.Model):
     name = models.CharField(max_length=255)
     grade_level = models.CharField(max_length=50, blank=True)
 
-    # Stats (populated by MODAQ)
-    total_points = models.IntegerField(default=0)
-    tossups_heard = models.IntegerField(default=0)
-    correct_buzzes = models.IntegerField(default=0)
-    incorrect_buzzes = models.IntegerField(default=0)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
+        unique_together = [['team', 'name']]
 
     def __str__(self):
         return f"{self.name} ({self.team.name})"
-
-    @property
-    def accuracy(self):
-        """Calculate buzz accuracy."""
-        total_buzzes = self.correct_buzzes + self.incorrect_buzzes
-        if total_buzzes == 0:
-            return 0
-        return (self.correct_buzzes / total_buzzes) * 100
 
 
 class Room(models.Model):

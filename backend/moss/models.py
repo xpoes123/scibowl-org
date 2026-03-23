@@ -2,25 +2,6 @@ from django.conf import settings
 from django.db import models
 
 
-class TournamentPlayer(models.Model):
-    tournament_team = models.ForeignKey(
-        "tournaments.Team",
-        on_delete=models.CASCADE,
-        related_name="moss_players",
-    )
-    name = models.CharField(max_length=255)
-    grade_level = models.CharField(max_length=50, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["name"]
-        unique_together = ["tournament_team", "name"]
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.tournament_team.name})"
-
 
 class Game(models.Model):
     STATUS_CHOICES = [
@@ -267,7 +248,7 @@ class GameTeamQuestionOutcome(models.Model):
     bonus_result = models.CharField(max_length=20, choices=BONUS_RESULT_CHOICES, blank=True)
 
     buzzing_player = models.ForeignKey(
-        TournamentPlayer,
+        "tournaments.Player",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -303,7 +284,7 @@ class GamePlayerLineupSegment(models.Model):
         related_name="lineup_segments",
     )
     tournament_player = models.ForeignKey(
-        TournamentPlayer,
+        "tournaments.Player",
         on_delete=models.CASCADE,
         related_name="lineup_segments",
     )

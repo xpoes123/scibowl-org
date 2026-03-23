@@ -16,13 +16,12 @@ from moss.models import (
     PacketVersion,
     Scoresheet,
     ScoresheetSnapshot,
-    TournamentPlayer,
 )
 from moss.reducer import initial_state
 from moss.services.export_facts import (
     reduce_scoresheet_export_to_question_outcomes,
 )
-from tournaments.models import Round as TournamentRound, Team
+from tournaments.models import Player, Round as TournamentRound, Team
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -247,12 +246,12 @@ def ingest_scoresheet_exports(
                 roster_by_team[name] = roster
                 player_name_by_id_by_team[name] = player_name_by_id
 
-            tournament_players: dict[tuple[str, str], TournamentPlayer] = {}
+            tournament_players: dict[tuple[str, str], Player] = {}
             for team_name, roster in roster_by_team.items():
                 team = tournament_teams[team_name]
                 for player_name in roster:
-                    player, _ = TournamentPlayer.objects.using(using).get_or_create(
-                        tournament_team=team,
+                    player, _ = Player.objects.using(using).get_or_create(
+                        team=team,
                         name=player_name,
                         defaults={"grade_level": ""},
                     )
@@ -363,8 +362,8 @@ def ingest_scoresheet_exports(
                             player_name = player_any
                         player = tournament_players.get((team_name, player_name))
                         if player is None:
-                            player, _ = TournamentPlayer.objects.using(using).get_or_create(
-                                tournament_team=tournament_teams[team_name],
+                            player, _ = Player.objects.using(using).get_or_create(
+                                team=tournament_teams[team_name],
                                 name=player_name,
                                 defaults={"grade_level": ""},
                             )
