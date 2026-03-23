@@ -5,7 +5,7 @@ from . import models
 
 @admin.register(models.Game)
 class GameAdmin(admin.ModelAdmin):
-    list_display = ["id", "tournament", "status", "round", "room", "started_at", "completed_at"]
+    list_display = ["id", "tournament", "status", "room", "started_at", "completed_at"]
     list_filter = ["tournament", "status"]
 
 

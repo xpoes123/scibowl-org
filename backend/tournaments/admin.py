@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tournament, Team, Player, Room, Round, Game
+from .models import Tournament, Team, Coach, Player, Room, Round
 
 
 @admin.register(Tournament)
@@ -17,9 +17,16 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ['name', 'school']
 
 
+@admin.register(Coach)
+class CoachAdmin(admin.ModelAdmin):
+    list_display = ['name', 'team', 'email']
+    list_filter = ['team__tournament']
+    search_fields = ['name', 'team__name']
+
+
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'team', 'grade_level', 'total_points', 'correct_buzzes', 'incorrect_buzzes']
+    list_display = ['name', 'team', 'grade_level']
     list_filter = ['team__tournament', 'grade_level']
     search_fields = ['name', 'team__name']
 
@@ -38,8 +45,3 @@ class RoundAdmin(admin.ModelAdmin):
     search_fields = ['name', 'packet_name']
 
 
-@admin.register(Game)
-class GameAdmin(admin.ModelAdmin):
-    list_display = ['tournament', 'round', 'room', 'team1', 'team2', 'team1_score', 'team2_score', 'is_complete']
-    list_filter = ['tournament', 'is_complete', 'round']
-    search_fields = ['team1__name', 'team2__name']
