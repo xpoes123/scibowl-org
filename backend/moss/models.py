@@ -2,36 +2,11 @@ from django.conf import settings
 from django.db import models
 
 
-class TournamentTeam(models.Model):
-    tournament = models.ForeignKey(
-        "tournaments.Tournament",
-        on_delete=models.CASCADE,
-        related_name="moss_teams",
-    )
-    name = models.CharField(max_length=255)
-    school = models.CharField(max_length=255, blank=True)
-    pool = models.CharField(
-        max_length=10,
-        blank=True,
-        help_text="Pool/Group assignment (e.g., 'A', 'B', 'C')",
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["name"]
-        unique_together = ["tournament", "name"]
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.tournament.name})"
-
-
 class TournamentPlayer(models.Model):
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
-        related_name="players",
+        related_name="moss_players",
     )
     name = models.CharField(max_length=255)
     grade_level = models.CharField(max_length=50, blank=True)
@@ -110,7 +85,7 @@ class GameTeam(models.Model):
         related_name="game_teams",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="game_teams",
     )
@@ -275,7 +250,7 @@ class GameTeamQuestionOutcome(models.Model):
         related_name="team_question_outcomes",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="question_outcomes",
     )
@@ -323,7 +298,7 @@ class GamePlayerLineupSegment(models.Model):
         related_name="player_lineup_segments",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="lineup_segments",
     )

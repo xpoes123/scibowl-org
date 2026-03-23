@@ -198,27 +198,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         generated_games = []
 
         with transaction.atomic():
-            moss_team_by_team_id = {}
-            for team in teams:
-                defaults = {
-                    "school": team.school or "",
-                    "pool": team.pool or "",
-                }
-                moss_team, _ = moss_models.TournamentTeam.objects.get_or_create(
-                    tournament=tournament,
-                    name=team.name,
-                    defaults=defaults,
-                )
-                update_fields = []
-                if moss_team.school != defaults["school"]:
-                    moss_team.school = defaults["school"]
-                    update_fields.append("school")
-                if moss_team.pool != defaults["pool"]:
-                    moss_team.pool = defaults["pool"]
-                    update_fields.append("pool")
-                if update_fields:
-                    moss_team.save(update_fields=update_fields)
-                moss_team_by_team_id[team.id] = moss_team
+            moss_team_by_team_id = {team.id: team for team in teams}
 
             # Generate round-robin schedules for each pool using round-robin algorithm
             from collections import deque

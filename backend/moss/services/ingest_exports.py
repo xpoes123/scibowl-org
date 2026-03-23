@@ -17,13 +17,12 @@ from moss.models import (
     Scoresheet,
     ScoresheetSnapshot,
     TournamentPlayer,
-    TournamentTeam,
 )
 from moss.reducer import initial_state
 from moss.services.export_facts import (
     reduce_scoresheet_export_to_question_outcomes,
 )
-from tournaments.models import Round as TournamentRound
+from tournaments.models import Round as TournamentRound, Team
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -208,9 +207,9 @@ def ingest_scoresheet_exports(
             )
 
             # Upsert tournament teams and game teams.
-            tournament_teams: dict[str, TournamentTeam] = {}
+            tournament_teams: dict[str, Team] = {}
             for name in team_names:
-                team, _ = TournamentTeam.objects.using(using).get_or_create(
+                team, _ = Team.objects.using(using).get_or_create(
                     tournament_id=tournament_id,
                     name=name,
                     defaults={"school": "", "pool": ""},
