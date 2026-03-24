@@ -31,46 +31,29 @@ class QuestionAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         question_style = cleaned_data.get('question_style')
-        correct_answer = cleaned_data.get('correct_answer')
-        option_1 = cleaned_data.get('option_1')
-        option_2 = cleaned_data.get('option_2')
-        option_3 = cleaned_data.get('option_3')
-        option_4 = cleaned_data.get('option_4')
+        options = cleaned_data.get('options') or []
 
-        filled_options = sum([
-            bool(option_1),
-            bool(option_2),
-            bool(option_3),
-            bool(option_4)
-        ])
+        if not isinstance(options, list):
+            raise forms.ValidationError("Options must be a JSON list of strings.")
+
+        num_options = len(options)
 
         if question_style == 'MULTIPLE_CHOICE':
-            if filled_options != 4:
+            if num_options != 4:
                 raise forms.ValidationError(
-                    "Multiple Choice questions require all 4 options to be filled."
-                )
-            if correct_answer and correct_answer.upper() not in ['W', 'X', 'Y', 'Z']:
-                raise forms.ValidationError(
-                    "For Multiple Choice, correct_answer must be W, X, Y, or Z"
+                    "Multiple Choice questions require exactly 4 options."
                 )
 
         elif question_style in ['IDENTIFY_ALL', 'RANK']:
-            if filled_options < 3:
+            if num_options < 2:
                 raise forms.ValidationError(
-                    f"{dict(Question.QUESTION_STYLE_CHOICES)[question_style]} questions require at least 3 options."
+                    f"{dict(Question.QUESTION_STYLE_CHOICES)[question_style]} questions require at least 2 options."
                 )
-            if correct_answer and question_style == 'IDENTIFY_ALL':
-                valid_letters = set(['W', 'X', 'Y', 'Z'])
-                answer_letters = [a.strip().upper() for a in correct_answer.split(',')]
-                if not all(letter in valid_letters for letter in answer_letters):
-                    raise forms.ValidationError(
-                        "For Identify All, correct_answer must be comma-separated letters (W, X, Y, Z)"
-                    )
 
         elif question_style == 'SHORT_ANSWER':
-            if filled_options > 0:
+            if num_options > 0:
                 raise forms.ValidationError(
-                    "Short Answer questions should not have options filled."
+                    "Short Answer questions should not have options."
                 )
 
         return cleaned_data
@@ -89,13 +72,13 @@ class QuestionAdmin(admin.ModelAdmin):
             'fields': ('question_text', 'category', 'question_type', 'question_style')
         }),
         ('Options & Answers', {
-            'fields': ('option_1', 'option_2', 'option_3', 'option_4', 'correct_answer', 'explanation'),
+            'fields': ('options', 'correct_answer', 'explanation'),
             'description': '''
                 <strong>Answer Format by Question Style:</strong><br>
-                • <strong>Multiple Choice:</strong> Options W/X/Y/Z (all 4 required). Answer: single letter (W, X, Y, or Z)<br>
-                • <strong>Identify All:</strong> Options W/X/Y/Z (3-4 required). Answer: comma-separated letters (e.g., "W, X, Z")<br>
-                • <strong>Rank:</strong> Options W/X/Y/Z (3-4 required). Answer: ranking order (e.g., "Y, W, Z, X")<br>
-                • <strong>Short Answer:</strong> No options. Answer: text (use " OR " for alternatives)<br>
+                • <strong>Multiple Choice:</strong> Exactly 4 options as a JSON list, e.g. ["Option W", "Option X", "Option Y", "Option Z"]. Answer: label of correct option (W, X, Y, or Z)<br>
+                • <strong>Identify All:</strong> 2+ options as a JSON list. Answer: comma-separated labels of all correct options (e.g., "W, X, Z")<br>
+                • <strong>Rank:</strong> 2+ options as a JSON list. Answer: labels in correct ranking order (e.g., "Y, W, Z, X")<br>
+                • <strong>Short Answer:</strong> Leave options as []. Answer: text (use " OR " for alternatives)<br>
             '''
         }),
         ('Metadata', {

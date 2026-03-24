@@ -49,11 +49,9 @@ class Question(models.Model):
     # Answer fields
     correct_answer = models.CharField(max_length=1000, help_text="The correct answer(s)")
 
-    # Options for multiple choice, ranking, and identify all questions
-    option_1 = models.CharField(max_length=500, blank=True, null=True, help_text="Option W")
-    option_2 = models.CharField(max_length=500, blank=True, null=True, help_text="Option X")
-    option_3 = models.CharField(max_length=500, blank=True, null=True, help_text="Option Y")
-    option_4 = models.CharField(max_length=500, blank=True, null=True, help_text="Option Z")
+    # Options for multiple choice, ranking, and identify all questions.
+    # Stored as an ordered list of strings; labels (W, X, Y, Z, …) are derived by position.
+    options = models.JSONField(default=list, blank=True)
 
     # Metadata
     source = models.CharField(

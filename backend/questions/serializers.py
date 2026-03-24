@@ -11,7 +11,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = [
             'id', 'question_text', 'category', 'question_type', 'question_style',
-            'correct_answer', 'option_1', 'option_2', 'option_3', 'option_4',
+            'correct_answer', 'options',
             'source', 'explanation', 'times_answered', 'times_correct',
             'accuracy_rate', 'created_at', 'updated_at'
         ]
@@ -25,7 +25,7 @@ class QuestionListSerializer(serializers.ModelSerializer):
         model = Question
         fields = [
             'id', 'question_text', 'category', 'question_type', 'question_style',
-            'correct_answer', 'option_1', 'option_2', 'option_3', 'option_4', 'source'
+            'correct_answer', 'options', 'source'
         ]
 
 

@@ -137,10 +137,7 @@ class Command(BaseCommand):
                         question_style=q_data['question_style'],
                         question_type=q_data['question_type'],
                         correct_answer=q_data['correct_answer'],
-                        option_1=q_data.get('option_1'),
-                        option_2=q_data.get('option_2'),
-                        option_3=q_data.get('option_3'),
-                        option_4=q_data.get('option_4'),
+                        options=q_data.get('options', []),
                         source=q_data.get('source'),
                         explanation=q_data.get('explanation'),
                     )
@@ -223,12 +220,13 @@ class Command(BaseCommand):
                 text_preview += '...'
             self.stdout.write(f'Text: {text_preview}')
 
-            if q.get('option_1'):
+            options = q.get('options') or []
+            if options:
+                labels = 'WXYZ'
                 self.stdout.write('Options:')
-                self.stdout.write(f'  W) {q["option_1"][:60]}')
-                self.stdout.write(f'  X) {q["option_2"][:60]}')
-                self.stdout.write(f'  Y) {q["option_3"][:60]}')
-                self.stdout.write(f'  Z) {q["option_4"][:60]}')
+                for idx, opt in enumerate(options):
+                    label = labels[idx] if idx < len(labels) else str(idx + 1)
+                    self.stdout.write(f'  {label}) {str(opt)[:60]}')
 
             self.stdout.write(f'Answer: {q["correct_answer"]}')
 

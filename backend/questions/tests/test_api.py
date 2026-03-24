@@ -40,10 +40,12 @@ class QuestionListViewTestCase(TestCase):
             question_style='MULTIPLE_CHOICE',
             question_type='BONUS',
             correct_answer='W',
-            option_1='An object in motion stays in motion',
-            option_2='Force equals mass times acceleration',
-            option_3='Every action has an equal reaction',
-            option_4='Energy is conserved',
+            options=[
+                'An object in motion stays in motion',
+                'Force equals mass times acceleration',
+                'Every action has an equal reaction',
+                'Energy is conserved',
+            ],
             source='REGIONALS_2024',
             explanation='Law of inertia'
         )
