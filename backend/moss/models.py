@@ -27,13 +27,6 @@ class Game(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-    packet_version = models.ForeignKey(
-        "moss.PacketVersion",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="games",
-    )
     packet = models.ForeignKey(
         "questions.Packet",
         on_delete=models.SET_NULL,

@@ -92,12 +92,8 @@ class Question(models.Model):
     ]
 
     # Packet position
-    packet = models.ForeignKey(
-        Packet, on_delete=models.CASCADE, related_name='questions',
-        null=True, blank=True,
-    )
+    packet = models.ForeignKey(Packet, on_delete=models.CASCADE, related_name='questions')
     pair_id = models.PositiveIntegerField(
-        null=True, blank=True,
         help_text="Which tossup/bonus pair within the packet (1-based)"
     )
 
@@ -114,7 +110,7 @@ class Question(models.Model):
     #   SHORT_ANSWER / MULTIPLE_CHOICE : string (e.g. "mitosis" or "W")
     #   IDENTIFY_ALL                   : list of ints (indices of correct options)
     #   RANK                           : list of ints (options in correct order)
-    correct_answer = models.JSONField(null=True, blank=True)
+    correct_answer = models.JSONField()
 
     explanation = models.TextField(blank=True, null=True)
 
