@@ -145,65 +145,6 @@ class ScoresheetSnapshot(models.Model):
         return f"{self.scoresheet_id}@{self.seq}"
 
 
-class PacketVersion(models.Model):
-    checksum_algorithm = models.CharField(max_length=50)
-    checksum_canonicalization = models.CharField(max_length=100)
-    checksum_value = models.CharField(max_length=128)
-
-    year = models.PositiveIntegerField(null=True, blank=True)
-    packet_name = models.CharField(max_length=255, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["-created_at"]
-        unique_together = [
-            ("checksum_algorithm", "checksum_canonicalization", "checksum_value"),
-        ]
-
-    def __str__(self) -> str:
-        label = self.packet_name or "Packet"
-        if self.year:
-            label = f"{label} {self.year}"
-        return f"{label} ({self.checksum_value[:12]}…)"
-
-
-class PacketQuestion(models.Model):
-    QUESTION_TYPE_CHOICES = [
-        ("TOSSUP", "Tossup"),
-        ("BONUS", "Bonus"),
-    ]
-
-    packet_version = models.ForeignKey(
-        PacketVersion,
-        on_delete=models.CASCADE,
-        related_name="questions",
-    )
-    question_id = models.PositiveIntegerField()
-    pair_id = models.PositiveIntegerField()
-    question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES)
-    category = models.TextField(blank=True)
-
-    question_style = models.CharField(max_length=50, blank=True)
-    source = models.CharField(max_length=100, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["packet_version_id", "pair_id", "question_id"]
-        unique_together = [
-            ("packet_version", "question_id"),
-        ]
-        indexes = [
-            models.Index(fields=["packet_version", "pair_id"]),
-            models.Index(fields=["packet_version", "category"]),
-        ]
-
-    def __str__(self) -> str:
-        return f"{self.packet_version_id}:{self.question_type} q{self.question_id} (pair {self.pair_id})"
-
 
 class GameTeamQuestionOutcome(models.Model):
     TOSSUP_RESULT_CHOICES = [
@@ -228,19 +169,10 @@ class GameTeamQuestionOutcome(models.Model):
         on_delete=models.CASCADE,
         related_name="question_outcomes",
     )
-    packet_question = models.ForeignKey(
-        PacketQuestion,
-        on_delete=models.CASCADE,
-        related_name="team_outcomes",
-        null=True,
-        blank=True,
-    )
     question = models.ForeignKey(
         "questions.Question",
         on_delete=models.CASCADE,
         related_name="team_outcomes",
-        null=True,
-        blank=True,
     )
 
     heard = models.BooleanField(default=False)
@@ -261,17 +193,17 @@ class GameTeamQuestionOutcome(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["game_id", "tournament_team_id", "packet_question_id"]
+        ordering = ["game_id", "tournament_team_id", "question_id"]
         unique_together = [
-            ("game", "tournament_team", "packet_question"),
+            ("game", "tournament_team", "question"),
         ]
         indexes = [
             models.Index(fields=["game", "tournament_team"]),
-            models.Index(fields=["packet_question", "tournament_team"]),
+            models.Index(fields=["question", "tournament_team"]),
         ]
 
     def __str__(self) -> str:
-        return f"Game {self.game_id}: {self.tournament_team.name} q{self.packet_question.question_id} ({self.points})"
+        return f"Game {self.game_id}: {self.tournament_team.name} q{self.question_id} ({self.points})"
 
 
 class GamePlayerLineupSegment(models.Model):
