@@ -1,6 +1,69 @@
 from django.db import models
 
 
+class QuestionSet(models.Model):
+    """
+    An abstract, named collection of packets (e.g. "NSB 2025 Regionals").
+    Versions of the same set are tracked via QuestionSetVersion.
+    """
+    name = models.CharField(max_length=255)
+    year = models.PositiveIntegerField(null=True, blank=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-year', 'name']
+
+    def __str__(self):
+        if self.year:
+            return f"{self.name} ({self.year})"
+        return self.name
+
+
+class QuestionSetVersion(models.Model):
+    """
+    A specific, immutable snapshot of a QuestionSet. This is the object
+    that tournaments and games reference directly.
+    """
+    question_set = models.ForeignKey(QuestionSet, on_delete=models.CASCADE, related_name='versions')
+    tag = models.CharField(max_length=50, help_text='e.g. "v1", "v1.1", "corrected"')
+    notes = models.TextField(blank=True, help_text="What changed in this version")
+    is_primary = models.BooleanField(default=False, help_text="Marks the canonical/current version")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = [('question_set', 'tag')]
+
+    def __str__(self):
+        return f"{self.question_set.name} {self.tag}"
+
+
+class Packet(models.Model):
+    """
+    A single packet (set of tossup/bonus pairs) within a QuestionSetVersion.
+    """
+    question_set_version = models.ForeignKey(
+        QuestionSetVersion, on_delete=models.CASCADE, related_name='packets'
+    )
+    number = models.PositiveIntegerField(help_text="Packet number within the set (e.g. 1–12)")
+    title = models.CharField(max_length=255, blank=True, help_text='e.g. "Round 1"')
+    checksum = models.CharField(
+        max_length=128, blank=True,
+        help_text="SHA-256 of canonicalized packet JSON, for deduplication"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['number']
+        unique_together = [('question_set_version', 'number')]
+
+    def __str__(self):
+        label = self.title or f"Packet {self.number}"
+        return f"{self.question_set_version} — {label}"
+
+
 class Question(models.Model):
     """
     Main Question model for Science Bowl questions
@@ -23,22 +86,20 @@ class Question(models.Model):
         ('RANK', 'Rank'),
     ]
 
-    SOURCE_CHOICES = [
-        ('MIT_2025', 'MIT 2025'),
-        ('REGIONALS_2023', 'Regionals 2023'),
-        ('REGIONALS_2024', 'Regionals 2024'),
-        ('REGIONALS_2025', 'Regionals 2025'),
-        ('NATIONALS_2023', 'Nationals 2023'),
-        ('NATIONALS_2024', 'Nationals 2024'),
-        ('NATIONALS_2025', 'Nationals 2025'),
-        ('INVITATIONAL', 'Invitational'),
-        ('USER_SUBMITTED', 'User Submitted'),
-    ]
-    
     QUESTION_TYPE_CHOICES = [
         ('TOSSUP', 'Tossup'),
         ('BONUS', 'Bonus'),
     ]
+
+    # Packet position
+    packet = models.ForeignKey(
+        Packet, on_delete=models.CASCADE, related_name='questions',
+        null=True, blank=True,
+    )
+    pair_id = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Which tossup/bonus pair within the packet (1-based)"
+    )
 
     # Question content
     question_text = models.TextField()
@@ -46,22 +107,19 @@ class Question(models.Model):
     question_style = models.CharField(max_length=20, choices=QUESTION_STYLE_CHOICES, db_index=True, default='MULTIPLE_CHOICE')
     question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES, db_index=True, default='TOSSUP')
 
-    # Answer fields
-    correct_answer = models.CharField(max_length=1000, help_text="The correct answer(s)")
-
-    # Options for multiple choice, ranking, and identify all questions.
-    # Stored as an ordered list of strings; labels (W, X, Y, Z, …) are derived by position.
+    # Options (ordered list of strings; labels W/X/Y/Z/… derived by position)
     options = models.JSONField(default=list, blank=True)
 
-    # Metadata
-    source = models.CharField(
-        max_length=50,
-        choices=SOURCE_CHOICES,
-        blank=True,
-        null=True,
-        help_text="Source of question"
-    )
-    explanation = models.TextField(blank=True, null=True, help_text="Explanation of the answer")
+    # Correct answer — type depends on question_style:
+    #   SHORT_ANSWER / MULTIPLE_CHOICE : string (e.g. "mitosis" or "W")
+    #   IDENTIFY_ALL                   : list of ints (indices of correct options)
+    #   RANK                           : list of ints (options in correct order)
+    correct_answer = models.JSONField(null=True, blank=True)
+
+    explanation = models.TextField(blank=True, null=True)
+
+    # Content checksum for deduplication
+    checksum = models.CharField(max_length=128, blank=True)
 
     # Stats
     times_answered = models.IntegerField(default=0)
@@ -73,7 +131,8 @@ class Question(models.Model):
 
     class Meta:
         db_table = 'questions'
-        ordering = ['-created_at']
+        ordering = ['pair_id', 'question_type']
+        unique_together = [['packet', 'pair_id', 'question_type']]
         indexes = [
             models.Index(fields=['category', 'question_type']),
         ]
