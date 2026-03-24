@@ -34,6 +34,13 @@ class Game(models.Model):
         blank=True,
         related_name="games",
     )
+    packet = models.ForeignKey(
+        "questions.Packet",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="games",
+    )
     pairs_played = models.PositiveIntegerField(default=0)
 
     tossup_points_correct = models.IntegerField(null=True, blank=True)
@@ -232,6 +239,15 @@ class GameTeamQuestionOutcome(models.Model):
         PacketQuestion,
         on_delete=models.CASCADE,
         related_name="team_outcomes",
+        null=True,
+        blank=True,
+    )
+    question = models.ForeignKey(
+        "questions.Question",
+        on_delete=models.CASCADE,
+        related_name="team_outcomes",
+        null=True,
+        blank=True,
     )
 
     heard = models.BooleanField(default=False)
