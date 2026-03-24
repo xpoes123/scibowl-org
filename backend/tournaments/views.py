@@ -7,12 +7,12 @@ from django.shortcuts import get_object_or_404
 from pathlib import Path
 import json
 import re
-from .models import Tournament, Team, Coach, Player, Room, Round
+from .models import Tournament, Team, Player, Room, Round
 from moss import models as moss_models
 from moss.serializers import MossGameSerializer
 from .serializers import (
     TournamentListSerializer, TournamentDetailSerializer,
-    TeamSerializer, CoachSerializer, PlayerSerializer, RoomSerializer,
+    TeamSerializer, PlayerSerializer, RoomSerializer,
     RoundSerializer,
 )
 
@@ -330,23 +330,6 @@ class TeamViewSet(viewsets.ModelViewSet):
         serializer = PlayerSerializer(players, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'])
-    def coaches(self, request, pk=None):
-        """Get all coaches for a team."""
-        team = self.get_object()
-        coaches = team.coaches.all()
-        serializer = CoachSerializer(coaches, many=True)
-        return Response(serializer.data)
-
-
-class CoachViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for managing coaches.
-    Supports full CRUD operations.
-    """
-    queryset = Coach.objects.all()
-    serializer_class = CoachSerializer
-    permission_classes = [permissions.AllowAny]
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
