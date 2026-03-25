@@ -186,7 +186,13 @@ class Room(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rooms')
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NOT_STARTED')
-    current_round = models.IntegerField(default=0)
+    current_round = models.ForeignKey(
+        "Round",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="active_rooms",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -261,6 +267,13 @@ class Round(models.Model):
     name = models.CharField(max_length=100, blank=True)
 
     # Packet assignment
+    packet = models.ForeignKey(
+        "questions.Packet",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="rounds",
+    )
     packet_name = models.CharField(max_length=255, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
