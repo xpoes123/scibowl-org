@@ -17,11 +17,6 @@ Extends Django's built-in `AbstractUser` (adds `username`, `email`, `password`, 
 | `email` | User's email address. |
 | `password` | Hashed password. |
 | `first_name` / `last_name` | Display name fields. |
-| `bio` | Optional free-text biography. |
-| `school` | School or organization the user is affiliated with. |
-| `grade_level` | Numeric grade level (e.g. 9–12 for high school). |
-| `total_questions_answered` | Running count of practice questions answered, updated on each submission. |
-| `correct_answers` | Running count of correct practice answers, used to compute accuracy. |
 | `is_staff` / `is_superuser` | Django permission flags (inherited). |
 | `created_at` | Timestamp set on account creation. |
 | `updated_at` | Timestamp updated on every save. |
@@ -86,36 +81,8 @@ An individual tossup or bonus question, belonging to a specific pair within a pa
 | `correct_answer` | JSON value whose type depends on `question_style`: a string label (e.g. `"W"`) for `MULTIPLE_CHOICE`/`SHORT_ANSWER`, or an array of 0-based option indices for `IDENTIFY_ALL` and `RANK`. |
 | `explanation` | Optional explanation of the correct answer. |
 | `checksum` | SHA-256 of the canonicalized question content; used for deduplication. |
-| `times_answered` | Count of times this question has been answered in practice mode. |
-| `times_correct` | Count of correct practice answers; used with `times_answered` to compute accuracy. |
 | `created_at` | Timestamp set on creation. |
 | `updated_at` | Timestamp updated on every save. |
-
-### `user_question_history` (`questions.UserQuestionHistory`)
-
-Records each time a user answers a question in practice mode.
-
-| Field | Description |
-|---|---|
-| `id` | Primary key. |
-| `user` | FK → `User`. The user who answered the question. |
-| `question` | FK → `Question`. The question that was answered. |
-| `user_answer` | The raw answer text the user submitted. |
-| `is_correct` | Whether the submitted answer was correct. |
-| `time_taken` | Seconds spent on the question; nullable. |
-| `answered_at` | Timestamp set when the answer was recorded. |
-
-### `bookmarks` (`questions.Bookmark`)
-
-Allows a user to save a question for later review.
-
-| Field | Description |
-|---|---|
-| `id` | Primary key. |
-| `user` | FK → `User`. The user who created the bookmark. |
-| `question` | FK → `Question`. The bookmarked question. Unique per user. |
-| `notes` | Optional free-text note attached to the bookmark. |
-| `created_at` | Timestamp set when the bookmark was created. |
 
 ---
 
