@@ -1444,12 +1444,12 @@ class Command(BaseCommand):
             with connections[db_alias].cursor() as cursor:
                 cursor.execute(
                     """
-                    SELECT DISTINCT pq.category
+                    SELECT DISTINCT q.category
                     FROM moss_gameteamquestionoutcome o
-                    JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                    JOIN questions q ON q.id = o.question_id
                     JOIN moss_game g ON g.id = o.game_id
                     WHERE g.tournament_id = %s
-                    ORDER BY pq.category ASC
+                    ORDER BY q.category ASC
                     """,
                     [tournament.id],
                 )
@@ -1525,7 +1525,7 @@ class Command(BaseCommand):
                   t.name AS team_name,
                   t.school AS school,
                   t.pool AS pool
-                FROM moss_tournamentteam t
+                FROM tournaments_team t
                 WHERE t.tournament_id = %s
                 ORDER BY t.name ASC
                 """,
@@ -1542,8 +1542,8 @@ class Command(BaseCommand):
                   p.grade_level AS grade_level,
                   t.id AS team_id,
                   t.name AS team_name
-                FROM moss_tournamentplayer p
-                JOIN moss_tournamentteam t ON t.id = p.tournament_team_id
+                FROM tournaments_player p
+                JOIN tournaments_team t ON t.id = p.team_id
                 WHERE t.tournament_id = %s
                 ORDER BY t.name ASC, p.name ASC
                 """,
@@ -1576,13 +1576,15 @@ class Command(BaseCommand):
                   r.packet_name AS round_packet_name,
                   g.status AS status,
                   g.completed_at AS completed_at,
-                  pv.checksum_value AS packet_checksum,
-                  pv.packet_name AS packet_name,
-                  pv.year AS packet_year,
+                  pk.checksum AS packet_checksum,
+                  pk.title AS packet_name,
+                  qs.year AS packet_year,
                   g.pairs_played AS pairs_played
                 FROM moss_game g
                 LEFT JOIN tournaments_round r ON r.id = g.round_id
-                LEFT JOIN moss_packetversion pv ON pv.id = g.packet_version_id
+                LEFT JOIN questions_packet pk ON pk.id = g.packet_id
+                LEFT JOIN questions_questionsetversion qsv ON qsv.id = pk.question_set_version_id
+                LEFT JOIN questions_questionset qs ON qs.id = qsv.question_set_id
                 WHERE g.tournament_id = %s
                 ORDER BY COALESCE(r.round_number, 999999) ASC, g.id ASC
                 """,
@@ -1599,20 +1601,20 @@ class Command(BaseCommand):
                   t.id AS team_id,
                   t.name AS team_name,
                   gt.score_cached AS score,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
                 FROM moss_gameteam gt
                 JOIN moss_game g ON g.id = gt.game_id
-                JOIN moss_tournamentteam t ON t.id = gt.tournament_team_id
+                JOIN tournaments_team t ON t.id = gt.tournament_team_id
                 LEFT JOIN moss_gameteamquestionoutcome o
                   ON o.game_id = gt.game_id AND o.tournament_team_id = gt.tournament_team_id
-                LEFT JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                LEFT JOIN questions q ON q.id = o.question_id
                 WHERE g.tournament_id = %s
                 GROUP BY gt.game_id, gt.slot, t.id, t.name, gt.score_cached
                 ORDER BY gt.game_id ASC, gt.slot ASC
@@ -1659,10 +1661,10 @@ class Command(BaseCommand):
                     SUM(CASE WHEN o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END) AS tossups_no_penalty,
                     SUM(o.points) AS tossup_points
                   FROM moss_gameteamquestionoutcome o
-                  JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                  JOIN questions q ON q.id = o.question_id
                   JOIN moss_game g ON g.id = o.game_id
                   WHERE g.tournament_id = %s
-                    AND pq.question_type = 'TOSSUP'
+                    AND q.question_type = 'TOSSUP'
                     AND o.buzzing_player_id IS NOT NULL
                   GROUP BY o.game_id, o.tournament_team_id, o.buzzing_player_id
                 )
@@ -1678,8 +1680,8 @@ class Command(BaseCommand):
                   COALESCE(ts.tossups_no_penalty, 0) AS tossups_no_penalty,
                   COALESCE(ts.tossup_points, 0) AS tossup_points
                 FROM active a
-                JOIN moss_tournamentteam t ON t.id = a.team_id
-                JOIN moss_tournamentplayer p ON p.id = a.player_id
+                JOIN tournaments_team t ON t.id = a.team_id
+                JOIN tournaments_player p ON p.id = a.player_id
                 LEFT JOIN pairs_heard ph
                   ON ph.game_id = a.game_id AND ph.team_id = a.team_id AND ph.player_id = a.player_id
                 LEFT JOIN tossup_stats ts
@@ -1698,23 +1700,23 @@ class Command(BaseCommand):
                   gt.slot AS slot,
                   t.id AS team_id,
                   t.name AS team_name,
-                  COALESCE(pq.category, '') AS category,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
-                  COALESCE(SUM(CASE WHEN pq.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
+                  COALESCE(q.category, '') AS category,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' THEN o.points ELSE 0 END), 0) AS tossup_points,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' THEN o.points ELSE 0 END), 0) AS bonus_points,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'TOSSUP' AND o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_correct,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS bonuses_incorrect,
+                  COALESCE(SUM(CASE WHEN q.question_type = 'BONUS' AND o.bonus_result = 'UNHEARD' THEN 1 ELSE 0 END), 0) AS bonuses_unheard
                 FROM moss_gameteam gt
                 JOIN moss_game g ON g.id = gt.game_id
-                JOIN moss_tournamentteam t ON t.id = gt.tournament_team_id
+                JOIN tournaments_team t ON t.id = gt.tournament_team_id
                 JOIN moss_gameteamquestionoutcome o
                   ON o.game_id = gt.game_id AND o.tournament_team_id = gt.tournament_team_id
-                JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                JOIN questions q ON q.id = o.question_id
                 WHERE g.tournament_id = %s
-                GROUP BY gt.game_id, gt.slot, t.id, t.name, COALESCE(pq.category, '')
+                GROUP BY gt.game_id, gt.slot, t.id, t.name, COALESCE(q.category, '')
                 ORDER BY gt.game_id ASC, gt.slot ASC, category ASC
                 """,
                 params=[tournament.id],
@@ -1730,20 +1732,20 @@ class Command(BaseCommand):
                   t.name AS team_name,
                   p.id AS player_id,
                   p.name AS player_name,
-                  COALESCE(pq.category, '') AS category,
+                  COALESCE(q.category, '') AS category,
                   COALESCE(SUM(CASE WHEN o.tossup_result = 'CORRECT' THEN 1 ELSE 0 END), 0) AS tossups_correct,
                   COALESCE(SUM(CASE WHEN o.tossup_result = 'INCORRECT' THEN 1 ELSE 0 END), 0) AS tossups_incorrect,
                   COALESCE(SUM(CASE WHEN o.tossup_result = 'NO_PENALTY' THEN 1 ELSE 0 END), 0) AS tossups_no_penalty,
                   COALESCE(SUM(o.points), 0) AS tossup_points
                 FROM moss_gameteamquestionoutcome o
-                JOIN moss_packetquestion pq ON pq.id = o.packet_question_id
+                JOIN questions q ON q.id = o.question_id
                 JOIN moss_game g ON g.id = o.game_id
-                JOIN moss_tournamentteam t ON t.id = o.tournament_team_id
-                JOIN moss_tournamentplayer p ON p.id = o.buzzing_player_id
+                JOIN tournaments_team t ON t.id = o.tournament_team_id
+                JOIN tournaments_player p ON p.id = o.buzzing_player_id
                 WHERE g.tournament_id = %s
-                  AND pq.question_type = 'TOSSUP'
+                  AND q.question_type = 'TOSSUP'
                   AND o.buzzing_player_id IS NOT NULL
-                GROUP BY o.game_id, t.id, t.name, p.id, p.name, COALESCE(pq.category, '')
+                GROUP BY o.game_id, t.id, t.name, p.id, p.name, COALESCE(q.category, '')
                 ORDER BY o.game_id ASC, t.name ASC, p.name ASC, category ASC
                 """,
                 params=[tournament.id],
