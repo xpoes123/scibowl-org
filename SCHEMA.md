@@ -97,23 +97,69 @@ Core record for a Science Bowl tournament event.
 | `id` | Primary key. |
 | `name` | Full name of the tournament (e.g. "2025 NSB Regionals"). |
 | `slug` | URL-safe identifier used by the website (e.g. `"2025-nsb-regionals"`); nullable for programmatically created records. |
-| `description` | Optional free-text description of the tournament. |
-| `division` | Competitive level: `HIGH_SCHOOL`, `MIDDLE_SCHOOL`, `COLLEGIATE`, or `OPEN`. |
-| `format` | Bracket format: `ROUND_ROBIN`, `DOUBLE_ELIM`, `SINGLE_ELIM`, `SWISS`, or `CUSTOM`. |
-| `status` | Current lifecycle state: `UPCOMING`, `REGISTRATION`, `IN_PROGRESS`, `COMPLETED`, or `CANCELLED`. |
-| `tournament_date` | Date the tournament is held. |
-| `registration_deadline` | Last date to register; nullable. |
-| `location` | City or venue description. |
-| `venue` | Specific venue name within the location; optional. |
-| `host_organization` | Organization running the tournament. |
+| `description` | Optional internal/admin-facing description of the tournament. |
+| `publication_status` | Visibility state: `DRAFT`, `PUBLISHED`, or `ARCHIVED`. Controls whether the tournament appears on the public listing. |
+| `status` | Lifecycle state: `UPCOMING`, `REGISTRATION`, `IN_PROGRESS`, `COMPLETED`, or `CANCELLED`. |
+| `mode` | Format: `IN_PERSON` or `ONLINE`. |
+| `timezone` | IANA timezone identifier (e.g. `"America/New_York"`). Used for date display and status calculation. |
+| `divisions` | Array of competitive levels: `HS` (High School), `MS` (Middle School), `UG` (Undergraduate), or `OPEN`. Supports multi-division tournaments. |
+| `format` | Bracket format: `ROUND_ROBIN`, `DOUBLE_ELIM`, `SINGLE_ELIM`, `SWISS`, or `CUSTOM`; optional. |
+| `difficulty` | Optional free-text difficulty description (e.g. `"Nationals-level"`). |
+| `format_summary` | Human-readable format description for display (e.g. `"4x8 RR + 8-team DE bracket"`); optional. |
+| `rounds_guaranteed` | Number of rounds guaranteed for each team; nullable. |
+| `start_date` | Date the tournament begins. |
+| `end_date` | Date the tournament ends; nullable (same as `start_date` for single-day events). |
+| `location_city` | City where the tournament is held; blank for online tournaments. |
+| `location_state` | Two-letter state code; blank for online tournaments. |
+| `location_address` | Venue name or street address; optional. |
+| `notes_logistics` | Logistics details for display (e.g. check-in time, requirements); optional. |
+| `notes_writing_team` | Name of the question-writing team; optional. |
+| `host_organization` | Organization running the tournament; optional. |
 | `tournament_director` | FK → `User`. The user responsible for directing the tournament; nullable. |
 | `question_set_version` | FK → `QuestionSetVersion`. The question set version used for this tournament; nullable. |
 | `max_teams` | Maximum number of teams allowed to register; nullable for unlimited. |
 | `current_teams` | Cached count of currently registered teams. |
-| `website_url` | URL to an external tournament information page; optional. |
 | `registration_url` | URL to an external registration form; optional. |
+| `registration_method` | How teams register: `FORM`, `EMAIL`, `WEBSITE`, or `OTHER`; optional. |
+| `registration_instructions` | Human-readable registration instructions; optional. |
+| `registration_cost` | Cost description (e.g. `"$30 per team"`); optional. |
 | `created_at` | Timestamp set on creation. |
 | `updated_at` | Timestamp updated on every save. |
+
+### `tournaments_tournamentcontact` (`tournaments.TournamentContact`)
+
+A public contact entry for a tournament (e.g. email address, Discord server).
+
+| Field | Description |
+|---|---|
+| `id` | Primary key. |
+| `tournament` | FK → `Tournament`. The tournament this contact belongs to. |
+| `type` | Contact method: `EMAIL`, `DISCORD`, `PHONE`, or `OTHER`. |
+| `value` | The contact value (e.g. email address or Discord invite URL). |
+| `label` | Optional display label (e.g. `"Tournament Director"`). |
+
+### `tournaments_tournamentlink` (`tournaments.TournamentLink`)
+
+A public link associated with a tournament (e.g. results sheet, website, packet archive).
+
+| Field | Description |
+|---|---|
+| `id` | Primary key. |
+| `tournament` | FK → `Tournament`. The tournament this link belongs to. |
+| `type` | Link category: `WEBSITE`, `RESULTS`, `PACKETS`, `STATS`, or `OTHER`. |
+| `url` | Full URL. |
+| `label` | Display label (e.g. `"Final Standings"`). |
+
+### `tournaments_tournamentdeadline` (`tournaments.TournamentDeadline`)
+
+A labeled deadline associated with a tournament's registration (e.g. registration close, payment due).
+
+| Field | Description |
+|---|---|
+| `id` | Primary key. |
+| `tournament` | FK → `Tournament`. The tournament this deadline belongs to. |
+| `label` | Deadline description (e.g. `"Registration closes"`, `"Payment due"`). |
+| `date` | Date in `YYYY-MM-DD` format or a descriptive string. |
 
 ### `tournaments_team` (`tournaments.Team`)
 
