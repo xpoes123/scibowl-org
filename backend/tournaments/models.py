@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -7,7 +8,6 @@ User = get_user_model()
 class Tournament(models.Model):
     """
     Core tournament model representing a quiz bowl tournament.
-    Based on TOURNAMENT.md requirements for MVP.
     """
     FORMAT_CHOICES = [
         ('ROUND_ROBIN', 'Round Robin'),
@@ -18,9 +18,9 @@ class Tournament(models.Model):
     ]
 
     DIVISION_CHOICES = [
-        ('HIGH_SCHOOL', 'High School'),
-        ('MIDDLE_SCHOOL', 'Middle School'),
-        ('COLLEGIATE', 'Collegiate'),
+        ('HS', 'High School'),
+        ('MS', 'Middle School'),
+        ('UG', 'Undergraduate'),
         ('OPEN', 'Open'),
     ]
 
@@ -32,6 +32,24 @@ class Tournament(models.Model):
         ('CANCELLED', 'Cancelled'),
     ]
 
+    PUBLICATION_STATUS_CHOICES = [
+        ('DRAFT', 'Draft'),
+        ('PUBLISHED', 'Published'),
+        ('ARCHIVED', 'Archived'),
+    ]
+
+    MODE_CHOICES = [
+        ('IN_PERSON', 'In Person'),
+        ('ONLINE', 'Online'),
+    ]
+
+    REGISTRATION_METHOD_CHOICES = [
+        ('FORM', 'Form'),
+        ('EMAIL', 'Email'),
+        ('WEBSITE', 'Website'),
+        ('OTHER', 'Other'),
+    ]
+
     name = models.CharField(max_length=255)
     slug = models.SlugField(
         max_length=255,
@@ -41,22 +59,36 @@ class Tournament(models.Model):
         help_text="URL slug used by the website (e.g. pilot-scrimmage)",
     )
     description = models.TextField(blank=True)
-    division = models.CharField(max_length=20, choices=DIVISION_CHOICES)
-    format = models.CharField(max_length=20, choices=FORMAT_CHOICES)
+    publication_status = models.CharField(max_length=20, choices=PUBLICATION_STATUS_CHOICES, default='DRAFT')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='UPCOMING')
+    mode = models.CharField(max_length=20, choices=MODE_CHOICES)
+    timezone = models.CharField(max_length=100, help_text="IANA timezone identifier, e.g. America/New_York")
+    divisions = ArrayField(
+        models.CharField(max_length=10, choices=DIVISION_CHOICES),
+        help_text="Division(s) for this tournament, e.g. ['HS'] or ['MS', 'HS']",
+    )
+    format = models.CharField(max_length=20, choices=FORMAT_CHOICES, blank=True)
+    difficulty = models.CharField(max_length=255, blank=True)
+    format_summary = models.TextField(blank=True, help_text="Human-readable format description, e.g. '4x8 RR + 8-team DE bracket'")
+    rounds_guaranteed = models.IntegerField(null=True, blank=True)
 
     # Dates
-    tournament_date = models.DateField()
-    registration_deadline = models.DateField(null=True, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # Location
-    location = models.CharField(max_length=255)
-    venue = models.CharField(max_length=255, blank=True)
+    # Location (blank for ONLINE tournaments)
+    location_city = models.CharField(max_length=255, blank=True)
+    location_state = models.CharField(max_length=2, blank=True)
+    location_address = models.CharField(max_length=255, blank=True)
+
+    # Notes
+    notes_logistics = models.TextField(blank=True)
+    notes_writing_team = models.CharField(max_length=255, blank=True)
 
     # Organizer info
-    host_organization = models.CharField(max_length=255)
+    host_organization = models.CharField(max_length=255, blank=True)
     tournament_director = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -78,24 +110,24 @@ class Tournament(models.Model):
         related_name="tournaments",
     )
 
-    # External links
-    website_url = models.URLField(max_length=500, blank=True, help_text="Tournament website or information page")
-    registration_url = models.URLField(max_length=500, blank=True, help_text="External registration link (if not using built-in registration)")
+    # Registration
+    registration_url = models.URLField(max_length=500, blank=True, help_text="External registration link")
+    registration_method = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, blank=True)
+    registration_instructions = models.TextField(blank=True)
+    registration_cost = models.CharField(max_length=100, blank=True)
 
     class Meta:
-        ordering = ['tournament_date', 'name']
+        ordering = ['start_date', 'name']
 
     def __str__(self):
-        return f"{self.name} ({self.get_division_display()})"
+        return f"{self.name} ({', '.join(self.divisions)})"
 
     @property
     def is_registration_open(self):
-        """Check if registration is currently open."""
         return self.status == 'REGISTRATION'
 
     @property
     def is_upcoming(self):
-        """Check if tournament hasn't started yet."""
         return self.status in ['UPCOMING', 'REGISTRATION']
 
 
