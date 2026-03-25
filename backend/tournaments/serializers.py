@@ -20,7 +20,7 @@ class TournamentListSerializer(serializers.ModelSerializer):
             'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url'
+            'website_url', 'registration_url', 'question_set_version',
         ]
 
 
@@ -36,8 +36,8 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
             'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url',
-            'teams_count', 'rooms_count', 'director', 'created_at', 'updated_at'
+            'website_url', 'registration_url', 'question_set_version',
+            'teams_count', 'rooms_count', 'director', 'created_at', 'updated_at',
         ]
 
     def get_teams_count(self, obj):

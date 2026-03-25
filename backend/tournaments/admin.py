@@ -4,10 +4,11 @@ from .models import Tournament, Team, Player, Room, Round
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'division', 'status', 'tournament_date', 'location', 'current_teams', 'max_teams']
+    list_display = ['name', 'division', 'status', 'tournament_date', 'location', 'question_set_version', 'current_teams', 'max_teams']
     list_filter = ['status', 'division', 'format', 'tournament_date']
     search_fields = ['name', 'location', 'host_organization']
     date_hierarchy = 'tournament_date'
+    raw_id_fields = ['question_set_version']
 
 
 @admin.register(Team)

@@ -69,6 +69,15 @@ class Tournament(models.Model):
     max_teams = models.IntegerField(null=True, blank=True)
     current_teams = models.IntegerField(default=0)
 
+    # Question set used for this tournament
+    question_set_version = models.ForeignKey(
+        "questions.QuestionSetVersion",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="tournaments",
+    )
+
     # External links
     website_url = models.URLField(max_length=500, blank=True, help_text="Tournament website or information page")
     registration_url = models.URLField(max_length=500, blank=True, help_text="External registration link (if not using built-in registration)")
