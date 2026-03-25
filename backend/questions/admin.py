@@ -106,25 +106,6 @@ class QuestionAdmin(admin.ModelAdmin):
                 • <strong>Short Answer:</strong> No options. Answer: string (use " OR " for alternatives)<br>
             ''',
         }),
-        ('Statistics', {
-            'fields': ('times_answered', 'times_correct'),
-        }),
     )
 
 
-@admin.register(UserQuestionHistory)
-class UserQuestionHistoryAdmin(admin.ModelAdmin):
-    list_display = ['user', 'question', 'is_correct', 'time_taken', 'answered_at']
-    list_filter = ['is_correct', 'answered_at']
-    search_fields = ['user__username', 'question__question_text']
-    ordering = ['-answered_at']
-    readonly_fields = ['answered_at']
-
-
-@admin.register(Bookmark)
-class BookmarkAdmin(admin.ModelAdmin):
-    list_display = ['user', 'question', 'created_at']
-    list_filter = ['created_at']
-    search_fields = ['user__username', 'question__question_text', 'notes']
-    ordering = ['-created_at']
-    readonly_fields = ['created_at']
