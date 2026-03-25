@@ -16,14 +16,13 @@ class SnapshotTestCase(TestCase):
     def setUp(self):
         self.tournament = Tournament.objects.create(
             name="Test Tournament",
-            description="",
-            division="HIGH_SCHOOL",
+            divisions=["HS"],
             format="ROUND_ROBIN",
             status="UPCOMING",
-            tournament_date="2026-02-01",
-            location="Test City",
-            venue="Test Venue",
-            host_organization="Test Org",
+            mode="IN_PERSON",
+            timezone="America/New_York",
+            start_date="2026-02-01",
+            location_city="Test City",
         )
 
         team1 = Team.objects.create(

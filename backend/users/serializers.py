@@ -6,17 +6,13 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User model"""
 
-    accuracy = serializers.ReadOnlyField()
-
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
-            'bio', 'school', 'grade_level',
-            'total_questions_answered', 'correct_answers', 'accuracy',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'username', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'username', 'created_at', 'updated_at']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -31,7 +27,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'username', 'email', 'password', 'password_confirm',
-            'first_name', 'last_name', 'bio', 'school', 'grade_level'
+            'first_name', 'last_name'
         ]
 
     def validate_email(self, value):
@@ -58,14 +54,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class PublicUserSerializer(serializers.ModelSerializer):
     """Serializer for public user profiles (excludes email)"""
 
-    accuracy = serializers.ReadOnlyField()
-
     class Meta:
         model = User
         fields = [
             'id', 'username', 'first_name', 'last_name',
-            'bio', 'school', 'grade_level',
-            'total_questions_answered', 'correct_answers', 'accuracy',
             'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'total_questions_answered', 'correct_answers', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']

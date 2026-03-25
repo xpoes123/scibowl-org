@@ -1,4 +1,3 @@
-import django.contrib.postgres.fields
 from django.db import migrations, models
 
 
@@ -56,14 +55,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="tournament",
             name="divisions",
-            field=django.contrib.postgres.fields.ArrayField(
-                base_field=models.CharField(
-                    choices=[("HS", "High School"), ("MS", "Middle School"), ("UG", "Undergraduate"), ("OPEN", "Open")],
-                    max_length=10,
-                ),
+            field=models.JSONField(
                 default=list,
                 help_text="Division(s) for this tournament, e.g. ['HS'] or ['MS', 'HS']",
-                size=None,
             ),
             preserve_default=False,
         ),

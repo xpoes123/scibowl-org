@@ -20,20 +20,12 @@ def _make_tournament():
     return Tournament.objects.create(
         name="Pilot Scrimmage",
         slug="pilot-scrimmage",
-        description="",
-        division="HIGH_SCHOOL",
+        divisions=["HS"],
         format="ROUND_ROBIN",
         status="COMPLETED",
-        tournament_date=date(2026, 2, 13),
-        registration_deadline=None,
-        location="",
-        venue="",
-        host_organization="",
-        tournament_director=None,
-        max_teams=None,
-        current_teams=0,
-        website_url="",
-        registration_url="",
+        mode="IN_PERSON",
+        timezone="America/New_York",
+        start_date=date(2026, 2, 13),
     )
 
 

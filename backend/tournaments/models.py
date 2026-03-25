@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -63,8 +62,8 @@ class Tournament(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='UPCOMING')
     mode = models.CharField(max_length=20, choices=MODE_CHOICES)
     timezone = models.CharField(max_length=100, help_text="IANA timezone identifier, e.g. America/New_York")
-    divisions = ArrayField(
-        models.CharField(max_length=10, choices=DIVISION_CHOICES),
+    divisions = models.JSONField(
+        default=list,
         help_text="Division(s) for this tournament, e.g. ['HS'] or ['MS', 'HS']",
     )
     format = models.CharField(max_length=20, choices=FORMAT_CHOICES, blank=True)
