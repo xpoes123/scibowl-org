@@ -3,9 +3,15 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from questions.models import Question, UserQuestionHistory, Bookmark
+from questions.models import Packet, Question, QuestionSet, QuestionSetVersion, UserQuestionHistory, Bookmark
 
 User = get_user_model()
+
+
+def _make_packet() -> Packet:
+    qs = QuestionSet.objects.create(name='Test Set', year=2025)
+    qsv = QuestionSetVersion.objects.create(question_set=qs, tag='v1', is_primary=True)
+    return Packet.objects.create(question_set_version=qsv, number=1, title='Round 1')
 
 
 class QuestionListViewTestCase(TestCase):
@@ -16,25 +22,28 @@ class QuestionListViewTestCase(TestCase):
         self.client = APIClient()
         self.url = reverse('questions:question_list')
 
-        # Create test user
         self.user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
             password='testpass123'
         )
 
-        # Create sample questions
+        packet = _make_packet()
+
         self.question1 = Question.objects.create(
+            packet=packet,
+            pair_id=1,
             question_text='What is the atomic number of Carbon?',
             category='CHEMISTRY',
             question_style='SHORT_ANSWER',
             question_type='TOSSUP',
             correct_answer='6',
-            source='MIT_2025',
             explanation='Carbon has 6 protons'
         )
 
         self.question2 = Question.objects.create(
+            packet=packet,
+            pair_id=1,
             question_text='What is Newton\'s first law?',
             category='PHYSICS',
             question_style='MULTIPLE_CHOICE',
@@ -46,17 +55,17 @@ class QuestionListViewTestCase(TestCase):
                 'Every action has an equal reaction',
                 'Energy is conserved',
             ],
-            source='REGIONALS_2024',
             explanation='Law of inertia'
         )
 
         self.question3 = Question.objects.create(
+            packet=packet,
+            pair_id=2,
             question_text='Name three types of RNA',
             category='BIOLOGY',
             question_style='IDENTIFY_ALL',
             question_type='TOSSUP',
-            correct_answer='mRNA, tRNA, rRNA',
-            source='NATIONALS_2024',
+            correct_answer=[0, 1, 2],
             explanation='Three main types of RNA'
         )
 
@@ -83,12 +92,6 @@ class QuestionListViewTestCase(TestCase):
     def test_filter_by_question_style(self):
         """Test filtering questions by question style"""
         response = self.client.get(self.url, {'question_style': 'MULTIPLE_CHOICE'})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
-
-    def test_filter_by_source(self):
-        """Test filtering questions by source"""
-        response = self.client.get(self.url, {'source': 'MIT_2025'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
 
@@ -122,13 +125,15 @@ class QuestionDetailViewTestCase(TestCase):
         """Set up test client and sample data"""
         self.client = APIClient()
 
+        packet = _make_packet()
         self.question = Question.objects.create(
+            packet=packet,
+            pair_id=1,
             question_text='What is the speed of light?',
             category='PHYSICS',
             question_style='SHORT_ANSWER',
             question_type='TOSSUP',
             correct_answer='3.00 x 10^8 m/s',
-            source='MIT_2025',
             explanation='Speed of light in vacuum'
         )
 
@@ -169,14 +174,15 @@ class UserQuestionHistoryTestCase(TestCase):
             password='testpass123'
         )
 
-        # Create test question
+        packet = _make_packet()
         self.question = Question.objects.create(
+            packet=packet,
+            pair_id=1,
             question_text='What is H2O?',
             category='CHEMISTRY',
             question_style='SHORT_ANSWER',
             question_type='TOSSUP',
             correct_answer='Water',
-            source='MIT_2025'
         )
 
     def test_list_history_unauthenticated(self):
@@ -280,23 +286,25 @@ class BookmarkTestCase(TestCase):
             password='testpass123'
         )
 
-        # Create test questions
+        packet = _make_packet()
         self.question1 = Question.objects.create(
+            packet=packet,
+            pair_id=1,
             question_text='What is DNA?',
             category='BIOLOGY',
             question_style='SHORT_ANSWER',
             question_type='TOSSUP',
             correct_answer='Deoxyribonucleic acid',
-            source='MIT_2025'
         )
 
         self.question2 = Question.objects.create(
+            packet=packet,
+            pair_id=2,
             question_text='What is ATP?',
             category='BIOLOGY',
             question_style='SHORT_ANSWER',
             question_type='TOSSUP',
             correct_answer='Adenosine triphosphate',
-            source='MIT_2025'
         )
 
     def test_list_bookmarks_unauthenticated(self):

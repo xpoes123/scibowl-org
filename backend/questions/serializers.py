@@ -10,9 +10,10 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = [
-            'id', 'question_text', 'category', 'question_type', 'question_style',
+            'id', 'packet', 'pair_id',
+            'question_text', 'category', 'question_type', 'question_style',
             'correct_answer', 'options',
-            'source', 'explanation', 'times_answered', 'times_correct',
+            'explanation', 'times_answered', 'times_correct',
             'accuracy_rate', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'times_answered', 'times_correct', 'created_at', 'updated_at']
@@ -24,8 +25,9 @@ class QuestionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = [
-            'id', 'question_text', 'category', 'question_type', 'question_style',
-            'correct_answer', 'options', 'source'
+            'id', 'packet', 'pair_id',
+            'question_text', 'category', 'question_type', 'question_style',
+            'correct_answer', 'options',
         ]
 
 

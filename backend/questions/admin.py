@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Question, UserQuestionHistory, Bookmark
+from .models import Bookmark, Packet, Question, QuestionSet, QuestionSetVersion, UserQuestionHistory
 
 
 class QuestionAdminForm(forms.ModelForm):
@@ -13,18 +13,16 @@ class QuestionAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Update help text based on question style
         if self.instance.pk:
             style = self.instance.question_style
             self.fields['correct_answer'].help_text = self._get_answer_help_text(style)
 
     def _get_answer_help_text(self, style):
-        """Return appropriate help text based on question style"""
         help_texts = {
-            'MULTIPLE_CHOICE': 'Enter the correct option letter (W, X, Y, or Z)',
-            'IDENTIFY_ALL': 'Enter all correct options separated by commas (e.g., "W, X, Z")',
-            'RANK': 'Enter the correct ranking order (e.g., "Y, W, Z, X" from first to last)',
-            'SHORT_ANSWER': 'Enter the acceptable answer(s). Use " OR " to separate alternatives (e.g., "mitochondria OR mitochondrion")',
+            'MULTIPLE_CHOICE': 'String: correct option label, e.g. "W"',
+            'IDENTIFY_ALL': 'JSON array of 0-based indices of all correct options, e.g. [0, 2]',
+            'RANK': 'JSON array of 0-based option indices in correct order, e.g. [1, 0, 3, 2]',
+            'SHORT_ANSWER': 'String: acceptable answer(s). Use " OR " for alternatives.',
         }
         return help_texts.get(style, 'The correct answer(s)')
 
@@ -59,30 +57,57 @@ class QuestionAdminForm(forms.ModelForm):
         return cleaned_data
 
 
+@admin.register(QuestionSet)
+class QuestionSetAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'year', 'created_at']
+    list_filter = ['year']
+    search_fields = ['name']
+    ordering = ['-year', 'name']
+
+
+@admin.register(QuestionSetVersion)
+class QuestionSetVersionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'question_set', 'tag', 'is_primary', 'created_at']
+    list_filter = ['is_primary']
+    search_fields = ['question_set__name', 'tag']
+    ordering = ['-created_at']
+
+
+@admin.register(Packet)
+class PacketAdmin(admin.ModelAdmin):
+    list_display = ['id', 'question_set_version', 'number', 'title', 'created_at']
+    list_filter = ['question_set_version__question_set']
+    search_fields = ['title', 'question_set_version__question_set__name']
+    ordering = ['question_set_version', 'number']
+
+
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
-    list_display = ['id', 'category', 'question_type', 'question_style', 'source', 'times_answered', 'accuracy_rate', 'created_at']
-    list_filter = ['category', 'question_type', 'question_style', 'source', 'created_at']
-    search_fields = ['question_text', 'correct_answer']
+    list_display = ['id', 'packet', 'pair_id', 'category', 'question_type', 'question_style', 'times_answered', 'accuracy_rate', 'created_at']
+    list_filter = ['category', 'question_type', 'question_style', 'created_at']
+    search_fields = ['question_text']
     ordering = ['-created_at']
 
     fieldsets = (
+        ('Packet', {
+            'fields': ('packet', 'pair_id'),
+        }),
         ('Question Content', {
-            'fields': ('question_text', 'category', 'question_type', 'question_style')
+            'fields': ('question_text', 'category', 'question_type', 'question_style'),
         }),
         ('Options & Answers', {
             'fields': ('options', 'correct_answer', 'explanation'),
             'description': '''
-                <strong>Answer Format by Question Style:</strong><br>
-                • <strong>Multiple Choice:</strong> Exactly 4 options as a JSON list, e.g. ["Option W", "Option X", "Option Y", "Option Z"]. Answer: label of correct option (W, X, Y, or Z)<br>
-                • <strong>Identify All:</strong> 2+ options as a JSON list. Answer: comma-separated labels of all correct options (e.g., "W, X, Z")<br>
-                • <strong>Rank:</strong> 2+ options as a JSON list. Answer: labels in correct ranking order (e.g., "Y, W, Z, X")<br>
-                • <strong>Short Answer:</strong> Leave options as []. Answer: text (use " OR " for alternatives)<br>
-            '''
+                <strong>Answer format by question style:</strong><br>
+                • <strong>Multiple Choice:</strong> 4 options. Answer: label string e.g. "W"<br>
+                • <strong>Identify All:</strong> 2+ options. Answer: JSON array of 0-based indices of correct options, e.g. [0, 2]<br>
+                • <strong>Rank:</strong> 2+ options. Answer: JSON array of 0-based indices in correct order, e.g. [1, 0, 3, 2]<br>
+                • <strong>Short Answer:</strong> No options. Answer: string (use " OR " for alternatives)<br>
+            ''',
         }),
-        ('Metadata', {
-            'fields': ('source', 'times_answered', 'times_correct')
+        ('Statistics', {
+            'fields': ('times_answered', 'times_correct'),
         }),
     )
 
