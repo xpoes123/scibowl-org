@@ -199,6 +199,59 @@ class Room(models.Model):
         return f"{self.tournament.name} - {self.name}"
 
 
+class TournamentContact(models.Model):
+    CONTACT_TYPE_CHOICES = [
+        ('EMAIL', 'Email'),
+        ('DISCORD', 'Discord'),
+        ('PHONE', 'Phone'),
+        ('OTHER', 'Other'),
+    ]
+
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='contacts')
+    type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES)
+    value = models.CharField(max_length=500)
+    label = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ['type', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.type}: {self.label or self.value}"
+
+
+class TournamentLink(models.Model):
+    LINK_TYPE_CHOICES = [
+        ('WEBSITE', 'Website'),
+        ('RESULTS', 'Results'),
+        ('PACKETS', 'Packets'),
+        ('STATS', 'Stats'),
+        ('OTHER', 'Other'),
+    ]
+
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='links')
+    type = models.CharField(max_length=20, choices=LINK_TYPE_CHOICES)
+    url = models.URLField(max_length=500)
+    label = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['type', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.label}"
+
+
+class TournamentDeadline(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='deadlines')
+    label = models.CharField(max_length=255)
+    date = models.CharField(max_length=100, help_text="Date in YYYY-MM-DD format or descriptive text")
+
+    class Meta:
+        ordering = ['date', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.label}: {self.date}"
+
+
 class Round(models.Model):
     """
     Represents a round of play in a tournament.

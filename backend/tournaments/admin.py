@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tournament, Team, Player, Room, Round
+from .models import Tournament, Team, Player, Room, Round, TournamentContact, TournamentLink, TournamentDeadline
 
 
 @admin.register(Tournament)
@@ -9,6 +9,26 @@ class TournamentAdmin(admin.ModelAdmin):
     search_fields = ['name', 'location_city', 'host_organization']
     date_hierarchy = 'start_date'
     raw_id_fields = ['question_set_version']
+
+
+@admin.register(TournamentContact)
+class TournamentContactAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'type', 'label', 'value']
+    list_filter = ['type']
+    search_fields = ['tournament__name', 'label', 'value']
+
+
+@admin.register(TournamentLink)
+class TournamentLinkAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'type', 'label', 'url']
+    list_filter = ['type']
+    search_fields = ['tournament__name', 'label']
+
+
+@admin.register(TournamentDeadline)
+class TournamentDeadlineAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'label', 'date']
+    search_fields = ['tournament__name', 'label']
 
 
 @admin.register(Team)
