@@ -117,10 +117,6 @@ class Question(models.Model):
     # Content checksum for deduplication
     checksum = models.CharField(max_length=128, blank=True)
 
-    # Stats
-    times_answered = models.IntegerField(default=0)
-    times_correct = models.IntegerField(default=0)
-
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -135,54 +131,3 @@ class Question(models.Model):
 
     def __str__(self):
         return f"{self.category} - {self.question_type}: {self.question_text[:50]}..."
-
-    @property
-    def accuracy_rate(self):
-        """Calculate accuracy rate for this question"""
-        if self.times_answered == 0:
-            return 0
-        return (self.times_correct / self.times_answered) * 100
-
-
-class UserQuestionHistory(models.Model):
-    """
-    Tracks individual user's performance on questions
-    """
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='question_history')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='user_attempts')
-
-    user_answer = models.TextField()
-    is_correct = models.BooleanField()
-    time_taken = models.IntegerField(help_text="Time taken in seconds", null=True, blank=True)
-
-    answered_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'user_question_history'
-        ordering = ['-answered_at']
-        indexes = [
-            models.Index(fields=['user', 'answered_at']),
-            models.Index(fields=['question', 'is_correct']),
-        ]
-
-    def __str__(self):
-        return f"{self.user.username} - {self.question.id} - {'✓' if self.is_correct else '✗'}"
-
-
-class Bookmark(models.Model):
-    """
-    Allows users to bookmark questions for later review
-    """
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='bookmarks')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='bookmarked_by')
-
-    notes = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'bookmarks'
-        unique_together = ['user', 'question']
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.user.username} bookmarked Q{self.question.id}"

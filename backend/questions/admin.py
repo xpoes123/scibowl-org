@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Bookmark, Packet, Question, QuestionSet, QuestionSetVersion, UserQuestionHistory
+from .models import Packet, Question, QuestionSet, QuestionSetVersion
 
 
 class QuestionAdminForm(forms.ModelForm):
@@ -84,7 +84,7 @@ class PacketAdmin(admin.ModelAdmin):
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
-    list_display = ['id', 'packet', 'pair_id', 'category', 'question_type', 'question_style', 'times_answered', 'accuracy_rate', 'created_at']
+    list_display = ['id', 'packet', 'pair_id', 'category', 'question_type', 'question_style', 'created_at']
     list_filter = ['category', 'question_type', 'question_style', 'created_at']
     search_fields = ['question_text']
     ordering = ['-created_at']
