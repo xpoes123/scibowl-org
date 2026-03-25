@@ -8,33 +8,60 @@ from moss.models import (
     Game,
     GamePlayerLineupSegment,
     GameTeamQuestionOutcome,
-    PacketQuestion,
-    PacketVersion,
 )
 from moss.services.ingest_exports import ingest_scoresheet_exports
+from questions.models import Packet, Question, QuestionSet, QuestionSetVersion
 from tournaments.models import Tournament
+
+CHECKSUM = "0" * 64
+
+
+def _make_tournament():
+    return Tournament.objects.create(
+        name="Pilot Scrimmage",
+        slug="pilot-scrimmage",
+        divisions=["HS"],
+        format="ROUND_ROBIN",
+        status="COMPLETED",
+        mode="IN_PERSON",
+        timezone="America/New_York",
+        start_date=date(2026, 2, 13),
+    )
+
+
+def _make_packet(pair_ids: list[int], checksum: str = CHECKSUM) -> Packet:
+    """Create a QuestionSet → QuestionSetVersion → Packet → Questions hierarchy."""
+    qs = QuestionSet.objects.create(name="Test Set", year=2022)
+    qsv = QuestionSetVersion.objects.create(question_set=qs, tag="v1", is_primary=True)
+    packet = Packet.objects.create(question_set_version=qsv, number=1, title="Round 1", checksum=checksum)
+    for pair_id in pair_ids:
+        Question.objects.create(
+            packet=packet,
+            pair_id=pair_id,
+            question_type="TOSSUP",
+            category="BIOLOGY",
+            question_style="MULTIPLE_CHOICE",
+            question_text="",
+            options=[],
+            correct_answer="",
+        )
+        Question.objects.create(
+            packet=packet,
+            pair_id=pair_id,
+            question_type="BONUS",
+            category="BIOLOGY",
+            question_style="MULTIPLE_CHOICE",
+            question_text="",
+            options=[],
+            correct_answer="",
+        )
+    return packet
 
 
 class IngestQuestionOutcomesTestCase(TestCase):
-    def test_ingest_populates_packet_questions_and_outcomes(self):
-        tournament = Tournament.objects.create(
-            name="Pilot Scrimmage",
-            slug="pilot-scrimmage",
-            description="",
-            division="HIGH_SCHOOL",
-            format="ROUND_ROBIN",
-            status="COMPLETED",
-            tournament_date=date(2026, 2, 13),
-            registration_deadline=None,
-            location="",
-            venue="",
-            host_organization="",
-            tournament_director=None,
-            max_teams=None,
-            current_teams=0,
-            website_url="",
-            registration_url="",
-        )
+    def test_ingest_populates_outcomes(self):
+        tournament = _make_tournament()
+        _make_packet(pair_ids=[1, 2])
 
         export_obj = {
             "format": "moss_scoresheet",
@@ -53,7 +80,7 @@ class IngestQuestionOutcomesTestCase(TestCase):
             "packet_checksum": {
                 "algorithm": "sha256",
                 "canonicalization": "json_sorted_keys_utf8_no_ws",
-                "value": "0" * 64,
+                "value": CHECKSUM,
             },
             "game": {
                 "teams": [
@@ -110,16 +137,10 @@ class IngestQuestionOutcomesTestCase(TestCase):
             exports=[(Path("export.json"), raw, export_obj)],
         )
 
-        self.assertEqual(PacketVersion.objects.count(), 1)
-        pv = PacketVersion.objects.first()
-        assert pv is not None
-        self.assertEqual(pv.checksum_value, "0" * 64)
-
-        self.assertEqual(PacketQuestion.objects.count(), 4)
         self.assertEqual(Game.objects.count(), 1)
         game = Game.objects.first()
         assert game is not None
-        self.assertIsNotNone(game.packet_version_id)
+        self.assertIsNotNone(game.packet_id)
         self.assertEqual(game.pairs_played, 1)
         self.assertEqual(game.tossup_points_correct, 4)
         self.assertEqual(game.bonus_points_correct, 10)
@@ -131,25 +152,45 @@ class IngestQuestionOutcomesTestCase(TestCase):
 
         self.assertEqual(GamePlayerLineupSegment.objects.count(), 4)
 
+    def test_ingest_missing_packet_raises(self):
+        tournament = _make_tournament()
+        # No packet pre-created — ingest must raise.
+        export_obj = {
+            "format": "moss_scoresheet",
+            "version": 1,
+            "exported_at": "2026-02-13T00:00:00Z",
+            "packet": {
+                "packet": "Round 1",
+                "year": 2022,
+                "questions": [{"id": 1, "pair_id": 1, "question_type": "TOSSUP"}],
+            },
+            "packet_checksum": {
+                "algorithm": "sha256",
+                "canonicalization": "json_sorted_keys_utf8_no_ws",
+                "value": CHECKSUM,
+            },
+            "game": {
+                "teams": [
+                    {"name": "Team A", "players": ["Alice"]},
+                    {"name": "Team B", "players": ["Carol"]},
+                ]
+            },
+            "rules": {
+                "tossup": {"correct": 4, "incorrect": -4, "no_penalty": 0},
+                "bonus": {"correct": 10, "incorrect": 0},
+            },
+            "state": {"pair_index": 0, "attempts_by_question_id": {}},
+        }
+        raw = json.dumps(export_obj, sort_keys=True).encode("utf-8")
+        with self.assertRaises(ValueError, msg="No packet found"):
+            ingest_scoresheet_exports(
+                tournament_id=tournament.id,
+                exports=[(Path("export.json"), raw, export_obj)],
+            )
+
     def test_ingest_v3_id_based_export(self):
-        tournament = Tournament.objects.create(
-            name="Pilot Scrimmage",
-            slug="pilot-scrimmage",
-            description="",
-            division="HIGH_SCHOOL",
-            format="ROUND_ROBIN",
-            status="COMPLETED",
-            tournament_date=date(2026, 2, 13),
-            registration_deadline=None,
-            location="",
-            venue="",
-            host_organization="",
-            tournament_director=None,
-            max_teams=None,
-            current_teams=0,
-            website_url="",
-            registration_url="",
-        )
+        tournament = _make_tournament()
+        _make_packet(pair_ids=[1])
 
         export_obj = {
             "format": "moss_scoresheet",
@@ -166,7 +207,7 @@ class IngestQuestionOutcomesTestCase(TestCase):
             "packet_checksum": {
                 "algorithm": "sha256",
                 "canonicalization": "json_sorted_keys_utf8_no_ws",
-                "value": "0" * 64,
+                "value": CHECKSUM,
             },
             "game": {
                 "teams": [

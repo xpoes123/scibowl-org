@@ -5,7 +5,8 @@ from django.db import transaction
 
 from django.conf import settings
 
-from .models import Game, GameTeam, Scoresheet, ScoresheetEvent, TournamentTeam
+from .models import Game, GameTeam, Scoresheet, ScoresheetEvent
+from tournaments.models import Team
 from .serializers import (
     ScoresheetEventOutSerializer,
     ScoresheetEventPostSerializer,
@@ -39,7 +40,7 @@ class ScoresheetCreateView(APIView):
             game = Game.objects.create(tournament=tournament)
             scoresheet = Scoresheet.objects.create(game=game)
             for slot, name in enumerate([team_a_name, team_b_name], start=1):
-                team, _ = TournamentTeam.objects.get_or_create(tournament=tournament, name=name)
+                team, _ = Team.objects.get_or_create(tournament=tournament, name=name, defaults={"school": ""})
                 GameTeam.objects.create(game=game, tournament_team=team, slot=slot)
 
         return Response({"scoresheet_id": scoresheet.id, "game_id": game.id}, status=status.HTTP_201_CREATED)

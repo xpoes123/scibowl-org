@@ -7,33 +7,31 @@ from moss.models import (
     Scoresheet,
     ScoresheetEvent,
     ScoresheetSnapshot,
-    TournamentTeam,
 )
 from moss.services.snapshots import build_state, maybe_write_snapshot, SNAPSHOT_INTERVAL
-from tournaments.models import Tournament
+from tournaments.models import Team, Tournament
 
 
 class SnapshotTestCase(TestCase):
     def setUp(self):
         self.tournament = Tournament.objects.create(
             name="Test Tournament",
-            description="",
-            division="HIGH_SCHOOL",
+            divisions=["HS"],
             format="ROUND_ROBIN",
             status="UPCOMING",
-            tournament_date="2026-02-01",
-            location="Test City",
-            venue="Test Venue",
-            host_organization="Test Org",
+            mode="IN_PERSON",
+            timezone="America/New_York",
+            start_date="2026-02-01",
+            location_city="Test City",
         )
 
-        team1 = TournamentTeam.objects.create(
+        team1 = Team.objects.create(
             tournament=self.tournament,
             name="Team A",
             school="Test School",
             pool="A",
         )
-        team2 = TournamentTeam.objects.create(
+        team2 = Team.objects.create(
             tournament=self.tournament,
             name="Team B",
             school="Test School",

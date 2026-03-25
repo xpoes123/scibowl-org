@@ -2,50 +2,6 @@ from django.conf import settings
 from django.db import models
 
 
-class TournamentTeam(models.Model):
-    tournament = models.ForeignKey(
-        "tournaments.Tournament",
-        on_delete=models.CASCADE,
-        related_name="moss_teams",
-    )
-    name = models.CharField(max_length=255)
-    school = models.CharField(max_length=255, blank=True)
-    pool = models.CharField(
-        max_length=10,
-        blank=True,
-        help_text="Pool/Group assignment (e.g., 'A', 'B', 'C')",
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["name"]
-        unique_together = ["tournament", "name"]
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.tournament.name})"
-
-
-class TournamentPlayer(models.Model):
-    tournament_team = models.ForeignKey(
-        TournamentTeam,
-        on_delete=models.CASCADE,
-        related_name="players",
-    )
-    name = models.CharField(max_length=255)
-    grade_level = models.CharField(max_length=50, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["name"]
-        unique_together = ["tournament_team", "name"]
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.tournament_team.name})"
-
 
 class Game(models.Model):
     STATUS_CHOICES = [
@@ -57,13 +13,6 @@ class Game(models.Model):
     tournament = models.ForeignKey(
         "tournaments.Tournament",
         on_delete=models.CASCADE,
-        related_name="moss_games",
-    )
-    round = models.ForeignKey(
-        "tournaments.Round",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
         related_name="moss_games",
     )
     room = models.ForeignKey(
@@ -78,8 +27,15 @@ class Game(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
-    packet_version = models.ForeignKey(
-        "moss.PacketVersion",
+    round = models.ForeignKey(
+        "tournaments.Round",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="games",
+    )
+    packet = models.ForeignKey(
+        "questions.Packet",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -110,7 +66,7 @@ class GameTeam(models.Model):
         related_name="game_teams",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="game_teams",
     )
@@ -196,65 +152,6 @@ class ScoresheetSnapshot(models.Model):
         return f"{self.scoresheet_id}@{self.seq}"
 
 
-class PacketVersion(models.Model):
-    checksum_algorithm = models.CharField(max_length=50)
-    checksum_canonicalization = models.CharField(max_length=100)
-    checksum_value = models.CharField(max_length=128)
-
-    year = models.PositiveIntegerField(null=True, blank=True)
-    packet_name = models.CharField(max_length=255, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["-created_at"]
-        unique_together = [
-            ("checksum_algorithm", "checksum_canonicalization", "checksum_value"),
-        ]
-
-    def __str__(self) -> str:
-        label = self.packet_name or "Packet"
-        if self.year:
-            label = f"{label} {self.year}"
-        return f"{label} ({self.checksum_value[:12]}…)"
-
-
-class PacketQuestion(models.Model):
-    QUESTION_TYPE_CHOICES = [
-        ("TOSSUP", "Tossup"),
-        ("BONUS", "Bonus"),
-    ]
-
-    packet_version = models.ForeignKey(
-        PacketVersion,
-        on_delete=models.CASCADE,
-        related_name="questions",
-    )
-    question_id = models.PositiveIntegerField()
-    pair_id = models.PositiveIntegerField()
-    question_type = models.CharField(max_length=20, choices=QUESTION_TYPE_CHOICES)
-    category = models.TextField(blank=True)
-
-    question_style = models.CharField(max_length=50, blank=True)
-    source = models.CharField(max_length=100, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ["packet_version_id", "pair_id", "question_id"]
-        unique_together = [
-            ("packet_version", "question_id"),
-        ]
-        indexes = [
-            models.Index(fields=["packet_version", "pair_id"]),
-            models.Index(fields=["packet_version", "category"]),
-        ]
-
-    def __str__(self) -> str:
-        return f"{self.packet_version_id}:{self.question_type} q{self.question_id} (pair {self.pair_id})"
-
 
 class GameTeamQuestionOutcome(models.Model):
     TOSSUP_RESULT_CHOICES = [
@@ -275,12 +172,12 @@ class GameTeamQuestionOutcome(models.Model):
         related_name="team_question_outcomes",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="question_outcomes",
     )
-    packet_question = models.ForeignKey(
-        PacketQuestion,
+    question = models.ForeignKey(
+        "questions.Question",
         on_delete=models.CASCADE,
         related_name="team_outcomes",
     )
@@ -292,7 +189,7 @@ class GameTeamQuestionOutcome(models.Model):
     bonus_result = models.CharField(max_length=20, choices=BONUS_RESULT_CHOICES, blank=True)
 
     buzzing_player = models.ForeignKey(
-        TournamentPlayer,
+        "tournaments.Player",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -303,17 +200,17 @@ class GameTeamQuestionOutcome(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["game_id", "tournament_team_id", "packet_question_id"]
+        ordering = ["game_id", "tournament_team_id", "question_id"]
         unique_together = [
-            ("game", "tournament_team", "packet_question"),
+            ("game", "tournament_team", "question"),
         ]
         indexes = [
             models.Index(fields=["game", "tournament_team"]),
-            models.Index(fields=["packet_question", "tournament_team"]),
+            models.Index(fields=["question", "tournament_team"]),
         ]
 
     def __str__(self) -> str:
-        return f"Game {self.game_id}: {self.tournament_team.name} q{self.packet_question.question_id} ({self.points})"
+        return f"Game {self.game_id}: {self.tournament_team.name} q{self.question_id} ({self.points})"
 
 
 class GamePlayerLineupSegment(models.Model):
@@ -323,12 +220,12 @@ class GamePlayerLineupSegment(models.Model):
         related_name="player_lineup_segments",
     )
     tournament_team = models.ForeignKey(
-        TournamentTeam,
+        "tournaments.Team",
         on_delete=models.CASCADE,
         related_name="lineup_segments",
     )
     tournament_player = models.ForeignKey(
-        TournamentPlayer,
+        "tournaments.Player",
         on_delete=models.CASCADE,
         related_name="lineup_segments",
     )

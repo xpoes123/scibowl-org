@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tournament, Team, Coach, Player, Room, Round, Game
+from .models import Tournament, Team, Player, Room, Round
 
 
 class TournamentDirectorSerializer(serializers.Serializer):
@@ -20,7 +20,7 @@ class TournamentListSerializer(serializers.ModelSerializer):
             'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url'
+            'website_url', 'registration_url', 'question_set_version',
         ]
 
 
@@ -36,8 +36,8 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
             'id', 'slug', 'name', 'description', 'division', 'format', 'status',
             'tournament_date', 'registration_deadline', 'location', 'venue',
             'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url',
-            'teams_count', 'rooms_count', 'director', 'created_at', 'updated_at'
+            'website_url', 'registration_url', 'question_set_version',
+            'teams_count', 'rooms_count', 'director', 'created_at', 'updated_at',
         ]
 
     def get_teams_count(self, obj):
@@ -55,40 +55,22 @@ class TournamentDetailSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     """Serializer for teams."""
     players_count = serializers.SerializerMethodField()
-    coaches_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
-        fields = ['id', 'name', 'school', 'pool', 'players_count', 'coaches_count']
+        fields = ['id', 'name', 'school', 'pool', 'players_count']
 
     def get_players_count(self, obj):
         return obj.players.count()
-
-    def get_coaches_count(self, obj):
-        return obj.coaches.count()
-
-
-class CoachSerializer(serializers.ModelSerializer):
-    """Serializer for coaches."""
-    team_name = serializers.CharField(source='team.name', read_only=True)
-
-    class Meta:
-        model = Coach
-        fields = ['id', 'name', 'email', 'phone', 'team', 'team_name']
 
 
 class PlayerSerializer(serializers.ModelSerializer):
     """Serializer for players."""
     team_name = serializers.CharField(source='team.name', read_only=True)
-    accuracy = serializers.ReadOnlyField()
-    
+
     class Meta:
         model = Player
-        fields = [
-            'id', 'name', 'grade_level', 'team_name',
-            'total_points', 'tossups_heard', 'correct_buzzes', 'incorrect_buzzes',
-            'accuracy'
-        ]
+        fields = ['id', 'name', 'grade_level', 'team_name']
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -105,26 +87,3 @@ class RoundSerializer(serializers.ModelSerializer):
         fields = ['id', 'round_number', 'name', 'packet_name']
 
 
-class GameSerializer(serializers.ModelSerializer):
-    """Serializer for games."""
-    team1_name = serializers.CharField(source='team1.name', read_only=True)
-    team2_name = serializers.CharField(source='team2.name', read_only=True)
-    team1_pool = serializers.CharField(source='team1.pool', read_only=True)
-    team2_pool = serializers.CharField(source='team2.pool', read_only=True)
-    round_number = serializers.IntegerField(source='round.round_number', read_only=True)
-    room_name = serializers.CharField(source='room.name', read_only=True)
-    winner_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Game
-        fields = [
-            'id', 'round_number', 'room', 'room_name', 'pool',
-            'team1_name', 'team2_name', 'team1_pool', 'team2_pool',
-            'team1_score', 'team2_score',
-            'current_tossup', 'is_complete', 'winner_name',
-            'started_at', 'completed_at'
-        ]
-
-    def get_winner_name(self, obj):
-        winner = obj.winner
-        return winner.name if winner else None

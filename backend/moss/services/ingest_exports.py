@@ -12,18 +12,15 @@ from moss.models import (
     GamePlayerLineupSegment,
     GameTeam,
     GameTeamQuestionOutcome,
-    PacketQuestion,
-    PacketVersion,
     Scoresheet,
     ScoresheetSnapshot,
-    TournamentPlayer,
-    TournamentTeam,
 )
 from moss.reducer import initial_state
 from moss.services.export_facts import (
     reduce_scoresheet_export_to_question_outcomes,
 )
-from tournaments.models import Round as TournamentRound
+from questions.models import Packet, Question
+from tournaments.models import Player, Round as TournamentRound, Team
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -155,50 +152,46 @@ def ingest_scoresheet_exports(
                                     **updates
                                 )
 
-            packet_version, _ = PacketVersion.objects.using(using).get_or_create(
-                checksum_algorithm=checksum_algorithm,
-                checksum_canonicalization=checksum_canonicalization,
-                checksum_value=checksum_value,
-                defaults={"year": packet_year, "packet_name": packet_name_str},
-            )
-            if packet_year is not None or packet_name_str:
-                PacketVersion.objects.using(using).filter(id=packet_version.id).update(
-                    year=packet_year,
-                    packet_name=packet_name_str,
+            # Look up the Packet by checksum. The question set must be imported first.
+            try:
+                packet_obj = Packet.objects.using(using).get(checksum=checksum_value)
+            except Packet.DoesNotExist:
+                raise ValueError(
+                    f"No packet found with checksum {checksum_value!r} "
+                    f"(algorithm={checksum_algorithm!r}, canonicalization={checksum_canonicalization!r}). "
+                    "Import the question set before ingesting game exports."
                 )
 
-            packet_questions = _require_list(packet.get("questions"), "packet.questions")
-            for idx, question_any in enumerate(packet_questions):
-                question = _require_dict(question_any, f"packet.questions[{idx}]")
-                qid = _require_int(question.get("id"), f"packet.questions[{idx}].id")
-                pair_id = _require_int(question.get("pair_id"), f"packet.questions[{idx}].pair_id")
-                qtype = _require_str(question.get("question_type"), f"packet.questions[{idx}].question_type")
-                category_any = question.get("category")
-                category = category_any if isinstance(category_any, str) else ""
-                qstyle_any = question.get("question_style")
-                qstyle = qstyle_any if isinstance(qstyle_any, str) else ""
-                source_any = question.get("source")
-                source = source_any if isinstance(source_any, str) else ""
+            # Build a map from the export's question IDs to Question objects.
+            question_by_export_id: dict[int, Question] = {}
+            packet_questions_raw = _require_list(packet.get("questions"), "packet.questions")
+            for idx, question_any in enumerate(packet_questions_raw):
+                q = _require_dict(question_any, f"packet.questions[{idx}]")
+                qid = _require_int(q.get("id"), f"packet.questions[{idx}].id")
+                pair_id = _require_int(q.get("pair_id"), f"packet.questions[{idx}].pair_id")
+                qtype = _require_str(q.get("question_type"), f"packet.questions[{idx}].question_type")
 
-                PacketQuestion.objects.using(using).update_or_create(
-                    packet_version=packet_version,
-                    question_id=qid,
-                    defaults={
-                        "pair_id": pair_id,
-                        "question_type": qtype,
-                        "category": category,
-                        "question_style": qstyle,
-                        "source": source,
-                    },
-                )
+                try:
+                    question_obj = Question.objects.using(using).get(
+                        packet=packet_obj,
+                        pair_id=pair_id,
+                        question_type=qtype,
+                    )
+                except Question.DoesNotExist:
+                    raise ValueError(
+                        f"No question found for packet {packet_obj.id} "
+                        f"pair_id={pair_id} question_type={qtype!r} "
+                        f"(export question id={qid}). "
+                        "Ensure the question set is fully imported."
+                    )
+                question_by_export_id[qid] = question_obj
 
             game = Game.objects.using(using).create(
                 tournament_id=tournament_id,
-                round=round_obj,
                 status="COMPLETED",
                 started_at=None,
                 completed_at=exported_dt,
-                packet_version=packet_version,
+                packet=packet_obj,
                 pairs_played=int(export_outcomes.pairs_played),
                 tossup_points_correct=tossup_correct,
                 tossup_points_incorrect=tossup_incorrect,
@@ -208,9 +201,9 @@ def ingest_scoresheet_exports(
             )
 
             # Upsert tournament teams and game teams.
-            tournament_teams: dict[str, TournamentTeam] = {}
+            tournament_teams: dict[str, Team] = {}
             for name in team_names:
-                team, _ = TournamentTeam.objects.using(using).get_or_create(
+                team, _ = Team.objects.using(using).get_or_create(
                     tournament_id=tournament_id,
                     name=name,
                     defaults={"school": "", "pool": ""},
@@ -248,12 +241,12 @@ def ingest_scoresheet_exports(
                 roster_by_team[name] = roster
                 player_name_by_id_by_team[name] = player_name_by_id
 
-            tournament_players: dict[tuple[str, str], TournamentPlayer] = {}
+            tournament_players: dict[tuple[str, str], Player] = {}
             for team_name, roster in roster_by_team.items():
                 team = tournament_teams[team_name]
                 for player_name in roster:
-                    player, _ = TournamentPlayer.objects.using(using).get_or_create(
-                        tournament_team=team,
+                    player, _ = Player.objects.using(using).get_or_create(
+                        team=team,
                         name=player_name,
                         defaults={"grade_level": ""},
                     )
@@ -284,16 +277,11 @@ def ingest_scoresheet_exports(
                 },
             )
 
-            packet_question_by_id: dict[int, PacketQuestion] = {
-                pq.question_id: pq
-                for pq in PacketQuestion.objects.using(using).filter(packet_version=packet_version)
-            }
-
             for outcome in export_outcomes.outcomes:
                 tteam = tournament_teams[outcome.team_name]
-                pq = packet_question_by_id.get(outcome.question_id)
-                if pq is None:
-                    raise ValueError(f"Missing PacketQuestion for question id {outcome.question_id}")
+                question_obj = question_by_export_id.get(outcome.question_id)
+                if question_obj is None:
+                    raise ValueError(f"Missing Question for export question id {outcome.question_id}")
 
                 buzzing_player = None
                 if outcome.question_type == "TOSSUP" and outcome.buzzing_player_name:
@@ -302,7 +290,7 @@ def ingest_scoresheet_exports(
                 GameTeamQuestionOutcome.objects.using(using).create(
                     game=game,
                     tournament_team=tteam,
-                    packet_question=pq,
+                    question=question_obj,
                     heard=bool(outcome.heard),
                     points=int(outcome.points),
                     tossup_result=outcome.tossup_result or "",
@@ -364,8 +352,8 @@ def ingest_scoresheet_exports(
                             player_name = player_any
                         player = tournament_players.get((team_name, player_name))
                         if player is None:
-                            player, _ = TournamentPlayer.objects.using(using).get_or_create(
-                                tournament_team=tournament_teams[team_name],
+                            player, _ = Player.objects.using(using).get_or_create(
+                                team=tournament_teams[team_name],
                                 name=player_name,
                                 defaults={"grade_level": ""},
                             )

@@ -7,7 +7,6 @@ User = get_user_model()
 class Tournament(models.Model):
     """
     Core tournament model representing a quiz bowl tournament.
-    Based on TOURNAMENT.md requirements for MVP.
     """
     FORMAT_CHOICES = [
         ('ROUND_ROBIN', 'Round Robin'),
@@ -18,9 +17,9 @@ class Tournament(models.Model):
     ]
 
     DIVISION_CHOICES = [
-        ('HIGH_SCHOOL', 'High School'),
-        ('MIDDLE_SCHOOL', 'Middle School'),
-        ('COLLEGIATE', 'Collegiate'),
+        ('HS', 'High School'),
+        ('MS', 'Middle School'),
+        ('UG', 'Undergraduate'),
         ('OPEN', 'Open'),
     ]
 
@@ -32,6 +31,24 @@ class Tournament(models.Model):
         ('CANCELLED', 'Cancelled'),
     ]
 
+    PUBLICATION_STATUS_CHOICES = [
+        ('DRAFT', 'Draft'),
+        ('PUBLISHED', 'Published'),
+        ('ARCHIVED', 'Archived'),
+    ]
+
+    MODE_CHOICES = [
+        ('IN_PERSON', 'In Person'),
+        ('ONLINE', 'Online'),
+    ]
+
+    REGISTRATION_METHOD_CHOICES = [
+        ('FORM', 'Form'),
+        ('EMAIL', 'Email'),
+        ('WEBSITE', 'Website'),
+        ('OTHER', 'Other'),
+    ]
+
     name = models.CharField(max_length=255)
     slug = models.SlugField(
         max_length=255,
@@ -41,22 +58,36 @@ class Tournament(models.Model):
         help_text="URL slug used by the website (e.g. pilot-scrimmage)",
     )
     description = models.TextField(blank=True)
-    division = models.CharField(max_length=20, choices=DIVISION_CHOICES)
-    format = models.CharField(max_length=20, choices=FORMAT_CHOICES)
+    publication_status = models.CharField(max_length=20, choices=PUBLICATION_STATUS_CHOICES, default='DRAFT')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='UPCOMING')
+    mode = models.CharField(max_length=20, choices=MODE_CHOICES)
+    timezone = models.CharField(max_length=100, help_text="IANA timezone identifier, e.g. America/New_York")
+    divisions = models.JSONField(
+        default=list,
+        help_text="Division(s) for this tournament, e.g. ['HS'] or ['MS', 'HS']",
+    )
+    format = models.CharField(max_length=20, choices=FORMAT_CHOICES, blank=True)
+    difficulty = models.CharField(max_length=255, blank=True)
+    format_summary = models.TextField(blank=True, help_text="Human-readable format description, e.g. '4x8 RR + 8-team DE bracket'")
+    rounds_guaranteed = models.IntegerField(null=True, blank=True)
 
     # Dates
-    tournament_date = models.DateField()
-    registration_deadline = models.DateField(null=True, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # Location
-    location = models.CharField(max_length=255)
-    venue = models.CharField(max_length=255, blank=True)
+    # Location (blank for ONLINE tournaments)
+    location_city = models.CharField(max_length=255, blank=True)
+    location_state = models.CharField(max_length=2, blank=True)
+    location_address = models.CharField(max_length=255, blank=True)
+
+    # Notes
+    notes_logistics = models.TextField(blank=True)
+    notes_writing_team = models.CharField(max_length=255, blank=True)
 
     # Organizer info
-    host_organization = models.CharField(max_length=255)
+    host_organization = models.CharField(max_length=255, blank=True)
     tournament_director = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -69,24 +100,33 @@ class Tournament(models.Model):
     max_teams = models.IntegerField(null=True, blank=True)
     current_teams = models.IntegerField(default=0)
 
-    # External links
-    website_url = models.URLField(max_length=500, blank=True, help_text="Tournament website or information page")
-    registration_url = models.URLField(max_length=500, blank=True, help_text="External registration link (if not using built-in registration)")
+    # Question set used for this tournament
+    question_set_version = models.ForeignKey(
+        "questions.QuestionSetVersion",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="tournaments",
+    )
+
+    # Registration
+    registration_url = models.URLField(max_length=500, blank=True, help_text="External registration link")
+    registration_method = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, blank=True)
+    registration_instructions = models.TextField(blank=True)
+    registration_cost = models.CharField(max_length=100, blank=True)
 
     class Meta:
-        ordering = ['tournament_date', 'name']
+        ordering = ['start_date', 'name']
 
     def __str__(self):
-        return f"{self.name} ({self.get_division_display()})"
+        return f"{self.name} ({', '.join(self.divisions)})"
 
     @property
     def is_registration_open(self):
-        """Check if registration is currently open."""
         return self.status == 'REGISTRATION'
 
     @property
     def is_upcoming(self):
-        """Check if tournament hasn't started yet."""
         return self.status in ['UPCOMING', 'REGISTRATION']
 
 
@@ -110,26 +150,6 @@ class Team(models.Model):
         return f"{self.name} ({self.school})"
 
 
-class Coach(models.Model):
-    """
-    Represents a coach for a team.
-    """
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='coaches')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='coached_teams')
-
-    name = models.CharField(max_length=255)
-    email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=50, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return f"{self.name} ({self.team.name})"
-
 
 class Player(models.Model):
     """
@@ -141,28 +161,15 @@ class Player(models.Model):
     name = models.CharField(max_length=255)
     grade_level = models.CharField(max_length=50, blank=True)
 
-    # Stats (populated by MODAQ)
-    total_points = models.IntegerField(default=0)
-    tossups_heard = models.IntegerField(default=0)
-    correct_buzzes = models.IntegerField(default=0)
-    incorrect_buzzes = models.IntegerField(default=0)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
+        unique_together = [['team', 'name']]
 
     def __str__(self):
         return f"{self.name} ({self.team.name})"
-
-    @property
-    def accuracy(self):
-        """Calculate buzz accuracy."""
-        total_buzzes = self.correct_buzzes + self.incorrect_buzzes
-        if total_buzzes == 0:
-            return 0
-        return (self.correct_buzzes / total_buzzes) * 100
 
 
 class Room(models.Model):
@@ -178,7 +185,13 @@ class Room(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='rooms')
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NOT_STARTED')
-    current_round = models.IntegerField(default=0)
+    current_round = models.ForeignKey(
+        "Round",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="active_rooms",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -191,6 +204,59 @@ class Room(models.Model):
         return f"{self.tournament.name} - {self.name}"
 
 
+class TournamentContact(models.Model):
+    CONTACT_TYPE_CHOICES = [
+        ('EMAIL', 'Email'),
+        ('DISCORD', 'Discord'),
+        ('PHONE', 'Phone'),
+        ('OTHER', 'Other'),
+    ]
+
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='contacts')
+    type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES)
+    value = models.CharField(max_length=500)
+    label = models.CharField(max_length=255, blank=True)
+
+    class Meta:
+        ordering = ['type', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.type}: {self.label or self.value}"
+
+
+class TournamentLink(models.Model):
+    LINK_TYPE_CHOICES = [
+        ('WEBSITE', 'Website'),
+        ('RESULTS', 'Results'),
+        ('PACKETS', 'Packets'),
+        ('STATS', 'Stats'),
+        ('OTHER', 'Other'),
+    ]
+
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='links')
+    type = models.CharField(max_length=20, choices=LINK_TYPE_CHOICES)
+    url = models.URLField(max_length=500)
+    label = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['type', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.label}"
+
+
+class TournamentDeadline(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='deadlines')
+    label = models.CharField(max_length=255)
+    date = models.CharField(max_length=100, help_text="Date in YYYY-MM-DD format or descriptive text")
+
+    class Meta:
+        ordering = ['date', 'label']
+
+    def __str__(self):
+        return f"{self.tournament.name} - {self.label}: {self.date}"
+
+
 class Round(models.Model):
     """
     Represents a round of play in a tournament.
@@ -200,6 +266,13 @@ class Round(models.Model):
     name = models.CharField(max_length=100, blank=True)
 
     # Packet assignment
+    packet = models.ForeignKey(
+        "questions.Packet",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="rounds",
+    )
     packet_name = models.CharField(max_length=255, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -215,48 +288,3 @@ class Round(models.Model):
         return f"{self.tournament.name} - Round {self.round_number}"
 
 
-class Game(models.Model):
-    """
-    Represents a single game between teams.
-    Data primarily written by MODAQ.
-    """
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='games')
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, related_name='games')
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='games')
-
-    team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='games_as_team1')
-    team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='games_as_team2')
-
-    # Pool assignment (set at game creation, doesn't change with team reassignments)
-    pool = models.CharField(max_length=10, blank=True, help_text="Pool this game belongs to")
-
-    # Scores (set by MODAQ)
-    team1_score = models.IntegerField(default=0)
-    team2_score = models.IntegerField(default=0)
-
-    # Game state
-    current_tossup = models.IntegerField(default=0)
-    is_complete = models.BooleanField(default=False)
-
-    # Timestamps
-    started_at = models.DateTimeField(null=True, blank=True)
-    completed_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['round__round_number', 'room__name']
-
-    def __str__(self):
-        return f"{self.team1.name} vs {self.team2.name} (Round {self.round.round_number})"
-
-    @property
-    def winner(self):
-        """Return the winning team if game is complete."""
-        if not self.is_complete:
-            return None
-        if self.team1_score > self.team2_score:
-            return self.team1
-        elif self.team2_score > self.team1_score:
-            return self.team2
-        return None  # Tie

@@ -32,25 +32,23 @@ class UserRegistrationTestCase(TestCase):
         # Verify user was created in database
         self.assertTrue(User.objects.filter(username='newuser').exists())
 
-    def test_register_user_with_profile_info(self):
-        """Test user registration with optional profile information"""
+    def test_register_user_with_name(self):
+        """Test user registration with optional name fields"""
         data = {
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password': 'SecurePass123!',
             'password_confirm': 'SecurePass123!',
-            'bio': 'Science enthusiast',
-            'school': 'Test High School',
-            'grade_level': 10
+            'first_name': 'Jane',
+            'last_name': 'Doe',
         }
 
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = User.objects.get(username='newuser')
-        self.assertEqual(user.bio, 'Science enthusiast')
-        self.assertEqual(user.school, 'Test High School')
-        self.assertEqual(user.grade_level, 10)
+        self.assertEqual(user.first_name, 'Jane')
+        self.assertEqual(user.last_name, 'Doe')
 
     def test_register_password_mismatch(self):
         """Test registration fails when passwords don't match"""
@@ -244,9 +242,8 @@ class UserProfileTestCase(TestCase):
             username='user1',
             email='user1@example.com',
             password='testpass123',
-            bio='Love science',
-            school='Test High School',
-            grade_level='11'
+            first_name='Jane',
+            last_name='Doe',
         )
 
         self.user2 = User.objects.create_user(
@@ -268,58 +265,40 @@ class UserProfileTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], 'user1')
         self.assertEqual(response.data['email'], 'user1@example.com')
-        self.assertEqual(response.data['bio'], 'Love science')
-        self.assertEqual(response.data['school'], 'Test High School')
-        self.assertEqual(response.data['grade_level'], 11)
+        self.assertEqual(response.data['first_name'], 'Jane')
+        self.assertEqual(response.data['last_name'], 'Doe')
 
     def test_update_profile(self):
         """Test user can update their profile"""
         self.client.force_authenticate(user=self.user2)
 
         data = {
-            'bio': 'Updated bio',
-            'school': 'New School',
-            'grade_level': 12
+            'first_name': 'Updated',
+            'last_name': 'Name',
         }
 
         response = self.client.patch(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.user2.refresh_from_db()
-        self.assertEqual(self.user2.bio, 'Updated bio')
-        self.assertEqual(self.user2.school, 'New School')
-        self.assertEqual(self.user2.grade_level, 12)
+        self.assertEqual(self.user2.first_name, 'Updated')
+        self.assertEqual(self.user2.last_name, 'Name')
 
     def test_partial_update_profile(self):
         """Test user can partially update their profile"""
         self.client.force_authenticate(user=self.user1)
 
         data = {
-            'bio': 'New bio only'
+            'first_name': 'NewName'
         }
 
         response = self.client.patch(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.user1.refresh_from_db()
-        self.assertEqual(self.user1.bio, 'New bio only')
+        self.assertEqual(self.user1.first_name, 'NewName')
         # Other fields should remain unchanged
-        self.assertEqual(self.user1.school, 'Test High School')
-
-    def test_profile_shows_stats(self):
-        """Test profile includes user statistics"""
-        self.client.force_authenticate(user=self.user1)
-
-        # Update user stats
-        self.user1.total_questions_answered = 100
-        self.user1.correct_answers = 80
-        self.user1.save()
-
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['total_questions_answered'], 100)
-        self.assertEqual(response.data['correct_answers'], 80)
-        self.assertEqual(response.data['accuracy'], 80.0)
+        self.assertEqual(self.user1.last_name, 'Doe')
 
 
 class UserDetailViewTestCase(TestCase):
@@ -329,16 +308,12 @@ class UserDetailViewTestCase(TestCase):
         """Set up test client and users"""
         self.client = APIClient()
 
-        # Create test user with stats
         self.user = User.objects.create_user(
             username='publicuser',
             email='public@example.com',
             password='testpass123',
-            bio='Public bio',
-            school='Test School',
-            grade_level='12',
-            total_questions_answered=50,
-            correct_answers=40
+            first_name='Public',
+            last_name='User',
         )
 
         self.url = reverse('users:user_detail', kwargs={'username': 'publicuser'})
@@ -348,7 +323,7 @@ class UserDetailViewTestCase(TestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], 'publicuser')
-        self.assertEqual(response.data['bio'], 'Public bio')
+        self.assertEqual(response.data['first_name'], 'Public')
 
     def test_get_public_profile_authenticated(self):
         """Test authenticated users can view public profiles"""
@@ -369,14 +344,6 @@ class UserDetailViewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Verify email is not in response
         self.assertNotIn('email', response.data)
-
-    def test_public_profile_shows_stats(self):
-        """Test public profile includes user statistics"""
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['total_questions_answered'], 50)
-        self.assertEqual(response.data['correct_answers'], 40)
-        self.assertEqual(response.data['accuracy'], 80.0)
 
     def test_get_nonexistent_user_profile(self):
         """Test accessing non-existent user returns 404"""

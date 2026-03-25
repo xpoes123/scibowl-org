@@ -7,21 +7,6 @@ from .models import User
 class UserAdmin(BaseUserAdmin):
     """Admin interface for User model"""
 
-    list_display = ['username', 'email', 'school', 'grade_level', 'total_questions_answered', 'accuracy', 'is_staff']
-    list_filter = ['is_staff', 'is_superuser', 'is_active', 'grade_level']
-    search_fields = ['username', 'email', 'school']
-
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ('Science Bowl Info', {
-            'fields': ('school', 'grade_level', 'bio')
-        }),
-        ('Statistics', {
-            'fields': ('total_questions_answered', 'correct_answers')
-        }),
-    )
-
-    add_fieldsets = BaseUserAdmin.add_fieldsets + (
-        ('Additional Info', {
-            'fields': ('email', 'school', 'grade_level')
-        }),
-    )
+    list_display = ['username', 'email', 'is_staff', 'created_at']
+    list_filter = ['is_staff', 'is_superuser', 'is_active']
+    search_fields = ['username', 'email']

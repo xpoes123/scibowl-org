@@ -1,13 +1,34 @@
 from django.contrib import admin
-from .models import Tournament, Team, Player, Room, Round, Game
+from .models import Tournament, Team, Player, Room, Round, TournamentContact, TournamentLink, TournamentDeadline
 
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ['name', 'division', 'status', 'tournament_date', 'location', 'current_teams', 'max_teams']
-    list_filter = ['status', 'division', 'format', 'tournament_date']
-    search_fields = ['name', 'location', 'host_organization']
-    date_hierarchy = 'tournament_date'
+    list_display = ['name', 'divisions', 'status', 'start_date', 'location_city', 'question_set_version', 'current_teams', 'max_teams']
+    list_filter = ['status', 'mode', 'format', 'start_date']
+    search_fields = ['name', 'location_city', 'host_organization']
+    date_hierarchy = 'start_date'
+    raw_id_fields = ['question_set_version']
+
+
+@admin.register(TournamentContact)
+class TournamentContactAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'type', 'label', 'value']
+    list_filter = ['type']
+    search_fields = ['tournament__name', 'label', 'value']
+
+
+@admin.register(TournamentLink)
+class TournamentLinkAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'type', 'label', 'url']
+    list_filter = ['type']
+    search_fields = ['tournament__name', 'label']
+
+
+@admin.register(TournamentDeadline)
+class TournamentDeadlineAdmin(admin.ModelAdmin):
+    list_display = ['tournament', 'label', 'date']
+    search_fields = ['tournament__name', 'label']
 
 
 @admin.register(Team)
@@ -17,9 +38,10 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ['name', 'school']
 
 
+
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'team', 'grade_level', 'total_points', 'correct_buzzes', 'incorrect_buzzes']
+    list_display = ['name', 'team', 'grade_level']
     list_filter = ['team__tournament', 'grade_level']
     search_fields = ['name', 'team__name']
 
@@ -38,8 +60,3 @@ class RoundAdmin(admin.ModelAdmin):
     search_fields = ['name', 'packet_name']
 
 
-@admin.register(Game)
-class GameAdmin(admin.ModelAdmin):
-    list_display = ['tournament', 'round', 'room', 'team1', 'team2', 'team1_score', 'team2_score', 'is_complete']
-    list_filter = ['tournament', 'is_complete', 'round']
-    search_fields = ['team1__name', 'team2__name']

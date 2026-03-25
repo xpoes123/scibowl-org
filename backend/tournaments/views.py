@@ -7,12 +7,13 @@ from django.shortcuts import get_object_or_404
 from pathlib import Path
 import json
 import re
-from .models import Tournament, Team, Coach, Player, Room, Round, Game
+from .models import Tournament, Team, Player, Room, Round
 from moss import models as moss_models
+from moss.serializers import MossGameSerializer
 from .serializers import (
     TournamentListSerializer, TournamentDetailSerializer,
-    TeamSerializer, CoachSerializer, PlayerSerializer, RoomSerializer,
-    RoundSerializer, GameSerializer
+    TeamSerializer, PlayerSerializer, RoomSerializer,
+    RoundSerializer,
 )
 
 
@@ -121,8 +122,10 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
     def games(self, request, *args, **kwargs):
         """Get all games for a tournament."""
         tournament = self.get_object()
-        games = tournament.games.all()
-        serializer = GameSerializer(games, many=True)
+        games = moss_models.Game.objects.filter(tournament=tournament).prefetch_related(
+            'game_teams__tournament_team', 'room'
+        )
+        serializer = MossGameSerializer(games, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=["get"])
@@ -149,17 +152,14 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         """
         tournament = self.get_object()
 
-        games_count = tournament.games.count()
+        games_count = moss_models.Game.objects.filter(tournament=tournament).count()
         rounds_count = tournament.rounds.count()
-        moss_games_count = moss_models.Game.objects.filter(tournament=tournament).count()
 
-        tournament.games.all().delete()
-        tournament.rounds.all().delete()
         moss_models.Game.objects.filter(tournament=tournament).delete()
+        tournament.rounds.all().delete()
 
         return Response({
             'message': f'Deleted {games_count} games and {rounds_count} rounds',
-            'moss_games_deleted': moss_games_count,
         }, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
@@ -180,7 +180,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
             pools[pool_name].append(team)
 
         # Check if any games already exist
-        existing_games_count = tournament.games.count()
+        existing_games_count = moss_models.Game.objects.filter(tournament=tournament).count()
         if existing_games_count > 0:
             return Response(
                 {'error': f'Tournament already has {existing_games_count} games. Delete existing games first.'},
@@ -198,27 +198,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
         generated_games = []
 
         with transaction.atomic():
-            moss_team_by_team_id = {}
-            for team in teams:
-                defaults = {
-                    "school": team.school or "",
-                    "pool": team.pool or "",
-                }
-                moss_team, _ = moss_models.TournamentTeam.objects.get_or_create(
-                    tournament=tournament,
-                    name=team.name,
-                    defaults=defaults,
-                )
-                update_fields = []
-                if moss_team.school != defaults["school"]:
-                    moss_team.school = defaults["school"]
-                    update_fields.append("school")
-                if moss_team.pool != defaults["pool"]:
-                    moss_team.pool = defaults["pool"]
-                    update_fields.append("pool")
-                if update_fields:
-                    moss_team.save(update_fields=update_fields)
-                moss_team_by_team_id[team.id] = moss_team
+            moss_team_by_team_id = {team.id: team for team in teams}
 
             # Generate round-robin schedules for each pool using round-robin algorithm
             from collections import deque
@@ -291,19 +271,8 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
                             room = rooms[room_idx % len(rooms)]
                             room_idx += 1
 
-                            # Create game
-                            game = Game.objects.create(
-                                tournament=tournament,
-                                round=round_obj,
-                                room=room,
-                                team1=team1,
-                                team2=team2,
-                                pool=pool_name  # Store the pool assignment at game creation
-                            )
-
                             moss_game = moss_models.Game.objects.create(
                                 tournament=tournament,
-                                round=round_obj,
                                 room=room,
                                 status="SCHEDULED",
                             )
@@ -320,7 +289,7 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
                             moss_models.Scoresheet.objects.create(game=moss_game)
 
                             generated_games.append({
-                                'id': game.id,
+                                'id': moss_game.id,
                                 'pool': pool_name,
                                 'round_number': round_number,
                                 'room_name': room.name,
@@ -361,23 +330,6 @@ class TeamViewSet(viewsets.ModelViewSet):
         serializer = PlayerSerializer(players, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get'])
-    def coaches(self, request, pk=None):
-        """Get all coaches for a team."""
-        team = self.get_object()
-        coaches = team.coaches.all()
-        serializer = CoachSerializer(coaches, many=True)
-        return Response(serializer.data)
-
-
-class CoachViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for managing coaches.
-    Supports full CRUD operations.
-    """
-    queryset = Coach.objects.all()
-    serializer_class = CoachSerializer
-    permission_classes = [permissions.AllowAny]
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -400,12 +352,3 @@ class RoomViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class GameViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for managing games.
-    Allows updating room assignments.
-    """
-    queryset = Game.objects.all()
-    serializer_class = GameSerializer
-    permission_classes = [permissions.AllowAny]
-    http_method_names = ['get', 'patch', 'head', 'options']  # Only allow GET and PATCH
