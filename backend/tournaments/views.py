@@ -81,16 +81,11 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = Tournament.objects.all()
 
-        # Filter by status (supports comma-separated values)
+        # Filter by lifecycle status (supports comma-separated values)
         status = self.request.query_params.get('status', None)
         if status:
             status_list = [s.strip() for s in status.split(',')]
             queryset = queryset.filter(status__in=status_list)
-
-        # Filter by division
-        division = self.request.query_params.get('division', None)
-        if division:
-            queryset = queryset.filter(division=division)
 
         return queryset
     
