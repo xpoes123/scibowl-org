@@ -78,9 +78,16 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
             return PublicTournamentSummarySerializer
         return PublicTournamentDetailSerializer
 
+    _CACHE_CONTROL = 'public, max-age=60, stale-while-revalidate=300, stale-if-error=604800'
+
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        response['Cache-Control'] = 'public, max-age=60, stale-while-revalidate=300, stale-if-error=604800'
+        response['Cache-Control'] = self._CACHE_CONTROL
+        return response
+
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        response['Cache-Control'] = self._CACHE_CONTROL
         return response
 
     def get_queryset(self):
