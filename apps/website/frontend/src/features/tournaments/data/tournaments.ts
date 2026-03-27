@@ -1,17 +1,9 @@
-import type { TournamentSummary } from "../types";
-import tournamentsData from "./tournaments.json";
-
 /**
- * Tournament data loader for NSB Arena.
+ * Tournament data is now served from the database via the API.
  *
- * All tournaments are stored in a single tournaments.json file.
- * To add a new tournament:
- * 1. Add the tournament data to tournaments.json following the existing format
- * 2. Submit a PR with your changes
+ * - Public listing:  GET /api/tournaments/        → useTournaments hook
+ * - Tournament detail: GET /api/tournaments/:slug/ → getTournamentById (tournamentDetails.ts)
  *
- * The status field determines if the tournament is LIVE, UPCOMING, or FINISHED.
- *
- * Last updated: 1/8/2026
+ * tournaments.json is retained as a seed reference for load_tournaments_json.
+ * It is no longer imported at runtime.
  */
-
-export const TOURNAMENTS: TournamentSummary[] = tournamentsData as TournamentSummary[];

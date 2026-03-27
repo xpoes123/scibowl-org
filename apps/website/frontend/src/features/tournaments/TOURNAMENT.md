@@ -451,34 +451,31 @@ Build the simplest system that:
 
 **Database Models** (`backend/tournaments/models.py`)
 * `Tournament` - Core tournament with status, division, format, dates, location
-  * Status: UPCOMING, REGISTRATION, IN_PROGRESS, COMPLETED, CANCELLED
-  * Division: HIGH_SCHOOL, MIDDLE_SCHOOL, COLLEGIATE, OPEN
+  * Lifecycle status: UPCOMING, REGISTRATION, IN_PROGRESS, COMPLETED, CANCELLED
+  * Publication status: DRAFT, PUBLISHED, ARCHIVED (controls public visibility)
+  * Divisions: HS, MS, UG, OPEN — stored as a JSONField array (supports multi-division)
+  * Mode: IN_PERSON, ONLINE
   * Format: ROUND_ROBIN, DOUBLE_ELIM, SINGLE_ELIM, SWISS, CUSTOM
+  * Related tables: TournamentContact, TournamentLink, TournamentDeadline
 * `Team` - Teams participating in tournaments with pool assignments
-* `Coach` - Team coaches with contact information (name, email, phone)
-* `Player` - Individual players with stats fields (populated by MODAQ)
-  * Stats: total_points, tossups_heard, correct_buzzes, incorrect_buzzes
+* `Player` - Individual players on a team roster
 * `Room` - Physical/virtual rooms for games
   * Status: NOT_STARTED, IN_PROGRESS, FINISHED
 * `Round` - Tournament rounds with packet assignments
 * `Game` - Individual games between teams (data written by MODAQ)
 
 **API Endpoints** (`backend/tournaments/`)
-* `GET /api/tournaments/` - List tournaments (filterable by status, division)
-* `GET /api/tournaments/:id/` - Tournament details
-* `GET /api/tournaments/:id/teams/` - Tournament teams
-* `GET /api/tournaments/:id/rooms/` - Tournament rooms
-* `GET /api/tournaments/:id/rounds/` - Tournament rounds
-* `GET /api/tournaments/:id/games/` - Tournament games
-* `POST /api/tournaments/:id/generate_schedule/` - Generate round-robin schedule
+* `GET /api/tournaments/` - List tournaments (PUBLISHED only; filterable by lifecycle `status`)
+* `GET /api/tournaments/:slug/` - Tournament details (full shape including contacts, links, deadlines)
+* `GET /api/tournaments/:slug/teams/` - Tournament teams
+* `GET /api/tournaments/:slug/rooms/` - Tournament rooms
+* `GET /api/tournaments/:slug/rounds/` - Tournament rounds
+* `GET /api/tournaments/:slug/games/` - Tournament games
+* `POST /api/tournaments/:slug/generate_schedule/` - Generate round-robin schedule
 * `PATCH /api/teams/:id/` - Update team pool assignment
 * `GET /api/teams/:id/players/` - Get team's players
-* `GET /api/teams/:id/coaches/` - Get team's coaches
 * `POST /api/players/` - Add player to team
 * `DELETE /api/players/:id/` - Remove player
-* `POST /api/coaches/` - Add coach to team
-* `PATCH /api/coaches/:id/` - Update coach info
-* `DELETE /api/coaches/:id/` - Remove coach
 
 Tournament endpoints are read-only except for pool configuration and roster management.
 
@@ -499,9 +496,10 @@ Tournament endpoints are read-only except for pool configuration and roster mana
     - Public: View pool standings and team assignments
   * **Contact Tab**: Tournament director information (read-only)
 
-**Sample Data**
-* Management command: `load_sample_tournaments`
-* Includes: Stanford 2026 Collegiate, Stanford 2026 High School, MIT 2026
+**Tournament Listing (DB-served)**
+* The public tournament listing is now served from the database via `GET /api/tournaments/`
+* Seed command: `python manage.py load_tournaments_json` (reads `tournaments.json`, upserts all entries)
+* `load_sample_tournaments` is **stale** (pre-schema-alignment, will fail if run — retained for reference only)
 
 **Data Model Notes for Schedule Generation**
 
@@ -545,16 +543,16 @@ These features enable Tournament Directors to configure tournaments BEFORE they 
 
 2. ✅ **Teams Tab - Full Roster Management** (COMPLETED)
    * ✅ Master-detail layout (team list + team details)
-   * ✅ View team rosters (players and coaches) - public access
+   * ✅ View team rosters (players) - public access
    * ✅ Edit team names and schools (admin only)
    * ✅ Add/remove players with grade levels (admin only)
-   * ✅ Add/remove coaches with contact info (admin only)
    * ✅ Delete teams (admin only)
-   * ✅ Real-time player/coach count updates
-   * ✅ Backend: Full CRUD for teams, players, and coaches
+   * ✅ Real-time player count updates
+   * ✅ Backend: Full CRUD for teams and players
+   * Note: Coach model was removed (migration 0010_delete_coach)
 
 3. ✅ **Pools Tab - Configuration & Standings** (COMPLETED)
-   * ✅ Backend: Schedule generation endpoint (`POST /api/tournaments/:id/generate_schedule/`)
+   * ✅ Backend: Schedule generation endpoint (`POST /api/tournaments/:slug/generate_schedule/`)
    * ✅ Number-first pool configuration interface (admin)
      - Number input field (1-26 pools)
      - Auto-distribution algorithm (even team distribution)
@@ -569,7 +567,7 @@ These features enable Tournament Directors to configure tournaments BEFORE they 
    * ✅ Round-robin schedule generation algorithm
 
 4. ✅ **Schedule Tab - Match Schedule & Score Entry** (COMPLETED)
-   * ✅ Backend endpoint: `POST /api/tournaments/:id/generate_schedule/`
+   * ✅ Backend endpoint: `POST /api/tournaments/:slug/generate_schedule/`
    * ✅ Round-robin algorithm using circle method for balanced schedules
    * ✅ Auto-distributes games across rooms
    * ✅ Creates Game, Round objects atomically

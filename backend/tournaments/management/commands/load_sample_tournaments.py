@@ -1,3 +1,20 @@
+# =============================================================================
+# STALE — DO NOT USE
+#
+# This command was written before the Tournament model was realigned with the
+# static JSON format (migration 0012_tournament_schema_alignment). It references
+# field names that no longer exist on the model (e.g. `division`, `tournament_date`,
+# `registration_deadline`, `location`, `venue`, `website_url`) and will raise a
+# TypeError if run.
+#
+# It is kept here as a reference for the synthetic sample data that was used
+# during early development (Stanford 2026 Collegiate, Stanford 2026 High School,
+# MIT Science Bowl Invitational 2026).
+#
+# To seed the DB with real tournament data, use instead:
+#   python manage.py load_tournaments_json
+# =============================================================================
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.contrib.auth import get_user_model

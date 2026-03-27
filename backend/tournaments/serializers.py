@@ -1,56 +1,118 @@
 from rest_framework import serializers
-from .models import Tournament, Team, Player, Room, Round
+from .models import Tournament, Team, Player, Room, Round, TournamentContact, TournamentLink, TournamentDeadline
 
 
-class TournamentDirectorSerializer(serializers.Serializer):
-    """Serializer for tournament director info."""
-    id = serializers.IntegerField()
-    username = serializers.CharField()
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    bio = serializers.CharField()
-    school = serializers.CharField()
+# ---------------------------------------------------------------------------
+# Public tournament serializers
+# These match the Tournament / TournamentSummary TypeScript interfaces in
+# apps/website/frontend/src/features/tournaments/types.ts.
+# ---------------------------------------------------------------------------
+
+class TournamentContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TournamentContact
+        fields = ['type', 'value', 'label']
 
 
-class TournamentListSerializer(serializers.ModelSerializer):
-    """Serializer for tournament list view."""
+class TournamentLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TournamentLink
+        fields = ['type', 'url', 'label']
+
+
+class TournamentDeadlineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TournamentDeadline
+        fields = ['label', 'date']
+
+
+class PublicTournamentSummarySerializer(serializers.ModelSerializer):
+    """
+    Lightweight serializer for the tournament listing.
+    Matches the TournamentSummary TypeScript interface.
+    """
+    # Map publication_status → status to match the frontend shape.
+    status = serializers.CharField(source='publication_status')
+    dates = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
+
     class Meta:
         model = Tournament
         fields = [
-            'id', 'slug', 'name', 'description', 'division', 'format', 'status',
-            'tournament_date', 'registration_deadline', 'location', 'venue',
-            'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url', 'question_set_version',
+            'slug', 'name', 'status', 'mode', 'timezone',
+            'dates', 'divisions', 'location', 'updated_at',
         ]
 
+    def get_dates(self, obj):
+        return {
+            'start': obj.start_date.isoformat(),
+            # end_date is null for single-day events; fall back to start_date.
+            'end': (obj.end_date or obj.start_date).isoformat(),
+        }
 
-class TournamentDetailSerializer(serializers.ModelSerializer):
-    """Serializer for tournament detail view with related data."""
-    teams_count = serializers.SerializerMethodField()
-    rooms_count = serializers.SerializerMethodField()
-    director = serializers.SerializerMethodField()
+    def get_location(self, obj):
+        if obj.mode == 'ONLINE':
+            return None
+        if not obj.location_city and not obj.location_state:
+            return None
+        loc = {'city': obj.location_city, 'state': obj.location_state}
+        if obj.location_address:
+            loc['address'] = obj.location_address
+        return loc
 
-    class Meta:
-        model = Tournament
-        fields = [
-            'id', 'slug', 'name', 'description', 'division', 'format', 'status',
-            'tournament_date', 'registration_deadline', 'location', 'venue',
-            'host_organization', 'max_teams', 'current_teams',
-            'website_url', 'registration_url', 'question_set_version',
-            'teams_count', 'rooms_count', 'director', 'created_at', 'updated_at',
+
+class PublicTournamentDetailSerializer(PublicTournamentSummarySerializer):
+    """
+    Full serializer for the tournament detail page.
+    Matches the Tournament TypeScript interface.
+    """
+    notes = serializers.SerializerMethodField()
+    # 'format' here is the display summary, not the bracket-type model field.
+    format = serializers.SerializerMethodField()
+    contacts = TournamentContactSerializer(many=True)
+    registration = serializers.SerializerMethodField()
+    links = TournamentLinkSerializer(many=True)
+
+    class Meta(PublicTournamentSummarySerializer.Meta):
+        fields = PublicTournamentSummarySerializer.Meta.fields + [
+            'difficulty', 'notes', 'format', 'contacts', 'registration', 'links',
         ]
 
-    def get_teams_count(self, obj):
-        return obj.teams.count()
+    def get_notes(self, obj):
+        if not obj.notes_logistics and not obj.notes_writing_team:
+            return None
+        notes = {}
+        if obj.notes_logistics:
+            notes['logistics'] = obj.notes_logistics
+        if obj.notes_writing_team:
+            notes['writing_team'] = obj.notes_writing_team
+        return notes
 
-    def get_rooms_count(self, obj):
-        return obj.rooms.count()
+    def get_format(self, obj):
+        fmt = {'summary': obj.format_summary}
+        if obj.rounds_guaranteed is not None:
+            fmt['rounds_guaranteed'] = obj.rounds_guaranteed
+        return fmt
 
-    def get_director(self, obj):
-        if obj.tournament_director:
-            return TournamentDirectorSerializer(obj.tournament_director).data
-        return None
+    def get_registration(self, obj):
+        if not obj.registration_method:
+            return None
+        deadlines = TournamentDeadlineSerializer(obj.deadlines.all(), many=True).data
+        reg = {
+            'method': obj.registration_method,
+            'instructions': obj.registration_instructions,
+            'deadlines': list(deadlines),
+        }
+        if obj.registration_url:
+            reg['url'] = obj.registration_url
+        if obj.registration_cost:
+            reg['cost'] = obj.registration_cost
+        return reg
 
+
+# ---------------------------------------------------------------------------
+# Internal / admin serializers (used by team management, room, schedule endpoints)
+# ---------------------------------------------------------------------------
 
 class TeamSerializer(serializers.ModelSerializer):
     """Serializer for teams."""
@@ -85,5 +147,3 @@ class RoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Round
         fields = ['id', 'round_number', 'name', 'packet_name']
-
-
