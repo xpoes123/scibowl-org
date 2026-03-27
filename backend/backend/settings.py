@@ -190,6 +190,9 @@ CORS_ALLOWED_ORIGINS = config(
     default='http://localhost:5173,http://localhost:3000'
 ).split(',')
 
+_cors_origin_regexes = config('CORS_ALLOWED_ORIGIN_REGEXES', default='')
+CORS_ALLOWED_ORIGIN_REGEXES = [r for r in _cors_origin_regexes.split(',') if r]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_HEADERS = True
 
