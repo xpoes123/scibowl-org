@@ -11,7 +11,7 @@ from .models import Tournament, Team, Player, Room, Round
 from moss import models as moss_models
 from moss.serializers import MossGameSerializer
 from .serializers import (
-    TournamentListSerializer, TournamentDetailSerializer,
+    PublicTournamentSummarySerializer, PublicTournamentDetailSerializer,
     TeamSerializer, PlayerSerializer, RoomSerializer,
     RoundSerializer,
 )
@@ -75,13 +75,18 @@ class TournamentViewSet(viewsets.ReadOnlyModelViewSet):
     
     def get_serializer_class(self):
         if self.action == 'list':
-            return TournamentListSerializer
-        return TournamentDetailSerializer
-    
-    def get_queryset(self):
-        queryset = Tournament.objects.all()
+            return PublicTournamentSummarySerializer
+        return PublicTournamentDetailSerializer
 
-        # Filter by lifecycle status (supports comma-separated values)
+    def get_queryset(self):
+        # Only surface PUBLISHED tournaments on the public API.
+        queryset = Tournament.objects.filter(publication_status='PUBLISHED')
+
+        # Prefetch related objects for the detail view to avoid N+1 queries.
+        if self.action == 'retrieve':
+            queryset = queryset.prefetch_related('contacts', 'links', 'deadlines')
+
+        # Filter by lifecycle status (supports comma-separated values).
         status = self.request.query_params.get('status', None)
         if status:
             status_list = [s.strip() for s in status.split(',')]
