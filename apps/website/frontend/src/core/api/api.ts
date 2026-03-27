@@ -342,6 +342,30 @@ export const questionsAPI = {
 
 // Tournaments API
 export const tournamentsAPI = {
+  /**
+   * Fetch the public tournament listing.
+   * Returns all PUBLISHED tournaments (filtered server-side).
+   */
+  getPublicTournaments: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/tournaments/`);
+    if (!response.ok) throw new Error('Failed to load tournaments');
+    const data = await response.json();
+    return unwrapList<any>(data);
+  },
+
+  /**
+   * Fetch full detail for a single tournament by slug.
+   */
+  getPublicTournament: async (slug: string) => {
+    const response = await fetch(
+      `${API_BASE_URL}/api/tournaments/${encodeURIComponent(slug)}/`,
+    );
+    if (!response.ok) {
+      throw new Error(`Tournament "${slug}" not found`);
+    }
+    return response.json() as Promise<any>;
+  },
+
   getTournaments: async (filters?: {
     status?: string;
     division?: string;
