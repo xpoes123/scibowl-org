@@ -47,6 +47,27 @@ Routes are wired in `backend/backend/urls.py`:
 - `/api/questions/`
 - `/api/moss/`
 
+## Management commands
+
+### `load_tournaments_json` (canonical seed)
+
+Reads `apps/website/frontend/src/features/tournaments/data/tournaments.json` and
+upserts all tournaments (plus related contacts, links, and deadlines) into the DB.
+
+```bash
+python manage.py load_tournaments_json            # upsert all entries
+python manage.py load_tournaments_json --dry-run  # preview without writing
+```
+
+Safe to re-run; existing records are updated by slug, new ones are created.
+
+### `load_sample_tournaments` — STALE, do not use
+
+Pre-schema-alignment command that created synthetic sample data (Stanford 2026
+Collegiate, Stanford 2026 High School, MIT Science Bowl Invitational 2026).
+References field names that no longer exist on the Tournament model and will fail
+if run. Retained for historical reference only.
+
 ## Tests
 
 ```bash
