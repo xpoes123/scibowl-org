@@ -1,0 +1,502 @@
+{
+  "generated_at": "2026-04-19T18:57:44.216069Z",
+  "schema_version": 1,
+  "sources": [
+    {
+      "exported_at": "2026-04-19T15:29:58.336Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495446732132061344_dasoni_2_2026_ROUND_ROBIN_1_BISV_B__Canyon_Crest_A_20260419T150553Z_jhlj4bk.json",
+      "sha256": "05f91018bc0495b050858c5a38b93cf3ca176b7bb4be14e00c470a000e6ba11c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:31:52.139Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495447040321261709_dasoni_2_2026_ROUND_ROBIN_1_Clements__Whitney_Young_20260419T151138Z_l8ekqhb.json",
+      "sha256": "1b8e099ab53061f39afd147a2217cc5515d28d15f45dbffe95c06bc8912f1530",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:34:24.663Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495447675506655472_dasoni_2_2026_ROUND_ROBIN_1_Allen_School__Clovis_North_20260419T150410Z_vucy048.json",
+      "sha256": "882b5d09aa8f4f1cdc7fc6c90da65350ac7a56fd67269d0705fe1555a0918ede",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:34:39.119Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495447948212048053_dasoni_2_2026_ROUND_ROBIN_1_Woodlands__WWPS_B_20260419T150559Z_wbgcaon.json",
+      "sha256": "c22bb72900c01a00412630b0d0c73cc53a9cc11079c6efa2ec6c19abba04a1ce",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:34:42.461Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495447989848637650_dasoni_2_2026_ROUND_ROBIN_1_MSJ__North_Hollywood_B_20260419T150536Z_dek5e5j.json",
+      "sha256": "d8ad89d1ffd34706df0dcf5b129cb243457051e01486805562487fe7da4fd146",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:35:47.467Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448002536673420_dasoni_2_2026_ROUND_ROBIN_1_Deap_South__Ward_Melville_20260419T150807Z_1f3gjww.json",
+      "sha256": "62abeec0ba1cb3cf573514313fc4015f05fd9be8b1f2fc1518ffe2f8f1adde4b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:34:41.995Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448088700260533_dasoni_2_2026_ROUND_ROBIN_1_Lexington_A__North_Allegheny_20260419T151122Z_h217pn4.json",
+      "sha256": "f3ca3c69e0ed1d06c2302085b9b9ed93936f033b75cd6a27da4956d50ee5ef72",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:35:50.479Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448267108913303_dasoni_2_2026_ROUND_ROBIN_1_Lynbrook_B__WWPS_A_20260419T151120Z_qz29ok2.json",
+      "sha256": "85893bc6c6be53bc18a1c4a21bce0d284c206f4f0effdd07c5b5dff9ed259234",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:32:52.532Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448583808483389_dasoni_2_2026_ROUND_ROBIN_1_Collierville_B__Iolani_A_20260419T150607Z_75btnde_1.json",
+      "sha256": "10af8d5063d6e37179d9c4fc32cfddc71fc99298c752e75dac518ca52fe0831d",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:37:44.217Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448662808072483_dasoni_2_2026_ROUND_ROBIN_1_Doral_Academy__Palo_Alto_20260419T150451Z_dt1ctlk.json",
+      "sha256": "ee5a4dceaa04a4cf4aa7344e5306d58a1e2125f97be82d3b200768c890babedb",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:38:43.046Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495448694303227924_dasoni_2_2026_ROUND_ROBIN_1_American_Heritage_Broward__Lexington_B_20260419T150700Z_fzz1zna.json",
+      "sha256": "567e6163b9148d87134ff4c57e3c0bcad7163d39d7c41b8135316699fac634d8",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:40:00.724Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495449054518448179_dasoni_2_2026_ROUND_ROBIN_1_Bridgeland__Punahou_School_20260419T145640Z_2cijg34.json",
+      "sha256": "52ec458e680501d318ed7309406935fdf09f9b40d2b9c237c1db8db5da56ef75",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:42:19.774Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495449609936310505_dasoni_2_2026_ROUND_ROBIN_1_Collierville_A__Iolani_B_20260419T150419Z_v8nkzsl.json",
+      "sha256": "c1dce8b15bd8049064c480b956cf42981e2d929a209f39d38175aaf6f9ac09c4",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:43:19.901Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495450243653701895_dasoni_2_2026_ROUND_ROBIN_1_Canyon_Crest_B__Lynbrook_A_20260419T151432Z_nrl6uwr.json",
+      "sha256": "a2f92a49af73347f786bf1f5059e557d3a0b082630999382e212040204228daa",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:53:42.781Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495452492174065755_dasoni_2_2026_ROUND_ROBIN_1_Arcadia_A__Luka_Fan_Club_20260419T153640Z_f7ikgcc.json",
+      "sha256": "282d462ebdc4f1f767800d6b29bee12032001a40a36a43019f7681fde77e6659",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T15:55:13.239Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495452958811492382_dasoni_2_2026_ROUND_ROBIN_1_Hunter__North_Hollywood_A_20260419T150441Z_dswbv1b.json",
+      "sha256": "53cd8a68428631d7604f94b252902e746121e76a57afccd7e38bd9f7d80f589b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:00:44.286Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495454341245440010_dasoni_2_2026_ROUND_ROBIN_1_Arcadia_B__Enloe_20260419T154045Z_f1q9sqp.json",
+      "sha256": "7ec4f5a170a05cbb305d25caa620815961ea71ccab8ed43c0c645bf855bc550b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:02:26.769Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495454716941959271_dasoni_2_2026_ROUND_ROBIN_1_Benjamin_Franklin__BISV_A_20260419T151435Z_1kglz39.json",
+      "sha256": "0e2f7cbb553bc76cf86e28ac312355026102eb1855c0823a1b55769e4fc9a35c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:09:22.762Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495456662050308276_dasoni_2_2026_ROUND_ROBIN_1_Deep_Run__Thomas_Jefferson_20260419T153110Z_zu21s2y.json",
+      "sha256": "68d0214c51ac4bbb1f95b5b8cc73e045c96b93106a2a1eaf2d69fe988d227e10",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:29:55.928Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495461689942872274_dasoni_2_2026_ROUND_ROBIN_2_Arcadia_A__Varun_Clemens_20260419T160730Z_hdwtari1.json",
+      "sha256": "2369c3e8a9cf8e1da8b551fe5eebbe4bde324b2fd9e7eb541882a1c6a1443d3d",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:31:42.118Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495462138502975600_dasoni_2_2026_ROUND_ROBIN_2_BISV_A__Bridgeland_20260419T160743Z_azy7d07.json",
+      "sha256": "589ae174abe7ff48c0eb448d87afbaf40f8fe5a60b9c440158dc2e71917002ce",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:32:37.312Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495462250658402394_dasoni_2_2026_ROUND_ROBIN_2_Ward_Melville__Woodlands_20260419T161129Z_pu49dwt.json",
+      "sha256": "5dee7b62b9416a1be0b42d72a05c2863109740a9c49ddb00cfd83c9947271f21",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:32:50.139Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495462344619331644_dasoni_2_2026_ROUND_ROBIN_2_Eastlake__Whitney_Young_20260419T161024Z_42w6418.json",
+      "sha256": "585a6332650bd5e47931e8b30ef31b3f0278f1ea323c12b1eb7bf15ca7bdd15e",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:33:45.745Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495462707929808968_dasoni_2_2026_ROUND_ROBIN_2_Benjamin_Franklin__North_Hollywood_B_20260419T160834Z_5aacemi.json",
+      "sha256": "7b7e8d59650cbc4e91ccde3d54ec7d950ed6c3807d4c27b622f9a549cdaa3e3a",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:35:57.625Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463125418512515_dasoni_2_2026_ROUND_ROBIN_2_Collierville_B__Hunter_20260419T160702Z_jzgejuv.json",
+      "sha256": "5ba02628087b3d8c5ea7b917a2dbd4c72f5a33f7d947428e13504b8be8560d3b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:36:36.680Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463464464941279_dasoni_2_2026_ROUND_ROBIN_2_Collierville_A__WWPS_B_20260419T160731Z_kihugwl.json",
+      "sha256": "a31b2427769c9f8d1127833a1879f2c75a076cb15b72177fb1f2dc4386583406",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:37:18.260Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463516038107346_dasoni_2_2026_ROUND_ROBIN_2_Deep_Run__Morgantown_20260419T161501Z_p8jxj18.json",
+      "sha256": "277df5ff5c3a1e942f301271b4121bfb28ab58b830c01b5ea6d63fdee1e82f28",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:36:42.637Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463554952986624_dasoni_2_2026_ROUND_ROBIN_2_Doral_Academy__North_Allegheny_20260419T160728Z_aa78akq.json",
+      "sha256": "bd4734ea8b0eb2f3c3881315e832f62a0e44c2a5b7907211b837d8e62419432d",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:38:01.837Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463618546892810_dasoni_2_2026_ROUND_ROBIN_2_Lexington_B__North_Hollywood_A_20260419T160659Z_1qoiv0c.json",
+      "sha256": "885c2d4de1de3154afebc3ee2a939a30fed0bfd13c7e7ef665a5f7f0b1ead614",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:39:17.463Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495463864832102622_dasoni_2_2026_ROUND_ROBIN_2_Lexington_A__Quail_Valley_20260419T160800Z_ijwbzvq-3.json",
+      "sha256": "fa9980d2e709d08f1c95cac5baef794851004c1d380d89b6c33912ffe71690be",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:40:16.531Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495464382216536104_dasoni_2_2026_ROUND_ROBIN_2_BASIS_Chandler__Enloe_20260419T160757Z_9mesllx.json",
+      "sha256": "40ee5cd720f0867ced52cdf717a284ba9d5b00a1b360705983a32efafefd0259",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:42:50.660Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495464812266651678_dasoni_2_2026_ROUND_ROBIN_2_American_Heritage_Broward__Iolani_A_20260419T160720Z_g8sbg6q.json",
+      "sha256": "20d5801e26e7fdee9b3c683628fc20ddde8b1fdab795efcce51729e1584e6355",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:41:42.197Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495464840183939072_dasoni_2_2026_ROUND_ROBIN_2_Deap_South__Iolani_B_20260419T160751Z_pkwrvpu.json",
+      "sha256": "8620b0ca99e7f05ed1e47ffe23202315d1e12309e45b46dc3cec422b72348169",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:44:46.895Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495465252358328320_dasoni_2_2026_ROUND_ROBIN_2_BISV_B__Luka_Fan_Club_20260419T160726Z_jasj9as_2.json",
+      "sha256": "100867bf6c7c3d261eaeb700b95a0fbcd905cc884117983ba2e630ab35c54049",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:44:49.765Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495465373187965128_dasoni_2_2026_ROUND_ROBIN_2_MSJ__Punahou_School_20260419T160939Z_fl5flml1.json",
+      "sha256": "e38797b55fbc6d106ac3ab278174fd50af25ae18793abc6632e7bc350c73694d",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:47:53.593Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495466204595491056_dasoni_2_2026_ROUND_ROBIN_2_Clements__Lynbrook_B_20260419T164214Z_npfpmv0.json",
+      "sha256": "318d1a14b5c27974f2299b6dc0e9cd2cb86f7627d578139de14a641f860081d4",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:47:48.271Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495466213785079898_dasoni_2_2026_ROUND_ROBIN_2_Clovis_North__Thomas_Jefferson_20260419T161559Z_v265i51.json",
+      "sha256": "e0b5f53a50b54e4b54db5f9cbf0a710010640f947565d99da68ca75a6e6aedfc",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T16:54:17.531Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495467711461855273_dasoni_2_2026_ROUND_ROBIN_2_Arcadia_B__Lynbrook_A_20260419T162714Z_8k7v3tv.json",
+      "sha256": "96cbe71263543be2bf29bb1f0d0c860c729b681eea0bdc5cfb71811ba5199840",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:09:44.514Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495471505394503732_dasoni_2_2026_ROUND_ROBIN_3_Canyon_Crest_A__Luka_Fan_Club_20260419T164635Z_d94kfgm.json",
+      "sha256": "f03876d3d0a23a125eb83177be99fe0d47762de8bf4684ac3fff5ec211a8db3c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:11:46.541Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495472120430596156_dasoni_2_2026_ROUND_ROBIN_3_Ward_Melville__WWPS_B_20260419T165121Z_mzwwwub.json",
+      "sha256": "47a30b49e24d58996c3c39cb982c203efe43097ef13bb77699a77fa3b2a71d4f",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:13:29.199Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495472628767395960_dasoni_2_2026_ROUND_ROBIN_3_Bridgeland__North_Hollywood_B_20260419T164853Z_jgyfnmh.json",
+      "sha256": "900b5779fbb1e630cffd8d3356a012c6575528370b886f4570ff6442ebccb85b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:15:38.410Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495472977523773611_dasoni_2_2026_ROUND_ROBIN_3_BISV_B__Varun_Clemens_20260419T165038Z_87u5i1o_1.json",
+      "sha256": "3f7853ef5ee2cf73df522bd3a8ae6f3804aab9ab789b0c222ef37003af11c476",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:15:23.371Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495473203508936786_dasoni_2_2026_ROUND_ROBIN_3_Iolani_B__Woodlands_20260419T164644Z_0rwn3k7.json",
+      "sha256": "b4c0f6238ae7d06a6e1d808ef08e211a41994845ba94842f05b3ff27119e0b9a",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:16:15.407Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495473300959264849_dasoni_2_2026_ROUND_ROBIN_3_Arcadia_B__Canyon_Crest_B_20260419T165551Z_sbd3597.json",
+      "sha256": "c355e4db0390a1dcd3902eb7e6d34688311ece16c3049db5b2ee06166ba31a13",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:18:40.890Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495473849247203408_dasoni_2_2026_ROUND_ROBIN_3_Clements__WWPS_A_20260419T165324Z_dgyx1u2.json",
+      "sha256": "ac009ef8b7509c87fc5cb6eea1943fa20483c67017aee21fcccdcb00b4d3a83e",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:19:01.819Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495473929639165972_dasoni_2_2026_ROUND_ROBIN_3_Benjamin_Franklin__MSJ_20260419T164639Z_h10hanj.json",
+      "sha256": "94e9809fe7c917b3595ee614e133fb45fe6a6ab2ced62c5c285af4af364d8736",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:14:57.674Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495473964741431486_dasoni_2_2026_ROUND_ROBIN_3_North_Allegheny__Palo_Alto_20260419T165131Z_n6cx63j.json",
+      "sha256": "ae0421b942bd80e1e676d9449c03d72f500bdd93770898705b7cbd8cdf382967",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:20:00.970Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495474418518855753_dasoni_2_2026_ROUND_ROBIN_3_Doral_Academy__Quail_Valley_20260419T165002Z_r4o04i2.json",
+      "sha256": "13ec9988ea6b9d3ec56d1954a62ed6919a69825c6427a5994a9b6464a0b2c76e",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:20:16.689Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495474482398367825_dasoni_2_2026_ROUND_ROBIN_3_BISV_A__Punahou_School_20260419T165503Z_qlttsqw.json",
+      "sha256": "7b70767b108a9b08d31ebf837504a23ebc647e0b46f304b16a616343ffa51182",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:21:56.217Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495474706722193560_dasoni_2_2026_ROUND_ROBIN_3_Iolani_A__North_Hollywood_A_20260419T164706Z_aekpm1d.json",
+      "sha256": "1b1856ed0a51a3e3d68efcbeb937dbd58aaf797f9739532b7a3223fa1189446c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:24:35.993Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495475389147906088_dasoni_2_2026_ROUND_ROBIN_3_Allen_School__Thomas_Jefferson_20260419T165818Z_jkctdse.json",
+      "sha256": "b33c3df1cf622e0ed37c77e562d956d3aabece1b472e7212d5bad51abcf3950f",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:25:13.697Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495475457577975879_dasoni_2_2026_ROUND_ROBIN_3_Eastlake__Lynbrook_B_20260419T170156Z_mt9k0w3.json",
+      "sha256": "c6d12a8ecb671bc3282661a96501ae5a3bd60cda4c8496172e39bd8c4c73177c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:25:11.596Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495475538033115227_dasoni_2_2026_ROUND_ROBIN_3_BASIS_Chandler__Lynbrook_A_20260419T165928Z_3mkfuxr.json",
+      "sha256": "45ca98a222c3e575b388f67efcbae7b6aaac416fc80374f410e5cb265d88fde5",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:25:38.075Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495475632648491278_dasoni_2_2026_ROUND_ROBIN_3_Collierville_A__Deap_South_20260419T165143Z_pi696yh.json",
+      "sha256": "3f734f212d44d0d2e5a07179daead86b98c43e89811a077dcdf49a4d3669124c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:26:43.227Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495475852190941325_dasoni_2_2026_ROUND_ROBIN_3_American_Heritage_Broward__Collierville_B_20260419T170034Z_vq0bj8d.json",
+      "sha256": "6ce1f7da30780d2340b530e407223e9f8fae986b03751d5f8e32c6ab39e6191e",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:29:01.082Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495476388168335421_dasoni_2_2026_ROUND_ROBIN_3_Hunter__Lexington_B_20260419T164852Z_b7xpgf9.json",
+      "sha256": "5dd434f03d4f13c5b8ae6e474e7f86d14c094abd92320861418df6093d400cc6",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:40:30.405Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495479325045031032_dasoni_2_2026_ROUND_ROBIN_3_Clovis_North__Morgantown_20260419T170113Z_ygkz0mf.json",
+      "sha256": "d09537a70d0b5fba266f4f79cb4a40cf64fc8037a427a83f9756e6811beb41cb",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:45:30.501Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495480509692903515_dasoni_2_2026_ROUND_ROBIN_4_Arcadia_A__Canyon_Crest_A_20260419T172302Z_5bk9tp4.json",
+      "sha256": "c8fda2f665a910d8d3a4279355465467b99903b7b2f405ed734652125b1bfb30",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:45:12.395Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495480586062663751_dasoni_2_2026_ROUND_ROBIN_4_Whitney_Young__WWPS_A_20260419T172328Z_v5oyfyz.json",
+      "sha256": "6f1f95e27c7786f2270f4586cb71fd9c32017bac51255730928c56be3900457a",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:46:00.267Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495480699048820796_dasoni_2_2026_ROUND_ROBIN_4_Canyon_Crest_B__Enloe_20260419T172346Z_ix2ouce.json",
+      "sha256": "4f95d54867d8e212b3394b76bd3d39faa5ce3a3bbdf27d5f8e332b9c5bf3c522",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:47:35.899Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495481122799357982_dasoni_2_2026_ROUND_ROBIN_4_Arcadia_B__BASIS_Chandler_20260419T172906Z_vswi77a.json",
+      "sha256": "005962d30587c0d08bb1ed979dbc69462e0aeffc934d6f0143b5bbe5014f1562",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:48:27.280Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495481371274252368_dasoni_2_2026_ROUND_ROBIN_4_Allen_School__Deep_Run_20260419T173011Z_1sbxf7w.json",
+      "sha256": "9303320e5fadee349883cb3bba43c76835286db8b1acd8133c475e8ff240fdbb",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:49:46.775Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495481693350658219_dasoni_2_2026_ROUND_ROBIN_4_BISV_A__North_Hollywood_B_20260419T172423Z_c6c2cdd.json",
+      "sha256": "ccceda8836937e5499df499dc20c939e0f31c8a4a617624fe9d7ac391fb5956d",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:49:30.069Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495481732873457925_dasoni_2_2026_ROUND_ROBIN_4_Luka_Fan_Club__Varun_Clemens_20260419T172527Z_74uk7be.json",
+      "sha256": "3a6a932ca178540cea3fdbd7dce7302409052aad920c684b5c3f93f6474689aa",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:51:49.261Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495482240166006894_dasoni_2_2026_ROUND_ROBIN_4_Benjamin_Franklin__Punahou_School_20260419T172703Z_kvmuewz.json",
+      "sha256": "99713f24e8494affc2230849a3d923dd9077f713531204c8f2d612a44809fca7",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:52:04.171Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495482293068894380_dasoni_2_2026_ROUND_ROBIN_4_Collierville_A__Ward_Melville_20260419T173010Z_n7guvm6.json",
+      "sha256": "d959e6ce40cd8b99d8eb3577acd23b6dd6c56b210b893b59c33990c97203c14c",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:54:50.423Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495482958256275506_dasoni_2_2026_ROUND_ROBIN_4_Clements__Eastlake_20260419T173141Z_btsjm4k.json",
+      "sha256": "ad88d47854029b081b70cdd73bc6f5d6ddf65fad090593beb672aab36832baa6",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:55:37.164Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495483203190788157_dasoni_2_2026_ROUND_ROBIN_4_Lexington_A__Palo_Alto_20260419T173207Z_tpy2bo6-2.json",
+      "sha256": "6186f674d1e4d542c52889c0ab60c5124cfdbf59458eab650b5084a0b4d08c41",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:55:49.755Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495483518573351072_dasoni_2_2026_ROUND_ROBIN_4_North_Allegheny__Quail_Valley_20260419T172800Z_su9wwwo.json",
+      "sha256": "67181d15b02637d8242b683fe82af956c72a2cffaf6fb90a23801f87f744dd9b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:57:07.473Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495483725297750326_dasoni_2_2026_ROUND_ROBIN_4_Deap_South__Woodlands_20260419T172857Z_3aybhdp.json",
+      "sha256": "61287f863eb293bf970a895e2095b2cb6aee196ff12d8bf3a63559c6d40ff6a8",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:58:06.707Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495483863768502282_dasoni_2_2026_ROUND_ROBIN_4_Iolani_B__WWPS_B_20260419T173103Z_7ttrzku.json",
+      "sha256": "fadf31dc0eb8fdbc88b722cd4793f6df503cf9f25bf6cc2b5482895d1420960b",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T17:59:15.417Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495484161144918116_dasoni_2_2026_ROUND_ROBIN_4_Bridgeland__MSJ_20260419T173111Z_64j3oe9.json",
+      "sha256": "a254af27397bdcaf11793f4d798d49eeb2b2941a2b6ecab2c0e0e52566fa6342",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T18:01:22.484Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495484630562898100_dasoni_2_2026_ROUND_ROBIN_4_Hunter__Iolani_A_20260419T172817Z_y9rhwk5.json",
+      "sha256": "8552584fb464f1be03321f8f82360a2c9b2d49a4974d0ad9edc3b6084db70c39",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T18:05:00.989Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495485512021049505_dasoni_2_2026_ROUND_ROBIN_4_American_Heritage_Broward__North_Hollywood_A_20260419T173426Z_8unevwj.json",
+      "sha256": "6c7c305c5c3f2ad88f26e2e2faf96bf96e717323d2274230bdd3f8b28f429076",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T18:06:48.972Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495485949197422673_dasoni_2_2026_ROUND_ROBIN_4_Collierville_B__Lexington_B_20260419T173410Z_5yrx19z.json",
+      "sha256": "2d3259ecdc32921c0dfe31830b138d73d78749dd76e0ae42ae70e3dede47c7dc",
+      "version": 3
+    },
+    {
+      "exported_at": "2026-04-19T18:07:45.688Z",
+      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495486190512509148_dasoni_2_2026_ROUND_ROBIN_4_Morgantown__Thomas_Jefferson_20260419T174417Z_ddk5fs4.json",
+      "sha256": "916493ad52045975f1517761d6719274de44c267b0ab5a96c2cbe3313592fac5",
+      "version": 3
+    }
+  ],
+  "tournament": {
+    "name": "DASONI 2",
+    "slug": "dasoni-2"
+  },
+  "views": {
+    "category_standings": [
+      {
+        "category": "BIOLOGY",
+        "individual_standings": "individual_standings__biology.csv",
+        "key": "biology",
+        "team_standings": "team_standings__biology.csv"
+      },
+      {
+        "category": "CHEMISTRY",
+        "individual_standings": "individual_standings__chemistry.csv",
+        "key": "chemistry",
+        "team_standings": "team_standings__chemistry.csv"
+      },
+      {
+        "category": "EARTH_SPACE",
+        "individual_standings": "individual_standings__earth_space.csv",
+        "key": "earth_space",
+        "team_standings": "team_standings__earth_space.csv"
+      },
+      {
+        "category": "MATH",
+        "individual_standings": "individual_standings__math.csv",
+        "key": "math",
+        "team_standings": "team_standings__math.csv"
+      },
+      {
+        "category": "PHYSICS",
+        "individual_standings": "individual_standings__physics.csv",
+        "key": "physics",
+        "team_standings": "team_standings__physics.csv"
+      }
+    ],
+    "individual_standings": "individual_standings.csv",
+    "team_standings": "team_standings.csv"
+  }
+}

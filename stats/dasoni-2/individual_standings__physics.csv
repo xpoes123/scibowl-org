@@ -1,0 +1,171 @@
+rank,player_id,name,team,games_played,4s,-4s,0s,tossups_heard,tossup_points,points_per_game
+1,1,Daniel L,Allen School,3,10,0,2,12,40,13.333333333333334
+2,103,Sohil,Lynbrook A,3,10,1,1,12,36,12.0
+3,148,Praneel A,Varun Clemens,3,9,1,2,12,32,10.666666666666666
+4,121,Charles H,North Hollywood A,4,8,1,7,16,28,7.0
+5,80,Gabe L,Hunter,4,8,1,7,16,28,7.0
+6,118,Hongyi,North Allegheny,4,8,1,7,16,28,7.0
+7,135,Travis D,Punahou School,4,7,0,9,16,28,7.0
+8,35,Haiyue M,Canyon Crest A,3,6,0,6,12,24,8.0
+9,56,Sai B,Collierville B,4,6,0,10,16,24,6.0
+10,93,William J,Lexington A,3,6,0,6,12,24,8.0
+11,111,Theenash S,MSJ,4,7,2,7,16,20,5.0
+12,162,Andrew K,Whitney Young,3,6,1,5,12,20,6.666666666666667
+13,96,Ayaan I,Lexington B,4,6,1,7,14,20,5.0
+14,43,Eric Z,Clements,4,5,0,11,16,20,5.0
+15,47,Justin D,Clovis North,3,5,0,7,12,20,6.666666666666667
+16,154,Monish S,WWPS A,3,6,2,4,12,16,5.333333333333333
+17,18,Aaron C,BISV A,4,5,1,10,16,16,4.0
+18,69,Abhishek C,Doral Academy,3,5,1,6,12,16,5.333333333333333
+19,99,Akhil B,Luka Fan Club,4,5,1,10,16,16,4.0
+20,42,Alex S,Clements,4,5,1,10,16,16,4.0
+21,60,Sanjay O,Deap South,4,5,1,10,16,16,4.0
+22,49,Abhinav S,Collierville A,4,4,0,12,16,16,4.0
+23,82,Daniel Y,Iolani A,3,4,0,8,12,16,5.333333333333333
+24,156,Dhanshika S,WWPS B,4,4,0,12,16,16,4.0
+25,126,Kensuke O,North Hollywood B,4,4,0,12,16,16,4.0
+26,127,Nathaniel O,North Hollywood B,4,4,0,12,16,16,4.0
+27,119,Jason,North Allegheny,4,3,0,13,16,12,3.0
+28,12,Johnson P,Arcadia B,4,3,0,13,16,12,3.0
+29,137,Josh P,Quail Valley,3,3,0,9,12,12,4.0
+30,168,Kai C,Woodlands,4,3,0,13,16,12,3.0
+31,75,Lawrence Q,Enloe,3,3,0,9,12,12,4.0
+32,10,Paxton L,Arcadia A,3,3,0,9,12,12,4.0
+33,28,Ronald Z,Benjamin Franklin,4,3,0,13,16,12,3.0
+34,59,Ryan K,Deap South,4,3,0,13,16,12,3.0
+35,53,Sumin Y,Collierville A,4,3,0,13,16,12,3.0
+36,61,Ziang Z,Deap South,4,3,0,13,16,12,3.0
+37,131,Kevin P,Palo Alto,3,3,1,8,12,8,2.6666666666666665
+38,74,Shivam,Eastlake,2,3,1,4,8,8,4.0
+39,86,Sola M,Iolani A,3,3,1,6,10,8,2.6666666666666665
+40,163,Brennan T,Whitney Young,3,2,0,10,12,8,2.6666666666666665
+41,4,Dhruv M,American Heritage Broward,4,2,0,14,16,8,2.0
+42,7,Ethan W,Arcadia A,3,2,0,10,12,8,2.6666666666666665
+43,83,Ethan Z,Iolani A,3,2,0,8,10,8,2.6666666666666665
+44,115,Sunny G,Morgantown,3,2,0,10,12,8,2.6666666666666665
+45,108,Vincent Q,Lynbrook B,3,2,0,10,12,8,2.6666666666666665
+46,78,Vishruth K,Enloe,3,2,0,10,12,8,2.6666666666666665
+47,161,Will S,Ward Melville,4,2,0,14,16,8,2.0
+48,17,Varyan J,BASIS Chandler,3,5,4,3,12,4,1.3333333333333333
+49,123,Connor Z,North Hollywood A,4,3,2,11,16,4,1.0
+50,29,Advaith B,Bridgeland,4,2,1,13,16,4,1.0
+51,46,Ethan W,Clovis North,3,2,1,9,12,4,1.3333333333333333
+52,11,Henry Z,Arcadia B,4,2,1,13,16,4,1.0
+53,34,Alex D,Canyon Crest A,3,1,0,11,12,4,1.3333333333333333
+54,37,Andy S,Canyon Crest B,3,1,0,11,12,4,1.3333333333333333
+55,109,Anish A,MSJ,4,1,0,15,16,4,1.0
+56,2,Ariv B,American Heritage Broward,2,1,0,7,8,4,2.0
+57,30,Carson P,Bridgeland,4,1,0,15,16,4,1.0
+58,167,John,Woodlands,3,1,0,11,12,4,1.3333333333333333
+59,13,Kevin W,Arcadia B,4,1,0,15,16,4,1.0
+60,19,Larry Z,BISV A,4,1,0,15,16,4,1.0
+61,120,Leo,North Allegheny,4,1,0,15,16,4,1.0
+62,26,Maddox H,Benjamin Franklin,3,1,0,11,12,4,1.3333333333333333
+63,16,Nihar B,BASIS Chandler,3,1,0,11,12,4,1.3333333333333333
+64,158,Niharika D,WWPS B,4,1,0,15,16,4,1.0
+65,36,Owen M,Canyon Crest A,3,1,0,11,12,4,1.3333333333333333
+66,64,Prithwish C,Deep Run,2,1,0,7,8,4,2.0
+67,65,Rithik N,Deep Run,2,1,0,5,6,4,2.0
+68,107,Robert Y,Lynbrook B,3,1,0,11,12,4,1.3333333333333333
+69,145,Rohan B,Thomas Jefferson,4,1,0,15,16,4,1.0
+70,160,Srihari K,Ward Melville,4,1,0,15,16,4,1.0
+71,139,Vedant B,Quail Valley,3,1,0,11,12,4,1.3333333333333333
+72,44,Yale Z,Clements,3,1,0,11,12,4,1.3333333333333333
+73,142,Eshaan S,Thomas Jefferson,4,2,2,12,16,0,0.0
+74,143,Hrishi B,Thomas Jefferson,4,2,2,12,16,0,0.0
+75,22,Andrew L,BISV B,3,1,1,10,12,0,0.0
+76,166,Arjith,Woodlands,3,1,1,10,12,0,0.0
+77,66,Riyan N,Deep Run,1,1,1,0,2,0,0.0
+78,98,Simon Z,Lexington B,4,1,1,14,16,0,0.0
+79,21,Timo Y,BISV A,4,1,1,14,16,0,0.0
+80,116,William T,Morgantown,3,1,1,10,12,0,0.0
+81,58,Abhinav A,Deap South,4,0,0,16,16,0,0.0
+82,45,Achuth V,Clovis North,3,0,0,12,12,0,0.0
+83,94,Adam H,Lexington B,3,0,0,12,12,0,0.0
+84,33,Aidan B,Canyon Crest A,1,0,0,2,2,0,0.0
+85,151,Akhil M,WWPS A,3,0,0,12,12,0,0.0
+86,95,Akshay R,Lexington B,4,0,0,14,14,0,0.0
+87,41,Alex F,Clements,1,0,0,4,4,0,0.0
+88,105,Ameyaa R,Lynbrook B,3,0,0,12,12,0,0.0
+89,117,Andrew,North Allegheny,4,0,0,16,16,0,0.0
+90,100,Andrew,Lynbrook A,3,0,0,12,12,0,0.0
+91,24,Andrew B,Benjamin Franklin,3,0,0,12,12,0,0.0
+92,155,Anna K,WWPS B,4,0,0,16,16,0,0.0
+93,50,Arman,Collierville A,1,0,0,2,2,0,0.0
+94,3,Arnav B,American Heritage Broward,1,0,0,4,4,0,0.0
+95,159,Aydin E,Ward Melville,4,0,0,16,16,0,0.0
+96,14,Bowen S,BASIS Chandler,3,0,0,12,12,0,0.0
+97,112,Caden Y,Morgantown,2,0,0,8,8,0,0.0
+98,79,Camille P,Hunter,4,0,0,16,16,0,0.0
+99,164,Chaniel K,Whitney Young,3,0,0,12,12,0,0.0
+100,51,Charith N,Collierville A,4,0,0,16,16,0,0.0
+101,6,Christopher C,Arcadia A,3,0,0,12,12,0,0.0
+102,122,Connor C,North Hollywood A,4,0,0,16,16,0,0.0
+103,153,Dennis J,WWPS A,2,0,0,8,8,0,0.0
+104,62,Dheeran S,Deep Run,2,0,0,6,6,0,0.0
+105,97,Ethan L,Lexington B,3,0,0,8,8,0,0.0
+106,113,Gloria H,Morgantown,1,0,0,4,4,0,0.0
+107,157,Gyan C,WWPS B,4,0,0,14,14,0,0.0
+108,84,Haru G,Iolani A,4,0,0,16,16,0,0.0
+109,147,Heidi,Varun Clemens,2,0,0,8,8,0,0.0
+110,54,Ishan A,Collierville B,4,0,0,16,16,0,0.0
+111,55,Jacob L,Collierville B,4,0,0,16,16,0,0.0
+112,125,Jake R,North Hollywood B,4,0,0,16,16,0,0.0
+113,8,Jamie W,Arcadia A,2,0,0,8,8,0,0.0
+114,5,Jason T,American Heritage Broward,4,0,0,16,16,0,0.0
+115,31,Jeffy L,Bridgeland,4,0,0,16,16,0,0.0
+116,144,Justin Y,Thomas Jefferson,2,0,0,6,6,0,0.0
+117,130,Kaylee Z,Palo Alto,3,0,0,12,12,0,0.0
+118,88,Keene K,Iolani B,4,0,0,16,16,0,0.0
+119,52,Krish S,Collierville A,4,0,0,14,14,0,0.0
+120,114,Larry D,Morgantown,3,0,0,12,12,0,0.0
+121,169,Liam,Woodlands,3,0,0,12,12,0,0.0
+122,15,Lishan P,BASIS Chandler,3,0,0,12,12,0,0.0
+123,25,Lucas B,Benjamin Franklin,2,0,0,8,8,0,0.0
+124,133,Luke I,Punahou School,4,0,0,16,16,0,0.0
+125,20,Lutecia L,BISV A,4,0,0,16,16,0,0.0
+126,106,Matthew Y,Lynbrook B,2,0,0,8,8,0,0.0
+127,76,Max X,Enloe,3,0,0,12,12,0,0.0
+128,81,Melody L,Hunter,4,0,0,16,16,0,0.0
+129,85,Min S,Iolani A,4,0,0,16,16,0,0.0
+130,124,Minghao G,North Hollywood A,4,0,0,16,16,0,0.0
+131,89,Naoto H,Iolani B,4,0,0,16,16,0,0.0
+132,128,Neelabh G,North Hollywood B,1,0,0,4,4,0,0.0
+133,70,Neil H,Doral Academy,3,0,0,12,12,0,0.0
+134,134,Nicholas B,Punahou School,4,0,0,16,16,0,0.0
+135,63,Nimit A,Deep Run,3,0,0,12,12,0,0.0
+136,9,Olivia Q,Arcadia A,1,0,0,4,4,0,0.0
+137,129,Patrick L,North Hollywood B,3,0,0,12,12,0,0.0
+138,101,Philip,Lynbrook A,3,0,0,9,9,0,0.0
+139,92,Rahib H,Lexington A,1,0,0,4,4,0,0.0
+140,48,Renard W,Clovis North,3,0,0,12,12,0,0.0
+141,90,Rongting Z,Iolani B,4,0,0,16,16,0,0.0
+142,102,Ryan,Lynbrook A,3,0,0,11,11,0,0.0
+143,132,Ryan P,Palo Alto,3,0,0,12,12,0,0.0
+144,77,Ryan Y,Enloe,3,0,0,12,12,0,0.0
+145,73,Saahil,Eastlake,3,0,0,12,12,0,0.0
+146,38,Sahej B,Canyon Crest B,3,0,0,12,12,0,0.0
+147,57,Santhosh B,Collierville B,4,0,0,16,16,0,0.0
+148,71,Santiago S,Doral Academy,3,0,0,12,12,0,0.0
+149,72,Shalina L,Doral Academy,3,0,0,12,12,0,0.0
+150,149,Shaun I,Varun Clemens,3,0,0,12,12,0,0.0
+151,138,Shruthi R,Quail Valley,3,0,0,12,12,0,0.0
+152,32,Sidh K,Bridgeland,4,0,0,16,16,0,0.0
+153,146,Sophia G,Thomas Jefferson,3,0,0,10,10,0,0.0
+154,67,Sreekar K,Deep Run,2,0,0,6,6,0,0.0
+155,39,Theodore A,Canyon Crest B,3,0,0,12,12,0,0.0
+156,23,Timothy Y,BISV B,3,0,0,12,12,0,0.0
+157,136,Ty D,Punahou School,4,0,0,16,16,0,0.0
+158,140,Vedant N,Quail Valley,2,0,0,4,4,0,0.0
+159,141,Vihaan N,Quail Valley,3,0,0,8,8,0,0.0
+160,170,Walker,Woodlands,3,0,0,12,12,0,0.0
+161,68,Yunay V,Deep Run,2,0,0,8,8,0,0.0
+162,165,Zachary H,Whitney Young,3,0,0,12,12,0,0.0
+163,104,evan,Lynbrook A,1,0,0,4,4,0,0.0
+164,87,Hong Jin K,Iolani B,4,3,4,9,16,-4,-1.0
+165,110,Ishaan K,MSJ,4,1,2,13,16,-4,-1.0
+166,91,Allen F,Lexington A,3,0,1,11,12,-4,-1.3333333333333333
+167,152,Arjun D,WWPS A,3,0,1,11,12,-4,-1.3333333333333333
+168,27,Marianne N,Benjamin Franklin,4,0,1,15,16,-4,-1.0
+169,150,Uddip K,Varun Clemens,3,0,1,11,12,-4,-1.3333333333333333
+170,40,Yihan J,Canyon Crest B,3,0,1,11,12,-4,-1.3333333333333333
