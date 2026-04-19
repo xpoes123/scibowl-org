@@ -1,13 +1,7 @@
 {
-  "generated_at": "2026-04-19T19:20:54.463698Z",
+  "generated_at": "2026-04-19T19:30:45.603553Z",
   "schema_version": 1,
   "sources": [
-    {
-      "exported_at": "2026-04-18T22:02:05.437Z",
-      "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495183466059268336_stanford_science_bowl_2025_Round_1_Amador_Valley_A__Davidson_A_20260418T215625Z_fok0bxa.json",
-      "sha256": "6ce8514a773b8a106def04fdee0d067b72ad2cadc224e981ba902d4656ca78dc",
-      "version": 3
-    },
     {
       "exported_at": "2026-04-19T15:29:58.336Z",
       "path": "C:\\Users\\David\\Downloads\\end-of-round-scores\\1495446732132061344_dasoni_2_2026_ROUND_ROBIN_1_BISV_B__Canyon_Crest_A_20260419T150553Z_jhlj4bk.json",
@@ -602,12 +596,6 @@
         "individual_standings": "individual_standings__earth_space.csv",
         "key": "earth_space",
         "team_standings": "team_standings__earth_space.csv"
-      },
-      {
-        "category": "ENERGY",
-        "individual_standings": "individual_standings__energy.csv",
-        "key": "energy",
-        "team_standings": "team_standings__energy.csv"
       },
       {
         "category": "MATH",
