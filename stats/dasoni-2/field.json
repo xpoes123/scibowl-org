@@ -1,0 +1,186 @@
+{
+  "format": "moss_field_roster",
+  "version": 1,
+  "tournament": {
+    "slug": "dasoni-2",
+    "name": "DASONI 2"
+  },
+  "teams": [
+    {
+      "name": "Collierville A",
+      "players": ["Sumin Y", "Abhinav S", "Krish S", "Charith N", "Arman"]
+    },
+    {
+      "name": "Collierville B",
+      "players": ["Sai B", "Jacob L", "Santhosh B", "Ishan A"]
+    },
+    {
+      "name": "Punahou School",
+      "players": ["Travis D", "Ty D", "Luke I", "Nicholas B"]
+    },
+    {
+      "name": "Allen School",
+      "players": ["Daniel L"]
+    },
+    {
+      "name": "Palo Alto",
+      "players": ["Kevin P", "Kaylee Z"]
+    },
+    {
+      "name": "Canyon Crest A",
+      "players": ["Haiyue M", "Owen M", "Aidan B", "Alex D"]
+    },
+    {
+      "name": "Canyon Crest B",
+      "players": ["Yihan J", "Sahej B", "Andy S", "Theodore A"]
+    },
+    {
+      "name": "Frazer",
+      "players": ["Michael W", "Jimmy J", "Ajay S", "Edwin G", "Anish P"]
+    },
+    {
+      "name": "Iolani A",
+      "players": ["Min S", "Daniel Y", "Sola M", "Ethan Z", "Haru G"]
+    },
+    {
+      "name": "Iolani B",
+      "players": ["Hong Jin K", "Naoto H", "Rongting Z", "Keene K"]
+    },
+    {
+      "name": "Bridgeland",
+      "players": ["Advaith B", "Carson P", "Sidh K", "Jeffy L"]
+    },
+    {
+      "name": "Clovis North",
+      "players": ["Justin D", "Renard W", "Achuth V", "Ethan W"]
+    },
+    {
+      "name": "BISV A",
+      "players": ["Larry Z", "Lutecia L", "Timo Y", "Aaron C"]
+    },
+    {
+      "name": "BISV B",
+      "players": ["Timothy Y"]
+    },
+    {
+      "name": "Lynbrook A",
+      "players": ["Andrew", "Sohil", "Ryan", "Philip"]
+    },
+    {
+      "name": "Lynbrook B",
+      "players": ["Robert Y", "Ian C", "Alex M", "Vincent Q", "Matthew Y"]
+    },
+    {
+      "name": "Clements",
+      "players": ["Eric Z", "Yale Z", "Alex F", "Alex S", "Matthew C"]
+    },
+    {
+      "name": "North Hollywood A",
+      "players": ["Connor Z", "Connor C", "Minghao G", "Charles H"]
+    },
+    {
+      "name": "North Hollywood B",
+      "players": ["Kensuke O", "Jake R", "Patrick L", "Nathaniel O", "Neelabh G"]
+    },
+    {
+      "name": "Morgantown",
+      "players": ["Sunny G", "Larry D", "William T", "Caden Y", "Gloria H"]
+    },
+    {
+      "name": "Quail Valley",
+      "players": ["Shruthi R", "Vedant B", "Vihaan N", "Vedant N", "Josh P"]
+    },
+    {
+      "name": "Varun Clemens",
+      "players": ["Uddip K", "Shaun I", "Praneel A", "Heidi", "Ishan"]
+    },
+    {
+      "name": "BASIS Chandler",
+      "players": ["Varyan J", "Nihar B", "Lishan P", "Bowen S"]
+    },
+    {
+      "name": "Eastlake",
+      "players": ["Saahil", "Shivam", "Saamik", "Yash", "Neal K"]
+    },
+    {
+      "name": "Ward Melville",
+      "players": ["Will S", "Srihari K", "Aydin E"]
+    },
+    {
+      "name": "Benjamin Franklin",
+      "players": ["Andrew B", "Lucas B", "Ronald Z", "Marianne N", "Maddox H"]
+    },
+    {
+      "name": "Deep Run",
+      "players": ["Nimit A", "Prithwish C", "Yunay V", "Rithik N", "Sreekar K", "Dheeran S"]
+    },
+    {
+      "name": "Lexington A",
+      "players": ["Allen F", "William J", "Rahib H"]
+    },
+    {
+      "name": "Lexington B",
+      "players": ["Simon Z", "Ayaan I", "Adam H", "Ethan L", "Akshay R"]
+    },
+    {
+      "name": "Enloe",
+      "players": ["Kaiwen Y", "Max X", "Lawrence Q", "Ryan Y", "Vishruth K"]
+    },
+    {
+      "name": "Whitney Young",
+      "players": ["Andrew K", "Brennan T", "Chaniel K", "Zachary H"]
+    },
+    {
+      "name": "Deap South",
+      "players": ["Ryan K", "Sanjay O", "Ziang Z", "Abhinav A"]
+    },
+    {
+      "name": "American Heritage Broward",
+      "players": ["Dhruv M", "Ariv B", "Arnav B", "Jason T", "Daniel C"]
+    },
+    {
+      "name": "Doral Academy",
+      "players": ["Shalina L", "Neil H", "Abhishek C", "Santiago S"]
+    },
+    {
+      "name": "Thomas Jefferson",
+      "players": ["Sophia G", "Hrishi B", "Eshaan S", "Rohan B", "Nathan L"]
+    },
+    {
+      "name": "North Allegheny",
+      "players": ["Jason", "Andrew", "Leo", "Hongyi", "Aaron"]
+    },
+    {
+      "name": "Arcadia A",
+      "players": ["Ethan W", "Paxton L", "Christopher C", "Olivia Q", "Jamie W"]
+    },
+    {
+      "name": "Arcadia B",
+      "players": ["Kevin W", "Henry Z", "Johnson P"]
+    },
+    {
+      "name": "WWPS A",
+      "players": ["Dennis J", "Arjun D", "Monish S", "Akhil M"]
+    },
+    {
+      "name": "WWPS B",
+      "players": ["Aarush P", "Anna K", "Gyan C", "Niharika D", "Dhanshika S"]
+    },
+    {
+      "name": "MSJ",
+      "players": ["Theenash S", "Anish A", "Ishaan K"]
+    },
+    {
+      "name": "Woodlands",
+      "players": ["Kai C", "Arjith", "Walker", "Liam", "John"]
+    },
+    {
+      "name": "Hunter",
+      "players": ["Gabe L", "Camille P", "Melody L"]
+    },
+    {
+      "name": "Luka Fan Club",
+      "players": ["Akhil B"]
+    }
+  ]
+}
