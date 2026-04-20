@@ -1,0 +1,174 @@
+player_id,player_name,grade_level,team_id,team_name
+1,Daniel L,,1,Allen School
+2,Ariv B,,2,American Heritage Broward
+3,Arnav B,,2,American Heritage Broward
+4,Dhruv M,,2,American Heritage Broward
+5,Jason T,,2,American Heritage Broward
+6,Christopher C,,3,Arcadia A
+7,Ethan W,,3,Arcadia A
+8,Jamie W,,3,Arcadia A
+9,Olivia Q,,3,Arcadia A
+10,Paxton L,,3,Arcadia A
+11,Henry Z,,4,Arcadia B
+12,Johnson P,,4,Arcadia B
+13,Kevin W,,4,Arcadia B
+14,Arnav S,,5,BASIS Chandler
+15,Bowen S,,5,BASIS Chandler
+16,Lishan P,,5,BASIS Chandler
+17,Nihar B,,5,BASIS Chandler
+18,Varyan J,,5,BASIS Chandler
+19,Aaron C,,6,BISV A
+20,Larry Z,,6,BISV A
+21,Lutecia L,,6,BISV A
+22,Timo Y,,6,BISV A
+23,Andrew L,,7,BISV B
+24,Timothy Y,,7,BISV B
+25,Andrew B,,8,Benjamin Franklin
+26,Lucas B,,8,Benjamin Franklin
+27,Maddox H,,8,Benjamin Franklin
+28,Marianne N,,8,Benjamin Franklin
+29,Ronald Z,,8,Benjamin Franklin
+30,Advaith B,,9,Bridgeland
+31,Carson P,,9,Bridgeland
+32,Jeffy L,,9,Bridgeland
+33,Sidh K,,9,Bridgeland
+34,Aidan B,,10,Canyon Crest A
+35,Alex D,,10,Canyon Crest A
+36,Haiyue M,,10,Canyon Crest A
+37,Owen M,,10,Canyon Crest A
+38,Andy S,,11,Canyon Crest B
+39,Sahej B,,11,Canyon Crest B
+40,Theodore A,,11,Canyon Crest B
+41,Yihan J,,11,Canyon Crest B
+42,Alex F,,12,Clements
+43,Alex S,,12,Clements
+44,Eric Z,,12,Clements
+45,Yale Z,,12,Clements
+46,Achuth V,,13,Clovis North
+47,Ethan W,,13,Clovis North
+48,Justin D,,13,Clovis North
+49,Renard W,,13,Clovis North
+50,Abhinav S,,14,Collierville A
+51,Arman,,14,Collierville A
+52,Charith N,,14,Collierville A
+53,Krish S,,14,Collierville A
+54,Sumin Y,,14,Collierville A
+55,Ishan A,,15,Collierville B
+56,Jacob L,,15,Collierville B
+57,Sai B,,15,Collierville B
+58,Santhosh B,,15,Collierville B
+59,Abhinav A,,16,Deap South
+60,Ryan K,,16,Deap South
+61,Sanjay O,,16,Deap South
+62,Ziang Z,,16,Deap South
+63,Dheeran S,,17,Deep Run
+64,Nimit A,,17,Deep Run
+65,Prithwish C,,17,Deep Run
+66,Rithik N,,17,Deep Run
+67,Riyan N,,17,Deep Run
+68,Sreekar K,,17,Deep Run
+69,Yunay V,,17,Deep Run
+70,Abhishek C,,18,Doral Academy
+71,Neil H,,18,Doral Academy
+72,Santiago S,,18,Doral Academy
+73,Shalina L,,18,Doral Academy
+74,Neal K,,19,Eastlake
+75,Saahil,,19,Eastlake
+76,Shivam,,19,Eastlake
+77,Kaiwen Y,,20,Enloe
+78,Lawrence Q,,20,Enloe
+79,Max X,,20,Enloe
+80,Ryan Y,,20,Enloe
+81,Vishruth K,,20,Enloe
+82,Camille P,,21,Hunter
+83,Gabe L,,21,Hunter
+84,Melody L,,21,Hunter
+85,Daniel Y,,22,Iolani A
+86,Ethan Z,,22,Iolani A
+87,Haru G,,22,Iolani A
+88,Min S,,22,Iolani A
+89,Sola M,,22,Iolani A
+90,Hong Jin K,,23,Iolani B
+91,Keene K,,23,Iolani B
+92,Naoto H,,23,Iolani B
+93,Rongting Z,,23,Iolani B
+94,Allen F,,24,Lexington A
+95,Rahib H,,24,Lexington A
+96,William J,,24,Lexington A
+97,Adam H,,25,Lexington B
+98,Akshay R,,25,Lexington B
+99,Ayaan I,,25,Lexington B
+100,Ethan L,,25,Lexington B
+101,Simon Z,,25,Lexington B
+102,Akhil B,,26,Luka Fan Club
+103,Andrew,,27,Lynbrook A
+104,Philip,,27,Lynbrook A
+105,Ryan,,27,Lynbrook A
+106,Sohil,,27,Lynbrook A
+107,evan,,27,Lynbrook A
+108,Ameyaa R,,28,Lynbrook B
+109,Matthew Y,,28,Lynbrook B
+110,Robert Y,,28,Lynbrook B
+111,Vincent Q,,28,Lynbrook B
+112,Anish A,,29,MSJ
+113,Ishaan K,,29,MSJ
+114,Theenash S,,29,MSJ
+115,Caden Y,,30,Morgantown
+116,Gloria H,,30,Morgantown
+117,Larry D,,30,Morgantown
+118,Sunny G,,30,Morgantown
+119,William T,,30,Morgantown
+120,Andrew,,31,North Allegheny
+121,Hongyi,,31,North Allegheny
+122,Jason,,31,North Allegheny
+123,Leo,,31,North Allegheny
+124,Charles H,,32,North Hollywood A
+125,Connor C,,32,North Hollywood A
+126,Connor Z,,32,North Hollywood A
+127,Minghao G,,32,North Hollywood A
+128,Jake R,,33,North Hollywood B
+129,Kensuke O,,33,North Hollywood B
+130,Nathaniel O,,33,North Hollywood B
+131,Neelabh G,,33,North Hollywood B
+132,Patrick L,,33,North Hollywood B
+133,Kaylee Z,,34,Palo Alto
+134,Kevin P,,34,Palo Alto
+135,Ryan P,,34,Palo Alto
+136,Luke I,,35,Punahou School
+137,Nicholas B,,35,Punahou School
+138,Travis D,,35,Punahou School
+139,Ty D,,35,Punahou School
+140,Josh P,,36,Quail Valley
+141,Shruthi R,,36,Quail Valley
+142,Vedant B,,36,Quail Valley
+143,Vedant N,,36,Quail Valley
+144,Vihaan N,,36,Quail Valley
+145,Eshaan S,,37,Thomas Jefferson
+146,Hrishi B,,37,Thomas Jefferson
+147,Justin Y,,37,Thomas Jefferson
+148,Rohan B,,37,Thomas Jefferson
+149,Sophia G,,37,Thomas Jefferson
+150,Heidi,,38,Varun Clemens
+151,Praneel A,,38,Varun Clemens
+152,Shaun I,,38,Varun Clemens
+153,Uddip K,,38,Varun Clemens
+154,Akhil M,,39,WWPS A
+155,Arjun D,,39,WWPS A
+156,Dennis J,,39,WWPS A
+157,Monish S,,39,WWPS A
+158,Anna K,,40,WWPS B
+159,Dhanshika S,,40,WWPS B
+160,Gyan C,,40,WWPS B
+161,Niharika D,,40,WWPS B
+162,Aydin E,,41,Ward Melville
+163,Srihari K,,41,Ward Melville
+164,Will S,,41,Ward Melville
+165,Andrew K,,42,Whitney Young
+166,Brennan T,,42,Whitney Young
+167,Chaniel K,,42,Whitney Young
+168,Zachary H,,42,Whitney Young
+169,Arjith,,43,Woodlands
+170,John,,43,Woodlands
+171,Kai C,,43,Woodlands
+172,Liam,,43,Woodlands
+173,Walker,,43,Woodlands

@@ -1,5 +1,15 @@
 {
-  "generated_at": "2026-04-20T01:32:36.012795Z",
+  "datasets": {
+    "game_players": "facts/game_players.csv",
+    "game_players_by_category": "facts/game_players_by_category.csv",
+    "game_teams": "facts/game_teams.csv",
+    "game_teams_by_category": "facts/game_teams_by_category.csv",
+    "games": "facts/games.csv",
+    "players": "facts/players.csv",
+    "rounds": "facts/rounds.csv",
+    "teams": "facts/teams.csv"
+  },
+  "generated_at": "2026-04-20T01:44:14.191978Z",
   "schema_version": 1,
   "sources": [
     {

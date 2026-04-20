@@ -1,0 +1,1371 @@
+game_id,team_id,team_name,player_id,player_name,category,tossups_correct,tossups_incorrect,tossups_no_penalty,tossup_points
+1,7,BISV B,23,Andrew L,PHYSICS,0,1,0,-4
+1,7,BISV B,24,Timothy Y,BIOLOGY,1,0,0,4
+1,7,BISV B,24,Timothy Y,CHEMISTRY,2,0,0,8
+1,10,Canyon Crest A,35,Alex D,CHEMISTRY,0,1,0,-4
+1,10,Canyon Crest A,35,Alex D,EARTH_SPACE,1,0,0,4
+1,10,Canyon Crest A,36,Haiyue M,BIOLOGY,2,0,0,8
+1,10,Canyon Crest A,36,Haiyue M,EARTH_SPACE,1,1,0,0
+1,10,Canyon Crest A,36,Haiyue M,PHYSICS,4,0,0,16
+1,10,Canyon Crest A,37,Owen M,CHEMISTRY,1,0,0,4
+1,10,Canyon Crest A,37,Owen M,MATH,3,0,0,12
+2,12,Clements,43,Alex S,CHEMISTRY,3,0,0,12
+2,12,Clements,43,Alex S,MATH,3,0,0,12
+2,12,Clements,43,Alex S,PHYSICS,2,0,0,8
+2,42,Whitney Young,165,Andrew K,CHEMISTRY,1,0,0,4
+2,42,Whitney Young,165,Andrew K,EARTH_SPACE,2,0,0,8
+2,42,Whitney Young,165,Andrew K,MATH,1,0,0,4
+2,42,Whitney Young,165,Andrew K,PHYSICS,2,1,0,4
+2,42,Whitney Young,166,Brennan T,EARTH_SPACE,2,0,0,8
+2,42,Whitney Young,167,Chaniel K,BIOLOGY,2,0,0,8
+2,42,Whitney Young,168,Zachary H,BIOLOGY,1,0,0,4
+3,1,Allen School,1,Daniel L,CHEMISTRY,2,0,0,8
+3,1,Allen School,1,Daniel L,EARTH_SPACE,2,0,0,8
+3,1,Allen School,1,Daniel L,MATH,1,1,0,0
+3,1,Allen School,1,Daniel L,PHYSICS,3,0,0,12
+3,13,Clovis North,46,Achuth V,BIOLOGY,4,0,0,16
+3,13,Clovis North,47,Ethan W,EARTH_SPACE,2,0,0,8
+3,13,Clovis North,47,Ethan W,PHYSICS,1,1,0,0
+3,13,Clovis North,48,Justin D,CHEMISTRY,1,1,0,0
+3,13,Clovis North,48,Justin D,MATH,2,0,0,8
+4,40,WWPS B,158,Anna K,CHEMISTRY,3,0,0,12
+4,40,WWPS B,158,Anna K,MATH,1,0,0,4
+4,40,WWPS B,160,Gyan C,EARTH_SPACE,2,0,0,8
+4,43,Woodlands,170,John,BIOLOGY,1,0,0,4
+4,43,Woodlands,170,John,CHEMISTRY,1,0,0,4
+4,43,Woodlands,170,John,EARTH_SPACE,1,0,0,4
+4,43,Woodlands,170,John,PHYSICS,1,0,0,4
+4,43,Woodlands,171,Kai C,MATH,1,0,0,4
+4,43,Woodlands,171,Kai C,PHYSICS,1,0,0,4
+4,43,Woodlands,172,Liam,MATH,1,0,0,4
+5,29,MSJ,112,Anish A,PHYSICS,1,0,0,4
+5,29,MSJ,113,Ishaan K,EARTH_SPACE,2,1,0,4
+5,29,MSJ,113,Ishaan K,MATH,3,0,0,12
+5,29,MSJ,114,Theenash S,BIOLOGY,4,0,0,16
+5,29,MSJ,114,Theenash S,CHEMISTRY,3,1,0,8
+5,29,MSJ,114,Theenash S,PHYSICS,3,0,0,12
+5,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,2,0,0,8
+5,33,North Hollywood B,129,Kensuke O,MATH,1,0,0,4
+5,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,1,0,0,4
+6,16,Deap South,59,Abhinav A,BIOLOGY,1,0,0,4
+6,16,Deap South,59,Abhinav A,EARTH_SPACE,3,0,0,12
+6,16,Deap South,60,Ryan K,EARTH_SPACE,1,0,0,4
+6,16,Deap South,60,Ryan K,MATH,2,0,0,8
+6,16,Deap South,60,Ryan K,PHYSICS,1,0,0,4
+6,16,Deap South,61,Sanjay O,BIOLOGY,1,0,0,4
+6,16,Deap South,61,Sanjay O,CHEMISTRY,2,2,0,0
+6,16,Deap South,61,Sanjay O,PHYSICS,3,0,0,12
+6,16,Deap South,62,Ziang Z,BIOLOGY,1,0,0,4
+6,16,Deap South,62,Ziang Z,MATH,1,0,0,4
+6,41,Ward Melville,162,Aydin E,CHEMISTRY,1,0,0,4
+6,41,Ward Melville,163,Srihari K,CHEMISTRY,1,0,0,4
+6,41,Ward Melville,164,Will S,MATH,1,0,0,4
+7,24,Lexington A,94,Allen F,BIOLOGY,0,1,0,-4
+7,24,Lexington A,94,Allen F,EARTH_SPACE,2,1,0,4
+7,24,Lexington A,96,William J,BIOLOGY,0,1,0,-4
+7,24,Lexington A,96,William J,CHEMISTRY,2,1,0,4
+7,24,Lexington A,96,William J,MATH,2,0,0,8
+7,24,Lexington A,96,William J,PHYSICS,2,0,0,8
+7,31,North Allegheny,120,Andrew,EARTH_SPACE,1,0,0,4
+7,31,North Allegheny,120,Andrew,MATH,1,0,0,4
+7,31,North Allegheny,121,Hongyi,BIOLOGY,3,0,0,12
+7,31,North Allegheny,121,Hongyi,PHYSICS,2,1,0,4
+7,31,North Allegheny,123,Leo,BIOLOGY,1,0,0,4
+7,31,North Allegheny,123,Leo,CHEMISTRY,1,0,0,4
+8,28,Lynbrook B,110,Robert Y,CHEMISTRY,2,0,0,8
+8,28,Lynbrook B,110,Robert Y,PHYSICS,1,0,0,4
+8,28,Lynbrook B,111,Vincent Q,EARTH_SPACE,2,0,0,8
+8,28,Lynbrook B,111,Vincent Q,PHYSICS,1,0,0,4
+8,39,WWPS A,154,Akhil M,CHEMISTRY,1,2,0,-4
+8,39,WWPS A,155,Arjun D,BIOLOGY,4,0,0,16
+8,39,WWPS A,155,Arjun D,CHEMISTRY,1,0,0,4
+8,39,WWPS A,155,Arjun D,PHYSICS,0,1,0,-4
+8,39,WWPS A,157,Monish S,MATH,4,0,0,16
+8,39,WWPS A,157,Monish S,PHYSICS,2,0,0,8
+9,15,Collierville B,56,Jacob L,MATH,1,0,0,4
+9,15,Collierville B,58,Santhosh B,CHEMISTRY,0,1,0,-4
+9,22,Iolani A,85,Daniel Y,BIOLOGY,1,0,0,4
+9,22,Iolani A,85,Daniel Y,PHYSICS,2,0,0,8
+9,22,Iolani A,86,Ethan Z,EARTH_SPACE,4,0,0,16
+9,22,Iolani A,86,Ethan Z,PHYSICS,2,0,0,8
+9,22,Iolani A,87,Haru G,BIOLOGY,1,0,0,4
+9,22,Iolani A,87,Haru G,MATH,1,0,0,4
+9,22,Iolani A,88,Min S,CHEMISTRY,4,0,0,16
+9,22,Iolani A,88,Min S,MATH,2,0,0,8
+10,18,Doral Academy,70,Abhishek C,MATH,2,0,0,8
+10,18,Doral Academy,70,Abhishek C,PHYSICS,2,0,0,8
+10,18,Doral Academy,71,Neil H,BIOLOGY,3,0,0,12
+10,18,Doral Academy,72,Santiago S,CHEMISTRY,1,0,0,4
+10,34,Palo Alto,134,Kevin P,BIOLOGY,1,0,0,4
+10,34,Palo Alto,134,Kevin P,CHEMISTRY,2,0,0,8
+10,34,Palo Alto,134,Kevin P,EARTH_SPACE,1,2,0,-4
+10,34,Palo Alto,134,Kevin P,MATH,1,0,0,4
+10,34,Palo Alto,134,Kevin P,PHYSICS,2,0,0,8
+10,34,Palo Alto,135,Ryan P,BIOLOGY,0,1,0,-4
+10,34,Palo Alto,135,Ryan P,CHEMISTRY,1,0,0,4
+10,34,Palo Alto,135,Ryan P,MATH,1,0,0,4
+11,2,American Heritage Broward,4,Dhruv M,PHYSICS,1,0,0,4
+11,2,American Heritage Broward,5,Jason T,BIOLOGY,3,0,0,12
+11,2,American Heritage Broward,5,Jason T,MATH,2,0,0,8
+11,25,Lexington B,97,Adam H,MATH,2,0,0,8
+11,25,Lexington B,98,Akshay R,CHEMISTRY,1,0,0,4
+11,25,Lexington B,98,Akshay R,EARTH_SPACE,2,0,0,8
+11,25,Lexington B,99,Ayaan I,CHEMISTRY,1,0,0,4
+11,25,Lexington B,99,Ayaan I,PHYSICS,3,0,0,12
+11,25,Lexington B,100,Ethan L,BIOLOGY,0,1,0,-4
+11,25,Lexington B,101,Simon Z,CHEMISTRY,2,0,0,8
+11,25,Lexington B,101,Simon Z,PHYSICS,0,1,0,-4
+12,9,Bridgeland,30,Advaith B,EARTH_SPACE,0,1,0,-4
+12,9,Bridgeland,30,Advaith B,MATH,2,0,0,8
+12,9,Bridgeland,30,Advaith B,PHYSICS,1,0,0,4
+12,9,Bridgeland,31,Carson P,BIOLOGY,1,0,0,4
+12,9,Bridgeland,32,Jeffy L,BIOLOGY,1,0,0,4
+12,9,Bridgeland,32,Jeffy L,CHEMISTRY,2,0,0,8
+12,35,Punahou School,136,Luke I,BIOLOGY,0,1,0,-4
+12,35,Punahou School,138,Travis D,CHEMISTRY,2,1,0,4
+12,35,Punahou School,138,Travis D,EARTH_SPACE,3,0,0,12
+12,35,Punahou School,138,Travis D,MATH,2,0,0,8
+12,35,Punahou School,138,Travis D,PHYSICS,2,0,0,8
+13,14,Collierville A,50,Abhinav S,BIOLOGY,2,0,0,8
+13,14,Collierville A,50,Abhinav S,CHEMISTRY,2,1,0,4
+13,14,Collierville A,50,Abhinav S,EARTH_SPACE,1,0,0,4
+13,14,Collierville A,50,Abhinav S,MATH,2,0,0,8
+13,14,Collierville A,50,Abhinav S,PHYSICS,3,0,0,12
+13,14,Collierville A,52,Charith N,CHEMISTRY,1,0,0,4
+13,14,Collierville A,53,Krish S,BIOLOGY,1,0,0,4
+13,23,Iolani B,90,Hong Jin K,EARTH_SPACE,2,0,0,8
+13,23,Iolani B,90,Hong Jin K,MATH,1,0,0,4
+13,23,Iolani B,90,Hong Jin K,PHYSICS,1,1,0,0
+13,23,Iolani B,91,Keene K,CHEMISTRY,0,1,0,-4
+13,23,Iolani B,91,Keene K,MATH,1,0,0,4
+13,23,Iolani B,92,Naoto H,CHEMISTRY,0,1,0,-4
+14,27,Lynbrook A,103,Andrew,BIOLOGY,3,0,0,12
+14,27,Lynbrook A,103,Andrew,CHEMISTRY,1,0,0,4
+14,27,Lynbrook A,104,Philip,EARTH_SPACE,1,0,0,4
+14,27,Lynbrook A,105,Ryan,MATH,2,0,0,8
+14,27,Lynbrook A,106,Sohil,CHEMISTRY,2,0,0,8
+14,27,Lynbrook A,106,Sohil,EARTH_SPACE,1,0,0,4
+14,27,Lynbrook A,106,Sohil,MATH,2,0,0,8
+14,27,Lynbrook A,106,Sohil,PHYSICS,4,0,0,16
+14,27,Lynbrook A,107,evan,CHEMISTRY,1,0,0,4
+15,3,Arcadia A,6,Christopher C,EARTH_SPACE,1,0,0,4
+15,3,Arcadia A,7,Ethan W,BIOLOGY,1,0,0,4
+15,3,Arcadia A,7,Ethan W,EARTH_SPACE,1,0,0,4
+15,3,Arcadia A,10,Paxton L,BIOLOGY,1,0,0,4
+15,3,Arcadia A,10,Paxton L,CHEMISTRY,3,0,0,12
+15,3,Arcadia A,10,Paxton L,MATH,1,0,0,4
+15,3,Arcadia A,10,Paxton L,PHYSICS,3,0,0,12
+15,26,Luka Fan Club,102,Akhil B,BIOLOGY,1,0,0,4
+15,26,Luka Fan Club,102,Akhil B,CHEMISTRY,1,2,0,-4
+15,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,1,1,0,0
+15,26,Luka Fan Club,102,Akhil B,MATH,3,0,0,12
+15,26,Luka Fan Club,102,Akhil B,PHYSICS,1,1,0,0
+16,21,Hunter,82,Camille P,BIOLOGY,3,0,0,12
+16,21,Hunter,83,Gabe L,CHEMISTRY,3,0,0,12
+16,21,Hunter,83,Gabe L,PHYSICS,2,0,0,8
+16,32,North Hollywood A,124,Charles H,BIOLOGY,1,0,0,4
+16,32,North Hollywood A,124,Charles H,PHYSICS,1,0,0,4
+16,32,North Hollywood A,125,Connor C,EARTH_SPACE,2,0,0,8
+16,32,North Hollywood A,126,Connor Z,CHEMISTRY,1,0,0,4
+16,32,North Hollywood A,126,Connor Z,EARTH_SPACE,1,0,0,4
+16,32,North Hollywood A,126,Connor Z,MATH,1,0,0,4
+16,32,North Hollywood A,126,Connor Z,PHYSICS,1,1,0,0
+16,32,North Hollywood A,127,Minghao G,MATH,3,0,0,12
+17,4,Arcadia B,11,Henry Z,PHYSICS,0,1,0,-4
+17,4,Arcadia B,13,Kevin W,BIOLOGY,3,0,0,12
+17,4,Arcadia B,13,Kevin W,CHEMISTRY,1,0,0,4
+17,4,Arcadia B,13,Kevin W,EARTH_SPACE,1,0,0,4
+17,4,Arcadia B,13,Kevin W,MATH,2,0,0,8
+17,4,Arcadia B,13,Kevin W,PHYSICS,1,0,0,4
+17,20,Enloe,78,Lawrence Q,MATH,1,0,0,4
+17,20,Enloe,78,Lawrence Q,PHYSICS,1,0,0,4
+17,20,Enloe,79,Max X,MATH,1,0,0,4
+17,20,Enloe,81,Vishruth K,CHEMISTRY,3,0,0,12
+17,20,Enloe,81,Vishruth K,EARTH_SPACE,2,1,0,4
+17,20,Enloe,81,Vishruth K,PHYSICS,2,0,0,8
+18,6,BISV A,19,Aaron C,EARTH_SPACE,2,0,0,8
+18,6,BISV A,19,Aaron C,MATH,1,0,0,4
+18,6,BISV A,19,Aaron C,PHYSICS,1,0,0,4
+18,6,BISV A,20,Larry Z,BIOLOGY,3,1,0,8
+18,6,BISV A,20,Larry Z,CHEMISTRY,1,0,0,4
+18,6,BISV A,20,Larry Z,PHYSICS,1,0,0,4
+18,6,BISV A,22,Timo Y,CHEMISTRY,0,1,0,-4
+18,6,BISV A,22,Timo Y,MATH,1,0,0,4
+18,6,BISV A,22,Timo Y,PHYSICS,1,1,0,0
+18,8,Benjamin Franklin,26,Lucas B,CHEMISTRY,1,0,0,4
+18,8,Benjamin Franklin,26,Lucas B,EARTH_SPACE,1,0,0,4
+18,8,Benjamin Franklin,28,Marianne N,BIOLOGY,1,0,0,4
+18,8,Benjamin Franklin,28,Marianne N,CHEMISTRY,2,0,0,8
+18,8,Benjamin Franklin,29,Ronald Z,MATH,2,0,0,8
+19,17,Deep Run,63,Dheeran S,CHEMISTRY,0,1,0,-4
+19,17,Deep Run,64,Nimit A,BIOLOGY,2,1,0,4
+19,17,Deep Run,64,Nimit A,EARTH_SPACE,2,0,0,8
+19,17,Deep Run,66,Rithik N,PHYSICS,1,0,0,4
+19,17,Deep Run,67,Riyan N,MATH,2,0,0,8
+19,17,Deep Run,67,Riyan N,PHYSICS,1,1,0,0
+19,37,Thomas Jefferson,145,Eshaan S,CHEMISTRY,1,0,0,4
+19,37,Thomas Jefferson,145,Eshaan S,PHYSICS,2,0,0,8
+19,37,Thomas Jefferson,146,Hrishi B,BIOLOGY,1,0,0,4
+19,37,Thomas Jefferson,146,Hrishi B,CHEMISTRY,1,0,0,4
+19,37,Thomas Jefferson,146,Hrishi B,PHYSICS,0,1,0,-4
+19,37,Thomas Jefferson,147,Justin Y,BIOLOGY,1,1,0,0
+19,37,Thomas Jefferson,148,Rohan B,CHEMISTRY,2,0,0,8
+19,37,Thomas Jefferson,148,Rohan B,EARTH_SPACE,1,1,0,0
+20,3,Arcadia A,6,Christopher C,EARTH_SPACE,1,0,0,4
+20,3,Arcadia A,7,Ethan W,EARTH_SPACE,1,0,0,4
+20,3,Arcadia A,7,Ethan W,MATH,1,0,0,4
+20,3,Arcadia A,7,Ethan W,PHYSICS,1,0,0,4
+20,38,Varun Clemens,151,Praneel A,BIOLOGY,1,0,0,4
+20,38,Varun Clemens,151,Praneel A,CHEMISTRY,4,0,0,16
+20,38,Varun Clemens,151,Praneel A,EARTH_SPACE,1,1,0,0
+20,38,Varun Clemens,151,Praneel A,MATH,1,1,0,0
+20,38,Varun Clemens,151,Praneel A,PHYSICS,3,0,0,12
+20,38,Varun Clemens,152,Shaun I,BIOLOGY,1,0,0,4
+20,38,Varun Clemens,153,Uddip K,BIOLOGY,2,0,0,8
+21,6,BISV A,19,Aaron C,EARTH_SPACE,2,1,0,4
+21,6,BISV A,19,Aaron C,MATH,0,1,0,-4
+21,6,BISV A,19,Aaron C,PHYSICS,3,1,0,8
+21,6,BISV A,20,Larry Z,BIOLOGY,3,1,0,8
+21,6,BISV A,21,Lutecia L,CHEMISTRY,2,0,0,8
+21,9,Bridgeland,30,Advaith B,EARTH_SPACE,1,0,0,4
+21,9,Bridgeland,30,Advaith B,MATH,1,0,0,4
+21,9,Bridgeland,30,Advaith B,PHYSICS,1,0,0,4
+21,9,Bridgeland,31,Carson P,CHEMISTRY,1,0,0,4
+21,9,Bridgeland,33,Sidh K,BIOLOGY,1,0,0,4
+22,41,Ward Melville,162,Aydin E,BIOLOGY,1,0,0,4
+22,41,Ward Melville,163,Srihari K,EARTH_SPACE,2,0,0,8
+22,41,Ward Melville,163,Srihari K,MATH,2,0,0,8
+22,41,Ward Melville,164,Will S,BIOLOGY,1,0,0,4
+22,41,Ward Melville,164,Will S,CHEMISTRY,1,0,0,4
+22,41,Ward Melville,164,Will S,MATH,1,0,0,4
+22,41,Ward Melville,164,Will S,PHYSICS,1,0,0,4
+22,43,Woodlands,169,Arjith,PHYSICS,1,0,0,4
+22,43,Woodlands,170,John,BIOLOGY,1,0,0,4
+22,43,Woodlands,170,John,CHEMISTRY,2,0,0,8
+22,43,Woodlands,170,John,EARTH_SPACE,1,0,0,4
+23,19,Eastlake,75,Saahil,BIOLOGY,2,1,0,4
+23,19,Eastlake,75,Saahil,CHEMISTRY,2,0,0,8
+23,19,Eastlake,75,Saahil,EARTH_SPACE,1,0,0,4
+23,19,Eastlake,75,Saahil,MATH,1,1,0,0
+23,42,Whitney Young,165,Andrew K,CHEMISTRY,2,0,0,8
+23,42,Whitney Young,165,Andrew K,EARTH_SPACE,2,0,0,8
+23,42,Whitney Young,165,Andrew K,MATH,3,0,0,12
+23,42,Whitney Young,165,Andrew K,PHYSICS,2,0,0,8
+23,42,Whitney Young,166,Brennan T,PHYSICS,2,0,0,8
+23,42,Whitney Young,167,Chaniel K,BIOLOGY,1,0,0,4
+24,8,Benjamin Franklin,25,Andrew B,EARTH_SPACE,1,0,0,4
+24,8,Benjamin Franklin,27,Maddox H,PHYSICS,1,0,0,4
+24,8,Benjamin Franklin,28,Marianne N,BIOLOGY,1,0,0,4
+24,8,Benjamin Franklin,28,Marianne N,MATH,1,0,0,4
+24,8,Benjamin Franklin,29,Ronald Z,PHYSICS,1,0,0,4
+24,33,North Hollywood B,129,Kensuke O,BIOLOGY,1,0,0,4
+24,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,2,1,0,4
+24,33,North Hollywood B,129,Kensuke O,MATH,2,0,0,8
+24,33,North Hollywood B,129,Kensuke O,PHYSICS,1,0,0,4
+24,33,North Hollywood B,130,Nathaniel O,BIOLOGY,2,0,0,8
+24,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,2,1,0,4
+25,15,Collierville B,55,Ishan A,MATH,1,0,0,4
+25,15,Collierville B,56,Jacob L,BIOLOGY,1,0,0,4
+25,15,Collierville B,56,Jacob L,CHEMISTRY,1,0,0,4
+25,15,Collierville B,57,Sai B,PHYSICS,2,0,0,8
+25,15,Collierville B,58,Santhosh B,BIOLOGY,1,0,0,4
+25,15,Collierville B,58,Santhosh B,CHEMISTRY,1,0,0,4
+25,21,Hunter,82,Camille P,BIOLOGY,1,0,0,4
+25,21,Hunter,82,Camille P,CHEMISTRY,1,0,0,4
+25,21,Hunter,82,Camille P,EARTH_SPACE,4,0,0,16
+25,21,Hunter,83,Gabe L,CHEMISTRY,1,0,0,4
+25,21,Hunter,83,Gabe L,MATH,3,0,0,12
+25,21,Hunter,83,Gabe L,PHYSICS,2,0,0,8
+26,14,Collierville A,50,Abhinav S,BIOLOGY,0,1,0,-4
+26,14,Collierville A,50,Abhinav S,CHEMISTRY,1,0,0,4
+26,14,Collierville A,50,Abhinav S,EARTH_SPACE,1,0,0,4
+26,14,Collierville A,50,Abhinav S,MATH,2,0,0,8
+26,14,Collierville A,50,Abhinav S,PHYSICS,1,0,0,4
+26,14,Collierville A,53,Krish S,BIOLOGY,1,0,0,4
+26,14,Collierville A,54,Sumin Y,CHEMISTRY,3,0,0,12
+26,14,Collierville A,54,Sumin Y,EARTH_SPACE,2,0,0,8
+26,14,Collierville A,54,Sumin Y,MATH,1,0,0,4
+26,40,WWPS B,159,Dhanshika S,BIOLOGY,1,0,0,4
+26,40,WWPS B,159,Dhanshika S,PHYSICS,1,0,0,4
+26,40,WWPS B,160,Gyan C,EARTH_SPACE,1,0,0,4
+26,40,WWPS B,161,Niharika D,BIOLOGY,1,0,0,4
+27,17,Deep Run,64,Nimit A,BIOLOGY,1,0,0,4
+27,17,Deep Run,64,Nimit A,EARTH_SPACE,1,1,0,0
+27,17,Deep Run,65,Prithwish C,PHYSICS,1,0,0,4
+27,17,Deep Run,66,Rithik N,MATH,0,1,0,-4
+27,30,Morgantown,117,Larry D,CHEMISTRY,2,0,0,8
+27,30,Morgantown,118,Sunny G,BIOLOGY,1,0,0,4
+27,30,Morgantown,118,Sunny G,EARTH_SPACE,1,0,0,4
+27,30,Morgantown,118,Sunny G,MATH,2,1,0,4
+27,30,Morgantown,119,William T,CHEMISTRY,1,0,0,4
+27,30,Morgantown,119,William T,EARTH_SPACE,1,0,0,4
+27,30,Morgantown,119,William T,MATH,1,0,0,4
+27,30,Morgantown,119,William T,PHYSICS,1,1,0,0
+28,18,Doral Academy,70,Abhishek C,MATH,4,0,0,16
+28,18,Doral Academy,70,Abhishek C,PHYSICS,1,1,0,0
+28,18,Doral Academy,71,Neil H,BIOLOGY,2,0,0,8
+28,18,Doral Academy,72,Santiago S,CHEMISTRY,2,0,0,8
+28,31,North Allegheny,120,Andrew,EARTH_SPACE,2,0,0,8
+28,31,North Allegheny,121,Hongyi,BIOLOGY,2,0,0,8
+28,31,North Allegheny,121,Hongyi,PHYSICS,1,0,0,4
+28,31,North Allegheny,122,Jason,PHYSICS,1,0,0,4
+28,31,North Allegheny,123,Leo,CHEMISTRY,2,1,0,4
+28,31,North Allegheny,123,Leo,EARTH_SPACE,2,0,0,8
+28,31,North Allegheny,123,Leo,PHYSICS,1,0,0,4
+29,25,Lexington B,97,Adam H,MATH,2,1,0,4
+29,25,Lexington B,98,Akshay R,EARTH_SPACE,2,1,0,4
+29,25,Lexington B,101,Simon Z,BIOLOGY,2,1,0,4
+29,32,North Hollywood A,124,Charles H,CHEMISTRY,1,0,0,4
+29,32,North Hollywood A,124,Charles H,PHYSICS,3,0,0,12
+29,32,North Hollywood A,125,Connor C,MATH,1,0,0,4
+29,32,North Hollywood A,126,Connor Z,BIOLOGY,1,0,0,4
+29,32,North Hollywood A,126,Connor Z,CHEMISTRY,3,0,0,12
+29,32,North Hollywood A,126,Connor Z,EARTH_SPACE,1,1,0,0
+29,32,North Hollywood A,126,Connor Z,PHYSICS,0,1,0,-4
+29,32,North Hollywood A,127,Minghao G,BIOLOGY,1,0,0,4
+29,32,North Hollywood A,127,Minghao G,MATH,1,0,0,4
+30,24,Lexington A,94,Allen F,BIOLOGY,2,2,0,0
+30,24,Lexington A,94,Allen F,EARTH_SPACE,2,0,0,8
+30,24,Lexington A,96,William J,CHEMISTRY,4,0,0,16
+30,24,Lexington A,96,William J,EARTH_SPACE,0,1,0,-4
+30,24,Lexington A,96,William J,MATH,2,0,0,8
+30,24,Lexington A,96,William J,PHYSICS,1,0,0,4
+30,36,Quail Valley,140,Josh P,MATH,2,0,0,8
+30,36,Quail Valley,140,Josh P,PHYSICS,1,0,0,4
+30,36,Quail Valley,141,Shruthi R,BIOLOGY,2,0,0,8
+30,36,Quail Valley,142,Vedant B,EARTH_SPACE,2,0,0,8
+30,36,Quail Valley,142,Vedant B,PHYSICS,1,0,0,4
+31,5,BASIS Chandler,16,Lishan P,CHEMISTRY,1,0,0,4
+31,5,BASIS Chandler,17,Nihar B,BIOLOGY,4,0,0,16
+31,5,BASIS Chandler,17,Nihar B,CHEMISTRY,1,0,0,4
+31,5,BASIS Chandler,17,Nihar B,PHYSICS,1,0,0,4
+31,5,BASIS Chandler,18,Varyan J,CHEMISTRY,2,0,0,8
+31,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,3,1,0,8
+31,5,BASIS Chandler,18,Varyan J,MATH,3,0,0,12
+31,5,BASIS Chandler,18,Varyan J,PHYSICS,2,1,0,4
+31,20,Enloe,78,Lawrence Q,PHYSICS,1,0,0,4
+31,20,Enloe,81,Vishruth K,BIOLOGY,0,1,0,-4
+32,2,American Heritage Broward,2,Ariv B,CHEMISTRY,1,0,0,4
+32,2,American Heritage Broward,2,Ariv B,PHYSICS,1,0,0,4
+32,2,American Heritage Broward,3,Arnav B,MATH,2,0,0,8
+32,2,American Heritage Broward,5,Jason T,BIOLOGY,2,0,0,8
+32,22,Iolani A,85,Daniel Y,EARTH_SPACE,1,0,0,4
+32,22,Iolani A,85,Daniel Y,PHYSICS,1,0,0,4
+32,22,Iolani A,86,Ethan Z,EARTH_SPACE,1,0,0,4
+32,22,Iolani A,87,Haru G,BIOLOGY,2,0,0,8
+32,22,Iolani A,88,Min S,CHEMISTRY,3,0,0,12
+32,22,Iolani A,89,Sola M,BIOLOGY,0,1,0,-4
+32,22,Iolani A,89,Sola M,MATH,1,0,0,4
+32,22,Iolani A,89,Sola M,PHYSICS,1,0,0,4
+33,16,Deap South,59,Abhinav A,EARTH_SPACE,0,1,0,-4
+33,16,Deap South,60,Ryan K,BIOLOGY,2,2,0,0
+33,16,Deap South,60,Ryan K,EARTH_SPACE,1,0,0,4
+33,16,Deap South,60,Ryan K,MATH,2,1,0,4
+33,16,Deap South,61,Sanjay O,CHEMISTRY,4,0,0,16
+33,16,Deap South,61,Sanjay O,EARTH_SPACE,1,0,0,4
+33,16,Deap South,61,Sanjay O,PHYSICS,1,0,0,4
+33,16,Deap South,62,Ziang Z,EARTH_SPACE,1,0,0,4
+33,16,Deap South,62,Ziang Z,PHYSICS,2,0,0,8
+33,23,Iolani B,90,Hong Jin K,EARTH_SPACE,0,2,0,-8
+33,23,Iolani B,90,Hong Jin K,MATH,2,0,0,8
+33,23,Iolani B,90,Hong Jin K,PHYSICS,1,2,0,-4
+33,23,Iolani B,92,Naoto H,BIOLOGY,1,1,0,0
+34,7,BISV B,23,Andrew L,PHYSICS,1,0,0,4
+34,7,BISV B,24,Timothy Y,CHEMISTRY,1,0,0,4
+34,7,BISV B,24,Timothy Y,EARTH_SPACE,1,0,0,4
+34,7,BISV B,24,Timothy Y,MATH,1,1,0,0
+34,26,Luka Fan Club,102,Akhil B,BIOLOGY,2,1,0,4
+34,26,Luka Fan Club,102,Akhil B,CHEMISTRY,3,0,0,12
+34,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,3,1,0,8
+34,26,Luka Fan Club,102,Akhil B,MATH,3,1,0,8
+34,26,Luka Fan Club,102,Akhil B,PHYSICS,2,0,0,8
+35,29,MSJ,112,Anish A,BIOLOGY,1,0,0,4
+35,29,MSJ,113,Ishaan K,EARTH_SPACE,1,1,0,0
+35,29,MSJ,113,Ishaan K,MATH,1,1,0,0
+35,29,MSJ,113,Ishaan K,PHYSICS,0,1,0,-4
+35,29,MSJ,114,Theenash S,BIOLOGY,3,0,0,12
+35,29,MSJ,114,Theenash S,CHEMISTRY,3,0,0,12
+35,29,MSJ,114,Theenash S,EARTH_SPACE,0,1,0,-4
+35,29,MSJ,114,Theenash S,MATH,1,1,0,0
+35,29,MSJ,114,Theenash S,PHYSICS,2,0,0,8
+35,35,Punahou School,137,Nicholas B,MATH,1,0,0,4
+35,35,Punahou School,138,Travis D,CHEMISTRY,1,0,0,4
+35,35,Punahou School,138,Travis D,EARTH_SPACE,1,1,0,0
+35,35,Punahou School,138,Travis D,MATH,1,0,0,4
+35,35,Punahou School,138,Travis D,PHYSICS,2,0,0,8
+36,12,Clements,43,Alex S,BIOLOGY,1,0,0,4
+36,12,Clements,43,Alex S,CHEMISTRY,2,0,0,8
+36,12,Clements,43,Alex S,EARTH_SPACE,1,0,0,4
+36,12,Clements,43,Alex S,MATH,1,1,0,0
+36,12,Clements,43,Alex S,PHYSICS,1,1,0,0
+36,12,Clements,44,Eric Z,EARTH_SPACE,2,0,0,8
+36,12,Clements,44,Eric Z,MATH,1,0,0,4
+36,12,Clements,44,Eric Z,PHYSICS,2,0,0,8
+36,28,Lynbrook B,109,Matthew Y,BIOLOGY,1,0,0,4
+36,28,Lynbrook B,109,Matthew Y,MATH,1,0,0,4
+36,28,Lynbrook B,110,Robert Y,CHEMISTRY,2,0,0,8
+36,28,Lynbrook B,111,Vincent Q,BIOLOGY,1,0,0,4
+36,28,Lynbrook B,111,Vincent Q,EARTH_SPACE,1,0,0,4
+36,28,Lynbrook B,111,Vincent Q,MATH,1,0,0,4
+37,13,Clovis North,47,Ethan W,EARTH_SPACE,1,0,0,4
+37,13,Clovis North,47,Ethan W,PHYSICS,1,0,0,4
+37,13,Clovis North,48,Justin D,CHEMISTRY,3,0,0,12
+37,13,Clovis North,48,Justin D,MATH,1,0,0,4
+37,13,Clovis North,48,Justin D,PHYSICS,2,0,0,8
+37,37,Thomas Jefferson,145,Eshaan S,MATH,1,1,0,0
+37,37,Thomas Jefferson,145,Eshaan S,PHYSICS,0,1,0,-4
+37,37,Thomas Jefferson,146,Hrishi B,CHEMISTRY,1,0,0,4
+37,37,Thomas Jefferson,146,Hrishi B,EARTH_SPACE,1,0,0,4
+37,37,Thomas Jefferson,146,Hrishi B,MATH,1,0,0,4
+37,37,Thomas Jefferson,148,Rohan B,EARTH_SPACE,0,1,0,-4
+37,37,Thomas Jefferson,149,Sophia G,BIOLOGY,4,0,0,16
+37,37,Thomas Jefferson,149,Sophia G,EARTH_SPACE,1,1,0,0
+37,37,Thomas Jefferson,149,Sophia G,MATH,1,0,0,4
+38,4,Arcadia B,11,Henry Z,CHEMISTRY,1,0,0,4
+38,4,Arcadia B,12,Johnson P,CHEMISTRY,0,1,0,-4
+38,4,Arcadia B,12,Johnson P,PHYSICS,1,0,0,4
+38,4,Arcadia B,13,Kevin W,BIOLOGY,1,0,0,4
+38,4,Arcadia B,13,Kevin W,MATH,0,1,0,-4
+38,27,Lynbrook A,103,Andrew,BIOLOGY,3,0,0,12
+38,27,Lynbrook A,104,Philip,EARTH_SPACE,1,0,0,4
+38,27,Lynbrook A,106,Sohil,CHEMISTRY,3,0,0,12
+38,27,Lynbrook A,106,Sohil,EARTH_SPACE,1,0,0,4
+38,27,Lynbrook A,106,Sohil,MATH,4,0,0,16
+38,27,Lynbrook A,106,Sohil,PHYSICS,3,1,0,8
+39,10,Canyon Crest A,35,Alex D,BIOLOGY,0,1,0,-4
+39,10,Canyon Crest A,36,Haiyue M,PHYSICS,2,0,0,8
+39,10,Canyon Crest A,37,Owen M,CHEMISTRY,2,0,0,8
+39,10,Canyon Crest A,37,Owen M,MATH,1,0,0,4
+39,26,Luka Fan Club,102,Akhil B,BIOLOGY,2,2,0,0
+39,26,Luka Fan Club,102,Akhil B,CHEMISTRY,1,1,0,0
+39,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,2,1,0,4
+39,26,Luka Fan Club,102,Akhil B,MATH,1,0,0,4
+39,26,Luka Fan Club,102,Akhil B,PHYSICS,2,0,0,8
+40,40,WWPS B,158,Anna K,CHEMISTRY,1,1,0,0
+40,40,WWPS B,159,Dhanshika S,MATH,1,0,0,4
+40,40,WWPS B,159,Dhanshika S,PHYSICS,1,0,0,4
+40,40,WWPS B,160,Gyan C,EARTH_SPACE,1,1,0,0
+40,41,Ward Melville,162,Aydin E,BIOLOGY,2,0,0,8
+40,41,Ward Melville,163,Srihari K,BIOLOGY,1,0,0,4
+40,41,Ward Melville,164,Will S,BIOLOGY,1,0,0,4
+40,41,Ward Melville,164,Will S,CHEMISTRY,1,0,0,4
+40,41,Ward Melville,164,Will S,PHYSICS,1,0,0,4
+41,9,Bridgeland,31,Carson P,BIOLOGY,1,0,0,4
+41,9,Bridgeland,31,Carson P,CHEMISTRY,1,0,0,4
+41,33,North Hollywood B,129,Kensuke O,CHEMISTRY,1,0,0,4
+41,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,3,1,0,8
+41,33,North Hollywood B,129,Kensuke O,MATH,1,0,0,4
+41,33,North Hollywood B,129,Kensuke O,PHYSICS,1,0,0,4
+41,33,North Hollywood B,130,Nathaniel O,BIOLOGY,1,0,0,4
+41,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,2,1,0,4
+41,33,North Hollywood B,130,Nathaniel O,MATH,1,0,0,4
+41,33,North Hollywood B,130,Nathaniel O,PHYSICS,3,0,0,12
+42,7,BISV B,23,Andrew L,BIOLOGY,1,0,0,4
+42,7,BISV B,24,Timothy Y,CHEMISTRY,1,0,0,4
+42,7,BISV B,24,Timothy Y,MATH,1,0,0,4
+42,38,Varun Clemens,151,Praneel A,EARTH_SPACE,1,0,0,4
+42,38,Varun Clemens,151,Praneel A,MATH,2,0,0,8
+42,38,Varun Clemens,151,Praneel A,PHYSICS,3,1,0,8
+42,38,Varun Clemens,152,Shaun I,CHEMISTRY,2,1,0,4
+42,38,Varun Clemens,152,Shaun I,EARTH_SPACE,0,2,0,-8
+42,38,Varun Clemens,153,Uddip K,BIOLOGY,1,1,0,0
+42,38,Varun Clemens,153,Uddip K,EARTH_SPACE,0,1,0,-4
+43,23,Iolani B,90,Hong Jin K,EARTH_SPACE,1,1,0,0
+43,23,Iolani B,90,Hong Jin K,MATH,2,0,0,8
+43,23,Iolani B,90,Hong Jin K,PHYSICS,1,1,0,0
+43,23,Iolani B,91,Keene K,CHEMISTRY,4,0,0,16
+43,23,Iolani B,92,Naoto H,BIOLOGY,0,1,0,-4
+43,43,Woodlands,169,Arjith,BIOLOGY,1,0,0,4
+43,43,Woodlands,169,Arjith,PHYSICS,0,1,0,-4
+43,43,Woodlands,171,Kai C,EARTH_SPACE,0,1,0,-4
+43,43,Woodlands,171,Kai C,PHYSICS,1,0,0,4
+43,43,Woodlands,172,Liam,EARTH_SPACE,1,0,0,4
+44,4,Arcadia B,11,Henry Z,CHEMISTRY,0,1,0,-4
+44,4,Arcadia B,11,Henry Z,PHYSICS,1,0,0,4
+44,4,Arcadia B,12,Johnson P,MATH,1,0,0,4
+44,4,Arcadia B,12,Johnson P,PHYSICS,2,0,0,8
+44,4,Arcadia B,13,Kevin W,BIOLOGY,1,0,0,4
+44,4,Arcadia B,13,Kevin W,CHEMISTRY,3,0,0,12
+44,4,Arcadia B,13,Kevin W,MATH,1,0,0,4
+44,11,Canyon Crest B,38,Andy S,MATH,1,0,0,4
+44,11,Canyon Crest B,40,Theodore A,BIOLOGY,1,0,0,4
+45,12,Clements,43,Alex S,BIOLOGY,1,0,0,4
+45,12,Clements,43,Alex S,CHEMISTRY,1,0,0,4
+45,12,Clements,43,Alex S,MATH,1,1,0,0
+45,12,Clements,43,Alex S,PHYSICS,1,0,0,4
+45,12,Clements,44,Eric Z,CHEMISTRY,1,0,0,4
+45,12,Clements,44,Eric Z,MATH,1,0,0,4
+45,12,Clements,45,Yale Z,CHEMISTRY,1,0,0,4
+45,12,Clements,45,Yale Z,EARTH_SPACE,1,2,0,-4
+45,12,Clements,45,Yale Z,PHYSICS,1,0,0,4
+45,39,WWPS A,154,Akhil M,CHEMISTRY,0,2,0,-8
+45,39,WWPS A,154,Akhil M,EARTH_SPACE,1,0,0,4
+45,39,WWPS A,155,Arjun D,BIOLOGY,2,1,0,4
+45,39,WWPS A,157,Monish S,CHEMISTRY,1,0,0,4
+45,39,WWPS A,157,Monish S,MATH,2,1,0,4
+45,39,WWPS A,157,Monish S,PHYSICS,2,0,0,8
+46,8,Benjamin Franklin,28,Marianne N,EARTH_SPACE,1,0,0,4
+46,8,Benjamin Franklin,29,Ronald Z,MATH,1,0,0,4
+46,8,Benjamin Franklin,29,Ronald Z,PHYSICS,2,0,0,8
+46,29,MSJ,113,Ishaan K,CHEMISTRY,1,0,0,4
+46,29,MSJ,113,Ishaan K,EARTH_SPACE,1,2,0,-4
+46,29,MSJ,113,Ishaan K,MATH,2,0,0,8
+46,29,MSJ,114,Theenash S,BIOLOGY,3,1,0,8
+46,29,MSJ,114,Theenash S,CHEMISTRY,2,0,0,8
+46,29,MSJ,114,Theenash S,MATH,1,0,0,4
+46,29,MSJ,114,Theenash S,PHYSICS,1,1,0,0
+47,31,North Allegheny,121,Hongyi,BIOLOGY,1,0,0,4
+47,31,North Allegheny,121,Hongyi,EARTH_SPACE,1,0,0,4
+47,31,North Allegheny,121,Hongyi,PHYSICS,1,0,0,4
+47,31,North Allegheny,122,Jason,BIOLOGY,1,0,0,4
+47,31,North Allegheny,122,Jason,PHYSICS,2,0,0,8
+47,31,North Allegheny,123,Leo,CHEMISTRY,1,1,0,0
+47,31,North Allegheny,123,Leo,MATH,0,1,0,-4
+47,34,Palo Alto,134,Kevin P,BIOLOGY,1,0,0,4
+47,34,Palo Alto,134,Kevin P,CHEMISTRY,2,0,0,8
+47,34,Palo Alto,134,Kevin P,EARTH_SPACE,2,1,0,4
+47,34,Palo Alto,134,Kevin P,MATH,3,0,0,12
+47,34,Palo Alto,134,Kevin P,PHYSICS,1,1,0,0
+47,34,Palo Alto,135,Ryan P,CHEMISTRY,0,1,0,-4
+47,34,Palo Alto,135,Ryan P,MATH,1,0,0,4
+48,18,Doral Academy,70,Abhishek C,EARTH_SPACE,1,0,0,4
+48,18,Doral Academy,70,Abhishek C,MATH,3,0,0,12
+48,18,Doral Academy,70,Abhishek C,PHYSICS,2,0,0,8
+48,18,Doral Academy,71,Neil H,BIOLOGY,3,0,0,12
+48,18,Doral Academy,72,Santiago S,CHEMISTRY,3,0,0,12
+48,18,Doral Academy,72,Santiago S,MATH,0,1,0,-4
+48,36,Quail Valley,140,Josh P,MATH,1,0,0,4
+48,36,Quail Valley,140,Josh P,PHYSICS,2,0,0,8
+48,36,Quail Valley,142,Vedant B,EARTH_SPACE,3,0,0,12
+49,6,BISV A,19,Aaron C,CHEMISTRY,1,0,0,4
+49,6,BISV A,19,Aaron C,EARTH_SPACE,1,1,0,0
+49,6,BISV A,19,Aaron C,MATH,1,0,0,4
+49,6,BISV A,19,Aaron C,PHYSICS,1,0,0,4
+49,6,BISV A,20,Larry Z,BIOLOGY,3,0,0,12
+49,35,Punahou School,136,Luke I,MATH,1,0,0,4
+49,35,Punahou School,138,Travis D,CHEMISTRY,2,1,0,4
+49,35,Punahou School,138,Travis D,EARTH_SPACE,3,0,0,12
+49,35,Punahou School,138,Travis D,MATH,1,0,0,4
+49,35,Punahou School,138,Travis D,PHYSICS,2,0,0,8
+50,22,Iolani A,85,Daniel Y,PHYSICS,1,0,0,4
+50,22,Iolani A,87,Haru G,BIOLOGY,1,0,0,4
+50,22,Iolani A,88,Min S,CHEMISTRY,3,0,0,12
+50,22,Iolani A,89,Sola M,BIOLOGY,1,0,0,4
+50,22,Iolani A,89,Sola M,MATH,2,0,0,8
+50,32,North Hollywood A,124,Charles H,MATH,0,1,0,-4
+50,32,North Hollywood A,124,Charles H,PHYSICS,2,0,0,8
+50,32,North Hollywood A,125,Connor C,BIOLOGY,2,0,0,8
+50,32,North Hollywood A,125,Connor C,EARTH_SPACE,1,1,0,0
+50,32,North Hollywood A,125,Connor C,MATH,1,0,0,4
+50,32,North Hollywood A,126,Connor Z,CHEMISTRY,1,0,0,4
+50,32,North Hollywood A,126,Connor Z,EARTH_SPACE,1,0,0,4
+50,32,North Hollywood A,126,Connor Z,PHYSICS,1,0,0,4
+50,32,North Hollywood A,127,Minghao G,MATH,1,0,0,4
+51,1,Allen School,1,Daniel L,BIOLOGY,3,0,0,12
+51,1,Allen School,1,Daniel L,CHEMISTRY,2,0,0,8
+51,1,Allen School,1,Daniel L,EARTH_SPACE,1,1,0,0
+51,1,Allen School,1,Daniel L,MATH,1,0,0,4
+51,1,Allen School,1,Daniel L,PHYSICS,3,0,0,12
+51,37,Thomas Jefferson,145,Eshaan S,MATH,2,0,0,8
+51,37,Thomas Jefferson,145,Eshaan S,PHYSICS,0,1,0,-4
+51,37,Thomas Jefferson,146,Hrishi B,CHEMISTRY,1,2,0,-4
+51,37,Thomas Jefferson,146,Hrishi B,PHYSICS,1,0,0,4
+51,37,Thomas Jefferson,148,Rohan B,EARTH_SPACE,1,0,0,4
+51,37,Thomas Jefferson,149,Sophia G,BIOLOGY,0,1,0,-4
+52,19,Eastlake,75,Saahil,BIOLOGY,2,0,0,8
+52,19,Eastlake,75,Saahil,CHEMISTRY,2,1,0,4
+52,19,Eastlake,75,Saahil,EARTH_SPACE,3,0,0,12
+52,19,Eastlake,76,Shivam,EARTH_SPACE,0,1,0,-4
+52,19,Eastlake,76,Shivam,MATH,1,1,0,0
+52,19,Eastlake,76,Shivam,PHYSICS,3,0,0,12
+52,28,Lynbrook B,109,Matthew Y,BIOLOGY,2,0,0,8
+52,28,Lynbrook B,109,Matthew Y,MATH,2,0,0,8
+52,28,Lynbrook B,110,Robert Y,CHEMISTRY,2,0,0,8
+52,28,Lynbrook B,111,Vincent Q,MATH,1,0,0,4
+52,28,Lynbrook B,111,Vincent Q,PHYSICS,1,0,0,4
+53,5,BASIS Chandler,16,Lishan P,CHEMISTRY,1,1,0,0
+53,5,BASIS Chandler,16,Lishan P,MATH,1,0,0,4
+53,5,BASIS Chandler,17,Nihar B,BIOLOGY,3,0,0,12
+53,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,0,3,0,-12
+53,5,BASIS Chandler,18,Varyan J,MATH,0,1,0,-4
+53,5,BASIS Chandler,18,Varyan J,PHYSICS,1,2,0,-4
+53,27,Lynbrook A,104,Philip,EARTH_SPACE,2,0,0,8
+53,27,Lynbrook A,106,Sohil,BIOLOGY,1,0,0,4
+53,27,Lynbrook A,106,Sohil,CHEMISTRY,2,0,0,8
+53,27,Lynbrook A,106,Sohil,MATH,2,1,0,4
+53,27,Lynbrook A,106,Sohil,PHYSICS,3,0,0,12
+54,14,Collierville A,50,Abhinav S,BIOLOGY,1,0,0,4
+54,14,Collierville A,51,Arman,BIOLOGY,0,1,0,-4
+54,14,Collierville A,54,Sumin Y,BIOLOGY,1,0,0,4
+54,14,Collierville A,54,Sumin Y,CHEMISTRY,0,1,0,-4
+54,14,Collierville A,54,Sumin Y,EARTH_SPACE,0,2,0,-8
+54,14,Collierville A,54,Sumin Y,PHYSICS,1,0,0,4
+54,16,Deap South,59,Abhinav A,EARTH_SPACE,0,2,0,-8
+54,16,Deap South,60,Ryan K,BIOLOGY,1,0,0,4
+54,16,Deap South,60,Ryan K,EARTH_SPACE,1,0,0,4
+54,16,Deap South,60,Ryan K,MATH,1,0,0,4
+54,16,Deap South,60,Ryan K,PHYSICS,1,0,0,4
+54,16,Deap South,61,Sanjay O,CHEMISTRY,4,0,0,16
+54,16,Deap South,61,Sanjay O,MATH,1,0,0,4
+54,16,Deap South,62,Ziang Z,MATH,1,0,0,4
+54,16,Deap South,62,Ziang Z,PHYSICS,1,0,0,4
+55,2,American Heritage Broward,2,Ariv B,CHEMISTRY,2,0,0,8
+55,2,American Heritage Broward,2,Ariv B,MATH,1,0,0,4
+55,2,American Heritage Broward,4,Dhruv M,PHYSICS,1,0,0,4
+55,2,American Heritage Broward,5,Jason T,BIOLOGY,1,0,0,4
+55,2,American Heritage Broward,5,Jason T,MATH,1,0,0,4
+55,15,Collierville B,57,Sai B,PHYSICS,3,0,0,12
+55,15,Collierville B,58,Santhosh B,BIOLOGY,0,1,0,-4
+55,15,Collierville B,58,Santhosh B,CHEMISTRY,0,1,0,-4
+55,15,Collierville B,58,Santhosh B,EARTH_SPACE,1,0,0,4
+56,21,Hunter,82,Camille P,EARTH_SPACE,1,1,0,0
+56,21,Hunter,83,Gabe L,CHEMISTRY,1,1,0,0
+56,21,Hunter,83,Gabe L,MATH,1,1,0,0
+56,21,Hunter,83,Gabe L,PHYSICS,2,0,0,8
+56,21,Hunter,84,Melody L,CHEMISTRY,1,0,0,4
+56,25,Lexington B,98,Akshay R,EARTH_SPACE,2,0,0,8
+56,25,Lexington B,99,Ayaan I,PHYSICS,1,0,0,4
+56,25,Lexington B,100,Ethan L,BIOLOGY,1,0,0,4
+56,25,Lexington B,100,Ethan L,CHEMISTRY,1,0,0,4
+56,25,Lexington B,101,Simon Z,BIOLOGY,3,0,0,12
+56,25,Lexington B,101,Simon Z,CHEMISTRY,1,2,0,-4
+56,25,Lexington B,101,Simon Z,MATH,1,0,0,4
+57,13,Clovis North,46,Achuth V,BIOLOGY,3,0,0,12
+57,13,Clovis North,46,Achuth V,MATH,1,0,0,4
+57,13,Clovis North,48,Justin D,CHEMISTRY,1,1,0,0
+57,13,Clovis North,48,Justin D,EARTH_SPACE,1,1,0,0
+57,13,Clovis North,48,Justin D,PHYSICS,3,0,0,12
+57,13,Clovis North,49,Renard W,BIOLOGY,1,0,0,4
+57,13,Clovis North,49,Renard W,EARTH_SPACE,1,0,0,4
+57,30,Morgantown,115,Caden Y,MATH,1,0,0,4
+57,30,Morgantown,117,Larry D,CHEMISTRY,2,0,0,8
+57,30,Morgantown,118,Sunny G,BIOLOGY,0,1,0,-4
+57,30,Morgantown,118,Sunny G,MATH,1,0,0,4
+57,30,Morgantown,118,Sunny G,PHYSICS,1,0,0,4
+57,30,Morgantown,119,William T,EARTH_SPACE,1,0,0,4
+58,3,Arcadia A,7,Ethan W,BIOLOGY,1,1,0,0
+58,3,Arcadia A,7,Ethan W,CHEMISTRY,3,1,0,8
+58,3,Arcadia A,7,Ethan W,MATH,0,2,0,-8
+58,3,Arcadia A,7,Ethan W,PHYSICS,1,0,0,4
+58,3,Arcadia A,10,Paxton L,BIOLOGY,1,0,0,4
+58,3,Arcadia A,10,Paxton L,EARTH_SPACE,0,1,0,-4
+58,3,Arcadia A,10,Paxton L,MATH,1,0,0,4
+58,10,Canyon Crest A,35,Alex D,BIOLOGY,2,0,0,8
+58,10,Canyon Crest A,35,Alex D,EARTH_SPACE,1,0,0,4
+58,10,Canyon Crest A,35,Alex D,PHYSICS,1,0,0,4
+58,10,Canyon Crest A,36,Haiyue M,EARTH_SPACE,3,0,0,12
+58,10,Canyon Crest A,37,Owen M,CHEMISTRY,1,0,0,4
+58,10,Canyon Crest A,37,Owen M,MATH,2,0,0,8
+58,10,Canyon Crest A,37,Owen M,PHYSICS,1,0,0,4
+59,39,WWPS A,154,Akhil M,CHEMISTRY,1,1,0,0
+59,39,WWPS A,154,Akhil M,EARTH_SPACE,1,0,0,4
+59,39,WWPS A,155,Arjun D,BIOLOGY,4,0,0,16
+59,39,WWPS A,155,Arjun D,CHEMISTRY,2,0,0,8
+59,39,WWPS A,157,Monish S,EARTH_SPACE,0,1,0,-4
+59,39,WWPS A,157,Monish S,MATH,2,0,0,8
+59,39,WWPS A,157,Monish S,PHYSICS,2,2,0,0
+59,42,Whitney Young,165,Andrew K,CHEMISTRY,0,1,0,-4
+59,42,Whitney Young,165,Andrew K,EARTH_SPACE,0,1,0,-4
+59,42,Whitney Young,165,Andrew K,MATH,1,0,0,4
+59,42,Whitney Young,165,Andrew K,PHYSICS,2,0,0,8
+59,42,Whitney Young,166,Brennan T,CHEMISTRY,1,0,0,4
+59,42,Whitney Young,166,Brennan T,MATH,1,0,0,4
+59,42,Whitney Young,167,Chaniel K,CHEMISTRY,0,1,0,-4
+59,42,Whitney Young,168,Zachary H,EARTH_SPACE,1,0,0,4
+60,11,Canyon Crest B,38,Andy S,MATH,1,0,0,4
+60,11,Canyon Crest B,38,Andy S,PHYSICS,1,0,0,4
+60,11,Canyon Crest B,39,Sahej B,BIOLOGY,1,0,0,4
+60,11,Canyon Crest B,39,Sahej B,EARTH_SPACE,1,0,0,4
+60,11,Canyon Crest B,41,Yihan J,BIOLOGY,1,0,0,4
+60,11,Canyon Crest B,41,Yihan J,PHYSICS,0,1,0,-4
+60,20,Enloe,78,Lawrence Q,PHYSICS,1,0,0,4
+60,20,Enloe,79,Max X,MATH,1,0,0,4
+60,20,Enloe,80,Ryan Y,EARTH_SPACE,2,0,0,8
+60,20,Enloe,81,Vishruth K,BIOLOGY,2,1,0,4
+60,20,Enloe,81,Vishruth K,CHEMISTRY,4,0,0,16
+61,4,Arcadia B,11,Henry Z,CHEMISTRY,1,0,0,4
+61,4,Arcadia B,11,Henry Z,PHYSICS,1,0,0,4
+61,4,Arcadia B,13,Kevin W,BIOLOGY,1,0,0,4
+61,4,Arcadia B,13,Kevin W,CHEMISTRY,2,0,0,8
+61,4,Arcadia B,13,Kevin W,MATH,1,0,0,4
+61,5,BASIS Chandler,16,Lishan P,MATH,1,0,0,4
+61,5,BASIS Chandler,17,Nihar B,BIOLOGY,3,0,0,12
+61,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,3,0,0,12
+61,5,BASIS Chandler,18,Varyan J,MATH,2,0,0,8
+61,5,BASIS Chandler,18,Varyan J,PHYSICS,2,1,0,4
+62,1,Allen School,1,Daniel L,BIOLOGY,3,0,0,12
+62,1,Allen School,1,Daniel L,CHEMISTRY,3,0,0,12
+62,1,Allen School,1,Daniel L,EARTH_SPACE,1,0,0,4
+62,1,Allen School,1,Daniel L,MATH,2,0,0,8
+62,1,Allen School,1,Daniel L,PHYSICS,4,0,0,16
+62,17,Deep Run,65,Prithwish C,CHEMISTRY,1,0,0,4
+62,17,Deep Run,69,Yunay V,EARTH_SPACE,0,1,0,-4
+63,6,BISV A,19,Aaron C,EARTH_SPACE,1,0,0,4
+63,6,BISV A,20,Larry Z,BIOLOGY,2,1,0,4
+63,6,BISV A,20,Larry Z,CHEMISTRY,1,0,0,4
+63,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,3,0,0,12
+63,33,North Hollywood B,129,Kensuke O,PHYSICS,2,0,0,8
+63,33,North Hollywood B,130,Nathaniel O,BIOLOGY,2,0,0,8
+63,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,2,1,0,4
+63,33,North Hollywood B,130,Nathaniel O,MATH,2,0,0,8
+63,33,North Hollywood B,130,Nathaniel O,PHYSICS,1,0,0,4
+64,26,Luka Fan Club,102,Akhil B,BIOLOGY,2,1,0,4
+64,26,Luka Fan Club,102,Akhil B,CHEMISTRY,0,1,0,-4
+64,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,1,1,0,0
+64,26,Luka Fan Club,102,Akhil B,MATH,2,0,0,8
+64,38,Varun Clemens,150,Heidi,BIOLOGY,0,1,0,-4
+64,38,Varun Clemens,151,Praneel A,CHEMISTRY,3,0,0,12
+64,38,Varun Clemens,151,Praneel A,EARTH_SPACE,3,0,0,12
+64,38,Varun Clemens,151,Praneel A,MATH,1,1,0,0
+64,38,Varun Clemens,151,Praneel A,PHYSICS,3,0,0,12
+64,38,Varun Clemens,152,Shaun I,CHEMISTRY,1,0,0,4
+64,38,Varun Clemens,152,Shaun I,MATH,0,1,0,-4
+64,38,Varun Clemens,153,Uddip K,BIOLOGY,2,1,0,4
+64,38,Varun Clemens,153,Uddip K,EARTH_SPACE,0,1,0,-4
+64,38,Varun Clemens,153,Uddip K,PHYSICS,0,1,0,-4
+65,8,Benjamin Franklin,27,Maddox H,MATH,2,0,0,8
+65,8,Benjamin Franklin,28,Marianne N,BIOLOGY,2,0,0,8
+65,8,Benjamin Franklin,28,Marianne N,PHYSICS,0,1,0,-4
+65,8,Benjamin Franklin,29,Ronald Z,CHEMISTRY,2,0,0,8
+65,8,Benjamin Franklin,29,Ronald Z,MATH,1,0,0,4
+65,35,Punahou School,136,Luke I,BIOLOGY,2,1,0,4
+65,35,Punahou School,138,Travis D,CHEMISTRY,2,0,0,8
+65,35,Punahou School,138,Travis D,EARTH_SPACE,3,0,0,12
+65,35,Punahou School,138,Travis D,MATH,1,0,0,4
+65,35,Punahou School,138,Travis D,PHYSICS,1,0,0,4
+66,14,Collierville A,50,Abhinav S,CHEMISTRY,1,1,0,0
+66,14,Collierville A,50,Abhinav S,EARTH_SPACE,1,1,0,0
+66,14,Collierville A,50,Abhinav S,MATH,2,0,0,8
+66,14,Collierville A,53,Krish S,BIOLOGY,2,0,0,8
+66,14,Collierville A,54,Sumin Y,CHEMISTRY,1,0,0,4
+66,14,Collierville A,54,Sumin Y,EARTH_SPACE,1,0,0,4
+66,14,Collierville A,54,Sumin Y,PHYSICS,2,0,0,8
+66,41,Ward Melville,162,Aydin E,BIOLOGY,2,0,0,8
+66,41,Ward Melville,162,Aydin E,CHEMISTRY,0,1,0,-4
+66,41,Ward Melville,163,Srihari K,EARTH_SPACE,1,0,0,4
+66,41,Ward Melville,163,Srihari K,PHYSICS,1,0,0,4
+66,41,Ward Melville,164,Will S,EARTH_SPACE,1,0,0,4
+67,12,Clements,43,Alex S,BIOLOGY,1,1,0,0
+67,12,Clements,43,Alex S,CHEMISTRY,1,2,0,-4
+67,12,Clements,43,Alex S,MATH,1,1,0,0
+67,12,Clements,43,Alex S,PHYSICS,1,0,0,4
+67,12,Clements,44,Eric Z,CHEMISTRY,1,0,0,4
+67,12,Clements,44,Eric Z,MATH,1,0,0,4
+67,12,Clements,44,Eric Z,PHYSICS,3,0,0,12
+67,12,Clements,45,Yale Z,BIOLOGY,0,1,0,-4
+67,12,Clements,45,Yale Z,EARTH_SPACE,4,0,0,16
+67,19,Eastlake,75,Saahil,BIOLOGY,2,0,0,8
+67,19,Eastlake,75,Saahil,CHEMISTRY,1,0,0,4
+67,19,Eastlake,75,Saahil,MATH,1,0,0,4
+67,19,Eastlake,76,Shivam,MATH,1,0,0,4
+67,19,Eastlake,76,Shivam,PHYSICS,0,1,0,-4
+68,24,Lexington A,94,Allen F,BIOLOGY,3,0,0,12
+68,24,Lexington A,94,Allen F,MATH,0,1,0,-4
+68,24,Lexington A,94,Allen F,PHYSICS,0,1,0,-4
+68,24,Lexington A,96,William J,CHEMISTRY,3,1,0,8
+68,24,Lexington A,96,William J,EARTH_SPACE,2,0,0,8
+68,24,Lexington A,96,William J,MATH,0,1,0,-4
+68,24,Lexington A,96,William J,PHYSICS,3,0,0,12
+68,34,Palo Alto,134,Kevin P,BIOLOGY,1,0,0,4
+68,34,Palo Alto,134,Kevin P,CHEMISTRY,1,0,0,4
+68,34,Palo Alto,134,Kevin P,EARTH_SPACE,2,0,0,8
+68,34,Palo Alto,134,Kevin P,MATH,2,0,0,8
+68,34,Palo Alto,135,Ryan P,MATH,2,0,0,8
+69,31,North Allegheny,120,Andrew,EARTH_SPACE,2,1,0,4
+69,31,North Allegheny,120,Andrew,MATH,1,0,0,4
+69,31,North Allegheny,121,Hongyi,BIOLOGY,3,0,0,12
+69,31,North Allegheny,121,Hongyi,CHEMISTRY,1,0,0,4
+69,31,North Allegheny,121,Hongyi,PHYSICS,4,0,0,16
+69,31,North Allegheny,122,Jason,MATH,1,0,0,4
+69,31,North Allegheny,123,Leo,CHEMISTRY,3,0,0,12
+69,36,Quail Valley,140,Josh P,CHEMISTRY,0,1,0,-4
+69,36,Quail Valley,140,Josh P,MATH,2,0,0,8
+69,36,Quail Valley,141,Shruthi R,BIOLOGY,1,0,0,4
+69,36,Quail Valley,142,Vedant B,EARTH_SPACE,2,0,0,8
+70,16,Deap South,59,Abhinav A,BIOLOGY,2,1,0,4
+70,16,Deap South,59,Abhinav A,EARTH_SPACE,1,0,0,4
+70,16,Deap South,60,Ryan K,BIOLOGY,1,0,0,4
+70,16,Deap South,60,Ryan K,CHEMISTRY,1,0,0,4
+70,16,Deap South,60,Ryan K,MATH,3,0,0,12
+70,16,Deap South,60,Ryan K,PHYSICS,1,0,0,4
+70,16,Deap South,61,Sanjay O,CHEMISTRY,2,0,0,8
+70,16,Deap South,61,Sanjay O,PHYSICS,1,1,0,0
+70,16,Deap South,62,Ziang Z,CHEMISTRY,1,0,0,4
+70,16,Deap South,62,Ziang Z,EARTH_SPACE,3,0,0,12
+70,43,Woodlands,171,Kai C,PHYSICS,1,0,0,4
+71,23,Iolani B,91,Keene K,CHEMISTRY,2,0,0,8
+71,23,Iolani B,91,Keene K,MATH,2,0,0,8
+71,23,Iolani B,92,Naoto H,BIOLOGY,1,1,0,0
+71,23,Iolani B,92,Naoto H,EARTH_SPACE,0,1,0,-4
+71,23,Iolani B,93,Rongting Z,CHEMISTRY,0,1,0,-4
+71,40,WWPS B,158,Anna K,BIOLOGY,2,0,0,8
+71,40,WWPS B,158,Anna K,CHEMISTRY,1,0,0,4
+71,40,WWPS B,158,Anna K,MATH,1,0,0,4
+71,40,WWPS B,159,Dhanshika S,BIOLOGY,1,0,0,4
+71,40,WWPS B,159,Dhanshika S,MATH,1,0,0,4
+71,40,WWPS B,159,Dhanshika S,PHYSICS,2,0,0,8
+71,40,WWPS B,160,Gyan C,EARTH_SPACE,3,0,0,12
+71,40,WWPS B,161,Niharika D,PHYSICS,1,0,0,4
+72,9,Bridgeland,30,Advaith B,BIOLOGY,1,0,0,4
+72,9,Bridgeland,30,Advaith B,EARTH_SPACE,2,0,0,8
+72,9,Bridgeland,30,Advaith B,PHYSICS,0,1,0,-4
+72,9,Bridgeland,31,Carson P,MATH,1,0,0,4
+72,9,Bridgeland,31,Carson P,PHYSICS,1,0,0,4
+72,29,MSJ,113,Ishaan K,EARTH_SPACE,1,0,0,4
+72,29,MSJ,113,Ishaan K,MATH,1,1,0,0
+72,29,MSJ,113,Ishaan K,PHYSICS,1,1,0,0
+72,29,MSJ,114,Theenash S,BIOLOGY,3,1,0,8
+72,29,MSJ,114,Theenash S,CHEMISTRY,4,0,0,16
+72,29,MSJ,114,Theenash S,EARTH_SPACE,1,0,0,4
+72,29,MSJ,114,Theenash S,MATH,0,1,0,-4
+72,29,MSJ,114,Theenash S,PHYSICS,1,1,0,0
+73,21,Hunter,82,Camille P,BIOLOGY,1,0,0,4
+73,21,Hunter,82,Camille P,EARTH_SPACE,2,0,0,8
+73,21,Hunter,83,Gabe L,CHEMISTRY,2,0,0,8
+73,21,Hunter,83,Gabe L,MATH,3,0,0,12
+73,21,Hunter,83,Gabe L,PHYSICS,2,1,0,4
+73,22,Iolani A,86,Ethan Z,EARTH_SPACE,2,0,0,8
+73,22,Iolani A,86,Ethan Z,MATH,1,0,0,4
+73,22,Iolani A,87,Haru G,BIOLOGY,2,1,0,4
+73,22,Iolani A,88,Min S,CHEMISTRY,2,1,0,4
+73,22,Iolani A,89,Sola M,PHYSICS,2,1,0,4
+74,2,American Heritage Broward,5,Jason T,BIOLOGY,1,1,0,0
+74,2,American Heritage Broward,5,Jason T,MATH,1,0,0,4
+74,32,North Hollywood A,124,Charles H,PHYSICS,2,1,0,4
+74,32,North Hollywood A,125,Connor C,BIOLOGY,2,0,0,8
+74,32,North Hollywood A,125,Connor C,EARTH_SPACE,2,1,0,4
+74,32,North Hollywood A,126,Connor Z,CHEMISTRY,2,2,0,0
+74,32,North Hollywood A,126,Connor Z,EARTH_SPACE,1,0,0,4
+74,32,North Hollywood A,126,Connor Z,MATH,2,0,0,8
+74,32,North Hollywood A,126,Connor Z,PHYSICS,1,0,0,4
+74,32,North Hollywood A,127,Minghao G,MATH,1,0,0,4
+75,15,Collierville B,55,Ishan A,MATH,1,0,0,4
+75,15,Collierville B,56,Jacob L,BIOLOGY,1,0,0,4
+75,15,Collierville B,57,Sai B,PHYSICS,1,0,0,4
+75,25,Lexington B,98,Akshay R,EARTH_SPACE,3,0,0,12
+75,25,Lexington B,98,Akshay R,MATH,1,0,0,4
+75,25,Lexington B,99,Ayaan I,CHEMISTRY,1,0,0,4
+75,25,Lexington B,99,Ayaan I,MATH,0,1,0,-4
+75,25,Lexington B,99,Ayaan I,PHYSICS,2,1,0,4
+75,25,Lexington B,100,Ethan L,CHEMISTRY,0,1,0,-4
+75,25,Lexington B,100,Ethan L,EARTH_SPACE,1,0,0,4
+75,25,Lexington B,101,Simon Z,BIOLOGY,3,0,0,12
+75,25,Lexington B,101,Simon Z,CHEMISTRY,2,0,0,8
+75,25,Lexington B,101,Simon Z,MATH,1,0,0,4
+75,25,Lexington B,101,Simon Z,PHYSICS,1,0,0,4
+76,30,Morgantown,117,Larry D,BIOLOGY,1,0,0,4
+76,30,Morgantown,117,Larry D,CHEMISTRY,2,0,0,8
+76,30,Morgantown,118,Sunny G,MATH,1,0,0,4
+76,30,Morgantown,118,Sunny G,PHYSICS,1,0,0,4
+76,30,Morgantown,119,William T,EARTH_SPACE,0,1,0,-4
+76,37,Thomas Jefferson,145,Eshaan S,MATH,3,1,0,8
+76,37,Thomas Jefferson,146,Hrishi B,CHEMISTRY,1,0,0,4
+76,37,Thomas Jefferson,146,Hrishi B,PHYSICS,1,1,0,0
+76,37,Thomas Jefferson,148,Rohan B,EARTH_SPACE,2,0,0,8
+76,37,Thomas Jefferson,148,Rohan B,PHYSICS,1,0,0,4
+76,37,Thomas Jefferson,149,Sophia G,BIOLOGY,2,0,0,8
+76,37,Thomas Jefferson,149,Sophia G,EARTH_SPACE,2,0,0,8
+77,3,Arcadia A,6,Christopher C,EARTH_SPACE,2,0,0,8
+77,3,Arcadia A,6,Christopher C,PHYSICS,2,0,0,8
+77,3,Arcadia A,7,Ethan W,CHEMISTRY,3,0,0,12
+77,3,Arcadia A,7,Ethan W,MATH,2,0,0,8
+77,3,Arcadia A,7,Ethan W,PHYSICS,1,0,0,4
+77,3,Arcadia A,8,Jamie W,BIOLOGY,1,0,0,4
+77,3,Arcadia A,8,Jamie W,EARTH_SPACE,1,0,0,4
+77,7,BISV B,23,Andrew L,BIOLOGY,1,0,0,4
+77,7,BISV B,23,Andrew L,EARTH_SPACE,0,1,0,-4
+77,7,BISV B,24,Timothy Y,MATH,0,1,0,-4
+78,5,BASIS Chandler,16,Lishan P,CHEMISTRY,2,1,0,4
+78,5,BASIS Chandler,16,Lishan P,MATH,2,0,0,8
+78,5,BASIS Chandler,17,Nihar B,BIOLOGY,3,0,0,12
+78,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,2,0,0,8
+78,5,BASIS Chandler,18,Varyan J,PHYSICS,3,0,0,12
+79,28,Lynbrook B,109,Matthew Y,BIOLOGY,1,0,0,4
+79,28,Lynbrook B,109,Matthew Y,MATH,2,0,0,8
+79,28,Lynbrook B,109,Matthew Y,PHYSICS,1,0,0,4
+79,28,Lynbrook B,111,Vincent Q,BIOLOGY,1,0,0,4
+79,28,Lynbrook B,111,Vincent Q,CHEMISTRY,2,0,0,8
+79,28,Lynbrook B,111,Vincent Q,EARTH_SPACE,3,0,0,12
+79,28,Lynbrook B,111,Vincent Q,PHYSICS,1,0,0,4
+79,42,Whitney Young,165,Andrew K,CHEMISTRY,1,0,0,4
+79,42,Whitney Young,165,Andrew K,MATH,1,0,0,4
+80,23,Iolani B,90,Hong Jin K,EARTH_SPACE,2,0,0,8
+80,23,Iolani B,90,Hong Jin K,MATH,2,0,0,8
+80,23,Iolani B,90,Hong Jin K,PHYSICS,3,1,0,8
+80,23,Iolani B,91,Keene K,CHEMISTRY,3,0,0,12
+80,23,Iolani B,92,Naoto H,CHEMISTRY,1,0,0,4
+80,41,Ward Melville,162,Aydin E,BIOLOGY,1,0,0,4
+80,41,Ward Melville,163,Srihari K,BIOLOGY,1,0,0,4
+80,41,Ward Melville,163,Srihari K,MATH,1,0,0,4
+80,41,Ward Melville,163,Srihari K,PHYSICS,1,0,0,4
+81,6,BISV A,19,Aaron C,EARTH_SPACE,1,0,0,4
+81,6,BISV A,19,Aaron C,PHYSICS,1,0,0,4
+81,6,BISV A,20,Larry Z,BIOLOGY,1,0,0,4
+81,6,BISV A,20,Larry Z,CHEMISTRY,1,0,0,4
+81,29,MSJ,113,Ishaan K,EARTH_SPACE,2,2,0,0
+81,29,MSJ,113,Ishaan K,MATH,2,1,0,4
+81,29,MSJ,114,Theenash S,BIOLOGY,3,1,0,8
+81,29,MSJ,114,Theenash S,CHEMISTRY,3,1,0,8
+81,29,MSJ,114,Theenash S,PHYSICS,2,1,0,4
+82,34,Palo Alto,134,Kevin P,BIOLOGY,1,0,0,4
+82,34,Palo Alto,134,Kevin P,CHEMISTRY,1,1,0,0
+82,34,Palo Alto,134,Kevin P,EARTH_SPACE,3,0,0,12
+82,34,Palo Alto,134,Kevin P,MATH,0,1,0,-4
+82,34,Palo Alto,135,Ryan P,EARTH_SPACE,0,1,0,-4
+82,34,Palo Alto,135,Ryan P,MATH,1,1,0,0
+82,34,Palo Alto,135,Ryan P,PHYSICS,1,0,0,4
+82,36,Quail Valley,140,Josh P,CHEMISTRY,1,0,0,4
+82,36,Quail Valley,140,Josh P,MATH,2,0,0,8
+82,36,Quail Valley,140,Josh P,PHYSICS,1,0,0,4
+82,36,Quail Valley,141,Shruthi R,BIOLOGY,0,1,0,-4
+82,36,Quail Valley,141,Shruthi R,CHEMISTRY,1,0,0,4
+82,36,Quail Valley,142,Vedant B,EARTH_SPACE,1,0,0,4
+82,36,Quail Valley,144,Vihaan N,BIOLOGY,1,0,0,4
+83,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,2,1,0,4
+83,33,North Hollywood B,129,Kensuke O,MATH,1,0,0,4
+83,33,North Hollywood B,129,Kensuke O,PHYSICS,2,0,0,8
+83,33,North Hollywood B,130,Nathaniel O,BIOLOGY,1,0,0,4
+83,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,2,1,0,4
+83,33,North Hollywood B,130,Nathaniel O,PHYSICS,0,1,0,-4
+83,35,Punahou School,136,Luke I,BIOLOGY,2,0,0,8
+83,35,Punahou School,138,Travis D,CHEMISTRY,2,1,0,4
+83,35,Punahou School,138,Travis D,EARTH_SPACE,2,1,0,4
+83,35,Punahou School,138,Travis D,MATH,1,1,0,0
+84,13,Clovis North,46,Achuth V,BIOLOGY,1,0,0,4
+84,13,Clovis North,46,Achuth V,MATH,0,1,0,-4
+84,13,Clovis North,47,Ethan W,EARTH_SPACE,2,0,0,8
+84,13,Clovis North,47,Ethan W,PHYSICS,1,0,0,4
+84,13,Clovis North,48,Justin D,CHEMISTRY,3,0,0,12
+84,13,Clovis North,48,Justin D,MATH,1,0,0,4
+84,13,Clovis North,48,Justin D,PHYSICS,1,0,0,4
+84,17,Deep Run,64,Nimit A,BIOLOGY,2,0,0,8
+84,17,Deep Run,64,Nimit A,MATH,1,0,0,4
+84,17,Deep Run,65,Prithwish C,EARTH_SPACE,1,0,0,4
+84,17,Deep Run,65,Prithwish C,PHYSICS,0,1,0,-4
+84,17,Deep Run,69,Yunay V,PHYSICS,1,0,0,4
+85,14,Collierville A,50,Abhinav S,BIOLOGY,2,0,0,8
+85,14,Collierville A,50,Abhinav S,CHEMISTRY,2,0,0,8
+85,14,Collierville A,50,Abhinav S,EARTH_SPACE,1,0,0,4
+85,14,Collierville A,50,Abhinav S,MATH,1,1,0,0
+85,14,Collierville A,50,Abhinav S,PHYSICS,1,1,0,0
+85,14,Collierville A,51,Arman,BIOLOGY,1,0,0,4
+85,14,Collierville A,52,Charith N,PHYSICS,1,0,0,4
+85,14,Collierville A,54,Sumin Y,CHEMISTRY,2,0,0,8
+85,14,Collierville A,54,Sumin Y,EARTH_SPACE,1,0,0,4
+85,43,Woodlands,169,Arjith,PHYSICS,1,0,0,4
+85,43,Woodlands,170,John,BIOLOGY,1,0,0,4
+85,43,Woodlands,170,John,PHYSICS,1,0,0,4
+86,21,Hunter,82,Camille P,BIOLOGY,1,0,0,4
+86,21,Hunter,82,Camille P,EARTH_SPACE,3,0,0,12
+86,21,Hunter,83,Gabe L,CHEMISTRY,1,0,0,4
+86,21,Hunter,83,Gabe L,EARTH_SPACE,1,0,0,4
+86,21,Hunter,83,Gabe L,MATH,3,0,0,12
+86,21,Hunter,83,Gabe L,PHYSICS,3,0,0,12
+86,21,Hunter,84,Melody L,MATH,0,1,0,-4
+87,22,Iolani A,85,Daniel Y,EARTH_SPACE,0,1,0,-4
+87,22,Iolani A,85,Daniel Y,MATH,1,0,0,4
+87,22,Iolani A,85,Daniel Y,PHYSICS,1,1,0,0
+87,22,Iolani A,87,Haru G,BIOLOGY,1,0,0,4
+87,22,Iolani A,88,Min S,CHEMISTRY,1,1,0,0
+87,22,Iolani A,88,Min S,EARTH_SPACE,1,0,0,4
+87,22,Iolani A,89,Sola M,CHEMISTRY,1,0,0,4
+87,22,Iolani A,89,Sola M,EARTH_SPACE,1,0,0,4
+87,22,Iolani A,89,Sola M,MATH,3,0,0,12
+87,25,Lexington B,98,Akshay R,EARTH_SPACE,2,0,0,8
+87,25,Lexington B,98,Akshay R,MATH,0,1,0,-4
+87,25,Lexington B,99,Ayaan I,PHYSICS,1,0,0,4
+87,25,Lexington B,100,Ethan L,CHEMISTRY,1,0,0,4
+87,25,Lexington B,101,Simon Z,BIOLOGY,2,0,0,8
+87,25,Lexington B,101,Simon Z,CHEMISTRY,1,1,0,0
+88,8,Benjamin Franklin,27,Maddox H,MATH,1,0,0,4
+88,8,Benjamin Franklin,27,Maddox H,PHYSICS,1,0,0,4
+88,8,Benjamin Franklin,28,Marianne N,BIOLOGY,1,0,0,4
+88,8,Benjamin Franklin,29,Ronald Z,CHEMISTRY,1,1,0,0
+88,8,Benjamin Franklin,29,Ronald Z,EARTH_SPACE,1,0,0,4
+88,8,Benjamin Franklin,29,Ronald Z,MATH,1,0,0,4
+88,8,Benjamin Franklin,29,Ronald Z,PHYSICS,1,0,0,4
+88,9,Bridgeland,30,Advaith B,EARTH_SPACE,1,1,0,0
+88,9,Bridgeland,31,Carson P,CHEMISTRY,1,0,0,4
+88,9,Bridgeland,32,Jeffy L,PHYSICS,1,0,0,4
+89,16,Deap South,59,Abhinav A,BIOLOGY,0,1,0,-4
+89,16,Deap South,59,Abhinav A,EARTH_SPACE,1,0,0,4
+89,16,Deap South,60,Ryan K,BIOLOGY,1,1,0,0
+89,16,Deap South,60,Ryan K,CHEMISTRY,2,0,0,8
+89,16,Deap South,60,Ryan K,EARTH_SPACE,1,0,0,4
+89,16,Deap South,60,Ryan K,MATH,3,0,0,12
+89,16,Deap South,60,Ryan K,PHYSICS,1,0,0,4
+89,16,Deap South,61,Sanjay O,CHEMISTRY,1,0,0,4
+89,16,Deap South,62,Ziang Z,CHEMISTRY,1,0,0,4
+89,16,Deap South,62,Ziang Z,PHYSICS,2,0,0,8
+89,40,WWPS B,158,Anna K,BIOLOGY,1,0,0,4
+89,40,WWPS B,159,Dhanshika S,BIOLOGY,1,0,0,4
+89,40,WWPS B,159,Dhanshika S,EARTH_SPACE,1,0,0,4
+89,40,WWPS B,160,Gyan C,EARTH_SPACE,1,0,0,4
+90,19,Eastlake,74,Neal K,BIOLOGY,1,0,0,4
+90,19,Eastlake,75,Saahil,CHEMISTRY,2,0,0,8
+90,19,Eastlake,75,Saahil,EARTH_SPACE,2,0,0,8
+90,19,Eastlake,75,Saahil,MATH,1,0,0,4
+90,19,Eastlake,75,Saahil,PHYSICS,1,0,0,4
+90,19,Eastlake,76,Shivam,EARTH_SPACE,1,0,0,4
+90,19,Eastlake,76,Shivam,MATH,1,1,0,0
+90,19,Eastlake,76,Shivam,PHYSICS,1,0,0,4
+90,39,WWPS A,154,Akhil M,CHEMISTRY,0,1,0,-4
+90,39,WWPS A,155,Arjun D,BIOLOGY,2,0,0,8
+90,39,WWPS A,155,Arjun D,CHEMISTRY,2,0,0,8
+90,39,WWPS A,156,Dennis J,PHYSICS,2,0,0,8
+90,39,WWPS A,157,Monish S,BIOLOGY,1,0,0,4
+90,39,WWPS A,157,Monish S,EARTH_SPACE,0,1,0,-4
+90,39,WWPS A,157,Monish S,MATH,2,2,0,0
+90,39,WWPS A,157,Monish S,PHYSICS,0,1,0,-4
+91,20,Enloe,77,Kaiwen Y,BIOLOGY,2,0,0,8
+91,20,Enloe,77,Kaiwen Y,CHEMISTRY,1,0,0,4
+91,20,Enloe,77,Kaiwen Y,EARTH_SPACE,1,0,0,4
+91,20,Enloe,77,Kaiwen Y,PHYSICS,3,0,0,12
+91,20,Enloe,78,Lawrence Q,MATH,1,0,0,4
+91,20,Enloe,80,Ryan Y,EARTH_SPACE,1,0,0,4
+91,20,Enloe,81,Vishruth K,CHEMISTRY,0,2,0,-8
+91,20,Enloe,81,Vishruth K,EARTH_SPACE,0,1,0,-4
+91,20,Enloe,81,Vishruth K,PHYSICS,1,0,0,4
+91,27,Lynbrook A,104,Philip,EARTH_SPACE,1,0,0,4
+91,27,Lynbrook A,105,Ryan,MATH,1,0,0,4
+91,27,Lynbrook A,106,Sohil,BIOLOGY,2,0,0,8
+91,27,Lynbrook A,106,Sohil,CHEMISTRY,2,0,0,8
+91,27,Lynbrook A,106,Sohil,EARTH_SPACE,1,0,0,4
+91,27,Lynbrook A,106,Sohil,MATH,2,1,0,4
+91,27,Lynbrook A,106,Sohil,PHYSICS,0,1,0,-4
+91,27,Lynbrook A,107,evan,CHEMISTRY,1,0,0,4
+92,18,Doral Academy,70,Abhishek C,EARTH_SPACE,1,0,0,4
+92,18,Doral Academy,70,Abhishek C,MATH,3,0,0,12
+92,18,Doral Academy,70,Abhishek C,PHYSICS,2,0,0,8
+92,18,Doral Academy,71,Neil H,BIOLOGY,1,0,0,4
+92,18,Doral Academy,72,Santiago S,CHEMISTRY,1,0,0,4
+92,24,Lexington A,94,Allen F,BIOLOGY,2,1,0,4
+92,24,Lexington A,94,Allen F,EARTH_SPACE,2,1,0,4
+92,24,Lexington A,94,Allen F,PHYSICS,1,0,0,4
+92,24,Lexington A,96,William J,CHEMISTRY,3,0,0,12
+92,24,Lexington A,96,William J,EARTH_SPACE,0,1,0,-4
+92,24,Lexington A,96,William J,PHYSICS,1,1,0,0
+93,15,Collierville B,55,Ishan A,BIOLOGY,1,0,0,4
+93,15,Collierville B,55,Ishan A,CHEMISTRY,1,0,0,4
+93,32,North Hollywood A,124,Charles H,CHEMISTRY,0,1,0,-4
+93,32,North Hollywood A,124,Charles H,PHYSICS,1,1,0,0
+93,32,North Hollywood A,125,Connor C,BIOLOGY,1,1,0,0
+93,32,North Hollywood A,125,Connor C,CHEMISTRY,2,0,0,8
+93,32,North Hollywood A,125,Connor C,EARTH_SPACE,4,0,0,16
+93,32,North Hollywood A,125,Connor C,PHYSICS,1,0,0,4
+93,32,North Hollywood A,127,Minghao G,MATH,3,0,0,12
+94,1,Allen School,1,Daniel L,BIOLOGY,2,1,0,4
+94,1,Allen School,1,Daniel L,CHEMISTRY,4,0,0,16
+94,1,Allen School,1,Daniel L,EARTH_SPACE,3,0,0,12
+94,1,Allen School,1,Daniel L,MATH,2,0,0,8
+94,1,Allen School,1,Daniel L,PHYSICS,4,0,0,16
+94,30,Morgantown,115,Caden Y,MATH,0,2,0,-8
+94,30,Morgantown,115,Caden Y,PHYSICS,0,1,0,-4
+94,30,Morgantown,117,Larry D,BIOLOGY,1,0,0,4
+94,30,Morgantown,117,Larry D,CHEMISTRY,0,1,0,-4
+95,10,Canyon Crest A,35,Alex D,BIOLOGY,1,0,0,4
+95,10,Canyon Crest A,35,Alex D,EARTH_SPACE,1,0,0,4
+95,10,Canyon Crest A,36,Haiyue M,CHEMISTRY,2,0,0,8
+95,10,Canyon Crest A,36,Haiyue M,MATH,1,0,0,4
+95,10,Canyon Crest A,37,Owen M,CHEMISTRY,1,0,0,4
+95,10,Canyon Crest A,37,Owen M,MATH,1,0,0,4
+95,38,Varun Clemens,151,Praneel A,CHEMISTRY,1,1,0,0
+95,38,Varun Clemens,151,Praneel A,EARTH_SPACE,3,0,0,12
+95,38,Varun Clemens,151,Praneel A,MATH,0,2,0,-8
+95,38,Varun Clemens,151,Praneel A,PHYSICS,3,1,0,8
+95,38,Varun Clemens,152,Shaun I,BIOLOGY,0,1,0,-4
+95,38,Varun Clemens,152,Shaun I,CHEMISTRY,0,1,0,-4
+95,38,Varun Clemens,153,Uddip K,BIOLOGY,2,0,0,8
+96,12,Clements,43,Alex S,CHEMISTRY,2,0,0,8
+96,12,Clements,43,Alex S,MATH,2,1,0,4
+96,12,Clements,43,Alex S,PHYSICS,1,0,0,4
+96,12,Clements,44,Eric Z,PHYSICS,1,0,0,4
+96,22,Iolani A,85,Daniel Y,CHEMISTRY,0,1,0,-4
+96,22,Iolani A,85,Daniel Y,EARTH_SPACE,1,0,0,4
+96,22,Iolani A,85,Daniel Y,PHYSICS,0,1,0,-4
+96,22,Iolani A,87,Haru G,BIOLOGY,1,1,0,0
+96,22,Iolani A,88,Min S,CHEMISTRY,1,0,0,4
+96,22,Iolani A,89,Sola M,EARTH_SPACE,3,0,0,12
+96,22,Iolani A,89,Sola M,MATH,2,0,0,8
+96,22,Iolani A,89,Sola M,PHYSICS,1,0,0,4
+97,1,Allen School,1,Daniel L,CHEMISTRY,3,0,0,12
+97,1,Allen School,1,Daniel L,EARTH_SPACE,1,0,0,4
+97,1,Allen School,1,Daniel L,MATH,2,0,0,8
+97,1,Allen School,1,Daniel L,PHYSICS,3,1,0,8
+97,31,North Allegheny,120,Andrew,EARTH_SPACE,1,0,0,4
+97,31,North Allegheny,120,Andrew,MATH,1,0,0,4
+97,31,North Allegheny,121,Hongyi,BIOLOGY,3,1,0,8
+97,31,North Allegheny,121,Hongyi,MATH,1,0,0,4
+97,31,North Allegheny,122,Jason,PHYSICS,1,0,0,4
+97,31,North Allegheny,123,Leo,CHEMISTRY,1,0,0,4
+98,24,Lexington A,94,Allen F,BIOLOGY,1,0,0,4
+98,24,Lexington A,94,Allen F,EARTH_SPACE,2,0,0,8
+98,24,Lexington A,94,Allen F,MATH,1,0,0,4
+98,24,Lexington A,96,William J,CHEMISTRY,0,1,0,-4
+98,24,Lexington A,96,William J,MATH,1,0,0,4
+98,24,Lexington A,96,William J,PHYSICS,2,1,0,4
+98,38,Varun Clemens,151,Praneel A,CHEMISTRY,2,0,0,8
+98,38,Varun Clemens,151,Praneel A,EARTH_SPACE,2,0,0,8
+98,38,Varun Clemens,151,Praneel A,MATH,0,1,0,-4
+98,38,Varun Clemens,151,Praneel A,PHYSICS,0,2,0,-8
+98,38,Varun Clemens,152,Shaun I,BIOLOGY,1,0,0,4
+98,38,Varun Clemens,152,Shaun I,CHEMISTRY,1,0,0,4
+98,38,Varun Clemens,153,Uddip K,BIOLOGY,2,0,0,8
+99,5,BASIS Chandler,16,Lishan P,CHEMISTRY,3,0,0,12
+99,5,BASIS Chandler,16,Lishan P,MATH,1,0,0,4
+99,5,BASIS Chandler,17,Nihar B,BIOLOGY,3,1,0,8
+99,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,3,0,0,12
+99,5,BASIS Chandler,18,Varyan J,MATH,1,0,0,4
+99,5,BASIS Chandler,18,Varyan J,PHYSICS,1,1,0,0
+99,39,WWPS A,154,Akhil M,CHEMISTRY,1,0,0,4
+99,39,WWPS A,155,Arjun D,BIOLOGY,1,0,0,4
+99,39,WWPS A,156,Dennis J,MATH,0,1,0,-4
+99,39,WWPS A,156,Dennis J,PHYSICS,0,1,0,-4
+99,39,WWPS A,157,Monish S,EARTH_SPACE,0,1,0,-4
+99,39,WWPS A,157,Monish S,MATH,1,1,0,0
+99,39,WWPS A,157,Monish S,PHYSICS,0,1,0,-4
+100,29,MSJ,113,Ishaan K,EARTH_SPACE,0,2,0,-8
+100,29,MSJ,113,Ishaan K,MATH,1,0,0,4
+100,29,MSJ,113,Ishaan K,PHYSICS,1,0,0,4
+100,29,MSJ,114,Theenash S,BIOLOGY,4,0,0,16
+100,29,MSJ,114,Theenash S,CHEMISTRY,4,0,0,16
+100,29,MSJ,114,Theenash S,EARTH_SPACE,1,0,0,4
+100,29,MSJ,114,Theenash S,MATH,1,0,0,4
+100,29,MSJ,114,Theenash S,PHYSICS,1,0,0,4
+100,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,3,0,0,12
+100,33,North Hollywood B,129,Kensuke O,MATH,1,0,0,4
+100,33,North Hollywood B,129,Kensuke O,PHYSICS,0,1,0,-4
+101,26,Luka Fan Club,102,Akhil B,BIOLOGY,2,0,0,8
+101,26,Luka Fan Club,102,Akhil B,CHEMISTRY,0,1,0,-4
+101,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,1,0,0,4
+101,26,Luka Fan Club,102,Akhil B,MATH,1,0,0,4
+101,26,Luka Fan Club,102,Akhil B,PHYSICS,1,1,0,0
+101,27,Lynbrook A,103,Andrew,BIOLOGY,1,0,0,4
+101,27,Lynbrook A,103,Andrew,CHEMISTRY,3,0,0,12
+101,27,Lynbrook A,104,Philip,EARTH_SPACE,1,0,0,4
+101,27,Lynbrook A,106,Sohil,BIOLOGY,1,0,0,4
+101,27,Lynbrook A,106,Sohil,CHEMISTRY,1,0,0,4
+101,27,Lynbrook A,106,Sohil,EARTH_SPACE,1,1,0,0
+101,27,Lynbrook A,106,Sohil,MATH,3,0,0,12
+101,27,Lynbrook A,106,Sohil,PHYSICS,1,0,0,4
+102,13,Clovis North,46,Achuth V,BIOLOGY,2,0,0,8
+102,13,Clovis North,46,Achuth V,MATH,1,0,0,4
+102,13,Clovis North,47,Ethan W,EARTH_SPACE,1,0,0,4
+102,13,Clovis North,48,Justin D,CHEMISTRY,2,0,0,8
+102,13,Clovis North,48,Justin D,MATH,1,0,0,4
+102,13,Clovis North,49,Renard W,MATH,1,0,0,4
+102,32,North Hollywood A,124,Charles H,BIOLOGY,1,0,0,4
+102,32,North Hollywood A,124,Charles H,PHYSICS,1,1,0,0
+102,32,North Hollywood A,125,Connor C,BIOLOGY,1,0,0,4
+102,32,North Hollywood A,125,Connor C,EARTH_SPACE,3,0,0,12
+102,32,North Hollywood A,125,Connor C,PHYSICS,2,0,0,8
+102,32,North Hollywood A,126,Connor Z,CHEMISTRY,2,0,0,8
+102,32,North Hollywood A,127,Minghao G,MATH,1,0,0,4
+103,14,Collierville A,50,Abhinav S,CHEMISTRY,1,0,0,4
+103,14,Collierville A,50,Abhinav S,MATH,2,0,0,8
+103,14,Collierville A,51,Arman,BIOLOGY,2,0,0,8
+103,14,Collierville A,54,Sumin Y,EARTH_SPACE,3,0,0,12
+103,14,Collierville A,54,Sumin Y,PHYSICS,1,0,0,4
+103,16,Deap South,59,Abhinav A,BIOLOGY,1,0,0,4
+103,16,Deap South,60,Ryan K,MATH,1,0,0,4
+103,16,Deap South,61,Sanjay O,CHEMISTRY,1,0,0,4
+103,16,Deap South,62,Ziang Z,CHEMISTRY,0,1,0,-4
+103,16,Deap South,62,Ziang Z,EARTH_SPACE,1,0,0,4
+103,16,Deap South,62,Ziang Z,MATH,1,0,0,4
+103,16,Deap South,62,Ziang Z,PHYSICS,2,0,0,8
+104,12,Clements,43,Alex S,CHEMISTRY,0,1,0,-4
+104,12,Clements,43,Alex S,MATH,2,0,0,8
+104,12,Clements,43,Alex S,PHYSICS,2,1,0,4
+104,14,Collierville A,50,Abhinav S,CHEMISTRY,2,0,0,8
+104,14,Collierville A,50,Abhinav S,MATH,1,0,0,4
+104,14,Collierville A,50,Abhinav S,PHYSICS,1,0,0,4
+104,14,Collierville A,53,Krish S,BIOLOGY,1,0,0,4
+104,14,Collierville A,54,Sumin Y,CHEMISTRY,1,0,0,4
+104,14,Collierville A,54,Sumin Y,EARTH_SPACE,3,0,0,12
+105,1,Allen School,1,Daniel L,BIOLOGY,1,0,0,4
+105,1,Allen School,1,Daniel L,CHEMISTRY,0,1,0,-4
+105,1,Allen School,1,Daniel L,EARTH_SPACE,1,0,0,4
+105,1,Allen School,1,Daniel L,MATH,1,1,0,0
+105,1,Allen School,1,Daniel L,PHYSICS,2,0,0,8
+105,32,North Hollywood A,124,Charles H,PHYSICS,1,2,0,-4
+105,32,North Hollywood A,125,Connor C,EARTH_SPACE,3,1,0,8
+105,32,North Hollywood A,126,Connor Z,CHEMISTRY,4,0,0,16
+105,32,North Hollywood A,126,Connor Z,PHYSICS,1,0,0,4
+105,32,North Hollywood A,127,Minghao G,MATH,2,1,0,4
+106,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,4,0,0,16
+106,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,4,0,0,16
+106,33,North Hollywood B,130,Nathaniel O,PHYSICS,2,0,0,8
+106,39,WWPS A,154,Akhil M,EARTH_SPACE,0,1,0,-4
+106,39,WWPS A,155,Arjun D,BIOLOGY,4,0,0,16
+106,39,WWPS A,156,Dennis J,PHYSICS,1,0,0,4
+106,39,WWPS A,157,Monish S,MATH,3,0,0,12
+106,39,WWPS A,157,Monish S,PHYSICS,1,1,0,0
+107,13,Clovis North,46,Achuth V,BIOLOGY,3,0,0,12
+107,13,Clovis North,46,Achuth V,MATH,1,0,0,4
+107,13,Clovis North,47,Ethan W,EARTH_SPACE,2,0,0,8
+107,13,Clovis North,47,Ethan W,PHYSICS,1,0,0,4
+107,13,Clovis North,48,Justin D,CHEMISTRY,2,0,0,8
+107,13,Clovis North,48,Justin D,MATH,2,0,0,8
+107,31,North Allegheny,120,Andrew,EARTH_SPACE,1,1,0,0
+107,31,North Allegheny,121,Hongyi,BIOLOGY,0,1,0,-4
+107,31,North Allegheny,121,Hongyi,PHYSICS,1,1,0,0
+107,31,North Allegheny,122,Jason,MATH,1,0,0,4
+107,31,North Allegheny,123,Leo,CHEMISTRY,2,0,0,8
+108,5,BASIS Chandler,16,Lishan P,CHEMISTRY,1,1,0,0
+108,5,BASIS Chandler,17,Nihar B,BIOLOGY,2,0,0,8
+108,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,2,1,0,4
+108,5,BASIS Chandler,18,Varyan J,PHYSICS,1,1,0,0
+108,29,MSJ,112,Anish A,CHEMISTRY,1,0,0,4
+108,29,MSJ,113,Ishaan K,EARTH_SPACE,2,0,0,8
+108,29,MSJ,113,Ishaan K,MATH,3,0,0,12
+108,29,MSJ,114,Theenash S,BIOLOGY,2,0,0,8
+108,29,MSJ,114,Theenash S,CHEMISTRY,2,1,0,4
+108,29,MSJ,114,Theenash S,MATH,1,0,0,4
+108,29,MSJ,114,Theenash S,PHYSICS,3,0,0,12
+109,24,Lexington A,94,Allen F,BIOLOGY,3,0,0,12
+109,24,Lexington A,94,Allen F,EARTH_SPACE,2,0,0,8
+109,24,Lexington A,96,William J,CHEMISTRY,2,2,0,0
+109,24,Lexington A,96,William J,EARTH_SPACE,1,0,0,4
+109,24,Lexington A,96,William J,MATH,1,1,0,0
+109,24,Lexington A,96,William J,PHYSICS,2,0,0,8
+109,26,Luka Fan Club,102,Akhil B,BIOLOGY,1,0,0,4
+109,26,Luka Fan Club,102,Akhil B,CHEMISTRY,1,0,0,4
+109,26,Luka Fan Club,102,Akhil B,EARTH_SPACE,1,0,0,4
+109,26,Luka Fan Club,102,Akhil B,MATH,3,0,0,12
+109,26,Luka Fan Club,102,Akhil B,PHYSICS,1,0,0,4
+110,16,Deap South,59,Abhinav A,BIOLOGY,3,0,0,12
+110,16,Deap South,60,Ryan K,MATH,2,0,0,8
+110,16,Deap South,60,Ryan K,PHYSICS,3,0,0,12
+110,16,Deap South,61,Sanjay O,CHEMISTRY,1,2,0,-4
+110,16,Deap South,62,Ziang Z,CHEMISTRY,0,1,0,-4
+110,16,Deap South,62,Ziang Z,EARTH_SPACE,2,0,0,8
+110,16,Deap South,62,Ziang Z,PHYSICS,1,0,0,4
+110,22,Iolani A,85,Daniel Y,MATH,1,0,0,4
+110,22,Iolani A,87,Haru G,BIOLOGY,0,1,0,-4
+110,22,Iolani A,88,Min S,CHEMISTRY,3,1,0,8
+110,22,Iolani A,89,Sola M,EARTH_SPACE,2,0,0,8
+110,22,Iolani A,89,Sola M,MATH,1,0,0,4
+110,22,Iolani A,89,Sola M,PHYSICS,0,1,0,-4
+111,27,Lynbrook A,103,Andrew,BIOLOGY,1,0,0,4
+111,27,Lynbrook A,103,Andrew,CHEMISTRY,1,0,0,4
+111,27,Lynbrook A,104,Philip,EARTH_SPACE,1,0,0,4
+111,27,Lynbrook A,106,Sohil,CHEMISTRY,0,1,0,-4
+111,27,Lynbrook A,106,Sohil,EARTH_SPACE,1,0,0,4
+111,27,Lynbrook A,106,Sohil,MATH,3,0,0,12
+111,27,Lynbrook A,106,Sohil,PHYSICS,2,0,0,8
+111,38,Varun Clemens,150,Heidi,BIOLOGY,1,0,0,4
+111,38,Varun Clemens,151,Praneel A,CHEMISTRY,0,1,0,-4
+111,38,Varun Clemens,151,Praneel A,EARTH_SPACE,2,1,0,4
+111,38,Varun Clemens,151,Praneel A,MATH,0,1,0,-4
+111,38,Varun Clemens,151,Praneel A,PHYSICS,2,1,0,4
+111,38,Varun Clemens,152,Shaun I,CHEMISTRY,1,0,0,4
+111,38,Varun Clemens,152,Shaun I,MATH,1,0,0,4
+111,38,Varun Clemens,153,Uddip K,BIOLOGY,1,1,0,0
+112,5,BASIS Chandler,17,Nihar B,BIOLOGY,2,2,0,0
+112,5,BASIS Chandler,18,Varyan J,CHEMISTRY,0,1,0,-4
+112,5,BASIS Chandler,18,Varyan J,EARTH_SPACE,2,0,0,8
+112,5,BASIS Chandler,18,Varyan J,MATH,1,1,0,0
+112,5,BASIS Chandler,18,Varyan J,PHYSICS,1,1,0,0
+112,24,Lexington A,94,Allen F,BIOLOGY,2,1,0,4
+112,24,Lexington A,94,Allen F,EARTH_SPACE,2,1,0,4
+112,24,Lexington A,96,William J,CHEMISTRY,3,0,0,12
+112,24,Lexington A,96,William J,PHYSICS,1,0,0,4
+113,1,Allen School,1,Daniel L,CHEMISTRY,1,0,0,4
+113,1,Allen School,1,Daniel L,EARTH_SPACE,1,0,0,4
+113,1,Allen School,1,Daniel L,MATH,1,0,0,4
+113,1,Allen School,1,Daniel L,PHYSICS,2,0,0,8
+113,14,Collierville A,50,Abhinav S,CHEMISTRY,1,2,0,-4
+113,14,Collierville A,52,Charith N,EARTH_SPACE,1,0,0,4
+113,14,Collierville A,53,Krish S,BIOLOGY,1,0,0,4
+113,14,Collierville A,54,Sumin Y,EARTH_SPACE,2,0,0,8
+113,14,Collierville A,54,Sumin Y,PHYSICS,1,0,0,4
+114,33,North Hollywood B,128,Jake R,BIOLOGY,1,1,0,0
+114,33,North Hollywood B,129,Kensuke O,BIOLOGY,1,0,0,4
+114,33,North Hollywood B,129,Kensuke O,EARTH_SPACE,1,2,0,-4
+114,33,North Hollywood B,130,Nathaniel O,CHEMISTRY,1,0,0,4
+114,38,Varun Clemens,150,Heidi,BIOLOGY,1,0,0,4
+114,38,Varun Clemens,151,Praneel A,EARTH_SPACE,2,1,0,4
+114,38,Varun Clemens,151,Praneel A,PHYSICS,4,0,0,16
+114,38,Varun Clemens,152,Shaun I,MATH,1,0,0,4
+114,38,Varun Clemens,153,Uddip K,BIOLOGY,1,0,0,4
+115,13,Clovis North,46,Achuth V,BIOLOGY,2,2,0,0
+115,13,Clovis North,46,Achuth V,MATH,0,1,0,-4
+115,13,Clovis North,47,Ethan W,EARTH_SPACE,1,0,0,4
+115,13,Clovis North,47,Ethan W,PHYSICS,1,0,0,4
+115,13,Clovis North,48,Justin D,MATH,1,0,0,4
+115,13,Clovis North,48,Justin D,PHYSICS,1,0,0,4
+115,13,Clovis North,49,Renard W,EARTH_SPACE,1,0,0,4
+115,22,Iolani A,85,Daniel Y,PHYSICS,2,0,0,8
+115,22,Iolani A,88,Min S,CHEMISTRY,2,0,0,8
+115,22,Iolani A,89,Sola M,EARTH_SPACE,1,1,0,0
+115,22,Iolani A,89,Sola M,MATH,3,1,0,8
+116,1,Allen School,1,Daniel L,MATH,2,0,0,8
+116,1,Allen School,1,Daniel L,PHYSICS,0,1,0,-4
+116,38,Varun Clemens,151,Praneel A,CHEMISTRY,1,0,0,4
+116,38,Varun Clemens,151,Praneel A,MATH,1,1,0,0
+116,38,Varun Clemens,151,Praneel A,PHYSICS,1,0,0,4
+116,38,Varun Clemens,152,Shaun I,BIOLOGY,1,0,0,4
+116,38,Varun Clemens,152,Shaun I,CHEMISTRY,2,0,0,8
+116,38,Varun Clemens,152,Shaun I,EARTH_SPACE,0,1,0,-4
+116,38,Varun Clemens,152,Shaun I,PHYSICS,1,0,0,4
+116,38,Varun Clemens,153,Uddip K,BIOLOGY,2,1,0,4
+116,38,Varun Clemens,153,Uddip K,CHEMISTRY,1,0,0,4
+116,38,Varun Clemens,153,Uddip K,EARTH_SPACE,1,1,0,0
+116,38,Varun Clemens,153,Uddip K,PHYSICS,1,0,0,4
+117,27,Lynbrook A,103,Andrew,BIOLOGY,2,0,0,8
+117,27,Lynbrook A,103,Andrew,CHEMISTRY,1,0,0,4
+117,27,Lynbrook A,106,Sohil,CHEMISTRY,0,1,0,-4
+117,27,Lynbrook A,106,Sohil,EARTH_SPACE,0,1,0,-4
+117,27,Lynbrook A,106,Sohil,MATH,1,0,0,4
+117,27,Lynbrook A,106,Sohil,PHYSICS,2,1,0,4
+117,32,North Hollywood A,125,Connor C,EARTH_SPACE,3,0,0,12
+117,32,North Hollywood A,125,Connor C,MATH,1,0,0,4
+117,32,North Hollywood A,126,Connor Z,CHEMISTRY,2,2,0,0
+117,32,North Hollywood A,126,Connor Z,PHYSICS,1,1,0,0
+118,16,Deap South,59,Abhinav A,BIOLOGY,1,0,0,4
+118,16,Deap South,60,Ryan K,MATH,2,0,0,8
+118,16,Deap South,61,Sanjay O,CHEMISTRY,2,0,0,8
+118,16,Deap South,62,Ziang Z,EARTH_SPACE,1,1,0,0
+118,16,Deap South,62,Ziang Z,PHYSICS,2,0,0,8
+118,29,MSJ,114,Theenash S,BIOLOGY,3,1,0,8
+118,29,MSJ,114,Theenash S,CHEMISTRY,1,2,0,-4
+118,29,MSJ,114,Theenash S,EARTH_SPACE,0,1,0,-4
+118,29,MSJ,114,Theenash S,MATH,0,1,0,-4
+118,29,MSJ,114,Theenash S,PHYSICS,1,1,0,0
+119,22,Iolani A,85,Daniel Y,EARTH_SPACE,1,0,0,4
+119,22,Iolani A,88,Min S,BIOLOGY,1,0,0,4
+119,22,Iolani A,88,Min S,CHEMISTRY,1,0,0,4
+119,22,Iolani A,88,Min S,PHYSICS,0,1,0,-4
+119,22,Iolani A,89,Sola M,EARTH_SPACE,2,0,0,8
+119,22,Iolani A,89,Sola M,MATH,4,0,0,16
+119,32,North Hollywood A,124,Charles H,PHYSICS,2,0,0,8
+119,32,North Hollywood A,125,Connor C,BIOLOGY,1,0,0,4
+119,32,North Hollywood A,125,Connor C,EARTH_SPACE,0,1,0,-4
+119,32,North Hollywood A,126,Connor Z,BIOLOGY,1,0,0,4
+119,32,North Hollywood A,126,Connor Z,CHEMISTRY,3,0,0,12
+119,32,North Hollywood A,126,Connor Z,PHYSICS,1,0,0,4
+120,29,MSJ,112,Anish A,MATH,2,0,0,8
+120,29,MSJ,114,Theenash S,BIOLOGY,2,0,0,8
+120,29,MSJ,114,Theenash S,CHEMISTRY,2,2,0,0
+120,29,MSJ,114,Theenash S,MATH,1,0,0,4
+120,29,MSJ,114,Theenash S,PHYSICS,2,2,0,0
+120,38,Varun Clemens,151,Praneel A,CHEMISTRY,1,0,0,4
+120,38,Varun Clemens,151,Praneel A,EARTH_SPACE,2,1,0,4
+120,38,Varun Clemens,151,Praneel A,PHYSICS,1,0,0,4
+120,38,Varun Clemens,152,Shaun I,CHEMISTRY,1,0,0,4
+120,38,Varun Clemens,152,Shaun I,PHYSICS,0,1,0,-4
+120,38,Varun Clemens,153,Uddip K,BIOLOGY,1,2,0,-4
+121,22,Iolani A,88,Min S,CHEMISTRY,1,0,0,4
+121,22,Iolani A,89,Sola M,EARTH_SPACE,2,0,0,8
+121,22,Iolani A,89,Sola M,MATH,3,0,0,12
+121,29,MSJ,114,Theenash S,BIOLOGY,3,1,0,8
+121,29,MSJ,114,Theenash S,CHEMISTRY,1,1,0,0
+121,29,MSJ,114,Theenash S,MATH,1,0,0,4
+121,29,MSJ,114,Theenash S,PHYSICS,1,1,0,0
+122,16,Deap South,59,Abhinav A,BIOLOGY,1,0,0,4
+122,16,Deap South,60,Ryan K,MATH,2,0,0,8
+122,16,Deap South,61,Sanjay O,CHEMISTRY,2,1,0,4
+122,16,Deap South,62,Ziang Z,EARTH_SPACE,2,0,0,8
+122,27,Lynbrook A,103,Andrew,CHEMISTRY,1,0,0,4
+122,27,Lynbrook A,105,Ryan,MATH,0,1,0,-4
+122,27,Lynbrook A,106,Sohil,PHYSICS,2,0,0,8
