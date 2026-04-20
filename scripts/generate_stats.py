@@ -497,6 +497,317 @@ def write_individual_category_standings(
 
 
 # ---------------------------------------------------------------------------
+# Facts CSVs (per-game detail data)
+# ---------------------------------------------------------------------------
+
+def write_facts(
+    output_dir: Path,
+    exports: list[tuple[Path, bytes, dict[str, Any]]],
+    team_ids: dict[str, int],
+    player_ids: dict[tuple[str, str], int],
+) -> dict[str, str]:
+    """Write facts/ CSVs and return datasets dict for manifest."""
+    from moss.services.export_facts import (
+        reduce_scoresheet_export_to_facts as _facts,
+        reduce_scoresheet_export_to_question_outcomes as _outcomes,
+    )
+
+    # Collect per-game data.
+    teams_set: dict[str, dict[str, str]] = {}  # name -> {school, pool}
+    players_set: dict[tuple[str, str], str] = {}  # (team, name) -> grade
+    rounds_set: dict[str, str] = {}  # packet_name -> packet_name
+    games_rows: list[list[Any]] = []
+    game_teams_rows: list[list[Any]] = []
+    game_players_rows: list[list[Any]] = []
+    game_teams_by_cat_rows: list[list[Any]] = []
+    game_players_by_cat_rows: list[list[Any]] = []
+
+    # Infer rounds from packet checksums.
+    checksum_to_round: dict[str, int] = {}
+    checksum_to_packet_name: dict[str, str] = {}
+    for _path, _raw, obj in exports:
+        pc = obj.get("packet_checksum", {})
+        cs = pc.get("value", "") if isinstance(pc, dict) else ""
+        pkt = obj.get("packet", {})
+        pname = pkt.get("packet", "") if isinstance(pkt, dict) else ""
+        if cs and cs not in checksum_to_packet_name:
+            checksum_to_packet_name[cs] = pname
+
+    # Sort checksums by packet name for stable round assignment.
+    sorted_checksums = sorted(checksum_to_packet_name.items(), key=lambda x: x[1].casefold())
+    for idx, (cs, _) in enumerate(sorted_checksums, 1):
+        checksum_to_round[cs] = idx
+
+    for game_id, (path, raw, obj) in enumerate(exports, 1):
+        facts = _facts(obj)
+        question_outcomes = _outcomes(obj)
+
+        pkt = obj.get("packet", {})
+        packet_name = pkt.get("packet", "") if isinstance(pkt, dict) else ""
+        packet_year = pkt.get("year") if isinstance(pkt, dict) else None
+        pc = obj.get("packet_checksum", {})
+        checksum = pc.get("value", "") if isinstance(pc, dict) else ""
+        exported_at = obj.get("exported_at", "")
+        round_number = checksum_to_round.get(checksum, 0)
+
+        rounds_set[packet_name] = packet_name
+
+        # games.csv row
+        games_rows.append([
+            game_id, round_number, f"Round {round_number}", packet_name,
+            "COMPLETED", exported_at, checksum, packet_name, packet_year or "",
+            facts.pairs_played,
+        ])
+
+        # Parse lineup segments for game_players.
+        game_obj = obj.get("game", {})
+        team_objs = game_obj.get("teams", [])
+
+        # Build player lineup info per team.
+        lineup_map: dict[str, list[tuple[str, int, int | None]]] = {}
+        pid_to_name_map: dict[str, dict[str, str]] = {}
+        for team_obj in team_objs:
+            if not isinstance(team_obj, dict):
+                continue
+            tname = (team_obj.get("name") or "").strip()
+            if not tname:
+                continue
+            pid_to_name: dict[str, str] = {}
+            for p in (team_obj.get("players") or []):
+                if isinstance(p, dict) and p.get("id") is not None and isinstance(p.get("name"), str):
+                    pid_to_name[str(p["id"])] = p["name"].strip()
+            pid_to_name_map[tname] = pid_to_name
+            segs: list[tuple[str, int, int | None]] = []
+            for seg in (team_obj.get("lineup_segments") or []):
+                if not isinstance(seg, dict):
+                    continue
+                start = seg.get("start_tossup")
+                end = seg.get("end_tossup")
+                if not isinstance(start, int) or start < 1:
+                    continue
+                active = seg.get("active_players") or seg.get("active_player_ids") or []
+                is_ids = seg.get("active_player_ids") is not None and seg.get("active_players") is None
+                for pa_item in active:
+                    if is_ids:
+                        pname = pid_to_name.get(str(pa_item), str(pa_item))
+                    elif isinstance(pa_item, str):
+                        pname = pa_item.strip()
+                    elif isinstance(pa_item, dict) and isinstance(pa_item.get("name"), str):
+                        pname = pa_item["name"].strip()
+                    else:
+                        continue
+                    if pname:
+                        segs.append((pname, start, end))
+            lineup_map[tname] = segs
+
+        # game_teams.csv and register teams.
+        for slot, tf in enumerate(facts.team_facts, 1):
+            teams_set.setdefault(tf.team_name, {"school": "", "pool": ""})
+            tid = team_ids.get(tf.team_name, 0)
+            score = tf.points
+            game_teams_rows.append([
+                game_id, slot, tid, tf.team_name, score,
+                score - tf.bonus_points, tf.bonus_points,
+                tf.tossups_4, tf.tossups_neg, tf.tossups_0,
+                tf.bonuses_heard,
+                tf.bonuses_heard - (tf.bonuses_heard - (tf.bonus_points // 10 if tf.bonus_points >= 0 else 0)),
+                # bonuses_correct approximation: bonus_points / 10 (assuming 10 pts per correct)
+                # bonuses_incorrect: bonuses_heard - bonuses_correct
+                # bonuses_unheard: pairs_played - bonuses_heard (roughly)
+            ])
+            # Actually let me recalculate using question outcomes for accuracy.
+
+        # Redo game_teams with question outcomes for precise bonus breakdown.
+        game_teams_rows = game_teams_rows[:-len(facts.team_facts)]  # remove the ones we just added
+
+        # Build per-team aggregates from question outcomes.
+        team_outcome_agg: dict[str, dict[str, int]] = {}
+        for tf in facts.team_facts:
+            team_outcome_agg[tf.team_name] = {
+                "score": tf.points, "tossup_points": tf.points - tf.bonus_points,
+                "bonus_points": tf.bonus_points,
+                "tossups_correct": tf.tossups_4, "tossups_incorrect": tf.tossups_neg,
+                "tossups_no_penalty": tf.tossups_0,
+                "bonuses_correct": 0, "bonuses_incorrect": 0, "bonuses_unheard": 0,
+            }
+
+        for outcome in question_outcomes.outcomes:
+            agg = team_outcome_agg.get(outcome.team_name)
+            if not agg:
+                continue
+            if outcome.question_type == "BONUS":
+                if outcome.bonus_result == "CORRECT":
+                    agg["bonuses_correct"] += 1
+                elif outcome.bonus_result == "INCORRECT":
+                    agg["bonuses_incorrect"] += 1
+                elif outcome.bonus_result == "UNHEARD":
+                    agg["bonuses_unheard"] += 1
+
+        for slot, tf in enumerate(facts.team_facts, 1):
+            tid = team_ids.get(tf.team_name, 0)
+            agg = team_outcome_agg[tf.team_name]
+            game_teams_rows.append([
+                game_id, slot, tid, tf.team_name, agg["score"],
+                agg["tossup_points"], agg["bonus_points"],
+                agg["tossups_correct"], agg["tossups_incorrect"], agg["tossups_no_penalty"],
+                agg["bonuses_correct"], agg["bonuses_incorrect"], agg["bonuses_unheard"],
+            ])
+
+        # game_players.csv
+        for pf in facts.player_facts:
+            players_set.setdefault((pf.team_name, pf.player_name), "")
+            pid = player_ids.get((pf.team_name, pf.player_name), 0)
+            game_players_rows.append([
+                game_id, team_ids.get(pf.team_name, 0), pf.team_name,
+                pid, pf.player_name, pf.tossups_heard,
+                pf.tossups_4, pf.tossups_neg, pf.tossups_0, pf.tossup_points,
+            ])
+
+        # game_teams_by_category.csv
+        cat_team_agg: dict[tuple[str, str], dict[str, int]] = {}
+        for outcome in question_outcomes.outcomes:
+            cat = outcome.category or ""
+            key = (outcome.team_name, cat)
+            if key not in cat_team_agg:
+                cat_team_agg[key] = {
+                    "tossup_points": 0, "bonus_points": 0,
+                    "tossups_correct": 0, "tossups_incorrect": 0, "tossups_no_penalty": 0,
+                    "bonuses_correct": 0, "bonuses_incorrect": 0, "bonuses_unheard": 0,
+                }
+            a = cat_team_agg[key]
+            if outcome.question_type == "TOSSUP":
+                a["tossup_points"] += outcome.points
+                if outcome.tossup_result == "CORRECT":
+                    a["tossups_correct"] += 1
+                elif outcome.tossup_result == "INCORRECT":
+                    a["tossups_incorrect"] += 1
+                else:
+                    a["tossups_no_penalty"] += 1
+            elif outcome.question_type == "BONUS":
+                a["bonus_points"] += outcome.points
+                if outcome.bonus_result == "CORRECT":
+                    a["bonuses_correct"] += 1
+                elif outcome.bonus_result == "INCORRECT":
+                    a["bonuses_incorrect"] += 1
+                elif outcome.bonus_result == "UNHEARD":
+                    a["bonuses_unheard"] += 1
+
+        # Determine slot for each team in this game.
+        team_slot = {}
+        for slot, tf in enumerate(facts.team_facts, 1):
+            team_slot[tf.team_name] = slot
+
+        for (tname, cat), a in sorted(cat_team_agg.items(), key=lambda x: (x[0][0], x[0][1])):
+            game_teams_by_cat_rows.append([
+                game_id, team_slot.get(tname, 0), team_ids.get(tname, 0), tname, cat,
+                a["tossup_points"], a["bonus_points"],
+                a["tossups_correct"], a["tossups_incorrect"], a["tossups_no_penalty"],
+                a["bonuses_correct"], a["bonuses_incorrect"], a["bonuses_unheard"],
+            ])
+
+        # game_players_by_category.csv
+        cat_player_agg: dict[tuple[str, str, str], dict[str, int]] = {}
+        for outcome in question_outcomes.outcomes:
+            if outcome.question_type != "TOSSUP" or not outcome.buzzing_player_name:
+                continue
+            cat = outcome.category or ""
+            key = (outcome.team_name, outcome.buzzing_player_name, cat)
+            if key not in cat_player_agg:
+                cat_player_agg[key] = {
+                    "tossups_correct": 0, "tossups_incorrect": 0,
+                    "tossups_no_penalty": 0, "tossup_points": 0,
+                }
+            a = cat_player_agg[key]
+            a["tossup_points"] += outcome.points
+            if outcome.tossup_result == "CORRECT":
+                a["tossups_correct"] += 1
+            elif outcome.tossup_result == "INCORRECT":
+                a["tossups_incorrect"] += 1
+            else:
+                a["tossups_no_penalty"] += 1
+
+        for (tname, pname, cat), a in sorted(cat_player_agg.items()):
+            game_players_by_cat_rows.append([
+                game_id, team_ids.get(tname, 0), tname,
+                player_ids.get((tname, pname), 0), pname, cat,
+                a["tossups_correct"], a["tossups_incorrect"],
+                a["tossups_no_penalty"], a["tossup_points"],
+            ])
+
+    # Write all facts CSVs.
+    _write_csv(output_dir / "facts" / "teams.csv",
+               ["team_id", "team_name", "school", "pool"],
+               sorted([[team_ids[n], n, d["school"], d["pool"]] for n, d in teams_set.items()],
+                      key=lambda r: r[1]))
+    print(f"  Wrote facts/teams.csv")
+
+    _write_csv(output_dir / "facts" / "players.csv",
+               ["player_id", "player_name", "grade_level", "team_id", "team_name"],
+               sorted([[player_ids[k], k[1], "", team_ids.get(k[0], 0), k[0]]
+                       for k in players_set.keys()],
+                      key=lambda r: (r[4], r[1])))
+    print(f"  Wrote facts/players.csv")
+
+    # rounds.csv
+    round_rows = sorted(
+        [[rn, f"Round {rn}", pname] for cs, pname in checksum_to_packet_name.items()
+         for rn in [checksum_to_round[cs]]],
+        key=lambda r: r[0],
+    )
+    _write_csv(output_dir / "facts" / "rounds.csv",
+               ["round_number", "round_name", "packet_name"], round_rows)
+    print(f"  Wrote facts/rounds.csv")
+
+    _write_csv(output_dir / "facts" / "games.csv",
+               ["game_id", "round_number", "round_name", "round_packet_name",
+                "status", "completed_at", "packet_checksum", "packet_name",
+                "packet_year", "pairs_played"],
+               games_rows)
+    print(f"  Wrote facts/games.csv")
+
+    _write_csv(output_dir / "facts" / "game_teams.csv",
+               ["game_id", "slot", "team_id", "team_name", "score",
+                "tossup_points", "bonus_points",
+                "tossups_correct", "tossups_incorrect", "tossups_no_penalty",
+                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard"],
+               game_teams_rows)
+    print(f"  Wrote facts/game_teams.csv")
+
+    _write_csv(output_dir / "facts" / "game_players.csv",
+               ["game_id", "team_id", "team_name", "player_id", "player_name",
+                "pairs_heard", "tossups_correct", "tossups_incorrect",
+                "tossups_no_penalty", "tossup_points"],
+               game_players_rows)
+    print(f"  Wrote facts/game_players.csv")
+
+    _write_csv(output_dir / "facts" / "game_teams_by_category.csv",
+               ["game_id", "slot", "team_id", "team_name", "category",
+                "tossup_points", "bonus_points",
+                "tossups_correct", "tossups_incorrect", "tossups_no_penalty",
+                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard"],
+               game_teams_by_cat_rows)
+    print(f"  Wrote facts/game_teams_by_category.csv")
+
+    _write_csv(output_dir / "facts" / "game_players_by_category.csv",
+               ["game_id", "team_id", "team_name", "player_id", "player_name",
+                "category", "tossups_correct", "tossups_incorrect",
+                "tossups_no_penalty", "tossup_points"],
+               game_players_by_cat_rows)
+    print(f"  Wrote facts/game_players_by_category.csv")
+
+    return {
+        "teams": "facts/teams.csv",
+        "players": "facts/players.csv",
+        "rounds": "facts/rounds.csv",
+        "games": "facts/games.csv",
+        "game_teams": "facts/game_teams.csv",
+        "game_players": "facts/game_players.csv",
+        "game_teams_by_category": "facts/game_teams_by_category.csv",
+        "game_players_by_category": "facts/game_players_by_category.csv",
+    }
+
+
+# ---------------------------------------------------------------------------
 # Manifest
 # ---------------------------------------------------------------------------
 
@@ -507,6 +818,7 @@ def write_manifest(
     name: str,
     sources: list[dict[str, Any]],
     category_views: list[dict[str, str]],
+    datasets: dict[str, str],
     pretty: bool,
 ) -> None:
     manifest = {
@@ -514,6 +826,7 @@ def write_manifest(
         "generated_at": _iso_utc_now(),
         "tournament": {"slug": slug, "name": name},
         "sources": sources,
+        "datasets": datasets,
         "views": {
             "team_standings": "team_standings.csv",
             "individual_standings": "individual_standings.csv",
@@ -617,6 +930,9 @@ def main() -> None:
             "individual_standings": indiv_fn,
         })
 
+    # Write facts CSVs.
+    datasets = write_facts(output_dir, exports, team_ids, player_ids)
+
     # Build sources list.
     sources = []
     for path, raw, obj in exports:
@@ -633,6 +949,7 @@ def main() -> None:
         name=name,
         sources=sources,
         category_views=category_views,
+        datasets=datasets,
         pretty=args.pretty,
     )
 
