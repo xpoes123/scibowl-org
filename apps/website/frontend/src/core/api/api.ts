@@ -1,7 +1,12 @@
 // API Service for connecting to Django backend
+// Set VITE_USE_STATIC_DATA=true to bypass the Railway API and serve tournament
+// data from the bundled tournaments.json (useful when Railway is down).
+
+import staticTournaments from "../../features/tournaments/data/tournaments.json";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const STATS_BASE_URL = import.meta.env.VITE_STATS_URL || "";
+const USE_STATIC_DATA = import.meta.env.VITE_USE_STATIC_DATA === "true";
 
 const buildStatsUrl = (path: string) => {
   const trimmedStatsBaseUrl = STATS_BASE_URL.replace(/\/+$/, "");
@@ -347,6 +352,7 @@ export const tournamentsAPI = {
    * Returns all PUBLISHED tournaments (filtered server-side).
    */
   getPublicTournaments: async () => {
+    if (USE_STATIC_DATA) return staticTournaments.filter((t) => t.status === "PUBLISHED");
     const response = await fetch(`${API_BASE_URL}/api/tournaments/`);
     if (!response.ok) throw new Error('Failed to load tournaments');
     const data = await response.json();
@@ -357,6 +363,11 @@ export const tournamentsAPI = {
    * Fetch full detail for a single tournament by slug.
    */
   getPublicTournament: async (slug: string) => {
+    if (USE_STATIC_DATA) {
+      const tournament = staticTournaments.find((t) => t.slug === slug);
+      if (!tournament) throw new Error(`Tournament "${slug}" not found`);
+      return tournament;
+    }
     const response = await fetch(
       `${API_BASE_URL}/api/tournaments/${encodeURIComponent(slug)}/`,
     );
