@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState, type ReactNode } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useTournamentStatsCsv } from "../../hooks/useTournamentStatsCsv";
 import type { TournamentStatsManifest } from "../../types";
 
@@ -620,6 +620,28 @@ function classColor(cls: BuzzClass): string {
   }
 }
 
+function formatAnswer(q: QuestionRow): string {
+  if (!q.correct_answer) return "—";
+  const raw = q.correct_answer.replace(/^"|"$/g, "");
+  // MC: correct_answer is "W"/"X"/"Y"/"Z" — translate to letter + option text.
+  if (q.question_style === "MULTIPLE_CHOICE" && q.options.length > 0) {
+    const letterIdx = ["W", "X", "Y", "Z"].indexOf(raw);
+    if (letterIdx >= 0 && letterIdx < q.options.length) {
+      return `${raw}. ${clean(q.options[letterIdx])}`;
+    }
+  }
+  // IDENTIFY_ALL / RANK: correct_answer is JSON of 1-indexed option positions.
+  if ((q.question_style === "IDENTIFY_ALL" || q.question_style === "RANK") && q.options.length > 0) {
+    try {
+      const arr = JSON.parse(raw) as number[];
+      if (Array.isArray(arr)) {
+        return arr.map((n) => `${n}. ${clean(q.options[n - 1] ?? "")}`).join(" · ");
+      }
+    } catch { /* fall through */ }
+  }
+  return raw;
+}
+
 function formatStyle(style: string): string {
   switch (style) {
     case "SHORT_ANSWER": return "SA";
@@ -979,23 +1001,26 @@ function QuestionDetail({
             ].filter(Boolean).join(" ");
             const onClick = hasBuzz ? () => setPosFilter(isFiltered ? null : { kind: "word", index: i }) : undefined;
             return (
-              <span key={i} className={wordClasses}>
-                <button
-                  type="button"
-                  className="sbMossWord"
-                  disabled={!onClick}
-                  onClick={onClick}
-                  aria-label={hasBuzz ? `${here.length} buzz${here.length === 1 ? "" : "es"} at word ${i + 1}` : word}
-                >
-                  {word}
-                </button>
-                {hasBuzz && here.length > 1 && (
-                  <span className="sbMossWordBadge" aria-hidden="true">{here.length}</span>
-                )}
-                {avgWord !== null && i === Math.round(avgWord) && (
-                  <span className="sbMossAvgLine" title={`Average correct buzz: word ${avgWord.toFixed(1)} of ${words.length}`} />
-                )}
-              </span>
+              <Fragment key={i}>
+                {i > 0 && " "}
+                <span className={wordClasses}>
+                  <button
+                    type="button"
+                    className="sbMossWord"
+                    disabled={!onClick}
+                    onClick={onClick}
+                    aria-label={hasBuzz ? `${here.length} buzz${here.length === 1 ? "" : "es"} at word ${i + 1}` : word}
+                  >
+                    {word}
+                  </button>
+                  {hasBuzz && here.length > 1 && (
+                    <span className="sbMossWordBadge" aria-hidden="true">{here.length}</span>
+                  )}
+                  {avgWord !== null && i === Math.round(avgWord) && (
+                    <span className="sbMossAvgLine" title={`Average correct buzz: word ${avgWord.toFixed(1)} of ${words.length}`} />
+                  )}
+                </span>
+              </Fragment>
             );
           })}
           {/* End-of-read button, à la MoSS. */}
@@ -1068,18 +1093,17 @@ function QuestionDetail({
                         wOutcome === "wrong" ? "sbMossWordWrapWrong" : "",
                       ].filter(Boolean).join(" ");
                       return (
-                        <span key={wi} className={cls}>
-                          <span className="sbMossWord">{tok}</span>
-                          {hasBuzz && hereWord.length > 1 && (
-                            <span className="sbMossWordBadge" aria-hidden="true">{hereWord.length}</span>
-                          )}
-                        </span>
+                        <Fragment key={wi}>
+                          {wi > 0 && " "}
+                          <span className={cls}>
+                            <span className="sbMossWord">{tok}</span>
+                            {hasBuzz && hereWord.length > 1 && (
+                              <span className="sbMossWordBadge" aria-hidden="true">{hereWord.length}</span>
+                            )}
+                          </span>
+                        </Fragment>
                       );
-                    }).reduce<ReactNode[]>((acc, el, idx) => {
-                      if (idx > 0) acc.push(" ");
-                      acc.push(el);
-                      return acc;
-                    }, [])}
+                    })}
                   </span>
                   {optionBuzzList.length > 0 && <span className="sbMossOptionCount" aria-hidden="true">{optionBuzzList.length}</span>}
                 </li>
@@ -1089,7 +1113,8 @@ function QuestionDetail({
         )}
 
         <div className="sbMossQaAnswer">
-          <strong>Answer:</strong> {q.correct_answer ? q.correct_answer.replace(/^"|"$/g, "") : "—"}
+          <span className="sbMossQaAnswerLabel">ANSWER</span>
+          <span className="sbMossQaAnswerText">{formatAnswer(q)}</span>
         </div>
       </div>
 
@@ -1180,8 +1205,8 @@ function QuestionDetail({
       <div className="sbBuzzAttemptsTable">
         {posFilter && (
           <div className="sbBuzzFilterChip">
-            Filtered to <strong>{filterLabel()}</strong>
-            <button type="button" className="sbBuzzFilterClear" onClick={() => setPosFilter(null)} aria-label="Clear filter">×</button>
+            Highlighting <strong>{filterLabel()}</strong>
+            <button type="button" className="sbBuzzFilterClear" onClick={() => setPosFilter(null)} aria-label="Clear highlight">×</button>
           </div>
         )}
         <table className="sbDataTable">
@@ -1196,7 +1221,7 @@ function QuestionDetail({
             </tr>
           </thead>
           <tbody>
-            {buzzes.slice().filter(matchesFilter).sort((a, b) => a.attempt_index - b.attempt_index).map((b, i) => {
+            {buzzes.slice().sort((a, b) => a.attempt_index - b.attempt_index).map((b, i) => {
               const cls = classifyBuzz(b, q.question_type);
               const pinfo = b.player_id ? playerMap.get(b.player_id) : null;
               const pos = b.location_kind === "end"
@@ -1204,8 +1229,9 @@ function QuestionDetail({
                 : b.location_kind === "option"
                   ? `option ${b.option_index !== null ? ["W", "X", "Y", "Z"][b.option_index] ?? "?" : "?"}${b.word_index !== null && b.word_index >= 0 ? `, word ${b.word_index}` : ""}`
                   : `word ${b.word_index ?? 0}/${words.length}`;
+              const highlight = posFilter !== null && matchesFilter(b);
               return (
-                <tr key={i}>
+                <tr key={i} className={highlight ? "sbBuzzRowHighlight" : ""}>
                   <td>{pinfo?.name ?? (b.player_id ? "—" : "(bonus)")}</td>
                   <td>{teamMap.get(b.team_id) ?? "—"}</td>
                   <td className="sbMuted">{opponentOf(b)}</td>
@@ -1215,8 +1241,8 @@ function QuestionDetail({
                 </tr>
               );
             })}
-            {buzzes.filter(matchesFilter).length === 0 && (
-              <tr><td colSpan={6} className="sbMuted">No buzzes match this filter.</td></tr>
+            {buzzes.length === 0 && (
+              <tr><td colSpan={6} className="sbMuted">No buzzes on this question.</td></tr>
             )}
           </tbody>
         </table>

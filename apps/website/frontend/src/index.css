@@ -2523,14 +2523,35 @@ details[open] > .sbDetailsSummary::after {
 }
 
 .sbMossQaAnswer {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef0f4;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: KaTeX_Main, "Times New Roman", Times, serif;
+  font-size: 0.95rem;
+}
+
+.sbMossQaAnswerLabel {
   font-family: ui-sans-serif, system-ui;
-  font-size: 13px;
-  color: #064e3b;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.sbMossQaAnswerText {
+  color: #111;
+}
+
+/* Highlight a row in the attempts table when its buzz matches the
+   currently-clicked buzzpoint. */
+.sbBuzzRowHighlight td {
+  background: #fef3c7;
+}
+.sbBuzzRowHighlight td:first-child {
+  box-shadow: inset 3px 0 0 0 #d97706;
 }
 
 /* Buzz chips below question */
