@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo, useState, type ReactNode } from "react";
 import { useTournamentStatsCsv } from "../../hooks/useTournamentStatsCsv";
 import type { TournamentStatsManifest } from "../../types";
 
@@ -751,7 +751,7 @@ function QuestionList({
     }
   };
 
-  const { sorted, sort, headerProps } = useSortable<Row, Col>(rows, null, getValue);
+  const { sorted, sort, headerProps } = useSortable<Row, Col>(rows, { key: "qid", dir: "asc" }, getValue);
 
   if (!questions.length) return <p className="sbMuted">No questions match those filters.</p>;
   return (
@@ -891,6 +891,22 @@ function QuestionDetail({
     return m;
   }, [buzzes]);
 
+  // Option-text tokenized per option, plus per-(option, word) buzz index.
+  const optionTokens = useMemo(() => q.options.map((opt) => clean(opt).split(" ").filter(Boolean)), [q.options]);
+  const buzzesAtOptionWord = useMemo(() => {
+    const m = new Map<string, BuzzRow[]>(); // key = `${option_index}::${word_index}`
+    for (const b of buzzes) {
+      if (b.location_kind !== "option") continue;
+      if (b.option_index === null) continue;
+      if (b.word_index === null || b.word_index < 0) continue;
+      const k = `${b.option_index}::${b.word_index}`;
+      const arr = m.get(k) ?? [];
+      arr.push(b);
+      m.set(k, arr);
+    }
+    return m;
+  }, [buzzes]);
+
   // A single chip rendering one buzz (player + team, color-coded).
   const renderBuzzChip = (b: BuzzRow, key: string, onClick?: () => void, active?: boolean) => {
     const cls = classifyBuzz(b, q.question_type);
@@ -1019,27 +1035,53 @@ function QuestionDetail({
 
         {q.options.length > 0 && (
           <ol className="sbMossOptions">
-            {q.options.map((opt, i) => {
-              const here = (buzzesAtOption.get(i) ?? []).slice().sort((a, b) => a.attempt_index - b.attempt_index);
+            {q.options.map((_opt, i) => {
+              const optionBuzzList = buzzesAtOption.get(i) ?? [];
               const isFiltered = posFilter?.kind === "option" && posFilter.optionIndex === i;
-              const outcome = wordOutcome(here);
+              // Whole-option tint reflects EARLIEST relevant buzz outcome.
+              const outcome = wordOutcome(optionBuzzList);
               const liCls = [
                 "sbMossOption",
-                here.length ? "sbMossOptionClickable" : "",
+                optionBuzzList.length ? "sbMossOptionClickable" : "",
                 isFiltered ? "sbMossOptionSelected" : "",
                 outcome === "correct" ? "sbMossOptionCorrect" : "",
                 outcome === "neg" ? "sbMossOptionNeg" : "",
                 outcome === "wrong" ? "sbMossOptionWrong" : "",
               ].filter(Boolean).join(" ");
+              const tokens = optionTokens[i] ?? [];
               return (
                 <li
                   key={i}
                   className={liCls}
-                  onClick={here.length ? () => setPosFilter(isFiltered ? null : { kind: "option", optionIndex: i }) : undefined}
+                  onClick={optionBuzzList.length ? () => setPosFilter(isFiltered ? null : { kind: "option", optionIndex: i }) : undefined}
                 >
                   <span className="sbMossOptionLabel">{["W", "X", "Y", "Z"][i] ?? `O${i}`}.</span>
-                  <span className="sbMossOptionText">{clean(opt)}</span>
-                  {here.length > 0 && <span className="sbMossOptionCount" aria-hidden="true">{here.length}</span>}
+                  <span className="sbMossOptionText">
+                    {tokens.map((tok, wi) => {
+                      const hereWord = buzzesAtOptionWord.get(`${i}::${wi}`) ?? [];
+                      const wOutcome = wordOutcome(hereWord);
+                      const hasBuzz = hereWord.length > 0;
+                      const cls = [
+                        "sbMossWordWrap",
+                        wOutcome === "correct" ? "sbMossWordWrapCorrect" : "",
+                        wOutcome === "neg" ? "sbMossWordWrapNeg" : "",
+                        wOutcome === "wrong" ? "sbMossWordWrapWrong" : "",
+                      ].filter(Boolean).join(" ");
+                      return (
+                        <span key={wi} className={cls}>
+                          <span className="sbMossWord">{tok}</span>
+                          {hasBuzz && hereWord.length > 1 && (
+                            <span className="sbMossWordBadge" aria-hidden="true">{hereWord.length}</span>
+                          )}
+                        </span>
+                      );
+                    }).reduce<ReactNode[]>((acc, el, idx) => {
+                      if (idx > 0) acc.push(" ");
+                      acc.push(el);
+                      return acc;
+                    }, [])}
+                  </span>
+                  {optionBuzzList.length > 0 && <span className="sbMossOptionCount" aria-hidden="true">{optionBuzzList.length}</span>}
                 </li>
               );
             })}
