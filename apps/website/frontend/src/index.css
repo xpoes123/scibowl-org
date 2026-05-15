@@ -2304,3 +2304,285 @@ details[open] > .sbDetailsSummary::after {
 .sbH2HRoundSubtable .sbDataTable {
   background: white;
 }
+
+/* --- MoSS-styled per-question detail --- */
+
+.sbMossQa {
+  padding: 16px 18px;
+  border: 1px solid #e6e7ee;
+  border-radius: 14px;
+  background: white;
+  font-family: KaTeX_Main, "Times New Roman", Times, serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #111;
+}
+
+.sbMossQaBonus {
+  background: #fafafd;
+}
+
+.sbMossQaHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica;
+  font-size: 13px;
+}
+
+.sbMossQaMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  color: #444;
+}
+
+.sbMossQaRound {
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 12px;
+}
+
+.sbMossQaTitle {
+  grid-column: 2;
+  justify-self: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #111;
+}
+
+.sbMossQaSummary {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #64748b;
+}
+
+.sbMossQaNegs { color: #b91c1c; }
+
+.sbMossQaText {
+  margin-bottom: 12px;
+  /* MoSS-like serif body */
+}
+
+.sbMossWordWrap {
+  position: relative;
+  display: inline-block;
+  margin-right: 1px;
+}
+
+.sbMossWordWrap::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px; top: -1px; bottom: -1px;
+  border-radius: 4px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sbMossWordWrapCorrect::before {
+  background: #eefbf0;
+  box-shadow: inset 0 0 0 1px #a7e3b5;
+}
+
+.sbMossWordWrapNeg::before {
+  background: #fff1f1;
+  box-shadow: inset 0 0 0 1px #f3b4b4;
+}
+
+.sbMossWordWrapWrong::before {
+  background: #f3f4f6;
+  box-shadow: inset 0 0 0 1px #d1d5db;
+}
+
+.sbMossWordWrapSelected::before {
+  box-shadow: inset 0 0 0 2px #0f172a !important;
+}
+
+.sbMossWordWrapClickable:not(.sbMossWordWrapCorrect):not(.sbMossWordWrapNeg):not(.sbMossWordWrapWrong):not(.sbMossWordWrapSelected):hover::before {
+  background: rgba(15,23,42,0.04);
+}
+
+.sbMossWord {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  line-height: inherit;
+  cursor: default;
+  position: relative;
+  z-index: 1;
+}
+
+.sbMossWordWrapClickable .sbMossWord {
+  cursor: pointer;
+}
+
+.sbMossWord:disabled {
+  cursor: default;
+}
+
+.sbMossWordEnd {
+  font-family: ui-sans-serif, system-ui;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  border: 1px solid #e6e7ee;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-left: 4px;
+  background: white;
+}
+
+.sbMossEndWrap { margin-left: 4px; }
+
+.sbMossWordBadge {
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  margin-left: 2px;
+  font-family: ui-sans-serif, system-ui;
+  font-size: 9px;
+  font-weight: 700;
+  background: #0f172a;
+  color: white;
+  border-radius: 8px;
+  padding: 1px 5px;
+  vertical-align: super;
+  line-height: 1;
+}
+
+.sbMossAvgLine {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 50%;
+  width: 2px;
+  background: #475569;
+  opacity: 0.55;
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.sbMossOptions {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sbMossOption {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: #f8fafc;
+  color: #111;
+}
+
+.sbMossOptionClickable { cursor: pointer; }
+
+.sbMossOptionCorrect { background: #eefbf0; border-color: #a7e3b5; }
+.sbMossOptionNeg { background: #fff1f1; border-color: #f3b4b4; }
+.sbMossOptionWrong { background: #f3f4f6; border-color: #d1d5db; }
+.sbMossOptionSelected { box-shadow: 0 0 0 2px #0f172a; }
+
+.sbMossOptionLabel {
+  font-weight: 700;
+  color: #64748b;
+}
+
+.sbMossOptionText {
+  color: #111;
+}
+
+.sbMossOptionCount {
+  font-family: ui-sans-serif, system-ui;
+  font-size: 11px;
+  font-weight: 700;
+  background: #0f172a;
+  color: white;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.sbMossQaAnswer {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  font-family: ui-sans-serif, system-ui;
+  font-size: 13px;
+  color: #064e3b;
+}
+
+/* Buzz chips below question */
+.sbMossBuzzChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sbMossChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: ui-sans-serif, system-ui;
+  font-size: 11px;
+  cursor: pointer;
+  background: white;
+}
+
+.sbMossChip:disabled { cursor: default; opacity: 0.7; }
+
+.sbMossChipCorrect { background: #eefbf0; border-color: #a7e3b5; color: #065f46; }
+.sbMossChipNeg { background: #fff1f1; border-color: #f3b4b4; color: #991b1b; }
+.sbMossChipWrong { background: #f3f4f6; border-color: #d1d5db; color: #374151; }
+
+.sbMossChipActive {
+  box-shadow: 0 0 0 2px #0f172a;
+}
+
+.sbMossChip:hover:not(:disabled) {
+  filter: brightness(0.98);
+}
+
+.sbMossChipPlayer {
+  font-weight: 600;
+}
+
+.sbMossChipTeam {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.sbMossChipPos {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Update legend swatches to use MoSS palette */
+.sbBuzzLegendCorrect { background: #eefbf0; border: 1px solid #a7e3b5; }
+.sbBuzzLegendNeg { background: #fff1f1; border: 1px solid #f3b4b4; }
+.sbBuzzLegendWrong { background: #f3f4f6; border: 1px solid #d1d5db; }

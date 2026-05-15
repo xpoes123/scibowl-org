@@ -620,6 +620,16 @@ function classColor(cls: BuzzClass): string {
   }
 }
 
+function formatStyle(style: string): string {
+  switch (style) {
+    case "SHORT_ANSWER": return "SA";
+    case "MULTIPLE_CHOICE": return "MC";
+    case "IDENTIFY_ALL": return "Identify All";
+    case "RANK": return "Rank";
+    default: return style || "—";
+  }
+}
+
 function lastName(fullName: string): string {
   const trimmed = (fullName || "").trim();
   if (!trimmed) return "";
@@ -710,7 +720,7 @@ function QuestionList({
     conv: number | null;
     preview: string;
   };
-  type Col = "round" | "qid" | "type" | "category" | "buzzes" | "celerity" | "conv" | "negs";
+  type Col = "round" | "qid" | "type" | "style" | "category" | "buzzes" | "celerity" | "conv" | "negs";
 
   const rows: Row[] = questions.map((q) => {
     const key = questionKey(q.packet_checksum, q.question_id);
@@ -732,6 +742,7 @@ function QuestionList({
       case "round": return r.round;
       case "qid": return r.q.question_id;
       case "type": return r.q.question_type;
+      case "style": return r.q.question_style;
       case "category": return r.q.category;
       case "buzzes": return r.buzzes;
       case "celerity": return r.celerity;
@@ -751,6 +762,7 @@ function QuestionList({
             <th {...headerProps("round")}>Round <SortIndicator active={sort?.key === "round" ? sort : null} /></th>
             <th {...headerProps("qid", "sbNum")}>Q# <SortIndicator active={sort?.key === "qid" ? sort : null} /></th>
             <th {...headerProps("type")}>Type <SortIndicator active={sort?.key === "type" ? sort : null} /></th>
+            <th {...headerProps("style")}>Style <SortIndicator active={sort?.key === "style" ? sort : null} /></th>
             <th {...headerProps("category")}>Category <SortIndicator active={sort?.key === "category" ? sort : null} /></th>
             <th>Question</th>
             <th {...headerProps("buzzes", "sbNum")}>Buzzes <SortIndicator active={sort?.key === "buzzes" ? sort : null} /></th>
@@ -765,6 +777,7 @@ function QuestionList({
               <td>{r.round}</td>
               <td className="sbNum">{r.q.question_id}</td>
               <td><span className={r.q.question_type === "TOSSUP" ? "sbPill sbPillTu" : "sbPill sbPillBonus"}>{r.q.question_type === "TOSSUP" ? "TU" : "B"}</span></td>
+              <td><span className="sbPill sbPillNeutral">{formatStyle(r.q.question_style)}</span></td>
               <td><CategoryDot category={r.q.category} /></td>
               <td className="sbBuzzTextCell">{r.preview}{r.preview.length >= 90 ? "…" : ""}</td>
               <td className="sbNum">{r.buzzes}</td>
@@ -865,91 +878,216 @@ function QuestionDetail({
     .filter((c): c is number => c !== null);
   const meanCel = celValues.length ? celValues.reduce((s, c) => s + c, 0) / celValues.length : null;
 
+  // Buzzes that hit specific options (MC) — separate from word-position hits.
+  const buzzesAtOption = useMemo(() => {
+    const m = new Map<number, BuzzRow[]>();
+    for (const b of buzzes) {
+      if (b.location_kind === "option" && b.option_index !== null) {
+        const arr = m.get(b.option_index) ?? [];
+        arr.push(b);
+        m.set(b.option_index, arr);
+      }
+    }
+    return m;
+  }, [buzzes]);
+
+  // A single chip rendering one buzz (player + team, color-coded).
+  const renderBuzzChip = (b: BuzzRow, key: string, onClick?: () => void, active?: boolean) => {
+    const cls = classifyBuzz(b, q.question_type);
+    const pinfo = b.player_id ? playerMap.get(b.player_id) : null;
+    const playerLabel = pinfo ? lastName(pinfo.name) : (b.player_id ? "—" : "(team)");
+    const teamLabel = teamMap.get(b.team_id) ?? "—";
+    const at = b.location_kind === "end" ? "after read"
+      : b.location_kind === "option" ? `option ${b.option_index !== null ? ["W","X","Y","Z"][b.option_index] ?? "?" : "?"}`
+      : `word ${(b.word_index ?? 0) + 1}/${words.length}`;
+    const colorCls = cls === "correct" ? "sbMossChipCorrect" : cls === "neg" ? "sbMossChipNeg" : "sbMossChipWrong";
+    return (
+      <button
+        key={key}
+        type="button"
+        className={`sbMossChip ${colorCls} ${active ? "sbMossChipActive" : ""}`}
+        title={`${pinfo?.name ?? "—"} (${teamLabel}) — ${cls === "no_penalty" ? "wrong" : cls} @ ${at}`}
+        onClick={onClick}
+        disabled={!onClick}
+      >
+        <span className="sbMossChipPlayer">{playerLabel}</span>
+        <span className="sbMossChipTeam">{teamLabel}</span>
+        <span className="sbMossChipPos">@{at}</span>
+      </button>
+    );
+  };
+
+  // Outcome aggregate at a word position, for the inline ::before highlight class.
+  const wordOutcome = (here: BuzzRow[]): "correct" | "neg" | "wrong" | "" => {
+    if (here.length === 0) return "";
+    const cls = groupClass(here);
+    if (cls === "correct") return "correct";
+    if (cls === "neg") return "neg";
+    return "wrong";
+  };
+
   return (
     <div className="sbBuzzpointsDetail">
       <button type="button" className="sbInlineLink sbBuzzBackBtn" onClick={onBack}>{backLabel}</button>
 
-      <div className="sbBuzzDetailHead">
-        <div className="sbBuzzDetailMeta">
-          <span className="sbBuzzDetailRound">{roundLabel}</span>
-          <span>Q{q.question_id}</span>
-          <span className={q.question_type === "TOSSUP" ? "sbPill sbPillTu" : "sbPill sbPillBonus"}>{q.question_type === "TOSSUP" ? "TOSSUP" : "BONUS"}</span>
-          <CategoryDot category={q.category} />
-          {q.question_style && q.question_style !== "SHORT_ANSWER" && <span className="sbPill sbPillNeutral">{q.question_style.replace(/_/g, " ")}</span>}
+      <div className={`sbMossQa ${q.question_type === "BONUS" ? "sbMossQaBonus" : ""}`}>
+        <div className="sbMossQaHeader">
+          <div className="sbMossQaMeta">
+            <span className="sbMossQaRound">{roundLabel}</span>
+            <span>Q{q.question_id}</span>
+            <CategoryDot category={q.category} />
+            {q.question_style && <span className="sbPill sbPillNeutral">{formatStyle(q.question_style)}</span>}
+          </div>
+          <div className="sbMossQaTitle">{q.question_type === "TOSSUP" ? "TOSSUP" : "BONUS"}</div>
+          <div className="sbMossQaSummary">
+            <span>{buzzes.length} buzz{buzzes.length === 1 ? "" : "es"}</span>
+            <span>{corrects}/{buzzes.length} correct</span>
+            {q.question_type === "TOSSUP" && negs > 0 && <span className="sbMossQaNegs">{negs} neg{negs === 1 ? "" : "s"}</span>}
+            {meanCel !== null && <span title="Mean celerity on correct buzzes">celerity {fmtPct(meanCel, 1)}</span>}
+          </div>
         </div>
-        <div className="sbBuzzDetailSummary">
-          <span>{buzzes.length} buzzes</span>
-          {q.question_type === "TOSSUP" && <span>{negs} negs</span>}
-          <span>{corrects}/{buzzes.length} correct</span>
-          {avgWord !== null && <span>avg @ word {avgWord.toFixed(1)} / {words.length}</span>}
-          {meanCel !== null && <span title="Mean celerity on correct buzzes">celerity {fmtPct(meanCel, 1)}</span>}
-        </div>
-      </div>
 
-      <div className="sbBuzzWordView">
-        {words.map((word, i) => {
-          const here = (buzzesAtWord.get(i) ?? []).slice().sort((a, b) => a.attempt_index - b.attempt_index);
-          const isFiltered = posFilter?.kind === "word" && posFilter.index === i;
-          return (
-            <span key={i} className="sbBuzzWord">
-              {here.length > 0 && (
-                <span className="sbBuzzMarkers">
-                  {here.length === 1 ? (() => {
-                    const b = here[0];
-                    const cls = classifyBuzz(b, q.question_type);
-                    const pinfo = b.player_id ? playerMap.get(b.player_id) : null;
-                    const playerLabel = pinfo ? lastName(pinfo.name) : "—";
-                    const teamLabel = teamMap.get(b.team_id) ?? "—";
-                    return (
-                      <button
-                        type="button"
-                        className={`sbBuzzLabel ${isFiltered ? "sbBuzzLabelActive" : ""}`}
-                        title={`${pinfo?.name ?? "—"} (${teamLabel}) — ${cls.replace("_", " ")}`}
-                        style={{ background: classColor(cls), borderColor: classColor(cls) }}
-                        onClick={() => setPosFilter(isFiltered ? null : { kind: "word", index: i })}
-                      >
-                        <span className="sbBuzzLabelPlayer">{playerLabel}</span>
-                        <span className="sbBuzzLabelTeam">{teamLabel}</span>
-                      </button>
-                    );
-                  })() : (
-                    <button
-                      type="button"
-                      className={`sbBuzzBlob ${isFiltered ? "sbBuzzBlobActive" : ""}`}
-                      title={`${here.length} buzzes at "${word}" — click to filter`}
-                      style={{ background: classColor(groupClass(here)), borderColor: classColor(groupClass(here)) }}
-                      onClick={() => setPosFilter(isFiltered ? null : { kind: "word", index: i })}
-                    >
-                      {here.length}
-                    </button>
-                  )}
-                </span>
-              )}
-              <span className={here.length ? "sbBuzzWordText sbBuzzWordHit" : "sbBuzzWordText"}>
-                {word}
+        <div className="sbMossQaText">
+          {words.map((word, i) => {
+            const here = (buzzesAtWord.get(i) ?? []).slice().sort((a, b) => a.attempt_index - b.attempt_index);
+            const isFiltered = posFilter?.kind === "word" && posFilter.index === i;
+            const outcome = wordOutcome(here);
+            const hasBuzz = here.length > 0;
+            const wordClasses = [
+              "sbMossWordWrap",
+              hasBuzz ? "sbMossWordWrapClickable" : "",
+              isFiltered ? "sbMossWordWrapSelected" : "",
+              outcome === "correct" ? "sbMossWordWrapCorrect" : "",
+              outcome === "neg" ? "sbMossWordWrapNeg" : "",
+              outcome === "wrong" ? "sbMossWordWrapWrong" : "",
+            ].filter(Boolean).join(" ");
+            const onClick = hasBuzz ? () => setPosFilter(isFiltered ? null : { kind: "word", index: i }) : undefined;
+            return (
+              <span key={i} className={wordClasses}>
+                <button
+                  type="button"
+                  className="sbMossWord"
+                  disabled={!onClick}
+                  onClick={onClick}
+                  aria-label={hasBuzz ? `${here.length} buzz${here.length === 1 ? "" : "es"} at word ${i + 1}` : word}
+                >
+                  {word}
+                </button>
+                {hasBuzz && here.length > 1 && (
+                  <span className="sbMossWordBadge" aria-hidden="true">{here.length}</span>
+                )}
+                {avgWord !== null && i === Math.round(avgWord) && (
+                  <span className="sbMossAvgLine" title={`Average correct buzz: word ${avgWord.toFixed(1)} of ${words.length}`} />
+                )}
               </span>
-              {avgWord !== null && i === Math.round(avgWord) && (
-                <span className="sbBuzzAvgLine" title={`Average buzz position: word ${avgWord.toFixed(1)} of ${words.length}`} />
-              )}
-            </span>
-          );
-        })}
+            );
+          })}
+          {/* End-of-read button, à la MoSS. */}
+          <span className="sbMossWordWrap sbMossEndWrap">
+            {(() => {
+              const endHere = buzzes.filter((b) => b.location_kind === "end");
+              const isFiltered = posFilter?.kind === "end";
+              const outcome = wordOutcome(endHere);
+              const cls = [
+                "sbMossWord",
+                "sbMossWordEnd",
+              ].join(" ");
+              const wrapCls = [
+                "sbMossWordWrap",
+                endHere.length ? "sbMossWordWrapClickable" : "",
+                isFiltered ? "sbMossWordWrapSelected" : "",
+                outcome === "correct" ? "sbMossWordWrapCorrect" : "",
+                outcome === "neg" ? "sbMossWordWrapNeg" : "",
+                outcome === "wrong" ? "sbMossWordWrapWrong" : "",
+              ].filter(Boolean).join(" ");
+              return (
+                <span className={wrapCls}>
+                  <button
+                    type="button"
+                    className={cls}
+                    disabled={endHere.length === 0}
+                    onClick={() => setPosFilter(isFiltered ? null : { kind: "end" })}
+                  >
+                    END
+                  </button>
+                  {endHere.length > 1 && <span className="sbMossWordBadge" aria-hidden="true">{endHere.length}</span>}
+                </span>
+              );
+            })()}
+          </span>
+        </div>
+
+        {q.options.length > 0 && (
+          <ol className="sbMossOptions">
+            {q.options.map((opt, i) => {
+              const here = (buzzesAtOption.get(i) ?? []).slice().sort((a, b) => a.attempt_index - b.attempt_index);
+              const isFiltered = posFilter?.kind === "option" && posFilter.optionIndex === i;
+              const outcome = wordOutcome(here);
+              const liCls = [
+                "sbMossOption",
+                here.length ? "sbMossOptionClickable" : "",
+                isFiltered ? "sbMossOptionSelected" : "",
+                outcome === "correct" ? "sbMossOptionCorrect" : "",
+                outcome === "neg" ? "sbMossOptionNeg" : "",
+                outcome === "wrong" ? "sbMossOptionWrong" : "",
+              ].filter(Boolean).join(" ");
+              return (
+                <li
+                  key={i}
+                  className={liCls}
+                  onClick={here.length ? () => setPosFilter(isFiltered ? null : { kind: "option", optionIndex: i }) : undefined}
+                >
+                  <span className="sbMossOptionLabel">{["W", "X", "Y", "Z"][i] ?? `O${i}`}.</span>
+                  <span className="sbMossOptionText">{clean(opt)}</span>
+                  {here.length > 0 && <span className="sbMossOptionCount" aria-hidden="true">{here.length}</span>}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        <div className="sbMossQaAnswer">
+          <strong>Answer:</strong> {q.correct_answer ? q.correct_answer.replace(/^"|"$/g, "") : "—"}
+        </div>
       </div>
 
       <div className="sbBuzzLegend">
-        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch" style={{ background: classColor("correct") }} /> correct</span>
-        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch" style={{ background: classColor("neg") }} /> neg (-4)</span>
-        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch" style={{ background: classColor("no_penalty") }} /> wrong</span>
+        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch sbBuzzLegendCorrect" /> correct</span>
+        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch sbBuzzLegendNeg" /> neg (-4)</span>
+        <span className="sbBuzzLegendItem"><span className="sbBuzzLegendSwatch sbBuzzLegendWrong" /> wrong</span>
         {avgWord !== null && (
           <span className="sbBuzzLegendItem">
             <span className="sbBuzzLegendBar" />
-            average buzz @ word {avgWord.toFixed(1)} / {words.length}
+            avg correct buzz @ word {avgWord.toFixed(1)} / {words.length}
           </span>
         )}
-        <span className="sbBuzzLegendItem sbBuzzLegendItemSoft">tap any badge to filter the table below</span>
+        <span className="sbBuzzLegendItem sbBuzzLegendItemSoft">click any highlighted word or chip to filter the buzzes below</span>
       </div>
 
-      {q.options.length > 0 && (
+      {/* Chip row: every buzz on this question, color-coded, clickable. */}
+      <div className="sbMossBuzzChips">
+        {buzzes.slice().sort((a, b) => a.attempt_index - b.attempt_index).map((b, idx) => {
+          let isFiltered = false;
+          let setFilter: (() => void) | undefined;
+          if (b.location_kind === "question" && b.word_index !== null) {
+            const wi = b.word_index;
+            isFiltered = posFilter?.kind === "word" && posFilter.index === wi;
+            setFilter = () => setPosFilter(isFiltered ? null : { kind: "word", index: wi });
+          } else if (b.location_kind === "option" && b.option_index !== null) {
+            const oi = b.option_index;
+            isFiltered = posFilter?.kind === "option" && posFilter.optionIndex === oi;
+            setFilter = () => setPosFilter(isFiltered ? null : { kind: "option", optionIndex: oi });
+          } else {
+            isFiltered = posFilter?.kind === "end";
+            setFilter = () => setPosFilter(isFiltered ? null : { kind: "end" });
+          }
+          return renderBuzzChip(b, `chip-${idx}`, setFilter, isFiltered);
+        })}
+        {buzzes.length === 0 && <span className="sbMuted">No buzzes recorded.</span>}
+      </div>
+
+      {/* Old (unused) MC option dots — kept for compatibility, hidden. */}
+      {false && q.options.length > 0 && (
         <div className="sbBuzzOptions">
           {q.options.map((opt, i) => {
             const here = optionBuzzes.filter((b) => b.option_index === i);
@@ -996,10 +1134,6 @@ function QuestionDetail({
           })}
         </div>
       )}
-
-      <div className="sbBuzzAnswer">
-        <strong>Answer:</strong> {q.correct_answer ? q.correct_answer.replace(/^"|"$/g, "") : "—"}
-      </div>
 
       <div className="sbBuzzAttemptsTable">
         {posFilter && (
