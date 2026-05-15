@@ -586,7 +586,7 @@
         "slug": "ssb-2026-combined",
         "name": "SSB 2026 — All Tournaments (Combined Buzzpoints)",
         "status": "PUBLISHED",
-        "mode": "IN_PERSON",
+        "mode": "ONLINE",
         "timezone": "America/Los_Angeles",
         "dates": {
             "start": "2026-02-22",
@@ -594,7 +594,7 @@
         },
         "divisions": [
             "HS",
-            "COLLEGE"
+            "UG"
         ],
         "notes": {
             "logistics": "Aggregated buzzpoints across JHU Invitational, Stanford Science Bowl, and Stanford College+ Science Bowl. Questions deduplicated via fuzzy matching on packet variants of the SSB 2026 question set."
