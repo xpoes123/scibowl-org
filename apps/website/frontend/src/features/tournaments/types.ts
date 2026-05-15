@@ -157,6 +157,9 @@ export type TournamentStatsManifest = {
     game_players: string;
     game_teams_by_category: string;
     game_players_by_category: string;
+    buzzes: string;
+    questions_meta: string;
+    games_buzz: string;
   }>;
   views: {
     team_standings: string;
@@ -167,6 +170,14 @@ export type TournamentStatsManifest = {
       team_standings: string;
       individual_standings: string;
     }>;
+    buzzpoints?: {
+      index: string;
+      buzzes: string;
+      questions: string;
+      games: string;
+      teams: string;
+      players: string;
+    };
   };
 };
 

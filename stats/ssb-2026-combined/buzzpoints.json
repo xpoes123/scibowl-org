@@ -1,0 +1,324 @@
+{
+  "combined_from": [
+    "johns-hopkins-invitational",
+    "stanford-college-plus-science-bowl",
+    "stanford-science-bowl"
+  ],
+  "generated_at": "2026-05-15T07:27:52+00:00",
+  "rounds": [
+    {
+      "game_count": 8,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 1",
+      "packet_name": "DOUBLE ELIMINATION 1",
+      "round_number": 1,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 7,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 2",
+      "packet_name": "DOUBLE ELIMINATION 2",
+      "round_number": 2,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 4,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 3",
+      "packet_name": "DOUBLE ELIMINATION 3",
+      "round_number": 3,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 4,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 4",
+      "packet_name": "DOUBLE ELIMINATION 4",
+      "round_number": 4,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 2,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 5",
+      "packet_name": "DOUBLE ELIMINATION 5",
+      "round_number": 5,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 2,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 6",
+      "packet_name": "DOUBLE ELIMINATION 6",
+      "round_number": 6,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 1,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 7",
+      "packet_name": "DOUBLE ELIMINATION 7",
+      "round_number": 7,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 1,
+      "label": "Johns Hopkins Invitational \u2014 Double Elim 8",
+      "packet_name": "DOUBLE ELIMINATION 8",
+      "round_number": 8,
+      "stage": "double_elim",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 15,
+      "label": "Johns Hopkins Invitational \u2014 Round Robin 1",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 15,
+      "label": "Johns Hopkins Invitational \u2014 Round Robin 2",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 15,
+      "label": "Johns Hopkins Invitational \u2014 Round Robin 3",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 15,
+      "label": "Johns Hopkins Invitational \u2014 Round Robin 4",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 15,
+      "label": "Johns Hopkins Invitational \u2014 Round Robin 5",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin",
+      "tournament_slug": "johns-hopkins-invitational"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 1",
+      "packet_name": "DOUBLE ELIM 1",
+      "round_number": 1,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 2",
+      "packet_name": "DOUBLE ELIM 2",
+      "round_number": 2,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 3",
+      "packet_name": "DOUBLE ELIM 3",
+      "round_number": 3,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 4",
+      "packet_name": "DOUBLE ELIM 4",
+      "round_number": 4,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 6",
+      "packet_name": "DOUBLE ELIM 6",
+      "round_number": 6,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 1,
+      "label": "Stanford College Plus Science Bowl \u2014 Double Elim 8",
+      "packet_name": "DOUBLE ELIM 8",
+      "round_number": 8,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 1,
+      "label": "Stanford College Plus Science Bowl \u2014 round_1 0",
+      "packet_name": "Round 1",
+      "round_number": 0,
+      "stage": "round_1",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Round Robin 1",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Round Robin 2",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Round Robin 3",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Round Robin 4",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 3,
+      "label": "Stanford College Plus Science Bowl \u2014 Round Robin 5",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-college-plus-science-bowl"
+    },
+    {
+      "game_count": 8,
+      "label": "Stanford Science Bowl \u2014 Double Elim 1",
+      "packet_name": "DOUBLE ELIMINATION 1",
+      "round_number": 1,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 8,
+      "label": "Stanford Science Bowl \u2014 Double Elim 2",
+      "packet_name": "DOUBLE ELIMINATION 2",
+      "round_number": 2,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 4,
+      "label": "Stanford Science Bowl \u2014 Double Elim 3",
+      "packet_name": "DOUBLE ELIMINATION 3",
+      "round_number": 3,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 4,
+      "label": "Stanford Science Bowl \u2014 Double Elim 4",
+      "packet_name": "DOUBLE ELIMINATION 4",
+      "round_number": 4,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 2,
+      "label": "Stanford Science Bowl \u2014 Double Elim 5",
+      "packet_name": "DOUBLE ELIMINATION 5",
+      "round_number": 5,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 2,
+      "label": "Stanford Science Bowl \u2014 Double Elim 6",
+      "packet_name": "DOUBLE ELIMINATION 6",
+      "round_number": 6,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 1,
+      "label": "Stanford Science Bowl \u2014 Double Elim 7",
+      "packet_name": "DOUBLE ELIMINATION 7",
+      "round_number": 7,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 1,
+      "label": "Stanford Science Bowl \u2014 Double Elim 8",
+      "packet_name": "DOUBLE ELIMINATION 8",
+      "round_number": 8,
+      "stage": "double_elim",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 24,
+      "label": "Stanford Science Bowl \u2014 Round Robin 1",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 23,
+      "label": "Stanford Science Bowl \u2014 Round Robin 2",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 25,
+      "label": "Stanford Science Bowl \u2014 Round Robin 3",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 24,
+      "label": "Stanford Science Bowl \u2014 Round Robin 4",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-science-bowl"
+    },
+    {
+      "game_count": 24,
+      "label": "Stanford Science Bowl \u2014 Round Robin 5",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin",
+      "tournament_slug": "stanford-science-bowl"
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "buzzes": 13632,
+    "games": 286,
+    "players": 2393,
+    "questions": 823,
+    "rounds": 38,
+    "teams": 512
+  },
+  "tournament_slug": "ssb-2026-combined"
+}

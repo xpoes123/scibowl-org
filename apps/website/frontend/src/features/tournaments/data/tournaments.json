@@ -583,6 +583,36 @@
         "updated_at": "2026-01-06T02:00:00Z"
     },
     {
+        "slug": "ssb-2026-combined",
+        "name": "SSB 2026 — All Tournaments (Combined Buzzpoints)",
+        "status": "PUBLISHED",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-02-22",
+            "end": "2026-03-08"
+        },
+        "divisions": [
+            "HS",
+            "COLLEGE"
+        ],
+        "notes": {
+            "logistics": "Aggregated buzzpoints across JHU Invitational, Stanford Science Bowl, and Stanford College+ Science Bowl. Questions deduplicated via fuzzy matching on packet variants of the SSB 2026 question set."
+        },
+        "format": {
+            "summary": "Cross-tournament merged buzzpoints view. Not a real tournament — a unified analytics view over the three tournaments that ran the SSB 2026 packet family."
+        },
+        "contacts": [],
+        "registration": {
+            "method": "OTHER",
+            "instructions": "This is an aggregated analytics view, not a registerable tournament.",
+            "url": "",
+            "deadlines": []
+        },
+        "links": [],
+        "updated_at": "2026-05-15T00:00:00Z"
+    },
+    {
         "slug": "ward-melville-science-bowl",
         "name": "Ward Melville Science Bowl",
         "status": "PUBLISHED",
