@@ -1,0 +1,106 @@
+{
+  "generated_at": "2026-05-15T07:27:52+00:00",
+  "rounds": [
+    {
+      "game_count": 8,
+      "packet_checksum": "081aa6cc45a6d686044cf6ebf631152236ebc8e7d201485c9deb4b181d8e86ce",
+      "packet_name": "DOUBLE ELIMINATION 1",
+      "round_number": 1,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 7,
+      "packet_checksum": "0893dd958622c372168847f4b4ec0ef4ffd6ecf0e5c4fc92db82112c30f60126",
+      "packet_name": "DOUBLE ELIMINATION 2",
+      "round_number": 2,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 4,
+      "packet_checksum": "90ad383158a46a681dc2b164a6a1932953f25b650356d24d40211de23926eb07",
+      "packet_name": "DOUBLE ELIMINATION 3",
+      "round_number": 3,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 4,
+      "packet_checksum": "d6c5a411df32560bd2f939dc8903d0e11d37f6844b0f5e474a268148f0e34ec6",
+      "packet_name": "DOUBLE ELIMINATION 4",
+      "round_number": 4,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 2,
+      "packet_checksum": "9851a2177c625b9b27546960c193be53c0a517ab55dc90e3eda4e80b768b4d77",
+      "packet_name": "DOUBLE ELIMINATION 5",
+      "round_number": 5,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 2,
+      "packet_checksum": "040b08920e50cf7939e63b91865f451b5a7be5f641d38c563461254e3d8bc8f9",
+      "packet_name": "DOUBLE ELIMINATION 6",
+      "round_number": 6,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 1,
+      "packet_checksum": "4deefbe99c3eefb71a26f3ced3d0df9528d0ab16ccea7ff13206c54747be8b94",
+      "packet_name": "DOUBLE ELIMINATION 7",
+      "round_number": 7,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 1,
+      "packet_checksum": "37bde8d5c86569451102e31d26c94fba6ad301dc22028626efbcae958dc62bcb",
+      "packet_name": "DOUBLE ELIMINATION 8",
+      "round_number": 8,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 15,
+      "packet_checksum": "3bada81da048ad84fc5b788b5972f8a5e9b410ab7e9dc41fbcba85b45bd85845",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 15,
+      "packet_checksum": "6eb552720881ba931daa2dd33ff77e36273ee3ec2087b52870f9bedcd5286729",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 15,
+      "packet_checksum": "9d10cf6704229f5dd9e720e50ee0af88ffacfbaa8f16239cc9fd9a16ea259ebb",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 15,
+      "packet_checksum": "153999f72eb5484b70bb72a5b09a1445798e47a370df09eb17851fb48f129b0b",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 15,
+      "packet_checksum": "ed3685b4ccc2f0b03f0852a8ecf54fa326cf49a870340735c3b0f944d444a912",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin"
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "buzzes": 4890,
+    "games": 104,
+    "players": 948,
+    "questions": 598,
+    "rounds": 13,
+    "teams": 208
+  },
+  "tournament_slug": "johns-hopkins-invitational"
+}

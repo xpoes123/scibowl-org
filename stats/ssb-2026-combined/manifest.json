@@ -1,0 +1,30 @@
+{
+  "buzzpoints_generated_at": "2026-05-15T07:27:52+00:00",
+  "combined_from": [
+    "johns-hopkins-invitational",
+    "stanford-college-plus-science-bowl",
+    "stanford-science-bowl"
+  ],
+  "datasets": {
+    "buzzes": "facts/buzzes.csv",
+    "games_buzz": "facts/games_buzz.csv",
+    "questions_meta": "facts/questions_meta.csv"
+  },
+  "schema_version": 1,
+  "tournament": {
+    "name": "SSB 2026 \u2014 All Tournaments",
+    "slug": "ssb-2026-combined"
+  },
+  "views": {
+    "buzzpoints": {
+      "buzzes": "facts/buzzes.csv",
+      "games": "facts/games_buzz.csv",
+      "index": "buzzpoints.json",
+      "players": "facts/buzz_players.csv",
+      "questions": "facts/questions_meta.csv",
+      "teams": "facts/buzz_teams.csv"
+    },
+    "individual_standings": "",
+    "team_standings": ""
+  }
+}

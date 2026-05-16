@@ -14,6 +14,7 @@ import { ScoreboardView } from "./ScoreboardView";
 import { RoundReportView } from "./RoundReportView";
 import { TeamDetailView } from "./TeamDetailView";
 import { PlayerDetailView } from "./PlayerDetailView";
+import { BuzzpointsView } from "./BuzzpointsView";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -368,6 +369,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       ];
     }
 
+    const buzzpointsAvailable = !!statsManifest?.views?.buzzpoints || !!statsLink;
+
     if (isLive) {
       return [
         { id: "overview", label: "Overview", disabled: false },
@@ -375,7 +378,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
         { id: "results", label: "Results", disabled: false },
         { id: "games", label: "Games", disabled: false },
         { id: "rounds", label: "Rounds", disabled: false },
-        { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
+        { id: "statistics", label: "Buzzpoints", disabled: !buzzpointsAvailable },
       ];
     }
 
@@ -385,9 +388,9 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
       { id: "results", label: "Results", disabled: false },
       { id: "games", label: "Games", disabled: false },
       { id: "rounds", label: "Rounds", disabled: false },
-      { id: "statistics", label: "Buzzpoints", disabled: !statsLink },
+      { id: "statistics", label: "Buzzpoints", disabled: !buzzpointsAvailable },
     ];
-  }, [fieldDisabled, isLive, isUpcoming, statsLink]);
+  }, [fieldDisabled, isLive, isUpcoming, statsLink, statsManifest]);
 
   useEffect(() => {
     urlInitSlugRef.current = null;
@@ -979,6 +982,8 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
               <div className="sbTabSectionBody">
                 {isUpcoming ? (
                   <p className="sbMuted">Buzzpoints will be available after the tournament.</p>
+                ) : statsManifest?.views?.buzzpoints ? (
+                  <BuzzpointsView slug={tournament.slug} manifest={statsManifest} />
                 ) : statsLink ? (
                   <GoogleSheetEmbed url={statsLink.url} />
                 ) : (

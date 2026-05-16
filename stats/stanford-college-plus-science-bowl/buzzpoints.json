@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-05-15T07:27:52+00:00",
+  "rounds": [
+    {
+      "game_count": 3,
+      "packet_checksum": "fc08179ada02bafdb20aebca0f506fcf18f7e5c20ee6ff24a49c60f650a82a1a",
+      "packet_name": "DOUBLE ELIM 1",
+      "round_number": 1,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "b6d689c90964a1e14abf1a76f015514313c972bc05725a513715b756293a124d",
+      "packet_name": "DOUBLE ELIM 2",
+      "round_number": 2,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "275f572af73fbe0baea4b65266d91fce0b57a0b6569c5528a6af41256e1fdb2e",
+      "packet_name": "DOUBLE ELIM 3",
+      "round_number": 3,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "996270cc0498c447d9dadc9286e8f304b6eacc251a745f3bc48e5ea542e2fbfb",
+      "packet_name": "DOUBLE ELIM 4",
+      "round_number": 4,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "2fa9b78d17abe64d2e95713595330c2a0bdf1db31749c2a851010064902518c7",
+      "packet_name": "DOUBLE ELIM 6",
+      "round_number": 6,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 1,
+      "packet_checksum": "4563d95967ec0f8015b1f600faf306772abfe930ae707059e88472870c76ed3b",
+      "packet_name": "DOUBLE ELIM 8",
+      "round_number": 8,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 1,
+      "packet_checksum": "90027ac92c55995b778fd5005cfa17881869e6c4a2b8db622883e3151460b509",
+      "packet_name": "Round 1",
+      "round_number": 0,
+      "stage": "round_1"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "5e7e393b9538a1d5d69e7330b47646c42496b1348441450913c3a0305e976634",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "f31dc2047b839afc531f4cb19b570b67d66e719d1e3432531cc2c3d43f6803dc",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "348eafdd977a17b5cf564b11f3dab537e330971d9f1fc41f94ad45aac7657855",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "01d779d8e26112edff2690e6cd938be1e776f6dedf2cf2c91a34ce6339276371",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "4e77344bcbe41764af50f95936b6a977c655d7001328d6239ae8ca62aece73e2",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin"
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "buzzes": 1606,
+    "games": 32,
+    "players": 25,
+    "questions": 556,
+    "rounds": 12,
+    "teams": 6
+  },
+  "tournament_slug": "stanford-college-plus-science-bowl"
+}

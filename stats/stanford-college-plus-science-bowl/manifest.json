@@ -1,4 +1,10 @@
 {
+  "buzzpoints_generated_at": "2026-05-15T07:27:52+00:00",
+  "datasets": {
+    "buzzes": "facts/buzzes.csv",
+    "games_buzz": "facts/games_buzz.csv",
+    "questions_meta": "facts/questions_meta.csv"
+  },
   "generated_at": "2026-02-28T02:17:44.517550Z",
   "schema_version": 1,
   "sources": [
@@ -349,6 +355,14 @@
     "slug": "stanford-college-plus-science-bowl"
   },
   "views": {
+    "buzzpoints": {
+      "buzzes": "facts/buzzes.csv",
+      "games": "facts/games_buzz.csv",
+      "index": "buzzpoints.json",
+      "players": "facts/buzz_players.csv",
+      "questions": "facts/questions_meta.csv",
+      "teams": "facts/buzz_teams.csv"
+    },
     "category_standings": [
       {
         "category": "BIOLOGY",
