@@ -1160,5 +1160,61 @@
             }
         ],
         "updated_at": "2025-08-11T00:00:00Z"
+    },
+    {
+        "slug": "nssb",
+        "name": "NSSB Invitational",
+        "status": "PUBLISHED",
+        "mode": "ONLINE",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-05-31",
+            "end": "2026-05-31"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "notes": {
+            "logistics": "Online tournament hosted by West Windsor-Plainsboro High School South and North on Discord. Runs 7:45 AM – 5:30 PM PDT."
+        },
+        "format": {
+            "summary": "Online invitational hosted on Discord by WWPS and WWPN."
+        },
+        "contacts": [
+            {
+                "type": "DISCORD",
+                "value": "https://discord.gg/xT8tTmXRhp",
+                "label": "Tournament Discord"
+            }
+        ],
+        "registration": {
+            "method": "FORM",
+            "instructions": "Fill out the registration form by May 24th, then pay tournament fees by May 28th. Join the Discord server for ongoing updates.",
+            "url": "https://docs.google.com/forms/d/e/1FAIpQLSdjYHApbK2QP6oyO7sad0jHMAx4OM6sMJwNfwxaP8pTEmZGZw/viewform?usp=publish-editor",
+            "cost": "$25 per team",
+            "deadlines": [
+                {
+                    "label": "Registration closes",
+                    "date": "2026-05-24"
+                },
+                {
+                    "label": "Payment due",
+                    "date": "2026-05-28"
+                }
+            ]
+        },
+        "links": [
+            {
+                "type": "WEBSITE",
+                "url": "https://docs.google.com/document/d/1seSycVoKytzmYlwHdCwvRWfMRQdLKRMFTPC1-SF67PY/edit?tab=t.0",
+                "label": "Information document"
+            },
+            {
+                "type": "OTHER",
+                "url": "https://discord.gg/xT8tTmXRhp",
+                "label": "Discord server"
+            }
+        ],
+        "updated_at": "2026-05-16T00:00:00Z"
     }
 ]
