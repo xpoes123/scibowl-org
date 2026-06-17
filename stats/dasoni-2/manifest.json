@@ -1,11 +1,15 @@
 {
+  "buzzpoints_generated_at": "2026-06-17T02:25:28+00:00",
   "datasets": {
+    "buzzes": "facts/buzzes.csv",
     "game_players": "facts/game_players.csv",
     "game_players_by_category": "facts/game_players_by_category.csv",
     "game_teams": "facts/game_teams.csv",
     "game_teams_by_category": "facts/game_teams_by_category.csv",
     "games": "facts/games.csv",
+    "games_buzz": "facts/games_buzz.csv",
     "players": "facts/players.csv",
+    "questions_meta": "facts/questions_meta.csv",
     "rounds": "facts/rounds.csv",
     "teams": "facts/teams.csv"
   },
@@ -750,6 +754,14 @@
     "slug": "dasoni-2"
   },
   "views": {
+    "buzzpoints": {
+      "buzzes": "facts/buzzes.csv",
+      "games": "facts/games_buzz.csv",
+      "index": "buzzpoints.json",
+      "players": "facts/buzz_players.csv",
+      "questions": "facts/questions_meta.csv",
+      "teams": "facts/buzz_teams.csv"
+    },
     "category_standings": [
       {
         "category": "BIOLOGY",
