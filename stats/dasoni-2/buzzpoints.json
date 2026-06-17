@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-06-17T02:25:28+00:00",
+  "rounds": [
+    {
+      "game_count": 8,
+      "packet_checksum": "9f3637017a1faee9f783a0689f6bcfb59988a3e772d87ea4d28a272e3c2fe14d",
+      "packet_name": "DOUBLE ELIMINATION 1",
+      "round_number": 1,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 8,
+      "packet_checksum": "3fe07d02043f5df2e3509d2e48ec3a93b82b3906e0fa9358379548b68e3f2153",
+      "packet_name": "DOUBLE ELIMINATION 2",
+      "round_number": 2,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 4,
+      "packet_checksum": "4695c9141e14282c45371a5689c7bd410dc13fa979d4340761593e9c41dc58d0",
+      "packet_name": "DOUBLE ELIMINATION 3",
+      "round_number": 3,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 3,
+      "packet_checksum": "28f23e9c301c3a385809ff5341f7be3c6bfef31cdcb72c93a241b4ec48b9cb64",
+      "packet_name": "DOUBLE ELIMINATION 4",
+      "round_number": 4,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 2,
+      "packet_checksum": "446d36b412d17ea6b773ab34cb96ac2e75375ae1f17fe5b53c887ef6556e5614",
+      "packet_name": "DOUBLE ELIMINATION 5",
+      "round_number": 5,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 2,
+      "packet_checksum": "a5180f3c86554b29dcd364a6b5f497269f320664e5e5d40216dd9aa155f0a99d",
+      "packet_name": "DOUBLE ELIMINATION 6",
+      "round_number": 6,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 1,
+      "packet_checksum": "25dd49fe89bea0e15c19d182cc3d6821becc4b6ac0d75872d754abf5ddc717b0",
+      "packet_name": "DOUBLE ELIMINATION 7",
+      "round_number": 7,
+      "stage": "double_elim"
+    },
+    {
+      "game_count": 19,
+      "packet_checksum": "eba0dda907121d18d5a402b061baea373f3f5c808f4b23062b42728c97a6c81b",
+      "packet_name": "ROUND ROBIN 1",
+      "round_number": 1,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 19,
+      "packet_checksum": "7616a55ed99e53843849492d36a4ec2d84eba5e6b02e074087be801ffe8050e0",
+      "packet_name": "ROUND ROBIN 2",
+      "round_number": 2,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 19,
+      "packet_checksum": "8d3ec5c15f8addc4d68e68e81906d5c72bf098853df918ec3934d2476b006a5c",
+      "packet_name": "ROUND ROBIN 3",
+      "round_number": 3,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 19,
+      "packet_checksum": "8562f0ab5258b159fdde01c8de52a61dbb25abdb5cacf9a4c865f024978a879b",
+      "packet_name": "ROUND ROBIN 4",
+      "round_number": 4,
+      "stage": "round_robin"
+    },
+    {
+      "game_count": 19,
+      "packet_checksum": "2b71647c4556d0a5c966b64bc146a3663d49cb7f7f2d46cc6f47169887a6d99b",
+      "packet_name": "ROUND ROBIN 5",
+      "round_number": 5,
+      "stage": "round_robin"
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "buzzes": 5163,
+    "games": 123,
+    "players": 1024,
+    "questions": 480,
+    "rounds": 12,
+    "teams": 246
+  },
+  "tournament_slug": "dasoni-2"
+}
