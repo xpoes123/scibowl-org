@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { PacketSetRow } from "../components/PacketSetRow";
 import { usePacketSets } from "../hooks/usePacketSets";
 
@@ -34,6 +34,9 @@ export function PacketsPage() {
       <div className="card sbTournamentCard sbHeroCard">
         <h1 className="sbTitle">Question Packets</h1>
         <p className="sbMuted sbTopSpace">Search and filter invitational question sets.</p>
+        <Link to="/packets/submit" className="sbPageButton sbTopSpace">
+          Submit a packet
+        </Link>
 
         <div className="sbListingControls sbTopSpace">
           <label className="sbField">

@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { TournamentDetailPage, TournamentsLandingPage, TournamentsPage } from "./features/tournaments";
 import { isFeatureEnabled } from "./core/features";
-import { PacketSetDetailPage, PacketsPage } from "./features/packets";
+import { PacketSetDetailPage, PacketsPage, PacketSubmitPage } from "./features/packets";
 
 function TopNav() {
   const tournamentsEnabled = isFeatureEnabled("tournaments");
@@ -134,6 +134,7 @@ function AppContent() {
               {packetsEnabled && (
                 <>
                   <Route path="/packets" element={<PacketsPage />} />
+                  <Route path="/packets/submit" element={<PacketSubmitPage />} />
                   <Route path="/packets/:slug" element={<PacketSetDetailPage />} />
                 </>
               )}
