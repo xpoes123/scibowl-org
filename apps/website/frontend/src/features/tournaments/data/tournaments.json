@@ -1216,5 +1216,33 @@
             }
         ],
         "updated_at": "2026-05-16T00:00:00Z"
+    },
+    {
+        "slug": "bsb-scrimmage-2026",
+        "name": "2026 BSB Scrimmage",
+        "status": "DRAFT",
+        "mode": "IN_PERSON",
+        "timezone": "America/Los_Angeles",
+        "dates": {
+            "start": "2026-10-28",
+            "end": "2026-10-28"
+        },
+        "divisions": [
+            "UG"
+        ],
+        "location": {
+            "city": "Berkeley",
+            "state": "CA",
+            "address": "UC Berkeley"
+        },
+        "notes": {
+            "writing_team": "2026 Stanford Science Bowl question set"
+        },
+        "format": {
+            "summary": "TBD"
+        },
+        "contacts": [],
+        "links": [],
+        "updated_at": "2026-10-25T00:00:00Z"
     }
 ]
