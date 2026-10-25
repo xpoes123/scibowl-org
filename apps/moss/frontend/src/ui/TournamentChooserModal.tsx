@@ -177,7 +177,7 @@ export default function TournamentChooserModal({
                 });
 
                 if (!filtered.length) {
-                  if (!showAll && !canCheckAvailability) {
+                  if (!showAll && !canCheckAvailability && !availabilityError) {
                     return <div className="packetSubtext">{loadingText}</div>;
                   }
                   return <div className="packetSubtext">No results.</div>;
