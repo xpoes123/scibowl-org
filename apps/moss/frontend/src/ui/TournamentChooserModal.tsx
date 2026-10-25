@@ -22,6 +22,8 @@ type Props = {
   defaultFilterHint: string;
   loadingText: string;
   unavailableSuffix: string;
+  // Listed first (when available) regardless of date, e.g. the tournament of the selected roster.
+  pinnedSlug?: string | null;
   onSelect: (tournament: MossTournament) => void;
   onClose: () => void;
 };
@@ -60,6 +62,7 @@ export default function TournamentChooserModal({
   defaultFilterHint,
   loadingText,
   unavailableSuffix,
+  pinnedSlug = null,
   onSelect,
   onClose,
 }: Props) {
@@ -141,7 +144,9 @@ export default function TournamentChooserModal({
                 const base = showAll
                   ? [...tournaments]
                   : canCheckAvailability
-                    ? tournaments.filter((t) => isUpcoming(t) && getAvailability(t.slug) === "HAS")
+                    ? tournaments.filter(
+                        (t) => (isUpcoming(t) || t.slug === pinnedSlug) && getAvailability(t.slug) === "HAS"
+                      )
                     : [];
 
                 const q = searchQuery.trim().toLowerCase();
@@ -150,6 +155,10 @@ export default function TournamentChooserModal({
                   : base;
 
                 filtered.sort((a, b) => {
+                  if (pinnedSlug && (a.slug === pinnedSlug) !== (b.slug === pinnedSlug)) {
+                    return a.slug === pinnedSlug ? -1 : 1;
+                  }
+
                   if (showAll && canCheckAvailability) {
                     const aAvailable = getAvailability(a.slug) === "HAS";
                     const bAvailable = getAvailability(b.slug) === "HAS";

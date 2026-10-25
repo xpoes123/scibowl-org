@@ -45,6 +45,13 @@ import {
 } from "./scoreboard/displaySettings";
 import HoldToConfirmButton from "./ui/HoldToConfirmButton";
 import TournamentChooserModal, { type MossTournament } from "./ui/TournamentChooserModal";
+import TournamentPacketChooserModal from "./ui/TournamentPacketChooserModal";
+import {
+  fetchTournamentPacketList,
+  fetchTournamentPacketSlugs,
+  unlockTournamentPacket,
+  type TournamentPacketSummary,
+} from "./domain/tournamentPacketsClient";
 import useResizableRightColumn from "./ui/useResizableRightColumn";
 import type {
   Attempt,
@@ -277,7 +284,16 @@ type Packet = {
 
 type PacketChoice =
   | { kind: "sample"; label: string; subtext: string; packet: Packet }
-  | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
+  | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet }
+  | {
+      kind: "tournament";
+      label: string;
+      subtext: string;
+      tournamentSlug: string;
+      tournamentName: string;
+      packetId: string;
+      packet: Packet;
+    };
 
 type MossTournamentIndex = {
   format: "moss_tournaments";
@@ -2062,6 +2078,16 @@ function ModeratorApp() {
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
+  const [isPacketTournamentChooserOpen, setIsPacketTournamentChooserOpen] = useState(false);
+  const [packetTournamentShowAll, setPacketTournamentShowAll] = useState(false);
+  const [packetTournamentSearchQuery, setPacketTournamentSearchQuery] = useState("");
+  const [packetIndexLoading, setPacketIndexLoading] = useState(false);
+  const [packetIndexError, setPacketIndexError] = useState<string | null>(null);
+  const [packetIndexSlugs, setPacketIndexSlugs] = useState<Set<string> | null>(null);
+  const [packetTournament, setPacketTournament] = useState<MossTournament | null>(null);
+  const [tournamentPacketList, setTournamentPacketList] = useState<TournamentPacketSummary[] | null>(null);
+  const [tournamentPacketListLoading, setTournamentPacketListLoading] = useState(false);
+  const [tournamentPacketListError, setTournamentPacketListError] = useState<string | null>(null);
   const [scoresheetBaseState, setScoresheetBaseState] = useState<ScoresheetState>(() => initialScoresheetState());
   const [scoresheetEvents, setScoresheetEvents] = useState<ScoresheetEvent[]>([]);
   const [createdScoresheetId, setCreatedScoresheetId] = useState<number | null>(null);
@@ -2389,6 +2415,76 @@ function ModeratorApp() {
       cancelled = true;
     };
   }, [isTournamentRosterChooserOpen]);
+
+  useEffect(() => {
+    if (!isPacketTournamentChooserOpen) return;
+    let cancelled = false;
+
+    setPacketIndexLoading(true);
+    setPacketIndexError(null);
+    setPacketIndexSlugs(null);
+
+    void (async () => {
+      try {
+        const slugs = await fetchTournamentPacketSlugs();
+        if (cancelled) return;
+        setPacketIndexSlugs(new Set(slugs));
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load packet index";
+        setPacketIndexError(msg);
+        setPacketIndexSlugs(new Set());
+      } finally {
+        if (!cancelled) setPacketIndexLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isPacketTournamentChooserOpen]);
+
+  const packetTournamentSlug = packetTournament?.slug ?? null;
+
+  useEffect(() => {
+    if (!packetTournamentSlug) return;
+    let cancelled = false;
+
+    setTournamentPacketListLoading(true);
+    setTournamentPacketListError(null);
+    setTournamentPacketList(null);
+
+    void (async () => {
+      try {
+        const packets = await fetchTournamentPacketList(packetTournamentSlug);
+        if (cancelled) return;
+        setTournamentPacketList(packets);
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load packet list";
+        setTournamentPacketListError(msg);
+      } finally {
+        if (!cancelled) setTournamentPacketListLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [packetTournamentSlug]);
+
+  const rosterTournamentSlug = draftRosterChoice.kind === "tournament" ? draftRosterChoice.tournamentSlug : null;
+  const rosterTournamentName = rosterTournamentSlug
+    ? tournamentIndex.tournaments?.find((t) => t.slug === rosterTournamentSlug)?.name ?? rosterTournamentSlug
+    : null;
+  const packetTournamentRosterWarning =
+    packetTournament && rosterTournamentSlug && packetTournament.slug !== rosterTournamentSlug
+      ? `The selected roster is from ${rosterTournamentName}, not ${packetTournament.name}.`
+      : null;
+  const draftPacketTournamentWarning =
+    draftPacketChoice?.kind === "tournament" && rosterTournamentSlug && draftPacketChoice.tournamentSlug !== rosterTournamentSlug
+      ? `Packet is from ${draftPacketChoice.tournamentName}, but the roster is from ${rosterTournamentName}.`
+      : null;
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const effectiveScoresheetId = remoteScoresheetId ?? createdScoresheetId;
@@ -3041,11 +3137,15 @@ function ModeratorApp() {
     setDraftPacketChoice(null);
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(null);
     setIsNewGameOpen(true);
   }
 
   function closeNewGame() {
     setIsPacketChooserOpen(false);
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(null);
     setIsRosterChooserOpen(false);
     setIsTournamentRosterChooserOpen(false);
     setIsNewGameOpen(false);
@@ -3515,6 +3615,49 @@ function ModeratorApp() {
     });
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
+  }
+
+  function openPacketTournamentChooser() {
+    setIsPacketChooserOpen(false);
+    setPacketLoadError(null);
+    setPacketTournamentSearchQuery("");
+    setPacketTournament(null);
+    setIsPacketTournamentChooserOpen(true);
+  }
+
+  function choosePacketTournament(tournament: MossTournament) {
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(tournament);
+  }
+
+  function backToPacketTournamentChooser() {
+    setPacketTournament(null);
+    setIsPacketTournamentChooserOpen(true);
+  }
+
+  async function unlockAndChooseTournamentPacket(packetId: string, password: string): Promise<string | null> {
+    const tournament = packetTournament;
+    if (!tournament) return "No tournament selected.";
+    let parsedPacket: Packet;
+    try {
+      const text = await unlockTournamentPacket(tournament.slug, packetId, password);
+      parsedPacket = parsePacketJson(text);
+    } catch (e) {
+      return e instanceof Error ? e.message : "Failed to load tournament packet.";
+    }
+    const packetName = tournamentPacketList?.find((p) => p.id === packetId)?.name ?? parsedPacket.packet;
+    setDraftPacketChoice({
+      kind: "tournament",
+      label: "Select Tournament Packet",
+      subtext: `${tournament.name} \u00b7 ${packetName}`,
+      tournamentSlug: tournament.slug,
+      tournamentName: tournament.name,
+      packetId,
+      packet: parsedPacket,
+    });
+    setPacketLoadError(null);
+    setPacketTournament(null);
+    return null;
   }
 
   function requestUploadPacket() {
@@ -4927,6 +5070,9 @@ function ModeratorApp() {
                               </>
                             )}
                             {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                            {draftPacketTournamentWarning && (
+                              <div className="packetWarning">{draftPacketTournamentWarning}</div>
+                            )}
                           </div>
                           <div className="packetBoxButtons">
                             <button
@@ -5076,9 +5222,9 @@ function ModeratorApp() {
                       <div className="chooserOptionTitle">Upload Packet from Computer</div>
                       <div className="chooserOptionSubtext">Select a local packet file</div>
                     </button>
-                    <button type="button" className="chooserOption" disabled>
+                    <button type="button" className="chooserOption" onClick={openPacketTournamentChooser}>
                       <div className="chooserOptionTitle">Select Tournament Packet</div>
-                      <div className="chooserOptionSubtext">Coming soon!</div>
+                      <div className="chooserOptionSubtext">Unlock a packet with its password</div>
                     </button>
                     <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
                       <div className="chooserOptionTitle">Use Sample Packet</div>
@@ -5097,6 +5243,42 @@ function ModeratorApp() {
                 </div>
               </div>
             </div>
+          )}
+
+          {isNewGameOpen && isPacketTournamentChooserOpen && (
+            <TournamentChooserModal
+              title="Select Tournament Packet"
+              tournaments={Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : []}
+              availableSlugs={packetIndexSlugs}
+              availabilityError={packetIndexError}
+              availabilityLoading={packetIndexLoading}
+              selectError={null}
+              isSelecting={false}
+              showAll={packetTournamentShowAll}
+              onShowAllChange={setPacketTournamentShowAll}
+              searchQuery={packetTournamentSearchQuery}
+              onSearchQueryChange={setPacketTournamentSearchQuery}
+              defaultFilterHint="Default shows upcoming tournaments with packets, sorted from closest to today to furthest. The selected roster's tournament is listed first."
+              loadingText="Loading tournaments with packets…"
+              unavailableSuffix="(No packets uploaded)"
+              pinnedSlug={rosterTournamentSlug}
+              onSelect={choosePacketTournament}
+              onClose={() => setIsPacketTournamentChooserOpen(false)}
+            />
+          )}
+
+          {isNewGameOpen && packetTournament && (
+            <TournamentPacketChooserModal
+              key={packetTournament.slug}
+              tournamentName={packetTournament.name}
+              packets={tournamentPacketList}
+              listLoading={tournamentPacketListLoading}
+              listError={tournamentPacketListError}
+              warning={packetTournamentRosterWarning}
+              onUnlock={unlockAndChooseTournamentPacket}
+              onBack={backToPacketTournamentChooser}
+              onClose={() => setPacketTournament(null)}
+            />
           )}
 
           {isLoadGameOpen && (
