@@ -7,7 +7,7 @@
 
 - Tournament listing: A complete listing of all Science Bowl invitationals for the 2025-26 season
 - Packet archive: The largest invitational packet repository in Science Bowl (formerly known as cloud.mehvix).
-- MoSS: An all-in-on moderating software that reduces staffing needs to one staffer per room, while also recording buzzpoint statistics and allowing for real time game updates to Scibowl.Live's tournament listing. 
+- MoSS: An all-in-on moderating software that reduces staffing needs to one staffer per room, while also recording buzzpoint statistics and allowing for real time game updates to Scibowl.Live's tournament listing. Moderators can load password-protected tournament packets directly with Select Tournament Packet.
 
 ## Documentation
 
@@ -17,6 +17,8 @@
 - Backend API (Django): [`backend/README.md`](./backend/README.md)
 - Website frontend architecture notes: [`apps/website/frontend/src/README.md`](./apps/website/frontend/src/README.md)
 - PDF question import tooling: [`scripts/question_import/question_pdfs/README.md`](./scripts/question_import/question_pdfs/README.md)
+- Repo scripts (stats, uploads, imports): [`scripts/README.md`](./scripts/README.md)
+- MoSS tournament packets (upload, storage, endpoint): [`formats/moss/tournament-packets/README.md`](./formats/moss/tournament-packets/README.md)
 - Testing/CI setup notes: [`TESTING_SETUP.md`](./TESTING_SETUP.md)
 
 ## Deployment Architecture 
@@ -38,8 +40,9 @@ Browser
   ├──▶ Supabase: Hosts PostgreSQL database
   │      └── The actual tables. Railway reads/writes here, decoupling frontend from database.
   │
-  └──▶ AWS S3 (via Vercel serverless function) — game state snapshots
-         └── MoSS periodically uploads game export snapshots, independent of Railway/Supabase.
+  └──▶ AWS S3 (via Vercel serverless functions)
+         ├── Game state snapshots: MoSS periodically uploads game export snapshots, independent of Railway/Supabase.
+         └── Tournament packets (private bucket): MoSS lists packets and unlocks one with its password.
 ```
 
 ## License
