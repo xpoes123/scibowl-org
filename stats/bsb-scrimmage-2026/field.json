@@ -1,0 +1,26 @@
+{
+    "format": "moss_field_roster",
+    "version": 1,
+    "tournament": {
+        "slug": "bsb-scrimmage-2026",
+        "name": "2026 BSB Scrimmage"
+    },
+    "teams": [
+        {
+            "name": "Test Team A",
+            "players": ["Player A1", "Player A2", "Player A3", "Player A4"]
+        },
+        {
+            "name": "Test Team B",
+            "players": ["Player B1", "Player B2", "Player B3", "Player B4"]
+        },
+        {
+            "name": "Test Team C",
+            "players": ["Player C1", "Player C2", "Player C3", "Player C4", "Player C5"]
+        },
+        {
+            "name": "Test Team D",
+            "players": ["Player D1", "Player D2", "Player D3"]
+        }
+    ]
+}

@@ -44,6 +44,14 @@ import {
   type ScoreboardRowAdvanceMode,
 } from "./scoreboard/displaySettings";
 import HoldToConfirmButton from "./ui/HoldToConfirmButton";
+import TournamentChooserModal, { type MossTournament } from "./ui/TournamentChooserModal";
+import TournamentPacketChooserModal from "./ui/TournamentPacketChooserModal";
+import {
+  fetchTournamentPacketList,
+  fetchTournamentPacketSlugs,
+  unlockTournamentPacket,
+  type TournamentPacketSummary,
+} from "./domain/tournamentPacketsClient";
 import useResizableRightColumn from "./ui/useResizableRightColumn";
 import type {
   Attempt,
@@ -276,15 +284,16 @@ type Packet = {
 
 type PacketChoice =
   | { kind: "sample"; label: string; subtext: string; packet: Packet }
-  | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet };
-
-type MossTournament = {
-  slug: string;
-  name: string;
-  timezone: string;
-  dates: { start: string; end: string };
-  status?: string;
-};
+  | { kind: "upload"; label: string; subtext: string; fileName: string; packet: Packet }
+  | {
+      kind: "tournament";
+      label: string;
+      subtext: string;
+      tournamentSlug: string;
+      tournamentName: string;
+      packetId: string;
+      packet: Packet;
+    };
 
 type MossTournamentIndex = {
   format: "moss_tournaments";
@@ -1140,25 +1149,6 @@ function parseFieldRosterJson(jsonText: string): FieldRoster {
   }
 
   return { format: "moss_field_roster", version: 1, tournament, teams };
-}
-
-function getDateYmdInTimeZone(now: Date, timeZone: string): string | null {
-  try {
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(now);
-
-    const year = parts.find((p) => p.type === "year")?.value;
-    const month = parts.find((p) => p.type === "month")?.value;
-    const day = parts.find((p) => p.type === "day")?.value;
-    if (!year || !month || !day) return null;
-    return `${year}-${month}-${day}`;
-  } catch {
-    return null;
-  }
 }
 
 function isDraftRosterValid(draftTeams: DraftTeam[]): boolean {
@@ -2088,6 +2078,16 @@ function ModeratorApp() {
   const [draftPacketChoice, setDraftPacketChoice] = useState<PacketChoice | null>(null);
   const [isPacketChooserOpen, setIsPacketChooserOpen] = useState(false);
   const [packetLoadError, setPacketLoadError] = useState<string | null>(null);
+  const [isPacketTournamentChooserOpen, setIsPacketTournamentChooserOpen] = useState(false);
+  const [packetTournamentShowAll, setPacketTournamentShowAll] = useState(false);
+  const [packetTournamentSearchQuery, setPacketTournamentSearchQuery] = useState("");
+  const [packetIndexLoading, setPacketIndexLoading] = useState(false);
+  const [packetIndexError, setPacketIndexError] = useState<string | null>(null);
+  const [packetIndexSlugs, setPacketIndexSlugs] = useState<Set<string> | null>(null);
+  const [packetTournament, setPacketTournament] = useState<MossTournament | null>(null);
+  const [tournamentPacketList, setTournamentPacketList] = useState<TournamentPacketSummary[] | null>(null);
+  const [tournamentPacketListLoading, setTournamentPacketListLoading] = useState(false);
+  const [tournamentPacketListError, setTournamentPacketListError] = useState<string | null>(null);
   const [scoresheetBaseState, setScoresheetBaseState] = useState<ScoresheetState>(() => initialScoresheetState());
   const [scoresheetEvents, setScoresheetEvents] = useState<ScoresheetEvent[]>([]);
   const [createdScoresheetId, setCreatedScoresheetId] = useState<number | null>(null);
@@ -2415,6 +2415,76 @@ function ModeratorApp() {
       cancelled = true;
     };
   }, [isTournamentRosterChooserOpen]);
+
+  useEffect(() => {
+    if (!isPacketTournamentChooserOpen) return;
+    let cancelled = false;
+
+    setPacketIndexLoading(true);
+    setPacketIndexError(null);
+    setPacketIndexSlugs(null);
+
+    void (async () => {
+      try {
+        const slugs = await fetchTournamentPacketSlugs();
+        if (cancelled) return;
+        setPacketIndexSlugs(new Set(slugs));
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load packet index";
+        setPacketIndexError(msg);
+        setPacketIndexSlugs(new Set());
+      } finally {
+        if (!cancelled) setPacketIndexLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isPacketTournamentChooserOpen]);
+
+  const packetTournamentSlug = packetTournament?.slug ?? null;
+
+  useEffect(() => {
+    if (!packetTournamentSlug) return;
+    let cancelled = false;
+
+    setTournamentPacketListLoading(true);
+    setTournamentPacketListError(null);
+    setTournamentPacketList(null);
+
+    void (async () => {
+      try {
+        const packets = await fetchTournamentPacketList(packetTournamentSlug);
+        if (cancelled) return;
+        setTournamentPacketList(packets);
+      } catch (e) {
+        if (cancelled) return;
+        const msg = e instanceof Error ? e.message : "Failed to load packet list";
+        setTournamentPacketListError(msg);
+      } finally {
+        if (!cancelled) setTournamentPacketListLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [packetTournamentSlug]);
+
+  const rosterTournamentSlug = draftRosterChoice.kind === "tournament" ? draftRosterChoice.tournamentSlug : null;
+  const rosterTournamentName = rosterTournamentSlug
+    ? tournamentIndex.tournaments?.find((t) => t.slug === rosterTournamentSlug)?.name ?? rosterTournamentSlug
+    : null;
+  const packetTournamentRosterWarning =
+    packetTournament && rosterTournamentSlug && packetTournament.slug !== rosterTournamentSlug
+      ? `The selected roster is from ${rosterTournamentName}, not ${packetTournament.name}.`
+      : null;
+  const draftPacketTournamentWarning =
+    draftPacketChoice?.kind === "tournament" && rosterTournamentSlug && draftPacketChoice.tournamentSlug !== rosterTournamentSlug
+      ? `Packet is from ${draftPacketChoice.tournamentName}, but the roster is from ${rosterTournamentName}.`
+      : null;
 
   const remoteScoresheetId = useMemo(() => getRemoteScoresheetId(), []);
   const effectiveScoresheetId = remoteScoresheetId ?? createdScoresheetId;
@@ -3067,11 +3137,15 @@ function ModeratorApp() {
     setDraftPacketChoice(null);
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(null);
     setIsNewGameOpen(true);
   }
 
   function closeNewGame() {
     setIsPacketChooserOpen(false);
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(null);
     setIsRosterChooserOpen(false);
     setIsTournamentRosterChooserOpen(false);
     setIsNewGameOpen(false);
@@ -3541,6 +3615,49 @@ function ModeratorApp() {
     });
     setPacketLoadError(null);
     setIsPacketChooserOpen(false);
+  }
+
+  function openPacketTournamentChooser() {
+    setIsPacketChooserOpen(false);
+    setPacketLoadError(null);
+    setPacketTournamentSearchQuery("");
+    setPacketTournament(null);
+    setIsPacketTournamentChooserOpen(true);
+  }
+
+  function choosePacketTournament(tournament: MossTournament) {
+    setIsPacketTournamentChooserOpen(false);
+    setPacketTournament(tournament);
+  }
+
+  function backToPacketTournamentChooser() {
+    setPacketTournament(null);
+    setIsPacketTournamentChooserOpen(true);
+  }
+
+  async function unlockAndChooseTournamentPacket(packetId: string, password: string): Promise<string | null> {
+    const tournament = packetTournament;
+    if (!tournament) return "No tournament selected.";
+    let parsedPacket: Packet;
+    try {
+      const text = await unlockTournamentPacket(tournament.slug, packetId, password);
+      parsedPacket = parsePacketJson(text);
+    } catch (e) {
+      return e instanceof Error ? e.message : "Failed to load tournament packet.";
+    }
+    const packetName = tournamentPacketList?.find((p) => p.id === packetId)?.name ?? parsedPacket.packet;
+    setDraftPacketChoice({
+      kind: "tournament",
+      label: "Select Tournament Packet",
+      subtext: `${tournament.name} \u00b7 ${packetName}`,
+      tournamentSlug: tournament.slug,
+      tournamentName: tournament.name,
+      packetId,
+      packet: parsedPacket,
+    });
+    setPacketLoadError(null);
+    setPacketTournament(null);
+    return null;
   }
 
   function requestUploadPacket() {
@@ -4953,6 +5070,9 @@ function ModeratorApp() {
                               </>
                             )}
                             {packetLoadError && <div className="packetError">{packetLoadError}</div>}
+                            {draftPacketTournamentWarning && (
+                              <div className="packetWarning">{draftPacketTournamentWarning}</div>
+                            )}
                           </div>
                           <div className="packetBoxButtons">
                             <button
@@ -5062,160 +5182,24 @@ function ModeratorApp() {
           )}
 
           {isNewGameOpen && isTournamentRosterChooserOpen && (
-            <div
-              className="modalOverlay"
-              role="dialog"
-              aria-label="Select Tournament Roster"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsTournamentRosterChooserOpen(false);
-              }}
-            >
-              <div className="modal chooserModal" onClick={(e) => e.stopPropagation()}>
-                <div className="modalHeader">
-                  <h2 className="modalTitle">Select Tournament Roster</h2>
-                </div>
-                <div className="modalBody">
-                  <div className="packetBox" style={{ marginBottom: 12 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <input
-                        type="checkbox"
-                        checked={showAllTournaments}
-                        onChange={(e) => setShowAllTournaments(e.target.checked)}
-                      />
-                      Show all tournaments
-                    </label>
-                    <div className="packetSubtext">
-                      Default shows upcoming tournaments with rosters, sorted from closest to today to furthest.
-                    </div>
-                    {rosterIndexLoading && <div className="packetSubtext">Loading roster list…</div>}
-                    <div style={{ minHeight: 18 }}>
-                      {(tournamentRosterError || rosterIndexError) && (
-                        <div className="packetError">{tournamentRosterError ?? rosterIndexError}</div>
-                      )}
-                    </div>
-                  </div>
-
-                  <input
-                    className="textInput"
-                    value={tournamentSearchQuery}
-                    onChange={(e) => setTournamentSearchQuery(e.target.value)}
-                    placeholder="Search tournaments…"
-                    aria-label="Search tournaments"
-                    style={{ marginBottom: 12 }}
-                  />
-
-                  <div
-                    aria-label="Tournament search results"
-                    style={{
-                      height: 380,
-                      overflowY: "auto",
-                      paddingRight: 6,
-                    }}
-                  >
-                    <div className="chooserList">
-                      {(() => {
-                        const now = new Date();
-                        const tournaments = Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : [];
-
-                        const canCheckRosterAvailability = !!rosterIndexSlugs && !rosterIndexError;
-
-                        const getRosterStatus = (slug: string) => {
-                          if (!canCheckRosterAvailability) return "UNKNOWN";
-                          return rosterIndexSlugs.has(slug) ? "HAS" : "NO";
-                        };
-
-                        const isUpcoming = (t: MossTournament) => {
-                          const ymd = getDateYmdInTimeZone(now, t.timezone);
-                          if (!ymd) return false;
-                          return ymd <= t.dates.end;
-                        };
-
-                        const getSortKey = (t: MossTournament) => {
-                          if (showAllTournaments) return t.dates.start;
-                          const ymd = getDateYmdInTimeZone(now, t.timezone);
-                          if (!ymd) return t.dates.start;
-                          if (ymd < t.dates.start) return t.dates.start;
-                          return ymd;
-                        };
-
-                        const base = showAllTournaments
-                          ? [...tournaments]
-                          : canCheckRosterAvailability
-                            ? tournaments.filter((t) => isUpcoming(t) && getRosterStatus(t.slug) === "HAS")
-                            : [];
-
-                        const q = tournamentSearchQuery.trim().toLowerCase();
-                        const filtered = q
-                          ? base.filter((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
-                          : base;
-
-                        filtered.sort((a, b) => {
-                          if (showAllTournaments && canCheckRosterAvailability) {
-                            const aHasRoster = getRosterStatus(a.slug) === "HAS";
-                            const bHasRoster = getRosterStatus(b.slug) === "HAS";
-                            if (aHasRoster !== bHasRoster) return aHasRoster ? -1 : 1;
-                          }
-
-                          const aKey = getSortKey(a);
-                          const bKey = getSortKey(b);
-                          const keyCmp = aKey.localeCompare(bKey);
-                          if (keyCmp !== 0) return keyCmp;
-
-                          const startCmp = a.dates.start.localeCompare(b.dates.start);
-                          if (startCmp !== 0) return startCmp;
-
-                          return a.name.localeCompare(b.name);
-                        });
-
-                        if (!filtered.length) {
-                          if (!showAllTournaments && !canCheckRosterAvailability) {
-                            return <div className="packetSubtext">Loading roster list…</div>;
-                          }
-                          return <div className="packetSubtext">No results.</div>;
-                        }
-
-                        return filtered.map((tournament) => {
-                          const rosterStatus = getRosterStatus(tournament.slug);
-                          const hasRoster = rosterStatus === "HAS" || rosterStatus === "UNKNOWN";
-                          const disabled =
-                            tournamentRosterLoading ||
-                            rosterIndexLoading ||
-                            (canCheckRosterAvailability && rosterStatus !== "HAS");
-                          const title = canCheckRosterAvailability && !hasRoster
-                            ? `${tournament.name} (No roster file found)`
-                            : tournament.name;
-                          const dateLabel =
-                            tournament.dates.start === tournament.dates.end
-                              ? tournament.dates.start
-                              : `${tournament.dates.start} \u2013 ${tournament.dates.end}`;
-                          return (
-                            <button
-                              key={tournament.slug}
-                              type="button"
-                              className="chooserOption"
-                              disabled={disabled}
-                              onClick={() => void chooseTournamentRoster(tournament)}
-                            >
-                              <div className="chooserOptionRow">
-                                <div className="chooserOptionTitle chooserOptionTitleTruncate">{title}</div>
-                                <div className="chooserOptionDate">{dateLabel}</div>
-                              </div>
-                            </button>
-                          );
-                        });
-                      })()}
-                    </div>
-                  </div>
-
-                  <div className="chooserFooter">
-                    <button type="button" className="secondary" onClick={() => setIsTournamentRosterChooserOpen(false)}>
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TournamentChooserModal
+              title="Select Tournament Roster"
+              tournaments={Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : []}
+              availableSlugs={rosterIndexSlugs}
+              availabilityError={rosterIndexError}
+              availabilityLoading={rosterIndexLoading}
+              selectError={tournamentRosterError}
+              isSelecting={tournamentRosterLoading}
+              showAll={showAllTournaments}
+              onShowAllChange={setShowAllTournaments}
+              searchQuery={tournamentSearchQuery}
+              onSearchQueryChange={setTournamentSearchQuery}
+              defaultFilterHint="Default shows upcoming tournaments with rosters, sorted from closest to today to furthest."
+              loadingText="Loading roster list…"
+              unavailableSuffix="(No roster file found)"
+              onSelect={(tournament) => void chooseTournamentRoster(tournament)}
+              onClose={() => setIsTournamentRosterChooserOpen(false)}
+            />
           )}
 
           {isNewGameOpen && isPacketChooserOpen && (
@@ -5238,9 +5222,9 @@ function ModeratorApp() {
                       <div className="chooserOptionTitle">Upload Packet from Computer</div>
                       <div className="chooserOptionSubtext">Select a local packet file</div>
                     </button>
-                    <button type="button" className="chooserOption" disabled>
+                    <button type="button" className="chooserOption" onClick={openPacketTournamentChooser}>
                       <div className="chooserOptionTitle">Select Tournament Packet</div>
-                      <div className="chooserOptionSubtext">Coming soon!</div>
+                      <div className="chooserOptionSubtext">Unlock a packet with its password</div>
                     </button>
                     <button type="button" className="chooserOption" onClick={chooseSamplePacket}>
                       <div className="chooserOptionTitle">Use Sample Packet</div>
@@ -5259,6 +5243,42 @@ function ModeratorApp() {
                 </div>
               </div>
             </div>
+          )}
+
+          {isNewGameOpen && isPacketTournamentChooserOpen && (
+            <TournamentChooserModal
+              title="Select Tournament Packet"
+              tournaments={Array.isArray(tournamentIndex.tournaments) ? tournamentIndex.tournaments : []}
+              availableSlugs={packetIndexSlugs}
+              availabilityError={packetIndexError}
+              availabilityLoading={packetIndexLoading}
+              selectError={null}
+              isSelecting={false}
+              showAll={packetTournamentShowAll}
+              onShowAllChange={setPacketTournamentShowAll}
+              searchQuery={packetTournamentSearchQuery}
+              onSearchQueryChange={setPacketTournamentSearchQuery}
+              defaultFilterHint="Default shows upcoming tournaments with packets, sorted from closest to today to furthest. The selected roster's tournament is listed first."
+              loadingText="Loading tournaments with packets…"
+              unavailableSuffix="(No packets uploaded)"
+              pinnedSlug={rosterTournamentSlug}
+              onSelect={choosePacketTournament}
+              onClose={() => setIsPacketTournamentChooserOpen(false)}
+            />
+          )}
+
+          {isNewGameOpen && packetTournament && (
+            <TournamentPacketChooserModal
+              key={packetTournament.slug}
+              tournamentName={packetTournament.name}
+              packets={tournamentPacketList}
+              listLoading={tournamentPacketListLoading}
+              listError={tournamentPacketListError}
+              warning={packetTournamentRosterWarning}
+              onUnlock={unlockAndChooseTournamentPacket}
+              onBack={backToPacketTournamentChooser}
+              onClose={() => setPacketTournament(null)}
+            />
           )}
 
           {isLoadGameOpen && (

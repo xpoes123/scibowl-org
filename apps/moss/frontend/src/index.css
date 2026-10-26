@@ -846,6 +846,19 @@ button.addTeamButton:hover .addIcon {
   font-size: 13px;
 }
 
+.packetWarning {
+  margin-top: 6px;
+  color: #8a5a00;
+  font-size: 13px;
+}
+
+.packetPasswordRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
 .packetBoxButtons {
   display: flex;
   align-items: center;
