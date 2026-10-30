@@ -1,0 +1,1 @@
+A Science Bowl match used to take a whole crew. Now it takes one browser tab. MoSS reads the packet, scores every buzz, and keeps time — and drives the projector scoreboard live in another window. When the match ends, the results stream straight to Scibowl dot Live. One staffer. One room. The whole match.
