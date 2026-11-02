@@ -1234,6 +1234,8 @@ button.addTeamButton:hover .addIcon {
 }
 
 .controls button {
+  height: var(--sb-control-height);
+  min-width: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
