@@ -5403,13 +5403,19 @@ function ModeratorApp() {
               </div>
 
               <div className="controls">
-                <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
+                <button
+                  className="secondary"
+                  onClick={prev}
+                  disabled={isQuestionBlurred || pairIdx === 0}
+                  aria-label="Previous pair"
+                >
                   {"\u2190"}
                 </button>
 
                 <button
+                  className="secondary"
                   onClick={next}
-                  disabled={pairIdx === pairRows.length - 1}
+                  disabled={isQuestionBlurred || pairIdx === pairRows.length - 1}
                   aria-label="Next pair"
                 >
                   {"\u2192"}
