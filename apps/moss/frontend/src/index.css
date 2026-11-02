@@ -1079,8 +1079,9 @@ button.addTeamButton:hover .addIcon {
   text-transform: none;
 }
 
-.endOfRoundWarning {
-  font-weight: 700;
+.endOfRoundNotice button {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica;
+  margin-top: 4px;
 }
 
 .qaSection {

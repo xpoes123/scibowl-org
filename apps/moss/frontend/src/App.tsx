@@ -2982,7 +2982,7 @@ function ModeratorApp() {
     if (isScoresheetExported) return;
 
     const message =
-      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
+      "Please export and save the scoresheet to your computer before exiting!";
 
     function onBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -5422,8 +5422,30 @@ function ModeratorApp() {
                 <div className="endOfRoundSeparator" aria-hidden="true" />
                 <div className="endOfRoundNotice" aria-label="End of round notice">
                   <div className="endOfRoundTitle">END OF ROUND</div>
-                  <div>Export the scoresheet and save it to your computer.</div>
-                  <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
+                  {isScoresheetExported && lastExport ? (
+                    <>
+                      <div>Scoresheet exported {formatRelativeTime(lastExport.exportedAtIso, nowMs)}.</div>
+                      <div>
+                        <button
+                          type="button"
+                          className="secondary"
+                          onClick={exportScoresheet}
+                          disabled={!game || isExporting}
+                        >
+                          {isExporting ? "Exporting..." : "Export again"}
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>Please export and save the scoresheet to your computer before exiting!</div>
+                      <div>
+                        <button type="button" onClick={exportScoresheet} disabled={!game || isExporting}>
+                          {isExporting ? "Exporting..." : "Export scoresheet"}
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </>
             )}
