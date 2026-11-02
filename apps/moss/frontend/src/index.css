@@ -1502,6 +1502,38 @@ button.word.wordBold {
   border-radius: 12px;
 }
 
+/* Slim scrollbar with no arrow buttons, kept off the rounded corners. Chrome ignores these
+   pseudo-elements when scrollbar-width is set, so that property is limited to Firefox below. */
+.scoresheetTableWrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-track:vertical {
+  margin-block: 6px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-track:horizontal {
+  margin-inline: 6px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-thumb {
+  background-color: var(--sb-border);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 999px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-thumb:hover {
+  background-color: var(--sb-control-border);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scoresheetTableWrap {
+    scrollbar-width: thin;
+  }
+}
+
 .scoresheetStickyHeaderBackplate {
   position: sticky;
   top: 0;
@@ -1569,6 +1601,11 @@ button.word.wordBold {
 
 .scoresheetTable tbody td {
   border-bottom: 1px solid var(--sb-border);
+}
+
+/* The wrapper's border closes the table, so the last row doesn't draw its own. */
+.scoresheetTable tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .scoresheetExportRow {
@@ -2335,16 +2372,19 @@ button.word.wordBold {
 .scoresheetBoundaryButton::before {
   content: "";
   position: absolute;
-  left: 10px;
-  right: 10px;
+  left: 0;
+  right: 0;
   top: 0;
   height: 1px;
-  background: var(--sb-border);
+  /* Row lines come from the td borders; this line only appears on hover/focus or for marked breaks. */
+  background: transparent;
   transition: background 120ms ease, box-shadow 120ms ease;
 }
 
 .scoresheetBoundaryButton:hover::before,
-.scoresheetBoundaryButton:focus-visible::before {
+.scoresheetBoundaryButton:focus-visible::before,
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton:hover::before,
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton:focus-visible::before {
   background: #cdd4ff;
   box-shadow: 0 0 8px rgba(124, 153, 255, 0.45);
 }
@@ -2376,6 +2416,7 @@ button.word.wordBold {
 }
 
 .scoresheetBoundaryRowMarked .scoresheetBoundaryButton::before {
+  background: var(--sb-border);
   top: 50%;
   transform: translateY(-50%);
 }
