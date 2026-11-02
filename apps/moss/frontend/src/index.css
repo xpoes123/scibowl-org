@@ -1243,11 +1243,6 @@ button.addTeamButton:hover .addIcon {
   justify-content: center;
 }
 
-.arrowIcon {
-  width: 18px;
-  height: 18px;
-}
-
 button {
   border: 1px solid var(--sb-control-border);
   background: #111;
@@ -2075,7 +2070,8 @@ button.word.wordBold {
 }
 
 .pauseIcon,
-.playIcon {
+.playIcon,
+.arrowIcon {
   width: 18px;
   height: 18px;
   display: block;

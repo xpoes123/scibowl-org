@@ -5432,30 +5432,21 @@ function ModeratorApp() {
                 <div className="endOfRoundSeparator" aria-hidden="true" />
                 <div className="endOfRoundNotice" aria-label="End of round notice">
                   <div className="endOfRoundTitle">END OF ROUND</div>
-                  {isScoresheetExported && lastExport ? (
-                    <>
-                      <div>Scoresheet exported {formatRelativeTime(lastExport.exportedAtIso, nowMs)}.</div>
-                      <div>
-                        <button
-                          type="button"
-                          className="secondary"
-                          onClick={exportScoresheet}
-                          disabled={!game || isExporting}
-                        >
-                          {isExporting ? "Exporting..." : "Export again"}
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div>Please export and save the scoresheet to your computer before exiting!</div>
-                      <div>
-                        <button type="button" onClick={exportScoresheet} disabled={!game || isExporting}>
-                          {isExporting ? "Exporting..." : "Export scoresheet"}
-                        </button>
-                      </div>
-                    </>
-                  )}
+                  <div>
+                    {isScoresheetExported && lastExport
+                      ? `Scoresheet exported ${formatRelativeTime(lastExport.exportedAtIso, nowMs)}.`
+                      : "Please export and save the scoresheet to your computer before exiting!"}
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      className={isScoresheetExported ? "secondary" : undefined}
+                      onClick={exportScoresheet}
+                      disabled={!game || isExporting}
+                    >
+                      {isExporting ? "Exporting..." : isScoresheetExported ? "Export again" : "Export scoresheet"}
+                    </button>
+                  </div>
                 </div>
               </>
             )}
