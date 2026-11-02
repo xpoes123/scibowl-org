@@ -50,4 +50,8 @@ function serveRepoStats(): Plugin {
 
 export default defineConfig({
     plugins: [serveRepoStats(), react()],
+    server: {
+        // File change events don't propagate through Docker bind mounts on Windows, so poll instead.
+        watch: { usePolling: true },
+    },
 });
