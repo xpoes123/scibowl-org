@@ -1233,6 +1233,17 @@ button.addTeamButton:hover .addIcon {
   flex-wrap: wrap;
 }
 
+.controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowIcon {
+  width: 18px;
+  height: 18px;
+}
+
 button {
   border: 1px solid #d6d6de;
   background: #111;
