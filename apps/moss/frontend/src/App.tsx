@@ -480,7 +480,9 @@ function SortableDraftPlayerRow({
           aria-label="Remove player"
           onClick={() => onRemovePlayer(teamId, player.id)}
         >
-          ×
+          <svg className="closeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </button>
       )}
     </div>
@@ -567,7 +569,9 @@ function SortableDraftTeamCol({
               aria-label="Remove team"
               onClick={() => onRemoveTeam(team.id)}
             >
-              ×
+              <svg className="closeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </button>
           )}
         </div>
