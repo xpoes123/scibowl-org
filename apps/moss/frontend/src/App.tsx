@@ -480,7 +480,9 @@ function SortableDraftPlayerRow({
           aria-label="Remove player"
           onClick={() => onRemovePlayer(teamId, player.id)}
         >
-          ×
+          <svg className="closeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
         </button>
       )}
     </div>
@@ -567,7 +569,9 @@ function SortableDraftTeamCol({
               aria-label="Remove team"
               onClick={() => onRemoveTeam(team.id)}
             >
-              ×
+              <svg className="closeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </button>
           )}
         </div>
@@ -637,7 +641,7 @@ function SortableDraftTeamCol({
           title="Add player"
           aria-label="Add player"
         >
-          <span className="addIcon">+</span>
+          <span className="addIcon" />
         </button>
       </div>
     </div>
@@ -2982,7 +2986,7 @@ function ModeratorApp() {
     if (isScoresheetExported) return;
 
     const message =
-      "Have you exported your scoresheet? Please ensure you have exported the latest version of your scoresheet before leaving. Unsaved scoresheets will be lost!";
+      "Please export and save the scoresheet to your computer before exiting!";
 
     function onBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -5043,7 +5047,7 @@ function ModeratorApp() {
                             title="Add team"
                             aria-label="Add team"
                           >
-                            <span className="addIcon">+</span>
+                            <span className="addIcon" />
                           </button>
                         </div>
                       </div>
@@ -5403,16 +5407,26 @@ function ModeratorApp() {
               </div>
 
               <div className="controls">
-                <button onClick={prev} disabled={pairIdx === 0} aria-label="Previous pair">
-                  {"\u2190"}
+                <button
+                  className="secondary"
+                  onClick={prev}
+                  disabled={isQuestionBlurred || pairIdx === 0}
+                  aria-label="Previous pair"
+                >
+                  <svg className="arrowIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
 
                 <button
+                  className="secondary"
                   onClick={next}
-                  disabled={pairIdx === pairRows.length - 1}
+                  disabled={isQuestionBlurred || pairIdx === pairRows.length - 1}
                   aria-label="Next pair"
                 >
-                  {"\u2192"}
+                  <svg className="arrowIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -5422,8 +5436,21 @@ function ModeratorApp() {
                 <div className="endOfRoundSeparator" aria-hidden="true" />
                 <div className="endOfRoundNotice" aria-label="End of round notice">
                   <div className="endOfRoundTitle">END OF ROUND</div>
-                  <div>Export the scoresheet and save it to your computer.</div>
-                  <div className="endOfRoundWarning">Unsaved scoresheets will be lost!</div>
+                  <div>
+                    {isScoresheetExported && lastExport
+                      ? `Scoresheet exported ${formatRelativeTime(lastExport.exportedAtIso, nowMs)}.`
+                      : "Please export and save the scoresheet to your computer before exiting!"}
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      className={isScoresheetExported ? "secondary" : undefined}
+                      onClick={exportScoresheet}
+                      disabled={!game || isExporting}
+                    >
+                      {isExporting ? "Exporting..." : isScoresheetExported ? "Export again" : "Export scoresheet"}
+                    </button>
+                  </div>
                 </div>
               </>
             )}

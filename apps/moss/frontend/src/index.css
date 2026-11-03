@@ -3,8 +3,11 @@
   --sb-card: #ffffff;
   --sb-text: #111111;
   --sb-muted: #666666;
-  --sb-border: #e6e7ee;
+  --sb-border: #d5d8e0;
+  --sb-control-border: var(--sb-border);
   --sb-focus: #cdd4ff;
+  --sb-hover-glow: 0 0 0 1px var(--sb-focus), 0 0 8px rgba(124, 153, 255, 0.45);
+  --sb-hover-glow-inset: inset 0 0 0 1px var(--sb-focus), inset 0 0 8px rgba(124, 153, 255, 0.35);
   --sb-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   --sb-control-height: 42px;
   --sb-correct-bg: #eefbf0;
@@ -195,7 +198,7 @@ code {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--sb-border);
+  border: 1px solid var(--sb-control-border);
   border-radius: 12px;
   padding: 10px 14px;
   background: white;
@@ -206,8 +209,7 @@ code {
 }
 
 .sbSecondaryButton:hover {
-  background: #f0f2ff;
-  border-color: #dbe0ff;
+  box-shadow: var(--sb-hover-glow);
 }
 
 .sbSecondaryButton:focus-visible {
@@ -265,7 +267,7 @@ code {
 
 .layoutResizer:hover::before,
 .layoutResizing .layoutResizer::before {
-  background: #e6e7ee;
+  background: var(--sb-border);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
@@ -322,7 +324,7 @@ code {
   gap: 12px;
   padding: 14px 14px;
   border-radius: 14px;
-  border: 1px solid var(--sb-border);
+  border: 1px solid var(--sb-control-border);
   background: white;
   color: var(--sb-text);
   text-align: left;
@@ -334,8 +336,7 @@ code {
 }
 
 .mossHeroAction:hover {
-  background: var(--sb-correct-bg);
-  border-color: var(--sb-correct-border);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossHeroAction:focus-visible {
@@ -393,7 +394,7 @@ code {
 .modal {
   width: min(980px, 100%);
   background: white;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   border-radius: 16px;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
   max-height: calc(100vh - 48px);
@@ -408,7 +409,7 @@ code {
 
 .modalHeader {
   padding: 18px 20px 10px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--sb-border);
 }
 
 .modalTitle {
@@ -457,9 +458,12 @@ code {
   gap: 10px;
 }
 
+/* A horizontal scroller clips vertically too, so the padding gives hover glows room inside
+   it and the matching negative margin keeps the grid where it was. */
 .teamGridScroll {
   overflow-x: auto;
-  padding-bottom: 6px;
+  margin: -10px;
+  padding: 10px 10px 16px;
 }
 
 .teamGrid {
@@ -479,12 +483,12 @@ code {
 }
 
 .teamCol + .teamCol {
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--sb-border);
 }
 
 .addTeamCol {
   flex: 0 0 110px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--sb-border);
   padding-left: 14px;
   display: flex;
   justify-content: center;
@@ -504,7 +508,7 @@ code {
 
 .scoreToggle {
   display: flex;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   border-radius: 12px;
   overflow: hidden;
   background: white;
@@ -523,11 +527,12 @@ code {
 }
 
 .scoreToggle button + button {
-  border-left: 1px solid #e6e7ee;
+  border-left: 1px solid var(--sb-control-border);
 }
 
-.scoreToggle button:hover {
-  background: #f6f7fb;
+/* The toggle clips its children, so the hover glow is drawn inside each segment. */
+.scoreToggle button:hover:not(:disabled) {
+  box-shadow: var(--sb-hover-glow-inset);
 }
 
 .scoreToggle button.active {
@@ -603,10 +608,21 @@ code {
 
 .textInput {
   width: 100%;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 14px;
+}
+
+/* Read-only fields aren't typed into, so they don't glow on hover. */
+.textInput:not([readonly]):hover {
+  box-shadow: var(--sb-hover-glow);
+}
+
+/* Fields keep the glow while focused in place of the browser's own focus outline. */
+.textInput:focus {
+  outline: none;
+  box-shadow: var(--sb-hover-glow);
 }
 
 select.textInput {
@@ -671,7 +687,7 @@ select.textInput {
 
 .dndHandle:hover {
   background: #f6f7fb;
-  border-color: #e6e7ee;
+  border-color: var(--sb-border);
   color: #333;
 }
 
@@ -699,7 +715,7 @@ select.textInput {
 }
 
 button.inOutToggle {
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-control-border);
   background: white;
   color: #111;
   border-radius: 12px;
@@ -723,13 +739,18 @@ button.inOutToggle.bench {
   color: #8f1d1d;
 }
 
+button.inOutToggle:hover,
+button.iconButton:hover {
+  box-shadow: var(--sb-hover-glow);
+}
+
 button.inOutToggle:focus-visible {
   outline: 2px solid #cdd4ff;
   outline-offset: 2px;
 }
 
 button.iconButton {
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-control-border);
   background: white;
   color: #111;
   border-radius: 999px;
@@ -738,13 +759,11 @@ button.iconButton {
   padding: 0;
   display: grid;
   place-items: center;
-  font-size: 20px;
-  line-height: 1;
 }
 
 button.iconButton.danger {
   color: #111;
-  border-color: #e6e7ee;
+  border-color: var(--sb-control-border);
 }
 
 button.addRowButton,
@@ -769,8 +788,7 @@ button.addTeamButton {
 
 button.addRowButton:hover .addIcon,
 button.addTeamButton:hover .addIcon {
-  background: #f0f2ff;
-  border-color: #dbe0ff;
+  box-shadow: var(--sb-hover-glow);
 }
 
 .addIcon {
@@ -780,15 +798,33 @@ button.addTeamButton:hover .addIcon {
   display: grid;
   place-items: center;
   background: #f6f7fb;
-  border: 1px solid #eee;
-  font-size: 22px;
-  line-height: 1;
+  border: 1px solid var(--sb-border);
+}
+
+/* The plus is drawn from two boxes rather than an SVG so its bars snap to whole pixels.
+   Both share the one grid cell, and even sizes keep the centring on whole pixels too. */
+.addIcon::before,
+.addIcon::after {
+  content: "";
+  grid-area: 1 / 1;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.addIcon::before {
+  width: 10px;
+  height: 2px;
+}
+
+.addIcon::after {
+  width: 2px;
+  height: 10px;
 }
 
 .modalFooter {
   margin-top: 10px;
   padding-top: 14px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--sb-border);
 }
 
 .packetRow {
@@ -811,7 +847,7 @@ button.addTeamButton:hover .addIcon {
 }
 
 .packetBox {
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   border-radius: 14px;
   background: #f6f7fb;
   padding: 12px 12px;
@@ -898,7 +934,7 @@ button.addTeamButton:hover .addIcon {
   width: 100%;
   text-align: left;
   padding: 12px 14px;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-control-border);
   border-radius: 14px;
   background: white;
   color: #111;
@@ -906,7 +942,7 @@ button.addTeamButton:hover .addIcon {
 }
 
 .chooserOption:hover:not(:disabled) {
-  background: #f6f7fb;
+  box-shadow: var(--sb-hover-glow);
 }
 
 .chooserOption:disabled {
@@ -986,7 +1022,7 @@ button.addTeamButton:hover .addIcon {
 .questionBlock {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--sb-border);
 }
 
 .questionBlurWrap {
@@ -1011,7 +1047,7 @@ button.addTeamButton:hover .addIcon {
   width: min(520px, 100%);
   text-align: center;
   background: rgba(255, 255, 255, 0.88);
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -1058,7 +1094,7 @@ button.addTeamButton:hover .addIcon {
 
 .endOfRoundSeparator {
   height: 1px;
-  background: #e6e7ee;
+  background: var(--sb-border);
 }
 
 .endOfRoundNotice {
@@ -1079,13 +1115,14 @@ button.addTeamButton:hover .addIcon {
   text-transform: none;
 }
 
-.endOfRoundWarning {
-  font-weight: 700;
+.endOfRoundNotice button {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica;
+  margin-top: 4px;
 }
 
 .qaSection {
   padding: 14px 14px;
-  border: 1px solid #eee;
+  border: 1px solid var(--sb-border);
   border-radius: 14px;
   transition: box-shadow 120ms ease;
   font-family: KaTeX_Main, "Times New Roman", Times, serif;
@@ -1116,7 +1153,7 @@ button.addTeamButton:hover .addIcon {
 }
 
 .qaSectionClickable:not(.qaSectionDisabled):hover {
-  box-shadow: 0 0 0 1px var(--sb-focus);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .qaSectionClickable:focus-within {
@@ -1156,7 +1193,7 @@ button.addTeamButton:hover .addIcon {
   align-items: center;
   justify-content: center;
   line-height: 1;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-control-border);
   background: white;
   color: #111;
   grid-column: 3;
@@ -1232,8 +1269,16 @@ button.addTeamButton:hover .addIcon {
   flex-wrap: wrap;
 }
 
+.controls button {
+  height: var(--sb-control-height);
+  min-width: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 button {
-  border: 1px solid #d6d6de;
+  border: 1px solid #111;
   background: #111;
   color: white;
   padding: 10px 12px;
@@ -1246,6 +1291,14 @@ button {
 button.secondary {
   background: white;
   color: #111;
+  border-color: var(--sb-control-border);
+}
+
+/* Only buttons that use these base styles. Classed buttons opt into the glow in their own rules. */
+button:not([class]):hover:not(:disabled),
+button.secondary:hover:not(:disabled),
+button.holdConfirmButton:hover:not(:disabled) {
+  box-shadow: var(--sb-hover-glow);
 }
 
 button:disabled {
@@ -1357,7 +1410,7 @@ button.word.wordBold {
   width: 220px;
   padding: 12px;
   background: white;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   border-radius: 12px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
@@ -1370,7 +1423,7 @@ button.word.wordBold {
 }
 
 .selectInput {
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   border-radius: 10px;
   padding: 7px 10px;
   background: white;
@@ -1378,8 +1431,14 @@ button.word.wordBold {
   font-size: 14px;
 }
 
+.selectInput:hover,
+.selectInput:focus {
+  outline: none;
+  box-shadow: var(--sb-hover-glow);
+}
+
 .playerPickPanel {
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-border);
   border-radius: 12px;
   overflow: hidden;
   background: white;
@@ -1400,7 +1459,7 @@ button.word.wordBold {
 }
 
 .playerPickRow + .playerPickRow {
-  border-top: 1px solid #e6e7ee;
+  border-top: 1px solid var(--sb-border);
 }
 
 .playerPickRow:hover {
@@ -1447,7 +1506,7 @@ button.word.wordBold {
   padding: 14px;
   border-radius: 12px;
   background: #f7f7fb;
-  border: 1px solid #eee;
+  border: 1px solid var(--sb-border);
 }
 
 .answerInline {
@@ -1482,8 +1541,40 @@ button.word.wordBold {
   --scoresheetHeaderTotalHeight: calc(var(--scoresheetHeaderRow1Height) + var(--scoresheetHeaderRow2Height) + var(--scoresheetHeaderRow3Height));
   max-height: calc(100vh - 190px);
   overflow: auto;
-  border: 1px solid #eee;
+  border: 1px solid var(--sb-border);
   border-radius: 12px;
+}
+
+/* Slim scrollbar with no arrow buttons, kept off the rounded corners. Chrome ignores these
+   pseudo-elements when scrollbar-width is set, so that property is limited to Firefox below. */
+.scoresheetTableWrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-track:vertical {
+  margin-block: 6px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-track:horizontal {
+  margin-inline: 6px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-thumb {
+  background-color: var(--sb-border);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 999px;
+}
+
+.scoresheetTableWrap::-webkit-scrollbar-thumb:hover {
+  background-color: #878c99;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scoresheetTableWrap {
+    scrollbar-width: thin;
+  }
 }
 
 .scoresheetStickyHeaderBackplate {
@@ -1511,7 +1602,7 @@ button.word.wordBold {
 .scoresheetPairHeader,
 .scoresheetPairCell,
 .scoresheetGroupEnd {
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--sb-border);
 }
 
 .scoresheetTable th.scoresheetPairHeader {
@@ -1523,7 +1614,7 @@ button.word.wordBold {
   text-align: left;
   font-weight: 600;
   white-space: nowrap;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--sb-border);
   box-sizing: border-box;
 }
 
@@ -1540,7 +1631,7 @@ button.word.wordBold {
   top: var(--scoresheetHeaderRow2Top);
   z-index: 3;
   background: white;
-  box-shadow: inset 0 1px 0 #eee;
+  box-shadow: inset 0 1px 0 var(--sb-border);
 }
 
 .scoresheetTable thead tr:nth-child(3) th {
@@ -1548,11 +1639,16 @@ button.word.wordBold {
   top: var(--scoresheetHeaderRow3Top);
   z-index: 2;
   background: white;
-  box-shadow: inset 0 1px 0 #eee, inset 0 -1px 0 #eee;
+  box-shadow: inset 0 1px 0 var(--sb-border), inset 0 -1px 0 var(--sb-border);
 }
 
 .scoresheetTable tbody td {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--sb-border);
+}
+
+/* The wrapper's border closes the table, so the last row doesn't draw its own. */
+.scoresheetTable tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .scoresheetExportRow {
@@ -1595,7 +1691,7 @@ button.word.wordBold {
 
 .scoresheetScorePill {
   background: #f7f7fb;
-  border-color: #e6e7ee;
+  border-color: var(--sb-border);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1848,14 +1944,14 @@ button.word.wordBold {
   gap: 12px;
   align-items: flex-start;
   padding: 10px 12px;
-  border: 1px solid #eee;
+  border: 1px solid var(--sb-control-border);
   border-radius: 12px;
   background: #fafafe;
   cursor: pointer;
 }
 
 .scoreboardDisplaySettingsOption:hover {
-  box-shadow: inset 0 0 0 1px var(--sb-focus);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .scoreboardDisplaySettingsOption input {
@@ -1890,7 +1986,7 @@ button.word.wordBold {
   overflow: hidden;
   color: var(--sb-text);
   background: white;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   padding: 10px 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -1901,7 +1997,7 @@ button.word.wordBold {
 }
 
 .mossNavTimerDisplay:hover {
-  background: var(--sb-border);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossNavTimerDisplay--running {
@@ -1924,7 +2020,7 @@ button.word.wordBold {
   overflow: hidden;
   color: var(--sb-text);
   background: white;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   padding: 6px 10px;
   border-radius: 10px;
   font: inherit;
@@ -1936,7 +2032,7 @@ button.word.wordBold {
 }
 
 .questionTimerDisplay:hover:not(:disabled) {
-  background: var(--sb-border);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .questionTimerDisplay--warning {
@@ -1970,7 +2066,7 @@ button.word.wordBold {
   font: inherit;
   width: 5ch;
   box-sizing: content-box;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   border-radius: 10px;
   padding: 10px 12px;
   background: white;
@@ -1978,15 +2074,16 @@ button.word.wordBold {
   text-align: center;
 }
 
+.mossNavTimerInput:hover,
 .mossNavTimerInput:focus {
-  outline: 2px solid var(--sb-focus);
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossNavTimerBtn {
   font-size: 15px;
   background: white;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   padding: 10px 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -2001,7 +2098,7 @@ button.word.wordBold {
 }
 
 .mossNavTimerBtn:hover:not(:disabled) {
-  background: var(--sb-border);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossNavTimerBtn:disabled {
@@ -2022,7 +2119,9 @@ button.word.wordBold {
 }
 
 .pauseIcon,
-.playIcon {
+.playIcon,
+.arrowIcon,
+.closeIcon {
   width: 18px;
   height: 18px;
   display: block;
@@ -2047,7 +2146,7 @@ button.word.wordBold {
   font-weight: inherit;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #d6d6de;
+  border: 1px solid var(--sb-control-border);
   background: white;
   color: #111;
   cursor: pointer;
@@ -2056,7 +2155,7 @@ button.word.wordBold {
 }
 
 .mossNavTimerPreset:hover {
-  background: var(--sb-border);
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossNavTimerConfirm {
@@ -2202,7 +2301,7 @@ button.word.wordBold {
   color: var(--sb-muted);
   transition: color 0.2s;
   background: #f7f7fb;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   border-radius: 999px;
   padding: 8px 36px;
 }
@@ -2319,16 +2418,19 @@ button.word.wordBold {
 .scoresheetBoundaryButton::before {
   content: "";
   position: absolute;
-  left: 10px;
-  right: 10px;
+  left: 0;
+  right: 0;
   top: 0;
   height: 1px;
-  background: #eee;
+  /* Row lines come from the td borders; this line only appears on hover/focus or for marked breaks. */
+  background: transparent;
   transition: background 120ms ease, box-shadow 120ms ease;
 }
 
 .scoresheetBoundaryButton:hover::before,
-.scoresheetBoundaryButton:focus-visible::before {
+.scoresheetBoundaryButton:focus-visible::before,
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton:hover::before,
+.scoresheetBoundaryRowMarked .scoresheetBoundaryButton:focus-visible::before {
   background: #cdd4ff;
   box-shadow: 0 0 8px rgba(124, 153, 255, 0.45);
 }
@@ -2360,6 +2462,7 @@ button.word.wordBold {
 }
 
 .scoresheetBoundaryRowMarked .scoresheetBoundaryButton::before {
+  background: var(--sb-border);
   top: 50%;
   transform: translateY(-50%);
 }
@@ -2372,7 +2475,7 @@ button.word.wordBold {
   padding: 2px 8px;
   border-radius: 999px;
   background: white;
-  border: 1px solid #e6e7ee;
+  border: 1px solid var(--sb-border);
   font-size: 12px;
   color: #666;
   pointer-events: none;
@@ -2413,5 +2516,5 @@ button.word.wordBold {
   border-radius: 0 0 12px 12px;
   border-top: 0;
   padding-top: 4px;
-  box-shadow: 0 1px 0 #eee;
+  box-shadow: 0 1px 0 var(--sb-border);
 }
