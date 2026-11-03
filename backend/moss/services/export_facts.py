@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Iterable
 
+from moss.event_types import EVENT_END_CLEARED, EVENT_END_SET
 from moss.reducer import initial_state, reduce_events
 
 
@@ -146,12 +147,43 @@ def _packet_pair_maps(packet_questions: Iterable[dict[str, Any]]) -> tuple[dict[
     return tossup_by_pair, bonus_by_pair, pairs_total, pair_id_by_question_id
 
 
+def _end_boundary_from_export(export_obj: dict[str, Any]) -> int | None:
+    # The game end is only carried by the event log (`state` has no field for it).
+    # Replay end.set / end.cleared in seq order; the last one wins.
+    event_log = export_obj.get("event_log")
+    if not isinstance(event_log, dict):
+        return None
+    events = event_log.get("events")
+    if not isinstance(events, list):
+        return None
+
+    indexed = [(idx, ev) for idx, ev in enumerate(events) if isinstance(ev, dict)]
+    indexed.sort(key=lambda item: (_maybe_int(item[1].get("seq")) or 0, item[0]))
+
+    end_boundary: int | None = None
+    for _, event in indexed:
+        event_type = event.get("type") or event.get("event_type")
+        if event_type == EVENT_END_SET:
+            payload = event.get("payload")
+            boundary = _maybe_int(payload.get("boundary_before_question")) if isinstance(payload, dict) else None
+            end_boundary = boundary
+        elif event_type == EVENT_END_CLEARED:
+            end_boundary = None
+    return end_boundary
+
+
 def _pairs_played_from_export(
     state: dict[str, Any],
     attempts_by_question_id: dict[str, list[dict[str, Any]]],
     pairs_total: int,
     pair_id_by_question_id: dict[int, int],
+    end_boundary: int | None,
 ) -> int:
+    # An early end at boundary N means pairs 1..N-1 were heard. Out-of-range values are
+    # treated as "not ended early" and fall through to the inference below.
+    if end_boundary is not None and 2 <= end_boundary <= pairs_total:
+        return end_boundary - 1
+
     pair_index = _maybe_int(state.get("pair_index")) or 0
     pairs_from_cursor = pair_index + 1 if pair_index >= 0 else 0
 
@@ -247,7 +279,13 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
 
     state = _load_export_state(export_obj)
     attempts_by_question_id = _attempts_map_from_state(state)
-    pairs_played = _pairs_played_from_export(state, attempts_by_question_id, pairs_total, pair_id_by_question_id)
+    pairs_played = _pairs_played_from_export(
+        state,
+        attempts_by_question_id,
+        pairs_total,
+        pair_id_by_question_id,
+        _end_boundary_from_export(export_obj),
+    )
 
     game = _require_dict(export_obj.get("game"), "game")
     team_objs = _require_list(game.get("teams"), "game.teams")
@@ -324,6 +362,10 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
             if start is None:
                 raise ValueError(f"game.teams[].lineup_segments[{seg_idx}].start_tossup must be an integer")
             if start < 1:
+                continue
+            # A segment starting after the last pair played was never heard. Without this,
+            # clamping below would credit it with one tossup.
+            if start > pairs_played:
                 continue
             if end is None:
                 end = pairs_played
@@ -536,7 +578,13 @@ def reduce_scoresheet_export_to_question_outcomes(export_obj: dict[str, Any]) ->
 
     state = _load_export_state(export_obj)
     attempts_by_question_id = _attempts_map_from_state(state)
-    pairs_played = _pairs_played_from_export(state, attempts_by_question_id, pairs_total, pair_id_by_question_id)
+    pairs_played = _pairs_played_from_export(
+        state,
+        attempts_by_question_id,
+        pairs_total,
+        pair_id_by_question_id,
+        _end_boundary_from_export(export_obj),
+    )
 
     game = _require_dict(export_obj.get("game"), "game")
     team_objs = _require_list(game.get("teams"), "game.teams")

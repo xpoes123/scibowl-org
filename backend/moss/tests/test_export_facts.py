@@ -438,3 +438,151 @@ class ExportFactsReducerTestCase(TestCase):
         with self.assertRaises(ValueError):
             reduce_scoresheet_export_to_question_outcomes(export_obj)
 
+
+
+class ExportFactsEndBoundaryTestCase(TestCase):
+    """Early game end via end.set / end.cleared in the event log."""
+
+    def _attempt(self, team_id: str, player_id: str | None, result: str) -> dict:
+        return {
+            "team_id": team_id,
+            "player_id": player_id,
+            "result": result,
+            "token": "X",
+            "is_end": False,
+            "location": {"kind": "question", "word_index": 0},
+        }
+
+    def _export(self, end_events: list[dict], team_a_segments: list[dict] | None = None) -> dict:
+        # Three pairs. The cursor sits on pair 3 and pair 3 has a buzz, so without an
+        # early end the inferred pairs played is 3.
+        return {
+            "format": "moss_scoresheet",
+            "version": 3,
+            "exported_at": "2026-02-13T00:00:00Z",
+            "packet": {
+                "packet": "Round 1",
+                "year": 2022,
+                "questions": [
+                    {"id": 1, "pair_id": 1, "question_type": "TOSSUP", "category": "PHYSICS"},
+                    {"id": 2, "pair_id": 1, "question_type": "BONUS", "category": "PHYSICS"},
+                    {"id": 3, "pair_id": 2, "question_type": "TOSSUP", "category": "PHYSICS"},
+                    {"id": 4, "pair_id": 2, "question_type": "BONUS", "category": "PHYSICS"},
+                    {"id": 5, "pair_id": 3, "question_type": "TOSSUP", "category": "PHYSICS"},
+                    {"id": 6, "pair_id": 3, "question_type": "BONUS", "category": "PHYSICS"},
+                ],
+            },
+            "packet_checksum": {
+                "algorithm": "sha256",
+                "canonicalization": "json_sorted_keys_utf8_no_ws",
+                "value": "0" * 64,
+            },
+            "game": {
+                "teams": [
+                    {
+                        "id": "team_a",
+                        "name": "Team A",
+                        "players": [
+                            {"id": "p_alice", "name": "Alice"},
+                            {"id": "p_bob", "name": "Bob"},
+                            {"id": "p_eve", "name": "Eve"},
+                        ],
+                        "lineup_segments": team_a_segments
+                        or [{"start_tossup": 1, "end_tossup": None, "active_player_ids": ["p_alice", "p_bob"]}],
+                    },
+                    {
+                        "id": "team_b",
+                        "name": "Team B",
+                        "players": [{"id": "p_carol", "name": "Carol"}],
+                        "lineup_segments": [
+                            {"start_tossup": 1, "end_tossup": None, "active_player_ids": ["p_carol"]}
+                        ],
+                    },
+                ]
+            },
+            "rules": {
+                "tossup": {"correct": 4, "incorrect": -4, "no_penalty": 0},
+                "bonus": {"correct": 10, "incorrect": 0},
+            },
+            "event_log": {"scoresheet_id": None, "next_seq": len(end_events) + 1, "events": end_events},
+            "state": {
+                "pair_index": 2,
+                "attempts_by_question_id": {
+                    "1": [self._attempt("team_a", "p_alice", "correct")],
+                    "2": [
+                        {
+                            "team_id": "team_a",
+                            "player_id": None,
+                            "result": "correct",
+                            "token": "BONUS",
+                            "is_end": True,
+                            "location": {"kind": "end"},
+                        }
+                    ],
+                    "5": [self._attempt("team_b", "p_carol", "correct")],
+                },
+            },
+        }
+
+    def _end_set(self, seq: int, boundary) -> dict:
+        return {"seq": seq, "type": "end.set", "version": 1, "payload": {"boundary_before_question": boundary}}
+
+    def _end_cleared(self, seq: int) -> dict:
+        return {"seq": seq, "type": "end.cleared", "version": 1, "payload": {}}
+
+    def test_end_set_cuts_off_later_pairs(self):
+        export_obj = self._export([self._end_set(1, 3)])
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 2)
+
+        team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
+        team_b = next(t for t in facts.team_facts if t.team_name == "Team B")
+        self.assertEqual(team_a.tossups_heard, 2)
+        self.assertEqual(team_a.points, 14)
+        # Team B's buzz on pair 3 is after the end and is ignored.
+        self.assertEqual(team_b.tossups_heard, 2)
+        self.assertEqual(team_b.tossups_4, 0)
+        self.assertEqual(team_b.points, 0)
+
+        heard = {p.player_name: p.tossups_heard for p in facts.player_facts}
+        self.assertEqual(heard, {"Alice": 2, "Bob": 2, "Carol": 2})
+
+        outcomes = reduce_scoresheet_export_to_question_outcomes(export_obj)
+        self.assertEqual(outcomes.pairs_played, 2)
+        self.assertEqual({o.pair_id for o in outcomes.outcomes}, {1, 2})
+
+    def test_last_end_event_wins_in_seq_order(self):
+        moved = self._export([self._end_set(1, 3), self._end_set(2, 2)])
+        self.assertEqual(reduce_scoresheet_export_to_facts(moved).pairs_played, 1)
+
+        # Listed out of order: end.cleared has the higher seq, so the game is not ended early.
+        cleared = self._export([self._end_cleared(2), self._end_set(1, 2)])
+        self.assertEqual(reduce_scoresheet_export_to_facts(cleared).pairs_played, 3)
+
+    def test_out_of_range_end_falls_back_to_inference(self):
+        for boundary in (1, 4, 99, "2", None):
+            with self.subTest(boundary=boundary):
+                export_obj = self._export([self._end_set(1, boundary)])
+                self.assertEqual(reduce_scoresheet_export_to_facts(export_obj).pairs_played, 3)
+
+    def test_no_end_events_keeps_inference(self):
+        export_obj = self._export([])
+        self.assertEqual(reduce_scoresheet_export_to_facts(export_obj).pairs_played, 3)
+
+        del export_obj["event_log"]
+        self.assertEqual(reduce_scoresheet_export_to_facts(export_obj).pairs_played, 3)
+
+    def test_lineup_segment_starting_after_end_counts_nothing(self):
+        # Eve subs in for Bob at pair 2 only; the game ends before pair 2.
+        segments = [
+            {"start_tossup": 1, "end_tossup": 1, "active_player_ids": ["p_alice", "p_bob"]},
+            {"start_tossup": 2, "end_tossup": 2, "active_player_ids": ["p_alice", "p_eve"]},
+            {"start_tossup": 3, "end_tossup": None, "active_player_ids": ["p_alice", "p_bob"]},
+        ]
+        export_obj = self._export([self._end_set(1, 2)], team_a_segments=segments)
+
+        facts = reduce_scoresheet_export_to_facts(export_obj)
+        self.assertEqual(facts.pairs_played, 1)
+        heard = {p.player_name: p.tossups_heard for p in facts.player_facts}
+        self.assertEqual(heard, {"Alice": 1, "Bob": 1, "Carol": 1})
