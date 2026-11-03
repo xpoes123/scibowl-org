@@ -458,9 +458,12 @@ code {
   gap: 10px;
 }
 
+/* A horizontal scroller clips vertically too, so the padding gives hover glows room inside
+   it and the matching negative margin keeps the grid where it was. */
 .teamGridScroll {
   overflow-x: auto;
-  padding-bottom: 6px;
+  margin: -10px;
+  padding: 10px 10px 16px;
 }
 
 .teamGrid {
