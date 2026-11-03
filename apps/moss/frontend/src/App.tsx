@@ -31,6 +31,7 @@ import {
 import {
   finalBoundary,
   isPairAfterEnd,
+  lastHeardPairIndex,
   resolveEndBoundary,
 } from "./domain/scoresheetGameEnd";
 import {
@@ -2990,6 +2991,7 @@ function ModeratorApp() {
   // null means the game was not ended early; END is then shown at defaultEndBoundary.
   const endBoundary = resolveEndBoundary(scoresheetState.endBoundary, pairIds);
   const defaultEndBoundary = finalBoundary(pairIds);
+  const lastHeardPairIdx = lastHeardPairIndex(pairIds, endBoundary);
 
   function pairIdsWithAttemptsFrom(boundaryBeforeQuestion: number): number[] {
     return pairRows
@@ -4182,7 +4184,9 @@ function ModeratorApp() {
 
   function next() {
     setAttemptEditor(null);
-    const nextIndex = Math.min(pairRows.length - 1, pairIdx + 1);
+    // Pairs after END can still be viewed from the scoresheet, but Next stops at the last heard pair.
+    if (pairIdx >= lastHeardPairIdx) return;
+    const nextIndex = pairIdx + 1;
     if (nextIndex !== pairIdx) {
       appendScoresheetEvent(buildScoresheetEvent("cursor.pair_index_set", { pair_index: nextIndex }));
     }
@@ -4207,6 +4211,7 @@ function ModeratorApp() {
     const currentGame = game;
 
     if (question.question_type === "BONUS") return;
+    if (isPairAfterEnd(question.pair_id, endBoundary)) return;
 
     const anchor = getAnchorRect(anchorEl);
 
@@ -4275,6 +4280,7 @@ function ModeratorApp() {
 
   function setBonusResult(question: Question, result: AttemptResult) {
     if (question.question_type !== "BONUS") return;
+    if (isPairAfterEnd(question.pair_id, endBoundary)) return;
 
     setAttemptEditor(null);
     const tossup = tossupQuestionByPairId.get(question.pair_id);
@@ -4292,6 +4298,7 @@ function ModeratorApp() {
   function openBonusResultEditor(question: Question, anchorX: number, anchorY: number) {
     if (question.question_type !== "BONUS") return;
     if (!bonusEnabled) return;
+    if (isPairAfterEnd(question.pair_id, endBoundary)) return;
 
     const tossup = tossupQuestionByPairId.get(question.pair_id);
     const tossupAttempts = tossup ? attempts[tossup.id] ?? [] : [];
@@ -4310,6 +4317,7 @@ function ModeratorApp() {
     if (!selection) return;
     const question = questions.find((qq) => qq.id === questionId);
     if (!question) return;
+    if (isPairAfterEnd(question.pair_id, endBoundary)) return;
 
     if (question.question_type === "BONUS") {
       appendScoresheetEvent(buildScoresheetEvent("bonus.result_set", {
@@ -5415,7 +5423,13 @@ function ModeratorApp() {
               </div>
 
               <div className="questionBlurWrap">
-                <div className={["questionBlock", isQuestionBlurred ? "questionBlockBlurred" : ""].filter(Boolean).join(" ")}>
+                <div
+                  className={[
+                    "questionBlock",
+                    isQuestionBlurred ? "questionBlockBlurred" : "",
+                    q && isPairAfterEnd(q.pair_id, endBoundary) ? "questionBlockAfterEnd" : "",
+                  ].filter(Boolean).join(" ")}
+                >
                   {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
                   {bonusQ && (
                     <>
@@ -5452,7 +5466,7 @@ function ModeratorApp() {
                 <button
                   className="secondary"
                   onClick={next}
-                  disabled={isQuestionBlurred || pairIdx === pairRows.length - 1}
+                  disabled={isQuestionBlurred || pairIdx >= lastHeardPairIdx}
                   aria-label="Next pair"
                 >
                   <svg className="arrowIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -5462,7 +5476,7 @@ function ModeratorApp() {
               </div>
             </div>
 
-            {pairIdx === pairRows.length - 1 && (
+            {pairIdx >= lastHeardPairIdx && (
               <>
                 <div className="endOfRoundSeparator" aria-hidden="true" />
                 <div className="endOfRoundNotice" aria-label="End of round notice">

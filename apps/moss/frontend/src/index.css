@@ -1034,6 +1034,11 @@ button.addTeamButton:hover .addIcon {
   filter: blur(14px);
 }
 
+/* Viewing a pair after the game ended early: readable, but visibly not part of the game. */
+.questionBlockAfterEnd {
+  opacity: 0.5;
+}
+
 .questionBlurOverlay {
   position: absolute;
   inset: 0;
