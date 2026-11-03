@@ -641,7 +641,7 @@ function SortableDraftTeamCol({
           title="Add player"
           aria-label="Add player"
         >
-          <span className="addIcon">+</span>
+          <span className="addIcon" />
         </button>
       </div>
     </div>
@@ -5047,7 +5047,7 @@ function ModeratorApp() {
                             title="Add team"
                             aria-label="Add team"
                           >
-                            <span className="addIcon">+</span>
+                            <span className="addIcon" />
                           </button>
                         </div>
                       </div>

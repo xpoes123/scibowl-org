@@ -781,8 +781,26 @@ button.addTeamButton:hover .addIcon {
   place-items: center;
   background: #f6f7fb;
   border: 1px solid var(--sb-border);
-  font-size: 22px;
-  line-height: 1;
+}
+
+/* The plus is drawn from two boxes rather than an SVG so its bars snap to whole pixels.
+   Both share the one grid cell, and even sizes keep the centring on whole pixels too. */
+.addIcon::before,
+.addIcon::after {
+  content: "";
+  grid-area: 1 / 1;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.addIcon::before {
+  width: 10px;
+  height: 2px;
+}
+
+.addIcon::after {
+  width: 2px;
+  height: 10px;
 }
 
 .modalFooter {
