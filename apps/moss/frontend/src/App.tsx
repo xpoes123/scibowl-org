@@ -1589,6 +1589,11 @@ function ScoreboardDisplayApp() {
     return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
   }, [questions]);
 
+  const endBoundary = useMemo(
+    () => resolveEndBoundary(scoresheetState.endBoundary, pairRows.map((row) => row.pairId)),
+    [pairRows, scoresheetState.endBoundary]
+  );
+
   const scoredPairs = useMemo(() => {
     const runningByTeam: Record<string, number> = Object.fromEntries(teams.map((t) => [t.id, 0]));
 
@@ -1602,7 +1607,8 @@ function ScoreboardDisplayApp() {
 
         const tossupPoints = pointsForAttempt(tossupAttempt, pair.tossup?.question_type) ?? 0;
         const bonusPoints = pointsForAttempt(bonusAttempt, pair.bonus?.question_type) ?? 0;
-        const pairPoints = tossupPoints + bonusPoints;
+        // Pairs after END were not heard and do not count, matching the moderator view.
+        const pairPoints = isPairAfterEnd(pair.pairId, endBoundary) ? 0 : tossupPoints + bonusPoints;
         runningByTeam[team.id] += pairPoints;
 
         return {
@@ -1619,7 +1625,7 @@ function ScoreboardDisplayApp() {
 
     const totals = teams.map((t) => ({ teamId: t.id, total: runningByTeam[t.id] ?? 0 }));
     return { rows, totals };
-  }, [attempts, pairRows, teams]);
+  }, [attempts, endBoundary, pairRows, teams]);
 
   const mostRecentPairId = useMemo(() => {
     for (let i = scoredPairs.rows.length - 1; i >= 0; i--) {
@@ -1826,8 +1832,10 @@ function ScoreboardDisplayApp() {
               const row = scoredPairs.rows[i];
               const boundaryBeforeQuestion = row.pairId;
               const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
+              // The audience only sees END when the game ended early.
+              const isEndHere = boundaryBeforeQuestion === endBoundary;
 
-              if (markerKind !== undefined) {
+              if (markerKind !== undefined || isEndHere) {
                 nodes.push(
                   <tr
                     key={`boundary_${boundaryBeforeQuestion}`}
@@ -1835,7 +1843,9 @@ function ScoreboardDisplayApp() {
                   >
                     <td colSpan={colSpan}>
                       <div className="scoresheetBoundaryButton" aria-hidden="true">
-                        <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                        <span className="scoresheetBoundaryLabel">
+                          {[markerKind, isEndHere ? "END" : undefined].filter(Boolean).join(" · ")}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -1843,6 +1853,10 @@ function ScoreboardDisplayApp() {
               }
 
               const isActivePair = row.pairId === pairRows[pairIdx]?.pairId;
+              const rowClassName = [
+                isActivePair ? "scoresheetRowActive" : "",
+                isPairAfterEnd(row.pairId, endBoundary) ? "scoresheetRowAfterEnd" : "",
+              ].filter(Boolean).join(" ") || undefined;
 
               const renderTeamCells = (teamRow: typeof row.perTeam[0], isGroupEnd: boolean) => {
                 const tossupResult = teamRow.tossupAttempt?.result;
@@ -1882,7 +1896,7 @@ function ScoreboardDisplayApp() {
                   <tr
                     key={`row_${row.pairId}`}
                     data-pair-id={row.pairId}
-                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                    className={rowClassName}
                   >
                     {row.perTeam[0] && renderTeamCells(row.perTeam[0], true)}
                     <td className="scoresheetPairCell scoresheetNumberCell">
@@ -1896,7 +1910,7 @@ function ScoreboardDisplayApp() {
                   <tr
                     key={`row_${row.pairId}`}
                     data-pair-id={row.pairId}
-                    className={isActivePair ? "scoresheetRowActive" : undefined}
+                    className={rowClassName}
                   >
                     <td className="scoresheetPairCell">
                       <span className="pairLinkDisplay">{row.pairId}</span>
