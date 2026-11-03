@@ -2346,6 +2346,11 @@ button.word.wordBold {
   background: #f0f2ff;
 }
 
+/* Pairs after the game ended early were not heard. */
+.scoresheetRowAfterEnd td {
+  opacity: 0.4;
+}
+
 .scoresheetAttemptCell {
   padding: 0;
 }

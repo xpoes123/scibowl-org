@@ -29,6 +29,11 @@ import {
   type ScoresheetState,
 } from "./domain/scoresheetReducer";
 import {
+  finalBoundary,
+  isPairAfterEnd,
+  resolveEndBoundary,
+} from "./domain/scoresheetGameEnd";
+import {
   SCOREBOARD_CHANNEL_NAME,
   makeScoreboardClientId,
   safePostScoreboardMessage,
@@ -2981,6 +2986,30 @@ function ModeratorApp() {
     return [...byPair.values()].sort((a, b) => a.pairId - b.pairId);
   }, [questions]);
 
+  const pairIds = useMemo(() => pairRows.map((row) => row.pairId), [pairRows]);
+  // null means the game was not ended early; END is then shown at defaultEndBoundary.
+  const endBoundary = resolveEndBoundary(scoresheetState.endBoundary, pairIds);
+  const defaultEndBoundary = finalBoundary(pairIds);
+
+  function pairIdsWithAttemptsFrom(boundaryBeforeQuestion: number): number[] {
+    return pairRows
+      .filter((row) => row.pairId >= boundaryBeforeQuestion)
+      .filter((row) => [row.tossup, row.bonus].some((qq) => !!qq && (attempts[qq.id] ?? []).length > 0))
+      .map((row) => row.pairId);
+  }
+
+  function setGameEnd(boundaryBeforeQuestion: number) {
+    // Moving END back to its default spot after the last pair means the game was not ended early.
+    if (boundaryBeforeQuestion >= defaultEndBoundary) {
+      if (scoresheetState.endBoundary !== null) appendScoresheetEvent(buildScoresheetEvent("end.cleared", {}));
+      return;
+    }
+    if (boundaryBeforeQuestion < 2 || boundaryBeforeQuestion === endBoundary) return;
+    // Ending the game before recorded buzzes would silently drop them.
+    if (pairIdsWithAttemptsFrom(boundaryBeforeQuestion).length) return;
+    appendScoresheetEvent(buildScoresheetEvent("end.set", { boundary_before_question: boundaryBeforeQuestion }));
+  }
+
   useEffect(() => {
     if (!game) return;
     if (isScoresheetExported) return;
@@ -3055,7 +3084,8 @@ function ModeratorApp() {
 
         const tossupPoints = pointsForAttempt(tossupAttempt, pair.tossup?.question_type) ?? 0;
         const bonusPoints = pointsForAttempt(bonusAttempt, pair.bonus?.question_type) ?? 0;
-        const pairPoints = tossupPoints + bonusPoints;
+        // Pairs after END were not heard and do not count, matching the stats.
+        const pairPoints = isPairAfterEnd(pair.pairId, endBoundary) ? 0 : tossupPoints + bonusPoints;
         runningByTeam[team.id] += pairPoints;
 
         return {
@@ -3072,7 +3102,7 @@ function ModeratorApp() {
 
     const totals = teams.map((t) => ({ teamId: t.id, total: runningByTeam[t.id] ?? 0 }));
     return { rows, totals };
-  }, [attempts, pairRows, teams]);
+  }, [attempts, endBoundary, pairRows, teams]);
 
   async function exportScoresheet() {
     if (!game) return;
@@ -5572,7 +5602,9 @@ function ModeratorApp() {
                       const boundaryBeforeQuestion = row.pairId;
                       const isStartBoundary = i === 0;
                       const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
-                      const isSpacedMarker = markerKind !== undefined;
+                      const isEndHere = boundaryBeforeQuestion === endBoundary;
+                      const isSpacedMarker = markerKind !== undefined || isEndHere;
+                      const boundaryLabel = [markerKind, isEndHere ? "END" : undefined].filter(Boolean).join(" · ");
 
                       nodes.push(
                         <tr
@@ -5597,7 +5629,7 @@ function ModeratorApp() {
                               aria-label={
                                 isStartBoundary
                                   ? "Edit starting lineup"
-                                  : markerKind
+                                  : isSpacedMarker
                                     ? `Edit marker before question ${boundaryBeforeQuestion}`
                                     : `Add marker before question ${boundaryBeforeQuestion}`
                               }
@@ -5606,10 +5638,10 @@ function ModeratorApp() {
                                 <span className="scoresheetBoundaryAffordance scoresheetBoundaryAffordanceTab">
                                   Change starting lineup
                                 </span>
-                              ) : markerKind ? (
-                                <span className="scoresheetBoundaryLabel">{markerKind}</span>
+                              ) : isSpacedMarker ? (
+                                <span className="scoresheetBoundaryLabel">{boundaryLabel}</span>
                               ) : (
-                                <span className="scoresheetBoundaryAffordance">+ Add break</span>
+                                <span className="scoresheetBoundaryAffordance">+ Add break or end</span>
                               )}
                             </button>
                           </td>
@@ -5617,10 +5649,14 @@ function ModeratorApp() {
                       );
 
                       const isActivePair = row.pairId === q.pair_id;
+                      const rowClassName = [
+                        isActivePair ? "scoresheetRowActive" : "",
+                        isPairAfterEnd(row.pairId, endBoundary) ? "scoresheetRowAfterEnd" : "",
+                      ].filter(Boolean).join(" ");
                       nodes.push(
                         <tr
                           key={row.pairId}
-                          className={isActivePair ? "scoresheetRowActive" : undefined}
+                          className={rowClassName || undefined}
                         >
                           <td className="scoresheetPairCell">
                             <button
@@ -5699,6 +5735,35 @@ function ModeratorApp() {
                       );
                     }
 
+                    if (scoredPairs.rows.length) {
+                      // END sits here by default; it moves to an earlier boundary when the game ends early.
+                      const isEndHere = endBoundary === null;
+                      nodes.push(
+                        <tr
+                          key="boundary_final"
+                          className={[
+                            "scoresheetBoundaryRow",
+                            isEndHere ? "scoresheetBoundaryRowMarked" : "",
+                          ].filter(Boolean).join(" ")}
+                        >
+                          <td colSpan={colSpan}>
+                            <button
+                              type="button"
+                              className={["scoresheetBoundaryButton", isEndHere ? "scoresheetBoundaryButtonMarked" : ""].filter(Boolean).join(" ")}
+                              onClick={(e) => openScoresheetBoundaryPopup(defaultEndBoundary, e.currentTarget)}
+                              aria-label={isEndHere ? "End of game" : "Move end of game after the last question"}
+                            >
+                              {isEndHere ? (
+                                <span className="scoresheetBoundaryLabel">END</span>
+                              ) : (
+                                <span className="scoresheetBoundaryAffordance">+ Add end</span>
+                              )}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    }
+
                     return nodes;
                   })()}
                 </tbody>
@@ -5711,6 +5776,52 @@ function ModeratorApp() {
           if (!scoresheetBoundaryPopup) return null;
           const boundary = scoresheetBoundaryPopup.boundaryBeforeQuestion;
           const existing = scoresheetMarkers[boundary];
+          const isFinalBoundary = boundary === defaultEndBoundary;
+          const isEndHere = isFinalBoundary ? endBoundary === null : boundary === endBoundary;
+
+          const endButton = isFinalBoundary ? (
+            isEndHere ? null : (
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => {
+                  setGameEnd(defaultEndBoundary);
+                  setScoresheetBoundaryPopup(null);
+                }}
+              >
+                End game here
+              </button>
+            )
+          ) : (
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => {
+                setGameEnd(isEndHere ? defaultEndBoundary : boundary);
+                setScoresheetBoundaryPopup(null);
+              }}
+            >
+              {isEndHere ? "Undo end of game" : "End game here"}
+            </button>
+          );
+
+          if (isFinalBoundary) {
+            return (
+              <div
+                ref={scoresheetBoundaryPopupRef}
+                className="attemptPopup scoresheetBoundaryPopup"
+                role="dialog"
+                aria-label="End of game"
+                style={{ left: scoresheetBoundaryPopup.left, top: scoresheetBoundaryPopup.top }}
+              >
+                <div className="attemptPopupButtons">
+                  {endButton ?? (
+                    <div className="muted">If the game ended early, click the line where it ended.</div>
+                  )}
+                </div>
+              </div>
+            );
+          }
 
           return (
             <div
@@ -5776,6 +5887,7 @@ function ModeratorApp() {
                     </button>
                   </>
                 )}
+                {endButton}
               </div>
             </div>
           );
