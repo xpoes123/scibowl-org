@@ -9,7 +9,9 @@ MoSS exports/imports a saved game file with:
 - `game` (teams + players + optional lineup segments)
 - `rules`
 - `state` (attempts, pair index, etc.; v3 uses ids instead of repeated team/player names)
-- `event_log` (v2+ event stream)
+- `event_log` (v2+ event stream; event types and payloads are listed in the canonical spec)
+
+Games that end early (for example, when a timed round runs out) record an `end.set` event in `event_log`. Pairs from that boundary onward count as not heard. See "Game end" in the canonical spec: `apps/moss/frontend/src/assets/scoresheet_export_json_spec.md`.
 
 Optional fields:
 - `game.teams[].lineup_segments` (encodes lineup segments for substitutions)

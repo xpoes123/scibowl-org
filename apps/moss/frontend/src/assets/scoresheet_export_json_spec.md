@@ -68,6 +68,7 @@ Teams and players used for display and for attributing attempts.
       - `end_tossup` (number or null, required): Inclusive. `null` means "to end of game".
       - v1/v2: `active_players` (array of strings): Player display names.
       - v3: `active_player_ids` (array of strings): Player ids.
+      - v3: `ordered_player_ids` (array of strings, optional): Display order of the team's players for this segment.
 
 ### `rules` (object, required)
 Scoring rules used to interpret attempts.
@@ -98,6 +99,38 @@ The authoritative event stream for the scoresheet. Exported in v2 and later.
 Notes:
 - In v3 exports, event payload fields like `team_id` / `player_id` refer to `game.teams[].id` and `game.teams[].players[].id`.
 - Treat ids as opaque strings (do not parse/assume structure).
+- Events are applied in `seq` order. Later events override earlier ones as described per type below.
+
+#### Boundaries
+Several events refer to a `boundary_before_question`. Despite the name, its value is a **pair id**: boundary `N` is the gap immediately before pair `N` (between pairs `N - 1` and `N`). Boundary `1` is the start of the game.
+
+#### Event types
+| `type` | `payload` | Meaning |
+|---|---|---|
+| `cursor.pair_index_set` | `pair_index` (number) | Moves the UI cursor to a zero-based pair index. |
+| `attempt.recorded` | `question_id`, `team_id`, `player_id` (optional), `result`, `token`, `is_end`, `location` | Records a tossup attempt. Fields match the attempt object below. Replaces any earlier attempt on that question by the same team or the same player; if the new attempt is correct, also removes any other correct attempt on that question. |
+| `attempts.question_cleared` | `question_id` | Removes all attempts on a question. |
+| `bonus.result_set` | `bonus_question_id`, `team_id`, `result` | Records the bonus result for the team that earned the bonus. |
+| `marker.set` | `boundary_before_question`, `kind` (`"HALFTIME"` or `"BREAK"`) | Places or changes a marker at a boundary. At most one marker per boundary. Markers are organizational and gate lineup changes in the UI; they do not affect scoring. |
+| `marker.removed` | `boundary_before_question` | Removes the marker at a boundary. MoSS also emits `lineup.removed` for that boundary. |
+| `lineup.set` | `team_id`, `boundary_before_question`, `active_player_ids`, `ordered_player_ids` (optional) | Sets a team's active players starting at a boundary. |
+| `lineup.removed` | `team_id`, `boundary_before_question` | Removes a team's lineup change at a boundary. |
+| `end.set` | `boundary_before_question` | Ends the game early at a boundary. See "Game end" below. |
+| `end.cleared` | (empty) | Removes the early end; the game runs to the packet's last pair. |
+| `game.started`, `game.completed` | (empty) | Reserved. Accepted by the backend but not emitted by MoSS. |
+
+The meanings above follow the MoSS reducer (`apps/moss/frontend/src/domain/scoresheetReducer.ts`), which produces the exported `state` that stats are computed from. The backend reducer (`backend/moss/reducer.py`) differs in places (for example, `attempt.recorded` replaces by team only, and bonus results are stored separately from attempts) and is not used for stats on exports that include `state`.
+
+#### Game end
+The game end is a single value, `end_boundary`, derived by replaying `end.set` / `end.cleared` events in `seq` order (the last one wins). It is independent of markers: an end and a `HALFTIME`/`BREAK` marker may share a boundary.
+
+- **Not ended early** (`end_boundary` is null): no `end.set` events, or the last one was followed by `end.cleared`. Consumers infer pairs played as before: the larger of `state.pair_index + 1` and the highest pair with a recorded attempt, capped at the packet's pair count.
+- **Ended early at boundary `N`**: pairs `1` to `N - 1` were heard by both teams; pairs `N` and later were not heard by anyone. Consumers use `N - 1` as pairs played instead of inferring it.
+- **Valid range**: `N` is from `2` to the packet's last pair id. MoSS never produces values outside that range; consumers treat an out-of-range value as not ended early.
+- **No scoring after the end**: MoSS does not allow attempts or bonus results on pairs `N` and later. Consumers ignore any that are present.
+- **Where to read it**: `state` does not carry the game end. Consumers derive it from `event_log`. v1 exports (no event log) are never ended early.
+- **Lineups**: lineup segments are counted only up to pair `N - 1`. Segments that start at or after `N` contribute no tossups heard.
+- Pair ids are assumed to be contiguous, starting at `1`.
 
 ### `state` (object, required in v1, optional in v2+)
 The canonical marking state. A scoresheet table is not exported because it is derivable.
