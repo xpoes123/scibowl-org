@@ -616,6 +616,12 @@ code {
   box-shadow: var(--sb-hover-glow);
 }
 
+/* Fields keep the glow while focused in place of the browser's own focus outline. */
+.textInput:focus {
+  outline: none;
+  box-shadow: var(--sb-hover-glow);
+}
+
 select.textInput {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -1422,7 +1428,9 @@ button.word.wordBold {
   font-size: 14px;
 }
 
-.selectInput:hover {
+.selectInput:hover,
+.selectInput:focus {
+  outline: none;
   box-shadow: var(--sb-hover-glow);
 }
 
@@ -2063,13 +2071,10 @@ button.word.wordBold {
   text-align: center;
 }
 
-.mossNavTimerInput:hover {
-  box-shadow: var(--sb-hover-glow);
-}
-
+.mossNavTimerInput:hover,
 .mossNavTimerInput:focus {
-  outline: 2px solid var(--sb-focus);
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: var(--sb-hover-glow);
 }
 
 .mossNavTimerBtn {
