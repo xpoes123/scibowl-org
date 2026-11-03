@@ -6,6 +6,8 @@ export type ScoresheetState = {
   attemptsByQuestionId: Record<number, Attempt[]>;
   markers: Record<number, ScoresheetMarkerKind>;
   lineupsByTeamId: Record<string, Record<number, LineupState>>;
+  // Raw value from the last end.set / end.cleared; resolve with resolveEndBoundary before use.
+  endBoundary: number | null;
   lastSeq: number;
 };
 
@@ -20,6 +22,7 @@ export function initialScoresheetState(): ScoresheetState {
     attemptsByQuestionId: {},
     markers: {},
     lineupsByTeamId: {},
+    endBoundary: null,
     lastSeq: 0,
   };
 }
@@ -59,6 +62,8 @@ function cloneScoresheetState(base: ScoresheetState): ScoresheetState {
     attemptsByQuestionId,
     markers,
     lineupsByTeamId,
+    // Snapshots from older moderator windows have no endBoundary.
+    endBoundary: base.endBoundary ?? null,
     lastSeq: base.lastSeq,
   };
 }
@@ -185,6 +190,15 @@ export function reduceScoresheetEvents(events: ScoresheetEvent[], baseState: Sco
             state.lineupsByTeamId[rec.team_id] = teamLineups;
           }
         }
+        break;
+      }
+      case "end.set": {
+        const boundary = (payload as { boundary_before_question: number }).boundary_before_question;
+        state.endBoundary = Number.isInteger(boundary) ? boundary : null;
+        break;
+      }
+      case "end.cleared": {
+        state.endBoundary = null;
         break;
       }
       default:

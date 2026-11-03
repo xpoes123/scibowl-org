@@ -4103,6 +4103,7 @@ function ModeratorApp() {
           const boundary = Number(payload.boundary_before_question);
           return Number.isFinite(boundary);
         }
+        if (ev.type === "end.set" || ev.type === "end.cleared") return true;
         return false;
       });
 
