@@ -2067,6 +2067,17 @@ button.word.wordBold {
   animation: questionTimerFlash 0.5s ease-out 1 forwards;
 }
 
+/* Flashes what blocked a move of END (and END itself), using the question timer's flash. */
+.scoresheetBlockFlash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fca5a5;
+  /* Tint rather than cover, so the buzz or label text stays readable. */
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  animation: questionTimerFlash 0.5s ease-out 1 forwards;
+}
 
 .mossNavTimerInput {
   font: inherit;
@@ -2359,6 +2370,7 @@ button.word.wordBold {
 
 .scoresheetAttemptCell {
   padding: 0;
+  position: relative;
 }
 
 .scoresheetAttemptCellButton {

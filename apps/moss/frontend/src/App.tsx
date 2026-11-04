@@ -3010,6 +3010,50 @@ function ModeratorApp() {
       .map((row) => row.pairId);
   }
 
+  function markerBoundariesFrom(boundaryBeforeQuestion: number): number[] {
+    return Object.keys(scoresheetMarkers)
+      .map((key) => Number(key))
+      .filter((boundary) => boundary >= boundaryBeforeQuestion);
+  }
+
+  // What blocked the last attempt to move END; the scoresheet flashes these and the END marker.
+  const [endBlockFlash, setEndBlockFlash] = useState<{ id: number; pairIds: Set<number>; boundaries: Set<number> } | null>(null);
+  const endBlockFlashTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (endBlockFlashTimerRef.current) window.clearTimeout(endBlockFlashTimerRef.current);
+    };
+  }, []);
+
+  function flashEndBlockers(pairIdsBlocking: number[], boundariesBlocking: number[]) {
+    if (endBlockFlashTimerRef.current) window.clearTimeout(endBlockFlashTimerRef.current);
+    setEndBlockFlash((prev) => ({
+      id: (prev?.id ?? 0) + 1,
+      pairIds: new Set(pairIdsBlocking),
+      boundaries: new Set(boundariesBlocking),
+    }));
+    endBlockFlashTimerRef.current = window.setTimeout(() => {
+      endBlockFlashTimerRef.current = null;
+      setEndBlockFlash(null);
+    }, 600);
+
+    // Bring the first blocker into view. Boundary N sits above pair N, so it wins a tie.
+    const wrap = moderatorScoresheetWrapRef.current;
+    if (!wrap) return;
+    const firstPairId = pairIdsBlocking.length ? Math.min(...pairIdsBlocking) : Infinity;
+    const firstBoundary = boundariesBlocking.length ? Math.min(...boundariesBlocking) : Infinity;
+    const target = firstBoundary <= firstPairId
+      ? wrap.querySelector(`[data-boundary="${firstBoundary}"]`)
+      : wrap.querySelector(`[data-pair-id="${firstPairId}"]`);
+    if (!(target instanceof HTMLElement)) return;
+    const wrapRect = wrap.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    if (targetRect.top >= wrapRect.top && targetRect.bottom <= wrapRect.bottom) return;
+    const targetTopInWrap = wrap.scrollTop + (targetRect.top - wrapRect.top);
+    wrap.scrollTo({ top: Math.max(0, targetTopInWrap - wrap.clientHeight / 2), behavior: "smooth" });
+  }
+
   function setGameEnd(boundaryBeforeQuestion: number) {
     // Moving END back to its default spot after the last pair means the game was not ended early.
     if (boundaryBeforeQuestion >= defaultEndBoundary) {
@@ -3017,9 +3061,20 @@ function ModeratorApp() {
       return;
     }
     if (boundaryBeforeQuestion < 2 || boundaryBeforeQuestion === endBoundary) return;
-    // Ending the game before recorded buzzes would silently drop them.
-    if (pairIdsWithAttemptsFrom(boundaryBeforeQuestion).length) return;
+    // Ending the game before recorded buzzes would silently drop them, and a break or halftime
+    // at or after END would sit outside the game.
+    const pairIdsBlocking = pairIdsWithAttemptsFrom(boundaryBeforeQuestion);
+    const boundariesBlocking = markerBoundariesFrom(boundaryBeforeQuestion);
+    if (pairIdsBlocking.length || boundariesBlocking.length) {
+      flashEndBlockers(pairIdsBlocking, boundariesBlocking);
+      return;
+    }
     appendScoresheetEvent(buildScoresheetEvent("end.set", { boundary_before_question: boundaryBeforeQuestion }));
+  }
+
+  function renderEndBlockFlash(isBlocking: boolean) {
+    if (!isBlocking || !endBlockFlash) return null;
+    return <span key={`end_block_flash_${endBlockFlash.id}`} className="scoresheetBlockFlash" aria-hidden="true" />;
   }
 
   useEffect(() => {
@@ -5622,11 +5677,14 @@ function ModeratorApp() {
                       const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
                       const isEndHere = boundaryBeforeQuestion === endBoundary;
                       const isSpacedMarker = markerKind !== undefined || isEndHere;
-                      const boundaryLabel = [markerKind, isEndHere ? "END" : undefined].filter(Boolean).join(" · ");
+                      // Markers can't sit at or after END, so at most one label applies.
+                      const boundaryLabel = isEndHere ? "END" : markerKind;
+                      const isLabelFlashing = isEndHere || !!endBlockFlash?.boundaries.has(boundaryBeforeQuestion);
 
                       nodes.push(
                         <tr
                           key={`boundary_${boundaryBeforeQuestion}`}
+                          data-boundary={boundaryBeforeQuestion}
                           className={[
                             "scoresheetBoundaryRow",
                             isStartBoundary ? "scoresheetBoundaryRowStart" : "",
@@ -5657,9 +5715,14 @@ function ModeratorApp() {
                                   Change starting lineup
                                 </span>
                               ) : isSpacedMarker ? (
-                                <span className="scoresheetBoundaryLabel">{boundaryLabel}</span>
+                                <span className="scoresheetBoundaryLabel">
+                                  {boundaryLabel}
+                                  {renderEndBlockFlash(isLabelFlashing)}
+                                </span>
                               ) : (
-                                <span className="scoresheetBoundaryAffordance">+ Add break or end</span>
+                                <span className="scoresheetBoundaryAffordance">
+                                  {endBoundary !== null && boundaryBeforeQuestion > endBoundary ? "+ Add end" : "+ Add break or end"}
+                                </span>
                               )}
                             </button>
                           </td>
@@ -5674,6 +5737,7 @@ function ModeratorApp() {
                       nodes.push(
                         <tr
                           key={row.pairId}
+                          data-pair-id={row.pairId}
                           className={rowClassName || undefined}
                         >
                           <td className="scoresheetPairCell">
@@ -5689,6 +5753,7 @@ function ModeratorApp() {
                             const isGroupEnd = teamIndex < row.perTeam.length - 1;
                             const tossupResult = teamRow.tossupAttempt?.result;
                             const bonusResult = teamRow.bonusAttempt?.result;
+                            const isPairBlockingEnd = !!endBlockFlash?.pairIds.has(row.pairId);
 
                             const tossupCellClass = [
                               "scoresheetAttemptCell",
@@ -5726,6 +5791,7 @@ function ModeratorApp() {
                                 >
                                   {formatAttemptCellText(teamRow.tossupAttempt, row.tossup?.question_type, playersById)}
                                 </button>
+                                {renderEndBlockFlash(isPairBlockingEnd && !!teamRow.tossupAttempt)}
                               </td>,
                               <td key={`${teamRow.teamId}_b`} className={bonusCellClass || undefined}>
                                 <button
@@ -5740,6 +5806,7 @@ function ModeratorApp() {
                                 >
                                   {formatAttemptCellText(teamRow.bonusAttempt, row.bonus?.question_type, playersById)}
                                 </button>
+                                {renderEndBlockFlash(isPairBlockingEnd && !!teamRow.bonusAttempt)}
                               </td>,
                               <td
                                 key={`${teamRow.teamId}_r`}
@@ -5773,7 +5840,10 @@ function ModeratorApp() {
                               aria-label={isEndHere ? "End of game" : "Move end of game after the last question"}
                             >
                               {isEndHere ? (
-                                <span className="scoresheetBoundaryLabel">END</span>
+                                <span className="scoresheetBoundaryLabel">
+                                  END
+                                  {renderEndBlockFlash(true)}
+                                </span>
                               ) : (
                                 <span className="scoresheetBoundaryAffordance">+ Add end</span>
                               )}
@@ -5797,6 +5867,8 @@ function ModeratorApp() {
           const existing = scoresheetMarkers[boundary];
           const isFinalBoundary = boundary === defaultEndBoundary;
           const isEndHere = isFinalBoundary ? endBoundary === null : boundary === endBoundary;
+          // A break or halftime at or after END would sit outside the game.
+          const canAddMarker = endBoundary === null || boundary < endBoundary;
 
           const endButton = isFinalBoundary ? (
             isEndHere ? null : (
@@ -5851,7 +5923,7 @@ function ModeratorApp() {
               style={{ left: scoresheetBoundaryPopup.left, top: scoresheetBoundaryPopup.top }}
             >
               <div className="attemptPopupButtons">
-                {!existing ? (
+                {!existing ? (canAddMarker && (
                   <>
                     <button
                       type="button"
@@ -5873,7 +5945,7 @@ function ModeratorApp() {
                       Add Break
                     </button>
                   </>
-                ) : (
+                )) : (
                   <>
                     <button
                       type="button"
