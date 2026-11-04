@@ -535,6 +535,8 @@ class ExportFactsEndBoundaryTestCase(TestCase):
 
         facts = reduce_scoresheet_export_to_facts(export_obj)
         self.assertEqual(facts.pairs_played, 2)
+        self.assertEqual(facts.pairs_total, 3)
+        self.assertTrue(facts.ended_early)
 
         team_a = next(t for t in facts.team_facts if t.team_name == "Team A")
         team_b = next(t for t in facts.team_facts if t.team_name == "Team B")
@@ -564,7 +566,9 @@ class ExportFactsEndBoundaryTestCase(TestCase):
         for boundary in (1, 4, 99, "2", None):
             with self.subTest(boundary=boundary):
                 export_obj = self._export([self._end_set(1, boundary)])
-                self.assertEqual(reduce_scoresheet_export_to_facts(export_obj).pairs_played, 3)
+                facts = reduce_scoresheet_export_to_facts(export_obj)
+                self.assertEqual(facts.pairs_played, 3)
+                self.assertFalse(facts.ended_early)
 
     def test_no_end_events_keeps_inference(self):
         export_obj = self._export([])

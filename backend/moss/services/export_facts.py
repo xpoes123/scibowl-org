@@ -35,6 +35,9 @@ class ExportFacts:
     pairs_played: int
     team_facts: list[TeamFacts]
     player_facts: list[PlayerFacts]
+    # Pairs in the packet, and whether the moderator ended the game before the last one.
+    pairs_total: int = 0
+    ended_early: bool = False
 
 
 @dataclass(frozen=True)
@@ -279,12 +282,14 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
 
     state = _load_export_state(export_obj)
     attempts_by_question_id = _attempts_map_from_state(state)
+    end_boundary = _end_boundary_from_export(export_obj)
+    ended_early = end_boundary is not None and 2 <= end_boundary <= pairs_total
     pairs_played = _pairs_played_from_export(
         state,
         attempts_by_question_id,
         pairs_total,
         pair_id_by_question_id,
-        _end_boundary_from_export(export_obj),
+        end_boundary,
     )
 
     game = _require_dict(export_obj.get("game"), "game")
@@ -547,6 +552,8 @@ def reduce_scoresheet_export_to_facts(export_obj: dict[str, Any]) -> ExportFacts
         pairs_played=pairs_played,
         team_facts=team_facts,
         player_facts=player_facts,
+        pairs_total=pairs_total,
+        ended_early=ended_early,
     )
 
 
