@@ -28,3 +28,12 @@ coverage report
 ```
 
 More detail: `backend/TESTING.md`.
+
+## MoSS frontend
+
+MoSS unit tests use Vitest and live next to the code they test as `*.test.ts` (currently the scoresheet reducer and game-end helpers in `apps/moss/frontend/src/domain/`). They are not run in CI yet.
+
+```bash
+cd apps/moss/frontend
+npm test
+```
