@@ -2478,6 +2478,9 @@ button.word.wordBold {
   background: white;
   border: 1px solid var(--sb-border);
   font-size: 12px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
   color: #666;
   pointer-events: none;
   white-space: nowrap;
@@ -2493,11 +2496,8 @@ button.word.wordBold {
   /* Centered on the grid line, like the hover affordance; markers add no height. */
   top: 0;
   opacity: 1;
-  font-weight: 400;
-  letter-spacing: normal;
-  text-transform: none;
+  /* Placed markers are darker than the hover suggestion; otherwise the two match. */
   color: #111;
-  font-size: 13px;
 }
 
 .scoresheetBoundaryButton:hover .scoresheetBoundaryAffordance,
