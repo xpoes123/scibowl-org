@@ -8,13 +8,13 @@ Repo-level scripts. Run them from the repo root unless noted.
 
 ## Stats
 
-- **`generate_stats.py`**: standalone (no Django or database) generator of standings CSVs, per-category CSVs, `facts/` CSVs, and `manifest.json` from MoSS scoresheet export JSON files. Writes to `stats/<slug>/` by default and syncs to the frontends unless `--no-sync-frontends` is passed.
+- **`generate_stats.py`**: the supported stats generator. Standalone (no Django or database); writes standings CSVs, per-category CSVs, `facts/` CSVs, and `manifest.json` (schema version 2) from MoSS scoresheet export JSON files. Respects games the moderator ended early. Writes to `stats/<slug>/` by default (`--output-dir` to override), asks before overwriting unless `--yes`, and syncs to the frontends unless `--no-sync-frontends` is passed. `--tuh-scale N` (default 20) sets the N in the website's "points per N tossups heard"; it is display-only. Run `build_buzzpoints.py` afterwards, since this script rewrites `manifest.json`. File formats: [`stats/README.md`](../stats/README.md).
 
   ```bash
-  python scripts/generate_stats.py --tournament-slug <slug> path/to/exports/
+  python scripts/generate_stats.py --tournament-slug <slug> [--tournament-name "<name>"] [--tuh-scale 20] path/to/exports/
   ```
 
-  The Django command `generate_moss_static_stats` (see [`stats/README.md`](../stats/README.md)) produces the same layout and adds multi-report support.
+  The older Django command `generate_moss_static_stats` is no longer maintained (see [`stats/README.md`](../stats/README.md)); it was the only one with multi-report support.
 - **`build_buzzpoints.py`**: builds the buzzpoints artifacts for the website's Buzzpoints tab from MoSS export JSON files: `stats/<slug>/buzzpoints.json` and `stats/<slug>/facts/{buzzes,questions_meta,games_buzz,buzz_teams,buzz_players}.csv`. Groups exports by `tournament_slug` and adds the buzzpoints entries to the tournament's `manifest.json`. Input defaults to `.local/buzzpoints-inputs/` (git-ignored).
 
   ```bash

@@ -79,6 +79,64 @@ def _discover_json_files(raw_paths: list[str]) -> list[Path]:
     return unique
 
 
+def _lineup_segments_by_team(export_obj: dict[str, Any], pairs_played: int) -> dict[str, list[tuple[str, int, int]]]:
+    """
+    Return {team_name: [(player_name, start_pair, end_pair)]} limited to the pairs played.
+
+    Mirrors export_facts: an open-ended segment runs to the last pair played, and a segment
+    starting after it (e.g. after an early game end) was never heard.
+    """
+    lineup_map: dict[str, list[tuple[str, int, int]]] = {}
+    game_obj = export_obj.get("game", {})
+    for team_obj in (game_obj.get("teams", []) if isinstance(game_obj, dict) else []):
+        if not isinstance(team_obj, dict):
+            continue
+        tname = (team_obj.get("name") or "").strip()
+        if not tname:
+            continue
+        pid_to_name: dict[str, str] = {}
+        for p in (team_obj.get("players") or []):
+            if isinstance(p, dict) and p.get("id") is not None and isinstance(p.get("name"), str):
+                pid_to_name[str(p["id"])] = p["name"].strip()
+        segs: list[tuple[str, int, int]] = []
+        for seg in (team_obj.get("lineup_segments") or []):
+            if not isinstance(seg, dict):
+                continue
+            start = seg.get("start_tossup")
+            end = seg.get("end_tossup")
+            if not isinstance(start, int) or start < 1 or start > pairs_played:
+                continue
+            if end is None:
+                end = pairs_played
+            if not isinstance(end, int) or end < start:
+                continue
+            end = min(end, pairs_played)
+            active = seg.get("active_players") or seg.get("active_player_ids") or []
+            is_ids = seg.get("active_player_ids") is not None and seg.get("active_players") is None
+            for pa_item in active:
+                if is_ids:
+                    pname = pid_to_name.get(str(pa_item), str(pa_item))
+                elif isinstance(pa_item, str):
+                    pname = pa_item.strip()
+                elif isinstance(pa_item, dict) and isinstance(pa_item.get("name"), str):
+                    pname = pa_item["name"].strip()
+                else:
+                    continue
+                if pname:
+                    segs.append((pname, start, end))
+        lineup_map[tname] = segs
+    return lineup_map
+
+
+def _active_players_at(lineup_map: dict[str, list[tuple[str, int, int]]], team_name: str, pair_id: int) -> set[str]:
+    return {pn for pn, s, e in lineup_map.get(team_name, []) if s <= pair_id <= e}
+
+
+def _per_tuh_sort_key(points: int, tuh: int, name: str) -> tuple[bool, float, int, str]:
+    # Highest points per tossup heard first; players with no tossups heard go last.
+    return (tuh <= 0, -(points / tuh) if tuh > 0 else 0.0, -points, name)
+
+
 def _load_exports(
     paths: list[Path],
 ) -> list[tuple[Path, bytes, dict[str, Any]]]:
@@ -247,54 +305,8 @@ def aggregate_all(
         # --- Category stats ---
         outcomes: ExportQuestionOutcomes = reduce_scoresheet_export_to_question_outcomes(export_obj)
 
-        # Parse lineup segments for per-player per-category tossups heard.
-        game_obj = export_obj.get("game", {})
-        team_objs = game_obj.get("teams", [])
-        # Build: {team_name: [(player_name, start, end)]}
-        lineup_map: dict[str, list[tuple[str, int, int]]] = {}
-        for team_obj in team_objs:
-            if not isinstance(team_obj, dict):
-                continue
-            tname = (team_obj.get("name") or "").strip()
-            if not tname:
-                continue
-            # Build player_id -> name lookup
-            pid_to_name: dict[str, str] = {}
-            for p in (team_obj.get("players") or []):
-                if isinstance(p, dict) and p.get("id") is not None and isinstance(p.get("name"), str):
-                    pid_to_name[str(p["id"])] = p["name"].strip()
-            segs: list[tuple[str, int, int]] = []
-            for seg in (team_obj.get("lineup_segments") or []):
-                if not isinstance(seg, dict):
-                    continue
-                start = seg.get("start_tossup")
-                end = seg.get("end_tossup")
-                if not isinstance(start, int) or start < 1:
-                    continue
-                if end is None:
-                    end = facts.pairs_played
-                if not isinstance(end, int) or end < start:
-                    continue
-                active = seg.get("active_players") or seg.get("active_player_ids") or []
-                is_ids = seg.get("active_player_ids") is not None and seg.get("active_players") is None
-                for pa_item in active:
-                    if is_ids:
-                        pname = pid_to_name.get(str(pa_item), str(pa_item))
-                    elif isinstance(pa_item, str):
-                        pname = pa_item.strip()
-                    elif isinstance(pa_item, dict) and isinstance(pa_item.get("name"), str):
-                        pname = pa_item["name"].strip()
-                    else:
-                        continue
-                    if pname:
-                        segs.append((pname, start, end))
-            lineup_map[tname] = segs
-
-        def player_heard_pair(team_name: str, player_name: str, pair_id: int) -> bool:
-            for pn, s, e in lineup_map.get(team_name, []):
-                if pn == player_name and s <= pair_id <= e:
-                    return True
-            return False
+        # Lineups give per-player per-category tossups heard.
+        lineup_map = _lineup_segments_by_team(export_obj, facts.pairs_played)
 
         # Group outcomes by category.
         for outcome in outcomes.outcomes:
@@ -344,14 +356,13 @@ def aggregate_all(
             if outcome.question_type == "TOSSUP":
                 # For each player on this team who was active during this pair,
                 # credit them with hearing this tossup in this category.
-                for pn, s, e in lineup_map.get(outcome.team_name, []):
-                    if s <= outcome.pair_id <= e:
-                        pc_map = player_cats[cat]
-                        pk = (outcome.team_name, pn)
-                        if pk not in pc_map:
-                            pc_map[pk] = PlayerCatAgg(name=pn, team_name=outcome.team_name)
-                        pc_map[pk].tossups_heard += 1
-                        pc_map[pk].games_with_cat.add(game_idx)
+                for pn in sorted(_active_players_at(lineup_map, outcome.team_name, outcome.pair_id)):
+                    pc_map = player_cats[cat]
+                    pk = (outcome.team_name, pn)
+                    if pk not in pc_map:
+                        pc_map[pk] = PlayerCatAgg(name=pn, team_name=outcome.team_name)
+                    pc_map[pk].tossups_heard += 1
+                    pc_map[pk].games_with_cat.add(game_idx)
 
     # Finalize player category tossups_0.
     for cat, pc_map in player_cats.items():
@@ -386,7 +397,7 @@ def write_team_standings(
         t.name,
     ))
     headers = [
-        "rank", "team_id", "name", "wins", "losses", "points_per_game",
+        "rank", "team_id", "name", "wins", "losses", "games_played", "points", "points_per_game",
         "4s", "-4s", "0s", "tossups_heard", "bonuses_heard", "bonus_points", "points_per_bonus",
     ]
     rows = []
@@ -397,7 +408,7 @@ def write_team_standings(
         losses = int(t.losses) if t.losses == int(t.losses) else t.losses
         rows.append([
             rank, team_ids[t.name], t.name,
-            wins, losses,
+            wins, losses, t.games_played, t.points,
             ppg, t.tossups_4, t.tossups_neg, t.tossups_0,
             t.tossups_heard, t.bonuses_heard, t.bonus_points, ppb,
         ])
@@ -412,7 +423,7 @@ def write_individual_standings(
 ) -> None:
     items = [p for p in players.values()
              if p.tossups_heard > 0 or p.tossups_4 > 0 or p.tossups_neg > 0]
-    items.sort(key=lambda p: (-p.tossup_points, -p.tossups_4, p.name))
+    items.sort(key=lambda p: _per_tuh_sort_key(p.tossup_points, p.tossups_heard, p.name))
     headers = [
         "rank", "player_id", "name", "team", "games_played",
         "4s", "-4s", "0s", "tossups_heard", "tossup_points", "points_per_game",
@@ -436,19 +447,10 @@ def write_team_category_standings(
     tc_map: dict[str, TeamCatAgg],
     team_ids: dict[str, int],
 ) -> None:
-    items = list(tc_map.values())
-    for tc in items:
-        tc_gp = len(tc.games_with_cat)
-        if tc_gp == 0:
-            continue
-    items = [tc for tc in items if len(tc.games_with_cat) > 0]
-    items.sort(key=lambda tc: (
-        -(tc.points / len(tc.games_with_cat) if tc.games_with_cat else 0),
-        -tc.points,
-        tc.name,
-    ))
+    items = [tc for tc in tc_map.values() if len(tc.games_with_cat) > 0]
+    items.sort(key=lambda tc: _per_tuh_sort_key(tc.points, tc.tossups_heard, tc.name))
     headers = [
-        "rank", "team_id", "name", "games_played", "points_per_game",
+        "rank", "team_id", "name", "games_played", "points", "points_per_game",
         "4s", "-4s", "0s", "tossups_heard", "bonuses_heard", "bonus_points", "points_per_bonus",
     ]
     rows = []
@@ -457,7 +459,7 @@ def write_team_category_standings(
         ppg = tc.points / gp if gp else 0
         ppb = tc.bonus_points / tc.bonuses_heard if tc.bonuses_heard else 0
         rows.append([
-            rank, team_ids.get(tc.name, 0), tc.name, gp, ppg,
+            rank, team_ids.get(tc.name, 0), tc.name, gp, tc.points, ppg,
             tc.tossups_4, tc.tossups_neg, tc.tossups_0,
             tc.tossups_heard, tc.bonuses_heard, tc.bonus_points, ppb,
         ])
@@ -476,7 +478,7 @@ def write_individual_category_standings(
 ) -> None:
     items = [pc for pc in pc_map.values()
              if pc.tossups_heard > 0 or pc.tossups_4 > 0 or pc.tossups_neg > 0]
-    items.sort(key=lambda pc: (-pc.tossup_points, -pc.tossups_4, pc.name))
+    items.sort(key=lambda pc: _per_tuh_sort_key(pc.tossup_points, pc.tossups_heard, pc.name))
     headers = [
         "rank", "player_id", "name", "team", "games_played",
         "4s", "-4s", "0s", "tossups_heard", "tossup_points", "points_per_game",
@@ -556,49 +558,11 @@ def write_facts(
         games_rows.append([
             game_id, round_number, f"Round {round_number}", packet_name,
             "COMPLETED", exported_at, checksum, packet_name, packet_year or "",
-            facts.pairs_played,
+            facts.pairs_played, facts.pairs_total, 1 if facts.ended_early else 0,
         ])
 
-        # Parse lineup segments for game_players.
-        game_obj = obj.get("game", {})
-        team_objs = game_obj.get("teams", [])
-
-        # Build player lineup info per team.
-        lineup_map: dict[str, list[tuple[str, int, int | None]]] = {}
-        pid_to_name_map: dict[str, dict[str, str]] = {}
-        for team_obj in team_objs:
-            if not isinstance(team_obj, dict):
-                continue
-            tname = (team_obj.get("name") or "").strip()
-            if not tname:
-                continue
-            pid_to_name: dict[str, str] = {}
-            for p in (team_obj.get("players") or []):
-                if isinstance(p, dict) and p.get("id") is not None and isinstance(p.get("name"), str):
-                    pid_to_name[str(p["id"])] = p["name"].strip()
-            pid_to_name_map[tname] = pid_to_name
-            segs: list[tuple[str, int, int | None]] = []
-            for seg in (team_obj.get("lineup_segments") or []):
-                if not isinstance(seg, dict):
-                    continue
-                start = seg.get("start_tossup")
-                end = seg.get("end_tossup")
-                if not isinstance(start, int) or start < 1:
-                    continue
-                active = seg.get("active_players") or seg.get("active_player_ids") or []
-                is_ids = seg.get("active_player_ids") is not None and seg.get("active_players") is None
-                for pa_item in active:
-                    if is_ids:
-                        pname = pid_to_name.get(str(pa_item), str(pa_item))
-                    elif isinstance(pa_item, str):
-                        pname = pa_item.strip()
-                    elif isinstance(pa_item, dict) and isinstance(pa_item.get("name"), str):
-                        pname = pa_item["name"].strip()
-                    else:
-                        continue
-                    if pname:
-                        segs.append((pname, start, end))
-            lineup_map[tname] = segs
+        # Lineups give per-player per-category tossups heard.
+        lineup_map = _lineup_segments_by_team(obj, facts.pairs_played)
 
         # game_teams.csv and register teams.
         for slot, tf in enumerate(facts.team_facts, 1):
@@ -651,6 +615,7 @@ def write_facts(
                 agg["tossup_points"], agg["bonus_points"],
                 agg["tossups_correct"], agg["tossups_incorrect"], agg["tossups_no_penalty"],
                 agg["bonuses_correct"], agg["bonuses_incorrect"], agg["bonuses_unheard"],
+                tf.tossups_heard,
             ])
 
         # game_players.csv
@@ -673,9 +638,11 @@ def write_facts(
                     "tossup_points": 0, "bonus_points": 0,
                     "tossups_correct": 0, "tossups_incorrect": 0, "tossups_no_penalty": 0,
                     "bonuses_correct": 0, "bonuses_incorrect": 0, "bonuses_unheard": 0,
+                    "tossups_heard": 0,
                 }
             a = cat_team_agg[key]
             if outcome.question_type == "TOSSUP":
+                a["tossups_heard"] += 1
                 a["tossup_points"] += outcome.points
                 if outcome.tossup_result == "CORRECT":
                     a["tossups_correct"] += 1
@@ -703,21 +670,31 @@ def write_facts(
                 a["tossup_points"], a["bonus_points"],
                 a["tossups_correct"], a["tossups_incorrect"], a["tossups_no_penalty"],
                 a["bonuses_correct"], a["bonuses_incorrect"], a["bonuses_unheard"],
+                a["tossups_heard"],
             ])
 
-        # game_players_by_category.csv
+        # game_players_by_category.csv: buzz counts for players who buzzed, plus tossups heard
+        # for everyone in the lineup (so players who heard a category without buzzing get a row).
         cat_player_agg: dict[tuple[str, str, str], dict[str, int]] = {}
-        for outcome in question_outcomes.outcomes:
-            if outcome.question_type != "TOSSUP" or not outcome.buzzing_player_name:
-                continue
-            cat = outcome.category or ""
-            key = (outcome.team_name, outcome.buzzing_player_name, cat)
+
+        def cat_player_entry(key: tuple[str, str, str]) -> dict[str, int]:
             if key not in cat_player_agg:
                 cat_player_agg[key] = {
                     "tossups_correct": 0, "tossups_incorrect": 0,
                     "tossups_no_penalty": 0, "tossup_points": 0,
+                    "tossups_heard": 0,
                 }
-            a = cat_player_agg[key]
+            return cat_player_agg[key]
+
+        for outcome in question_outcomes.outcomes:
+            if outcome.question_type != "TOSSUP":
+                continue
+            cat = outcome.category or ""
+            for pname in _active_players_at(lineup_map, outcome.team_name, outcome.pair_id):
+                cat_player_entry((outcome.team_name, pname, cat))["tossups_heard"] += 1
+            if not outcome.buzzing_player_name:
+                continue
+            a = cat_player_entry((outcome.team_name, outcome.buzzing_player_name, cat))
             a["tossup_points"] += outcome.points
             if outcome.tossup_result == "CORRECT":
                 a["tossups_correct"] += 1
@@ -732,6 +709,7 @@ def write_facts(
                 player_ids.get((tname, pname), 0), pname, cat,
                 a["tossups_correct"], a["tossups_incorrect"],
                 a["tossups_no_penalty"], a["tossup_points"],
+                a["tossups_heard"],
             ])
 
     # Write all facts CSVs.
@@ -761,7 +739,7 @@ def write_facts(
     _write_csv(output_dir / "facts" / "games.csv",
                ["game_id", "round_number", "round_name", "round_packet_name",
                 "status", "completed_at", "packet_checksum", "packet_name",
-                "packet_year", "pairs_played"],
+                "packet_year", "pairs_played", "pairs_total", "ended_early"],
                games_rows)
     print(f"  Wrote facts/games.csv")
 
@@ -769,7 +747,8 @@ def write_facts(
                ["game_id", "slot", "team_id", "team_name", "score",
                 "tossup_points", "bonus_points",
                 "tossups_correct", "tossups_incorrect", "tossups_no_penalty",
-                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard"],
+                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard",
+                "tossups_heard"],
                game_teams_rows)
     print(f"  Wrote facts/game_teams.csv")
 
@@ -784,14 +763,15 @@ def write_facts(
                ["game_id", "slot", "team_id", "team_name", "category",
                 "tossup_points", "bonus_points",
                 "tossups_correct", "tossups_incorrect", "tossups_no_penalty",
-                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard"],
+                "bonuses_correct", "bonuses_incorrect", "bonuses_unheard",
+                "tossups_heard"],
                game_teams_by_cat_rows)
     print(f"  Wrote facts/game_teams_by_category.csv")
 
     _write_csv(output_dir / "facts" / "game_players_by_category.csv",
                ["game_id", "team_id", "team_name", "player_id", "player_name",
                 "category", "tossups_correct", "tossups_incorrect",
-                "tossups_no_penalty", "tossup_points"],
+                "tossups_no_penalty", "tossup_points", "tossups_heard"],
                game_players_by_cat_rows)
     print(f"  Wrote facts/game_players_by_category.csv")
 
@@ -819,11 +799,14 @@ def write_manifest(
     sources: list[dict[str, Any]],
     category_views: list[dict[str, str]],
     datasets: dict[str, str],
+    tuh_scale: int,
     pretty: bool,
 ) -> None:
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": _iso_utc_now(),
+        # Display-only: the website shows points per `tuh_scale` tossups heard.
+        "stats_options": {"tuh_scale": tuh_scale},
         "tournament": {"slug": slug, "name": name},
         "sources": sources,
         "datasets": datasets,
@@ -856,7 +839,13 @@ def main() -> None:
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output.")
     parser.add_argument("--yes", action="store_true", help="Overwrite without prompting.")
     parser.add_argument("--no-sync-frontends", action="store_true", help="Skip syncing to frontends.")
+    parser.add_argument(
+        "--tuh-scale", type=int, default=20,
+        help="N in 'points per N tossups heard' shown on the website (default: 20). Display only.",
+    )
     args = parser.parse_args()
+    if args.tuh_scale <= 0:
+        parser.error("--tuh-scale must be a positive integer")
 
     slug = args.tournament_slug
     name = args.tournament_name or slug
@@ -937,7 +926,8 @@ def main() -> None:
     sources = []
     for path, raw, obj in exports:
         sources.append({
-            "path": str(path),
+            # File name only; the full path would leak folders from the generating machine.
+            "path": path.name,
             "sha256": _sha256(raw),
             "version": obj.get("version"),
             "exported_at": obj.get("exported_at"),
@@ -950,6 +940,7 @@ def main() -> None:
         sources=sources,
         category_views=category_views,
         datasets=datasets,
+        tuh_scale=args.tuh_scale,
         pretty=args.pretty,
     )
 
