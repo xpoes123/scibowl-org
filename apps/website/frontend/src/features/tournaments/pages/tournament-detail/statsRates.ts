@@ -1,6 +1,6 @@
 import type { TournamentStatsManifest } from "../../types";
 
-// Points per N tossups heard (P/NTUH). N comes from the stats manifest (see stats/README.md) and
+// Points per N tossups heard (PPNTUH). N comes from the stats manifest (see stats/README.md) and
 // only affects display; the CSVs store raw points and tossups heard.
 export const DEFAULT_TUH_SCALE = 20;
 
@@ -10,7 +10,7 @@ export function tuhScaleFromManifest(manifest: TournamentStatsManifest | null | 
 }
 
 export function pointsPerTuhLabel(tuhScale: number): string {
-  return `P/${tuhScale}TUH`;
+  return `PP${tuhScale}TUH`;
 }
 
 // null when no tossups were heard, so there is nothing to divide by.

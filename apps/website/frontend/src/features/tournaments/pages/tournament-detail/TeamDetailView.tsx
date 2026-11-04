@@ -292,7 +292,7 @@ export function TeamDetailView({
       }
 
       // Per-category tossups heard only exist in schema version 2 facts. Without them there is
-      // no per-category TUH (the overall count would overstate it), so TUH and P/NTUH show "—".
+      // no per-category TUH (the overall count would overstate it), so TUH and PPNTUH show "—".
       const hasCategoryTuh = (gamePlayersByCategory ?? []).some((r) => r.tossups_heard !== undefined);
       const categoryByPlayer = new Map<number, { tu_pts: number; tuh: number; c: number; i: number; n: number }>();
       for (const row of (gamePlayersByCategory ?? []).filter(

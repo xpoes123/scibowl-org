@@ -45,21 +45,21 @@ Games can end early (the moderator marks the end in MoSS; see the "Game end" sec
 
 - **Pairs played** in a game: the pairs before the game end, or, if the game was not ended early, up to the last pair with a buzz (or the moderator's last position).
 - **Team tossups heard (TUH)**: one per pair played, per game. Per category, one per pair played whose tossup is in that category.
-- **Player TUH**: one per pair played during which the player was in the team's lineup (from `lineup_segments`). Per category, counted the same way, restricted to tossups in that category. MoSS always records a starting lineup, so every export has segments. If an export has none, its players get 0 TUH and no P/NTUH (below).
+- **Player TUH**: one per pair played during which the player was in the team's lineup (from `lineup_segments`). Per category, counted the same way, restricted to tossups in that category. MoSS always records a starting lineup, so every export has segments. If an export has none, its players get 0 TUH and no PPNTUH (below).
 
 Attempts and bonuses on pairs after the end are ignored everywhere.
 
 ### Points per N tossups heard
 
-The website shows **points per N tossups heard (P/NTUH)** instead of points per game:
+The website shows **points per N tossups heard (PPNTUH)** instead of points per game:
 
 ```
-P/NTUH = points × N / TUH
+PPNTUH = points × N / TUH
 ```
 
-N is `manifest.json` → `stats_options.tuh_scale` (default 20). P/NTUH is computed by the reader from the `points`/`tossup_points` and `tossups_heard` columns, so changing N needs no regeneration. With 0 TUH there is no P/NTUH; show it as blank and sort it last.
+N is `manifest.json` → `stats_options.tuh_scale` (default 20). PPNTUH is computed by the reader from the `points`/`tossup_points` and `tossups_heard` columns, so changing N needs no regeneration. With 0 TUH there is no PPNTUH; the website shows "—" and sorts it last.
 
-Version 1 files have no `points` column, so the website derives team points as `points_per_game × games_played` (W + L in overall standings, which lack `games_played`). They also have no per-category player TUH, so the Team view shows "—" for players' TUH and P/NTUH in a category.
+Version 1 files have no `points` column, so the website derives team points as `points_per_game × games_played` (W + L in overall standings, which lack `games_played`). They also have no per-category player TUH, so the Team view shows "—" for players' TUH and PPNTUH in a category.
 
 Which points: teams use total points (tossups + bonuses). Per category, a team's points are its tossup points on that category's tossups plus its bonus points on that category's bonuses. Players use tossup points.
 
@@ -83,7 +83,7 @@ Which points: teams use total points (tossups + bonuses). Per category, a team's
 | `facts/game_teams.csv` | New `tossups_heard` (equals the game's `pairs_played`). |
 | `facts/game_players.csv` | No change. `pairs_heard` is the player's TUH in that game. |
 | `facts/game_teams_by_category.csv` | New `tossups_heard`. |
-| `facts/game_players_by_category.csv` | New `tossups_heard`. Adds rows for players who heard tossups in a category without buzzing (all their counts are 0), so per-category P/NTUH can be computed from facts. |
+| `facts/game_players_by_category.csv` | New `tossups_heard`. Adds rows for players who heard tossups in a category without buzzing (all their counts are 0), so per-category PPNTUH can be computed from facts. |
 
 The website shows team standings in file order with the `rank` column as written, so they can be reordered by hand (e.g. for a tiebreak); regenerating overwrites such edits. Individual standings are re-sorted by the website, so their `rank` and order are informational only.
 
