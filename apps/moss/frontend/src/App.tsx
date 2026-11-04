@@ -5807,7 +5807,7 @@ function ModeratorApp() {
                   setScoresheetBoundaryPopup(null);
                 }}
               >
-                End game here
+                End game
               </button>
             )
           ) : (
@@ -5819,7 +5819,7 @@ function ModeratorApp() {
                 setScoresheetBoundaryPopup(null);
               }}
             >
-              {isEndHere ? "Undo end of game" : "End game here"}
+              {isEndHere ? "Undo end of game" : "End game"}
             </button>
           );
 

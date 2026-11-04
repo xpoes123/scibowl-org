@@ -1651,6 +1651,14 @@ button.word.wordBold {
   border-bottom: 0;
 }
 
+/* A marked boundary draws its own line through its middle, so the row above drops its border and
+   the marker sits centered in the gap. The final boundary row (END) is the table's last row, so the
+   row above it is the last pair and doesn't draw a border either. */
+.scoresheetTable tbody tr:has(+ tr.scoresheetBoundaryRowMarked) td,
+.scoresheetTable tbody tr:has(+ tr.scoresheetBoundaryRow:last-child) td {
+  border-bottom: 0;
+}
+
 .scoresheetExportRow {
   display: flex;
   align-items: center;
