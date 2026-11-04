@@ -5761,6 +5761,7 @@ function ModeratorApp() {
                           key="boundary_final"
                           className={[
                             "scoresheetBoundaryRow",
+                            "scoresheetBoundaryRowFinal",
                             isEndHere ? "scoresheetBoundaryRowMarked" : "",
                           ].filter(Boolean).join(" ")}
                         >

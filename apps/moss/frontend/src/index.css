@@ -1651,12 +1651,10 @@ button.word.wordBold {
   border-bottom: 0;
 }
 
-/* A marked boundary draws its own line through its middle, so the row above drops its border and
-   the marker sits centered in the gap. The final boundary row (END) is the table's last row, so the
-   row above it is the last pair and doesn't draw a border either. */
-.scoresheetTable tbody tr:has(+ tr.scoresheetBoundaryRowMarked) td,
-.scoresheetTable tbody tr:has(+ tr.scoresheetBoundaryRow:last-child) td {
-  border-bottom: 0;
+/* The final boundary (END) sits on the last pair's bottom line; leave room below it so its
+   label isn't cut off by the bottom of the wrapper. */
+.scoresheetTable tbody tr.scoresheetBoundaryRowFinal td {
+  padding-bottom: 14px;
 }
 
 .scoresheetExportRow {
@@ -2470,16 +2468,6 @@ button.word.wordBold {
   height: 18px;
 }
 
-.scoresheetBoundaryRowMarked .scoresheetBoundaryButton {
-  height: 22px;
-}
-
-.scoresheetBoundaryRowMarked .scoresheetBoundaryButton::before {
-  background: var(--sb-border);
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 .scoresheetBoundaryAffordance,
 .scoresheetBoundaryLabel {
   position: absolute;
@@ -2502,7 +2490,8 @@ button.word.wordBold {
 }
 
 .scoresheetBoundaryLabel {
-  top: 50%;
+  /* Centered on the grid line, like the hover affordance; markers add no height. */
+  top: 0;
   opacity: 1;
   font-weight: 400;
   letter-spacing: normal;
