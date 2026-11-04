@@ -1832,10 +1832,8 @@ function ScoreboardDisplayApp() {
               const row = scoredPairs.rows[i];
               const boundaryBeforeQuestion = row.pairId;
               const markerKind: ScoresheetMarkerKind | undefined = scoresheetMarkers[boundaryBeforeQuestion];
-              // The audience only sees END when the game ended early.
-              const isEndHere = boundaryBeforeQuestion === endBoundary;
 
-              if (markerKind !== undefined || isEndHere) {
+              if (markerKind !== undefined) {
                 nodes.push(
                   <tr
                     key={`boundary_${boundaryBeforeQuestion}`}
@@ -1843,9 +1841,7 @@ function ScoreboardDisplayApp() {
                   >
                     <td colSpan={colSpan}>
                       <div className="scoresheetBoundaryButton" aria-hidden="true">
-                        <span className="scoresheetBoundaryLabel">
-                          {[markerKind, isEndHere ? "END" : undefined].filter(Boolean).join(" · ")}
-                        </span>
+                        <span className="scoresheetBoundaryLabel">{markerKind}</span>
                       </div>
                     </td>
                   </tr>
@@ -4198,9 +4194,7 @@ function ModeratorApp() {
 
   function next() {
     setAttemptEditor(null);
-    // Pairs after END can still be viewed from the scoresheet, but Next stops at the last heard pair.
-    if (pairIdx >= lastHeardPairIdx) return;
-    const nextIndex = pairIdx + 1;
+    const nextIndex = Math.min(pairRows.length - 1, pairIdx + 1);
     if (nextIndex !== pairIdx) {
       appendScoresheetEvent(buildScoresheetEvent("cursor.pair_index_set", { pair_index: nextIndex }));
     }
@@ -4576,7 +4570,9 @@ function ModeratorApp() {
   function renderQuestionSection(question: Question, title: string, disabled: boolean) {
     const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
     const richParts = splitRichParts(question.question_text);
-    const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
+    // After END the section looks disabled, but stays clickable so attempts can be refused visibly.
+    const isAfterEnd = isPairAfterEnd(question.pair_id, endBoundary);
+    const sectionClasses = ["qaSection", disabled || isAfterEnd ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
     const hasOptions = (question.options?.length ?? 0) > 0;
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
@@ -5437,13 +5433,7 @@ function ModeratorApp() {
               </div>
 
               <div className="questionBlurWrap">
-                <div
-                  className={[
-                    "questionBlock",
-                    isQuestionBlurred ? "questionBlockBlurred" : "",
-                    q && isPairAfterEnd(q.pair_id, endBoundary) ? "questionBlockAfterEnd" : "",
-                  ].filter(Boolean).join(" ")}
-                >
+                <div className={["questionBlock", isQuestionBlurred ? "questionBlockBlurred" : ""].filter(Boolean).join(" ")}>
                   {tossupQ && renderQuestionSection(tossupQ, "TOSSUP", false)}
                   {bonusQ && (
                     <>
@@ -5480,7 +5470,7 @@ function ModeratorApp() {
                 <button
                   className="secondary"
                   onClick={next}
-                  disabled={isQuestionBlurred || pairIdx >= lastHeardPairIdx}
+                  disabled={isQuestionBlurred || pairIdx === pairRows.length - 1}
                   aria-label="Next pair"
                 >
                   <svg className="arrowIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -5911,7 +5901,7 @@ function ModeratorApp() {
                         setScoresheetBoundaryPopup(null);
                       }}
                     >
-                      Remove
+                      {existing === "HALFTIME" ? "Remove Halftime" : "Remove Break"}
                     </button>
                   </>
                 )}
