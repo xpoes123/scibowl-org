@@ -122,7 +122,7 @@ Several events refer to a `boundary_before_question`. Despite the name, its valu
 The meanings above follow the MoSS reducer (`apps/moss/frontend/src/domain/scoresheetReducer.ts`), which produces the exported `state` that stats are computed from. The backend reducer (`backend/moss/reducer.py`) differs in places (for example, `attempt.recorded` replaces by team only, and bonus results are stored separately from attempts) and is not used for stats on exports that include `state`.
 
 #### Game end
-The game end is a single value, `end_boundary`, derived by replaying `end.set` / `end.cleared` events in `seq` order (the last one wins). It is independent of markers: an end and a `HALFTIME`/`BREAK` marker may share a boundary.
+The game end is a single value, `end_boundary`, derived by replaying `end.set` / `end.cleared` events in `seq` order (the last one wins). It is stored separately from markers. MoSS keeps every `HALFTIME`/`BREAK` marker before the end (it refuses an end at or before a marker, and offers no markers at or after the end), but consumers should not rely on that.
 
 - **Not ended early** (`end_boundary` is null): no `end.set` events, or the last one was followed by `end.cleared`. Consumers infer pairs played as before: the larger of `state.pair_index + 1` and the highest pair with a recorded attempt, capped at the packet's pair count.
 - **Ended early at boundary `N`**: pairs `1` to `N - 1` were heard by both teams; pairs `N` and later were not heard by anyone. Consumers use `N - 1` as pairs played instead of inferring it.
