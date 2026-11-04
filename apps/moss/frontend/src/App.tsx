@@ -4567,12 +4567,12 @@ function ModeratorApp() {
     return found?.result;
   }
 
-  function renderQuestionSection(question: Question, title: string, disabled: boolean) {
+  function renderQuestionSection(question: Question, title: string, isLocked: boolean) {
     const selection = attemptEditor?.questionId === question.id ? attemptEditor.selection : null;
     const richParts = splitRichParts(question.question_text);
-    // After END the section looks disabled, but stays clickable so attempts can be refused visibly.
-    const isAfterEnd = isPairAfterEnd(question.pair_id, endBoundary);
-    const sectionClasses = ["qaSection", disabled || isAfterEnd ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
+    // Pairs after END were not heard, so they can be read but not scored.
+    const disabled = isLocked || isPairAfterEnd(question.pair_id, endBoundary);
+    const sectionClasses = ["qaSection", disabled ? "qaSectionDisabled" : ""].filter(Boolean).join(" ");
     const isBonus = question.question_type === "BONUS";
     const hasOptions = (question.options?.length ?? 0) > 0;
     const wordWrapClickableClass = disabled ? "" : "wordWrapClickable";
