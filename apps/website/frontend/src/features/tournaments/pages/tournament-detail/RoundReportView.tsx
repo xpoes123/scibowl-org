@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { formatPacketOrRoundLabel } from "./statsText";
+import { comparePointsPerTuh, formatPointsPerTuh, pointsPerTuh, pointsPerTuhLabel } from "./statsRates";
 
 type RoundReportViewProps = {
   games: Array<Record<string, string>> | null;
@@ -8,6 +9,7 @@ type RoundReportViewProps = {
   rounds: Array<Record<string, string>> | null;
   roundValue: string;
   onRoundChange: (value: string) => void;
+  tuhScale: number;
 };
 
 function toIntOrNull(raw: string | undefined): number | null {
@@ -60,7 +62,7 @@ function DataTable({
   );
 }
 
-export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundValue, onRoundChange }: RoundReportViewProps) {
+export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundValue, onRoundChange, tuhScale }: RoundReportViewProps) {
   const parsedRounds = useMemo(() => {
     const list = (rounds ?? []).map((r) => {
       const roundNumber = toIntOrNull(r.round_number);
@@ -192,33 +194,35 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
       const tuh = t.tossups_correct + t.tossups_incorrect + t.tossups_no_penalty;
       const bh = t.bonuses_correct + t.bonuses_incorrect;
       const ppb = bh > 0 ? t.bonus_points / bh : 0;
-      const ppg = t.games_played > 0 ? t.score / t.games_played : 0;
+      const rate = pointsPerTuh(t.score, tuh, tuhScale);
 
       return {
-        __key: String(t.team_id),
-        team: t.team_name,
-        gp: t.games_played,
-        score: t.score,
-        ppg: formatFixedNumber(ppg, 2),
-        tuh,
-        bh,
-        bpts: t.bonus_points,
-        ppb: formatFixedNumber(ppb, 2),
-        "4s": t.tossups_correct,
-        "-4s": t.tossups_incorrect,
+        rate,
+        row: {
+          __key: String(t.team_id),
+          team: t.team_name,
+          gp: t.games_played,
+          score: t.score,
+          pptuh: formatPointsPerTuh(rate),
+          tuh,
+          bh,
+          bpts: t.bonus_points,
+          ppb: formatFixedNumber(ppb, 2),
+          "4s": t.tossups_correct,
+          "-4s": t.tossups_incorrect,
+        },
       };
     });
 
     out.sort((a, b) => {
-      const aPpg = Number.parseFloat(String(a.ppg)) || 0;
-      const bPpg = Number.parseFloat(String(b.ppg)) || 0;
-      if (bPpg !== aPpg) return bPpg - aPpg;
-      if (b.score !== a.score) return b.score - a.score;
-      return String(a.team).localeCompare(String(b.team));
+      const byRate = comparePointsPerTuh(a.rate, b.rate);
+      if (byRate !== 0) return byRate;
+      if (b.row.score !== a.row.score) return b.row.score - a.row.score;
+      return a.row.team.localeCompare(b.row.team);
     });
 
-    return out;
-  }, [gameTeams, selectedGameIds]);
+    return out.map((entry) => entry.row);
+  }, [gameTeams, selectedGameIds, tuhScale]);
 
   const playerRows = useMemo(() => {
     type PlayerAgg = {
@@ -264,30 +268,32 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
     }
 
     const out = Array.from(byPlayer.values()).map((p) => {
-      const ppg = p.games_played > 0 ? p.tossup_points / p.games_played : 0;
+      const rate = pointsPerTuh(p.tossup_points, p.pairs_heard, tuhScale);
       return {
-        __key: String(p.player_id),
-        player: p.player_name,
-        team: p.team_name,
-        gp: p.games_played,
-        tuh: p.pairs_heard,
-        tu_pts: p.tossup_points,
-        ppg: formatFixedNumber(ppg, 2),
-        "4s": p.tossups_correct,
-        "-4s": p.tossups_incorrect,
+        rate,
+        row: {
+          __key: String(p.player_id),
+          player: p.player_name,
+          team: p.team_name,
+          gp: p.games_played,
+          tuh: p.pairs_heard,
+          tu_pts: p.tossup_points,
+          pptuh: formatPointsPerTuh(rate),
+          "4s": p.tossups_correct,
+          "-4s": p.tossups_incorrect,
+        },
       };
     });
 
     out.sort((a, b) => {
-      const aPpg = Number.parseFloat(String(a.ppg)) || 0;
-      const bPpg = Number.parseFloat(String(b.ppg)) || 0;
-      if (bPpg !== aPpg) return bPpg - aPpg;
-      if (b.tu_pts !== a.tu_pts) return Number(b.tu_pts) - Number(a.tu_pts);
-      return String(a.player).localeCompare(String(b.player));
+      const byRate = comparePointsPerTuh(a.rate, b.rate);
+      if (byRate !== 0) return byRate;
+      if (b.row.tu_pts !== a.row.tu_pts) return b.row.tu_pts - a.row.tu_pts;
+      return a.row.player.localeCompare(b.row.player);
     });
 
-    return out;
-  }, [gamePlayers, selectedGameIds]);
+    return out.map((entry) => entry.row);
+  }, [gamePlayers, selectedGameIds, tuhScale]);
 
   return (
     <div className="sbTabStack">
@@ -317,7 +323,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
             headers={[
               { key: "team", label: "Team" },
               ...(showGp ? [{ key: "gp", label: "GP", numeric: true }] : []),
-              { key: "ppg", label: "PPG", numeric: true },
+              { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
               { key: "4s", label: "4s", numeric: true },
               { key: "-4s", label: "-4s", numeric: true },
               { key: "tuh", label: "TUH", numeric: true },
@@ -338,7 +344,7 @@ export function RoundReportView({ games, gameTeams, gamePlayers, rounds, roundVa
               { key: "player", label: "Player" },
               { key: "team", label: "Team" },
               ...(showGp ? [{ key: "gp", label: "GP", numeric: true }] : []),
-              { key: "ppg", label: "PPG", numeric: true },
+              { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
               { key: "4s", label: "4s", numeric: true },
               { key: "-4s", label: "-4s", numeric: true },
               { key: "tuh", label: "TUH", numeric: true },

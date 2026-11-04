@@ -1,5 +1,6 @@
 import { useMemo, type ReactNode } from "react";
 import { formatPacketOrRoundLabel } from "./statsText";
+import { comparePointsPerTuh, formatPointsPerTuh, pointsPerTuh, pointsPerTuhLabel } from "./statsRates";
 
 type TeamDetailViewProps = {
   games: Array<Record<string, string>> | null;
@@ -13,6 +14,7 @@ type TeamDetailViewProps = {
   categoryLabel: string | null;
   gameTeamsByCategory: Array<Record<string, string>> | null;
   gamePlayersByCategory: Array<Record<string, string>> | null;
+  tuhScale: number;
 };
 
 function toIntOrNull(raw: string | undefined): number | null {
@@ -82,6 +84,7 @@ export function TeamDetailView({
   categoryLabel,
   gameTeamsByCategory,
   gamePlayersByCategory,
+  tuhScale,
 }: TeamDetailViewProps) {
   const teamOptions = useMemo(() => {
     const map = new Map<number, string>();
@@ -288,14 +291,18 @@ export function TeamDetailView({
         playedByPlayer.set(playerId, existing);
       }
 
-      const categoryByPlayer = new Map<number, { tu_pts: number; c: number; i: number; n: number }>();
+      // Per-category tossups heard only exist in schema version 2 facts. Without them there is
+      // no per-category TUH (the overall count would overstate it), so TUH and P/NTUH show "—".
+      const hasCategoryTuh = (gamePlayersByCategory ?? []).some((r) => r.tossups_heard !== undefined);
+      const categoryByPlayer = new Map<number, { tu_pts: number; tuh: number; c: number; i: number; n: number }>();
       for (const row of (gamePlayersByCategory ?? []).filter(
         (r) => toIntOrNull(r.team_id) === selectedTeamId && (r.category ?? "") === cat,
       )) {
         const playerId = toIntOrNull(row.player_id);
         if (playerId === null) continue;
-        const existing = categoryByPlayer.get(playerId) ?? { tu_pts: 0, c: 0, i: 0, n: 0 };
+        const existing = categoryByPlayer.get(playerId) ?? { tu_pts: 0, tuh: 0, c: 0, i: 0, n: 0 };
         existing.tu_pts += toInt(row.tossup_points);
+        existing.tuh += toInt(row.tossups_heard);
         existing.c += toInt(row.tossups_correct);
         existing.i += toInt(row.tossups_incorrect);
         existing.n += toInt(row.tossups_no_penalty);
@@ -304,16 +311,11 @@ export function TeamDetailView({
 
       const out = Array.from(playedByPlayer.values()).map((p) => {
         const gp = p.gameIds.size;
-        let tuh = 0;
-        for (const row of (gamePlayers ?? []).filter(
-          (r) => toIntOrNull(r.team_id) === selectedTeamId && toIntOrNull(r.player_id) === p.player_id,
-        )) {
-          tuh += toInt(row.pairs_heard);
-        }
-        const agg = categoryByPlayer.get(p.player_id) ?? { tu_pts: 0, c: 0, i: 0, n: 0 };
-        const ppg = gp > 0 ? agg.tu_pts / gp : 0;
+        const agg = categoryByPlayer.get(p.player_id) ?? { tu_pts: 0, tuh: 0, c: 0, i: 0, n: 0 };
+        const rate = hasCategoryTuh ? pointsPerTuh(agg.tu_pts, agg.tuh, tuhScale) : null;
         return {
           __key: String(p.player_id),
+          __rate: rate,
           player: onPlayerSelect ? (
             <button
               type="button"
@@ -327,19 +329,20 @@ export function TeamDetailView({
             p.player_name
           ),
           gp,
-          tuh,
+          tuh: hasCategoryTuh ? agg.tuh : "—",
           "4s": agg.c,
           "-4s": agg.i,
           pts: agg.tu_pts,
-          ppg: formatFixedNumber(ppg, 2),
+          pptuh: formatPointsPerTuh(rate),
+          __name: p.player_name,
         };
       });
 
       out.sort((a, b) => {
-        const aPts = Number(a.pts) || 0;
-        const bPts = Number(b.pts) || 0;
-        if (bPts !== aPts) return bPts - aPts;
-        return String(a.player).localeCompare(String(b.player));
+        const byRate = comparePointsPerTuh(a.__rate, b.__rate);
+        if (byRate !== 0) return byRate;
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        return a.__name.localeCompare(b.__name);
       });
 
       return out;
@@ -377,9 +380,10 @@ export function TeamDetailView({
 
     const out = Array.from(byPlayer.values()).map((p) => {
       const gp = p.gameIds.size;
-      const ppg = gp > 0 ? p.tu_pts / gp : 0;
+      const rate = pointsPerTuh(p.tu_pts, p.tuh, tuhScale);
       return {
         __key: String(p.player_id),
+        __rate: rate,
         player: onPlayerSelect ? (
           <button
             type="button"
@@ -397,19 +401,20 @@ export function TeamDetailView({
         "4s": p.c,
         "-4s": p.i,
         pts: p.tu_pts,
-        ppg: formatFixedNumber(ppg, 2),
+        pptuh: formatPointsPerTuh(rate),
+        __name: p.player_name,
       };
     });
 
     out.sort((a, b) => {
-      const aPts = Number(a.pts) || 0;
-      const bPts = Number(b.pts) || 0;
-      if (bPts !== aPts) return bPts - aPts;
-      return String(a.player).localeCompare(String(b.player));
+      const byRate = comparePointsPerTuh(a.__rate, b.__rate);
+      if (byRate !== 0) return byRate;
+      if (b.pts !== a.pts) return b.pts - a.pts;
+      return a.__name.localeCompare(b.__name);
     });
 
     return out;
-  }, [categoryKey, gamePlayers, gamePlayersByCategory, isCategoryMode, onPlayerSelect, selectedTeamId]);
+  }, [categoryKey, gamePlayers, gamePlayersByCategory, isCategoryMode, onPlayerSelect, selectedTeamId, tuhScale]);
 
   return (
     <div className="sbTabStack">
@@ -482,7 +487,7 @@ export function TeamDetailView({
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
                     { key: "pts", label: "Pts", numeric: true },
-                    { key: "ppg", label: "PPG", numeric: true },
+                    { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
                   ]
                 : [
                     { key: "player", label: "Player" },
@@ -491,7 +496,7 @@ export function TeamDetailView({
                     { key: "4s", label: "4s", numeric: true },
                     { key: "-4s", label: "-4s", numeric: true },
                     { key: "pts", label: "Pts", numeric: true },
-                    { key: "ppg", label: "PPG", numeric: true },
+                    { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
                   ]
             }
             rows={playerRows}

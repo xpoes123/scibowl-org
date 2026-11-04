@@ -465,22 +465,32 @@ export const tournamentsAPI = {
     const teamRows = csvRowsToObjects(parseCsv(teamText, "team standings"));
     const individualRows = csvRowsToObjects(parseCsv(individualText, "individual standings"));
 
-    const team_standings = teamRows.map((row) => ({
-      rank: toInt(row.rank),
-      team_id: toInt(row.team_id),
-      name: row.name ?? "",
-      wins: toFloat(row.wins),
-      losses: toFloat(row.losses),
-      games_played: row.games_played ? toInt(row.games_played) : undefined,
-      points_per_game: toFloat(row.points_per_game),
-      "4s": toInt(row["4s"]),
-      "-4s": toInt(row["-4s"]),
-      "0s": toInt(row["0s"]),
-      tossups_heard: toInt(row.tossups_heard),
-      bonuses_heard: toInt(row.bonuses_heard),
-      bonus_points: toInt(row.bonus_points),
-      points_per_bonus: toFloat(row.points_per_bonus),
-    }));
+    const team_standings = teamRows.map((row) => {
+      const wins = toFloat(row.wins);
+      const losses = toFloat(row.losses);
+      const games_played = row.games_played ? toInt(row.games_played) : undefined;
+      const points_per_game = toFloat(row.points_per_game);
+      // Schema version 1 files have no `points` column; overall standings there also lack
+      // games_played, so W + L stands in for it.
+      const points = row.points ? toInt(row.points) : Math.round(points_per_game * (games_played ?? wins + losses));
+      return {
+        rank: toInt(row.rank),
+        team_id: toInt(row.team_id),
+        name: row.name ?? "",
+        wins,
+        losses,
+        games_played,
+        points,
+        points_per_game,
+        "4s": toInt(row["4s"]),
+        "-4s": toInt(row["-4s"]),
+        "0s": toInt(row["0s"]),
+        tossups_heard: toInt(row.tossups_heard),
+        bonuses_heard: toInt(row.bonuses_heard),
+        bonus_points: toInt(row.bonus_points),
+        points_per_bonus: toFloat(row.points_per_bonus),
+      };
+    });
 
     const individual_standings = individualRows.map((row) => ({
       rank: toInt(row.rank),

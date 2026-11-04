@@ -59,6 +59,8 @@ P/NTUH = points × N / TUH
 
 N is `manifest.json` → `stats_options.tuh_scale` (default 20). P/NTUH is computed by the reader from the `points`/`tossup_points` and `tossups_heard` columns, so changing N needs no regeneration. With 0 TUH there is no P/NTUH; show it as blank and sort it last.
 
+Version 1 files have no `points` column, so the website derives team points as `points_per_game × games_played` (W + L in overall standings, which lack `games_played`). They also have no per-category player TUH, so the Team view shows "—" for players' TUH and P/NTUH in a category.
+
 Which points: teams use total points (tossups + bonuses). Per category, a team's points are its tossup points on that category's tossups plus its bonus points on that category's bonuses. Players use tossup points.
 
 ### `manifest.json` changes

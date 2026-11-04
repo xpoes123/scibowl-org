@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { IndividualStandingsRow, TeamStandingsRow } from "../../types";
+import { comparePointsPerTuh, formatPointsPerTuh, pointsPerTuh, pointsPerTuhLabel } from "./statsRates";
 
 function formatFixedNumber(value: number, digits = 2): string {
   if (!Number.isFinite(value)) return (0).toFixed(digits);
@@ -37,10 +38,12 @@ function DataTable({ headers, rows }: { headers: Array<{ key: string; label: str
 
 export function TeamStandingsTable({
   rows,
+  tuhScale,
   showWinsLosses = true,
   onTeamSelect,
 }: {
   rows: TeamStandingsRow[];
+  tuhScale: number;
   showWinsLosses?: boolean;
   onTeamSelect?: (teamId: number) => void;
 }) {
@@ -50,7 +53,7 @@ export function TeamStandingsTable({
     ...(showWinsLosses
       ? [{ key: "wins", label: "W", numeric: true }, { key: "losses", label: "L", numeric: true }]
       : [{ key: "gp", label: "GP", numeric: true }]),
-    { key: "ppg", label: "PPG", numeric: true },
+    { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
     { key: "4s", label: "4s", numeric: true },
     { key: "-4s", label: "-4s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
@@ -59,8 +62,19 @@ export function TeamStandingsTable({
     { key: "ppb", label: "PPB", numeric: true },
   ];
 
-  const tableRows = rows.map((r) => ({
-    rank: r.rank,
+  // Overall standings keep the file's order and ranks, which may be set by hand (e.g. tiebreaks).
+  // Category standings have no such ordering, so rank them by points per tossup heard.
+  const orderedRows = showWinsLosses
+    ? rows
+    : [...rows].sort((a, b) => {
+        const byRate = comparePointsPerTuh(pointsPerTuh(a.points, a.tossups_heard, 1), pointsPerTuh(b.points, b.tossups_heard, 1));
+        if (byRate !== 0) return byRate;
+        if (b.points !== a.points) return b.points - a.points;
+        return a.name.localeCompare(b.name);
+      });
+
+  const tableRows = orderedRows.map((r, idx) => ({
+    rank: showWinsLosses ? r.rank : idx + 1,
     name: onTeamSelect ? (
       <button
         type="button"
@@ -76,7 +90,7 @@ export function TeamStandingsTable({
     wins: r.wins ?? 0,
     losses: r.losses ?? 0,
     gp: r.games_played ?? 0,
-    ppg: formatFixedNumber(r.points_per_game, 2),
+    pptuh: formatPointsPerTuh(pointsPerTuh(r.points, r.tossups_heard, tuhScale)),
     "4s": r["4s"],
     "-4s": r["-4s"],
     tuh: r.tossups_heard,
@@ -88,7 +102,15 @@ export function TeamStandingsTable({
   return <DataTable headers={headers} rows={tableRows} />;
 }
 
-export function IndividualStandingsTable({ rows, onPlayerSelect }: { rows: IndividualStandingsRow[]; onPlayerSelect?: (playerId: number) => void }) {
+export function IndividualStandingsTable({
+  rows,
+  tuhScale,
+  onPlayerSelect,
+}: {
+  rows: IndividualStandingsRow[];
+  tuhScale: number;
+  onPlayerSelect?: (playerId: number) => void;
+}) {
   const headers = [
     { key: "rank", label: "Rank", numeric: true },
     { key: "name", label: "Player" },
@@ -98,13 +120,13 @@ export function IndividualStandingsTable({ rows, onPlayerSelect }: { rows: Indiv
     { key: "-4s", label: "-4s", numeric: true },
     { key: "tuh", label: "TUH", numeric: true },
     { key: "tp", label: "TU Pts", numeric: true },
-    { key: "ppg", label: "PPG", numeric: true },
+    { key: "pptuh", label: pointsPerTuhLabel(tuhScale), numeric: true },
   ];
 
+  // Ranked by points per tossup heard, with no minimum; no tossups heard sorts last.
   const sortedRows = [...rows].sort((a, b) => {
-    const aPpg = Number.isFinite(a.points_per_game) ? a.points_per_game : -Infinity;
-    const bPpg = Number.isFinite(b.points_per_game) ? b.points_per_game : -Infinity;
-    if (bPpg !== aPpg) return bPpg - aPpg;
+    const byRate = comparePointsPerTuh(pointsPerTuh(a.tossup_points, a.tossups_heard, 1), pointsPerTuh(b.tossup_points, b.tossups_heard, 1));
+    if (byRate !== 0) return byRate;
 
     const aTp = Number.isFinite(a.tossup_points) ? a.tossup_points : -Infinity;
     const bTp = Number.isFinite(b.tossup_points) ? b.tossup_points : -Infinity;
@@ -133,7 +155,7 @@ export function IndividualStandingsTable({ rows, onPlayerSelect }: { rows: Indiv
     "-4s": r["-4s"],
     tuh: r.tossups_heard,
     tp: r.tossup_points,
-    ppg: formatFixedNumber(r.points_per_game, 2),
+    pptuh: formatPointsPerTuh(pointsPerTuh(r.tossup_points, r.tossups_heard, tuhScale)),
   }));
 
   return <DataTable headers={headers} rows={tableRows} />;
