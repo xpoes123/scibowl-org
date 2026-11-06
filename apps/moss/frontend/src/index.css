@@ -1269,6 +1269,13 @@ button.addTeamButton:hover .addIcon {
   flex-wrap: wrap;
 }
 
+/* Sits at the right end of the question controls, away from the Prev/Next arrows. */
+.earlyEndControls {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
 .controls button {
   height: var(--sb-control-height);
   min-width: 56px;
@@ -2531,4 +2538,26 @@ button.word.wordBold {
   border-top: 0;
   padding-top: 4px;
   box-shadow: 0 1px 0 var(--sb-border);
+}
+
+.endGamePopup {
+  width: 240px;
+}
+
+.endGamePopupButtons {
+  margin-top: 10px;
+}
+
+/* Both answers are equally valid, so neither gets the solid primary style. They reuse the
+   Active/Bench toggle tints instead. */
+.endGamePopup button.endGameYes {
+  background: #e8f7ea;
+  border-color: #d8f0d2;
+  color: #1f6b2a;
+}
+
+.endGamePopup button.endGameNo {
+  background: #fdeaea;
+  border-color: #f2caca;
+  color: #8f1d1d;
 }

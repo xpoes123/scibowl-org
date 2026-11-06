@@ -41,8 +41,11 @@ import {
   type ScoresheetState,
 } from "./domain/scoresheetReducer";
 import {
+  endBoundaryForPair,
   finalBoundary,
+  isEarlyEndBoundary,
   isPairAfterEnd,
+  type EarlyEndTiming,
   lastHeardPairIndex,
   resolveEndBoundary,
 } from "./domain/scoresheetGameEnd";
@@ -2943,6 +2946,12 @@ function ModeratorApp() {
   usePopupDismiss(scoresheetBoundaryPopupRef, !!scoresheetBoundaryPopup, setScoresheetBoundaryPopup);
   useKeepPopupInViewport(scoresheetBoundaryPopupRef, scoresheetBoundaryPopup, setScoresheetBoundaryPopup);
 
+  // The question panel's End game popup, anchored to its button, for the pair it was opened on.
+  const [endGamePopup, setEndGamePopup] = useState<{ pairId: number; left: number; top: number } | null>(null);
+  const endGamePopupRef = useRef<HTMLDivElement | null>(null);
+  usePopupDismiss(endGamePopupRef, !!endGamePopup, setEndGamePopup);
+  useKeepPopupInViewport(endGamePopupRef, endGamePopup, setEndGamePopup);
+
   useEffect(() => {
     if (!lineupChangeModal) return;
 
@@ -3110,6 +3119,112 @@ function ModeratorApp() {
     }
     appendScoresheetEvent(buildScoresheetEvent("end.set", { boundary_before_question: boundaryBeforeQuestion }));
     return true;
+  }
+
+  // The question panel's early-end buttons: END moves to the chosen boundary, and the scoresheet
+  // scrolls so the moderator sees it land there.
+  function moveGameEndFromPanel(boundaryBeforeQuestion: number): boolean {
+    if (!setGameEnd(boundaryBeforeQuestion)) return false;
+    scrollScoresheetIntoView(`[data-boundary="${boundaryBeforeQuestion}"]`);
+    return true;
+  }
+
+  // Set when the End game popup ends the game. The export waits for the end event to reach state,
+  // since exportScoresheet builds the file from the state it renders with.
+  const exportAfterEndRef = useRef(false);
+  useEffect(() => {
+    if (!exportAfterEndRef.current || endBoundary === null) return;
+    exportAfterEndRef.current = false;
+    void exportScoresheet();
+  }, [endBoundary]);
+
+  // Which answers the End game popup offers for a pair. Ending after it is always offered; for the
+  // last pair that is the normal end, so it only exports. Ending before it is off when it has
+  // buzzes (it was clearly read) or it is the first pair.
+  function earlyEndTimingsForPair(row: PairRow): EarlyEndTiming[] {
+    const hasBuzzes = [row.tossup, row.bonus].some((q) => !!q && (attempts[q.id] ?? []).length > 0);
+    const canEndBefore = !hasBuzzes && isEarlyEndBoundary(endBoundaryForPair(row.pairId, "before"), pairIds);
+    return canEndBefore ? ["after", "before"] : ["after"];
+  }
+
+  // One button in the question controls. Before the game ends early it opens a popup asking
+  // whether this pair was read; afterwards it undoes the end from any pair.
+  function renderEndGameButton(disabled: boolean) {
+    if (!currentPair) return null;
+
+    if (endBoundary !== null) {
+      return (
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => moveGameEndFromPanel(defaultEndBoundary)}
+          disabled={disabled}
+          title="Move the end of the game back after the last question"
+        >
+          Undo Game End
+        </button>
+      );
+    }
+
+    const pairId = currentPair.pairId;
+    return (
+      <button
+        type="button"
+        className="secondary"
+        onClick={(e) => {
+          const pos = computePopupPosition(getAnchorRect(e.currentTarget), { width: 240, height: 170 });
+          setEndGamePopup({ pairId, left: pos.left, top: pos.top });
+        }}
+        disabled={disabled}
+        title="End the game at this question and export the scoresheet"
+        aria-haspopup="dialog"
+      >
+        End Game and Export
+      </button>
+    );
+  }
+
+  function renderEndGamePopup() {
+    if (!endGamePopup || endBoundary !== null) return null;
+    const row = pairRows.find((r) => r.pairId === endGamePopup.pairId);
+    if (!row) return null;
+    const n = row.pairId;
+    const timings = earlyEndTimingsForPair(row);
+
+    const choose = (timing: EarlyEndTiming) => {
+      setEndGamePopup(null);
+      const boundary = endBoundaryForPair(n, timing);
+      // END already sits after the last pair, so there is no end event to wait for.
+      if (boundary >= defaultEndBoundary) {
+        void exportScoresheet();
+        return;
+      }
+      if (moveGameEndFromPanel(boundary)) exportAfterEndRef.current = true;
+    };
+
+    // The popup always asks the same question; an answer that can't apply is greyed out.
+    return (
+      <div
+        ref={endGamePopupRef}
+        className="attemptPopup endGamePopup"
+        role="dialog"
+        aria-label="End game"
+        style={{ left: endGamePopup.left, top: endGamePopup.top }}
+      >
+        <div className="attemptPopupTitle">Was question {n} read?</div>
+        <div className="attemptPopupButtons endGamePopupButtons">
+          <button type="button" className="secondary endGameYes" onClick={() => choose("after")}>
+            Yes, end after {n}
+          </button>
+          <button type="button" className="secondary endGameNo" onClick={() => choose("before")} disabled={!timings.includes("before")}>
+            No, end before {n}
+          </button>
+          <button type="button" className="secondary" onClick={() => setEndGamePopup(null)}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
   }
 
   function renderEndBlockFlash(isBlocking: boolean) {
@@ -5574,6 +5689,8 @@ function ModeratorApp() {
                     <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
+
+                <div className="earlyEndControls">{renderEndGameButton(isQuestionBlurred)}</div>
               </div>
             </div>
 
@@ -5903,6 +6020,8 @@ function ModeratorApp() {
             </div>
           </div>
         </div>
+
+        {renderEndGamePopup()}
 
         {(() => {
           if (!scoresheetBoundaryPopup) return null;
