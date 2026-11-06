@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -1078,6 +1079,21 @@ function usePopupDismiss<T>(popupRef: RefObject<HTMLElement | null>, isOpen: boo
       window.removeEventListener("mousedown", onMouseDown, true);
     };
   }, [isOpen, popupRef, setPopup]);
+}
+
+// Popups are placed from an estimated height. Once one renders, this moves it up if its real
+// height runs past the bottom of the window.
+function useKeepPopupInViewport<T extends { top: number }>(
+  popupRef: RefObject<HTMLElement | null>,
+  popup: T | null,
+  setPopup: Dispatch<SetStateAction<T | null>>
+) {
+  useLayoutEffect(() => {
+    const el = popupRef.current;
+    if (!popup || !el) return;
+    const maxTop = Math.max(8, window.innerHeight - el.offsetHeight - 8);
+    if (popup.top > maxTop) setPopup((prev) => (prev ? { ...prev, top: maxTop } : prev));
+  }, [popup, popupRef, setPopup]);
 }
 
 function computePopupPosition(
@@ -2925,6 +2941,7 @@ function ModeratorApp() {
   }
 
   usePopupDismiss(scoresheetBoundaryPopupRef, !!scoresheetBoundaryPopup, setScoresheetBoundaryPopup);
+  useKeepPopupInViewport(scoresheetBoundaryPopupRef, scoresheetBoundaryPopup, setScoresheetBoundaryPopup);
 
   useEffect(() => {
     if (!lineupChangeModal) return;
