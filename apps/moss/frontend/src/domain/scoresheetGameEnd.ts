@@ -17,6 +17,19 @@ export function finalBoundary(pairIds: number[]): number {
   return pairIds.length ? Math.max(...pairIds) + 1 : 1;
 }
 
+// Ending "before" a pair means it was not read; ending "after" means it was the last pair heard.
+export type EarlyEndTiming = "before" | "after";
+
+export function endBoundaryForPair(pairId: number, timing: EarlyEndTiming): number {
+  return timing === "before" ? pairId : pairId + 1;
+}
+
+// Whether END at this boundary would end the game early. Before the first pair is not a valid
+// boundary, and after the last pair is where END already sits by default.
+export function isEarlyEndBoundary(boundaryBeforeQuestion: number, pairIds: number[]): boolean {
+  return resolveEndBoundary(boundaryBeforeQuestion, pairIds) !== null;
+}
+
 export function isPairAfterEnd(pairId: number, resolvedEndBoundary: number | null): boolean {
   return resolvedEndBoundary !== null && pairId >= resolvedEndBoundary;
 }

@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { finalBoundary, isPairAfterEnd, lastHeardPairIndex, resolveEndBoundary } from "./scoresheetGameEnd";
+import {
+  endBoundaryForPair,
+  finalBoundary,
+  isEarlyEndBoundary,
+  isPairAfterEnd,
+  lastHeardPairIndex,
+  resolveEndBoundary,
+} from "./scoresheetGameEnd";
 
 const pairIds = [1, 2, 3, 4, 5];
 
@@ -43,5 +50,24 @@ describe("lastHeardPairIndex", () => {
   it("is the pair before the boundary", () => {
     expect(lastHeardPairIndex(pairIds, 3)).toBe(1);
     expect(lastHeardPairIndex(pairIds, 2)).toBe(0);
+  });
+});
+
+describe("endBoundaryForPair", () => {
+  it("puts END before the pair when it is not read, and after it when it is", () => {
+    expect(endBoundaryForPair(3, "before")).toBe(3);
+    expect(endBoundaryForPair(3, "after")).toBe(4);
+  });
+});
+
+describe("isEarlyEndBoundary", () => {
+  it("rejects ending before the first pair and after the last pair", () => {
+    expect(isEarlyEndBoundary(endBoundaryForPair(1, "before"), pairIds)).toBe(false);
+    expect(isEarlyEndBoundary(endBoundaryForPair(5, "after"), pairIds)).toBe(false);
+  });
+
+  it("accepts ending before the last pair or after the first", () => {
+    expect(isEarlyEndBoundary(endBoundaryForPair(5, "before"), pairIds)).toBe(true);
+    expect(isEarlyEndBoundary(endBoundaryForPair(1, "after"), pairIds)).toBe(true);
   });
 });
