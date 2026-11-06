@@ -5698,7 +5698,11 @@ function ModeratorApp() {
               <>
                 <div className="endOfRoundSeparator" aria-hidden="true" />
                 <div className="endOfRoundNotice" aria-label="End of round notice">
-                  <div className="endOfRoundTitle">END OF ROUND</div>
+                  <div className="endOfRoundTitle">
+                    {endBoundary === null
+                      ? "END OF ROUND"
+                      : `GAME ENDED AFTER ${lastHeardPairIdx + 1} ${lastHeardPairIdx === 0 ? "QUESTION" : "QUESTIONS"}`}
+                  </div>
                   <div>
                     {isScoresheetExported && lastExport
                       ? `Scoresheet exported ${formatRelativeTime(lastExport.exportedAtIso, nowMs)}.`
