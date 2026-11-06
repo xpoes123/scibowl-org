@@ -3183,7 +3183,9 @@ function ModeratorApp() {
       })();
 
       const exportedSeq = scoresheetState.lastSeq;
-      const exportedAtEnd = pairIdx === pairRows.length - 1;
+      // Exporting from the last heard pair or later counts as the end-of-game export, including
+      // when the game ended early.
+      const exportedAtEnd = pairIdx >= lastHeardPairIdx;
       const exportedAtIso = new Date().toISOString();
       const exportObj = await buildExportObject(metaToUse, exportedAtIso);
 
