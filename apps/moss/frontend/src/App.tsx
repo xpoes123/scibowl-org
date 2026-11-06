@@ -3072,13 +3072,17 @@ function ModeratorApp() {
     }, 600);
 
     // Bring the first blocker into view. Boundary N sits above pair N, so it wins a tie.
-    const wrap = moderatorScoresheetWrapRef.current;
-    if (!wrap) return;
     const firstPairId = pairIdsBlocking.length ? Math.min(...pairIdsBlocking) : Infinity;
     const firstBoundary = boundariesBlocking.length ? Math.min(...boundariesBlocking) : Infinity;
-    const target = firstBoundary <= firstPairId
-      ? wrap.querySelector(`[data-boundary="${firstBoundary}"]`)
-      : wrap.querySelector(`[data-pair-id="${firstPairId}"]`);
+    if (firstBoundary <= firstPairId) scrollScoresheetIntoView(`[data-boundary="${firstBoundary}"]`);
+    else scrollScoresheetIntoView(`[data-pair-id="${firstPairId}"]`);
+  }
+
+  // Centers the matching scoresheet element unless it is already fully visible.
+  function scrollScoresheetIntoView(selector: string) {
+    const wrap = moderatorScoresheetWrapRef.current;
+    if (!wrap) return;
+    const target = wrap.querySelector(selector);
     if (!(target instanceof HTMLElement)) return;
     const wrapRect = wrap.getBoundingClientRect();
     const targetRect = target.getBoundingClientRect();
@@ -3087,22 +3091,25 @@ function ModeratorApp() {
     wrap.scrollTo({ top: Math.max(0, targetTopInWrap - wrap.clientHeight / 2), behavior: "smooth" });
   }
 
-  function setGameEnd(boundaryBeforeQuestion: number) {
+  // Returns whether END is now at the requested boundary.
+  function setGameEnd(boundaryBeforeQuestion: number): boolean {
     // Moving END back to its default spot after the last pair means the game was not ended early.
     if (boundaryBeforeQuestion >= defaultEndBoundary) {
       if (scoresheetState.endBoundary !== null) appendScoresheetEvent(buildScoresheetEvent("end.cleared", {}));
-      return;
+      return true;
     }
-    if (boundaryBeforeQuestion < 2 || boundaryBeforeQuestion === endBoundary) return;
+    if (boundaryBeforeQuestion < 2) return false;
+    if (boundaryBeforeQuestion === endBoundary) return true;
     // Ending the game before recorded buzzes would silently drop them, and a break or halftime
     // at or after END would sit outside the game.
     const pairIdsBlocking = pairIdsWithAttemptsFrom(boundaryBeforeQuestion);
     const boundariesBlocking = markerBoundariesFrom(boundaryBeforeQuestion);
     if (pairIdsBlocking.length || boundariesBlocking.length) {
       flashEndBlockers(pairIdsBlocking, boundariesBlocking);
-      return;
+      return false;
     }
     appendScoresheetEvent(buildScoresheetEvent("end.set", { boundary_before_question: boundaryBeforeQuestion }));
+    return true;
   }
 
   function renderEndBlockFlash(isBlocking: boolean) {
@@ -5861,6 +5868,7 @@ function ModeratorApp() {
                       nodes.push(
                         <tr
                           key="boundary_final"
+                          data-boundary={defaultEndBoundary}
                           className={[
                             "scoresheetBoundaryRow",
                             "scoresheetBoundaryRowFinal",
