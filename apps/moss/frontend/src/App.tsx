@@ -1,4 +1,15 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type Dispatch,
+  type ReactElement,
+  type ReactNode,
+  type RefObject,
+  type SetStateAction,
+} from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { DndContext, PointerSensor, closestCenter, type DragEndEvent, useSensor, useSensors } from "@dnd-kit/core";
 import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
@@ -1042,6 +1053,31 @@ function formatRelativeTime(iso: string, nowMs: number): string {
   if (diffHr < 24) return `${diffHr} hour${diffHr === 1 ? "" : "s"} ago`;
   const diffDay = Math.floor(diffHr / 24);
   return `${diffDay} day${diffDay === 1 ? "" : "s"} ago`;
+}
+
+// Closes an anchored popup on Escape or on a mouse press outside it, by setting its state to null.
+function usePopupDismiss<T>(popupRef: RefObject<HTMLElement | null>, isOpen: boolean, setPopup: Dispatch<SetStateAction<T | null>>) {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setPopup(null);
+    }
+
+    function onMouseDown(e: MouseEvent) {
+      const el = popupRef.current;
+      if (!el) return;
+      if (el.contains(e.target as Node)) return;
+      setPopup(null);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("mousedown", onMouseDown, true);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("mousedown", onMouseDown, true);
+    };
+  }, [isOpen, popupRef, setPopup]);
 }
 
 function computePopupPosition(
@@ -2888,27 +2924,7 @@ function ModeratorApp() {
     setScoresheetBoundaryPopup(null);
   }
 
-  useEffect(() => {
-    if (!scoresheetBoundaryPopup) return;
-
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setScoresheetBoundaryPopup(null);
-    }
-
-    function onMouseDown(e: MouseEvent) {
-      const el = scoresheetBoundaryPopupRef.current;
-      if (!el) return;
-      if (el.contains(e.target as Node)) return;
-      setScoresheetBoundaryPopup(null);
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("mousedown", onMouseDown, true);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("mousedown", onMouseDown, true);
-    };
-  }, [scoresheetBoundaryPopup]);
+  usePopupDismiss(scoresheetBoundaryPopupRef, !!scoresheetBoundaryPopup, setScoresheetBoundaryPopup);
 
   useEffect(() => {
     if (!lineupChangeModal) return;
