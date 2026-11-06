@@ -8,6 +8,8 @@ EVENT_MARKER_SET = "marker.set"
 EVENT_MARKER_REMOVED = "marker.removed"
 EVENT_LINEUP_SET = "lineup.set"
 EVENT_LINEUP_REMOVED = "lineup.removed"
+EVENT_END_SET = "end.set"
+EVENT_END_CLEARED = "end.cleared"
 
 EVENT_TYPES = {
     EVENT_GAME_STARTED,
@@ -20,4 +22,6 @@ EVENT_TYPES = {
     EVENT_MARKER_REMOVED,
     EVENT_LINEUP_SET,
     EVENT_LINEUP_REMOVED,
+    EVENT_END_SET,
+    EVENT_END_CLEARED,
 }

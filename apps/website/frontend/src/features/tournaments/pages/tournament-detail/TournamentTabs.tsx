@@ -15,6 +15,7 @@ import { RoundReportView } from "./RoundReportView";
 import { TeamDetailView } from "./TeamDetailView";
 import { PlayerDetailView } from "./PlayerDetailView";
 import { BuzzpointsView } from "./BuzzpointsView";
+import { tuhScaleFromManifest } from "./statsRates";
 
 type TournamentTabsProps = {
   tournament: TournamentDetail;
@@ -196,6 +197,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
   const reportBaseDir = useMemo(() => statsBaseDirFromManifestPath(manifestPath), [manifestPath]);
 
   const { data: statsManifest, loading: statsManifestLoading } = useTournamentStatsManifest(tournament.slug, standingsEnabled, manifestPath);
+  const tuhScale = tuhScaleFromManifest(statsManifest);
 
   type StandingsViewId = "standings" | "team" | "player";
   const [standingsView, setStandingsView] = useState<StandingsViewId>("standings");
@@ -796,6 +798,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                             }
                             gameTeamsByCategory={standingsCategoryKey === "overall" ? null : gameTeamByCategoryRows}
                             gamePlayersByCategory={standingsCategoryKey === "overall" ? null : gamePlayerByCategoryRows}
+                            tuhScale={tuhScale}
                           />
                         )
                       ) : (
@@ -851,6 +854,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                           <div className="sbTopSpace">
                             <TeamStandingsTable
                               rows={standings.team_standings}
+                              tuhScale={tuhScale}
                               showWinsLosses={showWinsLosses}
                               onTeamSelect={
                                 scoreboardAvailable
@@ -868,6 +872,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                           <div className="sbTopSpace">
                             <IndividualStandingsTable
                               rows={standings.individual_standings}
+                              tuhScale={tuhScale}
                               onPlayerSelect={
                                 scoreboardAvailable
                                   ? (playerId) => {
@@ -949,6 +954,7 @@ export function TournamentTabs({ tournament, variant }: TournamentTabsProps) {
                         rounds={roundRows}
                         roundValue={roundValue}
                         onRoundChange={setRoundValue}
+                        tuhScale={tuhScale}
                       />
                     ) : (
                       <p className="sbMuted">Rounds data files were not found.</p>

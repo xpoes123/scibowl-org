@@ -10,7 +10,9 @@ export type ScoresheetEventType =
   | "marker.set"
   | "marker.removed"
   | "lineup.set"
-  | "lineup.removed";
+  | "lineup.removed"
+  | "end.set"
+  | "end.cleared";
 
 export type ScoresheetEventPayload =
   | { pair_index: number }

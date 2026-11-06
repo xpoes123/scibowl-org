@@ -104,6 +104,8 @@ export type TeamStandingsRow = {
   wins?: number;
   losses?: number;
   games_played?: number;
+  // Total points. Read from the `points` column (schema version 2), else derived from PPG.
+  points: number;
   points_per_game: number;
   "4s": number;
   "-4s": number;
@@ -137,6 +139,7 @@ export type TournamentStandingsResponse = {
 export type TournamentStatsManifest = {
   schema_version: number;
   generated_at: string;
+  stats_options?: { tuh_scale?: number };
   tournament: { slug: string; name: string };
   report?: { key: string; label: string };
   rounds?: {

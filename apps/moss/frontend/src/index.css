@@ -1269,6 +1269,13 @@ button.addTeamButton:hover .addIcon {
   flex-wrap: wrap;
 }
 
+/* Sits at the right end of the question controls, away from the Prev/Next arrows. */
+.earlyEndControls {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
 .controls button {
   height: var(--sb-control-height);
   min-width: 56px;
@@ -1649,6 +1656,12 @@ button.word.wordBold {
 /* The wrapper's border closes the table, so the last row doesn't draw its own. */
 .scoresheetTable tbody tr:last-child td {
   border-bottom: 0;
+}
+
+/* The final boundary (END) sits on the last pair's bottom line; leave room below it so its
+   label isn't cut off by the bottom of the wrapper. */
+.scoresheetTable tbody tr.scoresheetBoundaryRowFinal td {
+  padding-bottom: 14px;
 }
 
 .scoresheetExportRow {
@@ -2061,6 +2074,17 @@ button.word.wordBold {
   animation: questionTimerFlash 0.5s ease-out 1 forwards;
 }
 
+/* Flashes what blocked a move of END (and END itself), using the question timer's flash. */
+.scoresheetBlockFlash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fca5a5;
+  /* Tint rather than cover, so the buzz or label text stays readable. */
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  animation: questionTimerFlash 0.5s ease-out 1 forwards;
+}
 
 .mossNavTimerInput {
   font: inherit;
@@ -2346,8 +2370,14 @@ button.word.wordBold {
   background: #f0f2ff;
 }
 
+/* Pairs after the game ended early were not heard. */
+.scoresheetRowAfterEnd td {
+  opacity: 0.4;
+}
+
 .scoresheetAttemptCell {
   padding: 0;
+  position: relative;
 }
 
 .scoresheetAttemptCellButton {
@@ -2457,16 +2487,6 @@ button.word.wordBold {
   height: 18px;
 }
 
-.scoresheetBoundaryRowMarked .scoresheetBoundaryButton {
-  height: 22px;
-}
-
-.scoresheetBoundaryRowMarked .scoresheetBoundaryButton::before {
-  background: var(--sb-border);
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 .scoresheetBoundaryAffordance,
 .scoresheetBoundaryLabel {
   position: absolute;
@@ -2477,6 +2497,9 @@ button.word.wordBold {
   background: white;
   border: 1px solid var(--sb-border);
   font-size: 12px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
   color: #666;
   pointer-events: none;
   white-space: nowrap;
@@ -2489,13 +2512,11 @@ button.word.wordBold {
 }
 
 .scoresheetBoundaryLabel {
-  top: 50%;
+  /* Centered on the grid line, like the hover affordance; markers add no height. */
+  top: 0;
   opacity: 1;
-  font-weight: 400;
-  letter-spacing: normal;
-  text-transform: none;
+  /* Placed markers are darker than the hover suggestion; otherwise the two match. */
   color: #111;
-  font-size: 13px;
 }
 
 .scoresheetBoundaryButton:hover .scoresheetBoundaryAffordance,
@@ -2517,4 +2538,26 @@ button.word.wordBold {
   border-top: 0;
   padding-top: 4px;
   box-shadow: 0 1px 0 var(--sb-border);
+}
+
+.endGamePopup {
+  width: 240px;
+}
+
+.endGamePopupButtons {
+  margin-top: 10px;
+}
+
+/* Both answers are equally valid, so neither gets the solid primary style. They reuse the
+   Active/Bench toggle tints instead. */
+.endGamePopup button.endGameYes {
+  background: #e8f7ea;
+  border-color: #d8f0d2;
+  color: #1f6b2a;
+}
+
+.endGamePopup button.endGameNo {
+  background: #fdeaea;
+  border-color: #f2caca;
+  color: #8f1d1d;
 }

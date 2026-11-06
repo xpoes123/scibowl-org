@@ -123,3 +123,31 @@ class ReducerTestCase(TestCase):
         state = reduce_events(events, initial_state())
         self.assertNotIn("5", state["markers"])
         self.assertNotIn("9", state["lineups"])
+
+    def test_end_set_and_cleared(self):
+        self.assertIsNone(initial_state()["end_boundary"])
+
+        set_then_moved = [
+            {"seq": 1, "type": event_types.EVENT_END_SET, "payload": {"boundary_before_question": 10}},
+            {"seq": 2, "type": event_types.EVENT_END_SET, "payload": {"boundary_before_question": 7}},
+        ]
+        state = reduce_events(set_then_moved, initial_state())
+        self.assertEqual(state["end_boundary"], 7)
+
+        cleared = set_then_moved + [{"seq": 3, "type": event_types.EVENT_END_CLEARED, "payload": {}}]
+        state = reduce_events(cleared, initial_state())
+        self.assertIsNone(state["end_boundary"])
+
+    def test_end_is_independent_of_markers(self):
+        events = [
+            {
+                "seq": 1,
+                "type": event_types.EVENT_MARKER_SET,
+                "payload": {"boundary_before_question": 5, "kind": "HALFTIME"},
+            },
+            {"seq": 2, "type": event_types.EVENT_END_SET, "payload": {"boundary_before_question": 5}},
+            {"seq": 3, "type": event_types.EVENT_END_CLEARED, "payload": {}},
+        ]
+        state = reduce_events(events, initial_state())
+        self.assertEqual(state["markers"]["5"], "HALFTIME")
+        self.assertIsNone(state["end_boundary"])

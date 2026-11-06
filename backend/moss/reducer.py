@@ -14,6 +14,7 @@ def initial_state() -> dict[str, Any]:
         "bonus_by_question_id": {},
         "markers": {},
         "lineups": {},
+        "end_boundary": None,
         "last_seq": 0,
     }
 
@@ -115,6 +116,14 @@ def apply_event(state: dict[str, Any], event: Any) -> dict[str, Any]:
             state["lineups"][team_key] = team_lineups
         else:
             state["lineups"].pop(team_key, None)
+        return state
+
+    if event_type == event_types.EVENT_END_SET:
+        state["end_boundary"] = int(payload.get("boundary_before_question"))
+        return state
+
+    if event_type == event_types.EVENT_END_CLEARED:
+        state["end_boundary"] = None
         return state
 
     return state

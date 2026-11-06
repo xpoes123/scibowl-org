@@ -54,7 +54,16 @@ def validate_event_payload(event_type: str, payload: object) -> None:
 
     payload_dict = _require_dict(payload, "payload")
 
-    if event_type in {event_types.EVENT_GAME_STARTED, event_types.EVENT_GAME_COMPLETED}:
+    if event_type in {
+        event_types.EVENT_GAME_STARTED,
+        event_types.EVENT_GAME_COMPLETED,
+        event_types.EVENT_END_CLEARED,
+    }:
+        return
+
+    if event_type == event_types.EVENT_END_SET:
+        # Boundary 1 is the start of the game, so the earliest early end is boundary 2.
+        _require_int(payload_dict.get("boundary_before_question"), "payload.boundary_before_question", min_value=2)
         return
 
     if event_type == event_types.EVENT_CURSOR_PAIR_INDEX_SET:
