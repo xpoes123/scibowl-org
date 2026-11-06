@@ -5715,7 +5715,7 @@ function ModeratorApp() {
                       onClick={exportScoresheet}
                       disabled={!game || isExporting}
                     >
-                      {isExporting ? "Exporting..." : isScoresheetExported ? "Export again" : "Export scoresheet"}
+                      {isExporting ? "Exporting..." : isScoresheetExported ? "Export Again" : "Export Scoresheet"}
                     </button>
                   </div>
                 </div>
@@ -6058,7 +6058,7 @@ function ModeratorApp() {
                 setScoresheetBoundaryPopup(null);
               }}
             >
-              {isEndHere ? "Undo end of game" : "End game"}
+              {isEndHere ? "Undo Game End" : "End Game"}
             </button>
           );
 
