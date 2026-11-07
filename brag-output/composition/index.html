@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: #f6f7fb;
+      }
+      :root {
+        --sans: ui-sans-serif, system-ui, sans-serif;
+        --mono: ui-monospace, monospace;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --border: #e6e7ee;
+        --ink: #111111;
+        --muted: #666666;
+        --blue: #134a9c;
+        --blue-hover: #0f3d85;
+        --soft: #f0f2ff;
+        --green-bg: #eefbf0;
+        --green-br: #a7e3b5;
+        --green-ink: #14803a;
+        --red-bg: #fff1f1;
+        --red-br: #f3b4b4;
+        --red-ink: #b42318;
+      }
+      #root {
+        width: 100%; height: 100%;
+        position: relative;
+        font-family: var(--sans);
+        color: var(--ink);
+        background: var(--bg);
+      }
+      .clip { position: absolute; inset: 0; }
+      .scene-inner {
+        position: absolute; inset: 0;
+        opacity: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        background: var(--bg);
+      }
+
+      /* ---------- Scene 1 ---------- */
+      .s1-line {
+        font-size: 68px; font-weight: 600; letter-spacing: -0.02em;
+        color: var(--ink); text-align: center; max-width: 1240px; line-height: 1.15;
+      }
+      .s1-roles {
+        margin-top: 46px; display: flex; gap: 22px; align-items: center;
+        color: var(--muted); font-size: 27px; letter-spacing: 0.02em;
+      }
+      .s1-roles .role { opacity: 0; }
+      .s1-roles .dot { opacity: 0; color: #b9bcc7; }
+
+      /* ---------- Window chrome ---------- */
+      .win {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 16px; overflow: hidden;
+        box-shadow: 0 24px 70px rgba(20,32,64,0.10);
+      }
+      .win-bar {
+        height: 54px; display: flex; align-items: center; gap: 14px;
+        padding: 0 20px; border-bottom: 1px solid var(--border);
+        background: #fbfbfe;
+      }
+      .win-lights { display: flex; gap: 8px; }
+      .win-lights i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+      .win-title {
+        font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em;
+      }
+      .win-badge {
+        margin-left: auto; font-family: var(--mono); font-size: 18px;
+        color: var(--blue); background: var(--soft);
+        padding: 6px 12px; border-radius: 8px; font-weight: 600;
+      }
+
+      /* ---------- Scene 2 ---------- */
+      .s2-win { width: 980px; height: 560px; }
+      .s2-body {
+        height: calc(100% - 54px); display: flex;
+      }
+      .s2-pane { flex: 1; padding: 30px; }
+      .s2-pane.left { border-right: 1px solid var(--border); }
+      .s2-hint { color: #c3c6d2; font-family: var(--mono); font-size: 17px; }
+      .chip {
+        position: absolute; opacity: 0;
+        font-size: 26px; font-weight: 600; color: var(--blue);
+        background: var(--soft); border: 1px solid #dfe3ff;
+        padding: 14px 26px; border-radius: 12px; white-space: nowrap;
+      }
+
+      /* ---------- Scene 3 ---------- */
+      .s3-win { width: 1560px; height: 800px; }
+      .s3-body { height: calc(100% - 54px); display: flex; }
+      .s3-left {
+        flex: 1.35; padding: 44px 46px; border-right: 1px solid var(--border);
+        display: flex; flex-direction: column;
+      }
+      .s3-toss-label {
+        font-family: var(--mono); font-size: 21px; color: var(--blue);
+        font-weight: 700; letter-spacing: 0.06em; margin-bottom: 26px;
+      }
+      .s3-toss {
+        font-family: var(--mono); font-size: 33px; line-height: 1.62; color: var(--ink);
+      }
+      .s3-toss .w { opacity: 0; display: inline; }
+      .s3-caret {
+        display: inline-block; width: 13px; height: 30px; vertical-align: -4px;
+        background: var(--blue); margin-left: 4px; opacity: 0;
+      }
+      .s3-right { flex: 1; padding: 34px 34px; display: flex; flex-direction: column; gap: 20px; }
+      .s3-scores { display: flex; gap: 16px; }
+      .s3-team {
+        flex: 1; background: #fafbff; border: 1px solid var(--border);
+        border-radius: 12px; padding: 16px 18px;
+      }
+      .s3-team .name { font-size: 19px; color: var(--muted); font-weight: 600; letter-spacing: 0.03em; }
+      .s3-team .val { font-size: 46px; font-weight: 700; color: var(--blue); margin-top: 4px; }
+      .s3-log-h { font-size: 18px; color: var(--muted); font-weight: 700; letter-spacing: 0.08em; }
+      .s3-row {
+        display: flex; align-items: center; gap: 14px;
+        background: #ffffff; border: 1px solid var(--border);
+        border-radius: 12px; padding: 18px 20px;
+      }
+      .s3-row .who { font-size: 24px; font-weight: 600; color: var(--ink); }
+      .s3-row .q { font-family: var(--mono); font-size: 19px; color: var(--muted); }
+      .s3-mark {
+        margin-left: auto; opacity: 0;
+        font-size: 22px; font-weight: 700; padding: 8px 16px; border-radius: 999px;
+      }
+      .s3-mark.good { color: var(--green-ink); background: var(--green-bg); border: 1px solid var(--green-br); }
+      .s3-mark.bad { color: var(--red-ink); background: var(--red-bg); border: 1px solid var(--red-br); }
+
+      /* ---------- Scene 4 ---------- */
+      .s4-wrap {
+        width: 1720px; display: flex; flex-direction: column; gap: 30px;
+      }
+      .s4-top { display: flex; gap: 34px; align-items: stretch; }
+      .s4-mod { width: 560px; }
+      .s4-mod .win-title { font-size: 17px; }
+      .s4-mod-body { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+      .s4-mini-row {
+        display: flex; align-items: center; gap: 10px; border-radius: 10px;
+        padding: 12px 14px; font-size: 18px; font-weight: 600;
+      }
+      .s4-mini-row.good { color: var(--green-ink); background: var(--green-bg); border: 1px solid var(--green-br); }
+      .s4-mini-row.bad { color: var(--red-ink); background: var(--red-bg); border: 1px solid var(--red-br); }
+      .s4-mini-row .tag { margin-left: auto; font-family: var(--mono); font-size: 17px; }
+
+      .s4-sync {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 10px; width: 96px;
+      }
+      .s4-arrow { font-size: 40px; color: var(--blue); opacity: 0; }
+      .s4-sync .pill {
+        font-size: 15px; font-weight: 700; color: var(--blue);
+        background: var(--soft); border-radius: 999px; padding: 6px 12px; white-space: nowrap;
+        display: flex; align-items: center; gap: 7px; opacity: 0;
+      }
+      .s4-sync .pill i { width: 9px; height: 9px; border-radius: 50%; background: #17a34a; display: block; }
+
+      .s4-board { flex: 1; border: 1px solid var(--border); border-radius: 18px; overflow: hidden; background: #fff;
+        box-shadow: 0 24px 70px rgba(20,32,64,0.12); }
+      .s4-board-bar {
+        background: var(--blue); color: #fff; height: 62px; display: flex; align-items: center;
+        padding: 0 26px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em;
+      }
+      .s4-board-bar .rd { margin-left: auto; font-family: var(--mono); font-size: 18px; opacity: 0.9; }
+      .s4-board-body { padding: 26px 34px; display: flex; flex-direction: column; gap: 18px; }
+      .s4-brow { display: flex; align-items: center; }
+      .s4-brow .bn { font-size: 40px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
+      .s4-brow .bv { margin-left: auto; font-size: 68px; font-weight: 800; color: var(--blue); font-variant-numeric: tabular-nums; }
+
+      .s4-tourn { border: 1px solid var(--border); border-radius: 16px; background: #fff; overflow: hidden; }
+      .s4-tourn-h {
+        display: flex; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border);
+        font-size: 19px; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; background: #fbfbfe;
+      }
+      .s4-trow { display: flex; align-items: center; padding: 18px 24px; gap: 18px; border-bottom: 1px solid #f0f1f6; }
+      .s4-trow:last-child { border-bottom: none; }
+      .s4-trow .m { font-size: 24px; font-weight: 600; color: var(--ink); }
+      .s4-trow .sub { font-size: 19px; color: var(--muted); }
+      .s4-status { margin-left: auto; font-size: 18px; font-weight: 700; padding: 8px 16px; border-radius: 999px; }
+      .s4-status.up { color: var(--blue); background: var(--soft); }
+      .s4-status.done { color: var(--muted); background: #eef0f4; }
+      .s4-live {
+        margin-left: auto; opacity: 0; display: flex; align-items: center; gap: 9px;
+        font-size: 18px; font-weight: 800; letter-spacing: 0.05em;
+        color: #ffffff; background: #d92d20; padding: 8px 16px; border-radius: 999px;
+      }
+      .s4-live i { width: 10px; height: 10px; border-radius: 50%; background: #fff; display: block; }
+
+      /* ---------- Scene 5 ---------- */
+      .s5-inner { gap: 30px; }
+      .s5-mark-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+      .s5-wordmark {
+        font-size: 150px; font-weight: 800; letter-spacing: -0.03em;
+        background: linear-gradient(100deg, #c084fc, #ddd6fe);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+        opacity: 0; position: relative; z-index: 2;
+      }
+      .s5-glow {
+        position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+        font-size: 150px; font-weight: 800; letter-spacing: -0.03em;
+        color: #c084fc; filter: blur(26px); opacity: 0; z-index: 1;
+        pointer-events: none;
+      }
+      .s5-sub { font-size: 34px; color: var(--muted); font-weight: 500; opacity: 0; letter-spacing: 0.01em; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="brag"
+      data-start="0"
+      data-duration="19.4"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- ===================== SCENE 1 ===================== -->
+      <section id="sec1" class="clip" data-start="0" data-duration="3.1" data-track-index="0">
+        <div class="scene-inner" id="s1" data-layout-allow-overlap data-layout-allow-occlusion>
+          <div class="s1-line" id="s1-line">A Science Bowl match used to take a whole crew.</div>
+          <div class="s1-roles">
+            <span class="role">Moderator</span><span class="dot">·</span>
+            <span class="role">Scorer</span><span class="dot">·</span>
+            <span class="role">Timer</span><span class="dot">·</span>
+            <span class="role">Board</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SCENE 2 ===================== -->
+      <section id="sec2" class="clip" data-start="2.7" data-duration="2.6" data-track-index="1">
+        <div class="scene-inner" id="s2" data-layout-allow-overlap data-layout-allow-occlusion>
+          <span class="chip" id="chip1">Moderator</span>
+          <span class="chip" id="chip2">Scorer</span>
+          <span class="chip" id="chip3">Timer</span>
+          <span class="chip" id="chip4">Board</span>
+          <div class="win s2-win" id="s2-win">
+            <div class="win-bar">
+              <div class="win-lights"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+              <div class="win-title">MoSS — Moderator Scoring System</div>
+            </div>
+            <div class="s2-body">
+              <div class="s2-pane left"><div class="s2-hint">TOSSUP · loading packet…</div></div>
+              <div class="s2-pane"><div class="s2-hint">scoresheet · ready</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SCENE 3 ===================== -->
+      <section id="sec3" class="clip" data-start="4.9" data-duration="4.9" data-track-index="2">
+        <div class="scene-inner" id="s3" data-layout-allow-overlap data-layout-allow-occlusion>
+          <div class="win s3-win">
+            <div class="win-bar">
+              <div class="win-lights"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+              <div class="win-title">MoSS — Moderator Scoring System</div>
+              <div class="win-badge" id="s3-timer">2:24</div>
+            </div>
+            <div class="s3-body">
+              <div class="s3-left">
+                <div class="s3-toss-label">TOSSUP · PHYSICS</div>
+                <div class="s3-toss" id="s3-toss">
+                  <span class="w">This </span><span class="w">vector </span><span class="w">quantity, </span><span class="w">the </span><span class="w">time </span><span class="w">rate </span><span class="w">of </span><span class="w">change </span><span class="w">of </span><span class="w">momentum, </span><span class="w">equals </span><span class="w">mass </span><span class="w">times </span><span class="w">acceleration. </span><span class="w">For </span><span class="w">ten </span><span class="w">points —</span><span class="s3-caret" id="s3-caret"></span>
+                </div>
+              </div>
+              <div class="s3-right">
+                <div class="s3-scores">
+                  <div class="s3-team"><div class="name">AURORA</div><div class="val" id="s3-aur">0</div></div>
+                  <div class="s3-team"><div class="name">BOREALIS</div><div class="val" id="s3-bor">0</div></div>
+                </div>
+                <div class="s3-log-h">BUZZ LOG</div>
+                <div class="s3-row" id="rowA">
+                  <div><div class="who">Kim · Aurora</div><div class="q">tossup 4 · buzz</div></div>
+                  <div class="s3-mark good" id="markA">Correct +4</div>
+                </div>
+                <div class="s3-row" id="rowB">
+                  <div><div class="who">Rao · Borealis</div><div class="q">tossup 5 · interrupt</div></div>
+                  <div class="s3-mark bad" id="markB">Incorrect</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SCENE 4 ===================== -->
+      <section id="sec4" class="clip" data-start="9.4" data-duration="7.5" data-track-index="3">
+        <div class="scene-inner" id="s4" data-layout-allow-overlap data-layout-allow-occlusion>
+          <div class="s4-wrap">
+            <div class="s4-top">
+              <div class="win s4-mod">
+                <div class="win-bar">
+                  <div class="win-lights"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+                  <div class="win-title">MoSS — Moderator</div>
+                </div>
+                <div class="s4-mod-body">
+                  <div class="s4-mini-row good">Kim · Aurora <span class="tag">+4</span></div>
+                  <div class="s4-mini-row bad">Rao · Borealis <span class="tag">interrupt</span></div>
+                  <div class="s4-mini-row" style="background:#fafbff;border:1px solid var(--border);color:var(--muted);">Aurora 4 · Borealis 0 <span class="tag">tossup 6 →</span></div>
+                </div>
+              </div>
+              <div class="s4-sync">
+                <div class="s4-arrow" id="s4-arrow">›</div>
+                <div class="pill" id="s4-pill"><i></i>Live sync</div>
+              </div>
+              <div class="s4-board">
+                <div class="s4-board-bar">MoSS — Scoreboard <span class="rd">TOSS-UP 6 / 25</span></div>
+                <div class="s4-board-body">
+                  <div class="s4-brow"><span class="bn">AURORA</span><span class="bv" id="board-aur">0</span></div>
+                  <div class="s4-brow"><span class="bn">BOREALIS</span><span class="bv" id="board-bor">0</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="s4-tourn">
+              <div class="s4-tourn-h">SCIBOWL.LIVE · REGIONAL QUALIFIER — ROUND 6</div>
+              <div class="s4-trow">
+                <div><div class="m">Aurora vs Borealis</div><div class="sub">Match 14 · Room A</div></div>
+                <div class="s4-live" id="liveBadge"><i id="liveDot"></i>LIVE</div>
+              </div>
+              <div class="s4-trow">
+                <div><div class="m">Comet vs Zenith</div><div class="sub">Match 15 · Room B</div></div>
+                <div class="s4-status up">Upcoming</div>
+              </div>
+              <div class="s4-trow">
+                <div><div class="m">Nova vs Vertex</div><div class="sub">Match 13 · Room A</div></div>
+                <div class="s4-status done">Finished</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SCENE 5 ===================== -->
+      <section id="sec5" class="clip" data-start="16.5" data-duration="2.9" data-track-index="4">
+        <div class="scene-inner s5-inner" id="s5" data-layout-allow-overlap data-layout-allow-occlusion>
+          <div class="s5-mark-wrap" id="s5-mark-wrap">
+            <div class="s5-glow" id="wm-glow" aria-hidden="true" data-layout-allow-occlusion data-layout-allow-overlap>SciBowl.Live</div>
+            <div class="s5-wordmark" id="wordmark">SciBowl.Live</div>
+          </div>
+          <div class="s5-sub" id="subline">One staffer. One room. The whole match.</div>
+        </div>
+      </section>
+
+      <!-- ===================== AUDIO ===================== -->
+      <audio id="music" src="assets/music/happy-beats-business-moves-vol-9-by-ende-dot-app.mp3"
+             data-start="0" data-duration="19.4" data-track-index="20"
+             data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.6,"v":0.13},{"t":16.9,"v":0.13},{"t":19.4,"v":0}]}]}'></audio>
+      <audio id="vo" src="assets/voiceover.wav"
+             data-start="0" data-duration="19.37" data-volume="1" data-track-index="21"></audio>
+
+      <!-- SFX: key ticks under scene-3 typing -->
+      <audio id="tick1" src="assets/sfx/keypress-003.wav" data-start="5.45" data-volume="0.26" data-track-index="22"></audio>
+      <audio id="tick2" src="assets/sfx/keypress-007.wav" data-start="5.75" data-volume="0.26" data-track-index="26"></audio>
+      <audio id="tick3" src="assets/sfx/keypress-011.wav" data-start="6.05" data-volume="0.26" data-track-index="27"></audio>
+      <audio id="tick4" src="assets/sfx/keypress-016.wav" data-start="6.30" data-volume="0.26" data-track-index="28"></audio>
+      <!-- SFX: correct chime (beat-grid 6.339) / incorrect dull tone (beat-grid 7.918) -->
+      <audio id="sfxCorrect" src="assets/sfx/impactBell_heavy_000.ogg" data-start="6.339" data-volume="0.5" data-track-index="23"></audio>
+      <audio id="sfxIncorrect" src="assets/sfx/impactSoft_medium_002.ogg" data-start="7.918" data-volume="0.5" data-track-index="29"></audio>
+      <!-- SFX: scoreboard mirror settle / live badge accent -->
+      <audio id="sfxSettle" src="assets/sfx/impactSoft_medium_000.ogg" data-start="10.008" data-volume="0.42" data-track-index="24"></audio>
+      <audio id="sfxLive" src="assets/sfx/rollover2.ogg" data-start="14.222" data-volume="0.4" data-track-index="30"></audio>
+      <!-- SFX: wordmark accent (beat-locked 16.858) -->
+      <audio id="sfxWord" src="assets/sfx/impactSoft_medium_001.ogg" data-start="16.858" data-volume="0.5" data-track-index="25"></audio>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+
+        /* ---- Scene 1 ---- */
+        tl.fromTo("#s1", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 0);
+        tl.fromTo("#s1-line", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0.15);
+        tl.to(".s1-roles .role", { opacity: 1, duration: 0.5, stagger: 0.12, ease: "power1.out" }, 1.1);
+        tl.to(".s1-roles .dot", { opacity: 1, duration: 0.5, stagger: 0.12, ease: "power1.out" }, 1.22);
+        tl.to("#s1", { opacity: 0, duration: 0.4, ease: "power1.in" }, 2.7);
+
+        /* ---- Scene 2: labels fold into one window ---- */
+        tl.fromTo("#s2", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 2.7);
+        // chips start spread out, converge toward center and fade as the window lands
+        tl.fromTo("#chip1", { opacity: 0, x: -430, y: -150 }, { opacity: 1, duration: 0.35 }, 2.75);
+        tl.fromTo("#chip2", { opacity: 0, x: 430, y: -150 }, { opacity: 1, duration: 0.35 }, 2.83);
+        tl.fromTo("#chip3", { opacity: 0, x: -430, y: 150 }, { opacity: 1, duration: 0.35 }, 2.91);
+        tl.fromTo("#chip4", { opacity: 0, x: 430, y: 150 }, { opacity: 1, duration: 0.35 }, 2.99);
+        tl.to("#chip1", { x: 0, y: 0, opacity: 0, duration: 0.7, ease: "power2.inOut" }, 3.5);
+        tl.to("#chip2", { x: 0, y: 0, opacity: 0, duration: 0.7, ease: "power2.inOut" }, 3.5);
+        tl.to("#chip3", { x: 0, y: 0, opacity: 0, duration: 0.7, ease: "power2.inOut" }, 3.5);
+        tl.to("#chip4", { x: 0, y: 0, opacity: 0, duration: 0.7, ease: "power2.inOut" }, 3.5);
+        tl.fromTo("#s2-win", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" }, 3.85); // window settles
+        tl.to("#s2", { opacity: 0, duration: 0.4, ease: "power1.in" }, 4.9);
+
+        /* ---- Scene 3: match runs itself ---- */
+        tl.fromTo("#s3", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 4.9);
+        // tossup types word-by-word
+        tl.fromTo(".s3-toss .w", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.22, stagger: 0.075, ease: "none" }, 5.3);
+        tl.fromTo("#s3-caret", { opacity: 0 }, { opacity: 1, duration: 0.2, yoyo: true, repeat: 5, ease: "none" }, 6.4);
+        // match timer ticking (derived from tween progress, not a clock)
+        const clock = { s: 144 };
+        const tEl = document.getElementById("s3-timer");
+        const fmt = (v) => { const n = Math.round(v); return Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0"); };
+        tl.to(clock, { s: 138, duration: 4.0, ease: "none", onUpdate: () => { tEl.textContent = fmt(clock.s); } }, 5.3);
+        // Correct mark — beat-grid 6.339
+        tl.to("#rowA", { backgroundColor: "#eefbf0", borderColor: "#a7e3b5", duration: 0.3, ease: "power1.out" }, 6.339);
+        tl.fromTo("#markA", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 6.339);
+        const aur = { v: 0 }; const aEl = document.getElementById("s3-aur");
+        tl.to(aur, { v: 4, duration: 0.4, ease: "power1.out", snap: { v: 1 }, onUpdate: () => { aEl.textContent = Math.round(aur.v); } }, 6.339);
+        // Incorrect mark — beat-grid 7.918
+        tl.to("#rowB", { backgroundColor: "#fff1f1", borderColor: "#f3b4b4", duration: 0.3, ease: "power1.out" }, 7.918);
+        tl.fromTo("#markB", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 7.918);
+        tl.to("#s3", { opacity: 0, duration: 0.4, ease: "power1.in" }, 9.4);
+
+        /* ---- Scene 4: two windows, one action ---- */
+        tl.fromTo("#s4", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 9.4);
+        tl.fromTo("#s4-arrow", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 9.55);
+        tl.to("#s4-pill", { opacity: 1, duration: 0.4, ease: "power1.out" }, 9.7);
+        // scoreboard mirrors the moderator score — settle lands ~10.008
+        const bAur = { v: 0 }; const baEl = document.getElementById("board-aur");
+        tl.to(bAur, { v: 4, duration: 0.5, ease: "back.out(1.6)", snap: { v: 1 }, onUpdate: () => { baEl.textContent = Math.round(bAur.v); } }, 9.55);
+        tl.fromTo(".s4-board", { scale: 0.985 }, { scale: 1, duration: 0.4, ease: "power2.out" }, 9.85);
+        // Live badge pushes onto the tournament row — accent ~14.222
+        tl.fromTo("#liveBadge", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 14.222);
+        tl.to("#liveDot", { opacity: 0.25, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 14.7);
+        tl.to("#s4", { opacity: 0, duration: 0.4, ease: "power1.in" }, 16.5);
+
+        /* ---- Scene 5: wordmark / outro ---- */
+        tl.fromTo("#s5", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 16.5);
+        tl.fromTo("#wordmark", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" }, 16.55);
+        // beat-locked wordmark accent at 16.858 (nearest musical beat in the outro window; see note)
+        tl.fromTo("#s5-mark-wrap", { scale: 1 }, { scale: 1.04, duration: 0.16, yoyo: true, repeat: 1, ease: "power2.out" }, 16.858); // beat-locked
+        // audio-reactive: wordmark glow opacity driven by pre-extracted music RMS (assets/audio-data.json)
+        const rmsKf = [[16.4,0.217],[16.533,0.0],[16.667,0.269],[16.8,0.005],[16.933,0.289],[17.067,0.299],[17.2,0.268],[17.333,0.212],[17.467,0.204],[17.6,0.282],[17.733,0.209],[17.867,0.347],[18.0,0.323],[18.133,0.2],[18.267,0.344],[18.4,0.457],[18.533,0.357],[18.667,0.207],[18.8,0.312],[18.933,0.711],[19.067,0.341],[19.2,0.342],[19.333,0.489]];
+        rmsKf.forEach(([t, n]) => {
+          tl.to("#wm-glow", { opacity: 0.18 + 0.55 * n, duration: 0.12, ease: "none" }, t);
+        });
+        tl.fromTo("#subline", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" }, 17.9);
+
+        /* ---- Music: fade in, low bed under VO, gentle fade-out under scene 5 ---- */
+
+        window.__timelines["brag"] = tl;
+        tl.seek(0);
+      </script>
+    </div>
+  </body>
+</html>
