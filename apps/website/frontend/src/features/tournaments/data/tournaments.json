@@ -1244,5 +1244,34 @@
         "contacts": [],
         "links": [],
         "updated_at": "2026-10-25T00:00:00Z"
+    },
+    {
+        "slug": "rice-volunteer-training-2026",
+        "name": "2026 Rice University Volunteer Training",
+        "status": "DRAFT",
+        "mode": "IN_PERSON",
+        "timezone": "America/Chicago",
+        "dates": {
+            "start": "2026-11-14",
+            "end": "2026-11-14"
+        },
+        "divisions": [
+            "HS"
+        ],
+        "location": {
+            "city": "Houston",
+            "state": "TX",
+            "address": "Rice University"
+        },
+        "notes": {
+            "logistics": "Volunteer training session for moderators and scorekeepers. Not a competitive tournament and not publicly listed.",
+            "writing_team": "2026 Stanford Science Bowl question set"
+        },
+        "format": {
+            "summary": "Practice games for training volunteers on MoSS."
+        },
+        "contacts": [],
+        "links": [],
+        "updated_at": "2026-11-12T00:00:00Z"
     }
 ]

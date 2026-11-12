@@ -1,0 +1,46 @@
+{
+    "format": "moss_field_roster",
+    "version": 1,
+    "tournament": {
+        "slug": "rice-volunteer-training-2026",
+        "name": "2026 Rice University Volunteer Training"
+    },
+    "teams": [
+        {
+            "name": "Practice Team A",
+            "players": [
+                "Player A1",
+                "Player A2",
+                "Player A3",
+                "Player A4"
+            ]
+        },
+        {
+            "name": "Practice Team B",
+            "players": [
+                "Player B1",
+                "Player B2",
+                "Player B3",
+                "Player B4"
+            ]
+        },
+        {
+            "name": "Practice Team C",
+            "players": [
+                "Player C1",
+                "Player C2",
+                "Player C3",
+                "Player C4"
+            ]
+        },
+        {
+            "name": "Practice Team D",
+            "players": [
+                "Player D1",
+                "Player D2",
+                "Player D3",
+                "Player D4"
+            ]
+        }
+    ]
+}
