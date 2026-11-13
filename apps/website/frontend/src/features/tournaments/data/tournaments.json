@@ -1248,7 +1248,7 @@
     {
         "slug": "rice-volunteer-training-2026",
         "name": "2026 Rice University Volunteer Training",
-        "status": "DRAFT",
+        "status": "PUBLISHED",
         "mode": "IN_PERSON",
         "timezone": "America/Chicago",
         "dates": {
@@ -1264,7 +1264,7 @@
             "address": "Rice University"
         },
         "notes": {
-            "logistics": "Volunteer training session for moderators and scorekeepers. Not a competitive tournament and not publicly listed.",
+            "logistics": "Volunteer training session for moderators and scorekeepers. Not a competitive tournament.",
             "writing_team": "Berkeley Science Bowl 2023 (Rounds 1, 2 and 4)"
         },
         "format": {
