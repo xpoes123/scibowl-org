@@ -823,6 +823,8 @@ function formatCorrectAnswer(q: Question): string {
 
   if (Array.isArray(q.correct_answer)) {
     const indices = q.correct_answer;
+    // An empty list is an identify-all answer of "none of them".
+    if (indices.length === 0) return "NONE";
     const labels = indices.map((i) => {
       const opt = q.options?.[i - 1];
       if (!opt) return String(i);
