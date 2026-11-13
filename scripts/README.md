@@ -35,7 +35,13 @@ Repo-level scripts. Run them from the repo root unless noted.
 Tools for converting question PDFs and spreadsheets into MoSS packet JSON or database-import JSON. See [`question_import/IMPORT_GUIDE.md`](./question_import/IMPORT_GUIDE.md), [`question_import/PDF_CONVERSION_README.md`](./question_import/PDF_CONVERSION_README.md), and [`question_import/question_pdfs/README.md`](./question_import/question_pdfs/README.md).
 
 - **`packet_to_latex.py`**: converts packet JSON into readable LaTeX (escaping `%`, wrapping bare `^`/`_` in math mode, converting Unicode symbols).
-- **`pdf_processing/pdf_to_moss.py`**: converts NSB round PDFs directly into MoSS packet JSON (PyMuPDF, with a pdfplumber fallback).
+- **`pdf_processing/pdf_to_moss.py`**: converts Science Bowl round PDFs (NSB layout: `TOSS-UP`/`BONUS` markers, `N) Category – Style` headers) into MoSS packet JSON (PyMuPDF, with a pdfplumber fallback). Strips running page headers and separators. Pass `--year`/`--source`/`--name` for non-NSB packets.
+- **`pdf_processing/verify_moss_packet.py`**: checks a converted packet against its PDF, independently of the converter: schema (`validate_packet` from `upload_tournament_packets.py`), marker counts, question headers, every multiple-choice / identify-all / rank answer, and a word-level diff of all question text, options and short answers. Exits non-zero on any discrepancy; review its notes and the listed super/subscripts by eye. Requires `pymupdf`.
+
+  ```bash
+  python scripts/question_import/pdf_processing/pdf_to_moss.py "Round 1.pdf" --year 2023 --source BSB_2023 --output round_1.json
+  python scripts/question_import/pdf_processing/verify_moss_packet.py round_1.json "Round 1.pdf"
+  ```
 - **`pdf_processing/csv_to_moss.py`**: converts the SSB question-writing CSV export into one MoSS packet JSON per round.
 - **`pdf_processing/ssb_excel_to_moss.py`**: converts the SSB question-writing Excel spreadsheet into one MoSS packet JSON per round (exports the blue-highlighted rounds).
 - **`pdf_processing/extract_pdf_pymupdf.py`**: extracts PDF text with PyMuPDF (recommended for spacing).
