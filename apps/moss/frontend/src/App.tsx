@@ -1031,6 +1031,35 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
+// Hotkeys click the popup's own buttons, so disabled/selection rules stay in one place.
+function clickPopupHotkey(popup: HTMLElement | null, e: KeyboardEvent): boolean {
+  if (!popup || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return false;
+  const target = e.target instanceof HTMLElement ? e.target : null;
+  if (target?.closest("input, textarea, select, [contenteditable='true']")) return false;
+  // Enter on a Tab-focused popup button activates it natively (mouse clicks don't focus them, see keepFocusOnMouseDown).
+  if (e.key === "Enter" && target?.closest("button") && popup.contains(target)) return false;
+  const key = e.key === "Enter" || e.key === "=" ? "+" : e.key.toLowerCase();
+  const button = Array.from(popup.querySelectorAll<HTMLButtonElement>("[data-hotkey]")).find(
+    (b) => b.dataset.hotkey === key
+  );
+  if (!button || button.disabled) return false;
+  button.click();
+  return true;
+}
+
+// Mouse clicks on popup buttons shouldn't steal focus, or Enter would re-click them instead of marking Correct.
+function keepFocusOnMouseDown(e: React.MouseEvent) {
+  if (e.target instanceof HTMLElement && e.target.closest("button")) e.preventDefault();
+}
+
+function HotkeyHint({ k }: { k: string }) {
+  return (
+    <kbd className="hotkeyHint" aria-hidden="true">
+      {k}
+    </kbd>
+  );
+}
+
 function teamLetterLabelForIndex(index: number): string {
   // 0 -> A, 1 -> B, ... 25 -> Z, 26 -> AA, etc.
   let n = index;
@@ -4612,7 +4641,11 @@ function ModeratorApp() {
     if (!attemptEditor) return;
 
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setAttemptEditor(null);
+      if (e.key === "Escape") {
+        setAttemptEditor(null);
+        return;
+      }
+      if (clickPopupHotkey(attemptPopupRef.current, e)) e.preventDefault();
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -4623,7 +4656,11 @@ function ModeratorApp() {
     if (!bonusResultEditor) return;
 
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setBonusResultEditor(null);
+      if (e.key === "Escape") {
+        setBonusResultEditor(null);
+        return;
+      }
+      if (clickPopupHotkey(bonusPopupRef.current, e)) e.preventDefault();
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -6364,6 +6401,7 @@ function ModeratorApp() {
               className="attemptPopup"
               role="dialog"
               aria-label="Mark attempt"
+              onMouseDown={keepFocusOnMouseDown}
               style={{ left: currentAttemptEditor.left, top: currentAttemptEditor.top }}
             >
               {popupQuestion.question_type !== "BONUS" && (() => {
@@ -6411,8 +6449,11 @@ function ModeratorApp() {
                                 );
                               }}
                               aria-label={`Select ${teamRoleLabelForIndex(idx)}`}
+                              aria-keyshortcuts={teamLetterLabelForIndex(idx)}
+                              data-hotkey={teamLetterLabelForIndex(idx).toLowerCase()}
                             >
                               {teamRoleLabelForIndex(idx)}
+                              <HotkeyHint k={teamLetterLabelForIndex(idx)} />
                             </button>
                           );
                         })}
@@ -6461,8 +6502,11 @@ function ModeratorApp() {
                               }}
                               role="option"
                               aria-selected={active}
+                              aria-keyshortcuts={String(idx + 1)}
+                              data-hotkey={String(idx + 1)}
                             >
-                              {p.name || `Player ${idx + 1}`}
+                              <span className="playerPickName">{p.name || `Player ${idx + 1}`}</span>
+                              <HotkeyHint k={String(idx + 1)} />
                             </button>
                           );
                         })}
@@ -6501,8 +6545,11 @@ function ModeratorApp() {
                     setAttemptResult(popupQuestion.id, "correct");
                     setAttemptEditor(null);
                   }}
+                  aria-keyshortcuts="Enter"
+                  data-hotkey="+"
                 >
                   {popupQuestion.question_type === "BONUS" ? "Correct (+10)" : "Correct"}
+                  <HotkeyHint k="↵" />
                 </button>
                 <button
                   type="button"
@@ -6511,8 +6558,11 @@ function ModeratorApp() {
                     setAttemptResult(popupQuestion.id, "incorrect");
                     setAttemptEditor(null);
                   }}
+                  aria-keyshortcuts="-"
+                  data-hotkey="-"
                 >
                   {popupQuestion.question_type === "BONUS" ? "Incorrect (0)" : "Incorrect"}
+                  <HotkeyHint k="−" />
                 </button>
               </div>
             </div>
@@ -6531,6 +6581,7 @@ function ModeratorApp() {
               className="attemptPopup"
               role="dialog"
               aria-label="Mark bonus"
+              onMouseDown={keepFocusOnMouseDown}
               style={{ left: bonusResultEditor.left, top: bonusResultEditor.top }}
             >
               <div className="attemptPopupButtons">
@@ -6541,8 +6592,11 @@ function ModeratorApp() {
                     setBonusResult(bonusQuestion, "correct");
                     setBonusResultEditor(null);
                   }}
+                  aria-keyshortcuts="Enter"
+                  data-hotkey="+"
                 >
                   Correct (+10)
+                  <HotkeyHint k="↵" />
                 </button>
                 <button
                   type="button"
@@ -6552,8 +6606,11 @@ function ModeratorApp() {
                     setBonusResult(bonusQuestion, "incorrect");
                     setBonusResultEditor(null);
                   }}
+                  aria-keyshortcuts="-"
+                  data-hotkey="-"
                 >
                   Incorrect (0)
+                  <HotkeyHint k="−" />
                 </button>
               </div>
             </div>

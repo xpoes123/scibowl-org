@@ -1508,6 +1508,62 @@ button.word.wordBold {
   gap: 8px;
 }
 
+.attemptPopup button {
+  position: relative;
+}
+
+.attemptPopup .playerPickRow {
+  padding-right: 34px;
+}
+
+.playerPickName {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hotkeyHint {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border: 1px solid currentColor;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font: 600 11px/15px system-ui, sans-serif;
+  text-align: center;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.attemptPopup .scoreToggle .hotkeyHint {
+  position: static;
+  transform: none;
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: 1px;
+}
+
+.attemptPopup button:disabled .hotkeyHint {
+  display: none;
+}
+
+.attemptPopup button.active .hotkeyHint,
+.attemptPopup button:hover:not(:disabled) .hotkeyHint {
+  opacity: 0.85;
+}
+
+@media (hover: none) {
+  .hotkeyHint {
+    display: none;
+  }
+}
+
 .answer {
   margin-top: 12px;
   padding: 14px;
