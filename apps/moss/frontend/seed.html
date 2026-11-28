@@ -1,0 +1,15 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>moss seed</title>
+<script>
+  // Local-only (untracked): seeds the "Use Cached Roster" option, then opens the app.
+  const p = (name, isIn = true) => ({ name, isIn });
+  localStorage.setItem("moss_cached_roster_v1", JSON.stringify({
+    format: "moss_cached_roster", version: 1,
+    teams: [
+      { name: "Berkeley High A", players: [p("Ada Okafor"), p("Ben Liu"), p("Chloe Ramirez"), p("Dev Patel"), p("Eli Nakamura-Fitzgerald", false)] },
+      { name: "Lowell B", players: [p("Fiona Chen"), p("Gus Alvarez"), p("Hana Kim"), p("Ivan Petrov"), p("Jules Moreau", false)] },
+    ],
+  }));
+  location.replace("/");
+</script>
